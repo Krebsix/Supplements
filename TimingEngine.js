@@ -22,8 +22,8 @@ export const SLOT_ORDER = ['fasted', 'morning', 'midday', 'pre_sport', 'post_spo
 // getSupplementsBySlot()
 // Gibt ein Objekt { slotId: [supplement, ...] } zurück
 // ─────────────────────────────────────────────────────────────
-export function getSupplementsBySlot(profile = 'adult') {
-  const filtered = inventory.filter(s =>
+export function getSupplementsBySlot(profile = 'adult', sourceInventory = inventory) {
+  const filtered = sourceInventory.filter(s =>
     profile === 'child' ? s.childSafe : true
   );
 
@@ -43,8 +43,8 @@ export function getSupplementsBySlot(profile = 'adult') {
 // ─────────────────────────────────────────────────────────────
 // getPrimarySlot(supplementId)
 // ─────────────────────────────────────────────────────────────
-export function getPrimarySlot(supplementId) {
-  const s = inventory.find(x => x.id === supplementId);
+export function getPrimarySlot(supplementId, sourceInventory = inventory) {
+  const s = sourceInventory.find(x => x.id === supplementId);
   return s?.timingSlots?.[0] ?? null;
 }
 
@@ -59,8 +59,8 @@ export function getSlotLabel(slotId) {
 // buildDailySchedule(loggedIds[], profile)
 // Gibt geordnete Timeline für das Dashboard zurück
 // ─────────────────────────────────────────────────────────────
-export function buildDailySchedule(loggedIds = [], profile = 'adult') {
-  const bySlot = getSupplementsBySlot(profile);
+export function buildDailySchedule(loggedIds = [], profile = 'adult', sourceInventory = inventory) {
+  const bySlot = getSupplementsBySlot(profile, sourceInventory);
 
   return SLOT_ORDER.map(slotId => ({
     slot:        SLOTS[slotId],

@@ -21,16 +21,16 @@ function formatLastLogged(lastLoggedAt) {
 }
 
 export default function Dashboard() {
-  const inventory = useStore((state) => state.inventory);
-  const runtimeSupplements = useStore((state) => state._runtimeSupplements);
+  const getFullInventory = useStore((state) => state.getFullInventory);
   const activeProfileId = useStore((state) => state.activeProfileId);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
   const lastLoggedAt = useStore((state) => state.lastLoggedAt);
   const getLoggedToday = useStore((state) => state.getLoggedToday);
 
   const loggedToday = getLoggedToday();
-  const dailySchedule = buildDailySchedule(loggedToday, activeProfileId);
-  const fullInventoryCount = inventory.length + runtimeSupplements.length;
+  const fullInventory = getFullInventory();
+  const dailySchedule = buildDailySchedule(loggedToday, activeProfileId, fullInventory);
+  const fullInventoryCount = fullInventory.length;
   const scheduledToday = dailySchedule.reduce(
     (total, item) => total + item.supplements.length,
     0
