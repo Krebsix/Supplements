@@ -1,12 +1,22 @@
 import { create } from 'zustand';
 import inventoryData from './inventory.json';
 
-export const useStore = create((set) => ({
+function isSameCalendarDay(dateA, dateB) {
+  return (
+    dateA.getFullYear() === dateB.getFullYear() &&
+    dateA.getMonth() === dateB.getMonth() &&
+    dateA.getDate() === dateB.getDate()
+  );
+}
+
+export const useStore = create((set, get) => ({
   // Basis-Daten
   inventory: inventoryData,
   _runtimeSupplements: [], // Speicher für manuell hinzugefügte Supplements
   stocks: {}, // Format: { id: menge }
   logs: [], // Historie der Einnahmen
+  activeProfileId: 'adult',
+  absorptionBlockedAt: null,
 
   // AKTION: Supplement einnehmen
   logSupplement: (id) => set((state) => {
@@ -38,8 +48,26 @@ export const useStore = create((set) => ({
     stocks: { ...state.stocks, [id]: (state.stocks[id] || 0) + amount }
   })),
 
+  // HELPER: Bereits heute geloggte Supplement-IDs
+  getLoggedToday: () => {
+    const today = new Date();
+    return get().logs
+      .filter((log) => {
+        const timestamp = new Date(log.timestamp);
+        return !Number.isNaN(timestamp.getTime()) && isSameCalendarDay(timestamp, today);
+      })
+      .map((log) => log.supplementId);
+  },
+
+  // HELPER: Minimaler Status für abhängige Notification-Logik
+  getAbsorptionStatus: () => ({
+    absorptionBlockedAt: get().absorptionBlockedAt,
+  }),
+
   // HELPER: Kombiniertes Inventar (Fixe Liste + Neue)
   getFullInventory: () => {
     return [...inventoryData, ...get()._runtimeSupplements];
-  }
+  },
 }));
+
+export default useStore;

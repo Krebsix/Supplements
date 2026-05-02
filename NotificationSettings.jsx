@@ -11,9 +11,9 @@ import {
   TouchableOpacity, TextInput, Alert,
 } from 'react-native';
 
-import useNotificationStore from '../store/useNotificationStore';
-import useStore             from '../store/useStore';
-import { SLOTS, SLOT_ORDER } from '../logic/TimingEngine';
+import useNotificationStore from './useNotificationStore';
+import useStore from './useStore';
+import { SLOTS, SLOT_ORDER } from './TimingEngine';
 
 // ─────────────────────────────────────────────────────────────
 export default function NotificationSettings() {

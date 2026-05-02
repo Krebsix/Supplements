@@ -16,7 +16,7 @@ import {
   rescheduleAfterAbsorptionBlock,
   snoozeNotification,
   requestPermissions,
-} from '../notifications/NotificationScheduler';
+} from './NotificationScheduler';
 
 // ─────────────────────────────────────────────────────────────
 const useNotificationStore = create(

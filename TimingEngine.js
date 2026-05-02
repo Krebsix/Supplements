@@ -4,7 +4,7 @@
  * Verwaltet Tages-Slots und ordnet Supplements ein.
  */
 
-import inventory from '../data/inventory.json';
+import inventory from './inventory.json';
 
 // ── Slot-Definitionen ────────────────────────────────────────
 export const SLOTS = {

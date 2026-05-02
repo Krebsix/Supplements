@@ -18,9 +18,9 @@
 import * as Notifications from 'expo-notifications';
 import { Platform }        from 'react-native';
 
-import inventory               from '../data/inventory.json';
-import { SLOTS, SLOT_ORDER }   from '../logic/TimingEngine';
-import { ABSORPTION_BLOCKER_ID, BLOCK_DURATION_MS } from '../logic/AbsorptionBlocker';
+import inventory from './inventory.json';
+import { SLOTS, SLOT_ORDER } from './TimingEngine';
+import { BLOCK_DURATION_MS } from './AbsorptionBlocker';
 
 // ─────────────────────────────────────────────────────────────
 // KONSTANTEN

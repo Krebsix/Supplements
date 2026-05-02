@@ -11,7 +11,7 @@
  *   INFO      → Timing-Hinweis
  */
 
-import inventory from '../data/inventory.json';
+import inventory from './inventory.json';
 
 // ── Lookup-Map für O(1) Zugriff ──────────────────────────────
 const supplementMap = new Map(inventory.map(s => [s.id, s]));
