@@ -1,9 +1,8 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { getBlockMessage, isBlocked } from '../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../ConflictLogic';
-import { buildDailySchedule } from '../TimingEngine';
 import useStore from '../useStore';
 
 function formatLastLogged(lastLoggedAt) {
@@ -21,28 +20,36 @@ function formatLastLogged(lastLoggedAt) {
 }
 
 export default function Dashboard() {
-  const getFullInventory = useStore((state) => state.getFullInventory);
   const activeProfileId = useStore((state) => state.activeProfileId);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
-  const lastLoggedAt = useStore((state) => state.lastLoggedAt);
+  const getActiveSupplements = useStore((state) => state.getActiveSupplements);
   const getLoggedToday = useStore((state) => state.getLoggedToday);
+  const getTodayProgress = useStore((state) => state.getTodayProgress);
+  const getTodaySchedule = useStore((state) => state.getTodaySchedule);
+  const logIntake = useStore((state) => state.logIntake);
+  const undoIntakeToday = useStore((state) => state.undoIntakeToday);
+  const getStock = useStore((state) => state.getStock);
+
+  // Subscribe to changing store slices so the dashboard re-renders after intake/stock/user-supplement updates.
+  const intakeLogs = useStore((state) => state.intakeLogs);
+  const userSupplements = useStore((state) => state.userSupplements);
+  const stockBySupplementId = useStore((state) => state.stockBySupplementId);
+  void intakeLogs;
+  void userSupplements;
+  void stockBySupplementId;
 
   const loggedToday = getLoggedToday();
-  const fullInventory = getFullInventory();
-  const dailySchedule = buildDailySchedule(loggedToday, activeProfileId, fullInventory);
-  const fullInventoryCount = fullInventory.length;
-  const scheduledToday = dailySchedule.reduce(
-    (total, item) => total + item.supplements.length,
-    0
-  );
-  const pendingToday = dailySchedule.reduce(
-    (total, item) => total + item.supplements.filter((supplement) => !supplement.logged).length,
-    0
-  );
+  const activeSupplements = getActiveSupplements();
+  const dailySchedule = getTodaySchedule();
+  const progress = getTodayProgress();
+  const fullInventoryCount = activeSupplements.length;
+  const scheduledToday = progress.total;
+  const pendingToday = progress.pending;
+  const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
   const slotAlerts = dailySchedule
     .map((item) => {
-      const messages = checkAllConflictsForSlot(item.supplements.map((supplement) => supplement.id));
+      const messages = checkAllConflictsForSlot([], item.supplements);
       return messages.length ? { slot: item.slot, messages } : null;
     })
     .filter(Boolean);
@@ -51,8 +58,7 @@ export default function Dashboard() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Supplement OS</Text>
       <Text style={styles.subtitle}>
-        Tagesuebersicht fuer Profil {activeProfileId}. Die Daten unten kommen aus dem
-        aktuellen Inventar, der Slot-Logik und dem lokalen Store.
+        Tagesuebersicht fuer Profil {activeProfileId}. Die Daten unten kommen aus deinen aktiven Supplements, der Slot-Logik und dem lokalen Store.
       </Text>
       <Text style={styles.statusText}>{formatLastLogged(lastLoggedAt)}</Text>
 
@@ -64,9 +70,9 @@ export default function Dashboard() {
       ) : null}
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Gesamt" value={String(fullInventoryCount)} />
+        <MetricCard label="Aktiv" value={String(fullInventoryCount)} />
         <MetricCard label="Heute geplant" value={String(scheduledToday)} />
-        <MetricCard label="Schon geloggt" value={String(loggedToday.length)} />
+        <MetricCard label="Fortschritt" value={`${progress.done}/${progress.total}`} />
         <MetricCard label="Noch offen" value={String(pendingToday)} />
       </View>
 
@@ -100,15 +106,29 @@ export default function Dashboard() {
                   {supplement.notes ? (
                     <Text style={styles.noteText}>{supplement.notes}</Text>
                   ) : null}
+                  {getStock(supplement.id)?.currentUnits !== undefined ? (
+                    <Text style={styles.noteText}>Bestand: {getStock(supplement.id).currentUnits} {getStock(supplement.id).unit || 'Einheiten'}</Text>
+                  ) : null}
                 </View>
-                <Text
-                  style={[
-                    styles.statePill,
-                    supplement.logged ? styles.loggedPill : styles.pendingPill,
-                  ]}
-                >
-                  {supplement.logged ? 'Erledigt' : 'Offen'}
-                </Text>
+                <View style={styles.actionWrap}>
+                  <Text
+                    style={[
+                      styles.statePill,
+                      supplement.logged ? styles.loggedPill : styles.pendingPill,
+                    ]}
+                  >
+                    {supplement.logged ? 'Erledigt' : 'Offen'}
+                  </Text>
+                  {supplement.logged ? (
+                    <TouchableOpacity style={styles.secondaryAction} onPress={() => undoIntakeToday(supplement.id)}>
+                      <Text style={styles.actionText}>Rueckgaengig</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity style={styles.primaryAction} onPress={() => logIntake(supplement.id, { slotId: item.slot.id })}>
+                      <Text style={styles.actionText}>Eingenommen</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             ))
           )}
@@ -313,6 +333,27 @@ const styles = StyleSheet.create({
     color: '#71717a',
     fontSize: 12,
     lineHeight: 17,
+  },
+  actionWrap: {
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  primaryAction: {
+    borderRadius: 999,
+    backgroundColor: '#2563eb',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+  secondaryAction: {
+    borderRadius: 999,
+    backgroundColor: '#3f3f46',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+  actionText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
   },
   statePill: {
     overflow: 'hidden',

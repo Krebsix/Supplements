@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -9,15 +9,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { SLOTS, SLOT_ORDER } from '../TimingEngine';
 import useStore from '../useStore';
 
 export default function AddSupplement() {
   const router = useRouter();
-  const addSupplement = useStore((state) => state.addSupplement);
-  const inventory = useStore((state) => state.inventory);
+  const params = useLocalSearchParams();
+  const addUserSupplement = useStore((state) => state.addUserSupplement);
+  const addSupplementFromPendingScan = useStore((state) => state.addSupplementFromPendingScan);
+  const pendingScanResult = useStore((state) => state.pendingScanResult);
+  const inventory = useStore((state) => state.librarySupplements);
 
   const [name, setName] = useState('');
   const [purpose, setPurpose] = useState('');
@@ -28,6 +31,27 @@ export default function AddSupplement() {
   const [notes, setNotes] = useState('');
   const [childSafe, setChildSafe] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState([]);
+  const fromScan = params.fromScan === '1' && pendingScanResult;
+
+
+  useEffect(() => {
+    if (!fromScan) return;
+
+    setName(pendingScanResult.productName || pendingScanResult.name || '');
+    setPurpose('Aus Scan bestaetigt');
+    setCategory('Scan');
+    setAmount('1');
+    setUnit('Portion');
+    setTimingRaw(pendingScanResult.timingSuggestion || '');
+    setNotes([
+      pendingScanResult.brand ? `Marke: ${pendingScanResult.brand}` : null,
+      Array.isArray(pendingScanResult.detectedIngredients)
+        ? `Erkannte Inhaltsstoffe: ${pendingScanResult.detectedIngredients.join(', ')}`
+        : null,
+      pendingScanResult.uncertaintyNote || null,
+    ].filter(Boolean).join('\n'));
+    setSelectedSlots(['evening']);
+  }, [fromScan, pendingScanResult]);
 
   const categoryExamples = Array.from(
     new Set(inventory.map((supplement) => supplement.category).filter(Boolean))
@@ -62,7 +86,7 @@ export default function AddSupplement() {
         .map((slotId) => SLOTS[slotId]?.label ?? slotId)
         .join(' / ');
 
-    addSupplement({
+    const payload = {
       name: trimmedName,
       purpose: purpose.trim() || 'Benutzerdefiniert',
       category: category.trim() || 'Benutzerdefiniert',
@@ -79,7 +103,13 @@ export default function AddSupplement() {
       stock: null,
       cureConfig: null,
       notes: notes.trim(),
-    });
+    };
+
+    if (fromScan) {
+      addSupplementFromPendingScan(payload);
+    } else {
+      addUserSupplement({ ...payload, source: 'manual' });
+    }
 
     Alert.alert(
       'Gespeichert',
@@ -92,8 +122,7 @@ export default function AddSupplement() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Neues Supplement</Text>
       <Text style={styles.subtitle}>
-        Manueller Eintrag auf Basis des bestehenden Store-Schemas. Kein Scanner, keine
-        Bildanalyse und keine automatische Produkterkennung in diesem Schritt.
+        Manueller Eintrag oder bestaetigtes Mock-Scan-Ergebnis. Kein medizinischer Rat; pruefe Dosierung, Quellen und Hinweise vor Nutzung.
       </Text>
 
       <FormField

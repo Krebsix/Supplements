@@ -19,6 +19,8 @@ import * as Notifications from 'expo-notifications';
 import { Platform }        from 'react-native';
 
 import inventory from './inventory.json';
+
+// TODO Phase 2: Notifications nur aus userSupplements mit status === 'active' planen, nicht direkt aus inventory.json.
 import { SLOTS, SLOT_ORDER } from './TimingEngine';
 import { BLOCK_DURATION_MS } from './AbsorptionBlocker';
 

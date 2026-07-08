@@ -37,6 +37,16 @@ export function getBlockMessage(remainingMinutes) {
 // ─────────────────────────────────────────────────────────────
 // shouldTriggerBlock(supplementId)
 // ─────────────────────────────────────────────────────────────
-export function shouldTriggerBlock(supplementId) {
-  return supplementId === ABSORPTION_BLOCKER_ID;
+export function shouldTriggerBlock(supplement) {
+  const libraryId = typeof supplement === 'object' ? supplement.libraryId ?? supplement.id : supplement;
+  const conflictTags = typeof supplement === 'object' && Array.isArray(supplement.conflictTags)
+    ? supplement.conflictTags
+    : [];
+  const flags = typeof supplement === 'object' ? supplement.flags || {} : {};
+
+  return (
+    libraryId === ABSORPTION_BLOCKER_ID ||
+    conflictTags.includes('ALL') ||
+    flags.isAbsorptionBlocker === true
+  );
 }

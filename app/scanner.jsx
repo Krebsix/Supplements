@@ -5,9 +5,19 @@ import { useRouter } from 'expo-router';
 import AppHeader from '../components/AppHeader';
 import PrimaryButton from '../components/PrimaryButton';
 import ScreenContainer from '../components/ScreenContainer';
+import mockScanResult from '../data/mockScanResult';
+import useStore from '../useStore';
 
 export default function ScannerScreen() {
   const router = useRouter();
+  const saveScanResult = useStore((state) => state.saveScanResult);
+  const setPendingScanResult = useStore((state) => state.setPendingScanResult);
+
+  function handleMockScan() {
+    saveScanResult(mockScanResult);
+    setPendingScanResult(mockScanResult);
+    router.push('/results');
+  }
 
   return (
     <ScreenContainer>
@@ -24,7 +34,7 @@ export default function ScannerScreen() {
         </Text>
       </View>
 
-      <PrimaryButton title="Scan simulieren" onPress={() => router.push('/results')} />
+      <PrimaryButton title="Scan simulieren" onPress={handleMockScan} />
       <PrimaryButton title="Zurück zur Startseite" variant="secondary" onPress={() => router.push('/')} />
     </ScreenContainer>
   );

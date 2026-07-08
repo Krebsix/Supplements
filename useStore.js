@@ -1,73 +1,228 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { shouldTriggerBlock } from './AbsorptionBlocker';
+import { buildDailySchedule } from './TimingEngine';
 import inventoryData from './inventory.json';
 
-function isSameCalendarDay(dateA, dateB) {
-  return (
-    dateA.getFullYear() === dateB.getFullYear() &&
-    dateA.getMonth() === dateB.getMonth() &&
-    dateA.getDate() === dateB.getDate()
-  );
+function createId(prefix = 'id') {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export const useStore = create((set, get) => ({
-  // Basis-Daten
-  inventory: inventoryData,
-  _runtimeSupplements: [], // Speicher für manuell hinzugefügte Supplements
-  stocks: {}, // Format: { id: menge }
-  logs: [], // Historie der Einnahmen
-  activeProfileId: 'adult',
-  absorptionBlockedAt: null,
+function toDateKey(date = new Date()) {
+  const value = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(value.getTime())) return new Date().toISOString().slice(0, 10);
+  return value.toISOString().slice(0, 10);
+}
 
-  // AKTION: Supplement einnehmen
-  logSupplement: (id) => set((state) => {
-    const currentStock = state.stocks[id] || 0;
-    const newLog = {
-      id: Math.random().toString(36).substr(2, 9),
-      supplementId: id,
-      timestamp: new Date().toISOString(),
-    };
+function normalizeDosage(dosage = {}) {
+  return {
+    amount: dosage?.amount?.toString?.() || '1',
+    unit: dosage?.unit?.toString?.() || 'Kapsel',
+  };
+}
 
-    return {
-      stocks: { ...state.stocks, [id]: Math.max(0, currentStock - 1) },
-      logs: [newLog, ...state.logs],
-      lastLoggedAt: new Date().toISOString()
-    };
-  }),
+function normalizeUserSupplement(draft = {}) {
+  const libraryId = draft.libraryId ?? (typeof draft.id === 'number' ? draft.id : null);
+  const id = typeof draft.id === 'string' && draft.id.startsWith('user-') ? draft.id : createId('user');
 
-  // AKTION: Neues Supplement hinzufügen (Schritt 2 Patch)
-  addSupplement: (supplement) => set((state) => ({
-    _runtimeSupplements: [...(state._runtimeSupplements || []), {
-      ...supplement,
-      id: `custom-${Date.now()}`, // Eindeutige ID für neue Einträge
-      isCustom: true
-    }]
-  })),
+  return {
+    ...draft,
+    id,
+    libraryId,
+    status: draft.status || 'active',
+    source: draft.source || (draft.isCustom ? 'manual' : 'library'),
+    dosage: normalizeDosage(draft.dosage),
+    timingSlots: Array.isArray(draft.timingSlots) ? draft.timingSlots : [],
+    conflictIds: Array.isArray(draft.conflictIds) ? draft.conflictIds : [],
+    conflictTags: Array.isArray(draft.conflictTags) ? draft.conflictTags : [],
+    synergyIds: Array.isArray(draft.synergyIds) ? draft.synergyIds : [],
+    flags: draft.flags || {},
+    createdAt: draft.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
 
-  // AKTION: Bestand auffüllen
-  updateStock: (id, amount) => set((state) => ({
-    stocks: { ...state.stocks, [id]: (state.stocks[id] || 0) + amount }
-  })),
+function getIntakeDecrement(stock) {
+  const value = Number(stock?.decrementPerIntake);
+  return Number.isFinite(value) && value > 0 ? value : 1;
+}
 
-  // HELPER: Bereits heute geloggte Supplement-IDs
-  getLoggedToday: () => {
-    const today = new Date();
-    return get().logs
-      .filter((log) => {
-        const timestamp = new Date(log.timestamp);
-        return !Number.isNaN(timestamp.getTime()) && isSameCalendarDay(timestamp, today);
-      })
-      .map((log) => log.supplementId);
-  },
+function migratePersistedState(persistedState = {}) {
+  const state = persistedState || {};
+  const userSupplements = Array.isArray(state.userSupplements)
+    ? state.userSupplements
+    : Array.isArray(state._runtimeSupplements)
+      ? state._runtimeSupplements.map((supplement) => normalizeUserSupplement({ ...supplement, source: supplement.source || 'manual' }))
+      : [];
 
-  // HELPER: Minimaler Status für abhängige Notification-Logik
-  getAbsorptionStatus: () => ({
-    absorptionBlockedAt: get().absorptionBlockedAt,
-  }),
+  const intakeLogs = Array.isArray(state.intakeLogs)
+    ? state.intakeLogs
+    : Array.isArray(state.logs)
+      ? state.logs.map((log) => ({
+          id: log.id || createId('log'),
+          userSupplementId: log.userSupplementId || log.supplementId,
+          libraryId: log.libraryId ?? null,
+          profileId: log.profileId || state.activeProfileId || 'adult',
+          slotId: log.slotId || null,
+          dateKey: log.dateKey || toDateKey(log.timestamp || log.takenAt),
+          takenAt: log.takenAt || log.timestamp || new Date().toISOString(),
+          amount: log.amount || '1',
+          unit: log.unit || 'Einheit',
+          source: log.source || 'legacy',
+          undoneAt: log.undoneAt || null,
+        }))
+      : [];
 
-  // HELPER: Kombiniertes Inventar (Fixe Liste + Neue)
-  getFullInventory: () => {
-    return [...inventoryData, ...get()._runtimeSupplements];
-  },
-}));
+  return {
+    ...state,
+    userSupplements,
+    intakeLogs,
+    stockBySupplementId: state.stockBySupplementId || state.stocks || {},
+    scanResults: state.scanResults || [],
+    pendingScanResult: state.pendingScanResult || null,
+    activeProfileId: state.activeProfileId || 'adult',
+    absorptionBlockedAt: state.absorptionBlockedAt || null,
+    settings: state.settings || {},
+  };
+}
+
+export const useStore = create(
+  persist(
+    (set, get) => ({
+      librarySupplements: inventoryData,
+      userSupplements: [],
+      intakeLogs: [],
+      stockBySupplementId: {},
+      scanResults: [],
+      pendingScanResult: null,
+      activeProfileId: 'adult',
+      absorptionBlockedAt: null,
+      settings: {},
+
+      addUserSupplement: (draft) => {
+        const supplement = normalizeUserSupplement(draft);
+        set((state) => ({ userSupplements: [...state.userSupplements, supplement] }));
+        return supplement;
+      },
+      updateUserSupplement: (id, patch) => set((state) => ({
+        userSupplements: state.userSupplements.map((supplement) =>
+          supplement.id === id ? { ...supplement, ...patch, updatedAt: new Date().toISOString() } : supplement
+        ),
+      })),
+      pauseUserSupplement: (id) => get().updateUserSupplement(id, { status: 'paused' }),
+      archiveUserSupplement: (id) => get().updateUserSupplement(id, { status: 'archived' }),
+      getActiveSupplements: () => get().userSupplements.filter((supplement) => supplement.status === 'active'),
+      getLibrarySupplementById: (id) => get().librarySupplements.find((supplement) => supplement.id === id),
+      setPendingScanResult: (result) => set({ pendingScanResult: result }),
+      clearPendingScanResult: () => set({ pendingScanResult: null }),
+      saveScanResult: (result) => set((state) => ({
+        scanResults: [{ ...result, id: result.id || createId('scan'), savedAt: new Date().toISOString() }, ...state.scanResults],
+      })),
+      addSupplementFromPendingScan: (formData) => {
+        const pending = get().pendingScanResult;
+        const supplement = get().addUserSupplement({
+          ...formData,
+          source: pending ? 'scan' : formData?.source || 'manual',
+          scanResultId: pending?.id || null,
+        });
+        if (pending) get().clearPendingScanResult();
+        return supplement;
+      },
+      logIntake: (userSupplementId, options = {}) => {
+        const supplement = get().userSupplements.find((item) => item.id === userSupplementId || item.libraryId === userSupplementId);
+        if (!supplement) return null;
+        userSupplementId = supplement.id;
+        const now = new Date();
+        const stock = get().stockBySupplementId[userSupplementId];
+        const decrement = getIntakeDecrement(stock);
+        const log = {
+          id: createId('log'),
+          userSupplementId,
+          libraryId: supplement.libraryId ?? null,
+          profileId: options.profileId || get().activeProfileId,
+          slotId: options.slotId || supplement.timingSlots?.[0] || null,
+          dateKey: options.dateKey || toDateKey(now),
+          takenAt: options.takenAt || now.toISOString(),
+          amount: options.amount || supplement.dosage?.amount || '1',
+          unit: options.unit || supplement.dosage?.unit || 'Einheit',
+          source: options.source || 'dashboard',
+          undoneAt: null,
+          stockDelta: Number.isFinite(Number(stock?.currentUnits)) ? decrement : 0,
+        };
+        set((state) => ({
+          intakeLogs: [log, ...state.intakeLogs],
+          stockBySupplementId: Number.isFinite(Number(stock?.currentUnits))
+            ? { ...state.stockBySupplementId, [userSupplementId]: { ...stock, currentUnits: Math.max(0, Number(stock.currentUnits) - decrement) } }
+            : state.stockBySupplementId,
+          absorptionBlockedAt: shouldTriggerBlock(supplement) ? log.takenAt : state.absorptionBlockedAt,
+        }));
+        return log;
+      },
+      undoIntakeToday: (userSupplementId) => {
+        const dateKey = toDateKey();
+        const log = get().intakeLogs.find((item) => item.userSupplementId === userSupplementId && item.dateKey === dateKey && !item.undoneAt);
+        if (!log) return null;
+        const stock = get().stockBySupplementId[userSupplementId];
+        set((state) => ({
+          intakeLogs: state.intakeLogs.map((item) => item.id === log.id ? { ...item, undoneAt: new Date().toISOString() } : item),
+          stockBySupplementId: Number.isFinite(Number(stock?.currentUnits)) && log.stockDelta > 0
+            ? { ...state.stockBySupplementId, [userSupplementId]: { ...stock, currentUnits: Number(stock.currentUnits) + log.stockDelta } }
+            : state.stockBySupplementId,
+        }));
+        return log;
+      },
+      getLoggedToday: (date = new Date()) => {
+        const dateKey = toDateKey(date);
+        return get().intakeLogs.filter((log) => log.dateKey === dateKey && !log.undoneAt);
+      },
+      getTodayProgress: (date = new Date()) => {
+        const schedule = get().getTodaySchedule(date);
+        const total = schedule.reduce((sum, slot) => sum + slot.supplements.length, 0);
+        const done = schedule.reduce((sum, slot) => sum + slot.supplements.filter((supplement) => supplement.logged).length, 0);
+        return { total, done, pending: Math.max(0, total - done), percent: total ? Math.round((done / total) * 100) : 0 };
+      },
+      getTodaySchedule: (date = new Date()) => {
+        const loggedIds = get().getLoggedToday(date).map((log) => log.userSupplementId);
+        return buildDailySchedule(loggedIds, get().activeProfileId, get().getActiveSupplements());
+      },
+      setStock: (userSupplementId, stockData) => set((state) => ({
+        stockBySupplementId: { ...state.stockBySupplementId, [userSupplementId]: stockData },
+      })),
+      adjustStock: (userSupplementId, delta) => set((state) => {
+        const stock = state.stockBySupplementId[userSupplementId];
+        if (!stock || !Number.isFinite(Number(stock.currentUnits))) return state;
+        return { stockBySupplementId: { ...state.stockBySupplementId, [userSupplementId]: { ...stock, currentUnits: Number(stock.currentUnits) + delta } } };
+      }),
+      getStock: (userSupplementId) => get().stockBySupplementId[userSupplementId] || null,
+
+      // Backward-compatible aliases for older screens/services.
+      inventory: inventoryData,
+      getFullInventory: () => [...get().librarySupplements, ...get().userSupplements],
+      addSupplement: (supplement) => get().addUserSupplement({ ...supplement, source: supplement.source || 'manual' }),
+      logSupplement: (id) => get().logIntake(id),
+      updateStock: (id, amount) => get().adjustStock(id, amount),
+      getAbsorptionStatus: () => ({ absorptionBlockedAt: get().absorptionBlockedAt }),
+    }),
+    {
+      name: 'supplement-os-store-v1',
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        userSupplements: state.userSupplements,
+        intakeLogs: state.intakeLogs,
+        stockBySupplementId: state.stockBySupplementId,
+        scanResults: state.scanResults,
+        pendingScanResult: state.pendingScanResult,
+        activeProfileId: state.activeProfileId,
+        absorptionBlockedAt: state.absorptionBlockedAt,
+        settings: state.settings,
+      }),
+      version: 1,
+      migrate: (state) => migratePersistedState(state),
+      merge: (persistedState, currentState) => ({ ...currentState, ...migratePersistedState(persistedState) }),
+    }
+  )
+);
 
 export default useStore;

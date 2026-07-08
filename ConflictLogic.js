@@ -39,7 +39,15 @@ export const CONFLICT_TAG_LABELS = {
 // Gibt ein Array von Konflikt-Objekten zurück.
 // activeIds = IDs der bereits im selben Slot geloggten Supplements.
 // ─────────────────────────────────────────────────────────────
+function canonicalId(supplementOrId) {
+  return typeof supplementOrId === 'object'
+    ? supplementOrId.libraryId ?? supplementOrId.id
+    : supplementOrId;
+}
+
 export function checkConflicts(targetId, activeIds = []) {
+  targetId = canonicalId(targetId);
+  activeIds = activeIds.map(canonicalId).filter((id) => supplementMap.has(id));
   const target = supplementMap.get(targetId);
   if (!target) return [];
 
@@ -104,12 +112,15 @@ export function checkConflicts(targetId, activeIds = []) {
 // Prüft alle Supplements eines Slots gegeneinander.
 // Gibt de-duplizierte Konflikt-Liste zurück.
 // ─────────────────────────────────────────────────────────────
-export function checkAllConflictsForSlot(ids = []) {
+export function checkAllConflictsForSlot(ids = [], supplements = null) {
+  const canonicalIds = Array.isArray(supplements)
+    ? supplements.map(canonicalId).filter((id) => supplementMap.has(id))
+    : ids.map(canonicalId).filter((id) => supplementMap.has(id));
   const seen  = new Set();
   const result = [];
 
-  for (let i = 0; i < ids.length; i++) {
-    const conflicts = checkConflicts(ids[i], ids.slice(i + 1));
+  for (let i = 0; i < canonicalIds.length; i++) {
+    const conflicts = checkConflicts(canonicalIds[i], canonicalIds.slice(i + 1));
     for (const c of conflicts) {
       const key = [c.sourceId, c.targetId, c.type].sort().join('-');
       if (!seen.has(key)) {
