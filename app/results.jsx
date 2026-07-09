@@ -10,13 +10,17 @@ export default function ResultsScreen() {
   const router = useRouter();
   const pendingScanResult = useStore((state) => state.pendingScanResult);
   const result = pendingScanResult || mockScanResult;
+  const displayResult = {
+    ...result,
+    brand: result.brand === 'Demo Brand' ? 'Marke nicht erkannt' : result.brand,
+  };
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.kicker}>Analyse-Ergebnis</Text>
       <Text style={styles.title}>Scan prüfen und bestätigen</Text>
       <Text style={styles.subtitle}>
-        Demo-Ergebnis mit Mock-Daten. Die echte Erkennung wird später über Wirkstoffnamen, Synonyme und Dosierungen abgesichert.
+        Vorläufiges Analyse-Ergebnis. Prüfe Produktname, Marke, Dosierung und Inhaltsstoffe bewusst, bevor du den Eintrag in deine Routine übernimmst.
       </Text>
 
       <View style={styles.noticeCard}>
@@ -26,7 +30,7 @@ export default function ResultsScreen() {
         </Text>
       </View>
 
-      <SupplementResultCard result={result} />
+      <SupplementResultCard result={displayResult} />
 
       <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/AddSupplement?fromScan=1')}>
         <Text style={styles.primaryButtonText}>Als Supplement hinzufügen</Text>

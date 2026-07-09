@@ -61,13 +61,13 @@ export default function AddSupplement() {
     if (!fromScan) return;
 
     setName(pendingScanResult.productName || pendingScanResult.name || '');
-    setPurpose('Aus Scan bestaetigt');
-    setCategory('Scan');
+    setPurpose('Aus Scan übernommen');
+    setCategory('Scan-Ergebnis');
     setAmount('1');
     setUnit('Portion');
     setTimingRaw(pendingScanResult.timingSuggestion || '');
     setNotes([
-      pendingScanResult.brand ? `Marke: ${pendingScanResult.brand}` : null,
+      pendingScanResult.brand && pendingScanResult.brand !== 'Demo Brand' ? `Marke: ${pendingScanResult.brand}` : null,
       Array.isArray(pendingScanResult.detectedIngredients)
         ? `Erkannte Inhaltsstoffe: ${pendingScanResult.detectedIngredients.join(', ')}`
         : null,
@@ -96,16 +96,34 @@ export default function AddSupplement() {
     });
   }
 
+  const screenTitle = editId
+    ? 'Supplement bearbeiten'
+    : fromScan
+      ? 'Scan-Ergebnis prüfen'
+      : 'Manueller Routine-Eintrag';
+
+  const screenSubtitle = editId
+    ? 'Passe Name, Dosierung, Tages-Slots und Notizen für deine aktive Routine an.'
+    : fromScan
+      ? 'Überprüfe die erkannten Angaben, ergänze fehlende Details und übernimm den Eintrag erst nach deiner Bestätigung in die Routine.'
+      : 'Erstelle einen eigenen Routine-Eintrag mit Name, Dosierung, Tages-Slots und optionalen Notizen. Keine medizinische Beratung.';
+
+  const primaryButtonLabel = editId
+    ? 'Änderungen speichern'
+    : fromScan
+      ? 'Scan-Ergebnis übernehmen'
+      : 'Manuellen Eintrag speichern';
+
   function handleSave() {
     const trimmedName = name.trim();
 
     if (!trimmedName) {
-      Alert.alert('Name fehlt', 'Bitte gib mindestens einen Namen fuer das Supplement ein.');
+      Alert.alert('Name fehlt', 'Bitte gib mindestens einen Namen für das Supplement ein.');
       return;
     }
 
     if (selectedSlots.length === 0) {
-      Alert.alert('Slot fehlt', 'Bitte waehle mindestens einen Tages-Slot aus.');
+      Alert.alert('Slot fehlt', 'Bitte wähle mindestens einen Tages-Slot aus.');
       return;
     }
 
@@ -144,8 +162,8 @@ export default function AddSupplement() {
 
       Alert.alert(
         'Aktualisiert',
-        'Die Änderungen wurden in der aktiven Routine gespeichert.',
-        [{ text: 'Zurück', onPress: () => router.back() }]
+        'Die Änderungen wurden in deiner aktiven Routine gespeichert.',
+        [{ text: 'Zum Dashboard', onPress: () => router.replace('/Dashboard') }]
       );
       return;
     }
@@ -160,19 +178,15 @@ export default function AddSupplement() {
       'Gespeichert',
       fromScan
         ? 'Das bestätigte Scan-Ergebnis wurde deiner Routine hinzugefügt.'
-        : 'Das Supplement wurde als manueller Eintrag hinzugefügt.',
-      [{ text: 'Zurück', onPress: () => router.back() }]
+        : 'Das Supplement wurde deiner Routine als manueller Eintrag hinzugefügt.',
+      [{ text: 'Zum Dashboard', onPress: () => router.replace('/Dashboard') }]
     );
   }
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>{editId ? 'Supplement bearbeiten' : 'Neues Supplement'}</Text>
-      <Text style={styles.subtitle}>
-        {editId
-          ? 'Passe Name, Dosierung, Tages-Slots und Notizen für deine aktive Routine an.'
-          : 'Manueller Eintrag oder bestätigtes Mock-Scan-Ergebnis. Kein medizinischer Rat; prüfe Dosierung, Quellen und Hinweise vor Nutzung.'}
-      </Text>
+      <Text style={styles.title}>{screenTitle}</Text>
+      <Text style={styles.subtitle}>{screenSubtitle}</Text>
 
       <FormField
         label="Name"
@@ -182,7 +196,7 @@ export default function AddSupplement() {
       />
 
       <FormField
-        label="Zweck"
+        label="Ziel / Verwendung"
         value={purpose}
         onChangeText={setPurpose}
         placeholder="z. B. Schlaf, Regeneration, Fokus"
@@ -224,7 +238,7 @@ export default function AddSupplement() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Tages-Slots</Text>
         <Text style={styles.sectionSubtitle}>
-          Waehle einen oder mehrere Slots, damit der Eintrag im Tagesplan auftaucht.
+          Wähle einen oder mehrere Slots, damit der Eintrag im Tagesplan auftaucht.
         </Text>
         <View style={styles.slotWrap}>
           {SLOT_ORDER.map((slotId) => {
@@ -247,17 +261,17 @@ export default function AddSupplement() {
       </View>
 
       <FormField
-        label="Anzeige fuer Timing"
+        label="Anzeige für Timing"
         value={timingRaw}
         onChangeText={setTimingRaw}
-        placeholder="Optional: eigener Freitext fuer den Einnahmezeitpunkt"
+        placeholder="Optional: z. B. abends nach dem Essen"
       />
 
       <View style={styles.switchCard}>
         <View style={styles.switchTextWrap}>
           <Text style={styles.switchTitle}>Kindersicher markiert</Text>
           <Text style={styles.switchSubtitle}>
-            Entspricht dem bestehenden `childSafe` Feld im Store.
+            Interner Sicherheitsmarker für spätere Hinweise und Filter. Keine Freigabe oder Dosierungsempfehlung.
           </Text>
         </View>
         <Switch
@@ -277,7 +291,7 @@ export default function AddSupplement() {
       />
 
       <TouchableOpacity style={styles.primaryButton} onPress={handleSave}>
-        <Text style={styles.primaryButtonText}>{editId ? 'Änderungen speichern' : 'Supplement speichern'}</Text>
+        <Text style={styles.primaryButtonText}>{primaryButtonLabel}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

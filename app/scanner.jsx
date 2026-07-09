@@ -30,7 +30,7 @@ export default function ScannerScreen() {
         </View>
         <Text style={styles.scanTitle}>Scan-Bereich vorbereitet</Text>
         <Text style={styles.scanText}>
-          Später erkennt dieser Bereich Produktfoto, Label, Wirkstoffe und Dosierungen. Aktuell bleibt der Mock-Scan bewusst stabil.
+          Dieser Bereich bereitet den späteren Foto-, Label- und Wirkstoff-Scan vor. Aktuell nutzt die App ein stabiles Test-Ergebnis zur sicheren Ablaufprüfung.
         </Text>
       </View>
 
