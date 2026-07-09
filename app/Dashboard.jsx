@@ -12,12 +12,12 @@ import {
 } from '../utils/supplementFormatting';
 
 function formatLastLogged(lastLoggedAt) {
-  if (!lastLoggedAt) return 'Heute noch keine Einnahme erfasst.';
+  if (!lastLoggedAt) return 'Heute wurde noch keine Einnahme dokumentiert.';
 
   const date = new Date(lastLoggedAt);
   if (Number.isNaN(date.getTime())) return 'Letzte Aktivität konnte nicht gelesen werden.';
 
-  return `Letzte Aktivität: ${date.toLocaleString('de-DE', {
+  return `Zuletzt dokumentiert: ${date.toLocaleString('de-DE', {
     day: '2-digit',
     month: '2-digit',
     hour: '2-digit',
@@ -31,9 +31,9 @@ function getProgressPercent(done, total) {
 }
 
 function getSlotCountLabel(count) {
-  if (count === 0) return 'Keine Einträge';
-  if (count === 1) return '1 Eintrag';
-  return `${count} Einträge`;
+  if (count === 0) return 'Keine geplanten Einnahmen';
+  if (count === 1) return '1 geplante Einnahme';
+  return `${count} geplante Einnahmen`;
 }
 
 function normalizeRoutineName(name = '') {
@@ -73,6 +73,12 @@ function getDuplicateCountLabel(count) {
   return `${count} zusätzliche Einträge`;
 }
 
+function getProfileLabel(profileId) {
+  if (profileId === 'adult') return 'Erwachsen';
+  if (profileId === 'child') return 'Kind';
+  return profileId || 'Standard';
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const activeProfileId = useStore((state) => state.activeProfileId);
@@ -97,6 +103,7 @@ export default function Dashboard() {
   const loggedToday = getLoggedToday();
   const activeSupplements = getActiveSupplements();
   const dailySchedule = getTodaySchedule();
+  const visibleSchedule = dailySchedule.filter((item) => item.supplements.length > 0);
   const progress = getTodayProgress();
   const fullInventoryCount = activeSupplements.length;
   const scheduledToday = progress.total;
@@ -161,7 +168,7 @@ export default function Dashboard() {
       <View style={styles.header}>
         <View style={styles.kickerRow}>
           <Text style={styles.kicker}>Supplement OS</Text>
-          <Text style={styles.profileLabel}>Profil {activeProfileId}</Text>
+          <Text style={styles.profileLabel}>Profil: {getProfileLabel(activeProfileId)}</Text>
         </View>
 
         <Text style={styles.title}>Tagesplan</Text>
@@ -173,9 +180,11 @@ export default function Dashboard() {
       <View style={styles.summaryCard}>
         <View style={styles.summaryTopRow}>
           <View>
-            <Text style={styles.summaryLabel}>Status heute</Text>
+            <Text style={styles.summaryLabel}>Tagesroutine</Text>
             <Text style={styles.summaryValue}>
-              {progress.done} von {progress.total} erledigt
+              {progress.total > 0
+                ? `${progress.done} von ${progress.total} Einnahmen dokumentiert`
+                : 'Keine Einnahmen geplant'}
             </Text>
           </View>
 
@@ -201,7 +210,7 @@ export default function Dashboard() {
       <View style={styles.metricGrid}>
         <MetricCard label="Aktiv" value={String(fullInventoryCount)} />
         <MetricCard label="Geplant" value={String(scheduledToday)} />
-        <MetricCard label="Erledigt" value={String(progress.done)} />
+        <MetricCard label="Eingenommen" value={String(progress.done)} />
         <MetricCard label="Offen" value={String(pendingToday)} />
       </View>
 
@@ -224,10 +233,34 @@ export default function Dashboard() {
 
       <SectionHeading
         title="Routine"
-        subtitle="Nach Einnahmezeit sortiert."
+        subtitle="Nur relevante Zeitfenster deiner heutigen Routine."
       />
 
-      {dailySchedule.map((item) => (
+      {fullInventoryCount === 0 ? (
+        <View style={styles.emptyRoutineCard}>
+          <Text style={styles.emptyRoutineTitle}>Noch keine aktive Routine</Text>
+          <Text style={styles.emptyRoutineText}>
+            Füge dein erstes Supplement hinzu, damit dein Tagesplan automatisch nach Einnahmezeit strukturiert wird.
+          </Text>
+          <TouchableOpacity
+            style={styles.emptyRoutineButton}
+            onPress={() => router.push('/AddSupplement')}
+          >
+            <Text style={styles.emptyRoutineButtonText}>Supplement hinzufügen</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+
+      {fullInventoryCount > 0 && visibleSchedule.length === 0 ? (
+        <View style={styles.emptyRoutineCard}>
+          <Text style={styles.emptyRoutineTitle}>Noch keine Einnahmezeiten geplant</Text>
+          <Text style={styles.emptyRoutineText}>
+            Deine Supplements sind vorhanden, aber aktuell keinem Zeitfenster zugeordnet. Über „Bearbeiten“ kannst du das Timing ergänzen.
+          </Text>
+        </View>
+      ) : null}
+
+      {fullInventoryCount > 0 ? visibleSchedule.map((item) => (
         <View key={item.slot.id} style={styles.slotCard}>
           <View style={styles.slotHeader}>
             <View style={styles.slotHeaderText}>
@@ -239,7 +272,7 @@ export default function Dashboard() {
 
           {item.supplements.length === 0 ? (
             <View style={styles.emptySlot}>
-              <Text style={styles.emptyText}>Für diesen Zeitraum ist nichts geplant.</Text>
+              <Text style={styles.emptyText}>Für dieses Zeitfenster ist aktuell nichts geplant.</Text>
             </View>
           ) : (
             item.supplements.map((supplement) => {
@@ -279,7 +312,7 @@ export default function Dashboard() {
                         supplement.logged ? styles.loggedPill : styles.pendingPill,
                       ]}
                     >
-                      {supplement.logged ? 'Erledigt' : 'Offen'}
+                      {supplement.logged ? 'Eingenommen' : 'Offen'}
                     </Text>
 
                     {supplement.logged ? (
@@ -317,7 +350,7 @@ export default function Dashboard() {
             })
           )}
         </View>
-      ))}
+      )) : null}
 
       <SectionHeading
         title="Hinweise"
@@ -346,7 +379,7 @@ export default function Dashboard() {
 
       <View style={styles.disclaimerCard}>
         <Text style={styles.disclaimerText}>
-          Supplement OS unterstützt die Organisation deiner Routine. Die Hinweise sind allgemein und ersetzen keine medizinische Beratung.
+          Supplement OS unterstützt die Dokumentation und Organisation deiner Routine. Die Hinweise sind allgemein und ersetzen keine medizinische Beratung.
         </Text>
       </View>
     </ScrollView>
@@ -620,6 +653,38 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontSize: 13,
     lineHeight: 18,
+  },
+  emptyRoutineCard: {
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 17,
+    marginBottom: 12,
+  },
+  emptyRoutineTitle: {
+    color: '#0F172A',
+    fontSize: 17,
+    fontWeight: '800',
+    marginBottom: 7,
+  },
+  emptyRoutineText: {
+    color: '#64748B',
+    fontSize: 14,
+    lineHeight: 21,
+  },
+  emptyRoutineButton: {
+    marginTop: 14,
+    alignSelf: 'flex-start',
+    borderRadius: 999,
+    backgroundColor: '#0F766E',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  emptyRoutineButtonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '900',
   },
   supplementCard: {
     flexDirection: 'row',
