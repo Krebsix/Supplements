@@ -115,6 +115,25 @@ export default function AddSupplement() {
       ? 'Scan-Ergebnis übernehmen'
       : 'Manuellen Eintrag speichern';
 
+  const modeLabel = editId
+    ? 'Aktive Routine'
+    : fromScan
+      ? 'Scannerprüfung'
+      : 'Neuer Routine-Eintrag';
+
+  const modePillLabel = editId ? 'Bearbeiten' : fromScan ? 'Prüfen' : 'Manuell';
+
+  const trustCopy = fromScan
+    ? 'Scan-Daten sind ein Startpunkt. Prüfe Name, Dosierung, Einheit und Timing, bevor du den Eintrag in deine Routine übernimmst.'
+    : editId
+      ? 'Änderungen wirken sich auf deine aktive Tagesroutine aus. Historische Einnahmen bleiben davon unberührt.'
+      : 'Dieser Eintrag strukturiert deine persönliche Routine. Die App gibt hier keine Diagnose, Therapie- oder Dosierungsempfehlung.';
+
+  const selectedSlotLabels = selectedSlots
+    .map((slotId) => SLOTS[slotId]?.label)
+    .filter(Boolean)
+    .join(' · ');
+
   function handleSave() {
     const trimmedName = name.trim();
 
@@ -186,25 +205,41 @@ export default function AddSupplement() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>{screenTitle}</Text>
-      <Text style={styles.subtitle}>{screenSubtitle}</Text>
+      <View style={styles.heroCard}>
+        <View style={styles.heroHeader}>
+          <Text style={styles.kicker}>{modeLabel}</Text>
+          <View style={styles.modePill}>
+            <Text style={styles.modePillText}>{modePillLabel}</Text>
+          </View>
+        </View>
+        <Text style={styles.title}>{screenTitle}</Text>
+        <Text style={styles.subtitle}>{screenSubtitle}</Text>
+      </View>
+
+      <View style={styles.trustCard}>
+        <Text style={styles.trustTitle}>Prüfhinweis</Text>
+        <Text style={styles.trustText}>{trustCopy}</Text>
+      </View>
 
       <FormField
-        label="Name"
+        label="Supplement-Name"
+        helper="Nutze einen klaren Produkt- oder Wirkstoffnamen, damit Dashboard, Verlauf und Archiv eindeutig bleiben."
         value={name}
         onChangeText={setName}
         placeholder="z. B. Magnesium Bisglycinat"
       />
 
       <FormField
-        label="Ziel / Verwendung"
+        label="Ziel / Kontext"
+        helper="Beschreibt den persönlichen Routine-Kontext, nicht die medizinische Wirkung."
         value={purpose}
         onChangeText={setPurpose}
-        placeholder="z. B. Schlaf, Regeneration, Fokus"
+        placeholder="z. B. Abendroutine, Regeneration, Fokus"
       />
 
       <FormField
-        label="Kategorie"
+        label="Kategorie / Gruppe"
+        helper="Hilft später bei Filterung, Stack-Logik und sauberer Auswertung."
         value={category}
         onChangeText={setCategory}
         placeholder="z. B. Mineralien"
@@ -212,23 +247,26 @@ export default function AddSupplement() {
 
       {categoryExamples.length > 0 ? (
         <Text style={styles.helperText}>
-          Beispiele aus dem aktuellen Inventar: {categoryExamples.join(', ')}
+          Beispiele aus deinem aktuellen Bestand: {categoryExamples.join(', ')}
         </Text>
       ) : null}
 
       <View style={styles.row}>
         <View style={styles.rowField}>
           <FormField
-            label="Dosierung"
+            label="Menge pro Einnahme"
+            helper="Nur die sichtbare Routine-Menge, keine Empfehlung."
             value={amount}
             onChangeText={setAmount}
             placeholder="z. B. 300"
+            keyboardType="decimal-pad"
           />
         </View>
         <View style={styles.rowSpacer} />
         <View style={styles.rowField}>
           <FormField
             label="Einheit"
+            helper="z. B. mg, IE, Kapsel, Tropfen oder Portion."
             value={unit}
             onChangeText={setUnit}
             placeholder="mg"
@@ -237,9 +275,9 @@ export default function AddSupplement() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Tages-Slots</Text>
+        <Text style={styles.sectionTitle}>Tagesroutine</Text>
         <Text style={styles.sectionSubtitle}>
-          Wähle einen oder mehrere Slots, damit der Eintrag im Tagesplan auftaucht.
+          Wähle die Tageszeit, in der dieser Eintrag sichtbar sein soll. Mehrere Slots sind möglich.
         </Text>
         <View style={styles.slotWrap}>
           {SLOT_ORDER.map((slotId) => {
@@ -259,10 +297,21 @@ export default function AddSupplement() {
             );
           })}
         </View>
+
+        {selectedSlotLabels ? (
+          <View style={styles.selectedSlotSummary}>
+            <Text style={styles.selectedSlotSummaryText}>
+              Ausgewählt: {selectedSlotLabels}
+            </Text>
+          </View>
+        ) : (
+          <Text style={styles.sectionHint}>Noch kein Tages-Slot ausgewählt.</Text>
+        )}
       </View>
 
       <FormField
-        label="Anzeige für Timing"
+        label="Timing-Anzeige"
+        helper="Optionaler Freitext für eine natürlichere Anzeige, z. B. „abends nach dem Essen“."
         value={timingRaw}
         onChangeText={setTimingRaw}
         placeholder="Optional: z. B. abends nach dem Essen"
@@ -270,9 +319,9 @@ export default function AddSupplement() {
 
       <View style={styles.switchCard}>
         <View style={styles.switchTextWrap}>
-          <Text style={styles.switchTitle}>Kindersicher markiert</Text>
+          <Text style={styles.switchTitle}>Familienhinweis vormerken</Text>
           <Text style={styles.switchSubtitle}>
-            Interner Sicherheitsmarker für spätere Hinweise und Filter. Keine Freigabe oder Dosierungsempfehlung.
+            Interner Marker für spätere Hinweise und Filter. Keine Sicherheitsfreigabe und keine Dosierungsempfehlung.
           </Text>
         </View>
         <Switch
@@ -284,7 +333,8 @@ export default function AddSupplement() {
       </View>
 
       <FormField
-        label="Notizen"
+        label="Interne Notizen"
+        helper="Optional: Herkunft, Einnahme-Kontext oder persönliche Beobachtungen."
         value={notes}
         onChangeText={setNotes}
         placeholder="Optional: Hinweise zur Einnahme oder Herkunft"
@@ -298,7 +348,7 @@ export default function AddSupplement() {
   );
 }
 
-function FormField({ label, multiline = false, ...props }) {
+function FormField({ label, helper, multiline = false, ...props }) {
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
@@ -308,6 +358,7 @@ function FormField({ label, multiline = false, ...props }) {
         placeholderTextColor="#71717a"
         style={[styles.input, multiline ? styles.inputMultiline : null]}
       />
+      {helper ? <Text style={styles.inputHelper}>{helper}</Text> : null}
     </View>
   );
 }
@@ -319,13 +370,65 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingTop: 28,
+    paddingTop: 22,
     paddingBottom: 44,
   },
-  title: {
+  heroCard: {
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    borderRadius: 24,
+    padding: 18,
+  },
+  heroHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  kicker: {
+    color: '#0f766e',
+    fontSize: 12,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  modePill: {
+    backgroundColor: '#ecfdf5',
+    borderColor: '#99f6e4',
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  modePillText: {
+    color: '#0f766e',
+    fontSize: 11,
+    fontWeight: '900',
+  },
+  trustCard: {
+    marginTop: 14,
+    backgroundColor: '#f0fdfa',
+    borderColor: '#99f6e4',
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 15,
+  },
+  trustTitle: {
     color: '#0f172a',
-    fontSize: 30,
-    lineHeight: 36,
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  trustText: {
+    marginTop: 5,
+    color: '#475569',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  title: {
+    marginTop: 12,
+    color: '#0f172a',
+    fontSize: 28,
+    lineHeight: 34,
     fontWeight: '800',
   },
   subtitle: {
@@ -359,6 +462,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+  },
+  inputHelper: {
+    marginTop: 6,
+    color: '#64748b',
+    fontSize: 12,
+    lineHeight: 18,
   },
   inputMultiline: {
     minHeight: 110,
@@ -420,6 +529,26 @@ const styles = StyleSheet.create({
   },
   slotChipTextSelected: {
     color: '#ffffff',
+  },
+  selectedSlotSummary: {
+    marginTop: 12,
+    backgroundColor: '#f8fafc',
+    borderColor: '#cbd5e1',
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  selectedSlotSummaryText: {
+    color: '#334155',
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  sectionHint: {
+    marginTop: 12,
+    color: '#64748b',
+    fontSize: 13,
+    lineHeight: 19,
   },
   switchCard: {
     marginTop: 18,
