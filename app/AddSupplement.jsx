@@ -189,7 +189,7 @@ export default function AddSupplement() {
                 style={[styles.slotChip, selected ? styles.slotChipSelected : styles.slotChipIdle]}
               >
                 <Text style={[styles.slotChipText, selected ? styles.slotChipTextSelected : null]}>
-                  {slot.emoji} {slot.label}
+                  {slot.label}
                 </Text>
               </TouchableOpacity>
             );
@@ -214,8 +214,8 @@ export default function AddSupplement() {
         <Switch
           value={childSafe}
           onValueChange={setChildSafe}
-          trackColor={{ false: '#3f3f46', true: '#4ade80' }}
-          thumbColor={childSafe ? '#ffffff' : '#d4d4d8'}
+          trackColor={{ false: '#cbd5e1', true: '#0f766e' }}
+          thumbColor={childSafe ? '#ffffff' : '#f8fafc'}
         />
       </View>
 
@@ -251,28 +251,29 @@ function FormField({ label, multiline = false, ...props }) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#f8fafc',
   },
   content: {
     paddingHorizontal: 20,
-    paddingTop: 24,
-    paddingBottom: 40,
+    paddingTop: 28,
+    paddingBottom: 44,
   },
   title: {
-    color: '#fff',
-    fontSize: 28,
-    fontWeight: '700',
+    color: '#0f172a',
+    fontSize: 30,
+    lineHeight: 36,
+    fontWeight: '800',
   },
   subtitle: {
-    marginTop: 8,
-    color: '#a1a1aa',
+    marginTop: 10,
+    color: '#475569',
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: 23,
   },
   helperText: {
-    marginTop: -4,
-    marginBottom: 12,
-    color: '#71717a',
+    marginTop: 4,
+    marginBottom: 8,
+    color: '#64748b',
     fontSize: 12,
     lineHeight: 18,
   },
@@ -281,16 +282,16 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 8,
-    color: '#f4f4f5',
+    color: '#0f172a',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   input: {
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#27272a',
-    backgroundColor: '#18181b',
-    color: '#fff',
+    borderColor: '#cbd5e1',
+    backgroundColor: '#ffffff',
+    color: '#0f172a',
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
@@ -311,53 +312,57 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 20,
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 16,
   },
   sectionTitle: {
-    color: '#f4f4f5',
+    color: '#0f172a',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   sectionSubtitle: {
     marginTop: 6,
-    color: '#71717a',
+    color: '#64748b',
     fontSize: 13,
-    lineHeight: 18,
+    lineHeight: 19,
   },
   slotWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 12,
+    gap: 8,
   },
   slotChip: {
-    marginRight: 10,
-    marginBottom: 10,
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
     borderWidth: 1,
+    paddingHorizontal: 13,
+    paddingVertical: 9,
   },
   slotChipIdle: {
-    backgroundColor: '#18181b',
-    borderColor: '#27272a',
+    backgroundColor: '#f8fafc',
+    borderColor: '#cbd5e1',
   },
   slotChipSelected: {
-    backgroundColor: '#1d4ed8',
-    borderColor: '#3b82f6',
+    backgroundColor: '#0f766e',
+    borderColor: '#0f766e',
   },
   slotChipText: {
-    color: '#d4d4d8',
+    color: '#334155',
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   slotChipTextSelected: {
-    color: '#eff6ff',
+    color: '#ffffff',
   },
   switchCard: {
-    marginTop: 20,
-    borderRadius: 16,
+    marginTop: 18,
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
     borderWidth: 1,
-    borderColor: '#27272a',
-    backgroundColor: '#18181b',
+    borderRadius: 20,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -365,29 +370,29 @@ const styles = StyleSheet.create({
   },
   switchTextWrap: {
     flex: 1,
-    paddingRight: 12,
+    paddingRight: 14,
   },
   switchTitle: {
-    color: '#f4f4f5',
+    color: '#0f172a',
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   switchSubtitle: {
     marginTop: 4,
-    color: '#71717a',
-    fontSize: 12,
-    lineHeight: 18,
+    color: '#64748b',
+    fontSize: 13,
+    lineHeight: 19,
   },
   primaryButton: {
-    marginTop: 24,
-    borderRadius: 16,
-    backgroundColor: '#2563eb',
-    paddingVertical: 16,
+    marginTop: 22,
+    backgroundColor: '#0f766e',
+    borderRadius: 999,
+    paddingVertical: 15,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '800',
   },
 });

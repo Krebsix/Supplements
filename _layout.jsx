@@ -1,41 +1,76 @@
 import React from 'react';
 import { Stack } from 'expo-router';
-import { TouchableOpacity, Text } from 'react-native';
-import { useRouter } from 'expo-router';
 
 export default function Layout() {
-  const router = useRouter();
-
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: '#121212' },
-        headerTintColor: '#fff',
-        headerTitleStyle: { fontWeight: 'bold' },
+        headerStyle: { backgroundColor: '#f8fafc' },
+        headerTintColor: '#0f172a',
+        headerShadowVisible: false,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          color: '#0f172a',
+          fontSize: 17,
+          fontWeight: '800',
+        },
+        headerBackTitle: 'Zurück',
       }}
     >
-      {/* Das Haupt-Dashboard */}
       <Stack.Screen
-        name="Dashboard"
+        name="index"
         options={{
           title: 'Supplement OS',
-          headerRight: () => (
-            <TouchableOpacity 
-              onPress={() => router.push('/AddSupplement')}
-              style={{ marginRight: 10, backgroundColor: '#007AFF', padding: 8, borderRadius: 8 }}
-            >
-              <Text style={{ color: '#fff', fontWeight: 'bold' }}>+ Neu</Text>
-            </TouchableOpacity>
-          ),
         }}
       />
 
-      {/* Der Hinzufügen-Screen */}
+      <Stack.Screen
+        name="Dashboard"
+        options={{
+          title: 'Tagesplan',
+        }}
+      />
+
+      <Stack.Screen
+        name="scanner"
+        options={{
+          title: 'Scanner',
+        }}
+      />
+
+      <Stack.Screen
+        name="results"
+        options={{
+          title: 'Analyse',
+        }}
+      />
+
       <Stack.Screen
         name="AddSupplement"
         options={{
-          title: 'Neues Supplement',
-          presentation: 'modal', // Öffnet sich als schickes Modal
+          title: 'Supplement erfassen',
+          presentation: 'modal',
+        }}
+      />
+
+      <Stack.Screen
+        name="settings"
+        options={{
+          title: 'Einstellungen',
+        }}
+      />
+
+      <Stack.Screen
+        name="history"
+        options={{
+          title: 'Verlauf',
+        }}
+      />
+
+      <Stack.Screen
+        name="search"
+        options={{
+          title: 'Suche',
         }}
       />
     </Stack>
