@@ -79,6 +79,27 @@ function getProfileLabel(profileId) {
   return profileId || 'Standard';
 }
 
+function getRoutineInsight(progress) {
+  if (!progress.total) {
+    return {
+      label: 'Setup offen',
+      text: 'Füge Supplements hinzu oder ordne Timing zu, damit die Tagesroutine belastbar wird.',
+    };
+  }
+
+  if (progress.pending === 0) {
+    return {
+      label: 'Routine vollständig',
+      text: 'Alle geplanten Einnahmen sind für heute dokumentiert.',
+    };
+  }
+
+  return {
+    label: `${progress.pending} offen`,
+    text: 'Offene Einnahmen bleiben sichtbar, bis sie dokumentiert oder rückgängig gemacht werden.',
+  };
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const activeProfileId = useStore((state) => state.activeProfileId);
@@ -109,6 +130,7 @@ export default function Dashboard() {
   const scheduledToday = progress.total;
   const pendingToday = progress.pending;
   const progressPercent = getProgressPercent(progress.done, progress.total);
+  const routineInsight = getRoutineInsight(progress);
   const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
   const slotAlerts = dailySchedule
@@ -173,7 +195,7 @@ export default function Dashboard() {
 
         <Text style={styles.title}>Tagesplan</Text>
         <Text style={styles.subtitle}>
-          Übersicht deiner heutigen Supplement-Routine.
+          Tägliches Kontrollzentrum für Einnahmen, Timing, Verlauf und saubere Dokumentation.
         </Text>
       </View>
 
@@ -183,7 +205,7 @@ export default function Dashboard() {
             <Text style={styles.summaryLabel}>Tagesroutine</Text>
             <Text style={styles.summaryValue}>
               {progress.total > 0
-                ? `${progress.done} von ${progress.total} Einnahmen dokumentiert`
+                ? `${progress.done} / ${progress.total} dokumentiert`
                 : 'Keine Einnahmen geplant'}
             </Text>
           </View>
@@ -197,6 +219,11 @@ export default function Dashboard() {
           <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
         </View>
 
+        <View style={styles.summaryInsightRow}>
+          <Text style={styles.summaryInsightPill}>{routineInsight.label}</Text>
+          <Text style={styles.summaryInsightText}>{routineInsight.text}</Text>
+        </View>
+
         <Text style={styles.lastActivity}>{formatLastLogged(lastLoggedAt)}</Text>
       </View>
 
@@ -208,17 +235,17 @@ export default function Dashboard() {
       ) : null}
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Aktiv" value={String(fullInventoryCount)} />
-        <MetricCard label="Geplant" value={String(scheduledToday)} />
-        <MetricCard label="Eingenommen" value={String(progress.done)} />
-        <MetricCard label="Offen" value={String(pendingToday)} />
+        <MetricCard label="Aktive Routine" value={String(fullInventoryCount)} />
+        <MetricCard label="Heute geplant" value={String(scheduledToday)} />
+        <MetricCard label="Dokumentiert" value={String(progress.done)} />
+        <MetricCard label="Noch offen" value={String(pendingToday)} />
       </View>
 
       {duplicateEntryCount > 0 ? (
         <View style={styles.cleanupCard}>
           <Text style={styles.cleanupTitle}>Mehrfache Routine-Einträge erkannt</Text>
           <Text style={styles.cleanupText}>
-            {getDuplicateCountLabel(duplicateEntryCount)} mit gleichem Namen. Du kannst die zusätzlichen Einträge archivieren; je Name bleibt ein aktiver Eintrag erhalten.
+            {getDuplicateCountLabel(duplicateEntryCount)} mit gleichem Namen. Zusätzliche Einträge können ins Archiv verschoben werden; je Supplement bleibt ein aktiver Routine-Eintrag erhalten.
           </Text>
           {duplicateGroupNames ? (
             <Text style={styles.cleanupMeta} numberOfLines={2}>
@@ -233,14 +260,14 @@ export default function Dashboard() {
 
       <SectionHeading
         title="Routine"
-        subtitle="Nur relevante Zeitfenster deiner heutigen Routine."
+        subtitle="Nach Timing gruppiert, damit offene und dokumentierte Einnahmen sofort unterscheidbar bleiben."
       />
 
       {fullInventoryCount === 0 ? (
         <View style={styles.emptyRoutineCard}>
-          <Text style={styles.emptyRoutineTitle}>Noch keine aktive Routine</Text>
+          <Text style={styles.emptyRoutineTitle}>Routine noch nicht eingerichtet</Text>
           <Text style={styles.emptyRoutineText}>
-            Füge dein erstes Supplement hinzu, damit dein Tagesplan automatisch nach Einnahmezeit strukturiert wird.
+            Füge dein erstes Supplement hinzu, damit der Tagesplan nach Einnahmezeit, Dokumentation und Verlauf strukturiert werden kann.
           </Text>
           <TouchableOpacity
             style={styles.emptyRoutineButton}
@@ -253,9 +280,9 @@ export default function Dashboard() {
 
       {fullInventoryCount > 0 && visibleSchedule.length === 0 ? (
         <View style={styles.emptyRoutineCard}>
-          <Text style={styles.emptyRoutineTitle}>Noch keine Einnahmezeiten geplant</Text>
+          <Text style={styles.emptyRoutineTitle}>Timing noch unvollständig</Text>
           <Text style={styles.emptyRoutineText}>
-            Deine Supplements sind vorhanden, aber aktuell keinem Zeitfenster zugeordnet. Über „Bearbeiten“ kannst du das Timing ergänzen.
+            Deine Supplements sind vorhanden, aber aktuell keinem Zeitfenster zugeordnet. Über „Bearbeiten“ kannst du das Timing sauber ergänzen.
           </Text>
         </View>
       ) : null}
@@ -267,7 +294,10 @@ export default function Dashboard() {
               <Text style={styles.slotTitle}>{item.slot.label}</Text>
               <Text style={styles.slotTime}>{item.slot.time}</Text>
             </View>
-            <Text style={styles.slotCount}>{getSlotCountLabel(item.supplements.length)}</Text>
+            <View style={styles.slotStatusWrap}>
+              <Text style={styles.slotCount}>{getSlotCountLabel(item.supplements.length)}</Text>
+              <Text style={styles.slotStatus}>Routine-Fenster</Text>
+            </View>
           </View>
 
           {item.supplements.length === 0 ? (
@@ -289,14 +319,24 @@ export default function Dashboard() {
               return (
                 <View key={supplement.id} style={styles.supplementCard}>
                   <View style={styles.supplementTextWrap}>
-                    <Text style={styles.supplementName}>{supplementName}</Text>
+                    <View style={styles.supplementHeaderRow}>
+                      <Text style={styles.supplementName}>{supplementName}</Text>
+                      <Text
+                        style={[
+                          styles.statePill,
+                          supplement.logged ? styles.loggedPill : styles.pendingPill,
+                        ]}
+                      >
+                        {supplement.logged ? 'Dokumentiert' : 'Offen'}
+                      </Text>
+                    </View>
                     {supplementMeta ? (
                       <Text style={styles.supplementMeta}>{supplementMeta}</Text>
                     ) : null}
 
                     {stock?.currentUnits !== undefined ? (
                       <Text style={styles.noteText}>
-                        Bestand: {stock.currentUnits} {stock.unit || 'Einheiten'}
+                        Bestand dokumentiert: {stock.currentUnits} {stock.unit || 'Einheiten'}
                       </Text>
                     ) : null}
 
@@ -306,15 +346,6 @@ export default function Dashboard() {
                   </View>
 
                   <View style={styles.actionWrap}>
-                    <Text
-                      style={[
-                        styles.statePill,
-                        supplement.logged ? styles.loggedPill : styles.pendingPill,
-                      ]}
-                    >
-                      {supplement.logged ? 'Eingenommen' : 'Offen'}
-                    </Text>
-
                     {supplement.logged ? (
                       <TouchableOpacity
                         style={styles.secondaryAction}
@@ -327,7 +358,7 @@ export default function Dashboard() {
                         style={styles.primaryAction}
                         onPress={() => logIntake(supplement.id, { slotId: item.slot.id })}
                       >
-                        <Text style={styles.primaryActionText}>Eingenommen</Text>
+                        <Text style={styles.primaryActionText}>Dokumentieren</Text>
                       </TouchableOpacity>
                     )}
 
@@ -353,15 +384,15 @@ export default function Dashboard() {
       )) : null}
 
       <SectionHeading
-        title="Hinweise"
-        subtitle="Allgemeine organisatorische Hinweise."
+        title="Prüfhinweise"
+        subtitle="Allgemeine Hinweise zur Routine-Organisation, ohne medizinische Bewertung."
       />
 
       {slotAlerts.length === 0 ? (
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Keine zusätzlichen Hinweise</Text>
+          <Text style={styles.infoTitle}>Keine offenen Prüfhinweise</Text>
           <Text style={styles.infoText}>
-            Für den aktuellen Tagesplan liegen derzeit keine weiteren organisatorischen Hinweise vor.
+            Für den aktuellen Tagesplan liegen derzeit keine zusätzlichen organisatorischen Hinweise vor.
           </Text>
         </View>
       ) : (
@@ -379,7 +410,7 @@ export default function Dashboard() {
 
       <View style={styles.disclaimerCard}>
         <Text style={styles.disclaimerText}>
-          Supplement OS unterstützt die Dokumentation und Organisation deiner Routine. Die Hinweise sind allgemein und ersetzen keine medizinische Beratung.
+          Supplement OS unterstützt die strukturierte Dokumentation deiner Routine. Hinweise bleiben allgemein, dienen der Organisation und ersetzen keine medizinische Beratung.
         </Text>
       </View>
     </ScrollView>
@@ -502,6 +533,33 @@ const styles = StyleSheet.create({
     height: 7,
     borderRadius: 999,
     backgroundColor: '#0F766E',
+  },
+  summaryInsightRow: {
+    marginTop: 14,
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 12,
+  },
+  summaryInsightPill: {
+    alignSelf: 'flex-start',
+    overflow: 'hidden',
+    borderRadius: 999,
+    backgroundColor: '#ECFDF5',
+    color: '#0F766E',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    fontSize: 11,
+    fontWeight: '900',
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+  },
+  summaryInsightText: {
+    marginTop: 8,
+    color: '#475569',
+    fontSize: 13,
+    lineHeight: 18,
   },
   lastActivity: {
     marginTop: 12,
@@ -639,10 +697,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
+  slotStatusWrap: {
+    alignItems: 'flex-end',
+    flexShrink: 0,
+  },
   slotCount: {
-    color: '#64748B',
+    overflow: 'hidden',
+    borderRadius: 999,
+    backgroundColor: '#F1F5F9',
+    color: '#334155',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
+  },
+  slotStatus: {
+    marginTop: 5,
+    color: '#94A3B8',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   emptySlot: {
     borderTopWidth: 1,
@@ -699,7 +774,14 @@ const styles = StyleSheet.create({
   supplementTextWrap: {
     flex: 1,
   },
+  supplementHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
   supplementName: {
+    flex: 1,
     color: '#0F172A',
     fontSize: 16,
     fontWeight: '800',
@@ -718,12 +800,12 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   actionWrap: {
-    minWidth: 104,
+    minWidth: 116,
     alignItems: 'flex-end',
     gap: 8,
   },
   primaryAction: {
-    minWidth: 104,
+    minWidth: 116,
     borderRadius: 999,
     backgroundColor: '#0F766E',
     paddingHorizontal: 12,
@@ -731,7 +813,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   secondaryAction: {
-    minWidth: 104,
+    minWidth: 116,
     borderRadius: 999,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -741,7 +823,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dangerAction: {
-    minWidth: 104,
+    minWidth: 116,
     borderRadius: 999,
     backgroundColor: '#FFF7ED',
     borderWidth: 1,
