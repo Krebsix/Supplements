@@ -1,5 +1,6 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { getBlockMessage, isBlocked } from '../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../ConflictLogic';
@@ -31,6 +32,7 @@ function getSlotCountLabel(count) {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
   const activeProfileId = useStore((state) => state.activeProfileId);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
@@ -39,6 +41,7 @@ export default function Dashboard() {
   const getTodaySchedule = useStore((state) => state.getTodaySchedule);
   const logIntake = useStore((state) => state.logIntake);
   const undoIntakeToday = useStore((state) => state.undoIntakeToday);
+  const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
   const getStock = useStore((state) => state.getStock);
 
   // Subscribe to changing store slices so the dashboard re-renders after intake/stock/user-supplement updates.
@@ -65,6 +68,21 @@ export default function Dashboard() {
       return messages.length ? { slot: item.slot, messages } : null;
     })
     .filter(Boolean);
+
+  function handleArchiveSupplement(supplement) {
+    Alert.alert(
+      'Aus Routine entfernen',
+      `${supplement.name} wird aus der aktiven Routine entfernt. Der Eintrag wird archiviert und nicht dauerhaft gelöscht.`,
+      [
+        { text: 'Abbrechen', style: 'cancel' },
+        {
+          text: 'Entfernen',
+          style: 'destructive',
+          onPress: () => archiveUserSupplement(supplement.id),
+        },
+      ]
+    );
+  }
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
@@ -183,6 +201,20 @@ export default function Dashboard() {
                         <Text style={styles.primaryActionText}>Eingenommen</Text>
                       </TouchableOpacity>
                     )}
+
+                    <TouchableOpacity
+                      style={styles.secondaryAction}
+                      onPress={() => router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`)}
+                    >
+                      <Text style={styles.secondaryActionText}>Bearbeiten</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.dangerAction}
+                      onPress={() => handleArchiveSupplement(supplement)}
+                    >
+                      <Text style={styles.dangerActionText}>Entfernen</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               );
@@ -508,6 +540,16 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     alignItems: 'center',
   },
+  dangerAction: {
+    minWidth: 104,
+    borderRadius: 999,
+    backgroundColor: '#FFF7ED',
+    borderWidth: 1,
+    borderColor: '#FED7AA',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    alignItems: 'center',
+  },
   primaryActionText: {
     color: '#FFFFFF',
     fontSize: 12,
@@ -515,6 +557,11 @@ const styles = StyleSheet.create({
   },
   secondaryActionText: {
     color: '#334155',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  dangerActionText: {
+    color: '#9A3412',
     fontSize: 12,
     fontWeight: '800',
   },

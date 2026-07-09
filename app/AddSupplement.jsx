@@ -18,8 +18,11 @@ export default function AddSupplement() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const addUserSupplement = useStore((state) => state.addUserSupplement);
+  const updateUserSupplement = useStore((state) => state.updateUserSupplement);
   const addSupplementFromPendingScan = useStore((state) => state.addSupplementFromPendingScan);
+  const clearPendingScanResult = useStore((state) => state.clearPendingScanResult);
   const pendingScanResult = useStore((state) => state.pendingScanResult);
+  const userSupplements = useStore((state) => state.userSupplements);
   const inventory = useStore((state) => state.librarySupplements);
 
   const [name, setName] = useState('');
@@ -31,8 +34,28 @@ export default function AddSupplement() {
   const [notes, setNotes] = useState('');
   const [childSafe, setChildSafe] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState([]);
-  const fromScan = params.fromScan === '1' && pendingScanResult;
 
+  const editIdParam = Array.isArray(params.editId) ? params.editId[0] : params.editId;
+  const fromScanParam = Array.isArray(params.fromScan) ? params.fromScan[0] : params.fromScan;
+  const editId = typeof editIdParam === 'string' && editIdParam.length > 0 ? editIdParam : null;
+  const existingSupplement = editId
+    ? userSupplements.find((supplement) => supplement.id === editId)
+    : null;
+  const fromScan = !editId && fromScanParam === '1' && pendingScanResult;
+
+  useEffect(() => {
+    if (!existingSupplement) return;
+
+    setName(existingSupplement.name || '');
+    setPurpose(existingSupplement.purpose || '');
+    setCategory(existingSupplement.category || '');
+    setAmount(existingSupplement.dosage?.amount?.toString?.() || '');
+    setUnit(existingSupplement.dosage?.unit?.toString?.() || '');
+    setTimingRaw(existingSupplement.timingRaw || '');
+    setNotes(existingSupplement.notes || '');
+    setChildSafe(Boolean(existingSupplement.childSafe));
+    setSelectedSlots(Array.isArray(existingSupplement.timingSlots) ? existingSupplement.timingSlots : []);
+  }, [existingSupplement]);
 
   useEffect(() => {
     if (!fromScan) return;
@@ -52,6 +75,12 @@ export default function AddSupplement() {
     ].filter(Boolean).join('\n'));
     setSelectedSlots(['evening']);
   }, [fromScan, pendingScanResult]);
+
+  useEffect(() => {
+    if (!fromScan && !editId && pendingScanResult) {
+      clearPendingScanResult();
+    }
+  }, [clearPendingScanResult, editId, fromScan, pendingScanResult]);
 
   const categoryExamples = Array.from(
     new Set(inventory.map((supplement) => supplement.category).filter(Boolean))
@@ -105,6 +134,22 @@ export default function AddSupplement() {
       notes: notes.trim(),
     };
 
+    if (editId) {
+      if (!existingSupplement) {
+        Alert.alert('Eintrag nicht gefunden', 'Dieser Eintrag konnte nicht mehr im lokalen Store gefunden werden.');
+        return;
+      }
+
+      updateUserSupplement(editId, payload);
+
+      Alert.alert(
+        'Aktualisiert',
+        'Die Änderungen wurden in der aktiven Routine gespeichert.',
+        [{ text: 'Zurück', onPress: () => router.back() }]
+      );
+      return;
+    }
+
     if (fromScan) {
       addSupplementFromPendingScan(payload);
     } else {
@@ -113,16 +158,20 @@ export default function AddSupplement() {
 
     Alert.alert(
       'Gespeichert',
-      'Das Supplement wurde als manueller Eintrag hinzugefuegt.',
-      [{ text: 'Zurueck', onPress: () => router.back() }]
+      fromScan
+        ? 'Das bestätigte Scan-Ergebnis wurde deiner Routine hinzugefügt.'
+        : 'Das Supplement wurde als manueller Eintrag hinzugefügt.',
+      [{ text: 'Zurück', onPress: () => router.back() }]
     );
   }
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Neues Supplement</Text>
+      <Text style={styles.title}>{editId ? 'Supplement bearbeiten' : 'Neues Supplement'}</Text>
       <Text style={styles.subtitle}>
-        Manueller Eintrag oder bestaetigtes Mock-Scan-Ergebnis. Kein medizinischer Rat; pruefe Dosierung, Quellen und Hinweise vor Nutzung.
+        {editId
+          ? 'Passe Name, Dosierung, Tages-Slots und Notizen für deine aktive Routine an.'
+          : 'Manueller Eintrag oder bestätigtes Mock-Scan-Ergebnis. Kein medizinischer Rat; prüfe Dosierung, Quellen und Hinweise vor Nutzung.'}
       </Text>
 
       <FormField
@@ -228,7 +277,7 @@ export default function AddSupplement() {
       />
 
       <TouchableOpacity style={styles.primaryButton} onPress={handleSave}>
-        <Text style={styles.primaryButtonText}>Supplement speichern</Text>
+        <Text style={styles.primaryButtonText}>{editId ? 'Änderungen speichern' : 'Supplement speichern'}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
