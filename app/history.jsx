@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import StatusBadge from '../components/StatusBadge';
+import { getSlotLabel } from '../TimingEngine';
 import useStore from '../useStore';
 import { formatSupplementDosage, formatSupplementName } from '../utils/supplementFormatting';
 
@@ -10,8 +11,63 @@ const EMPTY_SUPPLEMENTS = [];
 
 function toDateKey(date = new Date()) {
   const value = date instanceof Date ? date : new Date(date);
-  if (Number.isNaN(value.getTime())) return new Date().toISOString().slice(0, 10);
-  return value.toISOString().slice(0, 10);
+
+  if (Number.isNaN(value.getTime())) {
+    const fallback = new Date();
+    return [
+      fallback.getFullYear(),
+      String(fallback.getMonth() + 1).padStart(2, '0'),
+      String(fallback.getDate()).padStart(2, '0'),
+    ].join('-');
+  }
+
+  return [
+    value.getFullYear(),
+    String(value.getMonth() + 1).padStart(2, '0'),
+    String(value.getDate()).padStart(2, '0'),
+  ].join('-');
+}
+
+function getLogDateKey(log) {
+  if (!log?.takenAt) return 'unknown';
+
+  const date = new Date(log.takenAt);
+  if (Number.isNaN(date.getTime())) return 'unknown';
+
+  return toDateKey(date);
+}
+
+function formatHistoryGroupTitle(dateKey) {
+  if (dateKey === 'unknown') return 'Ohne Datum';
+
+  const date = new Date(`${dateKey}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return 'Ohne Datum';
+
+  const todayKey = toDateKey(new Date());
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayKey = toDateKey(yesterday);
+
+  if (dateKey === todayKey) return 'Heute';
+  if (dateKey === yesterdayKey) return 'Gestern';
+
+  return date.toLocaleDateString('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+
+function formatHistoryTime(value) {
+  if (!value) return 'Zeitpunkt nicht hinterlegt';
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Zeitpunkt nicht lesbar';
+
+  return `${date.toLocaleTimeString('de-DE', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })} Uhr`;
 }
 
 function formatHistoryDate(value) {
@@ -20,29 +76,10 @@ function formatHistoryDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return 'Zeitpunkt nicht lesbar';
 
-  const todayKey = toDateKey(new Date());
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayKey = toDateKey(yesterday);
   const entryKey = toDateKey(date);
+  const dayLabel = formatHistoryGroupTitle(entryKey);
 
-  const dayLabel =
-    entryKey === todayKey
-      ? 'Heute'
-      : entryKey === yesterdayKey
-        ? 'Gestern'
-        : date.toLocaleDateString('de-DE', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          });
-
-  const timeLabel = date.toLocaleTimeString('de-DE', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
-  return `${dayLabel} · ${timeLabel} Uhr`;
+  return `${dayLabel} · ${formatHistoryTime(value)}`;
 }
 
 function formatLogDosage(log, supplement) {
@@ -61,6 +98,25 @@ function getSourceLabel(source) {
   if (source === 'manual') return 'Manuell';
   if (source === 'legacy') return 'Importiert';
   return 'Routine';
+}
+
+function getTimingLabel(slotId) {
+  if (!slotId) return null;
+  return getSlotLabel(slotId);
+}
+
+function groupLogsByDate(logs) {
+  return logs.reduce((groups, log) => {
+    const dateKey = getLogDateKey(log);
+    const existingGroup = groups.find((group) => group.dateKey === dateKey);
+
+    if (existingGroup) {
+      existingGroup.logs.push(log);
+      return groups;
+    }
+
+    return [...groups, { dateKey, logs: [log] }];
+  }, []);
 }
 
 function resolveSupplement(log, supplements) {
@@ -86,6 +142,7 @@ export default function HistoryScreen() {
 
   const activeLogs = sortedLogs.filter((log) => !log.undoneAt);
   const undoneLogs = sortedLogs.filter((log) => log.undoneAt);
+  const historyGroups = groupLogsByDate(sortedLogs);
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
@@ -98,7 +155,7 @@ export default function HistoryScreen() {
       <View style={styles.summaryCard}>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryValue}>{activeLogs.length}</Text>
-          <Text style={styles.summaryLabel}>Aktive Logs</Text>
+          <Text style={styles.summaryLabel}>Aktiv</Text>
         </View>
         <View style={styles.summaryDivider} />
         <View style={styles.summaryItem}>
@@ -120,47 +177,62 @@ export default function HistoryScreen() {
           </Text>
         </View>
       ) : (
-        sortedLogs.map((log) => {
-          const supplement = resolveSupplement(log, supplements);
-          const supplementName = formatSupplementName(supplement, 'Unbekanntes Supplement');
-          const dosage = formatLogDosage(log, supplement);
-          const statusLabel = log.undoneAt ? 'Rückgängig' : 'Eingenommen';
-          const sourceLabel = getSourceLabel(log.source);
+        historyGroups.map((group) => (
+          <View key={group.dateKey} style={styles.group}>
+            <Text style={styles.groupTitle}>{formatHistoryGroupTitle(group.dateKey)}</Text>
 
-          return (
-            <View key={log.id} style={styles.card}>
-              <View style={styles.cardHeader}>
-                <View style={styles.cardTextWrap}>
-                  <Text style={styles.name}>{supplementName}</Text>
-                  <Text style={styles.date}>{formatHistoryDate(log.takenAt)}</Text>
+            {group.logs.map((log) => {
+              const supplement = resolveSupplement(log, supplements);
+              const supplementName = formatSupplementName(supplement, 'Unbekanntes Supplement');
+              const dosage = formatLogDosage(log, supplement);
+              const statusLabel = log.undoneAt ? 'Rückgängig' : 'Eingenommen';
+              const sourceLabel = getSourceLabel(log.source);
+              const timingLabel = getTimingLabel(log.slotId);
+              const showMetaPanel = timingLabel || log.undoneAt;
+
+              return (
+                <View
+                  key={log.id ?? `${log.userSupplementId}-${log.takenAt ?? 'unknown'}`}
+                  style={[styles.card, log.undoneAt ? styles.cardUndone : null]}
+                >
+                  <View style={styles.cardHeader}>
+                    <View style={styles.cardTextWrap}>
+                      <Text style={styles.name}>{supplementName}</Text>
+                      <Text style={styles.date}>{formatHistoryTime(log.takenAt)}</Text>
+                    </View>
+                    <StatusBadge label={statusLabel} tone={log.undoneAt ? 'warning' : 'good'} />
+                  </View>
+
+                  <View style={styles.detailGrid}>
+                    <View style={styles.detailItem}>
+                      <Text style={styles.detailLabel}>Dosierung</Text>
+                      <Text style={styles.detailText}>{dosage}</Text>
+                    </View>
+
+                    <View style={styles.detailItem}>
+                      <Text style={styles.detailLabel}>Quelle</Text>
+                      <Text style={styles.detailText}>{sourceLabel}</Text>
+                    </View>
+                  </View>
+
+                  {showMetaPanel ? (
+                    <View style={styles.metaPanel}>
+                      {timingLabel ? (
+                        <Text style={styles.metaText}>Timing: {timingLabel}</Text>
+                      ) : null}
+
+                      {log.undoneAt ? (
+                        <Text style={styles.metaText}>
+                          Rückgängig gemacht: {formatHistoryDate(log.undoneAt)}
+                        </Text>
+                      ) : null}
+                    </View>
+                  ) : null}
                 </View>
-                <StatusBadge label={statusLabel} tone={log.undoneAt ? 'warning' : 'good'} />
-              </View>
-
-              <View style={styles.detailGrid}>
-                <View style={styles.detailItem}>
-                  <Text style={styles.detailLabel}>Dosierung</Text>
-                  <Text style={styles.detailText}>{dosage}</Text>
-                </View>
-
-                <View style={styles.detailItem}>
-                  <Text style={styles.detailLabel}>Quelle</Text>
-                  <Text style={styles.detailText}>{sourceLabel}</Text>
-                </View>
-              </View>
-
-              {log.slotId ? (
-                <Text style={styles.metaText}>Slot: {log.slotId}</Text>
-              ) : null}
-
-              {log.undoneAt ? (
-                <Text style={styles.metaText}>
-                  Rückgängig gemacht: {formatHistoryDate(log.undoneAt)}
-                </Text>
-              ) : null}
-            </View>
-          );
-        })
+              );
+            })}
+          </View>
+        ))
       )}
 
       <View style={styles.noticeCard}>
@@ -235,6 +307,19 @@ const styles = StyleSheet.create({
     height: 34,
     backgroundColor: '#e2e8f0',
   },
+  group: {
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  groupTitle: {
+    color: '#334155',
+    fontSize: 12,
+    fontWeight: '900',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginTop: 10,
+    marginBottom: 8,
+  },
   card: {
     backgroundColor: '#ffffff',
     borderColor: '#e2e8f0',
@@ -242,6 +327,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 16,
     marginBottom: 12,
+  },
+  cardUndone: {
+    backgroundColor: '#fffbeb',
+    borderColor: '#fde68a',
   },
   cardHeader: {
     flexDirection: 'row',
@@ -288,11 +377,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '800',
   },
+  metaPanel: {
+    backgroundColor: '#f8fafc',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    borderRadius: 14,
+    padding: 12,
+    marginTop: 12,
+    gap: 5,
+  },
   metaText: {
     color: '#64748b',
     fontSize: 12,
     lineHeight: 18,
-    marginTop: 10,
+    fontWeight: '700',
   },
   emptyCard: {
     backgroundColor: '#ffffff',
