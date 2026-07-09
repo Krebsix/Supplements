@@ -5,6 +5,11 @@ import { useRouter } from 'expo-router';
 import { getBlockMessage, isBlocked } from '../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../ConflictLogic';
 import useStore from '../useStore';
+import {
+  formatSupplementDosage,
+  formatSupplementName,
+  formatSupplementPurpose,
+} from '../utils/supplementFormatting';
 
 function formatLastLogged(lastLoggedAt) {
   if (!lastLoggedAt) return 'Heute noch keine Einnahme erfasst.';
@@ -37,7 +42,7 @@ function normalizeRoutineName(name = '') {
 
 function getDuplicateGroups(supplements = []) {
   const groupsByName = supplements.reduce((groups, supplement) => {
-    const key = normalizeRoutineName(supplement.name);
+    const key = normalizeRoutineName(formatSupplementName(supplement, ''));
     if (!key) return groups;
 
     return {
@@ -56,7 +61,7 @@ function getDuplicateGroups(supplements = []) {
       });
 
       return {
-        name: sorted[0]?.name || 'Unbenannter Eintrag',
+        name: formatSupplementName(sorted[0], 'Unbenannter Eintrag'),
         keep: sorted[0],
         duplicates: sorted.slice(1),
       };
@@ -114,9 +119,11 @@ export default function Dashboard() {
   const duplicateGroupNames = duplicateGroups.map((group) => group.name).join(', ');
 
   function handleArchiveSupplement(supplement) {
+    const supplementName = formatSupplementName(supplement);
+
     Alert.alert(
       'Aus Routine entfernen',
-      `${supplement.name} wird aus der aktiven Routine entfernt. Der Eintrag wird archiviert und nicht dauerhaft gelöscht.`,
+      `${supplementName} wird aus der aktiven Routine entfernt. Der Eintrag wird archiviert und nicht dauerhaft gelöscht.`,
       [
         { text: 'Abbrechen', style: 'cancel' },
         {
@@ -236,16 +243,23 @@ export default function Dashboard() {
             </View>
           ) : (
             item.supplements.map((supplement) => {
+              const routineSupplement =
+                activeSupplements.find((entry) => entry.id === supplement.id) ?? supplement;
               const stock = getStock(supplement.id);
+              const supplementName = formatSupplementName(routineSupplement);
+              const supplementMeta = [
+                formatSupplementDosage(routineSupplement, ''),
+                formatSupplementPurpose(routineSupplement, ''),
+              ].filter(Boolean).join(' · ');
+              const supplementNotes = routineSupplement.notes || supplement.notes;
 
               return (
                 <View key={supplement.id} style={styles.supplementCard}>
                   <View style={styles.supplementTextWrap}>
-                    <Text style={styles.supplementName}>{supplement.name}</Text>
-                    <Text style={styles.supplementMeta}>
-                      {supplement.dosage.amount} {supplement.dosage.unit}
-                      {supplement.purpose ? ` · ${supplement.purpose}` : ''}
-                    </Text>
+                    <Text style={styles.supplementName}>{supplementName}</Text>
+                    {supplementMeta ? (
+                      <Text style={styles.supplementMeta}>{supplementMeta}</Text>
+                    ) : null}
 
                     {stock?.currentUnits !== undefined ? (
                       <Text style={styles.noteText}>
@@ -253,8 +267,8 @@ export default function Dashboard() {
                       </Text>
                     ) : null}
 
-                    {supplement.notes ? (
-                      <Text style={styles.noteText}>{supplement.notes}</Text>
+                    {supplementNotes ? (
+                      <Text style={styles.noteText}>{supplementNotes}</Text>
                     ) : null}
                   </View>
 

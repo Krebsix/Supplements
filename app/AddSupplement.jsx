@@ -13,6 +13,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { SLOTS, SLOT_ORDER } from '../TimingEngine';
 import useStore from '../useStore';
+import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
 
 export default function AddSupplement() {
   const router = useRouter();
@@ -49,8 +50,8 @@ export default function AddSupplement() {
     setName(existingSupplement.name || '');
     setPurpose(existingSupplement.purpose || '');
     setCategory(existingSupplement.category || '');
-    setAmount(existingSupplement.dosage?.amount?.toString?.() || '');
-    setUnit(existingSupplement.dosage?.unit?.toString?.() || '');
+    setAmount(getDosageAmount(existingSupplement, ''));
+    setUnit(getDosageUnit(existingSupplement, ''));
     setTimingRaw(existingSupplement.timingRaw || '');
     setNotes(existingSupplement.notes || '');
     setChildSafe(Boolean(existingSupplement.childSafe));

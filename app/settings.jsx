@@ -1,70 +1,14 @@
 import React from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import useStore from '../useStore';
+import {
+  formatSupplementDosage as getSupplementDosage,
+  formatSupplementName as getSupplementName,
+  formatSupplementPurpose as getSupplementPurpose,
+} from '../utils/supplementFormatting';
 
 const EMPTY_SUPPLEMENTS = [];
 
-function formatSupplementValue(value, fallback) {
-  if (value === null || value === undefined || value === '') {
-    return fallback;
-  }
-
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  if (typeof value === 'number' || typeof value === 'boolean') {
-    return String(value);
-  }
-
-  if (Array.isArray(value)) {
-    const formattedValues = value
-      .map((item) => formatSupplementValue(item, ''))
-      .filter(Boolean);
-
-    return formattedValues.length > 0 ? formattedValues.join(', ') : fallback;
-  }
-
-  if (typeof value === 'object') {
-    if ('amount' in value || 'unit' in value) {
-      const amount = value.amount ?? '';
-      const unit = value.unit ?? '';
-
-      return `${amount} ${unit}`.trim() || fallback;
-    }
-
-    return (
-      value.label ||
-      value.name ||
-      value.title ||
-      value.value ||
-      fallback
-    );
-  }
-
-  return fallback;
-}
-
-function getSupplementName(supplement) {
-  return formatSupplementValue(
-    supplement.name || supplement.supplementName || supplement.productName,
-    'Unbenanntes Supplement'
-  );
-}
-
-function getSupplementDosage(supplement) {
-  return formatSupplementValue(
-    supplement.dosage || supplement.dose || supplement.serving,
-    'Dosierung nicht hinterlegt'
-  );
-}
-
-function getSupplementPurpose(supplement) {
-  return formatSupplementValue(
-    supplement.purpose || supplement.goal || supplement.reason,
-    'Zweck nicht hinterlegt'
-  );
-}
 
 export default function SettingsScreen() {
   const userSupplements = useStore((state) => state.userSupplements) ?? EMPTY_SUPPLEMENTS;
