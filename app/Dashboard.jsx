@@ -31,6 +31,43 @@ function getSlotCountLabel(count) {
   return `${count} Einträge`;
 }
 
+function normalizeRoutineName(name = '') {
+  return name.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function getDuplicateGroups(supplements = []) {
+  const groupsByName = supplements.reduce((groups, supplement) => {
+    const key = normalizeRoutineName(supplement.name);
+    if (!key) return groups;
+
+    return {
+      ...groups,
+      [key]: [...(groups[key] || []), supplement],
+    };
+  }, {});
+
+  return Object.values(groupsByName)
+    .filter((group) => group.length > 1)
+    .map((group) => {
+      const sorted = [...group].sort((a, b) => {
+        const aTime = new Date(a.createdAt || 0).getTime();
+        const bTime = new Date(b.createdAt || 0).getTime();
+        return aTime - bTime;
+      });
+
+      return {
+        name: sorted[0]?.name || 'Unbenannter Eintrag',
+        keep: sorted[0],
+        duplicates: sorted.slice(1),
+      };
+    });
+}
+
+function getDuplicateCountLabel(count) {
+  if (count === 1) return '1 zusätzlicher Eintrag';
+  return `${count} zusätzliche Einträge`;
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const activeProfileId = useStore((state) => state.activeProfileId);
@@ -68,6 +105,13 @@ export default function Dashboard() {
       return messages.length ? { slot: item.slot, messages } : null;
     })
     .filter(Boolean);
+  const duplicateGroups = getDuplicateGroups(activeSupplements);
+  const duplicateSupplementsToArchive = duplicateGroups.reduce(
+    (items, group) => [...items, ...group.duplicates],
+    []
+  );
+  const duplicateEntryCount = duplicateSupplementsToArchive.length;
+  const duplicateGroupNames = duplicateGroups.map((group) => group.name).join(', ');
 
   function handleArchiveSupplement(supplement) {
     Alert.alert(
@@ -79,6 +123,27 @@ export default function Dashboard() {
           text: 'Entfernen',
           style: 'destructive',
           onPress: () => archiveUserSupplement(supplement.id),
+        },
+      ]
+    );
+  }
+
+  function handleArchiveDuplicateSupplements() {
+    if (duplicateEntryCount === 0) return;
+
+    Alert.alert(
+      'Mehrfache Einträge bereinigen',
+      `${getDuplicateCountLabel(duplicateEntryCount)} werden archiviert. Je Supplement-Name bleibt ein aktiver Eintrag in deiner Routine erhalten.`,
+      [
+        { text: 'Abbrechen', style: 'cancel' },
+        {
+          text: 'Bereinigen',
+          style: 'destructive',
+          onPress: () => {
+            duplicateSupplementsToArchive.forEach((supplement) => {
+              archiveUserSupplement(supplement.id);
+            });
+          },
         },
       ]
     );
@@ -132,6 +197,23 @@ export default function Dashboard() {
         <MetricCard label="Erledigt" value={String(progress.done)} />
         <MetricCard label="Offen" value={String(pendingToday)} />
       </View>
+
+      {duplicateEntryCount > 0 ? (
+        <View style={styles.cleanupCard}>
+          <Text style={styles.cleanupTitle}>Mehrfache Routine-Einträge erkannt</Text>
+          <Text style={styles.cleanupText}>
+            {getDuplicateCountLabel(duplicateEntryCount)} mit gleichem Namen. Du kannst die zusätzlichen Einträge archivieren; je Name bleibt ein aktiver Eintrag erhalten.
+          </Text>
+          {duplicateGroupNames ? (
+            <Text style={styles.cleanupMeta} numberOfLines={2}>
+              Betroffen: {duplicateGroupNames}
+            </Text>
+          ) : null}
+          <TouchableOpacity style={styles.cleanupButton} onPress={handleArchiveDuplicateSupplements}>
+            <Text style={styles.cleanupButtonText}>Duplikate archivieren</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
 
       <SectionHeading
         title="Routine"
@@ -425,6 +507,45 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     lineHeight: 17,
+  },
+  cleanupCard: {
+    marginTop: 2,
+    marginBottom: 12,
+    borderRadius: 18,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    padding: 15,
+  },
+  cleanupTitle: {
+    color: '#0F172A',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  cleanupText: {
+    marginTop: 7,
+    color: '#475569',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  cleanupMeta: {
+    marginTop: 7,
+    color: '#64748B',
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  cleanupButton: {
+    marginTop: 12,
+    alignSelf: 'flex-start',
+    borderRadius: 999,
+    backgroundColor: '#0F766E',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  cleanupButtonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '800',
   },
   sectionHeader: {
     marginTop: 12,
