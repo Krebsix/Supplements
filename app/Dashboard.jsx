@@ -6,7 +6,7 @@ import { checkAllConflictsForSlot } from '../ConflictLogic';
 import useStore from '../useStore';
 
 function formatLastLogged(lastLoggedAt) {
-  if (!lastLoggedAt) return 'Noch keine Einnahmen heute erfasst.';
+  if (!lastLoggedAt) return 'Heute noch keine Einnahme erfasst.';
 
   const date = new Date(lastLoggedAt);
   if (Number.isNaN(date.getTime())) return 'Letzte Aktivität konnte nicht gelesen werden.';
@@ -17,6 +17,17 @@ function formatLastLogged(lastLoggedAt) {
     hour: '2-digit',
     minute: '2-digit',
   })}`;
+}
+
+function getProgressPercent(done, total) {
+  if (!total) return 0;
+  return Math.min(100, Math.round((done / total) * 100));
+}
+
+function getSlotCountLabel(count) {
+  if (count === 0) return 'Keine Einträge';
+  if (count === 1) return '1 Eintrag';
+  return `${count} Einträge`;
 }
 
 export default function Dashboard() {
@@ -45,6 +56,7 @@ export default function Dashboard() {
   const fullInventoryCount = activeSupplements.length;
   const scheduledToday = progress.total;
   const pendingToday = progress.pending;
+  const progressPercent = getProgressPercent(progress.done, progress.total);
   const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
   const slotAlerts = dailySchedule
@@ -56,103 +68,145 @@ export default function Dashboard() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Supplement OS</Text>
-      <Text style={styles.subtitle}>
-        Tagesuebersicht fuer Profil {activeProfileId}. Die Daten unten kommen aus deinen aktiven Supplements, der Slot-Logik und dem lokalen Store.
-      </Text>
-      <Text style={styles.statusText}>{formatLastLogged(lastLoggedAt)}</Text>
+      <View style={styles.header}>
+        <View style={styles.kickerRow}>
+          <Text style={styles.kicker}>Supplement OS</Text>
+          <Text style={styles.profileLabel}>Profil {activeProfileId}</Text>
+        </View>
+
+        <Text style={styles.title}>Tagesplan</Text>
+        <Text style={styles.subtitle}>
+          Übersicht deiner heutigen Supplement-Routine.
+        </Text>
+      </View>
+
+      <View style={styles.summaryCard}>
+        <View style={styles.summaryTopRow}>
+          <View>
+            <Text style={styles.summaryLabel}>Status heute</Text>
+            <Text style={styles.summaryValue}>
+              {progress.done} von {progress.total} erledigt
+            </Text>
+          </View>
+
+          <View style={styles.percentBadge}>
+            <Text style={styles.percentText}>{progressPercent}%</Text>
+          </View>
+        </View>
+
+        <View style={styles.progressTrack}>
+          <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
+        </View>
+
+        <Text style={styles.lastActivity}>{formatLastLogged(lastLoggedAt)}</Text>
+      </View>
 
       {blockerState.blocked ? (
-        <View style={styles.banner}>
-          <Text style={styles.bannerTitle}>Absorptions-Block aktiv</Text>
-          <Text style={styles.bannerText}>{getBlockMessage(blockerState.remainingMinutes)}</Text>
+        <View style={styles.noticeCard}>
+          <Text style={styles.noticeTitle}>Einnahmehinweis aktiv</Text>
+          <Text style={styles.noticeText}>{getBlockMessage(blockerState.remainingMinutes)}</Text>
         </View>
       ) : null}
 
       <View style={styles.metricGrid}>
         <MetricCard label="Aktiv" value={String(fullInventoryCount)} />
-        <MetricCard label="Heute geplant" value={String(scheduledToday)} />
-        <MetricCard label="Fortschritt" value={`${progress.done}/${progress.total}`} />
-        <MetricCard label="Noch offen" value={String(pendingToday)} />
+        <MetricCard label="Geplant" value={String(scheduledToday)} />
+        <MetricCard label="Erledigt" value={String(progress.done)} />
+        <MetricCard label="Offen" value={String(pendingToday)} />
       </View>
 
       <SectionHeading
-        title="Heutige Slots"
-        subtitle="Die Slot-Reihenfolge und Markierungen kommen direkt aus TimingEngine und Store."
+        title="Routine"
+        subtitle="Nach Einnahmezeit sortiert."
       />
 
       {dailySchedule.map((item) => (
         <View key={item.slot.id} style={styles.slotCard}>
           <View style={styles.slotHeader}>
             <View style={styles.slotHeaderText}>
-              <Text style={styles.slotTitle}>
-                {item.slot.emoji} {item.slot.label}
-              </Text>
+              <Text style={styles.slotTitle}>{item.slot.label}</Text>
               <Text style={styles.slotTime}>{item.slot.time}</Text>
             </View>
-            <Text style={styles.slotCount}>{item.supplements.length}</Text>
+            <Text style={styles.slotCount}>{getSlotCountLabel(item.supplements.length)}</Text>
           </View>
 
           {item.supplements.length === 0 ? (
-            <Text style={styles.emptyText}>Keine Supplements in diesem Slot.</Text>
+            <View style={styles.emptySlot}>
+              <Text style={styles.emptyText}>Für diesen Zeitraum ist nichts geplant.</Text>
+            </View>
           ) : (
-            item.supplements.map((supplement) => (
-              <View key={supplement.id} style={styles.supplementRow}>
-                <View style={styles.supplementTextWrap}>
-                  <Text style={styles.supplementName}>{supplement.name}</Text>
-                  <Text style={styles.supplementMeta}>
-                    {supplement.dosage.amount} {supplement.dosage.unit} · {supplement.purpose}
-                  </Text>
-                  {supplement.notes ? (
-                    <Text style={styles.noteText}>{supplement.notes}</Text>
-                  ) : null}
-                  {getStock(supplement.id)?.currentUnits !== undefined ? (
-                    <Text style={styles.noteText}>Bestand: {getStock(supplement.id).currentUnits} {getStock(supplement.id).unit || 'Einheiten'}</Text>
-                  ) : null}
+            item.supplements.map((supplement) => {
+              const stock = getStock(supplement.id);
+
+              return (
+                <View key={supplement.id} style={styles.supplementCard}>
+                  <View style={styles.supplementTextWrap}>
+                    <Text style={styles.supplementName}>{supplement.name}</Text>
+                    <Text style={styles.supplementMeta}>
+                      {supplement.dosage.amount} {supplement.dosage.unit}
+                      {supplement.purpose ? ` · ${supplement.purpose}` : ''}
+                    </Text>
+
+                    {stock?.currentUnits !== undefined ? (
+                      <Text style={styles.noteText}>
+                        Bestand: {stock.currentUnits} {stock.unit || 'Einheiten'}
+                      </Text>
+                    ) : null}
+
+                    {supplement.notes ? (
+                      <Text style={styles.noteText}>{supplement.notes}</Text>
+                    ) : null}
+                  </View>
+
+                  <View style={styles.actionWrap}>
+                    <Text
+                      style={[
+                        styles.statePill,
+                        supplement.logged ? styles.loggedPill : styles.pendingPill,
+                      ]}
+                    >
+                      {supplement.logged ? 'Erledigt' : 'Offen'}
+                    </Text>
+
+                    {supplement.logged ? (
+                      <TouchableOpacity
+                        style={styles.secondaryAction}
+                        onPress={() => undoIntakeToday(supplement.id)}
+                      >
+                        <Text style={styles.secondaryActionText}>Rückgängig</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.primaryAction}
+                        onPress={() => logIntake(supplement.id, { slotId: item.slot.id })}
+                      >
+                        <Text style={styles.primaryActionText}>Eingenommen</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
-                <View style={styles.actionWrap}>
-                  <Text
-                    style={[
-                      styles.statePill,
-                      supplement.logged ? styles.loggedPill : styles.pendingPill,
-                    ]}
-                  >
-                    {supplement.logged ? 'Erledigt' : 'Offen'}
-                  </Text>
-                  {supplement.logged ? (
-                    <TouchableOpacity style={styles.secondaryAction} onPress={() => undoIntakeToday(supplement.id)}>
-                      <Text style={styles.actionText}>Rueckgaengig</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity style={styles.primaryAction} onPress={() => logIntake(supplement.id, { slotId: item.slot.id })}>
-                      <Text style={styles.actionText}>Eingenommen</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              </View>
-            ))
+              );
+            })
           )}
         </View>
       ))}
 
       <SectionHeading
-        title="Konflikte und Hinweise"
-        subtitle="Diese Hinweise stammen direkt aus ConflictLogic fuer die aktuell gebildeten Slot-Gruppen."
+        title="Hinweise"
+        subtitle="Allgemeine organisatorische Hinweise."
       />
 
       {slotAlerts.length === 0 ? (
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Keine Konflikte erkannt</Text>
+          <Text style={styles.infoTitle}>Keine zusätzlichen Hinweise</Text>
           <Text style={styles.infoText}>
-            Fuer die heutige Slot-Bildung wurden aktuell keine Konflikte oder Synergien gemeldet.
+            Für den aktuellen Tagesplan liegen derzeit keine weiteren organisatorischen Hinweise vor.
           </Text>
         </View>
       ) : (
         slotAlerts.map((group) => (
           <View key={group.slot.id} style={styles.infoCard}>
-            <Text style={styles.infoTitle}>
-              {group.slot.emoji} {group.slot.label}
-            </Text>
+            <Text style={styles.infoTitle}>{group.slot.label}</Text>
             {group.messages.map((message, index) => (
               <Text key={`${group.slot.id}-${index}`} style={styles.infoText}>
                 {message.message}
@@ -161,6 +215,12 @@ export default function Dashboard() {
           </View>
         ))
       )}
+
+      <View style={styles.disclaimerCard}>
+        <Text style={styles.disclaimerText}>
+          Supplement OS unterstützt die Organisation deiner Routine. Die Hinweise sind allgemein und ersetzen keine medizinische Beratung.
+        </Text>
+      </View>
     </ScrollView>
   );
 }
@@ -186,50 +246,129 @@ function MetricCard({ label, value }) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#F4F7FA',
   },
   content: {
     paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingTop: 22,
     paddingBottom: 40,
   },
-  title: {
-    color: '#fff',
-    fontSize: 30,
+  header: {
+    marginBottom: 16,
+  },
+  kickerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  kicker: {
+    color: '#64748B',
+    fontSize: 12,
     fontWeight: '700',
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+  },
+  profileLabel: {
+    color: '#94A3B8',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  title: {
+    marginTop: 12,
+    color: '#0F172A',
+    fontSize: 32,
+    fontWeight: '800',
+    letterSpacing: -0.7,
   },
   subtitle: {
-    marginTop: 8,
-    color: '#a1a1aa',
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  statusText: {
-    marginTop: 8,
-    color: '#71717a',
-    fontSize: 13,
-  },
-  banner: {
-    marginTop: 18,
-    borderRadius: 16,
-    backgroundColor: '#3f1d1d',
-    borderWidth: 1,
-    borderColor: '#7f1d1d',
-    padding: 16,
-  },
-  bannerTitle: {
-    color: '#fecaca',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  bannerText: {
     marginTop: 6,
-    color: '#fca5a5',
+    color: '#64748B',
+    fontSize: 15,
+    lineHeight: 21,
+  },
+  summaryCard: {
+    borderRadius: 22,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 18,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 18,
+    elevation: 2,
+  },
+  summaryTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 16,
+  },
+  summaryLabel: {
+    color: '#64748B',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.9,
+    textTransform: 'uppercase',
+  },
+  summaryValue: {
+    marginTop: 7,
+    color: '#0F172A',
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  percentBadge: {
+    minWidth: 68,
+    borderRadius: 16,
+    backgroundColor: '#EEF6F7',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    alignItems: 'center',
+  },
+  percentText: {
+    color: '#0F766E',
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  progressTrack: {
+    height: 7,
+    marginTop: 18,
+    borderRadius: 999,
+    backgroundColor: '#E2E8F0',
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: 7,
+    borderRadius: 999,
+    backgroundColor: '#0F766E',
+  },
+  lastActivity: {
+    marginTop: 12,
+    color: '#64748B',
     fontSize: 13,
     lineHeight: 18,
   },
+  noticeCard: {
+    marginTop: 12,
+    borderRadius: 18,
+    backgroundColor: '#FFF7ED',
+    borderWidth: 1,
+    borderColor: '#FED7AA',
+    padding: 15,
+  },
+  noticeTitle: {
+    color: '#9A3412',
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  noticeText: {
+    marginTop: 6,
+    color: '#C2410C',
+    fontSize: 13,
+    lineHeight: 19,
+  },
   metricGrid: {
-    marginTop: 20,
+    marginTop: 14,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
@@ -237,157 +376,194 @@ const styles = StyleSheet.create({
   metricCard: {
     width: '48%',
     marginBottom: 12,
-    borderRadius: 16,
-    backgroundColor: '#18181b',
+    borderRadius: 18,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#27272a',
+    borderColor: '#E2E8F0',
     padding: 16,
   },
   metricValue: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '700',
+    color: '#0F172A',
+    fontSize: 26,
+    fontWeight: '800',
   },
   metricLabel: {
     marginTop: 6,
-    color: '#a1a1aa',
+    color: '#64748B',
     fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 17,
   },
   sectionHeader: {
-    marginTop: 14,
-    marginBottom: 12,
+    marginTop: 12,
+    marginBottom: 10,
   },
   sectionTitle: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '700',
+    color: '#0F172A',
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.4,
   },
   sectionSubtitle: {
     marginTop: 4,
-    color: '#71717a',
+    color: '#64748B',
     fontSize: 13,
     lineHeight: 18,
   },
   slotCard: {
-    marginBottom: 14,
-    borderRadius: 18,
-    backgroundColor: '#18181b',
+    marginBottom: 12,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#27272a',
-    padding: 16,
+    borderColor: '#E2E8F0',
+    padding: 15,
   },
   slotHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    gap: 12,
   },
   slotHeaderText: {
     flex: 1,
-    paddingRight: 12,
   },
   slotTitle: {
-    color: '#fff',
+    color: '#0F172A',
     fontSize: 17,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   slotTime: {
     marginTop: 3,
-    color: '#71717a',
+    color: '#64748B',
     fontSize: 12,
+    fontWeight: '600',
   },
   slotCount: {
-    color: '#60a5fa',
-    fontSize: 22,
+    color: '#64748B',
+    fontSize: 12,
     fontWeight: '700',
   },
-  emptyText: {
-    color: '#71717a',
-    fontSize: 13,
+  emptySlot: {
+    borderTopWidth: 1,
+    borderTopColor: '#E2E8F0',
+    paddingTop: 11,
   },
-  supplementRow: {
+  emptyText: {
+    color: '#94A3B8',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  supplementCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingTop: 12,
+    gap: 12,
+    paddingTop: 13,
+    marginTop: 10,
     borderTopWidth: 1,
-    borderTopColor: '#27272a',
+    borderTopColor: '#E2E8F0',
   },
   supplementTextWrap: {
     flex: 1,
-    paddingRight: 12,
   },
   supplementName: {
-    color: '#f4f4f5',
-    fontSize: 15,
-    fontWeight: '600',
+    color: '#0F172A',
+    fontSize: 16,
+    fontWeight: '800',
+    lineHeight: 21,
   },
   supplementMeta: {
     marginTop: 4,
-    color: '#a1a1aa',
+    color: '#475569',
     fontSize: 13,
     lineHeight: 18,
   },
   noteText: {
     marginTop: 4,
-    color: '#71717a',
+    color: '#64748B',
     fontSize: 12,
     lineHeight: 17,
   },
   actionWrap: {
+    minWidth: 104,
     alignItems: 'flex-end',
     gap: 8,
   },
   primaryAction: {
+    minWidth: 104,
     borderRadius: 999,
-    backgroundColor: '#2563eb',
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+    backgroundColor: '#0F766E',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    alignItems: 'center',
   },
   secondaryAction: {
+    minWidth: 104,
     borderRadius: 999,
-    backgroundColor: '#3f3f46',
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    alignItems: 'center',
   },
-  actionText: {
-    color: '#fff',
+  primaryActionText: {
+    color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
+  },
+  secondaryActionText: {
+    color: '#334155',
+    fontSize: 12,
+    fontWeight: '800',
   },
   statePill: {
     overflow: 'hidden',
     borderRadius: 999,
     paddingHorizontal: 10,
     paddingVertical: 6,
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 11,
+    fontWeight: '800',
   },
   loggedPill: {
-    backgroundColor: '#14532d',
-    color: '#bbf7d0',
+    backgroundColor: '#DCFCE7',
+    color: '#166534',
   },
   pendingPill: {
-    backgroundColor: '#1e3a5f',
-    color: '#bfdbfe',
+    backgroundColor: '#F1F5F9',
+    color: '#475569',
   },
   infoCard: {
     marginBottom: 12,
-    borderRadius: 16,
-    backgroundColor: '#18181b',
+    borderRadius: 18,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#27272a',
-    padding: 16,
+    borderColor: '#E2E8F0',
+    padding: 15,
   },
   infoTitle: {
-    color: '#fff',
+    color: '#0F172A',
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   infoText: {
-    marginTop: 8,
-    color: '#a1a1aa',
+    marginTop: 7,
+    color: '#475569',
     fontSize: 13,
     lineHeight: 19,
+  },
+  disclaimerCard: {
+    marginTop: 2,
+    borderRadius: 16,
+    backgroundColor: '#EEF2F6',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 13,
+  },
+  disclaimerText: {
+    color: '#64748B',
+    fontSize: 12,
+    lineHeight: 18,
   },
 });
