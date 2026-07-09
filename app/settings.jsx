@@ -8,15 +8,46 @@ import {
 } from '../utils/supplementFormatting';
 
 const EMPTY_SUPPLEMENTS = [];
+const EMPTY_LOGS = [];
 
 
 export default function SettingsScreen() {
   const userSupplements = useStore((state) => state.userSupplements) ?? EMPTY_SUPPLEMENTS;
+  const intakeLogs = useStore((state) => state.intakeLogs) ?? EMPTY_LOGS;
   const updateUserSupplement = useStore((state) => state.updateUserSupplement);
+  const clearIntakeLogs = useStore((state) => state.clearIntakeLogs);
 
   const archivedSupplements = userSupplements.filter(
     (supplement) => supplement.status === 'archived'
   );
+  const activeIntakeLogs = intakeLogs.filter((log) => !log.undoneAt).length;
+  const undoneIntakeLogs = intakeLogs.filter((log) => log.undoneAt).length;
+
+  const handleClearIntakeLogs = () => {
+    if (intakeLogs.length === 0) {
+      Alert.alert(
+        'Keine Historie vorhanden',
+        'Aktuell gibt es keine lokalen Einnahme-Logs, die gelöscht werden müssen.'
+      );
+      return;
+    }
+
+    Alert.alert(
+      'Einnahmehistorie löschen?',
+      `Dadurch werden ${intakeLogs.length} lokale Einnahme-Logs entfernt. Deine Supplements, dein Archiv, Scanner-Ergebnisse und Bestände bleiben erhalten.`,
+      [
+        {
+          text: 'Abbrechen',
+          style: 'cancel',
+        },
+        {
+          text: 'Historie löschen',
+          style: 'destructive',
+          onPress: clearIntakeLogs,
+        },
+      ]
+    );
+  };
 
   const handleRestoreSupplement = (supplement) => {
     const supplementName = getSupplementName(supplement);
@@ -67,6 +98,39 @@ export default function SettingsScreen() {
         <Text style={styles.cardText}>
           Das bestehende Inventar und der lokale Zustand bleiben unverändert erhalten.
         </Text>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>Datenhygiene</Text>
+        <Text style={styles.cardTitle}>Lokale Einnahmehistorie</Text>
+        <Text style={styles.cardText}>
+          Löscht ausschließlich lokale Einnahme-Logs. Supplements, Archiv, Scanner-Ergebnisse und Bestände bleiben erhalten.
+        </Text>
+
+        <View style={styles.historyStats}>
+          <View style={styles.historyStat}>
+            <Text style={styles.historyStatValue}>{activeIntakeLogs}</Text>
+            <Text style={styles.historyStatLabel}>Aktiv</Text>
+          </View>
+          <View style={styles.historyStat}>
+            <Text style={styles.historyStatValue}>{undoneIntakeLogs}</Text>
+            <Text style={styles.historyStatLabel}>Rückgängig</Text>
+          </View>
+          <View style={styles.historyStat}>
+            <Text style={styles.historyStatValue}>{intakeLogs.length}</Text>
+            <Text style={styles.historyStatLabel}>Gesamt</Text>
+          </View>
+        </View>
+
+        <Pressable
+          onPress={handleClearIntakeLogs}
+          style={({ pressed }) => [
+            styles.dangerButton,
+            pressed ? styles.dangerButtonPressed : null,
+          ]}
+        >
+          <Text style={styles.dangerButtonText}>Einnahmehistorie löschen</Text>
+        </Pressable>
       </View>
 
       <View style={styles.archiveSection}>

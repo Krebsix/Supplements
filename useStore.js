@@ -173,6 +173,10 @@ export const useStore = create(
         }));
         return log;
       },
+      clearIntakeLogs: () => set({
+        intakeLogs: [],
+        absorptionBlockedAt: null,
+      }),
       getLoggedToday: (date = new Date()) => {
         const dateKey = toDateKey(date);
         return get().intakeLogs.filter((log) => log.dateKey === dateKey && !log.undoneAt);
