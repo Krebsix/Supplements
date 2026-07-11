@@ -8,57 +8,85 @@ export default function Home() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.kicker}>Supplement OS</Text>
-      <Text style={styles.title}>Klinische Routine statt Produktchaos</Text>
+      <Text style={styles.title}>Scannen. Prüfen. In Routine überführen.</Text>
       <Text style={styles.subtitle}>
-        Scanne Produkte, prüfe Wirkstoffe und überführe bestätigte Einträge strukturiert in deinen Tagesplan.
+        Dein strukturierter Workspace für Supplement-Daten, Tagesroutine, Verlauf und spätere Scanner-Qualität.
       </Text>
 
       <View style={styles.heroCard}>
-        <Text style={styles.heroLabel}>Analyse-Workflow</Text>
-        <Text style={styles.heroTitle}>Produkt erfassen, Ergebnis prüfen, Routine aufbauen.</Text>
+        <Text style={styles.heroLabel}>Klinischer Workflow</Text>
+        <Text style={styles.heroTitle}>Erfassen, validieren, dokumentieren.</Text>
         <Text style={styles.heroText}>
-          Die App bleibt bewusst ruhig: erst saubere Daten, dann bessere Erkennung, danach echte Scanner-Qualität.
+          Supplement OS priorisiert belastbare Einträge: erst klare Produktdaten, dann Routine-Logik, später echte Scanner-Intelligenz.
         </Text>
 
         <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/scanner')}>
-          <Text style={styles.primaryButtonText}>Supplement scannen</Text>
+          <Text style={styles.primaryButtonText}>Produkt scannen</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push('/search')}>
-          <Text style={styles.secondaryButtonText}>Manuell suchen</Text>
+          <Text style={styles.secondaryButtonText}>Manuell erfassen</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>Arbeitsbereiche</Text>
+      <View style={styles.trustCard}>
+        <Text style={styles.trustLabel}>Produktprinzip</Text>
+
+        <TrustItem
+          title="Datenqualität vor Automatisierung"
+          text="Scanner- und manuelle Einträge sollen nachvollziehbar bleiben, bevor sie Routine-Logik beeinflussen."
+        />
+
+        <TrustItem
+          title="Archiv statt Datenverlust"
+          text="Entfernte Supplements bleiben wiederherstellbar, damit Verlauf und Kontext erhalten bleiben."
+        />
+
+        <TrustItem
+          title="Allgemeine Hinweise"
+          text="Die App organisiert und dokumentiert. Sie ersetzt keine medizinische Beratung."
+        />
+      </View>
+
+      <Text style={styles.sectionTitle}>Workflow</Text>
 
       <NavCard
         index="01"
         title="Tagesplan"
-        subtitle="Einnahme-Slots, offene Einträge, erledigte Supplements und Hinweise."
+        subtitle="Heute geplante Einnahmen, dokumentierte Routinen, offene Einträge und organisatorische Prüfhinweise."
         onPress={() => router.push('/Dashboard')}
       />
 
       <NavCard
         index="02"
         title="Neues Supplement"
-        subtitle="Manuellen Eintrag zum lokalen Inventar hinzufügen."
+        subtitle="Manuellen Eintrag mit Dosierung, Timing und Zweck sauber in die aktive Routine aufnehmen."
         onPress={() => router.push('/AddSupplement')}
       />
 
       <NavCard
         index="03"
         title="Verlauf"
-        subtitle="Letzte Analysen und gespeicherte Scan-Ergebnisse prüfen."
+        subtitle="Dokumentierte Einnahmen, Routine-Aktivität und frühere Einträge nachvollziehen."
         onPress={() => router.push('/history')}
       />
 
       <NavCard
         index="04"
         title="Einstellungen"
-        subtitle="App-Status, Benachrichtigungen und spätere Datenquellen."
+        subtitle="Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten."
         onPress={() => router.push('/settings')}
       />
     </ScrollView>
+  );
+}
+
+function TrustItem({ title, text }) {
+  return (
+    <View style={styles.trustItem}>
+      <Text style={styles.trustItemTitle}>{title}</Text>
+      <Text style={styles.trustItemText}>{text}</Text>
+    </View>
   );
 }
 
@@ -113,7 +141,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 24,
     padding: 18,
-    marginBottom: 26,
+    marginBottom: 16,
     shadowColor: '#0f172a',
     shadowOpacity: 0.05,
     shadowRadius: 14,
@@ -165,6 +193,40 @@ const styles = StyleSheet.create({
     color: '#0f172a',
     fontSize: 15,
     fontWeight: '800',
+  },
+  trustCard: {
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    borderRadius: 22,
+    padding: 16,
+    marginBottom: 24,
+  },
+  trustLabel: {
+    color: '#64748b',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 10,
+  },
+  trustItem: {
+    borderTopWidth: 1,
+    borderTopColor: '#e2e8f0',
+    paddingTop: 12,
+    marginTop: 12,
+  },
+  trustItemTitle: {
+    color: '#0f172a',
+    fontSize: 14,
+    fontWeight: '800',
+    lineHeight: 19,
+  },
+  trustItemText: {
+    color: '#64748b',
+    fontSize: 13,
+    lineHeight: 19,
+    marginTop: 4,
   },
   sectionTitle: {
     color: '#0f172a',
