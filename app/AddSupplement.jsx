@@ -61,20 +61,70 @@ export default function AddSupplement() {
   useEffect(() => {
     if (!fromScan) return;
 
-    setName(pendingScanResult.productName || pendingScanResult.name || '');
+    const scannedAmount =
+      pendingScanResult?.dosage?.amount ??
+      pendingScanResult?.dosageAmount ??
+      pendingScanResult?.amount ??
+      '';
+
+    const scannedUnit =
+      pendingScanResult?.dosage?.unit ??
+      pendingScanResult?.dosageUnit ??
+      pendingScanResult?.unit ??
+      '';
+
+    const recognizedBrand =
+      pendingScanResult.brand &&
+      pendingScanResult.brand !== 'Demo Brand'
+        ? pendingScanResult.brand
+        : null;
+
+    const recognizedIngredients =
+      Array.isArray(pendingScanResult.detectedIngredients) &&
+      pendingScanResult.detectedIngredients.length > 0
+        ? pendingScanResult.detectedIngredients
+        : [];
+
+    const scanWarnings = Array.isArray(pendingScanResult.warnings)
+      ? pendingScanResult.warnings
+      : [];
+
+    setName(
+      pendingScanResult.productName ||
+        pendingScanResult.name ||
+        ''
+    );
     setPurpose('Aus Scan übernommen');
     setCategory('Scan-Ergebnis');
-    setAmount('1');
-    setUnit('Portion');
-    setTimingRaw(pendingScanResult.timingSuggestion || '');
-    setNotes([
-      pendingScanResult.brand && pendingScanResult.brand !== 'Demo Brand' ? `Marke: ${pendingScanResult.brand}` : null,
-      Array.isArray(pendingScanResult.detectedIngredients)
-        ? `Erkannte Inhaltsstoffe: ${pendingScanResult.detectedIngredients.join(', ')}`
-        : null,
-      pendingScanResult.uncertaintyNote || null,
-    ].filter(Boolean).join('\n'));
-    setSelectedSlots(['evening']);
+    setAmount(
+      scannedAmount === null || scannedAmount === undefined
+        ? ''
+        : String(scannedAmount)
+    );
+    setUnit(
+      scannedUnit === null || scannedUnit === undefined
+        ? ''
+        : String(scannedUnit)
+    );
+    setTimingRaw('');
+    setNotes(
+      [
+        recognizedBrand ? `Marke: ${recognizedBrand}` : null,
+        recognizedIngredients.length > 0
+          ? `Erkannte Inhaltsstoffe: ${recognizedIngredients.join(', ')}`
+          : null,
+        pendingScanResult.timingSuggestion
+          ? `Unbestätigter Timing-Hinweis: ${pendingScanResult.timingSuggestion}`
+          : null,
+        scanWarnings.length > 0
+          ? `Prüfhinweise:\n- ${scanWarnings.join('\n- ')}`
+          : null,
+        pendingScanResult.uncertaintyNote || null,
+      ]
+        .filter(Boolean)
+        .join('\n\n')
+    );
+    setSelectedSlots([]);
   }, [fromScan, pendingScanResult]);
 
   useEffect(() => {
@@ -124,7 +174,7 @@ export default function AddSupplement() {
   const modePillLabel = editId ? 'Bearbeiten' : fromScan ? 'Prüfen' : 'Manuell';
 
   const trustCopy = fromScan
-    ? 'Scan-Daten sind ein Startpunkt. Prüfe Name, Dosierung, Einheit und Timing, bevor du den Eintrag in deine Routine übernimmst.'
+    ? 'Scan-Daten sind ein Startpunkt. Nicht erkannte Dosierung, Einheit und Tageszeit bleiben bewusst leer und müssen vor dem Speichern ergänzt werden.'
     : editId
       ? 'Änderungen wirken sich auf deine aktive Tagesroutine aus. Historische Einnahmen bleiben davon unberührt.'
       : 'Dieser Eintrag strukturiert deine persönliche Routine. Die App gibt hier keine Diagnose, Therapie- oder Dosierungsempfehlung.';
