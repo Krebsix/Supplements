@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
+  ActivityIndicator,
+  Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 
 import mockScanResult from '../data/mockScanResult';
@@ -53,42 +57,133 @@ export default function ScannerScreen() {
     (state) => state.setPendingScanResult
   );
 
+  const cameraRef = useRef(null);
+  const [permission, requestPermission] = useCameraPermissions();
+
   const [activeIndex, setActiveIndex] = useState(0);
-  const [capturedIds, setCapturedIds] = useState([]);
+  const [captures, setCaptures] = useState({});
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [captureError, setCaptureError] = useState('');
 
   const activeStep = CAPTURE_STEPS[activeIndex];
-  const activeCaptured = capturedIds.includes(activeStep.id);
+  const activeCapture = captures[activeStep.id] || null;
+  const activeCaptured = Boolean(activeCapture);
+  const capturedIds = CAPTURE_STEPS.filter((step) =>
+    Boolean(captures[step.id])
+  ).map((step) => step.id);
   const completedCount = capturedIds.length;
   const remainingCount = CAPTURE_STEPS.length - completedCount;
   const allCaptured = remainingCount === 0;
   const progress = `${(completedCount / CAPTURE_STEPS.length) * 100}%`;
+  const cameraPermissionBlocked =
+    permission && !permission.granted && permission.canAskAgain === false;
 
-  function handleCapture() {
-    const wasCaptured = capturedIds.includes(activeStep.id);
+  async function handlePermissionAction() {
+    setCaptureError('');
 
-    if (!wasCaptured) {
-      setCapturedIds((current) => [...current, activeStep.id]);
+    try {
+      if (permission?.canAskAgain === false) {
+        await Linking.openSettings();
+        return;
+      }
+
+      const nextPermission = await requestPermission();
+
+      if (!nextPermission.granted) {
+        setCaptureError(
+          'Ohne Kamerazugriff können keine Produktfotos aufgenommen werden.'
+        );
+      }
+    } catch {
+      setCaptureError(
+        'Der Kamerazugriff konnte nicht angefragt werden. Bitte versuche es erneut.'
+      );
+    }
+  }
+
+  async function handleCapture() {
+    if (!permission?.granted) {
+      await handlePermissionAction();
+      return;
     }
 
-    if (!wasCaptured && activeIndex < CAPTURE_STEPS.length - 1) {
-      setActiveIndex((current) => current + 1);
+    if (!cameraRef.current || !isCameraReady || isCapturing) {
+      return;
+    }
+
+    const captureIndex = activeIndex;
+    const stepId = activeStep.id;
+
+    setIsCapturing(true);
+    setCaptureError('');
+
+    try {
+      const photo = await cameraRef.current.takePictureAsync({
+        quality: 0.85,
+        skipProcessing: false,
+      });
+
+      if (!photo?.uri) {
+        throw new Error('Die Kamera hat keine Bilddatei zurückgegeben.');
+      }
+
+      setCaptures((current) => ({
+        ...current,
+        [stepId]: {
+          uri: photo.uri,
+          width: photo.width ?? null,
+          height: photo.height ?? null,
+          capturedAt: new Date().toISOString(),
+        },
+      }));
+
+      if (captureIndex < CAPTURE_STEPS.length - 1) {
+        setIsCameraReady(false);
+        setActiveIndex(captureIndex + 1);
+      }
+    } catch {
+      setCaptureError(
+        'Das Foto konnte nicht gespeichert werden. Halte das Produkt ruhig und versuche es erneut.'
+      );
+    } finally {
+      setIsCapturing(false);
     }
   }
 
   function handleRemoveCapture() {
-    setCapturedIds((current) =>
-      current.filter((captureId) => captureId !== activeStep.id)
-    );
+    setCaptures((current) => {
+      const nextCaptures = { ...current };
+      delete nextCaptures[activeStep.id];
+      return nextCaptures;
+    });
+
+    setIsCameraReady(false);
+    setCaptureError('');
+  }
+
+  function handleSelectStep(index) {
+    setActiveIndex(index);
+    setIsCameraReady(false);
+    setCaptureError('');
   }
 
   function handleNextOpenStep() {
     const nextOpenIndex = CAPTURE_STEPS.findIndex(
-      (step) => !capturedIds.includes(step.id)
+      (step) => !captures[step.id]
     );
 
     if (nextOpenIndex >= 0) {
-      setActiveIndex(nextOpenIndex);
+      handleSelectStep(nextOpenIndex);
     }
+  }
+
+  function handleCameraMountError(error) {
+    setIsCameraReady(false);
+    setCaptureError(
+      error?.message ||
+        'Die Kamera konnte nicht gestartet werden. Bitte öffne den Scanner erneut.'
+    );
   }
 
   function handleMockScan() {
@@ -187,21 +282,50 @@ export default function ScannerScreen() {
             activeCaptured && styles.cameraFrameComplete,
           ]}
         >
+          {activeCapture ? (
+            <Image
+              source={{ uri: activeCapture.uri }}
+              style={styles.capturedImage}
+              resizeMode="cover"
+            />
+          ) : permission?.granted ? (
+            <CameraView
+              key={activeStep.id}
+              ref={cameraRef}
+              style={styles.cameraPreview}
+              facing="back"
+              onCameraReady={() => {
+                setIsCameraReady(true);
+                setCaptureError('');
+              }}
+              onMountError={handleCameraMountError}
+            />
+          ) : (
+            <View style={styles.cameraPlaceholder}>
+              {permission === null && (
+                <ActivityIndicator size="small" color="#0f766e" />
+              )}
+
+              <Text style={styles.cameraPlaceholderTitle}>
+                {permission === null
+                  ? 'Kamerazugriff wird geprüft'
+                  : cameraPermissionBlocked
+                    ? 'Kamerazugriff ist deaktiviert'
+                    : 'Kamerazugriff erforderlich'}
+              </Text>
+
+              <Text style={styles.cameraPlaceholderText}>
+                {cameraPermissionBlocked
+                  ? 'Aktiviere die Kamera für Expo Go in den iPhone-Einstellungen.'
+                  : 'Die Kamera wird ausschließlich für die vier Produktaufnahmen verwendet.'}
+              </Text>
+            </View>
+          )}
+
           <View style={[styles.corner, styles.cornerTopLeft]} />
           <View style={[styles.corner, styles.cornerTopRight]} />
           <View style={[styles.corner, styles.cornerBottomLeft]} />
           <View style={[styles.corner, styles.cornerBottomRight]} />
-
-          <View style={styles.productPreview}>
-            <View style={styles.productCap} />
-            <View style={styles.productBody}>
-              <View style={styles.productLabel}>
-                <View style={styles.productLabelLineStrong} />
-                <View style={styles.productLabelLine} />
-                <View style={styles.productLabelLineShort} />
-              </View>
-            </View>
-          </View>
 
           <View
             style={[
@@ -216,11 +340,23 @@ export default function ScannerScreen() {
               ]}
             >
               {activeCaptured
-                ? 'Aufnahme wurde für diesen Schritt gespeichert'
-                : 'Produkt ruhig und vollständig im Rahmen positionieren'}
+                ? 'Echte Aufnahme für diesen Schritt gespeichert'
+                : permission?.granted
+                  ? isCameraReady
+                    ? 'Produkt ruhig und vollständig im Rahmen positionieren'
+                    : 'Kamera wird vorbereitet'
+                  : cameraPermissionBlocked
+                    ? 'Kamerazugriff in den iPhone-Einstellungen aktivieren'
+                    : 'Kamerazugriff für die Aufnahme erlauben'}
             </Text>
           </View>
         </View>
+
+        {captureError ? (
+          <View style={styles.captureErrorBox}>
+            <Text style={styles.captureErrorText}>{captureError}</Text>
+          </View>
+        ) : null}
 
         <View style={styles.guidanceBox}>
           <Text style={styles.guidanceLabel}>Für eine gute Erkennung</Text>
@@ -230,15 +366,44 @@ export default function ScannerScreen() {
         </View>
 
         <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={handleCapture}
+          style={[
+            styles.primaryButton,
+            (isCapturing ||
+              (permission?.granted &&
+                !activeCaptured &&
+                !isCameraReady)) &&
+              styles.primaryButtonDisabled,
+          ]}
+          onPress={
+            activeCaptured
+              ? handleRemoveCapture
+              : permission?.granted
+                ? handleCapture
+                : handlePermissionAction
+          }
+          disabled={
+            isCapturing ||
+            Boolean(
+              permission?.granted &&
+                !activeCaptured &&
+                !isCameraReady
+            )
+          }
           activeOpacity={0.85}
           accessibilityRole="button"
         >
           <Text style={styles.primaryButtonText}>
             {activeCaptured
-              ? 'Aufnahme erneut simulieren'
-              : 'Aufnahme simulieren'}
+              ? 'Foto neu aufnehmen'
+              : isCapturing
+                ? 'Foto wird gespeichert'
+                : !permission?.granted
+                  ? cameraPermissionBlocked
+                    ? 'iPhone-Einstellungen öffnen'
+                    : 'Kamerazugriff erlauben'
+                  : !isCameraReady
+                    ? 'Kamera wird vorbereitet'
+                    : 'Foto aufnehmen'}
           </Text>
         </TouchableOpacity>
 
@@ -276,9 +441,10 @@ export default function ScannerScreen() {
                 isActive && styles.stepCardActive,
                 isComplete && styles.stepCardComplete,
               ]}
-              onPress={() => setActiveIndex(index)}
+              onPress={() => handleSelectStep(index)}
               activeOpacity={0.8}
               accessibilityRole="button"
+              disabled={isCapturing}
             >
               <View
                 style={[
@@ -381,9 +547,9 @@ export default function ScannerScreen() {
       </TouchableOpacity>
 
       <Text style={styles.disclaimer}>
-        Die aktuelle Version verwendet weiterhin ein kontrolliertes
-        Test-Ergebnis. Eine echte Kamera- und Texterkennung wird in einer
-        späteren technischen Phase angebunden.
+        Die Fotos werden nur für den laufenden Scan im App-Speicher gehalten.
+        Die Auswertung nutzt in dieser Phase weiterhin ein kontrolliertes
+        Test-Ergebnis. OCR und echte Produkterkennung sind noch nicht verbunden.
       </Text>
     </ScrollView>
   );
@@ -559,8 +725,37 @@ const styles = StyleSheet.create({
     borderColor: '#5eead4',
     backgroundColor: '#f0fdfa',
   },
+  cameraPreview: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  capturedImage: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
+  },
+  cameraPlaceholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 34,
+    paddingBottom: 28,
+  },
+  cameraPlaceholderTitle: {
+    color: '#0f172a',
+    fontSize: 16,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginTop: 12,
+  },
+  cameraPlaceholderText: {
+    color: '#64748b',
+    fontSize: 13,
+    lineHeight: 19,
+    textAlign: 'center',
+    marginTop: 7,
+  },
   corner: {
     position: 'absolute',
+    zIndex: 2,
     width: 34,
     height: 34,
     borderColor: '#0f766e',
@@ -644,6 +839,7 @@ const styles = StyleSheet.create({
   },
   frameState: {
     position: 'absolute',
+    zIndex: 3,
     left: 14,
     right: 14,
     bottom: 12,
@@ -670,6 +866,21 @@ const styles = StyleSheet.create({
   frameStateTextComplete: {
     color: '#0f766e',
   },
+  captureErrorBox: {
+    backgroundColor: '#fff7ed',
+    borderWidth: 1,
+    borderColor: '#fed7aa',
+    borderRadius: 14,
+    paddingHorizontal: 13,
+    paddingVertical: 11,
+    marginTop: 12,
+  },
+  captureErrorText: {
+    color: '#9a3412',
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '700',
+  },
   guidanceBox: {
     backgroundColor: '#f8fafc',
     borderRadius: 16,
@@ -695,6 +906,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 18,
+  },
+  primaryButtonDisabled: {
+    backgroundColor: '#94a3b8',
   },
   primaryButtonText: {
     color: '#ffffff',
