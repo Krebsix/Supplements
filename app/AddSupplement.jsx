@@ -174,7 +174,7 @@ export default function AddSupplement() {
   const modePillLabel = editId ? 'Bearbeiten' : fromScan ? 'Prüfen' : 'Manuell';
 
   const trustCopy = fromScan
-    ? 'Scan-Daten sind ein Startpunkt. Nicht erkannte Dosierung, Einheit und Tageszeit bleiben bewusst leer und müssen vor dem Speichern ergänzt werden.'
+    ? 'Scan-Daten sind ein Startpunkt. Nicht erkannte Dosierung und Einheit bleiben bewusst leer und werden transparent als fehlend gespeichert, bis du sie ergänzt.'
     : editId
       ? 'Änderungen wirken sich auf deine aktive Tagesroutine aus. Historische Einnahmen bleiben davon unberührt.'
       : 'Dieser Eintrag strukturiert deine persönliche Routine. Die App gibt hier keine Diagnose, Therapie- oder Dosierungsempfehlung.';
@@ -210,8 +210,8 @@ export default function AddSupplement() {
       timingSlots: selectedSlots,
       timingRaw: derivedTimingRaw,
       dosage: {
-        amount: amount.trim() || '1',
-        unit: unit.trim() || 'Kapsel',
+        amount: amount.trim(),
+        unit: unit.trim(),
       },
       childSafe,
       conflictIds: [],

@@ -16,10 +16,75 @@ function toDateKey(date = new Date()) {
   return value.toISOString().slice(0, 10);
 }
 
+function normalizeOptionalText(value) {
+  if (value === null || value === undefined) return '';
+  return String(value).trim();
+}
+
 function normalizeDosage(dosage = {}) {
   return {
-    amount: dosage?.amount?.toString?.() || '1',
-    unit: dosage?.unit?.toString?.() || 'Kapsel',
+    amount: normalizeOptionalText(dosage?.amount),
+    unit: normalizeOptionalText(dosage?.unit),
+  };
+}
+
+function normalizeCaptureSummary(captureSummary) {
+  if (!captureSummary || typeof captureSummary !== 'object') {
+    return null;
+  }
+
+  const steps = Array.isArray(captureSummary.steps)
+    ? captureSummary.steps
+        .map((step) => ({
+          id: normalizeOptionalText(step?.id),
+          width: Number.isFinite(Number(step?.width))
+            ? Number(step.width)
+            : null,
+          height: Number.isFinite(Number(step?.height))
+            ? Number(step.height)
+            : null,
+          capturedAt:
+            typeof step?.capturedAt === 'string'
+              ? step.capturedAt
+              : null,
+        }))
+        .filter((step) => step.id)
+    : [];
+
+  const completedCount = Number(captureSummary.completedCount);
+  const requiredCount = Number(captureSummary.requiredCount);
+
+  return {
+    completedCount: Number.isFinite(completedCount)
+      ? completedCount
+      : steps.length,
+    requiredCount: Number.isFinite(requiredCount)
+      ? requiredCount
+      : steps.length,
+    steps,
+  };
+}
+
+function normalizeScanResult(result = {}) {
+  const source =
+    result && typeof result === 'object'
+      ? result
+      : {};
+
+  const {
+    captureSummary: rawCaptureSummary,
+    ...scanData
+  } = source;
+
+  const captureSummary =
+    normalizeCaptureSummary(rawCaptureSummary);
+
+  return {
+    ...scanData,
+    ...(captureSummary ? { captureSummary } : {}),
+    id: scanData.id || createId('scan'),
+    savedAt:
+      scanData.savedAt || new Date().toISOString(),
   };
 }
 
@@ -68,8 +133,8 @@ function migratePersistedState(persistedState = {}) {
           slotId: log.slotId || null,
           dateKey: log.dateKey || toDateKey(log.timestamp || log.takenAt),
           takenAt: log.takenAt || log.timestamp || new Date().toISOString(),
-          amount: log.amount || '1',
-          unit: log.unit || 'Einheit',
+          amount: normalizeOptionalText(log.amount),
+          unit: normalizeOptionalText(log.unit),
           source: log.source || 'legacy',
           undoneAt: log.undoneAt || null,
         }))
@@ -117,9 +182,20 @@ export const useStore = create(
       getLibrarySupplementById: (id) => get().librarySupplements.find((supplement) => supplement.id === id),
       setPendingScanResult: (result) => set({ pendingScanResult: result }),
       clearPendingScanResult: () => set({ pendingScanResult: null }),
-      saveScanResult: (result) => set((state) => ({
-        scanResults: [{ ...result, id: result.id || createId('scan'), savedAt: new Date().toISOString() }, ...state.scanResults],
-      })),
+      saveScanResult: (result) => {
+        const storedScan = normalizeScanResult(result);
+
+        set((state) => ({
+          scanResults: [
+            storedScan,
+            ...state.scanResults.filter(
+              (scan) => scan.id !== storedScan.id
+            ),
+          ],
+        }));
+
+        return storedScan;
+      },
       addSupplementFromPendingScan: (formData) => {
         const pending = get().pendingScanResult;
         const supplement = get().addUserSupplement({
@@ -145,8 +221,12 @@ export const useStore = create(
           slotId: options.slotId || supplement.timingSlots?.[0] || null,
           dateKey: options.dateKey || toDateKey(now),
           takenAt: options.takenAt || now.toISOString(),
-          amount: options.amount || supplement.dosage?.amount || '1',
-          unit: options.unit || supplement.dosage?.unit || 'Einheit',
+          amount: normalizeOptionalText(
+            options.amount ?? supplement.dosage?.amount
+          ),
+          unit: normalizeOptionalText(
+            options.unit ?? supplement.dosage?.unit
+          ),
           source: options.source || 'dashboard',
           undoneAt: null,
           stockDelta: Number.isFinite(Number(stock?.currentUnits)) ? decrement : 0,

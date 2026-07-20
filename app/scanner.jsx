@@ -192,8 +192,28 @@ export default function ScannerScreen() {
       return;
     }
 
-    saveScanResult(mockScanResult);
-    setPendingScanResult(mockScanResult);
+    const scanDraft = {
+      ...mockScanResult,
+      analysisMode: 'mock',
+      captureSummary: {
+        completedCount,
+        requiredCount: CAPTURE_STEPS.length,
+        steps: CAPTURE_STEPS.map((step) => {
+          const capture = captures[step.id];
+
+          return {
+            id: step.id,
+            width: capture?.width ?? null,
+            height: capture?.height ?? null,
+            capturedAt: capture?.capturedAt ?? null,
+          };
+        }),
+      },
+    };
+
+    const storedScan = saveScanResult(scanDraft);
+
+    setPendingScanResult(storedScan);
     router.push('/results');
   }
 

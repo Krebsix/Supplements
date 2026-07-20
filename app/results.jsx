@@ -19,6 +19,9 @@ function hasText(value) {
 export default function ResultsScreen() {
   const router = useRouter();
 
+  const saveScanResult = useStore(
+    (state) => state.saveScanResult
+  );
   const pendingScanResult = useStore(
     (state) => state.pendingScanResult
   );
@@ -65,7 +68,12 @@ export default function ResultsScreen() {
 
   function handleOpenReviewForm() {
     if (!pendingScanResult) {
-      setPendingScanResult(mockScanResult);
+      const storedScan = saveScanResult({
+        ...mockScanResult,
+        analysisMode: 'demo-fallback',
+      });
+
+      setPendingScanResult(storedScan);
     }
 
     router.push('/AddSupplement?fromScan=1');

@@ -175,11 +175,29 @@ async function _scheduleOne(supplement, slotId, triggerTimestamp) {
   const slot  = SLOTS[slotId];
   const stock = null; // wird im Response-Handler gelesen
 
+  const dosageLabel = [
+    supplement?.dosage?.amount,
+    supplement?.dosage?.unit,
+  ]
+    .map((value) =>
+      value === null || value === undefined
+        ? ''
+        : String(value).trim()
+    )
+    .filter(Boolean)
+    .join(' ') || 'Dosierung nicht hinterlegt';
+
+  const purposeLabel =
+    typeof supplement?.purpose === 'string' &&
+    supplement.purpose.trim()
+      ? supplement.purpose.trim()
+      : 'Zweck nicht hinterlegt';
+
   try {
     const notifId = await Notifications.scheduleNotificationAsync({
       content: {
         title:      `${slot?.emoji ?? '💊'} ${supplement.name}`,
-        body:       `${supplement.dosage.amount} ${supplement.dosage.unit} – ${supplement.purpose}`,
+        body:       `${dosageLabel} – ${purposeLabel}`,
         data: {
           supplementId: supplement.id,
           slotId,
