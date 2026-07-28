@@ -51,6 +51,23 @@ export default function SubstanceInsightCard({ profile }) {
 
       <Text style={styles.what}>{profile.what}</Text>
 
+      {/* Lebensphasen-Hinweise stehen bewusst vor allem anderen —
+          eine Kontraindikation darf nicht im Aufklappmenue verschwinden. */}
+      {(profile.advisories ?? []).map((advisory, index) => (
+        <View
+          key={`${advisory.severity}-${index}`}
+          style={[
+            styles.advisory,
+            { borderLeftColor: advisory.meta.hex },
+          ]}
+        >
+          <Text style={[styles.advisoryLabel, { color: advisory.meta.hex }]}>
+            {advisory.meta.label}
+          </Text>
+          <Text style={styles.advisoryText}>{advisory.text}</Text>
+        </View>
+      ))}
+
       {check ? (
         <View
           style={[
@@ -207,6 +224,25 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     marginTop: 9,
+  },
+  advisory: {
+    backgroundColor: '#f8fafc',
+    borderLeftWidth: 3,
+    borderRadius: 12,
+    padding: 11,
+    marginTop: 10,
+  },
+  advisoryLabel: {
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 0.7,
+    textTransform: 'uppercase',
+  },
+  advisoryText: {
+    color: '#334155',
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 4,
   },
   referenceBox: {
     backgroundColor: '#f8fafc',

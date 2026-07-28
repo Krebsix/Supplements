@@ -145,6 +145,9 @@ export async function analyzeCaptures(captures) {
   const uncertainties = Array.isArray(result.uncertainties)
     ? result.uncertainties.map(cleanText).filter(Boolean)
     : [];
+  const detectedCertifications = Array.isArray(result.certifications)
+    ? result.certifications.map(cleanText).filter(Boolean)
+    : [];
 
   const intakeInstruction = cleanText(result.intakeInstruction);
 
@@ -153,8 +156,10 @@ export async function analyzeCaptures(captures) {
     brand: cleanText(result.brand),
     confidence: clampConfidence(result.confidence),
     detectedIngredients: ingredients.map(formatIngredient).filter(Boolean),
-    // Rohdaten fuer spaetere Phasen (Substanz-Datenbank-Abgleich) aufbewahren
+    // Rohdaten fuer den Substanz-Datenbank-Abgleich aufbewahren
     ingredientDetails: ingredients,
+    // Erkannte Pruefsiegel (Phase 4) — Abgleich in data/certifications.js
+    detectedCertifications,
     dosage: {
       amount: cleanText(result.dosage?.amount),
       unit: cleanText(result.dosage?.unit),

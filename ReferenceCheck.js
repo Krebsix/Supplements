@@ -15,6 +15,7 @@
  */
 
 import { convertAmount } from './SubstanceMatcher';
+import { getAdvisories } from './data/lifeStageAdvisories';
 import { getReferenceValue } from './data/referenceValues';
 
 export const REFERENCE_STATUS = {
@@ -212,5 +213,7 @@ export function buildSubstanceProfile(match, lifeStageId) {
     cautionNote: substance.cautionNote ?? '',
     sources: substance.sources ?? [],
     referenceCheck: checkAgainstReference(match, lifeStageId),
+    // Was in DIESER Lebensphase besonders gilt (Phase 3)
+    advisories: getAdvisories(substance.id, lifeStageId),
   };
 }

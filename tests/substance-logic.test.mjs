@@ -90,5 +90,52 @@ for (const [sid, entry] of Object.entries(referenceValues)) {
 }
 check('Einheiten konsistent zwischen Substanz und Referenzwert', true);
 
+console.log('\n— Lebensphasen-Hinweise (Phase 3) —');
+const pregVitA = buildSubstanceProfile(matchIngredient({ name: 'Retinol', amount: '800', unit: 'µg' }), 'pregnancy');
+check('Vitamin A → Retinol erkannt', pregVitA.substanceId === 'vitamin-a', pregVitA.substanceId);
+check('Retinol in Schwangerschaft → contraindicated',
+  pregVitA.advisories.some(a => a.severity === 'contraindicated'), JSON.stringify(pregVitA.advisories.map(a=>a.severity)));
+check('Schwerster Hinweis steht zuerst', pregVitA.advisories[0]?.severity === 'contraindicated');
+
+const manVitA = buildSubstanceProfile(matchIngredient({ name: 'Retinol', amount: '800', unit: 'µg' }), 'adult-man');
+check('Retinol bei Mann → keine Kontraindikation',
+  !manVitA.advisories.some(a => a.severity === 'contraindicated'));
+
+const childAshwa = buildSubstanceProfile(matchIngredient({ name: 'Ashwagandha' }), 'child-4-10');
+check('Ashwagandha bei Kind → contraindicated',
+  childAshwa.advisories.some(a => a.severity === 'contraindicated'));
+
+const k2 = buildSubstanceProfile(matchIngredient({ name: 'MK-7' }), 'adult-man');
+check('Vitamin K2 → "all"-Hinweis greift in jeder Phase',
+  k2.advisories.some(a => a.severity === 'medical'));
+
+const manIron = buildSubstanceProfile(matchIngredient({ name: 'Eisen', amount: '20', unit: 'mg' }), 'adult-man');
+check('Eisen bei Mann → attention-Hinweis', manIron.advisories.some(a => a.severity === 'attention'));
+
+// Advisories duerfen nur bekannte Substanzen und Lebensphasen referenzieren
+const { advisories: advMap } = await import('../data/lifeStageAdvisories.js');
+for (const [sid, list] of Object.entries(advMap)) {
+  if (!ids.includes(sid)) { console.log(`  FAIL Advisory fuer unbekannte Substanz: ${sid}`); failed++; }
+  for (const entry of list) {
+    if (entry.lifeStages !== 'all') {
+      const bad = entry.lifeStages.filter(ls => !LIFE_STAGE_IDS.includes(ls));
+      if (bad.length) { console.log(`  FAIL ${sid} unbekannte Lebensphase: ${bad}`); failed++; }
+    }
+    if (!entry.text || entry.text.length < 20) { console.log(`  FAIL ${sid} Advisory-Text zu kurz`); failed++; }
+  }
+}
+check('Advisories referenzieren nur bekannte IDs', true);
+
+console.log('\n— Zertifizierungen (Phase 4) —');
+const { matchCertifications, certifications } = await import('../data/certifications.js');
+const certRes = matchCertifications(['Kölner Liste', 'USP Verified', 'Premium Qualität']);
+check('Kölner Liste erkannt', certRes.matched.some(c => c.id === 'koelner-liste'));
+check('USP Verified erkannt', certRes.matched.some(c => c.id === 'usp-verified'));
+check('Werbeaussage bleibt unknown', certRes.unknown.includes('Premium Qualität'));
+check('Alle Siegel haben scope-Feld', certifications.every(c => c.scope?.length > 20));
+check('Leere Eingabe → leeres Ergebnis', matchCertifications([]).matched.length === 0);
+check('Keine Herstellernamen in der Siegel-DB',
+  !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
+
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

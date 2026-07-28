@@ -1,0 +1,358 @@
+/**
+ * data/lifeStageAdvisories.js
+ * ─────────────────────────────────────────────────────────────
+ * Hinweise, die nur fuer bestimmte Lebensphasen gelten.
+ *
+ * Der Mengenabgleich aus ReferenceCheck.js beantwortet "wie viel".
+ * Diese Datei beantwortet "was gilt in dieser Lebensphase besonders" —
+ * etwa dass Retinol in der Schwangerschaft kritisch ist oder dass
+ * Ashwagandha kein Wirkstoff fuer Kinder ist.
+ *
+ * FORMULIERUNGSREGEL (wie ueberall in dieser App):
+ * Deskriptiv, nicht praeskriptiv. "Gilt als kontraindiziert" oder
+ * "wird ueblicherweise aerztlich begleitet" — nicht "nimm das nicht".
+ * Die App gibt Fakten wieder, sie verordnet nicht.
+ *
+ * Severity:
+ *   contraindicated  In dieser Lebensphase allgemein nicht vorgesehen
+ *   medical          Gehoert in aerztliche Begleitung
+ *   attention        Besonderheit, die man kennen sollte
+ *   increased        Erhoehter Bedarf in dieser Phase
+ */
+
+export const ADVISORY_SEVERITY = {
+  CONTRAINDICATED: 'contraindicated',
+  MEDICAL: 'medical',
+  ATTENTION: 'attention',
+  INCREASED: 'increased',
+};
+
+export const SEVERITY_META = {
+  [ADVISORY_SEVERITY.CONTRAINDICATED]: {
+    label: 'Nicht vorgesehen',
+    hex: '#dc2626',
+    rank: 4,
+  },
+  [ADVISORY_SEVERITY.MEDICAL]: {
+    label: 'Ärztlich abklären',
+    hex: '#b45309',
+    rank: 3,
+  },
+  [ADVISORY_SEVERITY.ATTENTION]: {
+    label: 'Besonderheit',
+    hex: '#0f766e',
+    rank: 2,
+  },
+  [ADVISORY_SEVERITY.INCREASED]: {
+    label: 'Erhöhter Bedarf',
+    hex: '#0369a1',
+    rank: 1,
+  },
+};
+
+/**
+ * advisories[substanceId] = [{ lifeStages: [...], severity, text }]
+ * lifeStages: 'all' oder eine Liste von Lebensphasen-IDs.
+ */
+export const advisories = {
+  'vitamin-a': [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Vorgeformtes Vitamin A (Retinol, Retinylacetat, Retinylpalmitat) gilt in der Schwangerschaft in höheren Mengen als fruchtschädigend. Präparate für die Schwangerschaft setzen stattdessen auf Beta-Carotin.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Die Obergrenze liegt bei Kindern deutlich niedriger als bei Erwachsenen. Eine Ergänzung wird üblicherweise ärztlich begleitet.',
+    },
+    {
+      lifeStages: ['breastfeeding'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'In der Stillzeit ist der Bedarf deutlich erhöht, weil Vitamin A über die Muttermilch abgegeben wird.',
+    },
+  ],
+  ashwagandha: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Ashwagandha gilt in Schwangerschaft und Stillzeit als kontraindiziert; es liegen keine ausreichenden Sicherheitsdaten vor.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder und Jugendliche gibt es keine etablierte Datenbasis. Adaptogene Pflanzenextrakte sind für diese Altersgruppen nicht vorgesehen.',
+    },
+    {
+      lifeStages: ['senior', 'menopause'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei Schilddrüsenerkrankungen und bei Einnahme von Schilddrüsen- oder Beruhigungsmedikamenten ist eine ärztliche Abklärung üblich.',
+    },
+  ],
+  iron: [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'Der Bedarf ist in der Schwangerschaft etwa doppelt so hoch. Die Versorgung wird im Rahmen der Vorsorge über Blutwerte kontrolliert.',
+    },
+    {
+      lifeStages: ['adult-man', 'menopause', 'senior'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Ohne nachgewiesenen Mangel ist eine Eisenergänzung in dieser Gruppe unüblich — überschüssiges Eisen wird gespeichert und nicht aktiv ausgeschieden.',
+    },
+    {
+      lifeStages: ['adult-woman', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Durch die Menstruation ist der Bedarf erhöht. Vor einer Ergänzung ist eine Bestimmung des Ferritinwerts üblich.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Eisenpräparate für Kinder gehören in ärztliche Hand. Versehentliche Überdosierung ist bei Kindern ein relevantes Vergiftungsrisiko.',
+    },
+  ],
+  iodine: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'Deutlich erhöhter Bedarf für die kindliche Gehirn- und Schilddrüsenentwicklung. Eine Ergänzung ist in diesen Phasen üblich und wird ärztlich begleitet.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei bestehenden Schilddrüsenerkrankungen — insbesondere Schilddrüsenüberfunktion und Autonomie — ist die Jodzufuhr ärztlich abzuklären.',
+    },
+  ],
+  folate: [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'Wichtigste Phase überhaupt: Eine ausreichende Zufuhr ab dem Kinderwunsch und in den ersten Schwangerschaftswochen senkt das Risiko für Neuralrohrdefekte. Der Bedarf ist deutlich erhöht.',
+    },
+    {
+      lifeStages: ['adult-woman'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei bestehendem Kinderwunsch wird eine Ergänzung bereits vor der Schwangerschaft begonnen, da sich das Neuralrohr sehr früh schließt.',
+    },
+  ],
+  'vitamin-b12': [
+    {
+      lifeStages: ['senior'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Aufnahmefähigkeit im Magen nimmt mit dem Alter ab. Ein Mangel kann trotz ausreichender Zufuhr über die Nahrung entstehen.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'Erhöhter Bedarf. Bei veganer Ernährung ist eine Ergänzung in diesen Phasen besonders relevant.',
+    },
+  ],
+  'vitamin-d3': [
+    {
+      lifeStages: ['menopause', 'senior'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Nach der Menopause und im höheren Alter gewinnt Vitamin D für den Knochenerhalt an Bedeutung, während die Eigenbildung in der Haut nachlässt.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Die Obergrenze liegt bei Kindern bei 2000 IE pro Tag und damit deutlich unter der für Erwachsene. Hochdosierte Erwachsenenpräparate sind für Kinder nicht geeignet.',
+    },
+  ],
+  calcium: [
+    {
+      lifeStages: ['menopause'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Nach der Menopause beschleunigt sich der Knochenabbau durch den sinkenden Östrogenspiegel. Calcium und Vitamin D werden in diesem Zusammenhang gemeinsam betrachtet.',
+    },
+    {
+      lifeStages: ['teen-11-17'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'In der Wachstumsphase wird die maximale Knochendichte aufgebaut — der Bedarf ist in dieser Zeit am höchsten.',
+    },
+  ],
+  'omega-3': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'DHA ist Strukturbestandteil von kindlichem Gehirn und Netzhaut; der Bedarf ist in diesen Phasen erhöht.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei Einnahme von Gerinnungshemmern und vor geplanten Operationen ist die Dosierung ärztlich abzuklären.',
+    },
+  ],
+  'vitamin-k2': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei Einnahme von Vitamin-K-Antagonisten (Cumarine wie Marcumar/Warfarin) beeinflusst Vitamin K direkt die Wirkung des Medikaments. Nur nach ärztlicher Absprache.',
+    },
+  ],
+  'l-tryptophan': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, SNRI, MAO-Hemmer) kombinieren — Risiko eines Serotonin-Syndroms.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder, Jugendliche sowie in Schwangerschaft und Stillzeit ist eine Ergänzung nicht vorgesehen.',
+    },
+  ],
+  '5-htp': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, SNRI, MAO-Hemmer, Methylenblau) kombinieren — Risiko eines Serotonin-Syndroms.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder, Jugendliche sowie in Schwangerschaft und Stillzeit ist eine Ergänzung nicht vorgesehen.',
+    },
+  ],
+  zinc: [
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Obergrenze liegt bei Kindern dieser Altersgruppe bei 10 mg pro Tag — viele Erwachsenenpräparate überschreiten das mit einer einzigen Kapsel.',
+    },
+    {
+      lifeStages: ['breastfeeding'],
+      severity: ADVISORY_SEVERITY.INCREASED,
+      text: 'In der Stillzeit ist der Bedarf erhöht.',
+    },
+  ],
+  selenium: [
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Obergrenze liegt bei Kindern bei 130 µg pro Tag. Bei Selen liegen Bedarf und Obergrenze generell nah beieinander.',
+    },
+  ],
+  'vitamin-b6': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die EFSA hat die Obergrenze 2023 auf 12 mg pro Tag gesenkt. Dauerhaft höhere Zufuhr kann Nervenschäden verursachen — viele B-Komplex-Präparate liegen darüber.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Für Kinder dieser Altersgruppe liegt die Obergrenze bei 7 mg pro Tag.',
+    },
+  ],
+  curcumin: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Hochdosierte Curcumin-Extrakte sind in Schwangerschaft und Stillzeit nicht ausreichend untersucht. Kurkuma als Gewürz ist davon nicht betroffen.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Piperin-haltige Präparate steigern nicht nur die Curcumin-Aufnahme, sondern können auch die Aufnahme von Medikamenten beeinflussen.',
+    },
+  ],
+  creatine: [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Für Kinder und Jugendliche liegen kaum Langzeitdaten vor; eine Ergänzung ist in diesen Altersgruppen unüblich.',
+    },
+    {
+      lifeStages: ['senior', 'menopause'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Wird in dieser Lebensphase im Zusammenhang mit Muskelerhalt untersucht — in Kombination mit Krafttraining.',
+    },
+  ],
+  psyllium: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Blockiert die Aufnahme von Wirkstoffen und Medikamenten. Mindestens 2 Stunden Abstand und reichlich Flüssigkeit sind erforderlich.',
+    },
+  ],
+  potassium: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei eingeschränkter Nierenfunktion und bei bestimmten Blutdruckmedikamenten (ACE-Hemmer, Sartane, kaliumsparende Diuretika) ist eine Kaliumergänzung ärztlich abzuklären.',
+    },
+  ],
+  probiotics: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei stark geschwächtem Immunsystem sind lebende Kulturen ärztlich abzuklären.',
+    },
+  ],
+  'l-arginine': [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'In diesen Lebensphasen nicht ausreichend untersucht.',
+    },
+  ],
+  'l-tyrosine': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei Schilddrüsenüberfunktion und bei Einnahme von Schilddrüsenhormonen oder MAO-Hemmern ärztlich abklären.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'In diesen Lebensphasen nicht ausreichend untersucht.',
+    },
+  ],
+  coq10: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Kann die Wirkung von Vitamin-K-Antagonisten beeinflussen. Häufiges Anwendungsgebiet ist die Begleitung einer Statin-Therapie.',
+    },
+  ],
+  'vitamin-e': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Höhere Dosen können die Blutungsneigung erhöhen — relevant bei Gerinnungshemmern und vor Operationen.',
+    },
+  ],
+};
+
+/**
+ * getAdvisories(substanceId, lifeStageId)
+ * Gibt die zutreffenden Hinweise zurueck, nach Schweregrad sortiert.
+ */
+export function getAdvisories(substanceId, lifeStageId) {
+  const entries = advisories[substanceId];
+  if (!Array.isArray(entries)) return [];
+
+  return entries
+    .filter(
+      (entry) =>
+        entry.lifeStages === 'all' ||
+        (Array.isArray(entry.lifeStages) &&
+          entry.lifeStages.includes(lifeStageId))
+    )
+    .map((entry) => ({
+      severity: entry.severity,
+      text: entry.text,
+      meta: SEVERITY_META[entry.severity],
+    }))
+    .sort((a, b) => (b.meta?.rank ?? 0) - (a.meta?.rank ?? 0));
+}
+
+/**
+ * getStrictestSeverity(substanceId, lifeStageId)
+ * Fuer Badges und Sortierung in Listen.
+ */
+export function getStrictestSeverity(substanceId, lifeStageId) {
+  const list = getAdvisories(substanceId, lifeStageId);
+  return list.length > 0 ? list[0].severity : null;
+}

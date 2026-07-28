@@ -41,6 +41,7 @@ const RESULT_SCHEMA = {
     "intakeInstruction",
     "warnings",
     "uncertainties",
+    "certifications",
   ],
   properties: {
     productName: {
@@ -115,6 +116,12 @@ const RESULT_SCHEMA = {
       items: { type: "string" },
       description:
         "Stellen, die unleserlich, abgeschnitten oder mehrdeutig waren",
+    },
+    certifications: {
+      type: "array",
+      items: { type: "string" },
+      description:
+        "Auf der Verpackung sichtbare Pruefsiegel und Zertifizierungen, woertlich wie abgedruckt (z. B. 'Kölner Liste', 'USP Verified', 'GMP', 'V-Label'). Keine Markennamen, keine Werbeaussagen wie 'Premium' oder 'laborgeprueft'.",
     },
   },
 } as const;

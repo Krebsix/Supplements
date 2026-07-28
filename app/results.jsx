@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import CertificationPanel from '../components/CertificationPanel';
 import LifeStagePicker from '../components/LifeStagePicker';
 import SubstanceInsightCard from '../components/SubstanceInsightCard';
 import SupplementResultCard from '../components/SupplementResultCard';
@@ -214,6 +215,19 @@ export default function ResultsScreen() {
               profile={profile}
             />
           ))}
+        </View>
+      ) : null}
+
+      {result?.analysisMode === 'vision' ? (
+        <View style={styles.substanceSection}>
+          <Text style={styles.substanceKicker}>Prüfsiegel</Text>
+          <Text style={styles.substanceTitle}>Was geprüft wurde</Text>
+          <Text style={styles.substanceText}>
+            Angezeigt werden nur nachprüfbare Zertifizierungen mit ihrem
+            jeweiligen Geltungsbereich. Die App bewertet keine Hersteller.
+          </Text>
+
+          <CertificationPanel labels={result.detectedCertifications} />
         </View>
       ) : null}
 

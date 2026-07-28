@@ -63,7 +63,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `CureManager.js` | Kur-Zyklen: `cycle` (z. B. 21/7) und `stepped` (Dosis-Stufen) |
 | `SupplementResearchLogic.js` | Aeltere Mini-Wissensdatenbank (Default-Slot, Hinweis) |
 | `SubstanceMatcher.js` | Ordnet Etikettentexte Substanzen und chemischen Formen zu |
-| `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase |
+| `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase, sammelt Lebensphasen-Hinweise |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 
 ### Wirkstoff-Datenbank (`data/`)
@@ -72,6 +72,8 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 |---|---|
 | `data/substances.js` | Kanonische Wirkstoffe: Synonyme, chemische Formen mit Bioverfuegbarkeit, Anwendungsgebiete, Warnhinweise |
 | `data/referenceValues.js` | Referenzwerte und Obergrenzen (UL) je Lebensphase — 8 Gruppen von Kind bis 65+ |
+| `data/lifeStageAdvisories.js` | Was in einer bestimmten Lebensphase gilt (z. B. Retinol in der Schwangerschaft). Severity: `contraindicated`, `medical`, `attention`, `increased` |
+| `data/certifications.js` | Pruefsiegel mit Geltungsbereich. Das Feld `scope` sagt, was ein Siegel NICHT abdeckt — bewusst so |
 
 Bewusst als versioniertes JS-Modul im Repo, nicht in einer Datenbank:
 Katalogwissen aendert sich selten, die App bleibt offline-faehig, und jede

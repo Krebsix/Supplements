@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import LifeStagePicker from '../components/LifeStagePicker';
 import useStore from '../useStore';
 import {
   formatSupplementDosage as getSupplementDosage,
@@ -18,6 +19,8 @@ export default function SettingsScreen() {
     (state) => state.updateUserSupplement
   );
   const clearIntakeLogs = useStore((state) => state.clearIntakeLogs);
+  const activeLifeStageId = useStore((state) => state.activeLifeStageId);
+  const setActiveLifeStage = useStore((state) => state.setActiveLifeStage);
 
   const archivedSupplements = userSupplements.filter(
     (supplement) => supplement.status === 'archived'
@@ -82,6 +85,28 @@ export default function SettingsScreen() {
         Prüfe deinen lokalen Datenbestand, verwalte die Einnahmehistorie und
         stelle archivierte Supplements wieder her.
       </Text>
+
+      <View style={styles.statusCard}>
+        <Text style={styles.cardLabel}>Profil</Text>
+        <Text style={styles.cardTitle}>Lebensphase für Referenzwerte</Text>
+        <Text style={styles.cardText}>
+          Referenzwerte und Obergrenzen unterscheiden sich deutlich zwischen
+          Kindern, Schwangerschaft, Menopause und höherem Alter. Die Auswahl
+          gilt für alle Wirkstoff-Ansichten in der App.
+        </Text>
+
+        <View style={styles.lifeStageWrapper}>
+          <LifeStagePicker
+            value={activeLifeStageId}
+            onChange={setActiveLifeStage}
+          />
+        </View>
+
+        <Text style={styles.lifeStageNote}>
+          Die App gleicht Mengen mit öffentlichen Referenzwerten ab (D-A-CH,
+          EFSA, NIH) und spricht keine gesundheitlichen Empfehlungen aus.
+        </Text>
+      </View>
 
       <View style={styles.statusCard}>
         <Text style={styles.cardLabel}>Lokaler Status</Text>
@@ -300,6 +325,15 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     marginTop: 10,
     marginBottom: 20,
+  },
+  lifeStageWrapper: {
+    marginTop: 14,
+    marginHorizontal: -4,
+  },
+  lifeStageNote: {
+    color: '#64748b',
+    fontSize: 11,
+    lineHeight: 17,
   },
   statusCard: {
     backgroundColor: '#ffffff',
