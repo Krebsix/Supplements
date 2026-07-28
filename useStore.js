@@ -148,6 +148,7 @@ function migratePersistedState(persistedState = {}) {
     scanResults: state.scanResults || [],
     pendingScanResult: state.pendingScanResult || null,
     activeProfileId: state.activeProfileId || 'adult',
+    activeLifeStageId: state.activeLifeStageId || 'adult-woman',
     absorptionBlockedAt: state.absorptionBlockedAt || null,
     settings: state.settings || {},
   };
@@ -163,8 +164,13 @@ export const useStore = create(
       scanResults: [],
       pendingScanResult: null,
       activeProfileId: 'adult',
+      // Lebensphase fuer den Referenzwert-Abgleich (siehe data/referenceValues.js)
+      activeLifeStageId: 'adult-woman',
       absorptionBlockedAt: null,
       settings: {},
+
+      setActiveLifeStage: (lifeStageId) =>
+        set({ activeLifeStageId: lifeStageId }),
 
       addUserSupplement: (draft) => {
         const supplement = normalizeUserSupplement(draft);
@@ -299,6 +305,7 @@ export const useStore = create(
         scanResults: state.scanResults,
         pendingScanResult: state.pendingScanResult,
         activeProfileId: state.activeProfileId,
+        activeLifeStageId: state.activeLifeStageId,
         absorptionBlockedAt: state.absorptionBlockedAt,
         settings: state.settings,
       }),

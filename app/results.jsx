@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,7 +8,11 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import LifeStagePicker from '../components/LifeStagePicker';
+import SubstanceInsightCard from '../components/SubstanceInsightCard';
 import SupplementResultCard from '../components/SupplementResultCard';
+import { buildSubstanceProfile } from '../ReferenceCheck';
+import { matchIngredients } from '../SubstanceMatcher';
 import mockScanResult from '../data/mockScanResult';
 import useStore from '../useStore';
 
@@ -31,6 +35,8 @@ export default function ResultsScreen() {
   const clearPendingScanResult = useStore(
     (state) => state.clearPendingScanResult
   );
+  const activeLifeStageId = useStore((state) => state.activeLifeStageId);
+  const setActiveLifeStage = useStore((state) => state.setActiveLifeStage);
 
   const isDemoFallback = !pendingScanResult;
   const result = pendingScanResult || mockScanResult;
@@ -77,6 +83,21 @@ export default function ResultsScreen() {
 
   const reviewPointCount =
     openCriticalCount + Number(ingredientCount > 0);
+
+  // Wirkstoff-Profile: strukturierte Details bevorzugen, sonst die Textliste
+  const substanceProfiles = useMemo(() => {
+    const source = Array.isArray(result?.ingredientDetails)
+      ? result.ingredientDetails
+      : Array.isArray(result?.detectedIngredients)
+        ? result.detectedIngredients
+        : [];
+
+    return matchIngredients(source).map((match) =>
+      buildSubstanceProfile(match, activeLifeStageId)
+    );
+  }, [result, activeLifeStageId]);
+
+  const matchedCount = substanceProfiles.filter((p) => p.matched).length;
 
   function handleOpenReviewForm() {
     if (!pendingScanResult) {
@@ -163,6 +184,38 @@ export default function ResultsScreen() {
       </View>
 
       <SupplementResultCard result={result} />
+
+      {substanceProfiles.length > 0 ? (
+        <View style={styles.substanceSection}>
+          <Text style={styles.substanceKicker}>Wirkstoffe im Detail</Text>
+          <Text style={styles.substanceTitle}>
+            {matchedCount === 0
+              ? 'Keine Wirkstoffe in der Datenbank gefunden'
+              : matchedCount === 1
+                ? '1 Wirkstoff zugeordnet'
+                : `${matchedCount} Wirkstoffe zugeordnet`}
+          </Text>
+          <Text style={styles.substanceText}>
+            Angezeigt werden Anwendungsgebiete, die chemische Form und der
+            Abgleich mit öffentlichen Referenzwerten. Die App ordnet Daten ein
+            und spricht keine gesundheitlichen Empfehlungen aus.
+          </Text>
+
+          <View style={styles.pickerWrapper}>
+            <LifeStagePicker
+              value={activeLifeStageId}
+              onChange={setActiveLifeStage}
+            />
+          </View>
+
+          {substanceProfiles.map((profile, index) => (
+            <SubstanceInsightCard
+              key={profile.substanceId || `unmatched-${index}`}
+              profile={profile}
+            />
+          ))}
+        </View>
+      ) : null}
 
       <View style={styles.nextStepCard}>
         <Text style={styles.nextStepKicker}>Nächster Schritt</Text>
@@ -323,6 +376,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     marginTop: 10,
+  },
+  substanceSection: {
+    marginTop: 18,
+  },
+  substanceKicker: {
+    color: '#0f766e',
+    fontSize: 11,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  substanceTitle: {
+    color: '#0f172a',
+    fontSize: 20,
+    lineHeight: 26,
+    fontWeight: '900',
+    marginTop: 5,
+  },
+  substanceText: {
+    color: '#64748b',
+    fontSize: 13,
+    lineHeight: 20,
+    marginTop: 7,
+    marginBottom: 14,
+  },
+  pickerWrapper: {
+    marginBottom: 4,
   },
   nextStepCard: {
     backgroundColor: '#ffffff',
