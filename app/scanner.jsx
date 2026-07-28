@@ -12,6 +12,8 @@ import {
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 
+import { lookupBarcode } from '../BarcodeLookup';
+import { analyzeCaptures, isAnalyzerConfigured } from '../ScanAnalyzer';
 import mockScanResult from '../data/mockScanResult';
 import useStore from '../useStore';
 
@@ -65,6 +67,11 @@ export default function ScannerScreen() {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
   const [captureError, setCaptureError] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [scannedBarcode, setScannedBarcode] = useState('');
+  const [isLookingUpBarcode, setIsLookingUpBarcode] = useState(false);
+
+  const analyzerReady = isAnalyzerConfigured();
 
   const activeStep = CAPTURE_STEPS[activeIndex];
   const activeCapture = captures[activeStep.id] || null;
@@ -186,35 +193,102 @@ export default function ScannerScreen() {
     );
   }
 
-  function handleMockScan() {
+  function buildCaptureSummary() {
+    return {
+      completedCount,
+      requiredCount: CAPTURE_STEPS.length,
+      steps: CAPTURE_STEPS.map((step) => {
+        const capture = captures[step.id];
+
+        return {
+          id: step.id,
+          width: capture?.width ?? null,
+          height: capture?.height ?? null,
+          capturedAt: capture?.capturedAt ?? null,
+        };
+      }),
+    };
+  }
+
+  function storeAndShowResult(scanDraft) {
+    const storedScan = saveScanResult(scanDraft);
+    setPendingScanResult(storedScan);
+    router.push('/results');
+  }
+
+  async function handleStartAnalysis() {
     if (!allCaptured) {
       handleNextOpenStep();
       return;
     }
 
-    const scanDraft = {
-      ...mockScanResult,
-      analysisMode: 'mock',
-      captureSummary: {
-        completedCount,
-        requiredCount: CAPTURE_STEPS.length,
-        steps: CAPTURE_STEPS.map((step) => {
-          const capture = captures[step.id];
+    if (isAnalyzing) return;
 
-          return {
-            id: step.id,
-            width: capture?.width ?? null,
-            height: capture?.height ?? null,
-            capturedAt: capture?.capturedAt ?? null,
-          };
-        }),
-      },
-    };
+    // Ohne konfiguriertes Analyse-Backend: klar gekennzeichnetes Mock-Ergebnis
+    if (!analyzerReady) {
+      storeAndShowResult({
+        ...mockScanResult,
+        analysisMode: 'mock',
+        captureSummary: buildCaptureSummary(),
+      });
+      return;
+    }
 
-    const storedScan = saveScanResult(scanDraft);
+    setIsAnalyzing(true);
+    setCaptureError('');
 
-    setPendingScanResult(storedScan);
-    router.push('/results');
+    try {
+      const analysis = await analyzeCaptures(captures);
+
+      storeAndShowResult({
+        ...analysis,
+        captureSummary: buildCaptureSummary(),
+      });
+    } catch (error) {
+      // Kein stilles Demo-Ergebnis bei Fehlern — das waere ein erfundener Wert.
+      setCaptureError(
+        error?.message ||
+          'Die Analyse ist fehlgeschlagen. Bitte erneut versuchen.'
+      );
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }
+
+  function handleBarcodeScanned(scan) {
+    const code = scan?.data;
+    if (!code || scannedBarcode) return;
+    setScannedBarcode(String(code));
+  }
+
+  async function handleBarcodeLookup() {
+    if (!scannedBarcode || isLookingUpBarcode) return;
+
+    setIsLookingUpBarcode(true);
+    setCaptureError('');
+
+    try {
+      const result = await lookupBarcode(scannedBarcode);
+
+      if (!result) {
+        setCaptureError(
+          `Barcode ${scannedBarcode} wurde in der Produktdatenbank nicht gefunden. Bitte die vier Fotos aufnehmen.`
+        );
+        setScannedBarcode('');
+        return;
+      }
+
+      storeAndShowResult({
+        ...result,
+        captureSummary: buildCaptureSummary(),
+      });
+    } catch (error) {
+      setCaptureError(
+        error?.message || 'Die Barcode-Suche ist fehlgeschlagen.'
+      );
+    } finally {
+      setIsLookingUpBarcode(false);
+    }
   }
 
   return (
@@ -261,6 +335,49 @@ export default function ScannerScreen() {
           <View style={[styles.progressFill, { width: progress }]} />
         </View>
       </View>
+
+      {scannedBarcode ? (
+        <View style={styles.barcodeCard}>
+          <View style={styles.barcodeHeader}>
+            <Text style={styles.barcodeKicker}>Barcode erkannt</Text>
+            <Text style={styles.barcodeValue}>{scannedBarcode}</Text>
+          </View>
+
+          <Text style={styles.barcodeText}>
+            Der Code kann direkt in der offenen Produktdatenbank nachgeschlagen
+            werden. Die vier Fotos bleiben der genauere Weg, weil sie Dosierung
+            und Wirkstoffformen vom Etikett erfassen.
+          </Text>
+
+          <TouchableOpacity
+            style={[
+              styles.barcodeButton,
+              isLookingUpBarcode && styles.primaryButtonDisabled,
+            ]}
+            onPress={handleBarcodeLookup}
+            disabled={isLookingUpBarcode}
+            activeOpacity={0.85}
+            accessibilityRole="button"
+          >
+            <Text style={styles.barcodeButtonText}>
+              {isLookingUpBarcode
+                ? 'Produkt wird gesucht…'
+                : 'Produkt per Barcode suchen'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.inlineButton}
+            onPress={() => setScannedBarcode('')}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+          >
+            <Text style={styles.inlineButtonText}>
+              Barcode verwerfen
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
 
       <View style={styles.captureCard}>
         <View style={styles.captureHeader}>
@@ -319,6 +436,12 @@ export default function ScannerScreen() {
                 setCaptureError('');
               }}
               onMountError={handleCameraMountError}
+              barcodeScannerSettings={{
+                barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e'],
+              }}
+              onBarcodeScanned={
+                scannedBarcode ? undefined : handleBarcodeScanned
+              }
             />
           ) : (
             <View style={styles.cameraPlaceholder}>
@@ -538,7 +661,8 @@ export default function ScannerScreen() {
             styles.analysisButton,
             allCaptured && styles.analysisButtonReady,
           ]}
-          onPress={handleMockScan}
+          onPress={handleStartAnalysis}
+          disabled={isAnalyzing}
           activeOpacity={0.85}
           accessibilityRole="button"
         >
@@ -548,9 +672,13 @@ export default function ScannerScreen() {
               allCaptured && styles.analysisButtonTextReady,
             ]}
           >
-            {allCaptured
-              ? 'Test-Analyse starten'
-              : 'Nächste offene Aufnahme'}
+            {isAnalyzing
+              ? 'Analyse läuft…'
+              : allCaptured
+                ? analyzerReady
+                  ? 'Analyse starten'
+                  : 'Test-Analyse starten'
+                : 'Nächste offene Aufnahme'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -567,9 +695,9 @@ export default function ScannerScreen() {
       </TouchableOpacity>
 
       <Text style={styles.disclaimer}>
-        Die Fotos werden nur für den laufenden Scan im App-Speicher gehalten.
-        Die Auswertung nutzt in dieser Phase weiterhin ein kontrolliertes
-        Test-Ergebnis. OCR und echte Produkterkennung sind noch nicht verbunden.
+        {analyzerReady
+          ? 'Die Fotos werden verkleinert, einmalig zur KI-Auswertung übertragen und dort nicht gespeichert. Erkannte Angaben sind ein Arbeitsstand und müssen vor der Übernahme geprüft werden.'
+          : 'Die Fotos werden nur für den laufenden Scan im App-Speicher gehalten. Ohne konfiguriertes Analyse-Backend nutzt die Auswertung ein klar gekennzeichnetes Test-Ergebnis (siehe scanConfig.js).'}
       </Text>
     </ScrollView>
   );
@@ -661,6 +789,52 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 999,
     backgroundColor: '#0f766e',
+  },
+  barcodeCard: {
+    backgroundColor: '#f0fdfa',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#99f6e4',
+    padding: 16,
+    marginBottom: 16,
+  },
+  barcodeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  barcodeKicker: {
+    color: '#0f766e',
+    fontSize: 11,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  barcodeValue: {
+    color: '#0f172a',
+    fontSize: 14,
+    fontWeight: '800',
+    fontVariant: ['tabular-nums'],
+  },
+  barcodeText: {
+    color: '#0f766e',
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 8,
+  },
+  barcodeButton: {
+    minHeight: 46,
+    backgroundColor: '#0f766e',
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    marginTop: 12,
+  },
+  barcodeButtonText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '900',
   },
   captureCard: {
     backgroundColor: '#ffffff',

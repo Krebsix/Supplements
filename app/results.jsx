@@ -35,6 +35,18 @@ export default function ResultsScreen() {
   const isDemoFallback = !pendingScanResult;
   const result = pendingScanResult || mockScanResult;
 
+  // Herkunft des Ergebnisses sichtbar machen (analysisMode aus dem Scan)
+  const modeLabel =
+    result?.analysisMode === 'vision'
+      ? 'KI-Analyse'
+      : result?.analysisMode === 'barcode-off'
+        ? 'Barcode-Treffer'
+        : isDemoFallback || result?.analysisMode === 'demo-fallback'
+          ? 'Testanalyse'
+          : result?.analysisMode === 'mock'
+            ? 'Test-Ergebnis'
+            : 'Scan vorhanden';
+
   const brandDetected =
     hasText(result?.brand) && result.brand !== 'Demo Brand';
 
@@ -96,7 +108,7 @@ export default function ResultsScreen() {
 
           <View style={styles.modeBadge}>
             <Text style={styles.modeBadgeText}>
-              {isDemoFallback ? 'Testanalyse' : 'Scan vorhanden'}
+              {modeLabel}
             </Text>
           </View>
         </View>

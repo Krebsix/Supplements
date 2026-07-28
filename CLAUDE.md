@@ -94,8 +94,14 @@ Loeschen der App bedeutet Datenverlust.
   werden als fehlend gespeichert — frueher wurden sie still auf `'1'` bzw. `'Kapsel'`
   gesetzt, was wie ein erkannter Wert aussah. Das war ein Bug, siehe Commit
   `6bd60b6`.
-- Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`) und eine
-  `captureSummary`, damit spaeter nachvollziehbar ist, woher ein Eintrag stammt.
+- Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`, `'vision'`
+  fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer)
+  und eine `captureSummary`, damit nachvollziehbar ist, woher ein Eintrag stammt.
+- Echte Scan-Analyse: `ScanAnalyzer.js` (App) → Supabase Edge Function
+  `supabase/functions/analyze-supplement` (Claude Vision, Structured Output).
+  Der `ANTHROPIC_API_KEY` liegt NUR als Supabase-Secret, nie in der App.
+  Endpoint-Konfiguration in `scanConfig.js` (leere URL = Mock-Fallback).
+- Barcode-Pfad: `BarcodeLookup.js` fragt Open Food Facts ab (kein Key noetig).
 - Keine gesundheitlichen Empfehlungen im Ausgabetext — die App ordnet Zeitpunkte und
   Konflikte, sie beraet nicht.
 - Deutsche Code-Kommentare beibehalten.

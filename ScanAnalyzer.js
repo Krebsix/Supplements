@@ -1,0 +1,175 @@
+/**
+ * ScanAnalyzer.js
+ * ─────────────────────────────────────────────────────────────
+ * Echte Foto-Analyse: schickt die vier Produktaufnahmen an die
+ * Supabase Edge Function `analyze-supplement`, die sie mit der
+ * Claude Vision API auswertet und strukturierte Produktdaten
+ * zurueckgibt.
+ *
+ * Regeln (siehe CLAUDE.md):
+ *   - Keine erfundenen Werte: Nicht Erkanntes bleibt leer.
+ *   - Ergebnis traegt analysisMode 'vision' fuer Nachvollziehbarkeit.
+ *   - Logik NIEMALS in UI-Komponenten.
+ */
+
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+
+import { SCAN_ANALYZE_URL, SUPABASE_ANON_KEY } from './scanConfig';
+
+// Kantenlaenge fuer den Upload: gross genug fuer lesbare Zutatentabellen,
+// klein genug, um die Request-Groesse im Rahmen zu halten.
+const UPLOAD_MAX_WIDTH = 1600;
+const UPLOAD_COMPRESSION = 0.7;
+const REQUEST_TIMEOUT_MS = 90000;
+
+export function isAnalyzerConfigured() {
+  return SCAN_ANALYZE_URL.trim().length > 0;
+}
+
+function cleanText(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function clampConfidence(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return 0;
+  return Math.max(0, Math.min(100, Math.round(num)));
+}
+
+// Zutat als lesbaren String aufbereiten, ohne fehlende Teile zu erfinden.
+function formatIngredient(ingredient) {
+  const name = cleanText(ingredient?.name);
+  if (!name) return '';
+  const amount = cleanText(ingredient?.amount);
+  const unit = cleanText(ingredient?.unit);
+  const form = cleanText(ingredient?.form);
+
+  let label = name;
+  if (form) label += ` (${form})`;
+  if (amount && unit) label += ` – ${amount} ${unit}`;
+  else if (amount) label += ` – ${amount}`;
+  return label;
+}
+
+async function prepareImage(stepId, capture) {
+  const resized = await manipulateAsync(
+    capture.uri,
+    [{ resize: { width: UPLOAD_MAX_WIDTH } }],
+    { compress: UPLOAD_COMPRESSION, format: SaveFormat.JPEG, base64: true }
+  );
+
+  if (!resized?.base64) {
+    throw new Error(`Aufnahme "${stepId}" konnte nicht aufbereitet werden.`);
+  }
+
+  return {
+    step: stepId,
+    mediaType: 'image/jpeg',
+    data: resized.base64,
+  };
+}
+
+/**
+ * analyzeCaptures(captures)
+ * captures: { front: {uri,...}, back: {...}, ingredients: {...}, dosage: {...} }
+ * Rueckgabe: Scan-Ergebnis im Format von results.jsx / SupplementResultCard.
+ */
+export async function analyzeCaptures(captures) {
+  if (!isAnalyzerConfigured()) {
+    throw new Error('Die Scan-Analyse ist nicht konfiguriert (scanConfig.js).');
+  }
+
+  const entries = Object.entries(captures || {}).filter(
+    ([, capture]) => Boolean(capture?.uri)
+  );
+  if (entries.length === 0) {
+    throw new Error('Keine Aufnahmen vorhanden.');
+  }
+
+  const images = [];
+  for (const [stepId, capture] of entries) {
+    images.push(await prepareImage(stepId, capture));
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let response;
+  try {
+    response = await fetch(SCAN_ANALYZE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(SUPABASE_ANON_KEY
+          ? {
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              apikey: SUPABASE_ANON_KEY,
+            }
+          : {}),
+      },
+      body: JSON.stringify({ images }),
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      throw new Error('Die Analyse hat zu lange gedauert. Bitte erneut versuchen.');
+    }
+    throw new Error('Die Analyse ist nicht erreichbar. Internetverbindung pruefen.');
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!response.ok) {
+    let serverMessage = '';
+    try {
+      const body = await response.json();
+      serverMessage = cleanText(body?.error);
+    } catch {
+      // Antwort war kein JSON — generische Meldung verwenden
+    }
+    throw new Error(
+      serverMessage || `Die Analyse ist fehlgeschlagen (Status ${response.status}).`
+    );
+  }
+
+  const payload = await response.json();
+  const result = payload?.result;
+  if (!result || typeof result !== 'object') {
+    throw new Error('Die Analyse hat kein verwertbares Ergebnis geliefert.');
+  }
+
+  const ingredients = Array.isArray(result.ingredients) ? result.ingredients : [];
+  const labelWarnings = Array.isArray(result.warnings)
+    ? result.warnings.map(cleanText).filter(Boolean)
+    : [];
+  const uncertainties = Array.isArray(result.uncertainties)
+    ? result.uncertainties.map(cleanText).filter(Boolean)
+    : [];
+
+  const intakeInstruction = cleanText(result.intakeInstruction);
+
+  return {
+    productName: cleanText(result.productName),
+    brand: cleanText(result.brand),
+    confidence: clampConfidence(result.confidence),
+    detectedIngredients: ingredients.map(formatIngredient).filter(Boolean),
+    // Rohdaten fuer spaetere Phasen (Substanz-Datenbank-Abgleich) aufbewahren
+    ingredientDetails: ingredients,
+    dosage: {
+      amount: cleanText(result.dosage?.amount),
+      unit: cleanText(result.dosage?.unit),
+    },
+    timingSuggestion: intakeInstruction
+      ? `Herstellerangabe: ${intakeInstruction}`
+      : '',
+    warnings: [
+      ...labelWarnings,
+      ...uncertainties.map((item) => `Unsicher erkannt: ${item}`),
+    ],
+    uncertaintyNote:
+      'KI-Auswertung der Etikettenfotos. Alle Angaben stammen vom Produktetikett ' +
+      'und muessen vor der Uebernahme kontrolliert werden. Keine gesundheitliche Beratung.',
+    analysisMode: 'vision',
+    analyzedAt: new Date().toISOString(),
+  };
+}
