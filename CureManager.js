@@ -6,6 +6,8 @@
  *   - stepped: Stufen-Dosierung (z.B. Testo Booster 5→7→10 Tropfen)
  */
 
+import { tr } from './i18n/runtime';
+
 const MS_PER_DAY = 86_400_000;
 
 // ─────────────────────────────────────────────────────────────
@@ -60,7 +62,7 @@ export function getSteppedDose(cureConfig, startDate) {
   return {
     week:  step.week,
     drops: step.drops,
-    label: `Woche ${step.week}: ${step.drops} Tropfen`,
+    label: tr('logic.cure.stepped', { week: step.week, drops: step.drops }),
   };
 }
 
@@ -73,13 +75,19 @@ export function getCureStatusLabel(cureConfig, startDate) {
 
   if (cureConfig.type === 'cycle') {
     const s = getCycleStatus(cureConfig, startDate);
-    const emoji = s.phase === 'on' ? '🟢' : '🔴';
-    return `${emoji} ${s.phase.toUpperCase()} – Tag ${s.dayInPhase}/${s.totalDays} (noch ${s.daysLeft} Tage)`;
+    return tr('logic.cure.cycle', {
+      emoji: s.phase === 'on' ? '🟢' : '🔴',
+      phase: tr(`logic.cure.phase.${s.phase}`),
+      day: s.dayInPhase,
+      total: s.totalDays,
+      left: s.daysLeft,
+    });
   }
 
   if (cureConfig.type === 'stepped') {
     const s = getSteppedDose(cureConfig, startDate);
-    return s ? `📈 ${s.label}` : null;
+    // Das Emoji steckt bereits im uebersetzten Label (logic.cure.stepped).
+    return s ? s.label : null;
   }
 
   return null;

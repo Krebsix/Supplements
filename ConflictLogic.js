@@ -11,6 +11,7 @@
  *   INFO      → Timing-Hinweis
  */
 
+import { tr } from './i18n/runtime';
 import inventory from './inventory.json';
 
 // ── Lookup-Map für O(1) Zugriff ──────────────────────────────
@@ -25,13 +26,20 @@ const CRITICAL_PAIRS = new Set([
 ]);
 
 // ── Tag-basierte Konflikte (externe Substanzen) ──────────────
-export const CONFLICT_TAG_LABELS = {
-  Blutverdünner: 'Blutverdünner (Medikament)',
-  SSRI:          'SSRI / Antidepressiva',
-  Kaffee:        'Kaffee',
-  Tee:           'Tee (schwarz/grün)',
-  ALL:           'ALLE Supplements (Absorption-Blocker)',
+// Die Tag-Namen selbst sind Datenschluessel aus inventory.json und bleiben
+// unveraendert; nur ihre Beschriftung wird uebersetzt.
+const CONFLICT_TAG_KEYS = {
+  Blutverdünner: 'logic.tag.blutverduenner',
+  SSRI:          'logic.tag.ssri',
+  Kaffee:        'logic.tag.kaffee',
+  Tee:           'logic.tag.tee',
+  ALL:           'logic.tag.all',
 };
+
+export function getConflictTagLabel(tag) {
+  const key = CONFLICT_TAG_KEYS[tag];
+  return key ? tr(key) : tag;
+}
 
 // ─────────────────────────────────────────────────────────────
 // checkConflicts(targetId, activeIds[])
@@ -85,7 +93,7 @@ export function checkConflicts(targetId, activeIds = []) {
         sourceId:   targetId,
         targetId:   activeId,
         targetName: active.name,
-        message:    `✅ Synergie: ${target.name} + ${active.name} wirken zusammen stärker.`,
+        message:    tr('logic.synergy', { a: target.name, b: active.name }),
       });
     }
   }
@@ -98,8 +106,8 @@ export function checkConflicts(targetId, activeIds = []) {
       severity:   tag === 'SSRI' ? 'CRITICAL' : 'HIGH',
       sourceId:   targetId,
       tag,
-      targetName: CONFLICT_TAG_LABELS[tag] ?? tag,
-      message:    `⚠️ ${target.name} nicht kombinieren mit: ${CONFLICT_TAG_LABELS[tag] ?? tag}`,
+      targetName: getConflictTagLabel(tag),
+      message:    tr('logic.conflict.tagBased', { name: target.name, tag: getConflictTagLabel(tag) }),
     });
   }
 
@@ -171,23 +179,26 @@ function _conflictMessage(idA, idB, isCritical) {
   const b = supplementMap.get(idB)?.name ?? `ID ${idB}`;
 
   if (isCritical) {
-    return `🚨 KRITISCH: ${a} + ${b} → Serotonin-Syndrom-Risiko! Niemals kombinieren.`;
+    return tr('logic.conflict.critical', { a, b });
   }
 
-  // Spezifische Nachrichten
-  const msgMap = {
-    '17-14': `⛔ Eisen + Magnesiumcitrat: Magnesium blockiert Eisen-Aufnahme. Min. 2h Abstand.`,
-    '17-19': `⛔ Eisen + Calcium: Calcium hemmt Eisen massiv. Min. 2h Abstand!`,
-    '17-71': `⛔ Eisen + Magnesiumbisglycinat: Magnesium blockiert Eisen-Aufnahme.`,
-    '17-75': `⛔ Eisen + Magnesiumoxid: Magnesium blockiert Eisen-Aufnahme.`,
-    '32-33': `⚠️ L-Arginin + L-Lysin: Konkurrieren um dieselben Aminosäure-Transporter.`,
-    '36-37': `⚠️ L-Tyrosin + L-Tryptophan: Konkurrieren um BBB-Transport. Getrennte Zeiten!`,
-    '10-16': `⚠️ Vitamin C (hoch) + Selen: Hohe Vitamin-C-Dosen reduzieren Selen-Bioverfügbarkeit.`,
-    '2-4':   `⛔ Nattokinase + ID 4: Verstärkte Blutungsneigung möglich.`,
-    '2-59':  `⛔ Nattokinase + ID 59: Verstärkte Blutungsneigung möglich.`,
-  };
+  // Paare mit eigener, konkreter Begruendung. Die Reihenfolge der IDs im
+  // Schluessel ist die aus dem Katalog — beide Richtungen werden geprueft,
+  // weil der Aufruf in beliebiger Reihenfolge kommen kann.
+  const SPECIFIC_PAIRS = [
+    '17-14', '17-19', '17-71', '17-75',
+    '32-33', '36-37', '10-16', '2-4', '2-59',
+  ];
 
   const key1 = `${idA}-${idB}`;
   const key2 = `${idB}-${idA}`;
-  return msgMap[key1] ?? msgMap[key2] ?? `⚠️ ${a} + ${b}: Bitte zeitlich trennen.`;
+  const pair = SPECIFIC_PAIRS.includes(key1)
+    ? key1
+    : SPECIFIC_PAIRS.includes(key2)
+      ? key2
+      : null;
+
+  return pair
+    ? tr(`logic.conflict.pair.${pair}`)
+    : tr('logic.conflict.generic', { a, b });
 }

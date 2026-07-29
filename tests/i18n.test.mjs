@@ -91,5 +91,50 @@ check('Keine anweisenden oder heilbezogenen Formulierungen im Englischen',
   prescriptiveHits.length === 0,
   prescriptiveHits.join(', '));
 
+
+console.log('\n— Fachlogik-Module schalten mit —');
+
+// Die Logik-Module sind bewusst frei von React und nutzen tr() aus
+// i18n/runtime. Diese Pruefung faengt zwei Fehler ab:
+//   1. einen vergessenen deutschen String in einem der Module
+//   2. einen Import-Ringschluss (useStore -> TimingEngine -> useStore),
+//      der dazu fuehren wuerde, dass tr() beim Laden noch undefiniert ist
+const { setActiveLanguage, getActiveLanguage } = await import('../i18n/runtime.js');
+const { getSlotLabel } = await import('../TimingEngine.js');
+const { getBlockMessage } = await import('../AbsorptionBlocker.js');
+const { checkConflicts } = await import('../ConflictLogic.js');
+const { matchIngredient } = await import('../SubstanceMatcher.js');
+const { checkAgainstReference, getStatusMeta } = await import('../ReferenceCheck.js');
+
+setActiveLanguage('de');
+check('Aktive Sprache wird gesetzt', getActiveLanguage() === 'de');
+const slotDe = getSlotLabel('pre_sport');
+const blockDe = getBlockMessage(45);
+const conflictDe = checkConflicts(17, [19])[0]?.message ?? '';
+const probe = matchIngredient({ name: 'Magnesium', amount: '200', unit: 'mg' });
+const summaryDe = checkAgainstReference(probe, 'adult-woman').summary;
+const statusDe = getStatusMeta('below').label;
+
+setActiveLanguage('en');
+check('Umschalten wirkt auf TimingEngine', getSlotLabel('pre_sport') !== slotDe,
+  `${slotDe} / ${getSlotLabel('pre_sport')}`);
+check('Umschalten wirkt auf AbsorptionBlocker', getBlockMessage(45) !== blockDe);
+check('Umschalten wirkt auf ConflictLogic',
+  (checkConflicts(17, [19])[0]?.message ?? '') !== conflictDe);
+check('Umschalten wirkt auf ReferenceCheck-Sätze',
+  checkAgainstReference(probe, 'adult-woman').summary !== summaryDe);
+check('Umschalten wirkt auf Status-Beschriftungen',
+  getStatusMeta('below').label !== statusDe);
+
+check('Englische Slot-Bezeichnung enthält keine Umlaute',
+  !/[äöüß]/i.test(getSlotLabel('fasted')), getSlotLabel('fasted'));
+check('Englischer Konflikt-Text enthält keine deutschen Wörter',
+  !/\b(und|nicht|mit|Abstand|Aufnahme)\b/.test(checkConflicts(17, [19])[0]?.message ?? ''),
+  checkConflicts(17, [19])[0]?.message);
+
+// Zurueck auf den Ausgangszustand, damit nachfolgende Pruefungen in
+// derselben Datei nicht auf Englisch laufen.
+setActiveLanguage('de');
+
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

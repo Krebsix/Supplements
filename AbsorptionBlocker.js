@@ -5,6 +5,8 @@
  * geloggt wurden. ID 43 = Flohsamenschalen (Absorption-Blocker).
  */
 
+import { tr } from './i18n/runtime';
+
 export const ABSORPTION_BLOCKER_ID = 43;
 export const BLOCK_DURATION_MS     = 2 * 60 * 60 * 1000; // 2 Stunden
 
@@ -31,7 +33,7 @@ export function isBlocked(blockerLoggedAt) {
 // getBlockMessage(remainingMinutes)
 // ─────────────────────────────────────────────────────────────
 export function getBlockMessage(remainingMinutes) {
-  return `🚫 Flohsamenschalen aktiv – alle Supplements für noch ${remainingMinutes} Min. gesperrt.`;
+  return tr('logic.absorption.blocked', { minutes: remainingMinutes });
 }
 
 // ─────────────────────────────────────────────────────────────

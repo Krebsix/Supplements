@@ -4,6 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { shouldTriggerBlock } from './AbsorptionBlocker';
 import { buildDailySchedule } from './TimingEngine';
+import { setActiveLanguage } from './i18n/runtime';
 import inventoryData from './inventory.json';
 
 function createId(prefix = 'id') {
@@ -176,7 +177,13 @@ export const useStore = create(
       setActiveLifeStage: (lifeStageId) =>
         set({ activeLifeStageId: lifeStageId }),
 
-      setLanguage: (language) => set({ language }),
+      setLanguage: (language) => {
+        // Fachlogik-Module lesen die Sprache aus i18n/runtime, weil sie
+        // keinen Hook nutzen koennen. Der Store bleibt die Quelle und
+        // spiegelt seinen Wert dorthin.
+        setActiveLanguage(language);
+        set({ language });
+      },
 
       addUserSupplement: (draft) => {
         const supplement = normalizeUserSupplement(draft);
@@ -319,6 +326,12 @@ export const useStore = create(
       version: 1,
       migrate: (state) => migratePersistedState(state),
       merge: (persistedState, currentState) => ({ ...currentState, ...migratePersistedState(persistedState) }),
+      // Nach dem Laden aus dem Speicher die Sprache an die Fachlogik-Module
+      // durchreichen — sonst laufen sie bis zur ersten Umschaltung auf
+      // Deutsch weiter, obwohl die Oberflaeche bereits englisch ist.
+      onRehydrateStorage: () => (state) => {
+        if (state?.language) setActiveLanguage(state.language);
+      },
     }
   )
 );

@@ -4,19 +4,55 @@
  * Verwaltet Tages-Slots und ordnet Supplements ein.
  */
 
+import { tr } from './i18n/runtime';
 import inventory from './inventory.json';
 
-// ── Slot-Definitionen ────────────────────────────────────────
-export const SLOTS = {
-  fasted:     { id: 'fasted',     label: 'Nüchtern',   emoji: '🌅', time: '06:00–07:00' },
-  morning:    { id: 'morning',    label: 'Morgen',      emoji: '☀️', time: '07:00–09:00' },
-  midday:     { id: 'midday',     label: 'Mittag',      emoji: '🌤️', time: '12:00–13:00' },
-  pre_sport:  { id: 'pre_sport',  label: 'Vor Sport',   emoji: '💪', time: '60–90 min vor Training' },
-  post_sport: { id: 'post_sport', label: 'Nach Sport',  emoji: '🏁', time: 'Direkt nach Training' },
-  evening:    { id: 'evening',    label: 'Abend',       emoji: '🌙', time: '19:00–21:00' },
+export const SLOT_ORDER = ['fasted', 'morning', 'midday', 'pre_sport', 'post_sport', 'evening'];
+
+const SLOT_EMOJI = {
+  fasted: '🌅',
+  morning: '☀️',
+  midday: '🌤️',
+  pre_sport: '💪',
+  post_sport: '🏁',
+  evening: '🌙',
 };
 
-export const SLOT_ORDER = ['fasted', 'morning', 'midday', 'pre_sport', 'post_sport', 'evening'];
+/**
+ * getSlot(slotId)
+ * Label und Zeitangabe werden bei jedem Aufruf uebersetzt, nicht einmalig
+ * beim Laden des Moduls — sonst bliebe die Sprache auf dem Stand, den sie
+ * beim App-Start hatte.
+ */
+export function getSlot(slotId) {
+  if (!SLOT_ORDER.includes(slotId)) return null;
+  return {
+    id: slotId,
+    label: tr(`logic.slot.${slotId}.label`),
+    emoji: SLOT_EMOJI[slotId],
+    time: tr(`logic.slot.${slotId}.time`),
+  };
+}
+
+/**
+ * SLOTS als Getter-Objekt: liest sich im aufrufenden Code weiterhin wie
+ * die fruehere Konstante (SLOTS.morning.label), liefert aber die jeweils
+ * aktuelle Sprache.
+ */
+export const SLOTS = Object.freeze(
+  Object.fromEntries(
+    SLOT_ORDER.map((slotId) => [
+      slotId,
+      Object.defineProperties(
+        { id: slotId, emoji: SLOT_EMOJI[slotId] },
+        {
+          label: { get: () => tr(`logic.slot.${slotId}.label`), enumerable: true },
+          time: { get: () => tr(`logic.slot.${slotId}.time`), enumerable: true },
+        }
+      ),
+    ])
+  )
+);
 
 // ─────────────────────────────────────────────────────────────
 // getSupplementsBySlot()
@@ -52,7 +88,7 @@ export function getPrimarySlot(supplementId, sourceInventory = inventory) {
 // getSlotLabel(slotId)
 // ─────────────────────────────────────────────────────────────
 export function getSlotLabel(slotId) {
-  return SLOTS[slotId]?.label ?? slotId;
+  return SLOT_ORDER.includes(slotId) ? tr(`logic.slot.${slotId}.label`) : slotId;
 }
 
 // ─────────────────────────────────────────────────────────────

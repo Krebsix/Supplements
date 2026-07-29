@@ -16,6 +16,7 @@
 
 import { convertAmount } from './SubstanceMatcher';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
+import { tr } from './i18n/runtime';
 import { getAdvisories } from './data/lifeStageAdvisories';
 import { getReferenceValue } from './data/referenceValues';
 import { normalizeSources } from './data/substances';
@@ -29,41 +30,45 @@ export const REFERENCE_STATUS = {
   UNKNOWN: 'unknown',
 };
 
+// Farbe und Tonalitaet sind sprachunabhaengig, die Beschriftung nicht.
+// Sie wird deshalb erst bei getStatusMeta() aufgeloest, nicht beim Laden
+// des Moduls — sonst bliebe sie auf der Startsprache stehen.
 const STATUS_META = {
   [REFERENCE_STATUS.BELOW]: {
-    label: 'Unter Referenzwert',
+    labelKey: 'reference.status.below',
     tone: 'neutral',
     hex: '#64748b',
   },
   [REFERENCE_STATUS.WITHIN]: {
-    label: 'Im Bereich des Referenzwerts',
+    labelKey: 'reference.status.within',
     tone: 'ok',
     hex: '#0f766e',
   },
   [REFERENCE_STATUS.ABOVE_REFERENCE]: {
-    label: 'Über Referenzwert',
+    labelKey: 'reference.status.aboveReference',
     tone: 'notice',
     hex: '#b45309',
   },
   [REFERENCE_STATUS.ABOVE_LIMIT]: {
-    label: 'Über Obergrenze',
+    labelKey: 'reference.status.aboveLimit',
     tone: 'warn',
     hex: '#dc2626',
   },
   [REFERENCE_STATUS.SAFE_LEVEL]: {
-    label: 'Innerhalb sicherer Menge',
+    labelKey: 'reference.status.safeLevel',
     tone: 'ok',
     hex: '#0f766e',
   },
   [REFERENCE_STATUS.UNKNOWN]: {
-    label: 'Kein Referenzwert hinterlegt',
+    labelKey: 'reference.status.unknown',
     tone: 'muted',
     hex: '#94a3b8',
   },
 };
 
 export function getStatusMeta(status) {
-  return STATUS_META[status] ?? STATUS_META[REFERENCE_STATUS.UNKNOWN];
+  const meta = STATUS_META[status] ?? STATUS_META[REFERENCE_STATUS.UNKNOWN];
+  return { ...meta, label: tr(meta.labelKey) };
 }
 
 // Toleranz nach unten: 80 % des Referenzwerts gelten noch als "im Bereich".
@@ -104,7 +109,10 @@ export function checkAgainstReference(match, lifeStageId) {
       upperLimit: reference.upperLimit,
       upperLimitNote: reference.upperLimitNote,
       percentOfReference: null,
-      summary: `Ohne erkannte Mengenangabe ist kein Abgleich möglich. Referenzwert: ${formatNumber(reference.reference)} ${reference.unit} pro Tag.`,
+      summary: tr('reference.noAmount', {
+        reference: formatNumber(reference.reference),
+        unit: reference.unit,
+      }),
     };
   }
 
@@ -128,7 +136,12 @@ export function checkAgainstReference(match, lifeStageId) {
       upperLimitNote: reference.upperLimitNote,
       percentOfReference: null,
       amountBasis: dose.basis,
-      summary: `Die Angabe bezieht sich auf ${dose.formName}, nicht auf elementares ${match.substance.name}. Für diese Verbindung ist kein gesicherter Elementanteil hinterlegt, deshalb ist kein Abgleich mit dem Referenzwert von ${formatNumber(reference.reference)} ${reference.unit} möglich. Die elementare Menge steht in der Nährwerttabelle des Produkts.`,
+      summary: tr('reference.compoundUnknown', {
+        form: dose.formName,
+        substance: match.substance.name,
+        reference: formatNumber(reference.reference),
+        unit: reference.unit,
+      }),
     };
   }
 
@@ -154,7 +167,10 @@ export function checkAgainstReference(match, lifeStageId) {
       upperLimit: reference.upperLimit,
       upperLimitNote: reference.upperLimitNote,
       percentOfReference: null,
-      summary: `Die Einheit "${match.unit}" lässt sich nicht sicher in ${reference.unit} umrechnen. Bitte vom Etikett übernehmen.`,
+      summary: tr('reference.unitMismatch', {
+        unit: match.unit,
+        targetUnit: reference.unit,
+      }),
     };
   }
 
@@ -183,26 +199,36 @@ export function checkAgainstReference(match, lifeStageId) {
   const amountText = `${formatNumber(amount)} ${reference.unit}`;
   const refText = hasReference ? `${formatNumber(refValue)} ${reference.unit}` : '';
 
+  const limitText = upperLimit !== null
+    ? `${formatNumber(upperLimit)} ${reference.unit}`
+    : '';
+
   let summary;
   switch (status) {
     case REFERENCE_STATUS.ABOVE_LIMIT:
-      summary = `${amountText} liegen über der tolerierbaren Gesamtzufuhr von ${formatNumber(upperLimit)} ${reference.unit} pro Tag. Diese Grenze bezieht sich auf alle Quellen zusammen, also auch auf Lebensmittel und weitere Präparate.`;
+      summary = tr('reference.aboveLimit', { amount: amountText, limit: limitText });
       break;
     case REFERENCE_STATUS.SAFE_LEVEL:
-      summary = `${amountText} liegen innerhalb der von EFSA/BfR als sicher bewerteten Tagesmenge von ${formatNumber(upperLimit)} ${reference.unit}. Für diesen Stoff existiert kein eigener Tages-Referenzwert, da er kein essenzieller Nährstoff ist.`;
+      summary = tr('reference.safeLevel', { amount: amountText, limit: limitText });
       break;
     case REFERENCE_STATUS.ABOVE_REFERENCE:
-      summary = `${amountText} liegen über dem Referenzwert von ${refText} pro Tag${
-        upperLimit !== null
-          ? `, aber unter der Obergrenze von ${formatNumber(upperLimit)} ${reference.unit}`
-          : ''
-      }.`;
+      summary = upperLimit !== null
+        ? tr('reference.aboveReferenceWithLimit', {
+            amount: amountText,
+            reference: refText,
+            limit: limitText,
+          })
+        : tr('reference.aboveReference', { amount: amountText, reference: refText });
       break;
     case REFERENCE_STATUS.WITHIN:
-      summary = `${amountText} entsprechen etwa dem Referenzwert von ${refText} pro Tag.`;
+      summary = tr('reference.within', { amount: amountText, reference: refText });
       break;
     default:
-      summary = `${amountText} decken rund ${percentOfReference} % des Referenzwerts von ${refText} pro Tag ab. Die restliche Menge stammt üblicherweise aus der Ernährung.`;
+      summary = tr('reference.below', {
+        amount: amountText,
+        percent: percentOfReference,
+        reference: refText,
+      });
   }
 
   // Wurde von der Verbindung auf das Element heruntergerechnet, muss die
@@ -216,10 +242,16 @@ export function checkAgainstReference(match, lifeStageId) {
     // Das Etikettenwort nehmen ("Magnesiumcitrat"), nicht den internen
     // Formnamen ("Citrat") — sonst liest sich der Satz wie ein Tippfehler.
     const compoundLabel = match.label || dose.formName;
-    summary += ` Grundlage der Rechnung: ${formatNumber(dose.originalAmount)} ${match.unit} ${compoundLabel} enthalten rund ${percentOfCompound} % elementares ${match.substance.name}. Referenzwerte beziehen sich immer auf die elementare Menge.`;
+    summary += tr('reference.compoundBasis', {
+      amount: formatNumber(dose.originalAmount),
+      unit: match.unit,
+      compound: compoundLabel,
+      percent: percentOfCompound,
+      substance: match.substance.name,
+    });
 
     if (dose.varies) {
-      summary += ' Der Anteil schwankt je nach Handelsform — maßgeblich ist die Nährwerttabelle des Produkts.';
+      summary += tr('reference.compoundVaries');
     }
   }
 
@@ -259,7 +291,7 @@ export function buildSubstanceProfile(match, lifeStageId) {
     return {
       matched: false,
       label: match?.label ?? '',
-      note: 'Dieser Eintrag ist in der Wirkstoff-Datenbank noch nicht hinterlegt. Angaben bitte direkt vom Etikett übernehmen.',
+      note: tr('reference.unmatched'),
     };
   }
 
