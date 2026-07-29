@@ -82,6 +82,9 @@ const INTENTIONAL_COVERAGE_GAPS = {
   betaine: ['child-4-10', 'teen-11-17'],
   astaxanthin: ['child-4-10', 'teen-11-17'],
   resveratrol: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
+  pqq: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
+  spermidine: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
+  'green-tea-extract-egcg': ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
 };
 
 for (const [sid, entry] of Object.entries(referenceValues)) {
@@ -150,7 +153,7 @@ check('Keine Herstellernamen in der Siegel-DB',
   !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
 
 console.log('\n— Erweiterung Juli 2026: neue Substanzen —');
-check('Substanz-Datenbank hat 62 Einträge', substances.length === 62, substances.length);
+check('Substanz-Datenbank hat 88 Einträge', substances.length === 88, substances.length);
 
 const biotinMatch = matchIngredient({ name: 'Biotin', amount: '50', unit: 'µg' });
 check('Biotin erkannt', biotinMatch.substanceId === 'biotin', biotinMatch.substanceId);
@@ -196,6 +199,63 @@ check('Kupfer bei Kind ohne Referenzwert → kein Crash, referenceCheck null',
 const copperWoman = matchIngredient({ name: 'Kupfer', amount: '6', unit: 'mg' });
 check('Kupfer 6mg Frau → above_limit (UL 5)',
   checkAgainstReference(copperWoman, 'adult-woman').status === 'above_limit');
+
+console.log('\n— Erweiterung Juli 2026, zweite Runde: Eigenbestand + Marktklassiker —');
+
+// Eigenbestand-Substanzen (inventory.json IDs 1, 2/8, 73, 69) muessen jetzt
+// eine Wirkstoff-Karte haben, wo vorher keine existierte.
+const nmnMatch = matchIngredient({ name: 'NMN' });
+check('NMN erkannt', nmnMatch.substanceId === 'nmn', nmnMatch.substanceId);
+
+const nattoMatch = matchIngredient({ name: 'Nattokinase' });
+check('Nattokinase erkannt', nattoMatch.substanceId === 'nattokinase', nattoMatch.substanceId);
+const nattoProfile = buildSubstanceProfile(nattoMatch, 'pregnancy');
+check('Nattokinase in Schwangerschaft → medical-Hinweis',
+  nattoProfile.advisories.some(a => a.severity === 'medical'));
+
+const lionsManeMatch = matchIngredient({ name: "Lion's Mane" });
+check("Lion's Mane erkannt", lionsManeMatch.substanceId === 'lions-mane', lionsManeMatch.substanceId);
+
+const methyleneMatch = matchIngredient({ name: 'Methylenblau' });
+check('Methylenblau erkannt', methyleneMatch.substanceId === 'methylene-blue', methyleneMatch.substanceId);
+const methyleneProfile = buildSubstanceProfile(methyleneMatch, 'adult-man');
+check('Methylenblau → contraindicated-Hinweis unabhaengig von Lebensphase (G6PD/Serotonin)',
+  methyleneProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+// Regulatorisch komplexe Faelle: kein Referenzwert, aber klare Kontext-Info
+const berberineMatch = matchIngredient({ name: 'Berberin' });
+check('Berberin: kein Referenzwert (laufende EFSA-Konsultation)',
+  buildSubstanceProfile(berberineMatch, 'adult-woman').referenceCheck === null);
+const berberinePreg = buildSubstanceProfile(berberineMatch, 'pregnancy');
+check('Berberin in Schwangerschaft → contraindicated',
+  berberinePreg.advisories.some(a => a.severity === 'contraindicated'));
+
+// Neue SAFE_LEVEL-Faelle: PQQ, Spermidin, EGCG haben nur EU-Zulassungsgrenzen
+const pqqLow = matchIngredient({ name: 'PQQ', amount: '10', unit: 'mg' });
+check('PQQ 10mg → safe_level (EU-Grenze 20mg)',
+  checkAgainstReference(pqqLow, 'adult-woman').status === 'safe_level');
+const pqqHigh = matchIngredient({ name: 'PQQ', amount: '25', unit: 'mg' });
+check('PQQ 25mg → above_limit (über EU-Grenze 20mg)',
+  checkAgainstReference(pqqHigh, 'adult-man').status === 'above_limit');
+
+const egcgHigh = matchIngredient({ name: 'EGCG', amount: '900', unit: 'mg' });
+check('EGCG 900mg → above_limit (über 800mg Lebertoxizitaets-Schwelle)',
+  checkAgainstReference(egcgHigh, 'adult-woman').status === 'above_limit');
+
+// Bor: vollstaendige Lebensphasen-Abdeckung mit reference:null (nur EFSA-UL)
+const boronChild = matchIngredient({ name: 'Bor', amount: '3', unit: 'mg' });
+check('Bor 3mg Kind → safe_level (UL 5)',
+  checkAgainstReference(boronChild, 'child-4-10').status === 'safe_level');
+const boronChildHigh = matchIngredient({ name: 'Bor', amount: '6', unit: 'mg' });
+check('Bor 6mg Kind → above_limit (UL 5, niedriger als Erwachsene)',
+  checkAgainstReference(boronChildHigh, 'child-4-10').status === 'above_limit');
+
+// Falsch-Treffer-Schutz auch fuer die neue Runde: kurze/generische Begriffe
+// duerfen nicht querschiessen (z. B. "Protease" ist Teil von Verdauungsenzyme-
+// Synonymen, sollte aber nicht faelschlich andere Eintraege treffen)
+const enzymeMatch = matchIngredient({ name: 'Protease' });
+check('"Protease" → digestive-enzymes, kein Fehltreffer',
+  enzymeMatch.substanceId === 'digestive-enzymes', enzymeMatch.substanceId);
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

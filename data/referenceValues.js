@@ -475,6 +475,50 @@ export const referenceValues = {
     upperLimitNote:
       'EU-Novel-Food-Zulassungsgrenze (2016): 150 mg/Tag, ausdrücklich nur für Erwachsene. Für Schwangerschaft, Stillzeit, Kinder und Jugendliche liegt keine Zulassung vor, deshalb hier ohne Eintrag statt eines falsch übertragenen Werts.',
   },
+
+  // ── Erweiterung Juli 2026, zweite Runde ───────────────────
+  boron: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: null, upperLimit: 5 },
+      'teen-11-17': { reference: null, upperLimit: 9 },
+      'adult-woman': { reference: null, upperLimit: 10 },
+      'adult-man': { reference: null, upperLimit: 10 },
+      pregnancy: { reference: null, upperLimit: 10 },
+      breastfeeding: { reference: null, upperLimit: 10 },
+      menopause: { reference: null, upperLimit: 10 },
+      senior: { reference: null, upperLimit: 10 },
+    },
+    upperLimitNote:
+      'EFSA-Obergrenze (2004), kein essenzieller Nährstoff, daher kein Referenzwert. Kinderwerte gerundet aus der Altersspanne 4–6/7–10 Jahre (4/5 mg) bzw. 11–14/15–17 Jahre (7/9 mg). Das BfR empfiehlt für Nahrungsergänzungsmittel eine deutlich niedrigere Höchstmenge von 0,5 mg/Tag, da Kinder ihre Hintergrundzufuhr aus normaler Ernährung bereits ausschöpfen können — bei Kindern/Jugendlichen ist die BfR-Empfehlung praktisch relevanter als der EFSA-UL.',
+  },
+  pqq: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 20 },
+      'adult-man': { reference: null, upperLimit: 20 },
+    },
+    upperLimitNote:
+      'EU-Novel-Food-Zulassungsgrenze (Durchführungsverordnung (EU) 2018/1122): 20 mg/Tag, ausdrücklich nur für Erwachsene. Für Schwangerschaft, Stillzeit, Kinder und Jugendliche liegt keine Zulassung vor.',
+  },
+  spermidine: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 6 },
+      'adult-man': { reference: null, upperLimit: 6 },
+    },
+    upperLimitNote:
+      'EU-Novel-Food-Zulassungsgrenze (Durchführungsverordnung (EU) 2020/443) speziell für spermidinreichen Weizenkeimextrakt: 6 mg/Tag, ausdrücklich nur für Erwachsene. Gilt nicht für synthetische Spermidin-Salze, die von dieser Zulassung nicht abgedeckt sind.',
+  },
+  'green-tea-extract-egcg': {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 800 },
+      'adult-man': { reference: null, upperLimit: 800 },
+    },
+    upperLimitNote:
+      'EFSA-Bewertung (2018): Ab 800 mg EGCG/Tag aus Nahrungsergänzungsmitteln ist mit ersten Anzeichen einer Leberschädigung zu rechnen. Aufgegossener Grüntee (kein Extrakt) gilt separat als unbedenklich. Für Schwangerschaft, Stillzeit, Kinder und Jugendliche liegen keine ausreichenden Sicherheitsdaten vor, deshalb hier ohne Eintrag.',
+  },
 };
 
 export function getLifeStage(id) {

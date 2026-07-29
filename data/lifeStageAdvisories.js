@@ -428,6 +428,139 @@ export const advisories = {
       text: 'Vor Labor-Bluttests relevant: Die Einnahme kann bestimmte Testergebnisse (z. B. Schilddrüsen-, Herzmarker) verfälschen.',
     },
   ],
+
+  // ── Erweiterung Juli 2026, zweite Runde ───────────────────
+  nattokinase: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Die EFSA-Sicherheitsbewertung schließt Schwangere und Stillende ausdrücklich aus.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Kann die Wirkung von Antikoagulanzien/Thrombozytenaggregationshemmern theoretisch verstärken — Fallberichte beschreiben sowohl Blutungsereignisse als auch thrombotische Komplikationen, wenn Nattokinase eigenmächtig eine Blutverdünner-Therapie ersetzte.',
+    },
+  ],
+  'methylene-blue': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'G6PD-Mangel gilt laut Fachinformation als Kontraindikation (Hämolyserisiko). Kombination mit serotonerg wirksamen Substanzen (SSRI, SNRI, MAO-Hemmer, 5-HTP, Tryptophan) birgt laut behördlicher Warnung bei jeder Dosierung ein Serotonin-Syndrom-Risiko.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine der geprüften Quellen liefert eine Sicherheitsbewertung für Schwangerschaft/Stillzeit im Nahrungsergänzungsmittel-Kontext — es handelt sich ohnehin um kein zugelassenes Nahrungsergänzungsmittel.',
+    },
+  ],
+  'l-carnitine': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei Anfallsleiden/Epilepsie können hohe Dosen laut NIH ODS das Anfallsrisiko erhöhen. Bei chronischer Nierenerkrankung können hohe Dosen Muskelschwäche begünstigen.',
+    },
+  ],
+  berberine: [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Berichte zu Bilirubin-Verdrängung mit Kernikterus-Risiko beim Säugling führen dazu, dass Berberin in der Schwangerschaft konsistent als Ausschlusskriterium genannt wird.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Pharmakokinetische Wechselwirkungen mit Statinen, Metformin/Antidiabetika und Blutdrucksenkern über CYP-Enzyme sind beschrieben.',
+    },
+  ],
+  'green-tea-extract-egcg': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Einnahme auf nüchternen Magen erhöht Bioverfügbarkeit und Lebertoxizitäts-Risiko von EGCG.',
+    },
+  ],
+  boswellia: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Laut NCCIH nur begrenzte Sicherheitsdaten zur Anwendung während Schwangerschaft und Stillzeit vorhanden.',
+    },
+  ],
+  harpagophytum: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'HMPC: Sicherheit nicht belegt, Anwendung bei unzureichender Datenlage nicht empfohlen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'HMPC: Anwendung bei Kindern/Jugendlichen unter 18 Jahren mangels Daten nicht empfohlen.',
+    },
+  ],
+  bromelain: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Sicherheit während Schwangerschaft und Stillzeit ist laut NCCIH nicht bekannt.',
+    },
+  ],
+  spirulina: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Enthält Phenylalanin — bei Phenylketonurie (PKU) muss die Zufuhr von Phenylalanin-Quellen strikt kontrolliert werden.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Für cyanobakterienhaltige Algen-Supplemente wird wegen möglicher Kontamination empfohlen, dass diese für Schwangere/Stillende nicht geeignet sind.',
+    },
+  ],
+  chlorella: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Der beschriebene Vitamin-K-Gehalt wird in Sekundärquellen im Zusammenhang mit Gerinnungshemmern genannt.',
+    },
+  ],
+  'black-seed-oil': [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Mengen oberhalb üblicher Lebensmittelverzehrsmengen gelten in der Schwangerschaft als wahrscheinlich unsicher, da ein Einfluss auf Uteruskontraktionen diskutiert wird.',
+    },
+  ],
+  chasteberry: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'HMPC beschränkt Anwendung auf erwachsene, nicht schwangere Frauen; NCCIH nennt die Anwendung in Schwangerschaft/Stillzeit als möglicherweise unsicher.',
+    },
+  ],
+  'black-cohosh': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'NCCIH nennt die Sicherheit in Schwangerschaft/Stillzeit explizit als ungeklärt; HMPC-Indikation ist ohnehin nicht auf Schwangerschaft anwendbar.',
+    },
+  ],
+  pqq: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die EU-Zulassung als Novel Food schließt Schwangere und Stillende ausdrücklich aus.',
+    },
+  ],
+  boron: [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'BfR: Bor-haltige Nahrungsergänzungsmittel sind laut Empfehlung nicht für Kinder und Jugendliche geeignet, da der UL aus Hintergrundquellen bereits ausgeschöpft sein kann.',
+    },
+  ],
+
   'vitamin-e': [
     {
       lifeStages: 'all',
