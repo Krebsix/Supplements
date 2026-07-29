@@ -67,6 +67,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase, sammelt Lebensphasen-Hinweise |
 | `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
 | `ProfileCheck.js` | Verknuepft das persoenliche Profil (Medikamentengruppen) mit dem Bestand und zitiert die belegten Hinweise |
+| `OutcomeTracker.js` | Wirkungskontrolle: Ausgangswert, Verlauf, Einnahmetreue — und die Stoerfaktoren, die gegen eine Zuordnung sprechen |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 
 ### Wirkstoff-Datenbank (`data/`)
@@ -78,6 +79,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `data/lifeStageAdvisories.js` | Was in einer bestimmten Lebensphase gilt (z. B. Retinol in der Schwangerschaft). Severity: `contraindicated`, `medical`, `attention`, `increased` |
 | `data/certifications.js` | Pruefsiegel mit Geltungsbereich. Das Feld `scope` sagt, was ein Siegel NICHT abdeckt — bewusst so |
 | `data/elementalFractions.js` | Massenanteil des Elements in einer Verbindung (500 mg Magnesiumcitrat = rund 81 mg Magnesium). Stoechiometrie mit Summenformel als Beleg |
+| `data/outcomeMetrics.js` | Zielgroessen der Wirkungskontrolle (5er-Skala). `direction` sagt, wo "besser" liegt — bei Beschwerden unten |
 | `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
 
 Bewusst als versioniertes JS-Modul im Repo, nicht in einer Datenbank:
@@ -157,6 +159,12 @@ Loeschen der App bedeutet Datenverlust.
   die in `data/substances.js` bzw. `data/lifeStageAdvisories.js` bereits mit
   Quelle belegt sind. Ein Test prueft, dass jedes Zitat dort noch woertlich
   steht — sonst behauptet die App etwas, das die Quelle nicht mehr hergibt.
+- **Eine Veraenderung ist kein Wirkungsnachweis.** Die Wirkungskontrolle darf
+  nie "X hat geholfen" sagen — auch nicht abgeschwaecht ("scheint zu wirken"),
+  das ist dieselbe Aussage mit Weichzeichner. Erlaubt ist "deine Bewertung ist
+  gestiegen". `OutcomeTracker.js` liefert deshalb Zahlen und Stoerfaktoren
+  GETRENNT zurueck, und die Oberflaeche zeigt beides nebeneinander. Ohne den
+  Stoerfaktor-Block waere das Feature ein Bestaetigungsautomat.
 - **Ein Treffer ist keine Bewertung der Person.** Die App kennt weder Praeparat
   noch Dosis noch Befund. Formulierung deshalb immer "dazu ist ein Hinweis
   hinterlegt", nie "das ist fuer dich gefaehrlich".

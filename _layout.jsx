@@ -65,6 +65,13 @@ export default function Layout() {
       />
 
       <Stack.Screen
+        name="outcome"
+        options={{
+          title: t('nav.outcome'),
+        }}
+      />
+
+      <Stack.Screen
         name="settings"
         options={{
           title: t('nav.settings'),

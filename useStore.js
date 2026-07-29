@@ -3,6 +3,12 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { shouldTriggerBlock } from './AbsorptionBlocker';
+import {
+  concludeTrial,
+  createRating,
+  createTrial,
+  TRIAL_STATUS,
+} from './OutcomeTracker';
 import { buildDailySchedule } from './TimingEngine';
 import { setActiveLanguage } from './i18n/runtime';
 import inventoryData from './inventory.json';
@@ -175,6 +181,8 @@ function migratePersistedState(persistedState = {}) {
     // Bestandsdaten aus aelteren Versionen kennen kein Profil — normalize
     // liefert dann ein leeres, aber vollstaendiges Objekt.
     profile: normalizeProfile(state.profile),
+    trials: Array.isArray(state.trials) ? state.trials : [],
+    trialRatings: Array.isArray(state.trialRatings) ? state.trialRatings : [],
     absorptionBlockedAt: state.absorptionBlockedAt || null,
     settings: state.settings || {},
   };
@@ -198,6 +206,10 @@ export const useStore = create(
       // Persoenliches Profil (Medikamentengruppen, Erkrankungen, Ziele).
       // Bleibt wie alles andere lokal auf dem Geraet.
       profile: EMPTY_PROFILE,
+      // Wirkungskontrolle: laufende und abgeschlossene Beobachtungen samt
+      // der einzelnen Bewertungen (siehe OutcomeTracker.js).
+      trials: [],
+      trialRatings: [],
       absorptionBlockedAt: null,
       settings: {},
 
@@ -217,6 +229,48 @@ export const useStore = create(
         }),
 
       clearProfile: () => set({ profile: normalizeProfile({}) }),
+
+      startTrial: (input) => {
+        const trial = createTrial(input);
+        set((state) => ({ trials: [trial, ...state.trials] }));
+        return trial;
+      },
+
+      addTrialRating: (trialId, value, note = '', date = new Date()) => {
+        const rating = createRating(trialId, value, note, date);
+        if (!rating) return null;
+
+        set((state) => ({
+          // Pro Tag nur eine Bewertung: Wer nachmittags korrigiert, meint
+          // eine Korrektur, keinen zweiten Messpunkt.
+          trialRatings: [
+            rating,
+            ...state.trialRatings.filter(
+              (entry) => !(entry.trialId === trialId && entry.dateKey === rating.dateKey)
+            ),
+          ],
+        }));
+        return rating;
+      },
+
+      concludeTrialById: (trialId, conclusion) =>
+        set((state) => ({
+          trials: state.trials.map((trial) =>
+            trial.id === trialId ? concludeTrial(trial, conclusion) : trial
+          ),
+        })),
+
+      deleteTrial: (trialId) =>
+        set((state) => ({
+          trials: state.trials.filter((trial) => trial.id !== trialId),
+          trialRatings: state.trialRatings.filter((rating) => rating.trialId !== trialId),
+        })),
+
+      getRunningTrials: () =>
+        get().trials.filter((trial) => trial.status === TRIAL_STATUS.RUNNING),
+
+      getTrialRatings: (trialId) =>
+        get().trialRatings.filter((rating) => rating.trialId === trialId),
 
       setLanguage: (language) => {
         // Fachlogik-Module lesen die Sprache aus i18n/runtime, weil sie
@@ -362,6 +416,8 @@ export const useStore = create(
         activeLifeStageId: state.activeLifeStageId,
         language: state.language,
         profile: state.profile,
+        trials: state.trials,
+        trialRatings: state.trialRatings,
         absorptionBlockedAt: state.absorptionBlockedAt,
         settings: state.settings,
       }),

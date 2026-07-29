@@ -10,6 +10,7 @@ export default {
   'nav.results': 'Analysis',
   'nav.addSupplement': 'Add supplement',
   'nav.profile': 'Profile',
+  'nav.outcome': 'Outcome',
   'nav.settings': 'Settings',
   'nav.history': 'History',
   'nav.search': 'Search',

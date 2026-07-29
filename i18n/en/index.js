@@ -13,6 +13,7 @@ import history from './history';
 import home from './home';
 import logic from './logic';
 import reference from './reference';
+import outcome from './outcome';
 import profile from './profile';
 import results from './results';
 import scanner from './scanner';
@@ -30,6 +31,7 @@ export default {
   ...dashboard,
   ...addSupplement,
   ...profile,
+  ...outcome,
   ...scanner,
   ...results,
   ...search,
