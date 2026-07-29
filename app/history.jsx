@@ -5,6 +5,7 @@ import StatusBadge from '../components/StatusBadge';
 import { getSlotLabel } from '../TimingEngine';
 import useStore from '../useStore';
 import { formatSupplementDosage, formatSupplementName } from '../utils/supplementFormatting';
+import { useTranslation } from '../i18n';
 
 const EMPTY_LOGS = [];
 const EMPTY_SUPPLEMENTS = [];
@@ -37,19 +38,19 @@ function getLogDateKey(log) {
   return toDateKey(date);
 }
 
-function formatHistoryGroupTitle(dateKey) {
-  if (dateKey === 'unknown') return 'Ohne Datum';
+function formatHistoryGroupTitle(dateKey, t) {
+  if (dateKey === 'unknown') return t('history.group.noDate');
 
   const date = new Date(`${dateKey}T12:00:00`);
-  if (Number.isNaN(date.getTime())) return 'Ohne Datum';
+  if (Number.isNaN(date.getTime())) return t('history.group.noDate');
 
   const todayKey = toDateKey(new Date());
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayKey = toDateKey(yesterday);
 
-  if (dateKey === todayKey) return 'Heute';
-  if (dateKey === yesterdayKey) return 'Gestern';
+  if (dateKey === todayKey) return t('history.group.today');
+  if (dateKey === yesterdayKey) return t('history.group.yesterday');
 
   return date.toLocaleDateString('de-DE', {
     day: '2-digit',
@@ -58,46 +59,48 @@ function formatHistoryGroupTitle(dateKey) {
   });
 }
 
-function formatHistoryTime(value) {
-  if (!value) return 'Zeitpunkt nicht hinterlegt';
+function formatHistoryTime(value, t) {
+  if (!value) return t('history.time.missing');
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Zeitpunkt nicht lesbar';
+  if (Number.isNaN(date.getTime())) return t('history.time.unreadable');
 
-  return `${date.toLocaleTimeString('de-DE', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })} Uhr`;
+  return t('history.time.withSuffix', {
+    time: date.toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+  });
 }
 
-function formatHistoryDate(value) {
-  if (!value) return 'Zeitpunkt nicht hinterlegt';
+function formatHistoryDate(value, t) {
+  if (!value) return t('history.time.missing');
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Zeitpunkt nicht lesbar';
+  if (Number.isNaN(date.getTime())) return t('history.time.unreadable');
 
   const entryKey = toDateKey(date);
-  const dayLabel = formatHistoryGroupTitle(entryKey);
+  const dayLabel = formatHistoryGroupTitle(entryKey, t);
 
-  return `${dayLabel} · ${formatHistoryTime(value)}`;
+  return `${dayLabel} · ${formatHistoryTime(value, t)}`;
 }
 
-function formatLogDosage(log, supplement) {
+function formatLogDosage(log, supplement, t) {
   const logDosage = [log.amount, log.unit].filter(Boolean).join(' ').trim();
 
   if (logDosage) {
     return logDosage;
   }
 
-  return formatSupplementDosage(supplement, 'Dosierung nicht hinterlegt');
+  return formatSupplementDosage(supplement, t('history.dosage.missing'));
 }
 
-function getSourceLabel(source) {
-  if (source === 'dashboard') return 'Tagesplan';
-  if (source === 'scan') return 'Scan';
-  if (source === 'manual') return 'Manuell';
-  if (source === 'legacy') return 'Importiert';
-  return 'Routine';
+function getSourceLabel(source, t) {
+  if (source === 'dashboard') return t('history.source.dashboard');
+  if (source === 'scan') return t('history.source.scan');
+  if (source === 'manual') return t('history.source.manual');
+  if (source === 'legacy') return t('history.source.legacy');
+  return t('history.source.default');
 }
 
 function getTimingLabel(slotId) {
@@ -128,6 +131,7 @@ function resolveSupplement(log, supplements) {
 }
 
 export default function HistoryScreen() {
+  const { t } = useTranslation();
   const intakeLogs = useStore((state) => state.intakeLogs) ?? EMPTY_LOGS;
   const userSupplements = useStore((state) => state.userSupplements) ?? EMPTY_SUPPLEMENTS;
   const librarySupplements = useStore((state) => state.librarySupplements) ?? EMPTY_SUPPLEMENTS;
@@ -146,47 +150,47 @@ export default function HistoryScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.kicker}>Verlauf</Text>
-      <Text style={styles.title}>Einnahmehistorie</Text>
+      <Text style={styles.kicker}>{t('history.kicker')}</Text>
+      <Text style={styles.title}>{t('history.title')}</Text>
       <Text style={styles.subtitle}>
-        Übersicht der erfassten Einnahmen und rückgängig gemachten Einträge aus deiner lokalen Routine.
+        {t('history.subtitle')}
       </Text>
 
       <View style={styles.summaryCard}>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryValue}>{activeLogs.length}</Text>
-          <Text style={styles.summaryLabel}>Aktiv</Text>
+          <Text style={styles.summaryLabel}>{t('history.summary.active')}</Text>
         </View>
         <View style={styles.summaryDivider} />
         <View style={styles.summaryItem}>
           <Text style={styles.summaryValue}>{undoneLogs.length}</Text>
-          <Text style={styles.summaryLabel}>Rückgängig</Text>
+          <Text style={styles.summaryLabel}>{t('history.summary.undone')}</Text>
         </View>
         <View style={styles.summaryDivider} />
         <View style={styles.summaryItem}>
           <Text style={styles.summaryValue}>{sortedLogs.length}</Text>
-          <Text style={styles.summaryLabel}>Gesamt</Text>
+          <Text style={styles.summaryLabel}>{t('history.summary.total')}</Text>
         </View>
       </View>
 
       {sortedLogs.length === 0 ? (
         <View style={styles.emptyCard}>
-          <Text style={styles.emptyTitle}>Noch keine Einnahmen erfasst</Text>
+          <Text style={styles.emptyTitle}>{t('history.empty.title')}</Text>
           <Text style={styles.emptyText}>
-            Sobald du im Tagesplan ein Supplement als eingenommen markierst, erscheint der Eintrag hier in der Historie.
+            {t('history.empty.text')}
           </Text>
         </View>
       ) : (
         historyGroups.map((group) => (
           <View key={group.dateKey} style={styles.group}>
-            <Text style={styles.groupTitle}>{formatHistoryGroupTitle(group.dateKey)}</Text>
+            <Text style={styles.groupTitle}>{formatHistoryGroupTitle(group.dateKey, t)}</Text>
 
             {group.logs.map((log) => {
               const supplement = resolveSupplement(log, supplements);
-              const supplementName = formatSupplementName(supplement, 'Unbekanntes Supplement');
-              const dosage = formatLogDosage(log, supplement);
-              const statusLabel = log.undoneAt ? 'Rückgängig' : 'Eingenommen';
-              const sourceLabel = getSourceLabel(log.source);
+              const supplementName = formatSupplementName(supplement, t('history.supplement.unknown'));
+              const dosage = formatLogDosage(log, supplement, t);
+              const statusLabel = log.undoneAt ? t('history.status.undone') : t('history.status.taken');
+              const sourceLabel = getSourceLabel(log.source, t);
               const timingLabel = getTimingLabel(log.slotId);
               const showMetaPanel = timingLabel || log.undoneAt;
 
@@ -198,19 +202,19 @@ export default function HistoryScreen() {
                   <View style={styles.cardHeader}>
                     <View style={styles.cardTextWrap}>
                       <Text style={styles.name}>{supplementName}</Text>
-                      <Text style={styles.date}>{formatHistoryTime(log.takenAt)}</Text>
+                      <Text style={styles.date}>{formatHistoryTime(log.takenAt, t)}</Text>
                     </View>
                     <StatusBadge label={statusLabel} tone={log.undoneAt ? 'warning' : 'good'} />
                   </View>
 
                   <View style={styles.detailGrid}>
                     <View style={styles.detailItem}>
-                      <Text style={styles.detailLabel}>Dosierung</Text>
+                      <Text style={styles.detailLabel}>{t('history.detail.dosage')}</Text>
                       <Text style={styles.detailText}>{dosage}</Text>
                     </View>
 
                     <View style={styles.detailItem}>
-                      <Text style={styles.detailLabel}>Quelle</Text>
+                      <Text style={styles.detailLabel}>{t('history.detail.source')}</Text>
                       <Text style={styles.detailText}>{sourceLabel}</Text>
                     </View>
                   </View>
@@ -218,12 +222,14 @@ export default function HistoryScreen() {
                   {showMetaPanel ? (
                     <View style={styles.metaPanel}>
                       {timingLabel ? (
-                        <Text style={styles.metaText}>Timing: {timingLabel}</Text>
+                        <Text style={styles.metaText}>
+                          {t('history.meta.timing', { timing: timingLabel })}
+                        </Text>
                       ) : null}
 
                       {log.undoneAt ? (
                         <Text style={styles.metaText}>
-                          Rückgängig gemacht: {formatHistoryDate(log.undoneAt)}
+                          {t('history.meta.undoneAt', { date: formatHistoryDate(log.undoneAt, t) })}
                         </Text>
                       ) : null}
                     </View>
@@ -236,9 +242,9 @@ export default function HistoryScreen() {
       )}
 
       <View style={styles.noticeCard}>
-        <Text style={styles.noticeTitle}>Hinweis</Text>
+        <Text style={styles.noticeTitle}>{t('history.notice.title')}</Text>
         <Text style={styles.noticeText}>
-          Die Historie zeigt lokale Routine-Einträge. Sie ersetzt keine medizinische Bewertung und dient aktuell der persönlichen Nachvollziehbarkeit.
+          {t('history.notice.text')}
         </Text>
       </View>
     </ScrollView>

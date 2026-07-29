@@ -16,44 +16,45 @@ import { lookupBarcode } from '../BarcodeLookup';
 import { analyzeCaptures, isAnalyzerConfigured } from '../ScanAnalyzer';
 import mockScanResult from '../data/mockScanResult';
 import useStore from '../useStore';
+import { useTranslation } from '../i18n';
 
+// Nur Uebersetzungs-Schluessel, keine Texte: Diese Konstante wird beim
+// Modulladen ausgewertet, bevor die Sprache feststeht. Aufgeloest wird
+// erst beim Rendern per t(step.titleKey) etc.
 const CAPTURE_STEPS = [
   {
     id: 'front',
-    title: 'Vorderseite',
-    shortLabel: 'Produkt erkennen',
-    description:
-      'Fotografiere Marke und Produktname vollständig und gut lesbar.',
-    requirement: 'Das gesamte Produkt sollte im Rahmen sichtbar sein.',
+    titleKey: 'scanner.step.front.title',
+    shortLabelKey: 'scanner.step.front.shortLabel',
+    descriptionKey: 'scanner.step.front.description',
+    requirementKey: 'scanner.step.front.requirement',
   },
   {
     id: 'back',
-    title: 'Rückseite',
-    shortLabel: 'Produktangaben',
-    description:
-      'Erfasse die Rückseite mit Hersteller-, Mengen- und weiteren Produktangaben.',
-    requirement: 'Vermeide Spiegelungen und verdeckte Textbereiche.',
+    titleKey: 'scanner.step.back.title',
+    shortLabelKey: 'scanner.step.back.shortLabel',
+    descriptionKey: 'scanner.step.back.description',
+    requirementKey: 'scanner.step.back.requirement',
   },
   {
     id: 'ingredients',
-    title: 'Inhaltsstoffe',
-    shortLabel: 'Zusammensetzung',
-    description:
-      'Fotografiere die vollständige Zutaten- oder Wirkstofftabelle.',
-    requirement: 'Alle Zeilen und Mengenangaben müssen erkennbar sein.',
+    titleKey: 'scanner.step.ingredients.title',
+    shortLabelKey: 'scanner.step.ingredients.shortLabel',
+    descriptionKey: 'scanner.step.ingredients.description',
+    requirementKey: 'scanner.step.ingredients.requirement',
   },
   {
     id: 'dosage',
-    title: 'Dosierung',
-    shortLabel: 'Einnahmehinweise',
-    description:
-      'Erfasse Dosierung, Portionsgröße und Anwendungshinweise des Herstellers.',
-    requirement: 'Achte besonders auf Einheit und empfohlene Tagesmenge.',
+    titleKey: 'scanner.step.dosage.title',
+    shortLabelKey: 'scanner.step.dosage.shortLabel',
+    descriptionKey: 'scanner.step.dosage.description',
+    requirementKey: 'scanner.step.dosage.requirement',
   },
 ];
 
 export default function ScannerScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const saveScanResult = useStore((state) => state.saveScanResult);
   const setPendingScanResult = useStore(
     (state) => state.setPendingScanResult
@@ -98,14 +99,10 @@ export default function ScannerScreen() {
       const nextPermission = await requestPermission();
 
       if (!nextPermission.granted) {
-        setCaptureError(
-          'Ohne Kamerazugriff können keine Produktfotos aufgenommen werden.'
-        );
+        setCaptureError(t('scanner.error.permissionDenied'));
       }
     } catch {
-      setCaptureError(
-        'Der Kamerazugriff konnte nicht angefragt werden. Bitte versuche es erneut.'
-      );
+      setCaptureError(t('scanner.error.permissionRequestFailed'));
     }
   }
 
@@ -132,7 +129,7 @@ export default function ScannerScreen() {
       });
 
       if (!photo?.uri) {
-        throw new Error('Die Kamera hat keine Bilddatei zurückgegeben.');
+        throw new Error(t('scanner.error.noPhotoFile'));
       }
 
       setCaptures((current) => ({
@@ -150,9 +147,7 @@ export default function ScannerScreen() {
         setActiveIndex(captureIndex + 1);
       }
     } catch {
-      setCaptureError(
-        'Das Foto konnte nicht gespeichert werden. Halte das Produkt ruhig und versuche es erneut.'
-      );
+      setCaptureError(t('scanner.error.captureFailed'));
     } finally {
       setIsCapturing(false);
     }
@@ -187,10 +182,7 @@ export default function ScannerScreen() {
 
   function handleCameraMountError(error) {
     setIsCameraReady(false);
-    setCaptureError(
-      error?.message ||
-        'Die Kamera konnte nicht gestartet werden. Bitte öffne den Scanner erneut.'
-    );
+    setCaptureError(error?.message || t('scanner.error.cameraMountFailed'));
   }
 
   function buildCaptureSummary() {
@@ -246,10 +238,7 @@ export default function ScannerScreen() {
       });
     } catch (error) {
       // Kein stilles Demo-Ergebnis bei Fehlern — das waere ein erfundener Wert.
-      setCaptureError(
-        error?.message ||
-          'Die Analyse ist fehlgeschlagen. Bitte erneut versuchen.'
-      );
+      setCaptureError(error?.message || t('scanner.error.analysisFailed'));
     } finally {
       setIsAnalyzing(false);
     }
@@ -272,7 +261,7 @@ export default function ScannerScreen() {
 
       if (!result) {
         setCaptureError(
-          `Barcode ${scannedBarcode} wurde in der Produktdatenbank nicht gefunden. Bitte die vier Fotos aufnehmen.`
+          t('scanner.error.barcodeNotFound', { code: scannedBarcode })
         );
         setScannedBarcode('');
         return;
@@ -283,9 +272,7 @@ export default function ScannerScreen() {
         captureSummary: buildCaptureSummary(),
       });
     } catch (error) {
-      setCaptureError(
-        error?.message || 'Die Barcode-Suche ist fehlgeschlagen.'
-      );
+      setCaptureError(error?.message || t('scanner.error.barcodeLookupFailed'));
     } finally {
       setIsLookingUpBarcode(false);
     }
@@ -297,20 +284,21 @@ export default function ScannerScreen() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.kicker}>Geführter Produktscan</Text>
-      <Text style={styles.title}>Vier Fotos. Ein klares Ergebnis.</Text>
-      <Text style={styles.subtitle}>
-        Die App führt dich Schritt für Schritt durch alle relevanten
-        Produktseiten. So können Angaben später vollständig und nachvollziehbar
-        geprüft werden.
-      </Text>
+      <Text style={styles.kicker}>{t('scanner.kicker')}</Text>
+      <Text style={styles.title}>{t('scanner.title')}</Text>
+      <Text style={styles.subtitle}>{t('scanner.subtitle')}</Text>
 
       <View style={styles.progressCard}>
         <View style={styles.progressHeader}>
           <View>
-            <Text style={styles.progressLabel}>Scan-Fortschritt</Text>
+            <Text style={styles.progressLabel}>
+              {t('scanner.progress.label')}
+            </Text>
             <Text style={styles.progressValue}>
-              {completedCount} von {CAPTURE_STEPS.length} Aufnahmen
+              {t('scanner.progress.count', {
+                completed: completedCount,
+                total: CAPTURE_STEPS.length,
+              })}
             </Text>
           </View>
 
@@ -326,7 +314,9 @@ export default function ScannerScreen() {
                 allCaptured && styles.progressBadgeTextComplete,
               ]}
             >
-              {allCaptured ? 'Vollständig' : `${remainingCount} offen`}
+              {allCaptured
+                ? t('scanner.progress.complete')
+                : t('scanner.progress.remaining', { count: remainingCount })}
             </Text>
           </View>
         </View>
@@ -339,15 +329,13 @@ export default function ScannerScreen() {
       {scannedBarcode ? (
         <View style={styles.barcodeCard}>
           <View style={styles.barcodeHeader}>
-            <Text style={styles.barcodeKicker}>Barcode erkannt</Text>
+            <Text style={styles.barcodeKicker}>
+              {t('scanner.barcode.detected')}
+            </Text>
             <Text style={styles.barcodeValue}>{scannedBarcode}</Text>
           </View>
 
-          <Text style={styles.barcodeText}>
-            Der Code kann direkt in der offenen Produktdatenbank nachgeschlagen
-            werden. Die vier Fotos bleiben der genauere Weg, weil sie Dosierung
-            und Wirkstoffformen vom Etikett erfassen.
-          </Text>
+          <Text style={styles.barcodeText}>{t('scanner.barcode.text')}</Text>
 
           <TouchableOpacity
             style={[
@@ -361,8 +349,8 @@ export default function ScannerScreen() {
           >
             <Text style={styles.barcodeButtonText}>
               {isLookingUpBarcode
-                ? 'Produkt wird gesucht…'
-                : 'Produkt per Barcode suchen'}
+                ? t('scanner.barcode.searching')
+                : t('scanner.barcode.search')}
             </Text>
           </TouchableOpacity>
 
@@ -373,7 +361,7 @@ export default function ScannerScreen() {
             accessibilityRole="button"
           >
             <Text style={styles.inlineButtonText}>
-              Barcode verwerfen
+              {t('scanner.barcode.discard')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -387,9 +375,12 @@ export default function ScannerScreen() {
 
           <View style={styles.captureHeaderText}>
             <Text style={styles.captureEyebrow}>
-              Aufnahme {activeIndex + 1} von {CAPTURE_STEPS.length}
+              {t('scanner.capture.eyebrow', {
+                current: activeIndex + 1,
+                total: CAPTURE_STEPS.length,
+              })}
             </Text>
-            <Text style={styles.captureTitle}>{activeStep.title}</Text>
+            <Text style={styles.captureTitle}>{t(activeStep.titleKey)}</Text>
           </View>
 
           <View
@@ -404,13 +395,15 @@ export default function ScannerScreen() {
                 activeCaptured && styles.captureStatusTextComplete,
               ]}
             >
-              {activeCaptured ? 'Gespeichert' : 'Offen'}
+              {activeCaptured
+                ? t('scanner.capture.statusSaved')
+                : t('scanner.capture.statusOpen')}
             </Text>
           </View>
         </View>
 
         <Text style={styles.captureDescription}>
-          {activeStep.description}
+          {t(activeStep.descriptionKey)}
         </Text>
 
         <View
@@ -451,16 +444,16 @@ export default function ScannerScreen() {
 
               <Text style={styles.cameraPlaceholderTitle}>
                 {permission === null
-                  ? 'Kamerazugriff wird geprüft'
+                  ? t('scanner.camera.checkingPermission')
                   : cameraPermissionBlocked
-                    ? 'Kamerazugriff ist deaktiviert'
-                    : 'Kamerazugriff erforderlich'}
+                    ? t('scanner.camera.permissionBlocked')
+                    : t('scanner.camera.permissionRequired')}
               </Text>
 
               <Text style={styles.cameraPlaceholderText}>
                 {cameraPermissionBlocked
-                  ? 'Aktiviere die Kamera für Expo Go in den iPhone-Einstellungen.'
-                  : 'Die Kamera wird ausschließlich für die vier Produktaufnahmen verwendet.'}
+                  ? t('scanner.camera.enableInSettings')
+                  : t('scanner.camera.purpose')}
               </Text>
             </View>
           )}
@@ -483,14 +476,14 @@ export default function ScannerScreen() {
               ]}
             >
               {activeCaptured
-                ? 'Echte Aufnahme für diesen Schritt gespeichert'
+                ? t('scanner.frame.saved')
                 : permission?.granted
                   ? isCameraReady
-                    ? 'Produkt ruhig und vollständig im Rahmen positionieren'
-                    : 'Kamera wird vorbereitet'
+                    ? t('scanner.frame.positionProduct')
+                    : t('scanner.frame.preparing')
                   : cameraPermissionBlocked
-                    ? 'Kamerazugriff in den iPhone-Einstellungen aktivieren'
-                    : 'Kamerazugriff für die Aufnahme erlauben'}
+                    ? t('scanner.frame.enableInSettings')
+                    : t('scanner.frame.allowAccess')}
             </Text>
           </View>
         </View>
@@ -502,9 +495,11 @@ export default function ScannerScreen() {
         ) : null}
 
         <View style={styles.guidanceBox}>
-          <Text style={styles.guidanceLabel}>Für eine gute Erkennung</Text>
+          <Text style={styles.guidanceLabel}>
+            {t('scanner.guidance.label')}
+          </Text>
           <Text style={styles.guidanceText}>
-            {activeStep.requirement}
+            {t(activeStep.requirementKey)}
           </Text>
         </View>
 
@@ -537,16 +532,16 @@ export default function ScannerScreen() {
         >
           <Text style={styles.primaryButtonText}>
             {activeCaptured
-              ? 'Foto neu aufnehmen'
+              ? t('scanner.primaryButton.retake')
               : isCapturing
-                ? 'Foto wird gespeichert'
+                ? t('scanner.primaryButton.saving')
                 : !permission?.granted
                   ? cameraPermissionBlocked
-                    ? 'iPhone-Einstellungen öffnen'
-                    : 'Kamerazugriff erlauben'
+                    ? t('scanner.primaryButton.openSettings')
+                    : t('scanner.primaryButton.allowAccess')
                   : !isCameraReady
-                    ? 'Kamera wird vorbereitet'
-                    : 'Foto aufnehmen'}
+                    ? t('scanner.primaryButton.preparing')
+                    : t('scanner.primaryButton.capture')}
           </Text>
         </TouchableOpacity>
 
@@ -558,17 +553,15 @@ export default function ScannerScreen() {
             accessibilityRole="button"
           >
             <Text style={styles.inlineButtonText}>
-              Gespeicherte Aufnahme entfernen
+              {t('scanner.inline.removeCapture')}
             </Text>
           </TouchableOpacity>
         )}
       </View>
 
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Benötigte Aufnahmen</Text>
-        <Text style={styles.sectionHint}>
-          Tippe auf einen Schritt, um ihn zu öffnen.
-        </Text>
+        <Text style={styles.sectionTitle}>{t('scanner.section.title')}</Text>
+        <Text style={styles.sectionHint}>{t('scanner.section.hint')}</Text>
       </View>
 
       <View style={styles.stepList}>
@@ -608,9 +601,9 @@ export default function ScannerScreen() {
               </View>
 
               <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>{step.title}</Text>
+                <Text style={styles.stepTitle}>{t(step.titleKey)}</Text>
                 <Text style={styles.stepDescription}>
-                  {step.shortLabel}
+                  {t(step.shortLabelKey)}
                 </Text>
               </View>
 
@@ -620,7 +613,11 @@ export default function ScannerScreen() {
                   isComplete && styles.stepStateComplete,
                 ]}
               >
-                {isComplete ? 'Erledigt' : isActive ? 'Aktiv' : 'Offen'}
+                {isComplete
+                  ? t('scanner.step.stateDone')
+                  : isActive
+                    ? t('scanner.step.stateActive')
+                    : t('scanner.step.stateOpen')}
               </Text>
             </TouchableOpacity>
           );
@@ -639,21 +636,26 @@ export default function ScannerScreen() {
             allCaptured && styles.analysisKickerReady,
           ]}
         >
-          {allCaptured ? 'Bereit zur Prüfung' : 'Aufnahmen vervollständigen'}
+          {allCaptured
+            ? t('scanner.analysis.readyKicker')
+            : t('scanner.analysis.pendingKicker')}
         </Text>
 
         <Text style={styles.analysisTitle}>
           {allCaptured
-            ? 'Alle Produktseiten sind erfasst.'
-            : `${remainingCount} ${
-                remainingCount === 1 ? 'Aufnahme fehlt' : 'Aufnahmen fehlen'
-              } noch.`}
+            ? t('scanner.analysis.readyTitle')
+            : t(
+                remainingCount === 1
+                  ? 'scanner.analysis.remaining_one'
+                  : 'scanner.analysis.remaining_other',
+                { count: remainingCount }
+              )}
         </Text>
 
         <Text style={styles.analysisText}>
           {allCaptured
-            ? 'Im nächsten Schritt werden die erkannten Produktdaten angezeigt und können vor dem Speichern kontrolliert werden.'
-            : 'Die Analyse startet erst, wenn alle erforderlichen Produktbereiche aufgenommen wurden.'}
+            ? t('scanner.analysis.readyText')
+            : t('scanner.analysis.pendingText')}
         </Text>
 
         <TouchableOpacity
@@ -673,12 +675,12 @@ export default function ScannerScreen() {
             ]}
           >
             {isAnalyzing
-              ? 'Analyse läuft…'
+              ? t('scanner.analysis.running')
               : allCaptured
                 ? analyzerReady
-                  ? 'Analyse starten'
-                  : 'Test-Analyse starten'
-                : 'Nächste offene Aufnahme'}
+                  ? t('scanner.analysis.start')
+                  : t('scanner.analysis.startTest')
+                : t('scanner.analysis.nextOpen')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -689,15 +691,13 @@ export default function ScannerScreen() {
         activeOpacity={0.8}
         accessibilityRole="button"
       >
-        <Text style={styles.secondaryButtonText}>
-          Zurück zur Startseite
-        </Text>
+        <Text style={styles.secondaryButtonText}>{t('scanner.backHome')}</Text>
       </TouchableOpacity>
 
       <Text style={styles.disclaimer}>
         {analyzerReady
-          ? 'Die Fotos werden verkleinert, einmalig zur KI-Auswertung übertragen und dort nicht gespeichert. Erkannte Angaben sind ein Arbeitsstand und müssen vor der Übernahme geprüft werden.'
-          : 'Die Fotos werden nur für den laufenden Scan im App-Speicher gehalten. Ohne konfiguriertes Analyse-Backend nutzt die Auswertung ein klar gekennzeichnetes Test-Ergebnis (siehe scanConfig.js).'}
+          ? t('scanner.disclaimer.vision')
+          : t('scanner.disclaimer.mock')}
       </Text>
     </ScrollView>
   );

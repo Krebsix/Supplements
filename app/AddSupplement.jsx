@@ -14,8 +14,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SLOTS, SLOT_ORDER } from '../TimingEngine';
 import useStore from '../useStore';
 import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
+import { useTranslation } from '../i18n';
 
 export default function AddSupplement() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams();
   const addUserSupplement = useStore((state) => state.addUserSupplement);
@@ -94,8 +96,8 @@ export default function AddSupplement() {
         pendingScanResult.name ||
         ''
     );
-    setPurpose('Aus Scan übernommen');
-    setCategory('Scan-Ergebnis');
+    setPurpose(t('addSupplement.scan.purpose'));
+    setCategory(t('addSupplement.scan.category'));
     setAmount(
       scannedAmount === null || scannedAmount === undefined
         ? ''
@@ -109,15 +111,17 @@ export default function AddSupplement() {
     setTimingRaw('');
     setNotes(
       [
-        recognizedBrand ? `Marke: ${recognizedBrand}` : null,
+        recognizedBrand ? t('addSupplement.scan.brandNote', { brand: recognizedBrand }) : null,
         recognizedIngredients.length > 0
-          ? `Erkannte Inhaltsstoffe: ${recognizedIngredients.join(', ')}`
+          ? t('addSupplement.scan.ingredientsNote', {
+              ingredients: recognizedIngredients.join(', '),
+            })
           : null,
         pendingScanResult.timingSuggestion
-          ? `Unbestätigter Timing-Hinweis: ${pendingScanResult.timingSuggestion}`
+          ? t('addSupplement.scan.timingNote', { timing: pendingScanResult.timingSuggestion })
           : null,
         scanWarnings.length > 0
-          ? `Prüfhinweise:\n- ${scanWarnings.join('\n- ')}`
+          ? t('addSupplement.scan.warningsNote', { warnings: scanWarnings.join('\n- ') })
           : null,
         pendingScanResult.uncertaintyNote || null,
       ]
@@ -148,36 +152,40 @@ export default function AddSupplement() {
   }
 
   const screenTitle = editId
-    ? 'Supplement bearbeiten'
+    ? t('addSupplement.screenTitle.edit')
     : fromScan
-      ? 'Scan-Ergebnis prüfen'
-      : 'Manueller Routine-Eintrag';
+      ? t('addSupplement.screenTitle.scan')
+      : t('addSupplement.screenTitle.manual');
 
   const screenSubtitle = editId
-    ? 'Passe Name, Dosierung, Tages-Slots und Notizen für deine aktive Routine an.'
+    ? t('addSupplement.screenSubtitle.edit')
     : fromScan
-      ? 'Überprüfe die erkannten Angaben, ergänze fehlende Details und übernimm den Eintrag erst nach deiner Bestätigung in die Routine.'
-      : 'Erstelle einen eigenen Routine-Eintrag mit Name, Dosierung, Tages-Slots und optionalen Notizen. Keine medizinische Beratung.';
+      ? t('addSupplement.screenSubtitle.scan')
+      : t('addSupplement.screenSubtitle.manual');
 
   const primaryButtonLabel = editId
-    ? 'Änderungen speichern'
+    ? t('addSupplement.primaryButton.edit')
     : fromScan
-      ? 'Scan-Ergebnis übernehmen'
-      : 'Manuellen Eintrag speichern';
+      ? t('addSupplement.primaryButton.scan')
+      : t('addSupplement.primaryButton.manual');
 
   const modeLabel = editId
-    ? 'Aktive Routine'
+    ? t('addSupplement.modeLabel.edit')
     : fromScan
-      ? 'Scannerprüfung'
-      : 'Neuer Routine-Eintrag';
+      ? t('addSupplement.modeLabel.scan')
+      : t('addSupplement.modeLabel.manual');
 
-  const modePillLabel = editId ? 'Bearbeiten' : fromScan ? 'Prüfen' : 'Manuell';
+  const modePillLabel = editId
+    ? t('addSupplement.modePill.edit')
+    : fromScan
+      ? t('addSupplement.modePill.scan')
+      : t('addSupplement.modePill.manual');
 
   const trustCopy = fromScan
-    ? 'Scan-Daten sind ein Startpunkt. Nicht erkannte Dosierung und Einheit bleiben bewusst leer und werden transparent als fehlend gespeichert, bis du sie ergänzt.'
+    ? t('addSupplement.trustCopy.scan')
     : editId
-      ? 'Änderungen wirken sich auf deine aktive Tagesroutine aus. Historische Einnahmen bleiben davon unberührt.'
-      : 'Dieser Eintrag strukturiert deine persönliche Routine. Die App gibt hier keine Diagnose, Therapie- oder Dosierungsempfehlung.';
+      ? t('addSupplement.trustCopy.edit')
+      : t('addSupplement.trustCopy.manual');
 
   const selectedSlotLabels = selectedSlots
     .map((slotId) => SLOTS[slotId]?.label)
@@ -188,12 +196,18 @@ export default function AddSupplement() {
     const trimmedName = name.trim();
 
     if (!trimmedName) {
-      Alert.alert('Name fehlt', 'Bitte gib mindestens einen Namen für das Supplement ein.');
+      Alert.alert(
+        t('addSupplement.alert.nameMissingTitle'),
+        t('addSupplement.alert.nameMissingMessage')
+      );
       return;
     }
 
     if (selectedSlots.length === 0) {
-      Alert.alert('Slot fehlt', 'Bitte wähle mindestens einen Tages-Slot aus.');
+      Alert.alert(
+        t('addSupplement.alert.slotMissingTitle'),
+        t('addSupplement.alert.slotMissingMessage')
+      );
       return;
     }
 
@@ -205,8 +219,8 @@ export default function AddSupplement() {
 
     const payload = {
       name: trimmedName,
-      purpose: purpose.trim() || 'Benutzerdefiniert',
-      category: category.trim() || 'Benutzerdefiniert',
+      purpose: purpose.trim() || t('addSupplement.defaultPurpose'),
+      category: category.trim() || t('addSupplement.defaultCategory'),
       timingSlots: selectedSlots,
       timingRaw: derivedTimingRaw,
       dosage: {
@@ -224,16 +238,19 @@ export default function AddSupplement() {
 
     if (editId) {
       if (!existingSupplement) {
-        Alert.alert('Eintrag nicht gefunden', 'Dieser Eintrag konnte nicht mehr im lokalen Store gefunden werden.');
+        Alert.alert(
+          t('addSupplement.alert.notFoundTitle'),
+          t('addSupplement.alert.notFoundMessage')
+        );
         return;
       }
 
       updateUserSupplement(editId, payload);
 
       Alert.alert(
-        'Aktualisiert',
-        'Die Änderungen wurden in deiner aktiven Routine gespeichert.',
-        [{ text: 'Zum Dashboard', onPress: () => router.replace('/Dashboard') }]
+        t('addSupplement.alert.updatedTitle'),
+        t('addSupplement.alert.updatedMessage'),
+        [{ text: t('addSupplement.alert.goToDashboard'), onPress: () => router.replace('/Dashboard') }]
       );
       return;
     }
@@ -245,11 +262,11 @@ export default function AddSupplement() {
     }
 
     Alert.alert(
-      'Gespeichert',
+      t('addSupplement.alert.savedTitle'),
       fromScan
-        ? 'Das bestätigte Scan-Ergebnis wurde deiner Routine hinzugefügt.'
-        : 'Das Supplement wurde deiner Routine als manueller Eintrag hinzugefügt.',
-      [{ text: 'Zum Dashboard', onPress: () => router.replace('/Dashboard') }]
+        ? t('addSupplement.alert.savedScanMessage')
+        : t('addSupplement.alert.savedManualMessage'),
+      [{ text: t('addSupplement.alert.goToDashboard'), onPress: () => router.replace('/Dashboard') }]
     );
   }
 
@@ -267,67 +284,67 @@ export default function AddSupplement() {
       </View>
 
       <View style={styles.trustCard}>
-        <Text style={styles.trustTitle}>Prüfhinweis</Text>
+        <Text style={styles.trustTitle}>{t('addSupplement.trustTitle')}</Text>
         <Text style={styles.trustText}>{trustCopy}</Text>
       </View>
 
       <FormField
-        label="Supplement-Name"
-        helper="Nutze einen klaren Produkt- oder Wirkstoffnamen, damit Dashboard, Verlauf und Archiv eindeutig bleiben."
+        label={t('addSupplement.nameLabel')}
+        helper={t('addSupplement.nameHelper')}
         value={name}
         onChangeText={setName}
-        placeholder="z. B. Magnesium Bisglycinat"
+        placeholder={t('addSupplement.namePlaceholder')}
       />
 
       <FormField
-        label="Ziel / Kontext"
-        helper="Beschreibt den persönlichen Routine-Kontext, nicht die medizinische Wirkung."
+        label={t('addSupplement.purposeLabel')}
+        helper={t('addSupplement.purposeHelper')}
         value={purpose}
         onChangeText={setPurpose}
-        placeholder="z. B. Abendroutine, Regeneration, Fokus"
+        placeholder={t('addSupplement.purposePlaceholder')}
       />
 
       <FormField
-        label="Kategorie / Gruppe"
-        helper="Hilft später bei Filterung, Stack-Logik und sauberer Auswertung."
+        label={t('addSupplement.categoryLabel')}
+        helper={t('addSupplement.categoryHelper')}
         value={category}
         onChangeText={setCategory}
-        placeholder="z. B. Mineralien"
+        placeholder={t('addSupplement.categoryPlaceholder')}
       />
 
       {categoryExamples.length > 0 ? (
         <Text style={styles.helperText}>
-          Beispiele aus deinem aktuellen Bestand: {categoryExamples.join(', ')}
+          {t('addSupplement.categoryExamples', { examples: categoryExamples.join(', ') })}
         </Text>
       ) : null}
 
       <View style={styles.row}>
         <View style={styles.rowField}>
           <FormField
-            label="Menge pro Einnahme"
-            helper="Nur die sichtbare Routine-Menge, keine Empfehlung."
+            label={t('addSupplement.amountLabel')}
+            helper={t('addSupplement.amountHelper')}
             value={amount}
             onChangeText={setAmount}
-            placeholder="z. B. 300"
+            placeholder={t('addSupplement.amountPlaceholder')}
             keyboardType="decimal-pad"
           />
         </View>
         <View style={styles.rowSpacer} />
         <View style={styles.rowField}>
           <FormField
-            label="Einheit"
-            helper="z. B. mg, IE, Kapsel, Tropfen oder Portion."
+            label={t('addSupplement.unitLabel')}
+            helper={t('addSupplement.unitHelper')}
             value={unit}
             onChangeText={setUnit}
-            placeholder="mg"
+            placeholder={t('addSupplement.unitPlaceholder')}
           />
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Tagesroutine</Text>
+        <Text style={styles.sectionTitle}>{t('addSupplement.routineSectionTitle')}</Text>
         <Text style={styles.sectionSubtitle}>
-          Wähle die Tageszeit, in der dieser Eintrag sichtbar sein soll. Mehrere Slots sind möglich.
+          {t('addSupplement.routineSectionSubtitle')}
         </Text>
         <View style={styles.slotWrap}>
           {SLOT_ORDER.map((slotId) => {
@@ -351,27 +368,27 @@ export default function AddSupplement() {
         {selectedSlotLabels ? (
           <View style={styles.selectedSlotSummary}>
             <Text style={styles.selectedSlotSummaryText}>
-              Ausgewählt: {selectedSlotLabels}
+              {t('addSupplement.selectedSlots', { slots: selectedSlotLabels })}
             </Text>
           </View>
         ) : (
-          <Text style={styles.sectionHint}>Noch kein Tages-Slot ausgewählt.</Text>
+          <Text style={styles.sectionHint}>{t('addSupplement.noSlotSelected')}</Text>
         )}
       </View>
 
       <FormField
-        label="Timing-Anzeige"
-        helper="Optionaler Freitext für eine natürlichere Anzeige, z. B. „abends nach dem Essen“."
+        label={t('addSupplement.timingLabel')}
+        helper={t('addSupplement.timingHelper')}
         value={timingRaw}
         onChangeText={setTimingRaw}
-        placeholder="Optional: z. B. abends nach dem Essen"
+        placeholder={t('addSupplement.timingPlaceholder')}
       />
 
       <View style={styles.switchCard}>
         <View style={styles.switchTextWrap}>
-          <Text style={styles.switchTitle}>Familienhinweis vormerken</Text>
+          <Text style={styles.switchTitle}>{t('addSupplement.childSafeTitle')}</Text>
           <Text style={styles.switchSubtitle}>
-            Interner Marker für spätere Hinweise und Filter. Keine Sicherheitsfreigabe und keine Dosierungsempfehlung.
+            {t('addSupplement.childSafeSubtitle')}
           </Text>
         </View>
         <Switch
@@ -383,11 +400,11 @@ export default function AddSupplement() {
       </View>
 
       <FormField
-        label="Interne Notizen"
-        helper="Optional: Herkunft, Einnahme-Kontext oder persönliche Beobachtungen."
+        label={t('addSupplement.notesLabel')}
+        helper={t('addSupplement.notesHelper')}
         value={notes}
         onChangeText={setNotes}
-        placeholder="Optional: Hinweise zur Einnahme oder Herkunft"
+        placeholder={t('addSupplement.notesPlaceholder')}
         multiline
       />
 

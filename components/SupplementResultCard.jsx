@@ -1,19 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useTranslation } from '../i18n';
+
+// Schluessel statt fertiger Labels — die Uebersetzung passiert erst beim
+// Rendern, damit ReviewRow die aktuelle Sprache ueber t() bekommt.
 const FIELD_STATES = {
   detected: {
-    label: 'Erkannt',
+    labelKey: 'components.result.fieldStateDetected',
     badgeStyle: 'detectedBadge',
     textStyle: 'detectedBadgeText',
   },
   review: {
-    label: 'Prüfen',
+    labelKey: 'components.result.fieldStateReview',
     badgeStyle: 'reviewBadge',
     textStyle: 'reviewBadgeText',
   },
   missing: {
-    label: 'Fehlt',
+    labelKey: 'components.result.fieldStateMissing',
     badgeStyle: 'missingBadge',
     textStyle: 'missingBadgeText',
   },
@@ -23,7 +27,7 @@ function hasText(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-function ReviewRow({ label, value, state = 'review', helper }) {
+function ReviewRow({ t, label, value, state = 'review', helper }) {
   const stateConfig = FIELD_STATES[state] || FIELD_STATES.review;
 
   return (
@@ -36,7 +40,7 @@ function ReviewRow({ label, value, state = 'review', helper }) {
 
       <View style={[styles.stateBadge, styles[stateConfig.badgeStyle]]}>
         <Text style={[styles.stateBadgeText, styles[stateConfig.textStyle]]}>
-          {stateConfig.label}
+          {t(stateConfig.labelKey)}
         </Text>
       </View>
     </View>
@@ -44,19 +48,21 @@ function ReviewRow({ label, value, state = 'review', helper }) {
 }
 
 export default function SupplementResultCard({ result }) {
+  const { t } = useTranslation();
+
   const productNameDetected =
     hasText(result?.productName) || hasText(result?.name);
 
   const productName = productNameDetected
     ? result.productName || result.name
-    : 'Produktname nicht erkannt';
+    : t('components.result.productNameMissing');
 
   const brandDetected =
     hasText(result?.brand) && result.brand !== 'Demo Brand';
 
   const brand = brandDetected
     ? result.brand
-    : 'Marke nicht erkannt';
+    : t('components.result.brandMissing');
 
   const ingredients = Array.isArray(result?.detectedIngredients)
     ? result.detectedIngredients.filter(hasText)
@@ -84,37 +90,41 @@ export default function SupplementResultCard({ result }) {
 
   const dosage = dosageDetected
     ? `${dosageAmount} ${dosageUnit}`
-    : 'Dosierung nicht erkannt';
+    : t('components.result.dosageMissing');
 
   const numericConfidence = Number(result?.confidence);
   const confidenceAvailable = Number.isFinite(numericConfidence);
 
   const confidenceLabel = !confidenceAvailable
-    ? 'Keine Bewertung verfügbar'
+    ? t('components.result.confidenceNone')
     : numericConfidence >= 90
-      ? 'Hohe technische Erkennung'
+      ? t('components.result.confidenceHigh')
       : numericConfidence >= 75
-        ? 'Prüfung erforderlich'
-        : 'Manuelle Kontrolle erforderlich';
+        ? t('components.result.confidenceReview')
+        : t('components.result.confidenceManual');
 
   return (
     <View style={styles.card}>
       <View style={styles.identityHeader}>
         <View style={styles.identityText}>
-          <Text style={styles.eyebrow}>Erkannte Produktidentität</Text>
+          <Text style={styles.eyebrow}>
+            {t('components.result.identityEyebrow')}
+          </Text>
           <Text style={styles.product}>{productName}</Text>
           <Text style={styles.brand}>{brand}</Text>
         </View>
 
         <View style={styles.scanBadge}>
-          <Text style={styles.scanBadgeText}>Scan</Text>
+          <Text style={styles.scanBadgeText}>
+            {t('components.result.scanBadge')}
+          </Text>
         </View>
       </View>
 
       <View style={styles.confidenceCard}>
         <View style={styles.confidenceHeader}>
           <Text style={styles.confidenceTitle}>
-            Technische Erkennung
+            {t('components.result.confidenceTitle')}
           </Text>
 
           <Text style={styles.confidenceValue}>
@@ -125,76 +135,83 @@ export default function SupplementResultCard({ result }) {
         <Text style={styles.confidenceStatus}>{confidenceLabel}</Text>
 
         <Text style={styles.confidenceExplanation}>
-          Der Prozentwert beschreibt nur die technische Erkennung des
-          Testmodells. Er bestätigt weder die inhaltliche Richtigkeit noch die
-          Eignung des Produkts.
+          {t('components.result.confidenceExplanation')}
         </Text>
       </View>
 
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Zu prüfende Angaben</Text>
+          <Text style={styles.sectionTitle}>
+            {t('components.result.reviewSectionTitle')}
+          </Text>
           <Text style={styles.sectionHint}>
-            Vor Übernahme kontrollieren
+            {t('components.result.reviewSectionHint')}
           </Text>
         </View>
 
         <View style={styles.reviewList}>
           <ReviewRow
-            label="Produktname"
+            t={t}
+            label={t('components.result.fieldProductName')}
             value={productName}
             state={productNameDetected ? 'detected' : 'missing'}
             helper={
               productNameDetected
-                ? 'Mit der Vorderseite des Produkts abgleichen.'
-                : 'Muss im nächsten Schritt manuell ergänzt werden.'
+                ? t('components.result.helperProductNameDetected')
+                : t('components.result.helperProductNameMissing')
             }
           />
 
           <ReviewRow
-            label="Marke"
+            t={t}
+            label={t('components.result.fieldBrand')}
             value={brand}
             state={brandDetected ? 'detected' : 'missing'}
             helper={
               brandDetected
-                ? 'Schreibweise und Hersteller kontrollieren.'
-                : 'Auf dem Produktetikett prüfen und ergänzen.'
+                ? t('components.result.helperBrandDetected')
+                : t('components.result.helperBrandMissing')
             }
           />
 
           <ReviewRow
-            label="Dosierung"
+            t={t}
+            label={t('components.result.fieldDosage')}
             value={dosage}
             state={dosageDetected ? 'review' : 'missing'}
             helper={
               dosageDetected
-                ? 'Menge, Einheit und Portionsbezug kontrollieren.'
-                : 'Es wird keine Dosierung automatisch übernommen.'
+                ? t('components.result.helperDosageDetected')
+                : t('components.result.helperDosageMissing')
             }
           />
 
           <ReviewRow
-            label="Inhaltsstoffe"
+            t={t}
+            label={t('components.result.fieldIngredients')}
             value={
               ingredients.length === 1
-                ? '1 Wirkstoff erkannt'
-                : `${ingredients.length} Wirkstoffe erkannt`
+                ? t('components.result.ingredientsCount_one')
+                : t('components.result.ingredientsCount_other', {
+                    count: ingredients.length,
+                  })
             }
             state={ingredients.length > 0 ? 'review' : 'missing'}
             helper={
               ingredients.length > 0
-                ? 'Alle Namen und Mengen mit dem Etikett abgleichen.'
-                : 'Keine auswertbaren Wirkstoffe vorhanden.'
+                ? t('components.result.helperIngredientsDetected')
+                : t('components.result.helperIngredientsMissing')
             }
           />
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Erkannte Wirkstoffe</Text>
+        <Text style={styles.sectionTitle}>
+          {t('components.result.ingredientsSectionTitle')}
+        </Text>
         <Text style={styles.sectionDescription}>
-          Die Erkennung nennt zunächst nur Wirkstoffnamen. Mengen, Formen und
-          Zusammensetzung sind dadurch noch nicht bestätigt.
+          {t('components.result.ingredientsSectionDescription')}
         </Text>
 
         {ingredients.length > 0 ? (
@@ -208,14 +225,16 @@ export default function SupplementResultCard({ result }) {
         ) : (
           <View style={styles.emptyBox}>
             <Text style={styles.emptyText}>
-              Keine Inhaltsstoffe erkannt.
+              {t('components.result.ingredientsEmpty')}
             </Text>
           </View>
         )}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Prüfhinweise</Text>
+        <Text style={styles.sectionTitle}>
+          {t('components.result.warningsSectionTitle')}
+        </Text>
 
         {warnings.length > 0 ? (
           <View style={styles.warningList}>
@@ -232,7 +251,7 @@ export default function SupplementResultCard({ result }) {
         ) : (
           <View style={styles.emptyBox}>
             <Text style={styles.emptyText}>
-              Keine zusätzlichen Hinweise verfügbar.
+              {t('components.result.warningsEmpty')}
             </Text>
           </View>
         )}
@@ -240,29 +259,32 @@ export default function SupplementResultCard({ result }) {
 
       <View style={styles.timingCard}>
         <View style={styles.timingHeader}>
-          <Text style={styles.timingTitle}>Timing-Hinweis</Text>
+          <Text style={styles.timingTitle}>
+            {t('components.result.timingTitle')}
+          </Text>
 
           <View style={styles.suggestionBadge}>
-            <Text style={styles.suggestionBadgeText}>Vorschlag</Text>
+            <Text style={styles.suggestionBadgeText}>
+              {t('components.result.timingBadge')}
+            </Text>
           </View>
         </View>
 
         <Text style={styles.timingText}>
           {hasText(result?.timingSuggestion)
             ? result.timingSuggestion
-            : 'Kein Timing-Vorschlag verfügbar.'}
+            : t('components.result.timingEmpty')}
         </Text>
 
         <Text style={styles.timingFootnote}>
-          Dieser Hinweis wird nicht automatisch als persönliche Routine
-          bestätigt.
+          {t('components.result.timingFootnote')}
         </Text>
       </View>
 
       {hasText(result?.uncertaintyNote) ? (
         <View style={styles.uncertaintyCard}>
           <Text style={styles.uncertaintyTitle}>
-            Grenzen der Analyse
+            {t('components.result.uncertaintyTitle')}
           </Text>
           <Text style={styles.uncertaintyText}>
             {result.uncertaintyNote}

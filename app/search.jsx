@@ -8,7 +8,11 @@ import { buildSubstanceProfile } from '../ReferenceCheck';
 import { matchIngredient } from '../SubstanceMatcher';
 import { substances } from '../data/substances';
 import useStore from '../useStore';
+import { useTranslation } from '../i18n';
 
+// Bewusst nicht uebersetzt: die Chips fuettern die Suche direkt gegen die
+// (vorerst deutsche) Wirkstoff-Datenbank. Eine Uebersetzung wuerde die
+// Treffer in anderen Sprachen veraendern statt nur die Oberflaeche.
 const examples = ['Magnesium', 'Vitamin D', 'Omega 3', 'Zink', 'Eisen'];
 
 // Freitextsuche ueber Name, Synonyme und Anwendungsgebiete —
@@ -33,6 +37,7 @@ function searchSubstances(query) {
 
 export default function SearchScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
   const activeLifeStageId = useStore((state) => state.activeLifeStageId);
@@ -60,17 +65,16 @@ export default function SearchScreen() {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.kicker}>Wirkstoff-Datenbank</Text>
-      <Text style={styles.title}>Nachschlagen statt raten.</Text>
+      <Text style={styles.kicker}>{t('search.kicker')}</Text>
+      <Text style={styles.title}>{t('search.title')}</Text>
       <Text style={styles.subtitle}>
-        Suche nach einem Wirkstoff oder nach einem Anwendungsgebiet — etwa
-        „Krämpfe“, „Schlaf“ oder „Immunsystem“.
+        {t('search.subtitle')}
       </Text>
 
       <TextInput
         value={query}
         onChangeText={setQuery}
-        placeholder="z. B. Magnesium oder Krämpfe"
+        placeholder={t('search.placeholder')}
         placeholderTextColor="#94a3b8"
         style={styles.input}
         autoCorrect={false}
@@ -79,7 +83,7 @@ export default function SearchScreen() {
 
       {!hasQuery ? (
         <>
-          <Text style={styles.label}>Häufig gesucht</Text>
+          <Text style={styles.label}>{t('search.frequentLabel')}</Text>
           <View style={styles.chips}>
             {examples.map((item) => (
               <TouchableOpacity
@@ -96,21 +100,18 @@ export default function SearchScreen() {
 
           <View style={styles.infoBox}>
             <Text style={styles.infoTitle}>
-              {substances.length} Wirkstoffe hinterlegt
+              {t('search.infoTitle', { count: substances.length })}
             </Text>
             <Text style={styles.infoText}>
-              Zu jedem Wirkstoff: Anwendungsgebiete, Unterschiede zwischen den
-              chemischen Formen und der Abgleich mit öffentlichen
-              Referenzwerten je Lebensphase.
+              {t('search.infoText')}
             </Text>
           </View>
         </>
       ) : profiles.length === 0 ? (
         <View style={styles.emptyBox}>
-          <Text style={styles.emptyTitle}>Kein Treffer</Text>
+          <Text style={styles.emptyTitle}>{t('search.emptyTitle')}</Text>
           <Text style={styles.emptyText}>
-            „{query.trim()}“ ist in der Wirkstoff-Datenbank noch nicht
-            hinterlegt. Die Datenbank wird laufend erweitert.
+            {t('search.emptyText', { query: query.trim() })}
           </Text>
         </View>
       ) : (
@@ -121,9 +122,7 @@ export default function SearchScreen() {
           />
 
           <Text style={styles.resultCount}>
-            {profiles.length === 1
-              ? '1 Treffer'
-              : `${profiles.length} Treffer`}
+            {t('search.hits', { count: profiles.length })}
           </Text>
 
           {profiles.map((profile) => (
@@ -138,12 +137,11 @@ export default function SearchScreen() {
         activeOpacity={0.8}
         accessibilityRole="button"
       >
-        <Text style={styles.secondaryButtonText}>Zurück zur Startseite</Text>
+        <Text style={styles.secondaryButtonText}>{t('common.backToHome')}</Text>
       </TouchableOpacity>
 
       <Text style={styles.disclaimer}>
-        Die Angaben dienen der Einordnung und ersetzen keine medizinische oder
-        pharmazeutische Beratung.
+        {t('search.disclaimer')}
       </Text>
     </ScrollView>
   );

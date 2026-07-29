@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 
 import { getBlockMessage, isBlocked } from '../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../ConflictLogic';
+import { useTranslation } from '../i18n';
 import useStore from '../useStore';
 import {
   formatSupplementDosage,
@@ -11,18 +12,19 @@ import {
   formatSupplementPurpose,
 } from '../utils/supplementFormatting';
 
-function formatLastLogged(lastLoggedAt) {
-  if (!lastLoggedAt) return 'Heute wurde noch keine Einnahme dokumentiert.';
+function formatLastLogged(lastLoggedAt, t) {
+  if (!lastLoggedAt) return t('dashboard.lastActivityNone');
 
   const date = new Date(lastLoggedAt);
-  if (Number.isNaN(date.getTime())) return 'Letzte Aktivität konnte nicht gelesen werden.';
+  if (Number.isNaN(date.getTime())) return t('dashboard.lastActivityInvalid');
 
-  return `Zuletzt dokumentiert: ${date.toLocaleString('de-DE', {
+  const formatted = date.toLocaleString('de-DE', {
     day: '2-digit',
     month: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-  })}`;
+  });
+  return t('dashboard.lastActivityLogged', { date: formatted });
 }
 
 function getProgressPercent(done, total) {
@@ -30,17 +32,17 @@ function getProgressPercent(done, total) {
   return Math.min(100, Math.round((done / total) * 100));
 }
 
-function getSlotCountLabel(count) {
-  if (count === 0) return 'Keine geplanten Einnahmen';
-  if (count === 1) return '1 geplante Einnahme';
-  return `${count} geplante Einnahmen`;
+function getSlotCountLabel(count, t) {
+  if (count === 0) return t('dashboard.slotCountEmpty');
+  if (count === 1) return t('dashboard.slotCount_one');
+  return t('dashboard.slotCount_other', { count });
 }
 
 function normalizeRoutineName(name = '') {
   return name.trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
-function getDuplicateGroups(supplements = []) {
+function getDuplicateGroups(supplements = [], t) {
   const groupsByName = supplements.reduce((groups, supplement) => {
     const key = normalizeRoutineName(formatSupplementName(supplement, ''));
     if (!key) return groups;
@@ -61,47 +63,48 @@ function getDuplicateGroups(supplements = []) {
       });
 
       return {
-        name: formatSupplementName(sorted[0], 'Unbenannter Eintrag'),
+        name: formatSupplementName(sorted[0], t('dashboard.unnamedEntry')),
         keep: sorted[0],
         duplicates: sorted.slice(1),
       };
     });
 }
 
-function getDuplicateCountLabel(count) {
-  if (count === 1) return '1 zusätzlicher Eintrag';
-  return `${count} zusätzliche Einträge`;
+function getDuplicateCountLabel(count, t) {
+  if (count === 1) return t('dashboard.duplicateCount_one');
+  return t('dashboard.duplicateCount_other', { count });
 }
 
-function getProfileLabel(profileId) {
-  if (profileId === 'adult') return 'Erwachsen';
-  if (profileId === 'child') return 'Kind';
-  return profileId || 'Standard';
+function getProfileLabel(profileId, t) {
+  if (profileId === 'adult') return t('dashboard.profileAdult');
+  if (profileId === 'child') return t('dashboard.profileChild');
+  return profileId || t('dashboard.profileDefault');
 }
 
-function getRoutineInsight(progress) {
+function getRoutineInsight(progress, t) {
   if (!progress.total) {
     return {
-      label: 'Setup offen',
-      text: 'Füge Supplements hinzu oder ordne Timing zu, damit die Tagesroutine belastbar wird.',
+      label: t('dashboard.insightSetupLabel'),
+      text: t('dashboard.insightSetupText'),
     };
   }
 
   if (progress.pending === 0) {
     return {
-      label: 'Routine vollständig',
-      text: 'Alle geplanten Einnahmen sind für heute dokumentiert.',
+      label: t('dashboard.insightCompleteLabel'),
+      text: t('dashboard.insightCompleteText'),
     };
   }
 
   return {
-    label: `${progress.pending} offen`,
-    text: 'Offene Einnahmen bleiben sichtbar, bis sie dokumentiert oder rückgängig gemacht werden.',
+    label: t('dashboard.insightPendingLabel', { pending: progress.pending }),
+    text: t('dashboard.insightPendingText'),
   };
 }
 
 export default function Dashboard() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [expandedNoteIds, setExpandedNoteIds] = React.useState(() => new Set());
 
   function toggleNoteExpanded(id) {
@@ -141,7 +144,7 @@ export default function Dashboard() {
   const scheduledToday = progress.total;
   const pendingToday = progress.pending;
   const progressPercent = getProgressPercent(progress.done, progress.total);
-  const routineInsight = getRoutineInsight(progress);
+  const routineInsight = getRoutineInsight(progress, t);
   const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
   const slotAlerts = dailySchedule
@@ -150,7 +153,7 @@ export default function Dashboard() {
       return messages.length ? { slot: item.slot, messages } : null;
     })
     .filter(Boolean);
-  const duplicateGroups = getDuplicateGroups(activeSupplements);
+  const duplicateGroups = getDuplicateGroups(activeSupplements, t);
   const duplicateSupplementsToArchive = duplicateGroups.reduce(
     (items, group) => [...items, ...group.duplicates],
     []
@@ -162,12 +165,12 @@ export default function Dashboard() {
     const supplementName = formatSupplementName(supplement);
 
     Alert.alert(
-      'Aus Routine entfernen',
-      `${supplementName} wird aus der aktiven Routine entfernt. Der Eintrag wird archiviert und nicht dauerhaft gelöscht.`,
+      t('dashboard.archiveAlertTitle'),
+      t('dashboard.archiveAlertMessage', { name: supplementName }),
       [
-        { text: 'Abbrechen', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Entfernen',
+          text: t('dashboard.remove'),
           style: 'destructive',
           onPress: () => archiveUserSupplement(supplement.id),
         },
@@ -179,12 +182,14 @@ export default function Dashboard() {
     if (duplicateEntryCount === 0) return;
 
     Alert.alert(
-      'Mehrfache Einträge bereinigen',
-      `${getDuplicateCountLabel(duplicateEntryCount)} werden archiviert. Je Supplement-Name bleibt ein aktiver Eintrag in deiner Routine erhalten.`,
+      t('dashboard.cleanupAlertTitle'),
+      t('dashboard.cleanupAlertMessage', {
+        label: getDuplicateCountLabel(duplicateEntryCount, t),
+      }),
       [
-        { text: 'Abbrechen', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Bereinigen',
+          text: t('dashboard.cleanupAlertConfirm'),
           style: 'destructive',
           onPress: () => {
             duplicateSupplementsToArchive.forEach((supplement) => {
@@ -200,24 +205,24 @@ export default function Dashboard() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <View style={styles.kickerRow}>
-          <Text style={styles.kicker}>Supplement OS</Text>
-          <Text style={styles.profileLabel}>Profil: {getProfileLabel(activeProfileId)}</Text>
+          <Text style={styles.kicker}>{t('dashboard.kicker')}</Text>
+          <Text style={styles.profileLabel}>
+            {t('dashboard.profileLabel', { profile: getProfileLabel(activeProfileId, t) })}
+          </Text>
         </View>
 
-        <Text style={styles.title}>Tagesplan</Text>
-        <Text style={styles.subtitle}>
-          Tägliches Kontrollzentrum für Einnahmen, Timing, Verlauf und saubere Dokumentation.
-        </Text>
+        <Text style={styles.title}>{t('dashboard.title')}</Text>
+        <Text style={styles.subtitle}>{t('dashboard.subtitle')}</Text>
       </View>
 
       <View style={styles.summaryCard}>
         <View style={styles.summaryTopRow}>
           <View>
-            <Text style={styles.summaryLabel}>Tagesroutine</Text>
+            <Text style={styles.summaryLabel}>{t('dashboard.summaryLabel')}</Text>
             <Text style={styles.summaryValue}>
               {progress.total > 0
-                ? `${progress.done} / ${progress.total} dokumentiert`
-                : 'Keine Einnahmen geplant'}
+                ? t('dashboard.summaryProgress', { done: progress.done, total: progress.total })
+                : t('dashboard.summaryEmpty')}
             </Text>
           </View>
 
@@ -235,66 +240,64 @@ export default function Dashboard() {
           <Text style={styles.summaryInsightText}>{routineInsight.text}</Text>
         </View>
 
-        <Text style={styles.lastActivity}>{formatLastLogged(lastLoggedAt)}</Text>
+        <Text style={styles.lastActivity}>{formatLastLogged(lastLoggedAt, t)}</Text>
       </View>
 
       {blockerState.blocked ? (
         <View style={styles.noticeCard}>
-          <Text style={styles.noticeTitle}>Einnahmehinweis aktiv</Text>
+          <Text style={styles.noticeTitle}>{t('dashboard.noticeTitle')}</Text>
           <Text style={styles.noticeText}>{getBlockMessage(blockerState.remainingMinutes)}</Text>
         </View>
       ) : null}
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Aktive Routine" value={String(fullInventoryCount)} />
-        <MetricCard label="Heute geplant" value={String(scheduledToday)} />
-        <MetricCard label="Dokumentiert" value={String(progress.done)} />
-        <MetricCard label="Noch offen" value={String(pendingToday)} />
+        <MetricCard label={t('dashboard.metricActiveRoutine')} value={String(fullInventoryCount)} />
+        <MetricCard label={t('dashboard.metricScheduledToday')} value={String(scheduledToday)} />
+        <MetricCard label={t('dashboard.metricLogged')} value={String(progress.done)} />
+        <MetricCard label={t('dashboard.metricPending')} value={String(pendingToday)} />
       </View>
 
       {duplicateEntryCount > 0 ? (
         <View style={styles.cleanupCard}>
-          <Text style={styles.cleanupTitle}>Mehrfache Routine-Einträge erkannt</Text>
+          <Text style={styles.cleanupTitle}>{t('dashboard.cleanupTitle')}</Text>
           <Text style={styles.cleanupText}>
-            {getDuplicateCountLabel(duplicateEntryCount)} mit gleichem Namen. Zusätzliche Einträge können ins Archiv verschoben werden; je Supplement bleibt ein aktiver Routine-Eintrag erhalten.
+            {t('dashboard.cleanupText', {
+              label: getDuplicateCountLabel(duplicateEntryCount, t),
+            })}
           </Text>
           {duplicateGroupNames ? (
             <Text style={styles.cleanupMeta} numberOfLines={2}>
-              Betroffen: {duplicateGroupNames}
+              {t('dashboard.cleanupMeta', { names: duplicateGroupNames })}
             </Text>
           ) : null}
           <TouchableOpacity style={styles.cleanupButton} onPress={handleArchiveDuplicateSupplements}>
-            <Text style={styles.cleanupButtonText}>Duplikate archivieren</Text>
+            <Text style={styles.cleanupButtonText}>{t('dashboard.cleanupButton')}</Text>
           </TouchableOpacity>
         </View>
       ) : null}
 
       <SectionHeading
-        title="Routine"
-        subtitle="Nach Timing gruppiert, damit offene und dokumentierte Einnahmen sofort unterscheidbar bleiben."
+        title={t('dashboard.sectionRoutineTitle')}
+        subtitle={t('dashboard.sectionRoutineSubtitle')}
       />
 
       {fullInventoryCount === 0 ? (
         <View style={styles.emptyRoutineCard}>
-          <Text style={styles.emptyRoutineTitle}>Routine noch nicht eingerichtet</Text>
-          <Text style={styles.emptyRoutineText}>
-            Füge dein erstes Supplement hinzu, damit der Tagesplan nach Einnahmezeit, Dokumentation und Verlauf strukturiert werden kann.
-          </Text>
+          <Text style={styles.emptyRoutineTitle}>{t('dashboard.emptyRoutineTitle')}</Text>
+          <Text style={styles.emptyRoutineText}>{t('dashboard.emptyRoutineText')}</Text>
           <TouchableOpacity
             style={styles.emptyRoutineButton}
             onPress={() => router.push('/AddSupplement')}
           >
-            <Text style={styles.emptyRoutineButtonText}>Supplement hinzufügen</Text>
+            <Text style={styles.emptyRoutineButtonText}>{t('dashboard.emptyRoutineButton')}</Text>
           </TouchableOpacity>
         </View>
       ) : null}
 
       {fullInventoryCount > 0 && visibleSchedule.length === 0 ? (
         <View style={styles.emptyRoutineCard}>
-          <Text style={styles.emptyRoutineTitle}>Timing noch unvollständig</Text>
-          <Text style={styles.emptyRoutineText}>
-            Deine Supplements sind vorhanden, aber aktuell keinem Zeitfenster zugeordnet. Über „Bearbeiten“ kannst du das Timing sauber ergänzen.
-          </Text>
+          <Text style={styles.emptyRoutineTitle}>{t('dashboard.timingIncompleteTitle')}</Text>
+          <Text style={styles.emptyRoutineText}>{t('dashboard.timingIncompleteText')}</Text>
         </View>
       ) : null}
 
@@ -306,14 +309,14 @@ export default function Dashboard() {
               <Text style={styles.slotTime}>{item.slot.time}</Text>
             </View>
             <View style={styles.slotStatusWrap}>
-              <Text style={styles.slotCount}>{getSlotCountLabel(item.supplements.length)}</Text>
-              <Text style={styles.slotStatus}>Routine-Fenster</Text>
+              <Text style={styles.slotCount}>{getSlotCountLabel(item.supplements.length, t)}</Text>
+              <Text style={styles.slotStatus}>{t('dashboard.slotStatus')}</Text>
             </View>
           </View>
 
           {item.supplements.length === 0 ? (
             <View style={styles.emptySlot}>
-              <Text style={styles.emptyText}>Für dieses Zeitfenster ist aktuell nichts geplant.</Text>
+              <Text style={styles.emptyText}>{t('dashboard.emptySlotText')}</Text>
             </View>
           ) : (
             item.supplements.map((supplement) => {
@@ -342,7 +345,7 @@ export default function Dashboard() {
                           supplement.logged ? styles.loggedPill : styles.pendingPill,
                         ]}
                       >
-                        {supplement.logged ? 'Dokumentiert' : 'Offen'}
+                        {supplement.logged ? t('dashboard.stateLogged') : t('dashboard.statePending')}
                       </Text>
                     </View>
                     {supplementMeta ? (
@@ -351,13 +354,18 @@ export default function Dashboard() {
 
                     {stock?.currentUnits !== undefined ? (
                       <Text style={styles.noteText}>
-                        Bestand dokumentiert: {stock.currentUnits} {stock.unit || 'Einheiten'}
+                        {t('dashboard.stockNote', {
+                          amount: stock.currentUnits,
+                          unit: stock.unit || t('dashboard.stockUnitFallback'),
+                        })}
                       </Text>
                     ) : null}
 
                     {supplementTiming ? (
                       <View style={styles.timingPill}>
-                        <Text style={styles.timingPillText}>🕐 {supplementTiming}</Text>
+                        <Text style={styles.timingPillText}>
+                          {t('dashboard.timingPrefix', { timing: supplementTiming })}
+                        </Text>
                       </View>
                     ) : null}
 
@@ -371,7 +379,7 @@ export default function Dashboard() {
                           <Text style={styles.noteText}>{supplementNotes}</Text>
                         ) : null}
                         <Text style={styles.noteToggle}>
-                          {notesExpanded ? 'Details ausblenden' : 'Details anzeigen'}
+                          {notesExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')}
                         </Text>
                       </TouchableOpacity>
                     ) : null}
@@ -383,14 +391,14 @@ export default function Dashboard() {
                         style={styles.secondaryAction}
                         onPress={() => undoIntakeToday(supplement.id)}
                       >
-                        <Text style={styles.secondaryActionText}>Rückgängig</Text>
+                        <Text style={styles.secondaryActionText}>{t('dashboard.undo')}</Text>
                       </TouchableOpacity>
                     ) : (
                       <TouchableOpacity
                         style={styles.primaryAction}
                         onPress={() => logIntake(supplement.id, { slotId: item.slot.id })}
                       >
-                        <Text style={styles.primaryActionText}>Dokumentieren</Text>
+                        <Text style={styles.primaryActionText}>{t('dashboard.logAction')}</Text>
                       </TouchableOpacity>
                     )}
 
@@ -398,14 +406,14 @@ export default function Dashboard() {
                       style={styles.secondaryAction}
                       onPress={() => router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`)}
                     >
-                      <Text style={styles.secondaryActionText}>Bearbeiten</Text>
+                      <Text style={styles.secondaryActionText}>{t('dashboard.edit')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                       style={styles.dangerAction}
                       onPress={() => handleArchiveSupplement(supplement)}
                     >
-                      <Text style={styles.dangerActionText}>Entfernen</Text>
+                      <Text style={styles.dangerActionText}>{t('dashboard.remove')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -416,16 +424,14 @@ export default function Dashboard() {
       )) : null}
 
       <SectionHeading
-        title="Prüfhinweise"
-        subtitle="Allgemeine Hinweise zur Routine-Organisation, ohne medizinische Bewertung."
+        title={t('dashboard.sectionAlertsTitle')}
+        subtitle={t('dashboard.sectionAlertsSubtitle')}
       />
 
       {slotAlerts.length === 0 ? (
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Keine offenen Prüfhinweise</Text>
-          <Text style={styles.infoText}>
-            Für den aktuellen Tagesplan liegen derzeit keine zusätzlichen organisatorischen Hinweise vor.
-          </Text>
+          <Text style={styles.infoTitle}>{t('dashboard.noAlertsTitle')}</Text>
+          <Text style={styles.infoText}>{t('dashboard.noAlertsText')}</Text>
         </View>
       ) : (
         slotAlerts.map((group) => (
@@ -441,9 +447,7 @@ export default function Dashboard() {
       )}
 
       <View style={styles.disclaimerCard}>
-        <Text style={styles.disclaimerText}>
-          Supplement OS unterstützt die strukturierte Dokumentation deiner Routine. Hinweise bleiben allgemein, dienen der Organisation und ersetzen keine medizinische Beratung.
-        </Text>
+        <Text style={styles.disclaimerText}>{t('dashboard.disclaimer')}</Text>
       </View>
     </ScrollView>
   );

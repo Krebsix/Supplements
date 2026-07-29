@@ -16,6 +16,7 @@ import { buildSubstanceProfile } from '../ReferenceCheck';
 import { matchIngredients } from '../SubstanceMatcher';
 import mockScanResult from '../data/mockScanResult';
 import useStore from '../useStore';
+import { useTranslation } from '../i18n';
 
 function hasText(value) {
   return typeof value === 'string' && value.trim().length > 0;
@@ -23,6 +24,7 @@ function hasText(value) {
 
 export default function ResultsScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const saveScanResult = useStore(
     (state) => state.saveScanResult
@@ -45,14 +47,14 @@ export default function ResultsScreen() {
   // Herkunft des Ergebnisses sichtbar machen (analysisMode aus dem Scan)
   const modeLabel =
     result?.analysisMode === 'vision'
-      ? 'KI-Analyse'
+      ? t('results.modeVision')
       : result?.analysisMode === 'barcode-off'
-        ? 'Barcode-Treffer'
+        ? t('results.modeBarcodeOff')
         : isDemoFallback || result?.analysisMode === 'demo-fallback'
-          ? 'Testanalyse'
+          ? t('results.modeDemoFallback')
           : result?.analysisMode === 'mock'
-            ? 'Test-Ergebnis'
-            : 'Scan vorhanden';
+            ? t('results.modeMock')
+            : t('results.modeDefault');
 
   const brandDetected =
     hasText(result?.brand) && result.brand !== 'Demo Brand';
@@ -126,7 +128,7 @@ export default function ResultsScreen() {
     >
       <View style={styles.heroCard}>
         <View style={styles.heroHeader}>
-          <Text style={styles.kicker}>Analyse-Ergebnis</Text>
+          <Text style={styles.kicker}>{t('results.kicker')}</Text>
 
           <View style={styles.modeBadge}>
             <Text style={styles.modeBadgeText}>
@@ -136,24 +138,22 @@ export default function ResultsScreen() {
         </View>
 
         <Text style={styles.title}>
-          Erst prüfen. Dann übernehmen.
+          {t('results.title')}
         </Text>
 
         <Text style={styles.subtitle}>
-          Die erkannten Angaben sind ein Arbeitsstand. Kontrolliere fehlende
-          und unsichere Felder, bevor daraus ein Eintrag für deine persönliche
-          Routine wird.
+          {t('results.subtitle')}
         </Text>
       </View>
 
       <View style={styles.reviewSummary}>
         <View style={styles.summaryTop}>
           <View>
-            <Text style={styles.summaryLabel}>Prüfstatus</Text>
+            <Text style={styles.summaryLabel}>{t('results.reviewStatusLabel')}</Text>
             <Text style={styles.summaryTitle}>
               {reviewPointCount === 1
-                ? '1 Prüfpunkt'
-                : `${reviewPointCount} Prüfpunkte`}
+                ? t('results.reviewPoint_one', { count: reviewPointCount })
+                : t('results.reviewPoint_other', { count: reviewPointCount })}
             </Text>
           </View>
 
@@ -171,16 +171,16 @@ export default function ResultsScreen() {
               ]}
             >
               {openCriticalCount === 0
-                ? 'Vollständig'
-                : `${openCriticalCount} offen`}
+                ? t('results.summaryComplete')
+                : t('results.summaryOpen', { count: openCriticalCount })}
             </Text>
           </View>
         </View>
 
         <Text style={styles.summaryText}>
           {openCriticalCount === 0
-            ? 'Alle zentralen Felder sind vorhanden, müssen aber weiterhin mit dem Produktetikett abgeglichen werden.'
-            : 'Mindestens eine zentrale Produktangabe fehlt. Die App übernimmt diese Information deshalb nicht automatisch.'}
+            ? t('results.summaryTextComplete')
+            : t('results.summaryTextIncomplete')}
         </Text>
       </View>
 
@@ -188,18 +188,16 @@ export default function ResultsScreen() {
 
       {substanceProfiles.length > 0 ? (
         <View style={styles.substanceSection}>
-          <Text style={styles.substanceKicker}>Wirkstoffe im Detail</Text>
+          <Text style={styles.substanceKicker}>{t('results.substanceSectionKicker')}</Text>
           <Text style={styles.substanceTitle}>
             {matchedCount === 0
-              ? 'Keine Wirkstoffe in der Datenbank gefunden'
+              ? t('results.substanceTitleNone')
               : matchedCount === 1
-                ? '1 Wirkstoff zugeordnet'
-                : `${matchedCount} Wirkstoffe zugeordnet`}
+                ? t('results.substanceTitle_one', { count: matchedCount })
+                : t('results.substanceTitle_other', { count: matchedCount })}
           </Text>
           <Text style={styles.substanceText}>
-            Angezeigt werden Anwendungsgebiete, die chemische Form und der
-            Abgleich mit öffentlichen Referenzwerten. Die App ordnet Daten ein
-            und spricht keine gesundheitlichen Empfehlungen aus.
+            {t('results.substanceText')}
           </Text>
 
           <View style={styles.pickerWrapper}>
@@ -220,11 +218,10 @@ export default function ResultsScreen() {
 
       {result?.analysisMode === 'vision' ? (
         <View style={styles.substanceSection}>
-          <Text style={styles.substanceKicker}>Prüfsiegel</Text>
-          <Text style={styles.substanceTitle}>Was geprüft wurde</Text>
+          <Text style={styles.substanceKicker}>{t('results.certKicker')}</Text>
+          <Text style={styles.substanceTitle}>{t('results.certTitle')}</Text>
           <Text style={styles.substanceText}>
-            Angezeigt werden nur nachprüfbare Zertifizierungen mit ihrem
-            jeweiligen Geltungsbereich. Die App bewertet keine Hersteller.
+            {t('results.certText')}
           </Text>
 
           <CertificationPanel labels={result.detectedCertifications} />
@@ -232,14 +229,12 @@ export default function ResultsScreen() {
       ) : null}
 
       <View style={styles.nextStepCard}>
-        <Text style={styles.nextStepKicker}>Nächster Schritt</Text>
+        <Text style={styles.nextStepKicker}>{t('results.nextStepKicker')}</Text>
         <Text style={styles.nextStepTitle}>
-          Angaben im Formular bestätigen
+          {t('results.nextStepTitle')}
         </Text>
         <Text style={styles.nextStepText}>
-          Im nächsten Bildschirm kannst du Name, Dosierung, Einheit und
-          Tageszeit kontrollieren oder ergänzen. Erst das anschließende
-          Speichern erstellt einen Routine-Eintrag.
+          {t('results.nextStepText')}
         </Text>
 
         <TouchableOpacity
@@ -249,7 +244,7 @@ export default function ResultsScreen() {
           accessibilityRole="button"
         >
           <Text style={styles.primaryButtonText}>
-            Daten im Formular prüfen
+            {t('results.primaryButton')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -261,7 +256,7 @@ export default function ResultsScreen() {
         accessibilityRole="button"
       >
         <Text style={styles.secondaryButtonText}>
-          Scan wiederholen
+          {t('results.rescanButton')}
         </Text>
       </TouchableOpacity>
 
@@ -272,14 +267,12 @@ export default function ResultsScreen() {
         accessibilityRole="button"
       >
         <Text style={styles.tertiaryButtonText}>
-          Zurück zur Startseite
+          {t('common.backToHome')}
         </Text>
       </TouchableOpacity>
 
       <Text style={styles.disclaimer}>
-        Die Scan-Auswertung ersetzt keine medizinische, pharmazeutische oder
-        individuelle fachliche Prüfung. Erkannte Angaben können unvollständig
-        oder fehlerhaft sein.
+        {t('results.disclaimer')}
       </Text>
     </ScrollView>
   );

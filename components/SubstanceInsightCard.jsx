@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { useTranslation } from '../i18n';
 import { getStatusMeta } from '../ReferenceCheck';
 
 /**
@@ -14,6 +15,7 @@ import { getStatusMeta } from '../ReferenceCheck';
  */
 export default function SubstanceInsightCard({ profile }) {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
 
   if (!profile) return null;
 
@@ -21,7 +23,9 @@ export default function SubstanceInsightCard({ profile }) {
   if (!profile.matched) {
     return (
       <View style={[styles.card, styles.cardUnmatched]}>
-        <Text style={styles.unmatchedName}>{profile.label || 'Unbenannter Eintrag'}</Text>
+        <Text style={styles.unmatchedName}>
+          {profile.label || t('components.insight.unnamedEntry')}
+        </Text>
         <Text style={styles.unmatchedNote}>{profile.note}</Text>
       </View>
     );
@@ -75,13 +79,18 @@ export default function SubstanceInsightCard({ profile }) {
             { borderLeftColor: statusMeta.hex },
           ]}
         >
-          <Text style={styles.referenceLabel}>Abgleich mit Referenzwert</Text>
+          <Text style={styles.referenceLabel}>
+            {t('components.insight.referenceHeading')}
+          </Text>
           <Text style={styles.referenceSummary}>{check.summary}</Text>
 
           {check.upperLimit !== null ? (
             <Text style={styles.referenceMeta}>
-              Referenzwert {check.reference} {check.unit} · Obergrenze{' '}
-              {check.upperLimit} {check.unit} pro Tag
+              {t('components.insight.referenceMeta', {
+                reference: check.reference,
+                unit: check.unit,
+                upperLimit: check.upperLimit,
+              })}
             </Text>
           ) : null}
 
@@ -94,9 +103,13 @@ export default function SubstanceInsightCard({ profile }) {
       {profile.form ? (
         <View style={styles.formBox}>
           <View style={styles.formHeader}>
-            <Text style={styles.formLabel}>Erkannte Form</Text>
+            <Text style={styles.formLabel}>
+              {t('components.insight.formLabel')}
+            </Text>
             <Text style={styles.formBio}>
-              Aufnahme: {profile.form.bioavailability}
+              {t('components.insight.formBio', {
+                bioavailability: profile.form.bioavailability,
+              })}
             </Text>
           </View>
           <Text style={styles.formName}>{profile.form.name}</Text>
@@ -104,7 +117,7 @@ export default function SubstanceInsightCard({ profile }) {
         </View>
       ) : null}
 
-      <Text style={styles.sectionLabel}>Anwendungsgebiete</Text>
+      <Text style={styles.sectionLabel}>{t('components.insight.useCases')}</Text>
       {profile.useCases.slice(0, expanded ? undefined : 3).map((useCase) => (
         <View key={useCase.topic} style={styles.useCase}>
           <Text style={styles.useCaseTopic}>{useCase.topic}</Text>
@@ -116,7 +129,9 @@ export default function SubstanceInsightCard({ profile }) {
         <>
           {profile.allForms.length > 1 ? (
             <>
-              <Text style={styles.sectionLabel}>Formen im Vergleich</Text>
+              <Text style={styles.sectionLabel}>
+                {t('components.insight.formsCompare')}
+              </Text>
               {profile.allForms.map((form) => (
                 <View key={form.name} style={styles.formRow}>
                   <View style={styles.formRowHeader}>
@@ -132,22 +147,25 @@ export default function SubstanceInsightCard({ profile }) {
           {profile.fatSoluble ? (
             <View style={styles.hintBox}>
               <Text style={styles.hintText}>
-                Fettlöslich — die Aufnahme ist zu einer Mahlzeit mit Fett
-                deutlich besser.
+                {t('components.insight.fatSolubleHint')}
               </Text>
             </View>
           ) : null}
 
           {profile.cautionNote ? (
             <View style={styles.cautionBox}>
-              <Text style={styles.cautionLabel}>Zu beachten</Text>
+              <Text style={styles.cautionLabel}>
+                {t('components.insight.caution')}
+              </Text>
               <Text style={styles.cautionText}>{profile.cautionNote}</Text>
             </View>
           ) : null}
 
           {profile.sources?.length > 0 ? (
             <View style={styles.sourcesBox}>
-              <Text style={styles.sourcesLabel}>Quellen</Text>
+              <Text style={styles.sourcesLabel}>
+                {t('components.insight.sources')}
+              </Text>
               {profile.sources.map((source, index) => (
                 <TouchableOpacity
                   key={`${source.label}-${index}`}
@@ -176,7 +194,9 @@ export default function SubstanceInsightCard({ profile }) {
         accessibilityRole="button"
       >
         <Text style={styles.expandButtonText}>
-          {expanded ? 'Weniger anzeigen' : 'Formen und Hinweise anzeigen'}
+          {expanded
+            ? t('components.insight.showLess')
+            : t('components.insight.showMore')}
         </Text>
       </TouchableOpacity>
     </View>

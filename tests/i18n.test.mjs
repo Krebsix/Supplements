@@ -11,8 +11,8 @@
  *     Deutsch-Fallback nicht und die Nutzerin sieht den rohen Schluessel)
  */
 
-import de from '../i18n/de.js';
-import en from '../i18n/en.js';
+import de from '../i18n/de/index.js';
+import en from '../i18n/en/index.js';
 import { translate, isSupportedLanguage, LANGUAGES, DEFAULT_LANGUAGE } from '../i18n/index.js';
 
 let failed = 0;

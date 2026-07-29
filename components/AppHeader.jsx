@@ -1,10 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useTranslation } from '../i18n';
+
 export default function AppHeader({ title, subtitle }) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.wrap}>
-      <Text style={styles.kicker}>Supplement OS</Text>
+      <Text style={styles.kicker}>{t('components.header.kicker')}</Text>
       <Text style={styles.title}>{title}</Text>
       {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
     </View>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import LanguagePicker from '../components/LanguagePicker';
 import LifeStagePicker from '../components/LifeStagePicker';
+import { useTranslation } from '../i18n';
 import useStore from '../useStore';
 import {
   formatSupplementDosage as getSupplementDosage,
@@ -12,6 +14,7 @@ const EMPTY_SUPPLEMENTS = [];
 const EMPTY_LOGS = [];
 
 export default function SettingsScreen() {
+  const { t } = useTranslation();
   const userSupplements =
     useStore((state) => state.userSupplements) ?? EMPTY_SUPPLEMENTS;
   const intakeLogs = useStore((state) => state.intakeLogs) ?? EMPTY_LOGS;
@@ -34,22 +37,22 @@ export default function SettingsScreen() {
   const handleClearIntakeLogs = () => {
     if (intakeLogs.length === 0) {
       Alert.alert(
-        'Keine Einnahmehistorie vorhanden',
-        'Auf diesem Gerät sind aktuell keine dokumentierten Einnahmen gespeichert.'
+        t('settings.clearHistoryEmpty.title'),
+        t('settings.clearHistoryEmpty.message')
       );
       return;
     }
 
     Alert.alert(
-      'Lokale Einnahmehistorie löschen?',
-      `Gelöscht werden ${intakeLogs.length} dokumentierte Einnahmen einschließlich rückgängig gemachter Einträge.\n\nErhalten bleiben deine Supplements, archivierten Supplements, Scanner-Ergebnisse und Bestände.`,
+      t('settings.clearHistoryConfirm.title'),
+      t('settings.clearHistoryConfirm.message', { count: intakeLogs.length }),
       [
         {
-          text: 'Abbrechen',
+          text: t('settings.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Historie löschen',
+          text: t('settings.clearHistoryConfirm.confirmButton'),
           style: 'destructive',
           onPress: clearIntakeLogs,
         },
@@ -61,15 +64,15 @@ export default function SettingsScreen() {
     const supplementName = getSupplementName(supplement);
 
     Alert.alert(
-      'Supplement wiederherstellen?',
-      `${supplementName} wird aus dem Archiv entfernt und wieder als aktives Supplement geführt.`,
+      t('settings.restoreConfirm.title'),
+      t('settings.restoreConfirm.message', { name: supplementName }),
       [
         {
-          text: 'Abbrechen',
+          text: t('settings.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Wiederherstellen',
+          text: t('settings.restoreConfirm.confirmButton'),
           onPress: () =>
             updateUserSupplement(supplement.id, { status: 'active' }),
         },
@@ -79,21 +82,14 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.kicker}>Einstellungen</Text>
-      <Text style={styles.title}>App-Status und lokale Daten</Text>
-      <Text style={styles.subtitle}>
-        Prüfe deinen lokalen Datenbestand, verwalte die Einnahmehistorie und
-        stelle archivierte Supplements wieder her.
-      </Text>
+      <Text style={styles.kicker}>{t('settings.kicker')}</Text>
+      <Text style={styles.title}>{t('settings.title')}</Text>
+      <Text style={styles.subtitle}>{t('settings.subtitle')}</Text>
 
       <View style={styles.statusCard}>
-        <Text style={styles.cardLabel}>Profil</Text>
-        <Text style={styles.cardTitle}>Lebensphase für Referenzwerte</Text>
-        <Text style={styles.cardText}>
-          Referenzwerte und Obergrenzen unterscheiden sich deutlich zwischen
-          Kindern, Schwangerschaft, Menopause und höherem Alter. Die Auswahl
-          gilt für alle Wirkstoff-Ansichten in der App.
-        </Text>
+        <Text style={styles.cardLabel}>{t('settings.profileLabel')}</Text>
+        <Text style={styles.cardTitle}>{t('settings.lifeStageTitle')}</Text>
+        <Text style={styles.cardText}>{t('settings.lifeStageText')}</Text>
 
         <View style={styles.lifeStageWrapper}>
           <LifeStagePicker
@@ -102,23 +98,22 @@ export default function SettingsScreen() {
           />
         </View>
 
-        <Text style={styles.lifeStageNote}>
-          Die App gleicht Mengen mit öffentlichen Referenzwerten ab (D-A-CH,
-          EFSA, NIH) und spricht keine gesundheitlichen Empfehlungen aus.
-        </Text>
+        <Text style={styles.lifeStageNote}>{t('settings.lifeStageNote')}</Text>
+
+        <View style={styles.lifeStageWrapper}>
+          <LanguagePicker />
+        </View>
       </View>
 
       <View style={styles.statusCard}>
-        <Text style={styles.cardLabel}>Lokaler Status</Text>
-        <Text style={styles.cardTitle}>Datenbestand auf diesem Gerät</Text>
-        <Text style={styles.cardText}>
-          Diese Übersicht zeigt den aktuell in der App gespeicherten Zustand.
-        </Text>
+        <Text style={styles.cardLabel}>{t('settings.localStatusLabel')}</Text>
+        <Text style={styles.cardTitle}>{t('settings.localStatusTitle')}</Text>
+        <Text style={styles.cardText}>{t('settings.localStatusText')}</Text>
 
         <View style={styles.statusGrid}>
           <View style={styles.statusItem}>
             <Text style={styles.statusValue}>{activeSupplements}</Text>
-            <Text style={styles.statusLabel}>Aktiv</Text>
+            <Text style={styles.statusLabel}>{t('settings.statusActive')}</Text>
           </View>
 
           <View style={styles.statusDivider} />
@@ -127,77 +122,75 @@ export default function SettingsScreen() {
             <Text style={styles.statusValue}>
               {archivedSupplements.length}
             </Text>
-            <Text style={styles.statusLabel}>Archiviert</Text>
+            <Text style={styles.statusLabel}>{t('settings.statusArchived')}</Text>
           </View>
 
           <View style={styles.statusDivider} />
 
           <View style={styles.statusItem}>
             <Text style={styles.statusValue}>{intakeLogs.length}</Text>
-            <Text style={styles.statusLabel}>Dokumentiert</Text>
+            <Text style={styles.statusLabel}>{t('settings.statusDocumented')}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>Datenhaltung</Text>
-        <Text style={styles.cardTitle}>Lokale Datenverwaltung</Text>
-        <Text style={styles.cardText}>
-          Supplements, Archiv, Scanner-Ergebnisse, Bestände und
-          Einnahmehistorie werden aktuell im lokalen App-Zustand verwaltet.
-          Änderungen in diesem Bereich betreffen ausschließlich die jeweils
-          ausdrücklich genannte Datenkategorie.
-        </Text>
+        <Text style={styles.cardLabel}>{t('settings.dataManagementLabel')}</Text>
+        <Text style={styles.cardTitle}>{t('settings.dataManagementTitle')}</Text>
+        <Text style={styles.cardText}>{t('settings.dataManagementText')}</Text>
 
         <View style={styles.trustNotice}>
-          <Text style={styles.trustNoticeTitle}>Kontrollierte Änderungen</Text>
+          <Text style={styles.trustNoticeTitle}>
+            {t('settings.controlledChangesTitle')}
+          </Text>
           <Text style={styles.trustNoticeText}>
-            Destruktive Aktionen werden vor der Ausführung bestätigt.
-            Archivierte Supplements bleiben erhalten und können
-            wiederhergestellt werden.
+            {t('settings.controlledChangesText')}
           </Text>
         </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>Datenhygiene</Text>
-        <Text style={styles.cardTitle}>Lokale Einnahmehistorie</Text>
-        <Text style={styles.cardText}>
-          Hier kannst du ausschließlich die auf diesem Gerät dokumentierten
-          Einnahmen entfernen.
-        </Text>
+        <Text style={styles.cardLabel}>{t('settings.dataHygieneLabel')}</Text>
+        <Text style={styles.cardTitle}>{t('settings.intakeHistoryTitle')}</Text>
+        <Text style={styles.cardText}>{t('settings.intakeHistoryText')}</Text>
 
         <View style={styles.historyStats}>
           <View style={styles.historyStat}>
             <Text style={styles.historyStatValue}>{activeIntakeLogs}</Text>
-            <Text style={styles.historyStatLabel}>Einnahmen</Text>
+            <Text style={styles.historyStatLabel}>
+              {t('settings.historyStatIntakes')}
+            </Text>
           </View>
 
           <View style={styles.historyStat}>
             <Text style={styles.historyStatValue}>{undoneIntakeLogs}</Text>
-            <Text style={styles.historyStatLabel}>Rückgängig</Text>
+            <Text style={styles.historyStatLabel}>
+              {t('settings.historyStatUndone')}
+            </Text>
           </View>
 
           <View style={styles.historyStat}>
             <Text style={styles.historyStatValue}>{intakeLogs.length}</Text>
-            <Text style={styles.historyStatLabel}>Gesamt</Text>
+            <Text style={styles.historyStatLabel}>
+              {t('settings.historyStatTotal')}
+            </Text>
           </View>
         </View>
 
         <View style={styles.scopeBox}>
           <View style={styles.scopeRow}>
-            <Text style={styles.scopeLabel}>Wird gelöscht</Text>
+            <Text style={styles.scopeLabel}>{t('settings.scopeDeletedLabel')}</Text>
             <Text style={styles.scopeText}>
-              Dokumentierte Einnahmen und rückgängig gemachte Einträge
+              {t('settings.scopeDeletedText')}
             </Text>
           </View>
 
           <View style={styles.scopeSeparator} />
 
           <View style={styles.scopeRow}>
-            <Text style={styles.scopeLabel}>Bleibt erhalten</Text>
+            <Text style={styles.scopeLabel}>{t('settings.scopeKeptLabel')}</Text>
             <Text style={styles.scopeText}>
-              Supplements, Archiv, Scanner-Ergebnisse und Bestände
+              {t('settings.scopeKeptText')}
             </Text>
           </View>
         </View>
@@ -210,26 +203,23 @@ export default function SettingsScreen() {
           ]}
         >
           <Text style={styles.dangerButtonText}>
-            Lokale Einnahmehistorie löschen
+            {t('settings.deleteHistoryButton')}
           </Text>
         </Pressable>
       </View>
 
       <View style={styles.archiveSection}>
-        <Text style={styles.sectionLabel}>Archiv</Text>
-        <Text style={styles.sectionTitle}>Archivierte Supplements</Text>
-        <Text style={styles.sectionText}>
-          Archivierte Supplements sind nicht endgültig gelöscht. Ihre
-          gespeicherten Angaben bleiben erhalten und können wieder als aktive
-          Supplements geführt werden.
-        </Text>
+        <Text style={styles.sectionLabel}>{t('settings.archiveLabel')}</Text>
+        <Text style={styles.sectionTitle}>{t('settings.archiveTitle')}</Text>
+        <Text style={styles.sectionText}>{t('settings.archiveText')}</Text>
 
         {archivedSupplements.length === 0 ? (
           <View style={styles.emptyArchiveCard}>
-            <Text style={styles.emptyArchiveTitle}>Archiv ist leer</Text>
+            <Text style={styles.emptyArchiveTitle}>
+              {t('settings.emptyArchiveTitle')}
+            </Text>
             <Text style={styles.emptyArchiveText}>
-              Aktuell sind keine Supplements archiviert. Aus der aktiven
-              Routine entfernte Supplements werden hier sicher aufbewahrt.
+              {t('settings.emptyArchiveText')}
             </Text>
           </View>
         ) : (
@@ -246,13 +236,15 @@ export default function SettingsScreen() {
                 </View>
 
                 <View style={styles.archiveBadge}>
-                  <Text style={styles.archiveBadgeText}>Archiviert</Text>
+                  <Text style={styles.archiveBadgeText}>
+                    {t('settings.archivedBadge')}
+                  </Text>
                 </View>
               </View>
 
               <View style={styles.archiveDetail}>
                 <Text style={styles.archiveDetailLabel}>
-                  Gespeicherter Zweck
+                  {t('settings.storedPurposeLabel')}
                 </Text>
                 <Text style={styles.archiveDetailText}>
                   {getSupplementPurpose(supplement)}
@@ -260,9 +252,11 @@ export default function SettingsScreen() {
               </View>
 
               <View style={styles.archiveTrustRow}>
-                <Text style={styles.archiveTrustLabel}>Datenstatus</Text>
+                <Text style={styles.archiveTrustLabel}>
+                  {t('settings.dataStatusLabel')}
+                </Text>
                 <Text style={styles.archiveTrustText}>
-                  Angaben bleiben lokal erhalten
+                  {t('settings.dataStatusText')}
                 </Text>
               </View>
 
@@ -274,7 +268,7 @@ export default function SettingsScreen() {
                 ]}
               >
                 <Text style={styles.restoreButtonText}>
-                  Aus Archiv wiederherstellen
+                  {t('settings.restoreFromArchiveButton')}
                 </Text>
               </Pressable>
             </View>
@@ -283,13 +277,9 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.noticeCard}>
-        <Text style={styles.noticeLabel}>Allgemeiner Hinweis</Text>
-        <Text style={styles.noticeTitle}>Dokumentation statt Diagnose</Text>
-        <Text style={styles.noticeText}>
-          Die App unterstützt die strukturierte Erfassung und Organisation von
-          Supplements. Sie ersetzt keine medizinische Beratung, Diagnose oder
-          Behandlung.
-        </Text>
+        <Text style={styles.noticeLabel}>{t('settings.generalNoticeLabel')}</Text>
+        <Text style={styles.noticeTitle}>{t('settings.generalNoticeTitle')}</Text>
+        <Text style={styles.noticeText}>{t('settings.generalNoticeText')}</Text>
       </View>
     </ScrollView>
   );

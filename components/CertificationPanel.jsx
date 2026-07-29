@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { KIND_LABELS, matchCertifications } from '../data/certifications';
+import { useTranslation } from '../i18n';
 
 /**
  * CertificationPanel
@@ -13,17 +14,18 @@ import { KIND_LABELS, matchCertifications } from '../data/certifications';
  */
 export default function CertificationPanel({ labels }) {
   const [expandedId, setExpandedId] = useState(null);
+  const { t } = useTranslation();
 
   const { matched, unknown } = matchCertifications(labels);
 
   if (matched.length === 0 && unknown.length === 0) {
     return (
       <View style={styles.emptyCard}>
-        <Text style={styles.emptyTitle}>Keine Prüfsiegel erkannt</Text>
+        <Text style={styles.emptyTitle}>
+          {t('components.certification.emptyTitle')}
+        </Text>
         <Text style={styles.emptyText}>
-          Auf den Aufnahmen war kein bekanntes Prüfsiegel sichtbar. Das ist
-          kein Qualitätsurteil — viele Produkte tragen keine Zertifizierung,
-          und Siegel können auf ungescannten Verpackungsseiten stehen.
+          {t('components.certification.emptyText')}
         </Text>
       </View>
     );
@@ -57,11 +59,13 @@ export default function CertificationPanel({ labels }) {
             {isOpen ? (
               <>
                 <View style={styles.scopeBox}>
-                  <Text style={styles.scopeLabel}>Was es nicht abdeckt</Text>
+                  <Text style={styles.scopeLabel}>
+                    {t('components.certification.scopeLabel')}
+                  </Text>
                   <Text style={styles.scopeText}>{cert.scope}</Text>
                 </View>
                 <Text style={styles.issuer}>
-                  Vergeben von: {cert.issuer}
+                  {t('components.certification.issuer', { issuer: cert.issuer })}
                 </Text>
               </>
             ) : null}
@@ -71,14 +75,14 @@ export default function CertificationPanel({ labels }) {
 
       {unknown.length > 0 ? (
         <View style={styles.unknownCard}>
-          <Text style={styles.unknownLabel}>Nicht zugeordnet</Text>
+          <Text style={styles.unknownLabel}>
+            {t('components.certification.unknownLabel')}
+          </Text>
           <Text style={styles.unknownText}>
             {unknown.join(' · ')}
           </Text>
           <Text style={styles.unknownNote}>
-            Diese Angaben vom Etikett sind in der Siegel-Datenbank nicht
-            hinterlegt. Werbeaussagen wie „laborgeprüft“ oder „Premium“ sind
-            keine geschützten Zertifizierungen.
+            {t('components.certification.unknownNote')}
           </Text>
         </View>
       ) : null}

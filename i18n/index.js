@@ -25,8 +25,8 @@
 
 import { useStore } from '../useStore';
 
-import de from './de';
-import en from './en';
+import de from './de/index';
+import en from './en/index';
 
 export const LANGUAGES = [
   { code: 'de', label: 'Deutsch', short: 'DE' },
