@@ -167,10 +167,32 @@ Deno.serve(async (req) => {
   // Rate-Limit pruefen, BEVOR irgendetwas kostenpflichtiges passiert.
   // SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY sind fuer jede Edge Function
   // automatisch vorhanden — kein manuelles Secret noetig.
-  const clientKey =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("cf-connecting-ip") ||
-    "unknown";
+  //
+  // X-Forwarded-For ist eine Kette "client, proxy1, proxy2, ...": Der
+  // ERSTE Eintrag kommt vom Client selbst und ist frei faelschbar (ein
+  // Angreifer koennte bei jedem Request einen neuen Fantasiewert senden
+  // und so das Limit umgehen). Der LETZTE Eintrag wird vom naechsten,
+  // vertrauenswuerdigen Hop (Supabase-Edge) angehaengt und ist die
+  // einzige Stelle, die der Client nicht kontrolliert.
+  const forwardedFor = req.headers.get("x-forwarded-for");
+  const trustedIp = forwardedFor
+    ?.split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .pop();
+
+  const IP_LIKE = /^[0-9a-fA-F:.]{3,45}$/;
+  if (!trustedIp || !IP_LIKE.test(trustedIp)) {
+    // Ohne verlaessliche Client-Kennung faellt die App geschlossen aus,
+    // statt alle nicht identifizierbaren Anfragen in einen gemeinsamen
+    // "unknown"-Topf zu werfen -- sonst koennte ein Angreifer diesen
+    // gemeinsamen Topf ausschoepfen und damit alle anderen betroffenen
+    // Clients blockieren.
+    return jsonResponse(503, {
+      error: "Dienst vorübergehend nicht verfügbar. Bitte später erneut versuchen.",
+    });
+  }
+  const clientKey = trustedIp;
 
   try {
     const supabaseAdmin = createClient(

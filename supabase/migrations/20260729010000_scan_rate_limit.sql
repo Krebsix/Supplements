@@ -18,8 +18,10 @@ create table if not exists public.scan_rate_limits (
 comment on table public.scan_rate_limits is
   'Rate-Limit-Zaehler fuer die Scan-Analyse-Function, geschluesselt nach Client-IP.';
 
--- Keine RLS-Policies noetig: Die Tabelle wird ausschliesslich ueber die
--- Function unten mit SECURITY DEFINER angesprochen, nie direkt per API.
+-- RLS aktiv, absichtlich OHNE Policies: anon/authenticated haben dadurch
+-- per Default-Deny keinerlei direkten Tabellenzugriff ueber die PostgREST-
+-- API. Das reicht fuer die TABELLE, schuetzt aber NICHT die Function unten
+-- (SECURITY DEFINER Functions umgehen RLS immer, unabhaengig vom Aufrufer).
 alter table public.scan_rate_limits enable row level security;
 
 -- Atomarer Check-and-Increment, damit parallele Requests sich nicht
@@ -37,6 +39,11 @@ as $$
 declare
   v_allowed boolean;
 begin
+  -- Alte Eintraege aufraeumen, damit die Tabelle nicht unbegrenzt waechst
+  -- (unabhaengig vom REVOKE unten -- Verteidigung in der Tiefe).
+  delete from public.scan_rate_limits
+  where window_start < now() - make_interval(mins => p_window_minutes * 2);
+
   insert into public.scan_rate_limits (client_key, window_start, request_count)
   values (p_client_key, now(), 1)
   on conflict (client_key) do update
@@ -59,3 +66,17 @@ $$;
 
 comment on function public.check_scan_rate_limit is
   'Gibt true zurueck, wenn client_key im aktuellen Zeitfenster noch unter dem Limit liegt, und zaehlt gleichzeitig hoch.';
+
+-- KRITISCH: Diese Function ist SECURITY DEFINER und wird von Supabase
+-- automatisch als PostgREST-RPC-Endpunkt exponiert (jede Function im
+-- public-Schema ist per Default so aufrufbar). Ohne dieses REVOKE koennte
+-- jeder Inhaber des (absichtlich oeffentlichen) Anon-Keys die Function
+-- DIREKT per HTTP aufrufen -- mit selbstgewaehlten Schwellenwerten und
+-- beliebigen client_key-Werten. Damit liesse sich sowohl das Rate-Limit
+-- fuer eine bestimmte echte Nutzerin boeswillig ausschoepfen (DoS gegen
+-- deren IP) als auch die Tabelle mit beliebig vielen Fantasie-Eintraegen
+-- fluten. Aufrufbar ist die Function deshalb ausschliesslich fuer den
+-- service_role, den nur die Edge Function selbst besitzt (Secret, nie im
+-- Client-Bundle oder Repo).
+revoke all on function public.check_scan_rate_limit(text, integer, integer) from public, anon, authenticated;
+grant execute on function public.check_scan_rate_limit(text, integer, integer) to service_role;
