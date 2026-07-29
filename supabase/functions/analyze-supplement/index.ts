@@ -15,6 +15,14 @@
  */
 
 import Anthropic from "npm:@anthropic-ai/sdk";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+// Rate-Limit: Der Anon-Key ist oeffentlich (App-Bundle, Repo) und laesst
+// sich ohne diese Sperre per curl beliebig oft aufrufen — jeder Aufruf
+// loest einen kostenpflichtigen Claude-API-Call aus. Siehe Migration
+// 20260729010000_scan_rate_limit.sql.
+const RATE_LIMIT_MAX_REQUESTS = 20;
+const RATE_LIMIT_WINDOW_MINUTES = 60;
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -154,6 +162,50 @@ Deno.serve(async (req) => {
   }
   if (req.method !== "POST") {
     return jsonResponse(405, { error: "Nur POST wird unterstuetzt." });
+  }
+
+  // Rate-Limit pruefen, BEVOR irgendetwas kostenpflichtiges passiert.
+  // SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY sind fuer jede Edge Function
+  // automatisch vorhanden — kein manuelles Secret noetig.
+  const clientKey =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("cf-connecting-ip") ||
+    "unknown";
+
+  try {
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    const { data: allowed, error: rateLimitError } = await supabaseAdmin.rpc(
+      "check_scan_rate_limit",
+      {
+        p_client_key: clientKey,
+        p_max_requests: RATE_LIMIT_MAX_REQUESTS,
+        p_window_minutes: RATE_LIMIT_WINDOW_MINUTES,
+      }
+    );
+
+    if (rateLimitError) {
+      // Fail closed: Ohne funktionierende Rate-Limit-Pruefung lieber
+      // ablehnen als ungeschuetzt kostenpflichtige Aufrufe zulassen.
+      console.error("rate limit check failed:", rateLimitError);
+      return jsonResponse(503, {
+        error: "Dienst vorübergehend nicht verfügbar. Bitte später erneut versuchen.",
+      });
+    }
+
+    if (allowed === false) {
+      return jsonResponse(429, {
+        error: "Zu viele Anfragen. Bitte in einer Stunde erneut versuchen.",
+      });
+    }
+  } catch (error) {
+    console.error("rate limit check error:", error);
+    return jsonResponse(503, {
+      error: "Dienst vorübergehend nicht verfügbar. Bitte später erneut versuchen.",
+    });
   }
 
   const apiKey = Deno.env.get("ANTHROPIC_API_KEY");
