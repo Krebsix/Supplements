@@ -141,7 +141,15 @@ Regeln:
 - Nicht lesbare oder fehlende Angaben sind null bzw. bleiben weg. Lieber null als geraten.
 - Unterscheide die chemische Form (z. B. Magnesiumbisglycinat vs. -citrat vs. -oxid), wenn sie auf dem Etikett steht.
 - Gib keine gesundheitlichen Empfehlungen ab. "warnings" enthaelt nur Hinweise, die auf dem Etikett stehen.
-- Antworte auf Deutsch.`;
+- Ist das Etikett auf Englisch oder einer anderen Sprache: Alle Freitextfelder
+  (intakeInstruction, warnings, uncertainties) uebersetzt du sinngemaess ins
+  Deutsche. productName und brand bleiben unveraendert wie aufgedruckt
+  (Eigennamen werden nicht uebersetzt). ingredients[].name gibst du auf
+  Deutsch an, wenn ein gebraeuchlicher deutscher Fachbegriff existiert
+  (z. B. "Iron" -> "Eisen", "Magnesium Citrate" -> "Magnesiumcitrat",
+  "Vitamin D3" bleibt "Vitamin D3"); existiert keine gebraeuchliche
+  deutsche Bezeichnung, uebernimm den Namen wie auf dem Etikett.
+- Antworte in jedem Fall auf Deutsch, unabhaengig von der Etikettensprache.`;
 
 type IncomingImage = {
   step?: string;

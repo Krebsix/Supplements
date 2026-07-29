@@ -102,6 +102,17 @@ function getRoutineInsight(progress) {
 
 export default function Dashboard() {
   const router = useRouter();
+  const [expandedNoteIds, setExpandedNoteIds] = React.useState(() => new Set());
+
+  function toggleNoteExpanded(id) {
+    setExpandedNoteIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
   const activeProfileId = useStore((state) => state.activeProfileId);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
@@ -315,6 +326,10 @@ export default function Dashboard() {
                 formatSupplementPurpose(routineSupplement, ''),
               ].filter(Boolean).join(' · ');
               const supplementNotes = routineSupplement.notes || supplement.notes;
+              const supplementTiming = (
+                routineSupplement.timingRaw || supplement.timingRaw || ''
+              ).trim();
+              const notesExpanded = expandedNoteIds.has(supplement.id);
 
               return (
                 <View key={supplement.id} style={styles.supplementCard}>
@@ -340,8 +355,25 @@ export default function Dashboard() {
                       </Text>
                     ) : null}
 
+                    {supplementTiming ? (
+                      <View style={styles.timingPill}>
+                        <Text style={styles.timingPillText}>🕐 {supplementTiming}</Text>
+                      </View>
+                    ) : null}
+
                     {supplementNotes ? (
-                      <Text style={styles.noteText}>{supplementNotes}</Text>
+                      <TouchableOpacity
+                        onPress={() => toggleNoteExpanded(supplement.id)}
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                      >
+                        {notesExpanded ? (
+                          <Text style={styles.noteText}>{supplementNotes}</Text>
+                        ) : null}
+                        <Text style={styles.noteToggle}>
+                          {notesExpanded ? 'Details ausblenden' : 'Details anzeigen'}
+                        </Text>
+                      </TouchableOpacity>
                     ) : null}
                   </View>
 
@@ -798,6 +830,27 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 12,
     lineHeight: 17,
+  },
+  timingPill: {
+    alignSelf: 'flex-start',
+    marginTop: 6,
+    borderRadius: 999,
+    backgroundColor: '#F0FDFA',
+    borderWidth: 1,
+    borderColor: '#99F6E4',
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+  },
+  timingPillText: {
+    color: '#0F766E',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  noteToggle: {
+    marginTop: 5,
+    color: '#0F766E',
+    fontSize: 11,
+    fontWeight: '800',
   },
   actionWrap: {
     minWidth: 116,
