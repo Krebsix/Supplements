@@ -16,7 +16,8 @@
  * gekennzeichnete Mock-Ergebnis zurueck (analysisMode: 'mock').
  */
 
-export const SCAN_ANALYZE_URL = '';
-// Beispiel: 'https://abcdefgh.supabase.co/functions/v1/analyze-supplement'
+export const SCAN_ANALYZE_URL =
+  'https://zeflyivnxbmkyiacogzu.supabase.co/functions/v1/analyze-supplement';
 
-export const SUPABASE_ANON_KEY = '';
+export const SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZmx5aXZueGJta3lpYWNvZ3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODM5NjcsImV4cCI6MjEwMDg1OTk2N30.1AAlXC9jtVb8NS0aE3QXCq6r6boreX6VkkFS-CcHU9M';
