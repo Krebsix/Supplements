@@ -134,22 +134,41 @@ const RESULT_SCHEMA = {
   },
 } as const;
 
-const SYSTEM_PROMPT = `Du extrahierst Produktdaten von Fotos eines Nahrungsergaenzungsmittels.
+const BASE_RULES = `Du extrahierst Produktdaten von Fotos eines Nahrungsergaenzungsmittels.
 
 Regeln:
 - Uebernimm ausschliesslich, was auf den Fotos lesbar ist. Erfinde nichts und ergaenze nichts aus Allgemeinwissen.
 - Nicht lesbare oder fehlende Angaben sind null bzw. bleiben weg. Lieber null als geraten.
 - Unterscheide die chemische Form (z. B. Magnesiumbisglycinat vs. -citrat vs. -oxid), wenn sie auf dem Etikett steht.
 - Gib keine gesundheitlichen Empfehlungen ab. "warnings" enthaelt nur Hinweise, die auf dem Etikett stehen.
-- Ist das Etikett auf Englisch oder einer anderen Sprache: Alle Freitextfelder
-  (intakeInstruction, warnings, uncertainties) uebersetzt du sinngemaess ins
-  Deutsche. productName und brand bleiben unveraendert wie aufgedruckt
-  (Eigennamen werden nicht uebersetzt). ingredients[].name gibst du auf
-  Deutsch an, wenn ein gebraeuchlicher deutscher Fachbegriff existiert
-  (z. B. "Iron" -> "Eisen", "Magnesium Citrate" -> "Magnesiumcitrat",
-  "Vitamin D3" bleibt "Vitamin D3"); existiert keine gebraeuchliche
-  deutsche Bezeichnung, uebernimm den Namen wie auf dem Etikett.
-- Antworte in jedem Fall auf Deutsch, unabhaengig von der Etikettensprache.`;
+- productName und brand bleiben unveraendert wie aufgedruckt (Eigennamen werden nicht uebersetzt).`;
+
+// Die Ausgabesprache folgt der App-Einstellung, nicht der Etikettensprache:
+// Wer die App auf Englisch bedient, soll ein englisches Etikett nicht
+// uebersetzt bekommen und ein deutsches schon.
+const LANGUAGE_RULES: Record<string, string> = {
+  de: `- Alle Freitextfelder (intakeInstruction, warnings, uncertainties) gibst du auf
+  Deutsch aus und uebersetzt sie bei Bedarf sinngemaess.
+- ingredients[].name gibst du auf Deutsch an, wenn ein gebraeuchlicher deutscher
+  Fachbegriff existiert (z. B. "Iron" -> "Eisen", "Magnesium Citrate" ->
+  "Magnesiumcitrat", "Vitamin D3" bleibt "Vitamin D3"); existiert keine
+  gebraeuchliche deutsche Bezeichnung, uebernimm den Namen wie auf dem Etikett.
+- Antworte in jedem Fall auf Deutsch, unabhaengig von der Etikettensprache.`,
+
+  en: `- Alle Freitextfelder (intakeInstruction, warnings, uncertainties) gibst du auf
+  ENGLISCH aus und uebersetzt sie bei Bedarf sinngemaess.
+- ingredients[].name gibst du auf Englisch an, wenn ein gebraeuchlicher englischer
+  Fachbegriff existiert (z. B. "Eisen" -> "Iron", "Magnesiumcitrat" -> "Magnesium
+  citrate", "Vitamin D3" bleibt "Vitamin D3"); existiert keine gebraeuchliche
+  englische Bezeichnung, uebernimm den Namen wie auf dem Etikett.
+- Formuliere beschreibend, niemals als Empfehlung: "is used for", nicht "take this for".
+- Antworte in jedem Fall auf Englisch, unabhaengig von der Etikettensprache.`,
+};
+
+function buildSystemPrompt(language: string): string {
+  const rules = LANGUAGE_RULES[language] ?? LANGUAGE_RULES.de;
+  return `${BASE_RULES}\n${rules}`;
+}
 
 type IncomingImage = {
   step?: string;
@@ -246,9 +265,15 @@ Deno.serve(async (req) => {
   }
 
   let images: IncomingImage[];
+  let language = "de";
   try {
     const body = await req.json();
     images = Array.isArray(body?.images) ? body.images : [];
+    // Unbekannte Sprachcodes fallen auf Deutsch zurueck, statt den Prompt
+    // mit einem beliebigen Wert aus dem Request zu fuettern.
+    if (typeof body?.language === "string" && body.language in LANGUAGE_RULES) {
+      language = body.language;
+    }
   } catch {
     return jsonResponse(400, { error: "Ungueltiger Request-Body." });
   }
@@ -309,7 +334,7 @@ Deno.serve(async (req) => {
     const response = await client.messages.create({
       model: Deno.env.get("ANALYZE_MODEL") ?? "claude-opus-5",
       max_tokens: 16000,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(language),
       output_config: {
         format: { type: "json_schema", schema: RESULT_SCHEMA },
       },

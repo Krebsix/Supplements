@@ -14,6 +14,7 @@
 
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
+import { getActiveLanguage, tr } from './i18n/runtime';
 import { SCAN_ANALYZE_URL, SUPABASE_ANON_KEY } from './scanConfig';
 
 // Kantenlaenge fuer den Upload: gross genug fuer lesbare Zutatentabellen,
@@ -59,7 +60,7 @@ async function prepareImage(stepId, capture) {
   );
 
   if (!resized?.base64) {
-    throw new Error(`Aufnahme "${stepId}" konnte nicht aufbereitet werden.`);
+    throw new Error(tr('analyzer.prepareFailed', { step: stepId }));
   }
 
   return {
@@ -76,14 +77,14 @@ async function prepareImage(stepId, capture) {
  */
 export async function analyzeCaptures(captures) {
   if (!isAnalyzerConfigured()) {
-    throw new Error('Die Scan-Analyse ist nicht konfiguriert (scanConfig.js).');
+    throw new Error(tr('analyzer.notConfigured'));
   }
 
   const entries = Object.entries(captures || {}).filter(
     ([, capture]) => Boolean(capture?.uri)
   );
   if (entries.length === 0) {
-    throw new Error('Keine Aufnahmen vorhanden.');
+    throw new Error(tr('analyzer.noCaptures'));
   }
 
   const images = [];
@@ -107,14 +108,16 @@ export async function analyzeCaptures(captures) {
             }
           : {}),
       },
-      body: JSON.stringify({ images }),
+      // Sprache mitschicken: die Vision-Auswertung formuliert ihre
+      // Freitextfelder in der Sprache, in der die App gerade laeuft.
+      body: JSON.stringify({ images, language: getActiveLanguage() }),
       signal: controller.signal,
     });
   } catch (error) {
     if (error?.name === 'AbortError') {
-      throw new Error('Die Analyse hat zu lange gedauert. Bitte erneut versuchen.');
+      throw new Error(tr('analyzer.timeout'));
     }
-    throw new Error('Die Analyse ist nicht erreichbar. Internetverbindung pruefen.');
+    throw new Error(tr('analyzer.unreachable'));
   } finally {
     clearTimeout(timeout);
   }
@@ -128,14 +131,14 @@ export async function analyzeCaptures(captures) {
       // Antwort war kein JSON — generische Meldung verwenden
     }
     throw new Error(
-      serverMessage || `Die Analyse ist fehlgeschlagen (Status ${response.status}).`
+      serverMessage || tr('analyzer.failedWithStatus', { status: response.status })
     );
   }
 
   const payload = await response.json();
   const result = payload?.result;
   if (!result || typeof result !== 'object') {
-    throw new Error('Die Analyse hat kein verwertbares Ergebnis geliefert.');
+    throw new Error(tr('analyzer.noResult'));
   }
 
   const ingredients = Array.isArray(result.ingredients) ? result.ingredients : [];
@@ -165,15 +168,13 @@ export async function analyzeCaptures(captures) {
       unit: cleanText(result.dosage?.unit),
     },
     timingSuggestion: intakeInstruction
-      ? `Herstellerangabe: ${intakeInstruction}`
+      ? tr('analyzer.manufacturerNote', { text: intakeInstruction })
       : '',
     warnings: [
       ...labelWarnings,
-      ...uncertainties.map((item) => `Unsicher erkannt: ${item}`),
+      ...uncertainties.map((item) => tr('analyzer.uncertain', { text: item })),
     ],
-    uncertaintyNote:
-      'KI-Auswertung der Etikettenfotos. Alle Angaben stammen vom Produktetikett ' +
-      'und muessen vor der Uebernahme kontrolliert werden. Keine gesundheitliche Beratung.',
+    uncertaintyNote: tr('analyzer.uncertaintyNote'),
     analysisMode: 'vision',
     analyzedAt: new Date().toISOString(),
   };
