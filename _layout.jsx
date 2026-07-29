@@ -1,7 +1,11 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 
+import { useTranslation } from './i18n';
+
 export default function Layout() {
+  const { t } = useTranslation();
+
   return (
     <Stack
       screenOptions={{
@@ -14,63 +18,70 @@ export default function Layout() {
           fontSize: 17,
           fontWeight: '800',
         },
-        headerBackTitle: 'Zurück',
+        headerBackTitle: t('common.back'),
       }}
     >
       <Stack.Screen
         name="index"
         options={{
-          title: 'Supplement OS',
+          title: t('nav.home'),
         }}
       />
 
       <Stack.Screen
         name="Dashboard"
         options={{
-          title: 'Tagesplan',
+          title: t('nav.dashboard'),
         }}
       />
 
       <Stack.Screen
         name="scanner"
         options={{
-          title: 'Scanner',
+          title: t('nav.scanner'),
         }}
       />
 
       <Stack.Screen
         name="results"
         options={{
-          title: 'Analyse',
+          title: t('nav.results'),
         }}
       />
 
       <Stack.Screen
         name="AddSupplement"
         options={{
-          title: 'Supplement erfassen',
+          title: t('nav.addSupplement'),
           presentation: 'modal',
+        }}
+      />
+
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: t('nav.profile'),
         }}
       />
 
       <Stack.Screen
         name="settings"
         options={{
-          title: 'Einstellungen',
+          title: t('nav.settings'),
         }}
       />
 
       <Stack.Screen
         name="history"
         options={{
-          title: 'Verlauf',
+          title: t('nav.history'),
         }}
       />
 
       <Stack.Screen
         name="search"
         options={{
-          title: 'Suche',
+          title: t('nav.search'),
         }}
       />
     </Stack>

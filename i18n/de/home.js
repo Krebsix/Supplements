@@ -34,6 +34,9 @@ export default {
   'home.nav.history.title': 'Verlauf',
   'home.nav.history.subtitle':
     'Dokumentierte Einnahmen, Routine-Aktivität und frühere Einträge nachvollziehen.',
+  'home.nav.profile.title': 'Persönliches Profil',
+  'home.nav.profile.subtitle':
+    'Medikamentengruppen hinterlegen und sehen, wo die Quellen dazu etwas zu deinem Bestand sagen.',
   'home.nav.settings.title': 'Einstellungen',
   'home.nav.settings.subtitle':
     'Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten.'

@@ -66,6 +66,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `DoseNormalizer.js` | Entscheidet, ob eine Menge die Verbindung oder das Element meint, und rechnet nur im ersten Fall herunter |
 | `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase, sammelt Lebensphasen-Hinweise |
 | `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
+| `ProfileCheck.js` | Verknuepft das persoenliche Profil (Medikamentengruppen) mit dem Bestand und zitiert die belegten Hinweise |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 
 ### Wirkstoff-Datenbank (`data/`)
@@ -77,6 +78,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `data/lifeStageAdvisories.js` | Was in einer bestimmten Lebensphase gilt (z. B. Retinol in der Schwangerschaft). Severity: `contraindicated`, `medical`, `attention`, `increased` |
 | `data/certifications.js` | Pruefsiegel mit Geltungsbereich. Das Feld `scope` sagt, was ein Siegel NICHT abdeckt — bewusst so |
 | `data/elementalFractions.js` | Massenanteil des Elements in einer Verbindung (500 mg Magnesiumcitrat = rund 81 mg Magnesium). Stoechiometrie mit Summenformel als Beleg |
+| `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
 
 Bewusst als versioniertes JS-Modul im Repo, nicht in einer Datenbank:
 Katalogwissen aendert sich selten, die App bleibt offline-faehig, und jede
@@ -98,6 +100,25 @@ weit zurueck. Alle 23 Branches sind auf GitHub.
 
 Vor dem Anlegen eines neuen Branches pruefen, welcher der aktuelle Kopf ist —
 nicht blind von `main` abzweigen.
+
+---
+
+## Sprachen
+
+Oberflaeche auf Deutsch und Englisch, umschaltbar im Hauptmenue und in den
+Einstellungen. Kataloge unter `i18n/de/` und `i18n/en/`, nach Bereich
+aufgeteilt, Schluessel flach (`dashboard.title`).
+
+- Komponenten nutzen `useTranslation()` aus `i18n/`.
+- Fachlogik-Module nutzen `tr()` aus `i18n/runtime` — dort gibt es keine Hooks.
+  `runtime.js` importiert bewusst NICHT den Store: `useStore` importiert
+  seinerseits `TimingEngine`, das waere ein Ringschluss. Der Store spiegelt
+  seinen Wert per `setActiveLanguage()` dorthin.
+- Deutsch ist die Pflegesprache. Fehlt ein englischer Schluessel, faellt die App
+  auf Deutsch zurueck statt auf eine leere Zeile.
+- **Die Fachtexte der Wirkstoff-Datenbank bleiben vorerst deutsch.** Eine
+  unsaubere englische Uebersetzung von "wird eingesetzt bei" klingt schnell
+  praeskriptiv und waere ein Compliance-Risiko, kein Schoenheitsfehler.
 
 ---
 
@@ -129,6 +150,16 @@ Loeschen der App bedeutet Datenverlust.
 - **Obergrenzen gelten fuer die Tagessumme, nicht pro Dose.** Wirkstoffmengen
   muessen ueber alle aktiven Produkte addiert werden (`StackAnalyzer.js`) —
   drei unauffaellige Praeparate koennen zusammen die Obergrenze reissen.
+- **Keine erfundene Medikamenten-Interaktionsdatenbank.** Wechselwirkungen
+  gehoeren in eine kuratierte oder lizenzierte Fachquelle; ein Sprachmodell ist
+  dafuer nicht zulaessig. `data/medicationClasses.js` enthaelt deshalb keine
+  eigenstaendigen Aussagen, sondern verweist mit woertlichem Zitat auf Saetze,
+  die in `data/substances.js` bzw. `data/lifeStageAdvisories.js` bereits mit
+  Quelle belegt sind. Ein Test prueft, dass jedes Zitat dort noch woertlich
+  steht — sonst behauptet die App etwas, das die Quelle nicht mehr hergibt.
+- **Ein Treffer ist keine Bewertung der Person.** Die App kennt weder Praeparat
+  noch Dosis noch Befund. Formulierung deshalb immer "dazu ist ein Hinweis
+  hinterlegt", nie "das ist fuer dich gefaehrlich".
 - Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`, `'vision'`
   fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer)
   und eine `captureSummary`, damit nachvollziehbar ist, woher ein Eintrag stammt.

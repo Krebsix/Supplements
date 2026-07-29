@@ -22,6 +22,27 @@ function normalizeOptionalText(value) {
   return String(value).trim();
 }
 
+/**
+ * Persoenliches Profil. Bewusst grobkoernig: Es werden Medikamenten-
+ * GRUPPEN erfasst, keine Praeparatenamen — die App vergleicht ohnehin nur
+ * gegen belegte Hinweise auf Gruppenebene (siehe data/medicationClasses.js),
+ * und je weniger Gesundheitsdaten auf dem Geraet liegen, desto besser.
+ */
+function normalizeProfile(profile = {}) {
+  const list = (value) =>
+    Array.isArray(value) ? value.filter((item) => typeof item === 'string' && item) : [];
+
+  return {
+    medicationClasses: list(profile?.medicationClasses),
+    conditions: list(profile?.conditions),
+    allergies: list(profile?.allergies),
+    dietaryPattern: typeof profile?.dietaryPattern === 'string' ? profile.dietaryPattern : '',
+    goals: list(profile?.goals),
+  };
+}
+
+export const EMPTY_PROFILE = normalizeProfile({});
+
 function normalizeDosage(dosage = {}) {
   return {
     amount: normalizeOptionalText(dosage?.amount),
@@ -151,6 +172,9 @@ function migratePersistedState(persistedState = {}) {
     activeProfileId: state.activeProfileId || 'adult',
     activeLifeStageId: state.activeLifeStageId || 'adult-woman',
     language: state.language || 'de',
+    // Bestandsdaten aus aelteren Versionen kennen kein Profil — normalize
+    // liefert dann ein leeres, aber vollstaendiges Objekt.
+    profile: normalizeProfile(state.profile),
     absorptionBlockedAt: state.absorptionBlockedAt || null,
     settings: state.settings || {},
   };
@@ -171,11 +195,28 @@ export const useStore = create(
       // Oberflaechensprache (siehe i18n/). Deutsch ist die Pflegesprache,
       // deshalb auch der Startwert.
       language: 'de',
+      // Persoenliches Profil (Medikamentengruppen, Erkrankungen, Ziele).
+      // Bleibt wie alles andere lokal auf dem Geraet.
+      profile: EMPTY_PROFILE,
       absorptionBlockedAt: null,
       settings: {},
 
       setActiveLifeStage: (lifeStageId) =>
         set({ activeLifeStageId: lifeStageId }),
+
+      updateProfile: (patch) =>
+        set((state) => ({ profile: normalizeProfile({ ...state.profile, ...patch }) })),
+
+      toggleProfileEntry: (field, value) =>
+        set((state) => {
+          const current = Array.isArray(state.profile?.[field]) ? state.profile[field] : [];
+          const next = current.includes(value)
+            ? current.filter((entry) => entry !== value)
+            : [...current, value];
+          return { profile: normalizeProfile({ ...state.profile, [field]: next }) };
+        }),
+
+      clearProfile: () => set({ profile: normalizeProfile({}) }),
 
       setLanguage: (language) => {
         // Fachlogik-Module lesen die Sprache aus i18n/runtime, weil sie
@@ -320,6 +361,7 @@ export const useStore = create(
         activeProfileId: state.activeProfileId,
         activeLifeStageId: state.activeLifeStageId,
         language: state.language,
+        profile: state.profile,
         absorptionBlockedAt: state.absorptionBlockedAt,
         settings: state.settings,
       }),

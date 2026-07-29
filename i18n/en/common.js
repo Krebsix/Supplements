@@ -4,6 +4,15 @@
  */
 
 export default {
+  'nav.home': 'Supplement OS',
+  'nav.dashboard': 'Daily plan',
+  'nav.scanner': 'Scanner',
+  'nav.results': 'Analysis',
+  'nav.addSupplement': 'Add supplement',
+  'nav.profile': 'Profile',
+  'nav.settings': 'Settings',
+  'nav.history': 'History',
+  'nav.search': 'Search',
   'common.back': 'Back',
   'common.backToHome': 'Back to start',
   'common.cancel': 'Cancel',

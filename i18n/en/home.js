@@ -34,6 +34,9 @@ export default {
   'home.nav.history.title': 'History',
   'home.nav.history.subtitle':
     'Review documented intakes, routine activity and earlier entries.',
+  'home.nav.profile.title': 'Personal profile',
+  'home.nav.profile.subtitle':
+    'Record medication groups and see where the sources say something about your products.',
   'home.nav.settings.title': 'Settings',
   'home.nav.settings.subtitle':
     'Manage the archive, local data, system status and future data sources.'
