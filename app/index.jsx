@@ -2,79 +2,84 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import LanguagePicker from '../components/LanguagePicker';
+import { useTranslation } from '../i18n';
+
 export default function Home() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.kicker}>Supplement OS</Text>
-      <Text style={styles.title}>Scannen. Prüfen. In Routine überführen.</Text>
-      <Text style={styles.subtitle}>
-        Dein strukturierter Workspace für Supplement-Daten, Tagesroutine, Verlauf und spätere Scanner-Qualität.
-      </Text>
+      <Text style={styles.kicker}>{t('home.kicker')}</Text>
+      <Text style={styles.title}>{t('home.title')}</Text>
+      <Text style={styles.subtitle}>{t('home.subtitle')}</Text>
+
+      {/* Sprachumschaltung im Hauptmenue, nicht nur in den Einstellungen:
+          Wer die App auf Englisch braucht, soll sie nicht erst auf Deutsch
+          durchsuchen muessen. */}
+      <LanguagePicker />
 
       <View style={styles.heroCard}>
-        <Text style={styles.heroLabel}>Klinischer Workflow</Text>
-        <Text style={styles.heroTitle}>Erfassen, validieren, dokumentieren.</Text>
-        <Text style={styles.heroText}>
-          Supplement OS priorisiert belastbare Einträge: erst klare Produktdaten, dann Routine-Logik, später echte Scanner-Intelligenz.
-        </Text>
+        <Text style={styles.heroLabel}>{t('home.hero.label')}</Text>
+        <Text style={styles.heroTitle}>{t('home.hero.title')}</Text>
+        <Text style={styles.heroText}>{t('home.hero.text')}</Text>
 
         <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/scanner')}>
-          <Text style={styles.primaryButtonText}>Produkt scannen</Text>
+          <Text style={styles.primaryButtonText}>{t('home.hero.scan')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push('/search')}>
-          <Text style={styles.secondaryButtonText}>Manuell erfassen</Text>
+          <Text style={styles.secondaryButtonText}>{t('home.hero.manual')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.trustCard}>
-        <Text style={styles.trustLabel}>Produktprinzip</Text>
+        <Text style={styles.trustLabel}>{t('home.trust.label')}</Text>
 
         <TrustItem
-          title="Datenqualität vor Automatisierung"
-          text="Scanner- und manuelle Einträge sollen nachvollziehbar bleiben, bevor sie Routine-Logik beeinflussen."
+          title={t('home.trust.quality.title')}
+          text={t('home.trust.quality.text')}
         />
 
         <TrustItem
-          title="Archiv statt Datenverlust"
-          text="Entfernte Supplements bleiben wiederherstellbar, damit Verlauf und Kontext erhalten bleiben."
+          title={t('home.trust.archive.title')}
+          text={t('home.trust.archive.text')}
         />
 
         <TrustItem
-          title="Allgemeine Hinweise"
-          text="Die App organisiert und dokumentiert. Sie ersetzt keine medizinische Beratung."
+          title={t('home.trust.advice.title')}
+          text={t('home.trust.advice.text')}
         />
       </View>
 
-      <Text style={styles.sectionTitle}>Workflow</Text>
+      <Text style={styles.sectionTitle}>{t('home.section.workflow')}</Text>
 
       <NavCard
         index="01"
-        title="Tagesplan"
-        subtitle="Heute geplante Einnahmen, dokumentierte Routinen, offene Einträge und organisatorische Prüfhinweise."
+        title={t('home.nav.today.title')}
+        subtitle={t('home.nav.today.subtitle')}
         onPress={() => router.push('/Dashboard')}
       />
 
       <NavCard
         index="02"
-        title="Neues Supplement"
-        subtitle="Manuellen Eintrag mit Dosierung, Timing und Zweck sauber in die aktive Routine aufnehmen."
+        title={t('home.nav.add.title')}
+        subtitle={t('home.nav.add.subtitle')}
         onPress={() => router.push('/AddSupplement')}
       />
 
       <NavCard
         index="03"
-        title="Verlauf"
-        subtitle="Dokumentierte Einnahmen, Routine-Aktivität und frühere Einträge nachvollziehen."
+        title={t('home.nav.history.title')}
+        subtitle={t('home.nav.history.subtitle')}
         onPress={() => router.push('/history')}
       />
 
       <NavCard
         index="04"
-        title="Einstellungen"
-        subtitle="Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten."
+        title={t('home.nav.settings.title')}
+        subtitle={t('home.nav.settings.subtitle')}
         onPress={() => router.push('/settings')}
       />
     </ScrollView>

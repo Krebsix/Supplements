@@ -149,6 +149,7 @@ function migratePersistedState(persistedState = {}) {
     pendingScanResult: state.pendingScanResult || null,
     activeProfileId: state.activeProfileId || 'adult',
     activeLifeStageId: state.activeLifeStageId || 'adult-woman',
+    language: state.language || 'de',
     absorptionBlockedAt: state.absorptionBlockedAt || null,
     settings: state.settings || {},
   };
@@ -166,11 +167,16 @@ export const useStore = create(
       activeProfileId: 'adult',
       // Lebensphase fuer den Referenzwert-Abgleich (siehe data/referenceValues.js)
       activeLifeStageId: 'adult-woman',
+      // Oberflaechensprache (siehe i18n/). Deutsch ist die Pflegesprache,
+      // deshalb auch der Startwert.
+      language: 'de',
       absorptionBlockedAt: null,
       settings: {},
 
       setActiveLifeStage: (lifeStageId) =>
         set({ activeLifeStageId: lifeStageId }),
+
+      setLanguage: (language) => set({ language }),
 
       addUserSupplement: (draft) => {
         const supplement = normalizeUserSupplement(draft);
@@ -306,6 +312,7 @@ export const useStore = create(
         pendingScanResult: state.pendingScanResult,
         activeProfileId: state.activeProfileId,
         activeLifeStageId: state.activeLifeStageId,
+        language: state.language,
         absorptionBlockedAt: state.absorptionBlockedAt,
         settings: state.settings,
       }),
