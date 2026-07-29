@@ -43,6 +43,12 @@ export default {
   'home.nav.outcome.title': 'Outcome tracking',
   'home.nav.outcome.subtitle':
     'Record why you take something — and see over time what changes and what argues against attributing it to the product.',
+  'home.nav.lab.title': 'Lab values',
+  'home.nav.lab.subtitle':
+    'Enter results and follow them over time. The app collects them, it does not interpret them.',
+  'home.nav.export.title': 'Create a report',
+  'home.nav.export.subtitle':
+    'An overview for your doctor or pharmacist. You decide what goes in.',
   'home.nav.settings.title': 'Settings',
   'home.nav.settings.subtitle':
     'Manage the archive, local data, system status and future data sources.'

@@ -12,6 +12,7 @@ import components from './components';
 import dashboard from './dashboard';
 import history from './history';
 import home from './home';
+import lab from './lab';
 import logic from './logic';
 import reference from './reference';
 import outcome from './outcome';
@@ -28,6 +29,7 @@ export default {
   ...analysis,
   ...components,
   ...logic,
+  ...lab,
   ...reference,
   ...home,
   ...dashboard,

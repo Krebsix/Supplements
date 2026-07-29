@@ -79,6 +79,20 @@ export default function Layout() {
       />
 
       <Stack.Screen
+        name="lab"
+        options={{
+          title: t('nav.lab'),
+        }}
+      />
+
+      <Stack.Screen
+        name="export"
+        options={{
+          title: t('nav.export'),
+        }}
+      />
+
+      <Stack.Screen
         name="settings"
         options={{
           title: t('nav.settings'),

@@ -68,6 +68,8 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
 | `ProfileCheck.js` | Verknuepft das persoenliche Profil (Medikamentengruppen) mit dem Bestand und zitiert die belegten Hinweise |
 | `OutcomeTracker.js` | Wirkungskontrolle: Ausgangswert, Verlauf, Einnahmetreue — und die Stoerfaktoren, die gegen eine Zuordnung sprechen |
+| `LabValues.js` | Laborwerte erfassen und im Verlauf zeigen. Bewertet NICHT — Referenzbereiche kommen aus dem Befund |
+| `ExportBuilder.js` | Bericht fuer Praxis/Apotheke als Markdown. Abschnitte waehlbar (Datensparsamkeit) |
 | `CostAnalyzer.js` | Kosten je Produkt aus TATSAECHLICHEM Verbrauch, plus die Verbindung zur Wirkungskontrolle (was lief nie ueberprueft mit) |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 
@@ -81,6 +83,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `data/certifications.js` | Pruefsiegel mit Geltungsbereich. Das Feld `scope` sagt, was ein Siegel NICHT abdeckt — bewusst so |
 | `data/elementalFractions.js` | Massenanteil des Elements in einer Verbindung (500 mg Magnesiumcitrat = rund 81 mg Magnesium). Stoechiometrie mit Summenformel als Beleg |
 | `data/outcomeMetrics.js` | Zielgroessen der Wirkungskontrolle (5er-Skala). `direction` sagt, wo "besser" liegt — bei Beschwerden unten |
+| `data/labMarkers.js` | Gaengige Laborwerte als Eingabehilfe. Bewusst OHNE Referenzbereiche — die haengen von Labor und Methode ab |
 | `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
 
 Bewusst als versioniertes JS-Modul im Repo, nicht in einer Datenbank:
@@ -170,6 +173,10 @@ Loeschen der App bedeutet Datenverlust.
   zeigt, welche Ausgaben ohne Wirkungskontrolle mitlaufen. Das ist eine
   Beobachtungsluecke, keine Aussage ueber Wirksamkeit — die Formulierung muss
   das offenhalten.
+- **Laborwerte werden nicht interpretiert.** Kein "zu niedrig", kein "Mangel",
+  keine Ampelfarbe. Referenzbereiche bringt die App nicht mit: Sie unterscheiden
+  sich je Labor und Messmethode, ein hinterlegter Wert waere im Einzelfall
+  falsch. Steht im Befund einer, wird er als Angabe des Labors uebernommen.
 - **Ein Treffer ist keine Bewertung der Person.** Die App kennt weder Praeparat
   noch Dosis noch Befund. Formulierung deshalb immer "dazu ist ein Hinweis
   hinterlegt", nie "das ist fuer dich gefaehrlich".

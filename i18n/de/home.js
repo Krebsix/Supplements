@@ -43,6 +43,12 @@ export default {
   'home.nav.outcome.title': 'Wirkungskontrolle',
   'home.nav.outcome.subtitle':
     'Festhalten, warum du etwas nimmst — und über die Zeit sehen, was sich verändert und was dagegen spricht, es der Einnahme zuzuschreiben.',
+  'home.nav.lab.title': 'Laborwerte',
+  'home.nav.lab.subtitle':
+    'Befunde eintragen und im Verlauf verfolgen. Die App ordnet sie nicht ein, sie stellt sie zusammen.',
+  'home.nav.export.title': 'Bericht erstellen',
+  'home.nav.export.subtitle':
+    'Eine Übersicht für Praxis oder Apotheke. Du entscheidest, was hineinkommt.',
   'home.nav.settings.title': 'Einstellungen',
   'home.nav.settings.subtitle':
     'Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten.'

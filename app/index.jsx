@@ -74,6 +74,20 @@ export default function Home() {
 
       <NavCard
         index="05"
+        title={t('home.nav.lab.title')}
+        subtitle={t('home.nav.lab.subtitle')}
+        onPress={() => router.push('/lab')}
+      />
+
+      <NavCard
+        index="06"
+        title={t('home.nav.export.title')}
+        subtitle={t('home.nav.export.subtitle')}
+        onPress={() => router.push('/export')}
+      />
+
+      <NavCard
+        index="07"
         title={t('home.nav.settings.title')}
         subtitle={t('home.nav.settings.subtitle')}
         onPress={() => router.push('/settings')}

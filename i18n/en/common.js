@@ -17,6 +17,8 @@ export default {
   'nav.profile': 'Profile',
   'nav.analysis': 'Analysis',
   'nav.outcome': 'Outcome',
+  'nav.lab': 'Lab values',
+  'nav.export': 'Report',
   'nav.settings': 'Settings',
   'nav.history': 'History',
   'nav.search': 'Search',

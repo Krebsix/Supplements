@@ -9,6 +9,7 @@ import {
   createTrial,
   TRIAL_STATUS,
 } from './OutcomeTracker';
+import { createLabValue } from './LabValues';
 import { buildDailySchedule } from './TimingEngine';
 import { setActiveLanguage } from './i18n/runtime';
 import inventoryData from './inventory.json';
@@ -182,6 +183,7 @@ function migratePersistedState(persistedState = {}) {
     // liefert dann ein leeres, aber vollstaendiges Objekt.
     profile: normalizeProfile(state.profile),
     trials: Array.isArray(state.trials) ? state.trials : [],
+    labValues: Array.isArray(state.labValues) ? state.labValues : [],
     trialRatings: Array.isArray(state.trialRatings) ? state.trialRatings : [],
     absorptionBlockedAt: state.absorptionBlockedAt || null,
     settings: state.settings || {},
@@ -210,6 +212,9 @@ export const useStore = create(
       // der einzelnen Bewertungen (siehe OutcomeTracker.js).
       trials: [],
       trialRatings: [],
+      // Laborwerte: bleiben wie alles andere lokal. Die App bewertet sie
+      // nicht, sie dokumentiert und stellt den Verlauf dar.
+      labValues: [],
       absorptionBlockedAt: null,
       settings: {},
 
@@ -268,6 +273,16 @@ export const useStore = create(
 
       getRunningTrials: () =>
         get().trials.filter((trial) => trial.status === TRIAL_STATUS.RUNNING),
+
+      addLabValue: (input) => {
+        const entry = createLabValue(input);
+        if (!entry) return null;
+        set((state) => ({ labValues: [entry, ...state.labValues] }));
+        return entry;
+      },
+
+      deleteLabValue: (id) =>
+        set((state) => ({ labValues: state.labValues.filter((entry) => entry.id !== id) })),
 
       getTrialRatings: (trialId) =>
         get().trialRatings.filter((rating) => rating.trialId === trialId),
@@ -418,6 +433,7 @@ export const useStore = create(
         profile: state.profile,
         trials: state.trials,
         trialRatings: state.trialRatings,
+        labValues: state.labValues,
         absorptionBlockedAt: state.absorptionBlockedAt,
         settings: state.settings,
       }),
