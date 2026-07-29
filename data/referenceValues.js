@@ -519,6 +519,17 @@ export const referenceValues = {
     upperLimitNote:
       'EFSA-Bewertung (2018): Ab 800 mg EGCG/Tag aus Nahrungsergänzungsmitteln ist mit ersten Anzeichen einer Leberschädigung zu rechnen. Aufgegossener Grüntee (kein Extrakt) gilt separat als unbedenklich. Für Schwangerschaft, Stillzeit, Kinder und Jugendliche liegen keine ausreichenden Sicherheitsdaten vor, deshalb hier ohne Eintrag.',
   },
+  caffeine: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 400 },
+      'adult-man': { reference: null, upperLimit: 400 },
+      pregnancy: { reference: null, upperLimit: 200 },
+      breastfeeding: { reference: null, upperLimit: 200 },
+    },
+    upperLimitNote:
+      'EFSA-Bewertung (2015): 400 mg/Tag aus allen Quellen gelten für die übrige erwachsene Bevölkerung als unbedenklich, eine Einzeldosis bis 200 mg ebenso. Für Schwangere und Stillende liegt die unbedenkliche Gesamt-Tagesmenge niedriger bei 200 mg. Für Kinder und Jugendliche nennt EFSA einen körpergewichtsbezogenen Wert von 3 mg/kg Körpergewicht/Tag, der sich nicht sinnvoll in einen festen mg-Wert übersetzen lässt — deshalb hier ohne Eintrag. Für Menopause/Senior nennt EFSA keinen gesonderten Wert.',
+  },
 };
 
 export function getLifeStage(id) {

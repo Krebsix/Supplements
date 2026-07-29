@@ -85,6 +85,7 @@ const INTENTIONAL_COVERAGE_GAPS = {
   pqq: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
   spermidine: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
   'green-tea-extract-egcg': ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
+  caffeine: ['child-4-10', 'teen-11-17', 'menopause', 'senior'],
 };
 
 for (const [sid, entry] of Object.entries(referenceValues)) {
@@ -153,7 +154,7 @@ check('Keine Herstellernamen in der Siegel-DB',
   !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
 
 console.log('\n— Erweiterung Juli 2026: neue Substanzen —');
-check('Substanz-Datenbank hat 88 Einträge', substances.length === 88, substances.length);
+check('Substanz-Datenbank hat 108 Einträge', substances.length === 108, substances.length);
 
 const biotinMatch = matchIngredient({ name: 'Biotin', amount: '50', unit: 'µg' });
 check('Biotin erkannt', biotinMatch.substanceId === 'biotin', biotinMatch.substanceId);
@@ -256,6 +257,57 @@ check('Bor 6mg Kind → above_limit (UL 5, niedriger als Erwachsene)',
 const enzymeMatch = matchIngredient({ name: 'Protease' });
 check('"Protease" → digestive-enzymes, kein Fehltreffer',
   enzymeMatch.substanceId === 'digestive-enzymes', enzymeMatch.substanceId);
+
+console.log('\n— Erweiterung Juli 2026, dritte Runde: Marktklassiker + kontroverse Stoffe —');
+
+// Koffein: einzige Substanz dieser Runde mit vollstaendigem EFSA-Referenzwert
+const caffeineHigh = matchIngredient({ name: 'Koffein', amount: '500', unit: 'mg' });
+check('Koffein 500mg → above_limit (über EFSA-Grenze 400mg)',
+  checkAgainstReference(caffeineHigh, 'adult-woman').status === 'above_limit');
+const caffeinePregnancyLimit = matchIngredient({ name: 'Koffein', amount: '250', unit: 'mg' });
+check('Koffein 250mg in Schwangerschaft → above_limit (niedrigere Grenze 200mg)',
+  checkAgainstReference(caffeinePregnancyLimit, 'pregnancy').status === 'above_limit');
+const caffeineMatch = matchIngredient({ name: 'Coffeinum' });
+check('Koffein-Synonym "Coffeinum" erkannt', caffeineMatch.substanceId === 'caffeine');
+
+// Kontroverse/risikoreiche Substanzen: Advisories muessen unabhaengig von der
+// Lebensphase greifen (severity 'all'), da es sich um generelle Sicherheits-
+// bzw. Regulierungsfragen handelt, nicht um Lebensphasen-Besonderheiten.
+const silverProfile = buildSubstanceProfile(matchIngredient({ name: 'Kolloidales Silber' }), 'adult-woman');
+check('Kolloidales Silber → contraindicated-Hinweis (Argyrie-Risiko)',
+  silverProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+const amygdalinProfile = buildSubstanceProfile(matchIngredient({ name: 'Amygdalin' }), 'child-4-10');
+check('Amygdalin bei Kind → contraindicated (Cyanidrisiko + Arzneimittelstatus)',
+  amygdalinProfile.advisories.filter(a => a.severity === 'contraindicated').length >= 2);
+
+const dheaProfile = buildSubstanceProfile(matchIngredient({ name: 'DHEA' }), 'adult-woman');
+check('DHEA → contraindicated (in Deutschland kein zulaessiges NEM)',
+  dheaProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+const garciniaProfile = buildSubstanceProfile(matchIngredient({ name: 'Garcinia Cambogia' }), 'pregnancy');
+check('Garcinia Cambogia in Schwangerschaft → contraindicated (ANSES)',
+  garciniaProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+// Bienenprodukte: Allergie-Warnungen muessen vorhanden sein
+const royalJellyProfile = buildSubstanceProfile(matchIngredient({ name: 'Gelée Royale' }), 'adult-man');
+check('Gelée Royale → contraindicated (Anaphylaxie-Risiko bei Bienenallergie)',
+  royalJellyProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+// Grapefruitkernextrakt: Kontamination/CYP3A4 muss im cautionNote stehen
+const gseMatch = matchIngredient({ name: 'Grapefruitkernextrakt' });
+check('Grapefruitkernextrakt: cautionNote nennt Konservierungsstoff-Kontamination',
+  /Benzethoniumchlorid/.test(gseMatch.substance?.cautionNote ?? ''));
+
+// Saccharomyces boulardii: Fungaemie-Risiko dokumentiert
+const boulardiiProfile = buildSubstanceProfile(matchIngredient({ name: 'Saccharomyces boulardii' }), 'senior');
+check('Saccharomyces boulardii → contraindicated (Fungämie-Risiko bei Katheter/Immunsuppression)',
+  boulardiiProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+// Kein Referenzwert erfunden, wo keiner existiert (MCT-Oel, L-Citrullin, D-Mannose)
+check('MCT-Öl: kein Referenzwert erfunden', !referenceValues['mct-oil']);
+check('L-Citrullin: kein Referenzwert erfunden', !referenceValues['l-citrulline']);
+check('D-Mannose: kein Referenzwert erfunden', !referenceValues['d-mannose']);
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

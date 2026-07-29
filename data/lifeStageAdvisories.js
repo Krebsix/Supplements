@@ -568,6 +568,166 @@ export const advisories = {
       text: 'Höhere Dosen können die Blutungsneigung erhöhen — relevant bei Gerinnungshemmern und vor Operationen.',
     },
   ],
+  caffeine: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'EFSA nennt für diese Gruppe eine niedrigere unbedenkliche Gesamt-Tagesaufnahme (200 mg) als für die übrige erwachsene Bevölkerung.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Hochkonzentrierte/reine Koffeinpulver-Produkte bergen laut BfR ein hohes Risiko versehentlicher Überdosierung bis hin zu Todesfällen, da haushaltsübliche Messmittel die geringe unbedenkliche Einzelmenge (0,2 g) nicht präzise erfassen können.',
+    },
+  ],
+  guarana: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Wirkung beruht auf dem enthaltenen Koffein — für Schwangere und Stillende gilt daher dieselbe niedrigere unbedenkliche Gesamt-Tagesaufnahme wie bei isoliertem Koffein.',
+    },
+  ],
+  'cranberry-extract': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Sicherheit während Schwangerschaft/Stillzeit laut EMA nicht belegt; Anwendung wird nicht empfohlen.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Erhöhter Oxalatgehalt kann bei Nierensteinen in der Vorgeschichte das Risiko erneuter Steinbildung erhöhen.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'EMA nennt die gleichzeitige Einnahme von Warfarin oder Tacrolimus als Kontraindikation wegen dokumentierter Wechselwirkungen.',
+    },
+  ],
+  'pumpkin-seed-extract': [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Anwendung bei Kindern/Jugendlichen unter 18 laut EMA nicht empfohlen, da Harnwegsbeschwerden in dieser Gruppe ärztlicher Abklärung bedürfen.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Für Extrakte laut EMA nicht ausreichend untersucht; reine Lebensmittelmengen (Samen/Öl) gelten als unbedenklich.',
+    },
+  ],
+  'grapefruit-seed-extract': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei Einnahme CYP3A4-abhängiger Medikamente (z. B. Immunsuppressiva, bestimmte Statine/Calciumkanalblocker) vor Anwendung ärztliche Rücksprache wegen möglicher Wechselwirkung.',
+    },
+  ],
+  'colloidal-silver': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Dauerhafte oder hochdosierte orale Einnahme ohne medizinische Indikation, da die kumulative Silberaufnahme (~1 g+) zu irreversibler Argyrie (Hautverfärbung) und möglicher Organablagerung führen kann. Wirksamkeit gegen innere Erkrankungen ist wissenschaftlich nicht belegt.',
+    },
+  ],
+  'amygdalin-b17': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Als „bedenkliches Arzneimittel" eingestuft (BfArM) und darf in Deutschland nicht in Verkehr gebracht werden; bereits geringe Mengen bergen ein Cyanidvergiftungsrisiko mit dokumentierten Todesfällen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Laut Verbraucherzentrale kann bereits ein einzelner Kern gefährlich sein — vollständiger Verzicht wird empfohlen.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Kombination mit hochdosiertem Vitamin C erhöht die Toxizität nachweislich.',
+    },
+  ],
+  dhea: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'In Deutschland/EU nicht als Nahrungsergänzungsmittel verkehrsfähig; ab 10 mg/Tag als Arzneimittel eingestuft (Expertenkommission BVL, 02/2025).',
+    },
+    {
+      lifeStages: ['menopause'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bereits ab 25 mg/Tag laut BfR messbare Hormonveränderungen möglich.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei hormonabhängigen Tumoren (Brust, Prostata) in der Vorgeschichte unklares Risiko durch Beeinflussung des Sexualhormonhaushalts.',
+    },
+  ],
+  'garcinia-cambogia-hca': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'EFSA-Sicherheitsbewertung (Entwurf 2026) kommt zum Schluss, dass keine sichere Aufnahmemenge festgelegt werden kann; Fälle akuter Leberschädigung sind dokumentiert.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding', 'child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die französische Behörde ANSES rät bei Schwangerschaft/Stillzeit sowie bei Kindern/Jugendlichen von der Anwendung ab, ebenso bei psychiatrischen, kardiometabolischen Erkrankungen oder Pankreatitis/Hepatitis in der Vorgeschichte.',
+    },
+  ],
+  propolis: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei Pollenallergie oder Allergie gegen Bienenprodukte/-stiche sind laut BfR und dermatologischer Fachliteratur allergische Reaktionen bis hin zu schweren Verläufen möglich.',
+    },
+  ],
+  'royal-jelly': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Bei Asthma, Atopie oder bekannter Allergie gegen Bienenprodukte/-stiche sind schwere bis lebensbedrohliche allergische Reaktionen dokumentiert, einschließlich Todesfällen (australische Meldedaten).',
+    },
+  ],
+  'flaxseed-oil': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Sicherheitsdaten zu Leinöl in Schwangerschaft/Stillzeit sind laut NCCIH begrenzt.',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Theoretische Wechselwirkung mit Antikoagulantien/Thrombozytenaggregationshemmern laut NCCIH.',
+    },
+  ],
+  'evening-primrose-oil': [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Widersprüchliche Studienlage zur Wirkung auf Wehen am Schwangerschaftsende; Sicherheit nicht abschließend belegt.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Sicherheit bei Kindern laut NCCIH nicht ausreichend untersucht.',
+    },
+  ],
+  'grape-seed-extract': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Sicherheit in Schwangerschaft/Stillzeit ist laut NCCIH nicht ausreichend belegt.',
+    },
+  ],
+  'saccharomyces-boulardii': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Bei liegendem zentralvenösem Katheter und/oder schwerer Immunsuppression sind dokumentierte Fungämie-Fälle mit teils schwerem Verlauf beschrieben.',
+    },
+  ],
 };
 
 /**
