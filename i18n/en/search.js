@@ -9,7 +9,7 @@ export default {
   'search.kicker': 'Substance database',
   'search.title': "Look it up. Don't guess.",
   'search.subtitle':
-    'Search for a substance or an area of use — for example "cramps", "sleep", or "immune system".',
+    'Search for a substance or an area of use, for example "cramps", "sleep", or "immune system".',
   'search.placeholder': 'e.g. magnesium or cramps',
   'search.frequentLabel': 'Frequently searched',
   'search.infoTitle': '{count} substances documented',

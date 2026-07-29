@@ -15,6 +15,7 @@ import { SLOTS, SLOT_ORDER } from '../TimingEngine';
 import useStore from '../useStore';
 import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
 import { useTranslation } from '../i18n';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 export default function AddSupplement() {
   const { t } = useTranslation();
@@ -394,8 +395,8 @@ export default function AddSupplement() {
         <Switch
           value={childSafe}
           onValueChange={setChildSafe}
-          trackColor={{ false: '#cbd5e1', true: '#0f766e' }}
-          thumbColor={childSafe ? '#ffffff' : '#f8fafc'}
+          trackColor={{ false: colors.rule, true: colors.accent }}
+          thumbColor={childSafe ? colors.surface : colors.canvas}
         />
       </View>
 
@@ -422,7 +423,7 @@ function FormField({ label, helper, multiline = false, ...props }) {
       <TextInput
         {...props}
         multiline={multiline}
-        placeholderTextColor="#71717a"
+        placeholderTextColor={colors.inkFaint}
         style={[styles.input, multiline ? styles.inputMultiline : null]}
       />
       {helper ? <Text style={styles.inputHelper}>{helper}</Text> : null}
@@ -431,21 +432,11 @@ function FormField({ label, helper, multiline = false, ...props }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#f8fafc',
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 22,
-    paddingBottom: 44,
-  },
+  screen: surfaces.screen,
+  content: surfaces.content,
   heroCard: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 24,
-    padding: 18,
+    ...surfaces.card,
+    marginBottom: 0,
   },
   heroHeader: {
     flexDirection: 'row',
@@ -453,88 +444,69 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   kicker: {
-    color: '#0f766e',
-    fontSize: 12,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+    ...type.eyebrow,
   },
   modePill: {
-    backgroundColor: '#ecfdf5',
-    borderColor: '#99f6e4',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm + 1,
+    paddingVertical: space.xs + 1,
   },
   modePillText: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 11,
     fontWeight: '900',
   },
   trustCard: {
-    marginTop: 14,
-    backgroundColor: '#f0fdfa',
-    borderColor: '#99f6e4',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 15,
+    marginTop: space.md + 2,
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.lg,
+    padding: space.lg - 3,
   },
   trustTitle: {
-    color: '#0f172a',
+    ...type.bodyStrong,
     fontSize: 14,
-    fontWeight: '900',
   },
   trustText: {
-    marginTop: 5,
-    color: '#475569',
+    marginTop: space.xs + 1,
+    color: colors.accentInk,
     fontSize: 13,
     lineHeight: 19,
   },
   title: {
-    marginTop: 12,
-    color: '#0f172a',
+    marginTop: space.md,
+    ...type.display,
     fontSize: 28,
     lineHeight: 34,
-    fontWeight: '800',
   },
   subtitle: {
-    marginTop: 10,
-    color: '#475569',
+    marginTop: space.sm + 2,
+    ...type.body,
     fontSize: 15,
     lineHeight: 23,
   },
   helperText: {
-    marginTop: 4,
-    marginBottom: 8,
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
+    marginTop: space.xs,
+    marginBottom: space.sm,
+    ...type.small,
   },
   field: {
-    marginTop: 16,
+    marginTop: space.lg,
   },
   label: {
-    marginBottom: 8,
-    color: '#0f172a',
+    marginBottom: space.sm,
+    color: colors.ink,
     fontSize: 14,
     fontWeight: '800',
   },
   input: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    backgroundColor: '#ffffff',
-    color: '#0f172a',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
+    ...surfaces.input,
+    paddingVertical: space.md,
     fontSize: 15,
   },
   inputHelper: {
-    marginTop: 6,
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
+    marginTop: space.xs + 2,
+    ...type.small,
   },
   inputMultiline: {
     minHeight: 110,
@@ -548,111 +520,95 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rowSpacer: {
-    width: 12,
+    width: space.md,
   },
   section: {
-    marginTop: 20,
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 16,
+    marginTop: space.xl - 2,
+    ...surfaces.card,
+    marginBottom: 0,
   },
   sectionTitle: {
-    color: '#0f172a',
+    ...type.heading,
     fontSize: 16,
-    fontWeight: '800',
   },
   sectionSubtitle: {
-    marginTop: 6,
-    color: '#64748b',
+    marginTop: space.sm - 2,
+    ...type.body,
     fontSize: 13,
-    lineHeight: 19,
   },
   slotWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 12,
-    gap: 8,
+    marginTop: space.md,
+    gap: space.sm,
   },
   slotChip: {
-    borderRadius: 999,
+    borderRadius: radius.md,
     borderWidth: 1,
-    paddingHorizontal: 13,
-    paddingVertical: 9,
+    paddingHorizontal: space.sm + 5,
+    paddingVertical: space.sm + 1,
   },
   slotChipIdle: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#cbd5e1',
+    backgroundColor: colors.surfaceSunken,
+    borderColor: colors.rule,
   },
   slotChipSelected: {
-    backgroundColor: '#0f766e',
-    borderColor: '#0f766e',
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   slotChipText: {
-    color: '#334155',
+    color: colors.inkMuted,
     fontSize: 13,
     fontWeight: '800',
   },
   slotChipTextSelected: {
-    color: '#ffffff',
+    color: colors.surface,
   },
   selectedSlotSummary: {
-    marginTop: 12,
-    backgroundColor: '#f8fafc',
-    borderColor: '#cbd5e1',
+    marginTop: space.md,
+    backgroundColor: colors.surfaceSunken,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: radius.md,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm + 2,
   },
   selectedSlotSummaryText: {
-    color: '#334155',
+    color: colors.inkMuted,
     fontSize: 13,
     fontWeight: '800',
   },
   sectionHint: {
-    marginTop: 12,
-    color: '#64748b',
+    marginTop: space.md,
+    ...type.body,
     fontSize: 13,
-    lineHeight: 19,
   },
   switchCard: {
-    marginTop: 18,
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 16,
+    marginTop: space.lg + 2,
+    ...surfaces.card,
+    marginBottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   switchTextWrap: {
     flex: 1,
-    paddingRight: 14,
+    paddingRight: space.md + 2,
   },
   switchTitle: {
-    color: '#0f172a',
+    ...type.bodyStrong,
     fontSize: 15,
-    fontWeight: '800',
   },
   switchSubtitle: {
-    marginTop: 4,
-    color: '#64748b',
+    marginTop: space.xs,
+    ...type.body,
     fontSize: 13,
-    lineHeight: 19,
   },
   primaryButton: {
-    marginTop: 22,
-    backgroundColor: '#0f766e',
-    borderRadius: 999,
-    paddingVertical: 15,
-    alignItems: 'center',
+    ...surfaces.buttonPrimary,
+    marginTop: space.xl,
   },
   primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '800',
+    ...surfaces.buttonPrimaryText,
   },
 });

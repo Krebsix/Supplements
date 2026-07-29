@@ -128,6 +128,31 @@ aufgeteilt, Schluessel flach (`dashboard.title`).
 
 ---
 
+## Design
+
+Tokens in `theme.js`. **Keine Hex-Werte in Screens oder Komponenten** — das
+ist eine Projektregel und wird eingehalten (Stand: null Treffer).
+
+Die Palette ist bewusst nicht die Tailwind-Vorgabe: Vorher lief alles auf
+slate-900/slate-500/teal-700, also genau den Werten, die praktisch jedes
+schnell gebaute Projekt verwendet. Die Richtung heisst jetzt "Papier und
+Tinte" — warmes Off-White statt blaustichigem Grau, tiefes Petrol
+(`colors.accent`) statt Teal, gedeckte Erdtoene fuer Warnungen statt
+Signalampel.
+
+- Ueberschriften laufen auf einer **Serifenschrift** (`type.display`,
+  `type.heading`, `type.subheading`, `type.numeral`). Systemschriften,
+  kein Font-Download. Das ist der sichtbarste Unterschied zum Einheitslook.
+- Fliesstext bleibt auf der Systemschrift, weil sie klein besser liest.
+- Keine vollrunden Pillen mehr (`borderRadius: 999`), nur moderate Radien.
+- Statusfarben ueber `toneFor(level)`. Eine Grenzwertueberschreitung ist ein
+  Hinweis, kein Alarm — deshalb gedeckt.
+- **Keine Gedankenstriche in Nutzertexten.** Doppelpunkt, Komma oder Punkt
+  statt "—". Der Gedankenstrich ist ein verlaessliches Erkennungsmerkmal
+  maschinell erzeugter Texte; in Kommentaren im Code ist er unproblematisch.
+
+---
+
 ## Datenhaltung
 
 Alles lokal auf dem Geraet: **zustand + AsyncStorage**, kein Server, keine Datenbank.

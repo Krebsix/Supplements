@@ -7,7 +7,7 @@ export default {
   'search.kicker': 'Wirkstoff-Datenbank',
   'search.title': 'Nachschlagen statt raten.',
   'search.subtitle':
-    'Suche nach einem Wirkstoff oder nach einem Anwendungsgebiet — etwa „Krämpfe“, „Schlaf“ oder „Immunsystem“.',
+    'Suche nach einem Wirkstoff oder nach einem Anwendungsgebiet, etwa „Krämpfe“, „Schlaf“ oder „Immunsystem“.',
   'search.placeholder': 'z. B. Magnesium oder Krämpfe',
   'search.frequentLabel': 'Häufig gesucht',
   'search.infoTitle': '{count} Wirkstoffe hinterlegt',

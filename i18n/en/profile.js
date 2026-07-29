@@ -12,7 +12,7 @@ export default {
   'profile.kicker': 'Personal profile',
   'profile.title': 'What additionally applies in your case',
   'profile.subtitle':
-    'The app compares your products against the documented sources. It does not assess your situation — it shows where a source says something about a medication group.',
+    'The app compares your products against the documented sources. It does not assess your situation, it shows where a source says something about a medication group.',
 
   'profile.privacy.title': 'Stays on your device',
   'profile.privacy.text':
@@ -20,7 +20,7 @@ export default {
 
   'profile.medications.title': 'Medication',
   'profile.medications.hint':
-    'Select the groups you take something from. Product names are not needed — the documented notes refer to groups anyway.',
+    'Select the groups you take something from. Product names are not needed, since the documented notes refer to groups anyway.',
   'profile.medications.none': 'Not specified',
 
   'profile.findings.title': 'Notes from the sources',
@@ -37,7 +37,7 @@ export default {
   'profile.findings.sources': 'Sources',
 
   'profile.findings.disclaimer':
-    'These notes are quoted verbatim from the documented sources for each substance. Whether they apply in your case depends on the product, the dose and your medical situation — the app cannot judge that. Discuss open questions with a doctor or pharmacist.',
+    'These notes are quoted verbatim from the documented sources for each substance. Whether they apply in your case depends on the product, the dose and your medical situation. The app cannot judge that. Discuss open questions with a doctor or pharmacist.',
 
   'profile.severity.contraindicated': 'Source calls it contraindicated',
   'profile.severity.medical': 'Source points to medical consultation',

@@ -47,7 +47,7 @@ export default {
   'reference.compoundBasis':
     ' Grundlage der Rechnung: {amount} {unit} {compound} enthalten rund {percent} % elementares {substance}. Referenzwerte beziehen sich immer auf die elementare Menge.',
   'reference.compoundVaries':
-    ' Der Anteil schwankt je nach Handelsform — maßgeblich ist die Nährwerttabelle des Produkts.',
+    ' Der Anteil schwankt je nach Handelsform. Maßgeblich ist die Nährwerttabelle des Produkts.',
 
   // Unbekannter Wirkstoff
   'reference.unmatched':

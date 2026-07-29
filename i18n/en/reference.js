@@ -43,7 +43,7 @@ export default {
   'reference.compoundBasis':
     ' Basis of this calculation: {amount} {unit} of {compound} contains around {percent} % elemental {substance}. Reference values always refer to the elemental amount.',
   'reference.compoundVaries':
-    ' The share varies by commercial form — the nutrition table on the product is what counts.',
+    ' The share varies by commercial form. The nutrition table on the product is what counts.',
 
   // Unknown substance
   'reference.unmatched':

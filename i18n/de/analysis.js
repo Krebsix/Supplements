@@ -54,7 +54,7 @@ export default {
   'analysis.unreviewed.text_other':
     '{count} Produkte für zusammen {amount} {currency} im Monat laufen mit, ohne dass du je festgehalten hättest, ob sie dir etwas bringen: {names}',
   'analysis.unreviewed.hint':
-    'Das ist kein Urteil über die Produkte — es heißt nur, dass es dazu keine Beobachtung gibt. Über die Wirkungskontrolle kannst du das nachholen.',
+    'Das ist kein Urteil über die Produkte: es heißt nur, dass es dazu keine Beobachtung gibt. Über die Wirkungskontrolle kannst du das nachholen.',
   'analysis.unreviewed.allReviewed': 'Zu allen bezifferten Produkten gibt es eine Beobachtung.',
   'analysis.unreviewed.goToOutcome': 'Zur Wirkungskontrolle',
 

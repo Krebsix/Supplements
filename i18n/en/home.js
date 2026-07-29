@@ -42,7 +42,7 @@ export default {
     'Daily totals across all products, running costs, and what has ever been reviewed.',
   'home.nav.outcome.title': 'Outcome tracking',
   'home.nav.outcome.subtitle':
-    'Record why you take something — and see over time what changes and what argues against attributing it to the product.',
+    'Record why you take something, and see over time what changes and what argues against attributing it to the product.',
   'home.nav.lab.title': 'Lab values',
   'home.nav.lab.subtitle':
     'Enter results and follow them over time. The app collects them, it does not interpret them.',

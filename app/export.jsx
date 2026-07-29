@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { ALL_SECTIONS, EXPORT_SECTIONS, buildReport } from '../ExportBuilder';
 import { useTranslation } from '../i18n';
 import useStore from '../useStore';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 const SECTION_ORDER = [
   { id: EXPORT_SECTIONS.SUPPLEMENTS, labelKey: 'export.section.supplements' },
@@ -122,46 +123,32 @@ export default function ExportScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { paddingHorizontal: 20, paddingTop: 28, paddingBottom: 44 },
-  kicker: {
-    color: '#0f766e', fontSize: 13, fontWeight: '800',
-    letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 8,
-  },
-  title: { color: '#0f172a', fontSize: 26, lineHeight: 32, fontWeight: '800' },
-  subtitle: { color: '#475569', fontSize: 14, lineHeight: 21, marginTop: 10, marginBottom: 8 },
-  sectionTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800', marginTop: 14, marginBottom: 10 },
-  card: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 18, padding: 6, marginBottom: 14,
-  },
-  checkRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11, paddingHorizontal: 10 },
+  screen: { ...surfaces.screen },
+  content: { ...surfaces.content },
+  kicker: { ...type.eyebrow, marginBottom: space.sm },
+  title: { ...type.display },
+  subtitle: { ...type.body, marginTop: space.md, marginBottom: space.sm },
+  sectionTitle: { ...type.heading, marginTop: space.lg - 2, marginBottom: space.md },
+  card: { ...surfaces.card, padding: space.sm - 2 },
+  checkRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11, paddingHorizontal: space.sm + 2 },
   checkbox: {
-    width: 22, height: 22, borderRadius: 7,
-    borderColor: '#cbd5e1', borderWidth: 1.5,
+    width: 22, height: 22, borderRadius: radius.sm,
+    borderColor: colors.ruleStrong, borderWidth: 1.5,
     alignItems: 'center', justifyContent: 'center', marginRight: 11,
   },
-  checkboxActive: { backgroundColor: '#0f766e', borderColor: '#0f766e' },
-  checkmark: { color: '#ffffff', fontSize: 13, fontWeight: '900' },
-  checkLabel: { color: '#0f172a', fontSize: 14, fontWeight: '600', flex: 1 },
-  primaryButton: {
-    backgroundColor: '#0f766e', borderRadius: 999,
-    paddingVertical: 14, alignItems: 'center',
-  },
-  primaryButtonText: { color: '#ffffff', fontSize: 15, fontWeight: '800' },
-  previewCard: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 16, padding: 14, marginBottom: 16,
-  },
+  checkboxActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  checkmark: { color: colors.surface, fontSize: 13, fontWeight: '900' },
+  checkLabel: { color: colors.ink, fontSize: 14, fontWeight: '600', flex: 1 },
+  primaryButton: { ...surfaces.buttonPrimary },
+  primaryButtonText: { ...surfaces.buttonPrimaryText },
+  previewCard: { ...surfaces.card, padding: space.md, marginBottom: space.lg },
+  // Monospace bleibt bewusst: das ist eine Textvorschau, keine Ueberschrift.
   previewText: {
-    color: '#334155',
+    color: colors.inkMuted,
     fontSize: 11,
     lineHeight: 17,
     fontFamily: 'Courier',
   },
-  backButton: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingVertical: 14, alignItems: 'center',
-  },
-  backButtonText: { color: '#0f172a', fontSize: 15, fontWeight: '800' },
+  backButton: { ...surfaces.buttonQuiet },
+  backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });

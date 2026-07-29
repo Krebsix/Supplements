@@ -42,7 +42,7 @@ export default {
     'Tagessummen über alle Produkte, laufende Kosten und was davon je überprüft wurde.',
   'home.nav.outcome.title': 'Wirkungskontrolle',
   'home.nav.outcome.subtitle':
-    'Festhalten, warum du etwas nimmst — und über die Zeit sehen, was sich verändert und was dagegen spricht, es der Einnahme zuzuschreiben.',
+    'Festhalten, warum du etwas nimmst, und über die Zeit sehen, was sich verändert und was dagegen spricht, es der Einnahme zuzuschreiben.',
   'home.nav.lab.title': 'Laborwerte',
   'home.nav.lab.subtitle':
     'Befunde eintragen und im Verlauf verfolgen. Die App ordnet sie nicht ein, sie stellt sie zusammen.',

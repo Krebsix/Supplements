@@ -14,6 +14,7 @@ import { getGroupedValues, getIntakeContext } from '../LabValues';
 import { LAB_MARKERS, getLabMarker } from '../data/labMarkers';
 import { useTranslation } from '../i18n';
 import useStore from '../useStore';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 /**
  * Laborwerte
@@ -135,7 +136,7 @@ export default function LabScreen() {
           value={measuredAt}
           onChangeText={setMeasuredAt}
           placeholder={t('lab.new.datePlaceholder')}
-          placeholderTextColor="#94a3b8"
+          placeholderTextColor={colors.inkFaint}
         />
 
         <Text style={styles.fieldLabel}>{t('lab.new.labName')}</Text>
@@ -150,7 +151,7 @@ export default function LabScreen() {
               onChangeText={setRefMin}
               keyboardType="decimal-pad"
               placeholder={t('lab.new.referenceMin')}
-              placeholderTextColor="#94a3b8"
+              placeholderTextColor={colors.inkFaint}
             />
           </View>
           <View style={styles.rowItem}>
@@ -160,7 +161,7 @@ export default function LabScreen() {
               onChangeText={setRefMax}
               keyboardType="decimal-pad"
               placeholder={t('lab.new.referenceMax')}
-              placeholderTextColor="#94a3b8"
+              placeholderTextColor={colors.inkFaint}
             />
           </View>
         </View>
@@ -244,67 +245,43 @@ export default function LabScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { paddingHorizontal: 20, paddingTop: 28, paddingBottom: 44 },
-  kicker: {
-    color: '#0f766e', fontSize: 13, fontWeight: '800',
-    letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 8,
-  },
-  title: { color: '#0f172a', fontSize: 26, lineHeight: 32, fontWeight: '800' },
-  subtitle: { color: '#475569', fontSize: 14, lineHeight: 21, marginTop: 10 },
-  privacy: { color: '#0f766e', fontSize: 12, marginTop: 8, marginBottom: 18 },
-  sectionTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800', marginTop: 12, marginBottom: 10 },
-  card: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 18, padding: 16, marginBottom: 12,
-  },
-  emptyCard: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 18, padding: 16, marginBottom: 12,
-  },
-  emptyText: { color: '#64748b', fontSize: 13, lineHeight: 20 },
-  fieldLabel: {
-    color: '#475569', fontSize: 10, fontWeight: '900', letterSpacing: 0.7,
-    textTransform: 'uppercase', marginTop: 12, marginBottom: 6,
-  },
-  fieldHint: { color: '#64748b', fontSize: 11, lineHeight: 17, marginTop: 6 },
-  input: {
-    backgroundColor: '#f8fafc', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10,
-    fontSize: 14, color: '#0f172a',
-  },
-  row: { flexDirection: 'row', gap: 10 },
+  screen: { ...surfaces.screen },
+  content: { ...surfaces.content },
+  kicker: { ...type.eyebrow, marginBottom: space.sm },
+  title: { ...type.display },
+  subtitle: { ...type.body, marginTop: space.md },
+  privacy: { color: colors.accent, fontSize: 12, marginTop: space.sm, marginBottom: space.lg },
+  sectionTitle: { ...type.heading, marginTop: space.md, marginBottom: space.md },
+  card: { ...surfaces.card },
+  emptyCard: { ...surfaces.card },
+  emptyText: { ...type.small, lineHeight: 20 },
+  fieldLabel: { ...type.label, marginTop: space.md, marginBottom: space.sm - 2 },
+  fieldHint: { color: colors.inkMuted, fontSize: 11, lineHeight: 17, marginTop: space.sm },
+  input: { ...surfaces.input },
+  row: { flexDirection: 'row', gap: space.sm + 2 },
   rowItem: { flex: 1 },
-  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  chip: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingHorizontal: 11, paddingVertical: 6,
-  },
-  chipActive: { backgroundColor: '#0f766e', borderColor: '#0f766e' },
-  chipText: { color: '#475569', fontSize: 11, fontWeight: '700' },
-  chipTextActive: { color: '#ffffff' },
-  primaryButton: {
-    backgroundColor: '#0f766e', borderRadius: 999,
-    paddingVertical: 13, alignItems: 'center', marginTop: 18,
-  },
-  primaryButtonText: { color: '#ffffff', fontSize: 14, fontWeight: '800' },
-  groupName: { color: '#0f172a', fontSize: 15, fontWeight: '800', marginBottom: 4 },
-  entryRow: { borderTopWidth: 1, borderTopColor: '#f1f5f9', paddingTop: 10, marginTop: 10 },
+  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm - 2 },
+  chip: { ...surfaces.chip, paddingHorizontal: 11, paddingVertical: space.sm - 2 },
+  chipActive: { ...surfaces.chipActive },
+  chipText: { color: colors.inkMuted, fontSize: 11, fontWeight: '700' },
+  chipTextActive: { ...surfaces.chipTextActive },
+  primaryButton: { ...surfaces.buttonPrimary, paddingVertical: 13, marginTop: space.md },
+  primaryButtonText: { ...surfaces.buttonPrimaryText, fontSize: 14 },
+  groupName: { color: colors.ink, fontSize: 15, fontWeight: '800', marginBottom: space.xs },
+  entryRow: { borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.sm + 2, marginTop: space.sm + 2 },
   entryHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
-  entryValue: { color: '#0f172a', fontSize: 16, fontWeight: '800' },
-  entryDate: { color: '#64748b', fontSize: 12 },
-  entryMeta: { color: '#64748b', fontSize: 12, marginTop: 3 },
-  entryContext: { color: '#94a3b8', fontSize: 11, lineHeight: 16, marginTop: 4 },
-  deleteLink: { color: '#dc2626', fontSize: 11, fontWeight: '700', marginTop: 8 },
-  disclaimer: { color: '#64748b', fontSize: 12, lineHeight: 18, marginTop: 8, marginBottom: 16 },
+  // Messwert in Serife: passt zum Laborbuch-Charakter des Screens.
+  entryValue: { ...type.numeral, fontSize: 16 },
+  entryDate: { color: colors.inkMuted, fontSize: 12 },
+  entryMeta: { color: colors.inkMuted, fontSize: 12, marginTop: 3 },
+  entryContext: { color: colors.inkFaint, fontSize: 11, lineHeight: 16, marginTop: space.xs },
+  deleteLink: { color: colors.alert, fontSize: 11, fontWeight: '700', marginTop: space.sm },
+  disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg - 2 },
   secondaryButton: {
-    backgroundColor: '#ffffff', borderColor: '#0f766e', borderWidth: 1,
-    borderRadius: 999, paddingVertical: 13, alignItems: 'center', marginBottom: 10,
+    backgroundColor: colors.surface, borderColor: colors.accent, borderWidth: 1,
+    borderRadius: radius.md, paddingVertical: 13, alignItems: 'center', marginBottom: space.sm + 2,
   },
-  secondaryButtonText: { color: '#0f766e', fontSize: 14, fontWeight: '800' },
-  backButton: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingVertical: 14, alignItems: 'center',
-  },
-  backButtonText: { color: '#0f172a', fontSize: 15, fontWeight: '800' },
+  secondaryButtonText: { color: colors.accent, fontSize: 14, fontWeight: '800' },
+  backButton: { ...surfaces.buttonQuiet },
+  backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });

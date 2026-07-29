@@ -3,6 +3,28 @@ import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { useTranslation } from '../i18n';
 import { getStatusMeta } from '../ReferenceCheck';
+import { colors, radius, space, surfaces, toneFor, type } from '../theme';
+
+// Mapping von ReferenceCheck-Tonnamen auf die Statusstufen aus theme.js.
+// 'neutral' und 'muted' landen absichtlich auf keinem bekannten Schluessel —
+// toneFor() faellt dann auf den gedeckten Default-Grauton zurueck.
+function referenceTone(tone) {
+  if (tone === 'ok') return toneFor('affirm');
+  if (tone === 'notice') return toneFor('caution');
+  if (tone === 'warn') return toneFor('alert');
+  return toneFor(tone);
+}
+
+// Mapping der Lebensphasen-Severity (data/lifeStageAdvisories.js) auf die
+// gleichen gedeckten Statusstufen. "attention" ordnet sich unter "caution"
+// ein, "increased" ist eine Mehrbedarfs-Info, keine Warnung — daher "affirm".
+function advisoryTone(severity) {
+  if (severity === 'contraindicated') return toneFor('contraindicated');
+  if (severity === 'medical') return toneFor('medical');
+  if (severity === 'attention') return toneFor('caution');
+  if (severity === 'increased') return toneFor('affirm');
+  return toneFor(severity);
+}
 
 /**
  * SubstanceInsightCard
@@ -33,6 +55,7 @@ export default function SubstanceInsightCard({ profile }) {
 
   const check = profile.referenceCheck;
   const statusMeta = check ? getStatusMeta(check.status) : null;
+  const statusTone = statusMeta ? referenceTone(statusMeta.tone) : null;
 
   return (
     <View style={styles.card}>
@@ -44,9 +67,9 @@ export default function SubstanceInsightCard({ profile }) {
 
         {statusMeta ? (
           <View
-            style={[styles.statusBadge, { borderColor: statusMeta.hex }]}
+            style={[styles.statusBadge, { backgroundColor: statusTone.surface }]}
           >
-            <Text style={[styles.statusBadgeText, { color: statusMeta.hex }]}>
+            <Text style={[styles.statusBadgeText, { color: statusTone.ink }]}>
               {statusMeta.label}
             </Text>
           </View>
@@ -57,27 +80,25 @@ export default function SubstanceInsightCard({ profile }) {
 
       {/* Lebensphasen-Hinweise stehen bewusst vor allem anderen —
           eine Kontraindikation darf nicht im Aufklappmenue verschwinden. */}
-      {(profile.advisories ?? []).map((advisory, index) => (
-        <View
-          key={`${advisory.severity}-${index}`}
-          style={[
-            styles.advisory,
-            { borderLeftColor: advisory.meta.hex },
-          ]}
-        >
-          <Text style={[styles.advisoryLabel, { color: advisory.meta.hex }]}>
-            {advisory.meta.label}
-          </Text>
-          <Text style={styles.advisoryText}>{advisory.text}</Text>
-        </View>
-      ))}
+      {(profile.advisories ?? []).map((advisory, index) => {
+        const tone = advisoryTone(advisory.severity);
+
+        return (
+          <View
+            key={`${advisory.severity}-${index}`}
+            style={[styles.advisory, { borderLeftColor: tone.ink }]}
+          >
+            <Text style={[styles.advisoryLabel, { color: tone.ink }]}>
+              {advisory.meta.label}
+            </Text>
+            <Text style={styles.advisoryText}>{advisory.text}</Text>
+          </View>
+        );
+      })}
 
       {check ? (
         <View
-          style={[
-            styles.referenceBox,
-            { borderLeftColor: statusMeta.hex },
-          ]}
+          style={[styles.referenceBox, { borderLeftColor: statusTone.ink }]}
         >
           <Text style={styles.referenceLabel}>
             {t('components.insight.referenceHeading')}
@@ -203,29 +224,23 @@ export default function SubstanceInsightCard({ profile }) {
   );
 }
 
+const cautionTone = toneFor('caution');
+const alertTone = toneFor('alert');
+
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 12,
+    ...surfaces.card,
   },
   cardUnmatched: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.surfaceSunken,
     borderStyle: 'dashed',
   },
   unmatchedName: {
-    color: '#334155',
-    fontSize: 15,
-    fontWeight: '800',
+    ...type.bodyStrong,
   },
   unmatchedNote: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 5,
+    ...type.small,
+    marginTop: space.xs + 1,
   },
   header: {
     flexDirection: 'row',
@@ -234,26 +249,20 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
-    paddingRight: 10,
+    paddingRight: space.sm + 2,
   },
   category: {
-    color: '#0f766e',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: colors.accent,
   },
   name: {
-    color: '#0f172a',
-    fontSize: 19,
-    fontWeight: '900',
+    ...type.heading,
     marginTop: 3,
   },
   statusBadge: {
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 9,
-    paddingVertical: 4,
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm + 1,
+    paddingVertical: space.xs,
     maxWidth: 132,
   },
   statusBadgeText: {
@@ -262,68 +271,57 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   what: {
-    color: '#475569',
-    fontSize: 13,
-    lineHeight: 20,
-    marginTop: 9,
+    ...type.body,
+    marginTop: space.sm + 1,
   },
   advisory: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.surfaceSunken,
     borderLeftWidth: 3,
-    borderRadius: 12,
-    padding: 11,
-    marginTop: 10,
+    borderRadius: radius.md,
+    padding: space.sm + 3,
+    marginTop: space.sm + 2,
   },
   advisoryLabel: {
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
+    ...type.label,
   },
   advisoryText: {
-    color: '#334155',
+    color: colors.ink,
     fontSize: 12,
     lineHeight: 18,
-    marginTop: 4,
+    marginTop: space.xs,
   },
   referenceBox: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.surfaceSunken,
     borderLeftWidth: 3,
-    borderRadius: 12,
-    padding: 12,
-    marginTop: 13,
+    borderRadius: radius.md,
+    padding: space.md,
+    marginTop: space.md + 1,
   },
   referenceLabel: {
-    color: '#475569',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: colors.inkMuted,
   },
   referenceSummary: {
-    color: '#0f172a',
+    color: colors.ink,
     fontSize: 13,
     lineHeight: 20,
     fontWeight: '600',
-    marginTop: 5,
+    marginTop: space.xs + 1,
   },
   referenceMeta: {
-    color: '#64748b',
-    fontSize: 11,
-    marginTop: 7,
+    ...type.small,
+    marginTop: space.sm - 1,
     fontWeight: '700',
   },
   referenceNote: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 17,
-    marginTop: 5,
+    ...type.small,
+    marginTop: space.xs + 1,
   },
   formBox: {
-    backgroundColor: '#f0fdfa',
-    borderRadius: 12,
-    padding: 12,
-    marginTop: 11,
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.md,
+    padding: space.md,
+    marginTop: space.sm + 3,
   },
   formHeader: {
     flexDirection: 'row',
@@ -331,57 +329,46 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   formLabel: {
-    color: '#0f766e',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: colors.accent,
   },
   formBio: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 11,
     fontWeight: '800',
   },
   formName: {
-    color: '#0f172a',
-    fontSize: 15,
-    fontWeight: '800',
-    marginTop: 4,
+    ...type.bodyStrong,
+    marginTop: space.xs,
   },
   formNote: {
-    color: '#0f766e',
+    color: colors.accentInk,
     fontSize: 12,
     lineHeight: 18,
-    marginTop: 4,
+    marginTop: space.xs,
   },
   sectionLabel: {
-    color: '#334155',
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
-    marginTop: 15,
-    marginBottom: 7,
+    ...type.label,
+    color: colors.inkMuted,
+    marginTop: space.lg - 1,
+    marginBottom: space.sm - 1,
   },
   useCase: {
-    marginBottom: 9,
+    marginBottom: space.sm + 1,
   },
   useCaseTopic: {
-    color: '#0f172a',
+    ...type.bodyStrong,
     fontSize: 13,
-    fontWeight: '800',
   },
   useCaseNote: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
+    ...type.small,
     marginTop: 2,
   },
   formRow: {
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
-    paddingTop: 8,
-    marginBottom: 8,
+    borderTopColor: colors.rule,
+    paddingTop: space.sm,
+    marginBottom: space.sm,
   },
   formRowHeader: {
     flexDirection: 'row',
@@ -389,84 +376,73 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   formRowName: {
-    color: '#0f172a',
+    ...type.bodyStrong,
     fontSize: 13,
-    fontWeight: '800',
     flex: 1,
   },
   formRowBio: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 11,
     fontWeight: '800',
   },
   formRowNote: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
+    ...type.small,
     marginTop: 3,
   },
   hintBox: {
-    backgroundColor: '#fffbeb',
-    borderRadius: 12,
-    padding: 11,
-    marginTop: 10,
+    backgroundColor: cautionTone.surface,
+    borderRadius: radius.md,
+    padding: space.sm + 3,
+    marginTop: space.sm + 2,
   },
   hintText: {
-    color: '#92400e',
+    color: cautionTone.ink,
     fontSize: 12,
     lineHeight: 18,
   },
   cautionBox: {
-    backgroundColor: '#fef2f2',
-    borderRadius: 12,
-    padding: 11,
-    marginTop: 10,
+    backgroundColor: alertTone.surface,
+    borderRadius: radius.md,
+    padding: space.sm + 3,
+    marginTop: space.sm + 2,
   },
   cautionLabel: {
-    color: '#b91c1c',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: alertTone.ink,
   },
   cautionText: {
-    color: '#991b1b',
+    color: alertTone.ink,
     fontSize: 12,
     lineHeight: 18,
-    marginTop: 4,
+    marginTop: space.xs,
   },
   sourcesBox: {
-    backgroundColor: '#f8fafc',
-    borderRadius: 12,
-    padding: 11,
-    marginTop: 10,
+    backgroundColor: colors.surfaceSunken,
+    borderRadius: radius.md,
+    padding: space.sm + 3,
+    marginTop: space.sm + 2,
   },
   sourcesLabel: {
-    color: '#475569',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
-    marginBottom: 5,
+    ...type.label,
+    color: colors.inkMuted,
+    marginBottom: space.xs + 1,
   },
   sourceText: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 17,
+    ...type.small,
     marginTop: 3,
   },
   sourceTextLinked: {
-    color: '#0f766e',
+    color: colors.accent,
     fontWeight: '700',
   },
   expandButton: {
     minHeight: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 8,
+    marginTop: space.sm,
   },
   expandButtonText: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 12,
     fontWeight: '900',
   },

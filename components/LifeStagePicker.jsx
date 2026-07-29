@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { LIFE_STAGES, getLifeStage } from '../data/referenceValues';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 /**
  * LifeStagePicker
@@ -51,48 +52,37 @@ export default function LifeStagePicker({ value, onChange }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
+    backgroundColor: colors.surface,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 18,
-    paddingVertical: 13,
-    marginBottom: 14,
+    borderRadius: radius.lg,
+    paddingVertical: space.md + 1,
+    marginBottom: space.lg - 2,
   },
   label: {
-    color: '#475569',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    paddingHorizontal: 14,
-    marginBottom: 9,
+    ...type.label,
+    paddingHorizontal: space.lg - 2,
+    marginBottom: space.sm + 1,
   },
   chipRow: {
-    paddingHorizontal: 14,
-    gap: 7,
+    paddingHorizontal: space.lg - 2,
+    gap: space.sm - 1,
   },
   chip: {
-    backgroundColor: '#f1f5f9',
-    borderRadius: 999,
-    paddingHorizontal: 13,
-    paddingVertical: 8,
+    ...surfaces.chip,
   },
   chipActive: {
-    backgroundColor: '#0f766e',
+    ...surfaces.chipActive,
   },
   chipText: {
-    color: '#475569',
-    fontSize: 12,
-    fontWeight: '800',
+    ...surfaces.chipText,
   },
   chipTextActive: {
-    color: '#ffffff',
+    ...surfaces.chipTextActive,
   },
   note: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 17,
-    paddingHorizontal: 14,
-    marginTop: 10,
+    ...type.small,
+    paddingHorizontal: space.lg - 2,
+    marginTop: space.sm + 2,
   },
 });

@@ -2,24 +2,24 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useTranslation } from '../i18n';
+import { colors, radius, space, surfaces, toneFor, type } from '../theme';
 
 // Schluessel statt fertiger Labels — die Uebersetzung passiert erst beim
 // Rendern, damit ReviewRow die aktuelle Sprache ueber t() bekommt.
+// Die Feldzustaende nutzen die gleichen gedeckten Statusstufen wie der
+// Rest der App: "detected" = affirm, "review" = caution, "missing" = alert.
 const FIELD_STATES = {
   detected: {
     labelKey: 'components.result.fieldStateDetected',
-    badgeStyle: 'detectedBadge',
-    textStyle: 'detectedBadgeText',
+    tone: 'affirm',
   },
   review: {
     labelKey: 'components.result.fieldStateReview',
-    badgeStyle: 'reviewBadge',
-    textStyle: 'reviewBadgeText',
+    tone: 'caution',
   },
   missing: {
     labelKey: 'components.result.fieldStateMissing',
-    badgeStyle: 'missingBadge',
-    textStyle: 'missingBadgeText',
+    tone: 'alert',
   },
 };
 
@@ -29,6 +29,7 @@ function hasText(value) {
 
 function ReviewRow({ t, label, value, state = 'review', helper }) {
   const stateConfig = FIELD_STATES[state] || FIELD_STATES.review;
+  const tone = toneFor(stateConfig.tone);
 
   return (
     <View style={styles.reviewRow}>
@@ -38,8 +39,8 @@ function ReviewRow({ t, label, value, state = 'review', helper }) {
         {helper ? <Text style={styles.reviewHelper}>{helper}</Text> : null}
       </View>
 
-      <View style={[styles.stateBadge, styles[stateConfig.badgeStyle]]}>
-        <Text style={[styles.stateBadgeText, styles[stateConfig.textStyle]]}>
+      <View style={[styles.stateBadge, { backgroundColor: tone.surface }]}>
+        <Text style={[styles.stateBadgeText, { color: tone.ink }]}>
           {t(stateConfig.labelKey)}
         </Text>
       </View>
@@ -295,13 +296,12 @@ export default function SupplementResultCard({ result }) {
   );
 }
 
+const warningTone = toneFor('caution');
+
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dbe4ee',
-    borderWidth: 1,
-    borderRadius: 24,
-    padding: 18,
+    ...surfaces.card,
+    marginBottom: 0,
   },
   identityHeader: {
     flexDirection: 'row',
@@ -310,47 +310,40 @@ const styles = StyleSheet.create({
   },
   identityText: {
     flex: 1,
-    paddingRight: 12,
+    paddingRight: space.md,
   },
   eyebrow: {
-    color: '#0f766e',
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    marginBottom: 6,
+    ...type.eyebrow,
+    marginBottom: space.sm - 2,
   },
   product: {
-    color: '#0f172a',
+    ...type.display,
     fontSize: 23,
     lineHeight: 29,
-    fontWeight: '900',
   },
   brand: {
-    color: '#64748b',
+    color: colors.inkMuted,
     fontSize: 14,
-    marginTop: 5,
+    marginTop: space.xs + 1,
   },
   scanBadge: {
-    backgroundColor: '#ecfdf5',
-    borderColor: '#99f6e4',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm + 2,
+    paddingVertical: space.xs + 2,
   },
   scanBadgeText: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 11,
     fontWeight: '900',
   },
   confidenceCard: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#e2e8f0',
+    backgroundColor: colors.surfaceSunken,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 18,
-    padding: 15,
-    marginTop: 18,
+    borderRadius: radius.lg,
+    padding: space.lg - 1,
+    marginTop: space.lg + 2,
   },
   confidenceHeader: {
     flexDirection: 'row',
@@ -358,29 +351,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   confidenceTitle: {
-    color: '#334155',
+    ...type.bodyStrong,
     fontSize: 13,
-    fontWeight: '800',
   },
   confidenceValue: {
-    color: '#0f172a',
+    ...type.numeral,
     fontSize: 22,
-    fontWeight: '900',
   },
   confidenceStatus: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 13,
     fontWeight: '900',
-    marginTop: 5,
+    marginTop: space.xs + 1,
   },
   confidenceExplanation: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 7,
+    ...type.small,
+    marginTop: space.sm - 1,
   },
   section: {
-    marginTop: 22,
+    marginTop: space.xl,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -388,159 +377,130 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   sectionTitle: {
-    color: '#0f172a',
-    fontSize: 16,
-    fontWeight: '900',
+    ...type.heading,
   },
   sectionHint: {
-    color: '#64748b',
+    color: colors.inkMuted,
     fontSize: 11,
     fontWeight: '700',
   },
   sectionDescription: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 6,
+    ...type.small,
+    marginTop: space.xs + 2,
   },
   reviewList: {
-    marginTop: 11,
+    marginTop: space.sm + 2,
   },
   reviewRow: {
     minHeight: 76,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#f8fafc',
-    borderColor: '#e2e8f0',
+    backgroundColor: colors.surfaceSunken,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 13,
-    marginBottom: 9,
+    borderRadius: radius.lg,
+    padding: space.md + 1,
+    marginBottom: space.sm + 1,
   },
   reviewRowContent: {
     flex: 1,
-    paddingRight: 10,
+    paddingRight: space.sm + 2,
   },
   reviewLabel: {
-    color: '#64748b',
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: colors.inkMuted,
   },
   reviewValue: {
-    color: '#0f172a',
+    color: colors.ink,
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '800',
     marginTop: 3,
   },
   reviewHelper: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 16,
-    marginTop: 4,
+    ...type.small,
+    marginTop: space.xs,
   },
   stateBadge: {
-    borderRadius: 999,
-    paddingHorizontal: 9,
-    paddingVertical: 5,
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm + 1,
+    paddingVertical: space.xs + 1,
   },
   stateBadgeText: {
     fontSize: 10,
     fontWeight: '900',
   },
-  detectedBadge: {
-    backgroundColor: '#ccfbf1',
-  },
-  detectedBadgeText: {
-    color: '#0f766e',
-  },
-  reviewBadge: {
-    backgroundColor: '#fef3c7',
-  },
-  reviewBadgeText: {
-    color: '#92400e',
-  },
-  missingBadge: {
-    backgroundColor: '#fee2e2',
-  },
-  missingBadgeText: {
-    color: '#b91c1c',
-  },
   ingredientWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 11,
+    marginTop: space.sm + 2,
   },
   ingredientChip: {
-    backgroundColor: '#f0fdfa',
-    borderColor: '#99f6e4',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 11,
-    paddingVertical: 7,
-    marginRight: 7,
-    marginBottom: 7,
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm + 3,
+    paddingVertical: space.sm - 1,
+    marginRight: space.sm - 1,
+    marginBottom: space.sm - 1,
   },
   ingredientText: {
-    color: '#115e59',
+    color: colors.accentInk,
     fontSize: 12,
     fontWeight: '800',
   },
   warningList: {
-    marginTop: 11,
+    marginTop: space.sm + 2,
   },
   warningCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#fffbeb',
-    borderColor: '#fde68a',
+    backgroundColor: warningTone.surface,
+    borderColor: warningTone.rule,
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 13,
-    marginBottom: 9,
+    borderRadius: radius.lg,
+    padding: space.md + 1,
+    marginBottom: space.sm + 1,
   },
   warningNumber: {
     width: 25,
     height: 25,
-    borderRadius: 9,
-    backgroundColor: '#fef3c7',
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: space.sm + 2,
   },
   warningNumberText: {
-    color: '#92400e',
+    color: warningTone.ink,
     fontSize: 11,
     fontWeight: '900',
   },
   warningText: {
     flex: 1,
-    color: '#78350f',
+    color: warningTone.ink,
     fontSize: 12,
     lineHeight: 18,
   },
   emptyBox: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#e2e8f0',
+    backgroundColor: colors.surfaceSunken,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 15,
-    padding: 13,
-    marginTop: 10,
+    borderRadius: radius.lg - 2,
+    padding: space.md + 1,
+    marginTop: space.sm + 1,
   },
   emptyText: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
+    ...type.small,
   },
   timingCard: {
-    backgroundColor: '#eef2ff',
-    borderColor: '#c7d2fe',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 18,
-    padding: 15,
-    marginTop: 20,
+    borderRadius: radius.lg,
+    padding: space.lg - 1,
+    marginTop: space.xl + 2,
   },
   timingHeader: {
     flexDirection: 'row',
@@ -548,47 +508,47 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   timingTitle: {
-    color: '#1e1b4b',
+    color: colors.accentInk,
     fontSize: 14,
     fontWeight: '900',
   },
   suggestionBadge: {
-    backgroundColor: '#ffffff',
-    borderRadius: 999,
-    paddingHorizontal: 9,
-    paddingVertical: 5,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm + 1,
+    paddingVertical: space.xs + 1,
   },
   suggestionBadgeText: {
-    color: '#4338ca',
+    color: colors.accent,
     fontSize: 10,
     fontWeight: '900',
   },
   timingText: {
-    color: '#3730a3',
+    color: colors.accentInk,
     fontSize: 13,
     lineHeight: 19,
-    marginTop: 9,
+    marginTop: space.sm + 1,
   },
   timingFootnote: {
-    color: '#6366f1',
+    color: colors.accent,
     fontSize: 11,
     lineHeight: 16,
-    marginTop: 8,
+    marginTop: space.sm,
   },
   uncertaintyCard: {
-    backgroundColor: '#f1f5f9',
-    borderRadius: 16,
-    padding: 14,
-    marginTop: 12,
+    backgroundColor: colors.surfaceSunken,
+    borderRadius: radius.lg,
+    padding: space.md + 2,
+    marginTop: space.md,
   },
   uncertaintyTitle: {
-    color: '#334155',
+    color: colors.ink,
     fontSize: 12,
     fontWeight: '900',
-    marginBottom: 5,
+    marginBottom: space.xs + 1,
   },
   uncertaintyText: {
-    color: '#64748b',
+    ...type.small,
     fontSize: 11,
     lineHeight: 17,
   },

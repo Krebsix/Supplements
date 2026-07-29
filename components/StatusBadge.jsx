@@ -1,10 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { radius, space, toneFor } from '../theme';
+
+// Mapping von den bisherigen Tonnamen auf die Statusstufen aus theme.js.
+// 'neutral' bleibt bewusst ohne Zuordnung — toneFor() faellt dann auf den
+// gedeckten Default-Grauton zurueck.
+const TONE_MAP = {
+  good: 'affirm',
+  warning: 'caution',
+  danger: 'alert',
+};
+
 export default function StatusBadge({ label, tone = 'neutral' }) {
+  const resolved = toneFor(TONE_MAP[tone]);
+
   return (
-    <View style={[styles.badge, styles[tone] || styles.neutral]}>
-      <Text style={styles.text}>{label}</Text>
+    <View style={[styles.badge, { backgroundColor: resolved.surface }]}>
+      <Text style={[styles.text, { color: resolved.ink }]}>{label}</Text>
     </View>
   );
 }
@@ -12,26 +25,13 @@ export default function StatusBadge({ label, tone = 'neutral' }) {
 const styles = StyleSheet.create({
   badge: {
     alignSelf: 'flex-start',
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  neutral: {
-    backgroundColor: '#334155',
-  },
-  good: {
-    backgroundColor: '#134e4a',
-  },
-  warning: {
-    backgroundColor: '#78350f',
-  },
-  danger: {
-    backgroundColor: '#7f1d1d',
+    borderRadius: radius.md,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs + 2,
+    marginRight: space.sm,
+    marginBottom: space.sm,
   },
   text: {
-    color: '#f8fafc',
     fontSize: 12,
     fontWeight: '700',
   },

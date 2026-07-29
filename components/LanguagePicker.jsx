@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { colors, radius, space, surfaces, type } from '../theme';
 import { useTranslation } from '../i18n';
 
 /**
@@ -54,65 +55,59 @@ export default function LanguagePicker({ compact = false }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
+    backgroundColor: colors.surface,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 18,
-    paddingVertical: 13,
-    marginBottom: 14,
+    borderRadius: radius.lg,
+    paddingVertical: space.md + 1,
+    marginBottom: space.lg - 2,
   },
   containerCompact: {
-    marginBottom: 10,
-    paddingVertical: 10,
+    marginBottom: space.md - 2,
+    paddingVertical: space.md - 2,
   },
   label: {
-    color: '#475569',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    paddingHorizontal: 14,
-    marginBottom: 9,
+    ...type.label,
+    paddingHorizontal: space.lg - 2,
+    marginBottom: space.sm + 1,
   },
   chipRow: {
     flexDirection: 'row',
-    paddingHorizontal: 14,
-    gap: 8,
+    paddingHorizontal: space.lg - 2,
+    gap: space.sm,
   },
   chip: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
-    borderRadius: 14,
-    paddingHorizontal: 13,
-    paddingVertical: 9,
+    backgroundColor: colors.surfaceSunken,
+    borderRadius: radius.lg - 4,
+    paddingHorizontal: space.md + 1,
+    paddingVertical: space.sm + 1,
     alignItems: 'center',
   },
   chipActive: {
-    backgroundColor: '#0f766e',
+    backgroundColor: colors.accent,
   },
   chipText: {
-    color: '#475569',
+    color: colors.inkMuted,
     fontSize: 13,
     fontWeight: '900',
     letterSpacing: 0.5,
   },
   chipTextActive: {
-    color: '#ffffff',
+    color: colors.surface,
   },
   chipSub: {
-    color: '#94a3b8',
+    color: colors.inkFaint,
     fontSize: 11,
     fontWeight: '700',
     marginTop: 1,
   },
   chipSubActive: {
-    color: '#ccfbf1',
+    color: colors.accentSoft,
   },
   note: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 17,
-    paddingHorizontal: 14,
-    marginTop: 10,
+    ...type.small,
+    paddingHorizontal: space.lg - 2,
+    marginTop: space.sm + 2,
   },
 });

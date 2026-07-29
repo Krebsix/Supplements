@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { KIND_LABELS, matchCertifications } from '../data/certifications';
+import { colors, radius, space, surfaces, toneFor, type } from '../theme';
 import { useTranslation } from '../i18n';
+
+const cautionTone = toneFor('caution');
 
 /**
  * CertificationPanel
@@ -92,12 +95,8 @@ export default function CertificationPanel({ labels }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 15,
-    marginBottom: 10,
+    ...surfaces.card,
+    marginBottom: space.sm + 2,
   },
   header: {
     flexDirection: 'row',
@@ -106,102 +105,72 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
-    paddingRight: 10,
+    paddingRight: space.sm + 2,
   },
   kind: {
-    color: '#0f766e',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: colors.accent,
   },
   name: {
-    color: '#0f172a',
-    fontSize: 16,
-    fontWeight: '900',
+    ...type.heading,
     marginTop: 3,
   },
   toggle: {
-    color: '#0f766e',
+    color: colors.accent,
     fontSize: 20,
     fontWeight: '900',
     lineHeight: 22,
   },
   what: {
-    color: '#475569',
-    fontSize: 12,
-    lineHeight: 19,
-    marginTop: 7,
+    ...type.body,
+    marginTop: space.sm - 1,
   },
   scopeBox: {
-    backgroundColor: '#fffbeb',
-    borderRadius: 12,
-    padding: 11,
-    marginTop: 11,
+    backgroundColor: cautionTone.surface,
+    borderRadius: radius.md,
+    padding: space.sm + 3,
+    marginTop: space.sm + 3,
   },
   scopeLabel: {
-    color: '#92400e',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
+    ...type.label,
+    color: cautionTone.ink,
   },
   scopeText: {
-    color: '#78350f',
+    color: cautionTone.ink,
     fontSize: 12,
     lineHeight: 18,
-    marginTop: 4,
+    marginTop: space.xs,
   },
   issuer: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 17,
-    marginTop: 9,
+    ...type.small,
+    marginTop: space.sm + 1,
   },
   emptyCard: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
+    ...surfaces.card,
     borderStyle: 'dashed',
-    borderRadius: 18,
-    padding: 15,
+    marginBottom: 0,
   },
   emptyTitle: {
-    color: '#334155',
-    fontSize: 14,
-    fontWeight: '900',
+    ...type.subheading,
   },
   emptyText: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 5,
+    ...type.body,
+    marginTop: space.xs + 1,
   },
   unknownCard: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 15,
-    marginBottom: 10,
+    ...surfaces.card,
   },
   unknownLabel: {
-    color: '#64748b',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+    ...type.label,
   },
   unknownText: {
-    color: '#334155',
+    color: colors.ink,
     fontSize: 13,
     fontWeight: '700',
-    marginTop: 5,
+    marginTop: space.xs + 1,
   },
   unknownNote: {
-    color: '#64748b',
-    fontSize: 11,
-    lineHeight: 17,
-    marginTop: 6,
+    ...type.small,
+    marginTop: space.xs + 2,
   },
 });

@@ -14,7 +14,7 @@ export default {
   'components.insight.useCases': 'Areas of use',
   'components.insight.formsCompare': 'Forms compared',
   'components.insight.fatSolubleHint':
-    'Fat-soluble — absorption is markedly better with a meal containing fat.',
+    'Fat-soluble: absorption is markedly better with a meal containing fat.',
   'components.insight.caution': 'Please note',
   'components.insight.sources': 'Sources',
   'components.insight.showLess': 'Show less',
@@ -76,7 +76,7 @@ export default {
   // CertificationPanel.jsx
   'components.certification.emptyTitle': 'No certification marks detected',
   'components.certification.emptyText':
-    'No known certification mark was visible in the captures. This is not a quality judgment — many products carry no certification, and marks may be on unscanned packaging sides.',
+    'No known certification mark was visible in the captures. This is not a quality judgment: many products carry no certification, and marks may be on unscanned packaging sides.',
   'components.certification.scopeLabel': 'What it does not cover',
   'components.certification.issuer': 'Issued by: {issuer}',
   'components.certification.unknownLabel': 'Not matched',

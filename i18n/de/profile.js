@@ -20,7 +20,7 @@ export default {
 
   'profile.medications.title': 'Medikamente',
   'profile.medications.hint':
-    'Wähle die Gruppen, aus denen du etwas einnimmst. Präparatenamen brauchst du nicht anzugeben — die hinterlegten Hinweise beziehen sich ohnehin auf Gruppen.',
+    'Wähle die Gruppen, aus denen du etwas einnimmst. Präparatenamen brauchst du nicht anzugeben, denn die hinterlegten Hinweise beziehen sich ohnehin auf Gruppen.',
   'profile.medications.none': 'Keine Angabe',
 
   'profile.findings.title': 'Hinweise aus den Quellen',
@@ -37,7 +37,7 @@ export default {
   'profile.findings.sources': 'Quellen',
 
   'profile.findings.disclaimer':
-    'Diese Hinweise stammen wörtlich aus den hinterlegten Fachquellen zum jeweiligen Wirkstoff. Ob sie in deinem Fall zutreffen, hängt von Präparat, Dosierung und Befund ab — das kann die App nicht beurteilen. Besprich offene Fragen mit Ärztin, Arzt oder Apotheke.',
+    'Diese Hinweise stammen wörtlich aus den hinterlegten Fachquellen zum jeweiligen Wirkstoff. Ob sie in deinem Fall zutreffen, hängt von Präparat, Dosierung und Befund ab. Das kann die App nicht beurteilen. Besprich offene Fragen mit Ärztin, Arzt oder Apotheke.',
 
   'profile.severity.contraindicated': 'Quelle nennt es kontraindiziert',
   'profile.severity.medical': 'Quelle verweist auf ärztliche Abklärung',

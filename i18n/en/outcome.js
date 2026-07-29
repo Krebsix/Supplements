@@ -15,7 +15,7 @@ export default {
   'outcome.kicker': 'Outcome tracking',
   'outcome.title': 'Is it actually doing anything for you?',
   'outcome.subtitle':
-    'Record why you take a product, what the starting point was, and what changes over time. The app does not flatter the result — it shows you what argues against attributing the change to the product.',
+    'Record why you take a product, what the starting point was, and what changes over time. The app does not flatter the result, it shows you what argues against attributing the change to the product.',
 
   // Metrics
   'outcome.metric.sleepQuality': 'Sleep quality',
@@ -37,7 +37,7 @@ export default {
   'outcome.new.selectMetric': 'What would you notice a change in?',
   'outcome.new.reason': 'Why are you taking it?',
   'outcome.new.reasonPlaceholder': 'e.g. sleeping restlessly for months',
-  'outcome.new.baseline': 'How is it right now — before you start?',
+  'outcome.new.baseline': 'How is it right now, before you start?',
   'outcome.new.baselineHint':
     'This starting value is the most important entry. In hindsight people almost always remember the state before taking something as worse than it was.',
   'outcome.new.duration': 'How long do you want to observe?',
@@ -87,18 +87,18 @@ export default {
   'outcome.confounder.shortDuration':
     'A period of {days} days is short. Day-to-day variation and expectation affect it more than anything else.',
   'outcome.confounder.fewRatings':
-    '{count} ratings so far — from {needed} onwards the trend becomes more meaningful.',
+    '{count} ratings so far. From {needed} onwards the trend becomes more meaningful.',
   'outcome.confounder.lowAdherence':
     'Intake is recorded on {percent} % of days. With gaps, you are observing something other than continuous use.',
   'outcome.confounder.noBaseline':
     'No starting value was recorded. Without it there is nothing to compare against.',
   'outcome.confounder.smallChange':
-    'The change is less than half a scale point — that is within normal day-to-day variation.',
+    'The change is less than half a scale point, which is within normal day-to-day variation.',
   'outcome.confounders.none':
     'None of the checked confounders apply. That makes the observation more solid, but still proves no causal link: season, sleep, stress and your own expectation always play a part.',
 
   'outcome.disclaimer':
-    'This evaluation is your own assessment over time, not a measurement of efficacy. Whether a product makes sense for you cannot be derived from it — that belongs with a doctor or pharmacist.',
+    'This evaluation is your own assessment over time, not a measurement of efficacy. Whether a product makes sense for you cannot be derived from it. That belongs with a doctor or pharmacist.',
 
   // Decision
   'outcome.due.title': 'Time for a decision',

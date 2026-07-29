@@ -6,6 +6,7 @@ import TabBar from '../components/TabBar';
 
 import LanguagePicker from '../components/LanguagePicker';
 import { useTranslation } from '../i18n';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 export default function Home() {
   const router = useRouter();
@@ -122,115 +123,94 @@ function NavCard({ index, title, subtitle, onPress }) {
 }
 
 const styles = StyleSheet.create({
-  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
-  screen: {
-    flex: 1,
-    backgroundColor: '#f8fafc',
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 28,
-    paddingBottom: 44,
-  },
+  screenWrap: { ...surfaces.screen },
+  screen: { ...surfaces.screen },
+  // Baustein aus dem Theme statt eigener Zahlen — deckt sich fast exakt
+  // mit den vorherigen Werten (20/28/44 -> 22/30/48).
+  content: { ...surfaces.content },
   kicker: {
-    color: '#0f766e',
-    fontSize: 13,
-    fontWeight: '800',
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
-    marginBottom: 8,
+    ...type.eyebrow,
+    marginBottom: space.sm,
   },
   title: {
-    color: '#0f172a',
+    ...type.display,
     fontSize: 30,
     lineHeight: 36,
     fontWeight: '800',
   },
   subtitle: {
-    color: '#475569',
+    ...type.body,
     fontSize: 15,
     lineHeight: 23,
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: space.sm,
+    marginBottom: space.lg,
   },
+  // surfaces.card statt eigener Kartendefinition — bringt Radius, Rahmen
+  // und Innenabstand aus dem Theme mit.
   trustCard: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 22,
-    padding: 16,
-    marginBottom: 24,
+    ...surfaces.card,
+    marginBottom: space.xl,
   },
   trustLabel: {
-    color: '#64748b',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    marginBottom: 10,
+    ...type.label,
+    marginBottom: space.sm,
   },
   trustItem: {
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
-    paddingTop: 12,
-    marginTop: 12,
+    borderTopColor: colors.rule,
+    paddingTop: space.md,
+    marginTop: space.md,
   },
   trustItemTitle: {
-    color: '#0f172a',
-    fontSize: 14,
+    ...type.bodyStrong,
     fontWeight: '800',
     lineHeight: 19,
   },
   trustItemText: {
-    color: '#64748b',
+    ...type.small,
     fontSize: 13,
     lineHeight: 19,
-    marginTop: 4,
+    marginTop: space.xs,
   },
+  // Rubriktitel ueber den NavCards: subheading traegt die Serife, das
+  // Unterscheidungsmerkmal der neuen Richtung.
   sectionTitle: {
-    color: '#0f172a',
-    fontSize: 16,
-    fontWeight: '800',
-    marginBottom: 12,
+    ...type.subheading,
+    marginBottom: space.md,
   },
   navCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 12,
+    ...surfaces.card,
   },
+  // Nummern-Kaestchen der NavCard: Akzentfarbe statt Systemgruen, Radius
+  // aus dem Theme statt eigenem Wert.
   navIndexWrap: {
     width: 44,
     height: 44,
-    borderRadius: 14,
-    backgroundColor: '#ecfdf5',
-    borderColor: '#ccfbf1',
+    borderRadius: radius.lg,
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accentSoft,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 14,
+    marginRight: space.md,
   },
+  // Serifenziffer in Akzentfarbe — das gewuenschte Detail der Startseite.
   navIndex: {
-    color: '#0f766e',
-    fontSize: 13,
-    fontWeight: '900',
+    ...type.numeral,
+    color: colors.accent,
   },
   navTextWrap: {
     flex: 1,
   },
   navTitle: {
-    color: '#0f172a',
-    fontSize: 16,
-    fontWeight: '800',
+    ...type.subheading,
   },
   navSubtitle: {
-    color: '#64748b',
+    ...type.small,
     fontSize: 13,
     lineHeight: 19,
-    marginTop: 4,
+    marginTop: space.xs,
   },
 });

@@ -14,7 +14,7 @@ export default {
   'components.insight.useCases': 'Anwendungsgebiete',
   'components.insight.formsCompare': 'Formen im Vergleich',
   'components.insight.fatSolubleHint':
-    'Fettlöslich — die Aufnahme ist zu einer Mahlzeit mit Fett deutlich besser.',
+    'Fettlöslich: die Aufnahme ist zu einer Mahlzeit mit Fett deutlich besser.',
   'components.insight.caution': 'Zu beachten',
   'components.insight.sources': 'Quellen',
   'components.insight.showLess': 'Weniger anzeigen',
@@ -76,7 +76,7 @@ export default {
   // CertificationPanel.jsx
   'components.certification.emptyTitle': 'Keine Prüfsiegel erkannt',
   'components.certification.emptyText':
-    'Auf den Aufnahmen war kein bekanntes Prüfsiegel sichtbar. Das ist kein Qualitätsurteil — viele Produkte tragen keine Zertifizierung, und Siegel können auf ungescannten Verpackungsseiten stehen.',
+    'Auf den Aufnahmen war kein bekanntes Prüfsiegel sichtbar. Das ist kein Qualitätsurteil, viele Produkte tragen keine Zertifizierung, und Siegel können auf ungescannten Verpackungsseiten stehen.',
   'components.certification.scopeLabel': 'Was es nicht abdeckt',
   'components.certification.issuer': 'Vergeben von: {issuer}',
   'components.certification.unknownLabel': 'Nicht zugeordnet',

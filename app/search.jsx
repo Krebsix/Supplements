@@ -11,6 +11,7 @@ import { matchIngredient } from '../SubstanceMatcher';
 import { substances } from '../data/substances';
 import useStore from '../useStore';
 import { useTranslation } from '../i18n';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 // Bewusst nicht uebersetzt: die Chips fuettern die Suche direkt gegen die
 // (vorerst deutsche) Wirkstoff-Datenbank. Eine Uebersetzung wuerde die
@@ -78,7 +79,7 @@ export default function SearchScreen() {
         value={query}
         onChangeText={setQuery}
         placeholder={t('search.placeholder')}
-        placeholderTextColor="#94a3b8"
+        placeholderTextColor={colors.inkFaint}
         style={styles.input}
         autoCorrect={false}
         returnKeyType="search"
@@ -153,143 +154,94 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
-  screen: {
-    flex: 1,
-    backgroundColor: '#f8fafc',
-  },
+  screenWrap: surfaces.screen,
+  screen: surfaces.screen,
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 26,
+    paddingHorizontal: space.xl - 2,
+    paddingTop: space.xl + 4,
     paddingBottom: 48,
   },
   kicker: {
-    color: '#0f766e',
-    fontSize: 12,
-    fontWeight: '900',
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
+    ...type.eyebrow,
   },
   title: {
-    color: '#0f172a',
+    ...type.display,
     fontSize: 29,
     lineHeight: 35,
-    fontWeight: '900',
-    letterSpacing: -0.4,
-    marginTop: 8,
+    marginTop: space.sm,
   },
   subtitle: {
-    color: '#475569',
-    fontSize: 14,
-    lineHeight: 21,
-    marginTop: 8,
-    marginBottom: 18,
+    ...type.body,
+    marginTop: space.sm,
+    marginBottom: space.lg + 2,
   },
   input: {
-    backgroundColor: '#ffffff',
-    borderColor: '#cbd5e1',
-    borderWidth: 1,
-    borderRadius: 16,
-    color: '#0f172a',
+    ...surfaces.input,
     fontSize: 16,
-    padding: 15,
-    marginBottom: 18,
+    padding: space.lg - 1,
+    marginBottom: space.lg + 2,
   },
   label: {
-    color: '#475569',
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    marginBottom: 10,
+    ...type.label,
+    color: colors.inkMuted,
+    marginBottom: space.sm + 2,
   },
   chips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 20,
+    marginBottom: space.xl - 2,
   },
   chip: {
-    backgroundColor: '#ffffff',
-    borderColor: '#cbd5e1',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 13,
-    paddingVertical: 9,
-    marginRight: 8,
-    marginBottom: 8,
+    ...surfaces.chip,
+    marginRight: space.sm,
+    marginBottom: space.sm,
   },
   chipText: {
-    color: '#334155',
+    color: colors.ink,
     fontSize: 13,
     fontWeight: '800',
   },
   infoBox: {
-    backgroundColor: '#f0fdfa',
-    borderColor: '#99f6e4',
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 16,
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.lg,
+    padding: space.lg - 2,
+    marginBottom: space.lg,
   },
   infoTitle: {
-    color: '#0f172a',
-    fontSize: 16,
-    fontWeight: '900',
+    ...type.subheading,
   },
   infoText: {
-    color: '#0f766e',
+    color: colors.accentInk,
     fontSize: 12,
     lineHeight: 19,
-    marginTop: 6,
+    marginTop: space.sm - 2,
   },
   emptyBox: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 16,
+    ...surfaces.card,
   },
   emptyTitle: {
-    color: '#0f172a',
-    fontSize: 16,
-    fontWeight: '900',
+    ...type.subheading,
   },
   emptyText: {
-    color: '#64748b',
-    fontSize: 13,
-    lineHeight: 20,
-    marginTop: 6,
+    ...type.body,
+    marginTop: space.sm - 2,
   },
   resultCount: {
-    color: '#475569',
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    marginBottom: 10,
+    ...type.label,
+    color: colors.inkMuted,
+    marginBottom: space.sm + 2,
   },
   secondaryButton: {
-    minHeight: 50,
-    backgroundColor: '#ffffff',
-    borderColor: '#cbd5e1',
-    borderWidth: 1,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
+    ...surfaces.buttonQuiet,
+    marginTop: space.sm + 2,
   },
   secondaryButtonText: {
-    color: '#0f172a',
-    fontSize: 14,
-    fontWeight: '900',
+    ...surfaces.buttonQuietText,
   },
   disclaimer: {
-    color: '#94a3b8',
-    fontSize: 11,
-    lineHeight: 17,
+    ...type.tiny,
     textAlign: 'center',
-    marginTop: 14,
-    paddingHorizontal: 6,
+    marginTop: space.md + 2,
+    paddingHorizontal: space.sm - 2,
   },
 });

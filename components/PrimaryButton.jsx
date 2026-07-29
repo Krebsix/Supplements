@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { space, surfaces } from '../theme';
+
 export default function PrimaryButton({ title, onPress, variant = 'primary' }) {
   return (
     <TouchableOpacity
@@ -16,28 +18,14 @@ export default function PrimaryButton({ title, onPress, variant = 'primary' }) {
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 16,
-    paddingVertical: 15,
-    paddingHorizontal: 18,
-    alignItems: 'center',
-    marginTop: 10,
+    marginTop: space.sm + 2,
   },
-  primary: {
-    backgroundColor: '#14b8a6',
-  },
-  secondary: {
-    backgroundColor: '#1e293b',
-    borderWidth: 1,
-    borderColor: '#334155',
-  },
+  primary: surfaces.buttonPrimary,
+  secondary: surfaces.buttonQuiet,
   text: {
     fontSize: 15,
     fontWeight: '800',
   },
-  primaryText: {
-    color: '#042f2e',
-  },
-  secondaryText: {
-    color: '#e2e8f0',
-  },
+  primaryText: surfaces.buttonPrimaryText,
+  secondaryText: surfaces.buttonQuietText,
 });

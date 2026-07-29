@@ -15,7 +15,7 @@ export default {
   'outcome.kicker': 'Wirkungskontrolle',
   'outcome.title': 'Bringt es dir tatsächlich etwas?',
   'outcome.subtitle':
-    'Halte fest, warum du ein Präparat nimmst, wie der Ausgangszustand war und was sich über die Zeit verändert. Die App rechnet nichts schön — sie zeigt dir daneben, was gegen eine eindeutige Zuordnung spricht.',
+    'Halte fest, warum du ein Präparat nimmst, wie der Ausgangszustand war und was sich über die Zeit verändert. Die App rechnet nichts schön, sondern zeigt dir daneben, was gegen eine eindeutige Zuordnung spricht.',
 
   // Zielgrößen
   'outcome.metric.sleepQuality': 'Schlafqualität',
@@ -37,7 +37,7 @@ export default {
   'outcome.new.selectMetric': 'Woran würdest du eine Veränderung merken?',
   'outcome.new.reason': 'Warum nimmst du es?',
   'outcome.new.reasonPlaceholder': 'z. B. schlafe seit Monaten unruhig',
-  'outcome.new.baseline': 'Wie ist es aktuell — vor dem Start?',
+  'outcome.new.baseline': 'Wie ist es aktuell, vor dem Start?',
   'outcome.new.baselineHint':
     'Dieser Ausgangswert ist der wichtigste Eintrag. Rückblickend erinnert man den Zustand vor der Einnahme fast immer schlechter, als er war.',
   'outcome.new.duration': 'Wie lange beobachten?',
@@ -87,18 +87,18 @@ export default {
   'outcome.confounder.shortDuration':
     'Der Zeitraum von {days} Tagen ist kurz. Tagesform und Erwartung wirken sich darauf stärker aus als alles andere.',
   'outcome.confounder.fewRatings':
-    'Bisher {count} Bewertungen — ab {needed} wird der Verlauf aussagekräftiger.',
+    'Bisher {count} Bewertungen. Ab {needed} wird der Verlauf aussagekräftiger.',
   'outcome.confounder.lowAdherence':
     'Die Einnahme ist an {percent} % der Tage dokumentiert. Bei Lücken beobachtest du etwas anderes als eine durchgehende Einnahme.',
   'outcome.confounder.noBaseline':
     'Es wurde kein Ausgangswert festgehalten. Ohne ihn gibt es nichts zu vergleichen.',
   'outcome.confounder.smallChange':
-    'Die Veränderung liegt unter einem halben Skalenpunkt — das entspricht normaler Tagesschwankung.',
+    'Die Veränderung liegt unter einem halben Skalenpunkt, das entspricht normaler Tagesschwankung.',
   'outcome.confounders.none':
     'Keiner der geprüften Störfaktoren liegt vor. Das macht die Beobachtung belastbarer, beweist aber weiterhin keinen ursächlichen Zusammenhang: Jahreszeit, Schlaf, Stress und die Erwartung an das Präparat wirken immer mit.',
 
   'outcome.disclaimer':
-    'Diese Auswertung ist deine eigene Einschätzung im Zeitverlauf, keine Wirksamkeitsmessung. Ob ein Präparat für dich sinnvoll ist, lässt sich daraus nicht ableiten — das gehört in ärztliche oder pharmazeutische Hände.',
+    'Diese Auswertung ist deine eigene Einschätzung im Zeitverlauf, keine Wirksamkeitsmessung. Ob ein Präparat für dich sinnvoll ist, lässt sich daraus nicht ableiten. Das gehört in ärztliche oder pharmazeutische Hände.',
 
   // Entscheidung
   'outcome.due.title': 'Zeit für eine Entscheidung',

@@ -14,6 +14,7 @@ import { checkProfileAgainstStack, summarizeProfileFindings } from '../ProfileCh
 import { MEDICATION_CLASSES } from '../data/medicationClasses';
 import { useTranslation } from '../i18n';
 import useStore from '../useStore';
+import { colors, radius, space, surfaces, toneFor, type } from '../theme';
 
 /**
  * Profil-Screen
@@ -138,20 +139,14 @@ export default function ProfileScreen() {
   );
 }
 
-const SEVERITY_STYLE = {
-  contraindicated: { hex: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
-  medical: { hex: '#b45309', bg: '#fffbeb', border: '#fde68a' },
-  attention: { hex: '#0f766e', bg: '#f0fdfa', border: '#ccfbf1' },
-};
-
 function FindingCard({ finding, t }) {
-  const tone = SEVERITY_STYLE[finding.severity] ?? SEVERITY_STYLE.attention;
+  const tone = toneFor(finding.severity);
 
   return (
-    <View style={[styles.findingCard, { borderColor: tone.border, backgroundColor: tone.bg }]}>
+    <View style={[styles.findingCard, { borderColor: tone.rule, backgroundColor: tone.surface }]}>
       <View style={styles.findingHead}>
         <Text style={styles.findingSubstance}>{finding.substanceName}</Text>
-        <Text style={[styles.findingSeverity, { color: tone.hex }]}>
+        <Text style={[styles.findingSeverity, { color: tone.ink }]}>
           {t(`profile.severity.${finding.severity}`)}
         </Text>
       </View>
@@ -186,112 +181,50 @@ function FindingCard({ finding, t }) {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { paddingHorizontal: 20, paddingTop: 28, paddingBottom: 44 },
-  kicker: {
-    color: '#0f766e',
-    fontSize: 13,
-    fontWeight: '800',
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
-    marginBottom: 8,
-  },
-  title: { color: '#0f172a', fontSize: 26, lineHeight: 32, fontWeight: '800' },
-  subtitle: {
-    color: '#475569',
-    fontSize: 14,
-    lineHeight: 21,
-    marginTop: 10,
-    marginBottom: 18,
-  },
+  screen: { ...surfaces.screen },
+  content: { ...surfaces.content },
+  kicker: { ...type.eyebrow, marginBottom: space.sm },
+  title: { ...type.display },
+  subtitle: { ...type.body, marginTop: space.md, marginBottom: space.lg },
   privacyCard: {
-    backgroundColor: '#ecfdf5',
-    borderColor: '#ccfbf1',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 16,
+    borderRadius: radius.lg,
+    padding: space.md,
+    marginBottom: space.lg,
   },
-  privacyTitle: { color: '#0f766e', fontSize: 13, fontWeight: '800', marginBottom: 4 },
-  privacyText: { color: '#475569', fontSize: 13, lineHeight: 19 },
-  card: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 22,
-  },
-  cardTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800' },
-  cardHint: { color: '#64748b', fontSize: 13, lineHeight: 19, marginTop: 6, marginBottom: 14 },
-  chipWrap: { gap: 8 },
-  chip: {
-    backgroundColor: '#f1f5f9',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 13,
-    paddingVertical: 10,
-  },
-  chipActive: { backgroundColor: '#0f766e', borderColor: '#0f766e' },
-  chipText: { color: '#0f172a', fontSize: 14, fontWeight: '700' },
-  chipTextActive: { color: '#ffffff' },
-  chipExample: { color: '#94a3b8', fontSize: 11, lineHeight: 16, marginTop: 2 },
-  chipExampleActive: { color: '#ccfbf1' },
-  resetButton: { marginTop: 14, alignSelf: 'flex-start' },
-  resetButtonText: { color: '#dc2626', fontSize: 13, fontWeight: '700' },
-  sectionTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800', marginBottom: 10 },
-  countLine: { color: '#64748b', fontSize: 13, fontWeight: '700', marginBottom: 10 },
-  emptyCard: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 20,
-  },
-  emptyText: { color: '#64748b', fontSize: 13, lineHeight: 20 },
-  findingCard: { borderWidth: 1, borderRadius: 18, padding: 15, marginBottom: 12 },
+  privacyTitle: { color: colors.accent, fontSize: 13, fontWeight: '800', marginBottom: space.xs },
+  privacyText: { ...type.small, lineHeight: 19 },
+  card: { ...surfaces.card, marginBottom: space.xxl - space.sm },
+  cardTitle: { ...type.subheading },
+  cardHint: { ...type.small, marginTop: space.sm, marginBottom: space.lg },
+  chipWrap: { gap: space.sm },
+  chip: { ...surfaces.chip, borderRadius: radius.lg, paddingHorizontal: 13, paddingVertical: space.md - 2 },
+  chipActive: { ...surfaces.chipActive },
+  chipText: { color: colors.ink, fontSize: 14, fontWeight: '700' },
+  chipTextActive: { ...surfaces.chipTextActive },
+  chipExample: { ...type.tiny, marginTop: 2 },
+  chipExampleActive: { color: colors.accentSoft },
+  resetButton: { marginTop: space.md, alignSelf: 'flex-start' },
+  resetButtonText: { color: colors.alert, fontSize: 13, fontWeight: '700' },
+  sectionTitle: { ...type.heading, marginBottom: space.md },
+  countLine: { ...type.small, fontWeight: '700', marginBottom: space.md },
+  emptyCard: { ...surfaces.card, marginBottom: space.xl - 2 },
+  emptyText: { ...type.small, lineHeight: 20 },
+  findingCard: { borderWidth: 1, borderRadius: radius.lg, padding: space.lg - 1, marginBottom: space.md },
   findingHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  findingSubstance: { color: '#0f172a', fontSize: 15, fontWeight: '800', flex: 1, paddingRight: 8 },
+  findingSubstance: { ...type.bodyStrong, fontSize: 15, flex: 1, paddingRight: space.sm },
   findingSeverity: { fontSize: 11, fontWeight: '800', textAlign: 'right', flexShrink: 0, maxWidth: 130 },
-  findingClass: { color: '#475569', fontSize: 12, fontWeight: '700', marginTop: 3 },
-  quoteLabel: {
-    color: '#94a3b8',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  quote: { color: '#0f172a', fontSize: 13, lineHeight: 20, fontStyle: 'italic' },
-  inProducts: { color: '#64748b', fontSize: 12, lineHeight: 18, marginTop: 10 },
-  sourceWrap: { marginTop: 10, borderTopWidth: 1, borderTopColor: '#e2e8f0', paddingTop: 8 },
-  sourceLabel: {
-    color: '#94a3b8',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-    marginBottom: 3,
-  },
-  sourceItem: { color: '#64748b', fontSize: 11, lineHeight: 17 },
-  sourceLink: { color: '#0f766e', textDecorationLine: 'underline' },
-  disclaimer: {
-    color: '#64748b',
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 6,
-    marginBottom: 18,
-  },
-  backButton: {
-    backgroundColor: '#f1f5f9',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  backButtonText: { color: '#0f172a', fontSize: 15, fontWeight: '800' },
+  findingClass: { color: colors.inkMuted, fontSize: 12, fontWeight: '700', marginTop: 3 },
+  quoteLabel: { ...type.label, marginTop: space.md, marginBottom: space.xs },
+  quote: { ...type.quote, fontSize: 13, lineHeight: 20, fontStyle: 'italic' },
+  inProducts: { ...type.small, marginTop: space.md },
+  sourceWrap: { marginTop: space.md, borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.sm },
+  sourceLabel: { ...type.label, marginBottom: 3 },
+  sourceItem: { color: colors.inkMuted, fontSize: 11, lineHeight: 17 },
+  sourceLink: { color: colors.accent, textDecorationLine: 'underline' },
+  disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg },
+  backButton: { ...surfaces.buttonQuiet },
+  backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });

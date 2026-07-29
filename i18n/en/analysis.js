@@ -51,7 +51,7 @@ export default {
   'analysis.unreviewed.text_other':
     '{count} products costing {amount} {currency} a month together keep running without you ever recording whether they do anything for you: {names}',
   'analysis.unreviewed.hint':
-    'This is not a verdict on the products — it only means there is no observation on file. You can catch up on that in outcome tracking.',
+    'This is not a verdict on the products: it only means there is no observation on file. You can catch up on that in outcome tracking.',
   'analysis.unreviewed.allReviewed': 'Every priced product has an observation on file.',
   'analysis.unreviewed.goToOutcome': 'Go to outcome tracking',
 

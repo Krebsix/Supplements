@@ -10,7 +10,7 @@ export default {
   'stack.warning.aboveLimit_other':
     '{name}: the daily total from {count} products is {amount} {unit}, above the upper limit of {limit} {unit}.',
   'stack.warning.aboveReference':
-    '{name}: {amount} {unit} in total from {count} products — above the reference value of {reference} {unit}, but below the upper limit.',
+    '{name}: {amount} {unit} in total from {count} products, above the reference value of {reference} {unit}, but below the upper limit.',
   'stack.warning.duplicate': '{name} is present in {count} of your products.',
   'stack.title': 'Daily total across all products',
   'stack.subtitle':

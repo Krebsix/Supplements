@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { useRouter } from 'expo-router';
 
 import { useTranslation } from '../i18n';
+import { colors, space } from '../theme';
 
 /**
  * TabBar
@@ -67,12 +68,12 @@ export default function TabBar({ active }) {
 const styles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderTopColor: '#e2e8f0',
+    backgroundColor: colors.surface,
+    borderTopColor: colors.rule,
     borderTopWidth: 1,
-    paddingTop: 8,
+    paddingTop: space.sm,
     // Auf iOS liegt unten die Home-Indikator-Leiste — ohne den Zuschlag
-    // klebt die Beschriftung darauf.
+    // klebt die Beschriftung darauf. Safe-Area-Wert, kein Theme-Abstand.
     paddingBottom: Platform.OS === 'ios' ? 24 : 10,
   },
   tab: {
@@ -84,10 +85,10 @@ const styles = StyleSheet.create({
   icon: { fontSize: 19, opacity: 0.45 },
   iconActive: { opacity: 1 },
   label: {
-    color: '#94a3b8',
+    color: colors.inkFaint,
     fontSize: 10,
     fontWeight: '700',
     marginTop: 2,
   },
-  labelActive: { color: '#0f766e', fontWeight: '900' },
+  labelActive: { color: colors.accent, fontWeight: '900' },
 });

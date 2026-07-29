@@ -11,6 +11,8 @@ import { useRouter } from 'expo-router';
 
 import TabBar from '../components/TabBar';
 
+import { colors, radius, space, surfaces, toneFor, type } from '../theme';
+
 import { analyzeCosts, findSharedGoals } from '../CostAnalyzer';
 import { analyzeStack, getStackWarnings } from '../StackAnalyzer';
 import { getOutcomeMetric } from '../data/outcomeMetrics';
@@ -325,7 +327,7 @@ function PriceEditor({ entries, onSave, t }) {
             onChangeText={setPrice}
             keyboardType="decimal-pad"
             placeholder="19,90"
-            placeholderTextColor="#94a3b8"
+            placeholderTextColor={colors.inkFaint}
           />
           <Text style={styles.fieldLabel}>{t('analysis.price.packageUnits')}</Text>
           <TextInput
@@ -334,7 +336,7 @@ function PriceEditor({ entries, onSave, t }) {
             onChangeText={setUnits}
             keyboardType="number-pad"
             placeholder="120"
-            placeholderTextColor="#94a3b8"
+            placeholderTextColor={colors.inkFaint}
           />
           <TouchableOpacity style={styles.primaryButton} onPress={() => save(openId)}>
             <Text style={styles.primaryButtonText}>{t('analysis.price.save')}</Text>
@@ -346,93 +348,115 @@ function PriceEditor({ entries, onSave, t }) {
 }
 
 const styles = StyleSheet.create({
-  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
-  screen: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { paddingHorizontal: 20, paddingTop: 28, paddingBottom: 44 },
+  screenWrap: { ...surfaces.screen },
+  screen: { ...surfaces.screen },
+  content: { ...surfaces.content },
   kicker: {
-    color: '#0f766e', fontSize: 13, fontWeight: '800',
-    letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 8,
+    ...type.eyebrow,
+    marginBottom: space.sm,
   },
-  title: { color: '#0f172a', fontSize: 26, lineHeight: 32, fontWeight: '800' },
-  subtitle: { color: '#475569', fontSize: 14, lineHeight: 21, marginTop: 10, marginBottom: 20 },
-  sectionTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800', marginTop: 14, marginBottom: 6 },
-  sectionHint: { color: '#64748b', fontSize: 12, lineHeight: 18, marginBottom: 10 },
-  card: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 18, padding: 16, marginBottom: 12,
-  },
-  emptyCard: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 18, padding: 16, marginBottom: 12,
-  },
-  emptyText: { color: '#64748b', fontSize: 13, lineHeight: 20 },
+  title: { ...type.display },
+  subtitle: { ...type.body, marginTop: space.md, marginBottom: space.xl },
+  sectionTitle: { ...type.heading, marginTop: space.lg, marginBottom: space.sm },
+  sectionHint: { ...type.small, marginBottom: space.md },
+  card: { ...surfaces.card },
+  emptyCard: { ...surfaces.card },
+  emptyText: { ...type.body },
+  // Warnungen aus dem Stack-Abgleich: 'notice' ist der Normalfall,
+  // 'critical' (StackAnalyzer-Level) wird darueber gelegt.
   warnCard: {
-    backgroundColor: '#fffbeb', borderColor: '#fde68a', borderWidth: 1,
-    borderRadius: 16, padding: 13, marginBottom: 10,
+    backgroundColor: toneFor('notice').surface,
+    borderColor: toneFor('notice').rule,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    padding: space.md,
+    marginBottom: space.sm,
   },
-  warnCardCritical: { backgroundColor: '#fef2f2', borderColor: '#fecaca' },
-  warnText: { color: '#b45309', fontSize: 13, lineHeight: 19, fontWeight: '600' },
-  warnTextCritical: { color: '#dc2626' },
-  allClear: { color: '#0f766e', fontSize: 13, lineHeight: 19, marginBottom: 10 },
+  warnCardCritical: {
+    backgroundColor: toneFor('critical').surface,
+    borderColor: toneFor('critical').rule,
+  },
+  warnText: {
+    ...type.body,
+    color: toneFor('notice').ink,
+    fontWeight: '600',
+  },
+  warnTextCritical: { color: toneFor('critical').ink },
+  allClear: {
+    color: toneFor('ok').ink,
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: space.sm,
+  },
   totalRow: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 14, paddingHorizontal: 14, paddingVertical: 11, marginBottom: 8,
+    backgroundColor: colors.surface,
+    borderColor: colors.rule,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
+    marginBottom: space.sm,
   },
   totalHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  totalName: { color: '#0f172a', fontSize: 14, fontWeight: '700', flex: 1 },
-  totalAmount: { color: '#0f172a', fontSize: 14, fontWeight: '800' },
-  totalMeta: { color: '#64748b', fontSize: 11, marginTop: 2 },
-  unresolvedNote: { color: '#94a3b8', fontSize: 12, marginTop: 4, marginBottom: 6 },
-  bigNumber: { color: '#0f172a', fontSize: 22, fontWeight: '800' },
-  smallNumber: { color: '#64748b', fontSize: 13, marginTop: 2, marginBottom: 12 },
+  totalName: { ...type.bodyStrong, fontSize: 14, flex: 1 },
+  totalAmount: { color: colors.ink, fontSize: 14, fontWeight: '800' },
+  totalMeta: { ...type.small, fontSize: 11, marginTop: space.xs },
+  unresolvedNote: { ...type.tiny, fontSize: 12, marginTop: space.xs, marginBottom: space.sm },
+  bigNumber: { ...type.numeral },
+  smallNumber: { ...type.small, marginTop: space.xs, marginBottom: space.md },
   costRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    borderTopWidth: 1, borderTopColor: '#f1f5f9', paddingTop: 9, marginTop: 9,
+    borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.sm, marginTop: space.sm,
   },
-  costTextWrap: { flex: 1, paddingRight: 10 },
-  costName: { color: '#0f172a', fontSize: 13, fontWeight: '700' },
-  costStatus: { color: '#94a3b8', fontSize: 11, marginTop: 1 },
-  costValue: { color: '#0f172a', fontSize: 13, fontWeight: '800' },
-  footnote: { color: '#94a3b8', fontSize: 11, lineHeight: 17, marginTop: 10 },
+  costTextWrap: { flex: 1, paddingRight: space.md },
+  costName: { ...type.bodyStrong, fontSize: 13 },
+  costStatus: { ...type.tiny, marginTop: 1 },
+  costValue: { color: colors.ink, fontSize: 13, fontWeight: '800' },
+  footnote: { ...type.tiny, lineHeight: 17, marginTop: space.md },
+  // Nie ueberprueft: ein Hinweis zum Nachschauen, kein Alarm.
   reviewCard: {
-    backgroundColor: '#fffbeb', borderColor: '#fde68a', borderWidth: 1,
-    borderRadius: 18, padding: 16, marginBottom: 12,
+    backgroundColor: toneFor('notice').surface,
+    borderColor: toneFor('notice').rule,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    padding: space.lg,
+    marginBottom: space.md,
   },
-  reviewText: { color: '#b45309', fontSize: 13, lineHeight: 20, fontWeight: '600' },
-  reviewHint: { color: '#64748b', fontSize: 12, lineHeight: 18, marginTop: 8 },
+  reviewText: {
+    ...type.body,
+    color: toneFor('notice').ink,
+    fontWeight: '600',
+  },
+  reviewHint: { marginTop: space.sm, ...type.small },
   linkButton: {
-    backgroundColor: '#0f766e', borderRadius: 999,
-    paddingVertical: 11, alignItems: 'center', marginTop: 12,
+    ...surfaces.buttonPrimary,
+    paddingVertical: space.md,
+    marginTop: space.md,
   },
-  linkButtonText: { color: '#ffffff', fontSize: 13, fontWeight: '800' },
-  sharedGoalItem: { color: '#475569', fontSize: 13, lineHeight: 20 },
-  priceTitle: { color: '#0f172a', fontSize: 14, fontWeight: '800' },
-  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, marginTop: 12 },
-  chip: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingHorizontal: 12, paddingVertical: 7,
-  },
-  chipActive: { backgroundColor: '#0f766e', borderColor: '#0f766e' },
-  chipText: { color: '#475569', fontSize: 12, fontWeight: '700' },
-  chipTextActive: { color: '#ffffff' },
-  priceForm: { marginTop: 14 },
+  linkButtonText: { ...surfaces.buttonPrimaryText, fontSize: 13 },
+  sharedGoalItem: { ...type.body, lineHeight: 20 },
+  priceTitle: { ...type.subheading },
+  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: space.md },
+  chip: { ...surfaces.chip },
+  chipActive: { ...surfaces.chipActive },
+  chipText: { ...surfaces.chipText },
+  chipTextActive: { ...surfaces.chipTextActive },
+  priceForm: { marginTop: space.lg },
   fieldLabel: {
-    color: '#475569', fontSize: 10, fontWeight: '900', letterSpacing: 0.7,
-    textTransform: 'uppercase', marginTop: 10, marginBottom: 6,
+    ...type.label,
+    marginTop: space.md,
+    marginBottom: space.sm,
   },
-  input: {
-    backgroundColor: '#f8fafc', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10,
-    fontSize: 14, color: '#0f172a',
-  },
+  input: { ...surfaces.input },
   primaryButton: {
-    backgroundColor: '#0f766e', borderRadius: 999,
-    paddingVertical: 13, alignItems: 'center', marginTop: 14,
+    ...surfaces.buttonPrimary,
+    paddingVertical: space.md,
+    marginTop: space.lg,
   },
-  primaryButtonText: { color: '#ffffff', fontSize: 14, fontWeight: '800' },
+  primaryButtonText: { ...surfaces.buttonPrimaryText },
   backButton: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingVertical: 14, alignItems: 'center', marginTop: 10,
+    ...surfaces.buttonQuiet,
+    marginTop: space.md,
   },
-  backButtonText: { color: '#0f172a', fontSize: 15, fontWeight: '800' },
+  backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });

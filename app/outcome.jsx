@@ -26,6 +26,7 @@ import {
 } from '../data/outcomeMetrics';
 import { useTranslation } from '../i18n';
 import useStore from '../useStore';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 const SCALE_LABEL_KEYS = [
   'outcome.scale.veryLow',
@@ -187,7 +188,7 @@ export default function OutcomeScreen() {
             value={draftReason}
             onChangeText={setDraftReason}
             placeholder={t('outcome.new.reasonPlaceholder')}
-            placeholderTextColor="#94a3b8"
+            placeholderTextColor={colors.inkFaint}
           />
 
           <Text style={styles.fieldLabel}>{t('outcome.new.baseline')}</Text>
@@ -273,6 +274,8 @@ function ScalePicker({ value, onChange, metricId, t }) {
             <Text style={[styles.scaleNumber, value === step && styles.scaleNumberActive]}>
               {step}
             </Text>
+            {/* Ziffern in Serife: die Skala ist zentrales Bedienelement,
+                das soll sich abheben. */}
           </TouchableOpacity>
         ))}
       </View>
@@ -432,103 +435,77 @@ function describeConfounder(confounder, t) {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { paddingHorizontal: 20, paddingTop: 28, paddingBottom: 44 },
-  kicker: {
-    color: '#0f766e', fontSize: 13, fontWeight: '800',
-    letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 8,
-  },
-  title: { color: '#0f172a', fontSize: 26, lineHeight: 32, fontWeight: '800' },
-  subtitle: { color: '#475569', fontSize: 14, lineHeight: 21, marginTop: 10, marginBottom: 20 },
-  sectionTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800', marginBottom: 10, marginTop: 8 },
-  card: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 20, padding: 16, marginBottom: 14,
-  },
-  cardDue: { borderColor: '#fde68a', backgroundColor: '#fffbeb' },
-  emptyCard: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 18, padding: 16, marginBottom: 14,
-  },
-  emptyText: { color: '#64748b', fontSize: 13, lineHeight: 20 },
+  screen: { ...surfaces.screen },
+  content: { ...surfaces.content },
+  kicker: { ...type.eyebrow, marginBottom: space.sm },
+  title: { ...type.display },
+  subtitle: { ...type.body, marginTop: space.md, marginBottom: space.xl },
+  sectionTitle: { ...type.heading, marginBottom: space.md, marginTop: space.sm },
+  card: { ...surfaces.card, marginBottom: space.lg - 2 },
+  cardDue: { borderColor: colors.caution, backgroundColor: colors.cautionSoft },
+  emptyCard: { ...surfaces.card, marginBottom: space.lg - 2 },
+  emptyText: { ...type.small, lineHeight: 20 },
   trialHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  trialName: { color: '#0f172a', fontSize: 16, fontWeight: '800', flex: 1 },
-  dueBadge: { color: '#b45309', fontSize: 11, fontWeight: '900' },
-  trialMetric: { color: '#0f766e', fontSize: 13, fontWeight: '700', marginTop: 2 },
-  trialReason: { color: '#64748b', fontSize: 13, lineHeight: 19, marginTop: 4, fontStyle: 'italic' },
-  trialProgress: { color: '#475569', fontSize: 12, fontWeight: '700', marginTop: 8 },
-  metaRow: { marginTop: 6 },
-  metaItem: { color: '#64748b', fontSize: 12, lineHeight: 18 },
-  fieldLabel: {
-    color: '#475569', fontSize: 10, fontWeight: '900', letterSpacing: 0.7,
-    textTransform: 'uppercase', marginTop: 14, marginBottom: 7,
-  },
-  fieldHint: { color: '#64748b', fontSize: 12, lineHeight: 18, marginTop: 6 },
-  input: {
-    backgroundColor: '#f8fafc', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10,
-    fontSize: 14, color: '#0f172a',
-  },
-  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 7 },
-  chip: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingHorizontal: 12, paddingVertical: 7,
-  },
-  chipActive: { backgroundColor: '#0f766e', borderColor: '#0f766e' },
-  chipText: { color: '#475569', fontSize: 12, fontWeight: '700' },
-  chipTextActive: { color: '#ffffff' },
-  scaleRow: { flexDirection: 'row', gap: 8 },
+  trialName: { ...type.bodyStrong, fontSize: 16, flex: 1 },
+  dueBadge: { color: colors.caution, fontSize: 11, fontWeight: '900' },
+  trialMetric: { color: colors.accent, fontSize: 13, fontWeight: '700', marginTop: 2 },
+  trialReason: { color: colors.inkMuted, fontSize: 13, lineHeight: 19, marginTop: space.xs, fontStyle: 'italic' },
+  trialProgress: { color: colors.inkMuted, fontSize: 12, fontWeight: '700', marginTop: space.sm },
+  metaRow: { marginTop: space.xs + 2 },
+  metaItem: { ...type.small, lineHeight: 18 },
+  fieldLabel: { ...type.label, marginTop: space.lg - 2, marginBottom: space.sm - 1 },
+  fieldHint: { ...type.small, lineHeight: 18, marginTop: space.sm },
+  input: { ...surfaces.input },
+  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm - 1 },
+  chip: { ...surfaces.chip, paddingHorizontal: space.md, paddingVertical: space.sm - 1 },
+  chipActive: { ...surfaces.chipActive },
+  chipText: { ...surfaces.chipText },
+  chipTextActive: { ...surfaces.chipTextActive },
+  scaleRow: { flexDirection: 'row', gap: space.sm },
   scaleButton: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
-    borderColor: '#e2e8f0',
+    backgroundColor: colors.surfaceSunken,
+    borderColor: colors.rule,
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: radius.md,
     paddingVertical: 11,
     alignItems: 'center',
   },
-  scaleButtonActive: { backgroundColor: '#0f766e', borderColor: '#0f766e' },
-  scaleNumber: { color: '#475569', fontSize: 15, fontWeight: '800' },
-  scaleNumberActive: { color: '#ffffff' },
-  scaleHint: { color: '#94a3b8', fontSize: 11, marginTop: 6 },
-  primaryButton: {
-    backgroundColor: '#0f766e', borderRadius: 999,
-    paddingVertical: 14, alignItems: 'center', marginTop: 18,
-  },
-  primaryButtonText: { color: '#ffffff', fontSize: 15, fontWeight: '800' },
-  blockTitle: { color: '#0f172a', fontSize: 13, fontWeight: '800', marginBottom: 5 },
+  scaleButtonActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  // Ziffern in Serife statt Systemschrift: die Skala ist die zentrale
+  // Bedienhandlung des Screens, das wertet sie sichtbar auf.
+  scaleNumber: { ...type.numeral, fontSize: 15 },
+  scaleNumberActive: { color: colors.surface },
+  scaleHint: { color: colors.inkFaint, fontSize: 11, marginTop: space.sm },
+  primaryButton: { ...surfaces.buttonPrimary, marginTop: space.xl - 4 },
+  primaryButtonText: { ...surfaces.buttonPrimaryText },
+  blockTitle: { color: colors.ink, fontSize: 13, fontWeight: '800', marginBottom: 5 },
   resultBlock: {
-    marginTop: 16, borderTopWidth: 1, borderTopColor: '#e2e8f0', paddingTop: 12,
+    marginTop: space.lg, borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.md,
   },
-  resultText: { color: '#475569', fontSize: 13, lineHeight: 20 },
+  resultText: { color: colors.inkMuted, fontSize: 13, lineHeight: 20 },
   confounderBlock: {
-    marginTop: 14, backgroundColor: '#f8fafc', borderColor: '#e2e8f0',
-    borderWidth: 1, borderRadius: 14, padding: 12,
+    marginTop: space.lg - 2, backgroundColor: colors.surfaceSunken, borderColor: colors.rule,
+    borderWidth: 1, borderRadius: radius.lg, padding: space.md,
   },
-  confounderIntro: { color: '#64748b', fontSize: 12, lineHeight: 18, marginBottom: 6 },
-  confounderText: { color: '#64748b', fontSize: 12, lineHeight: 18 },
-  confounderItem: { color: '#475569', fontSize: 12, lineHeight: 19, marginTop: 4 },
+  confounderIntro: { ...type.small, lineHeight: 18, marginBottom: space.sm - 2 },
+  confounderText: { ...type.small, lineHeight: 18 },
+  confounderItem: { color: colors.inkMuted, fontSize: 12, lineHeight: 19, marginTop: space.xs },
   dueBlock: {
-    marginTop: 14, backgroundColor: '#ffffff', borderColor: '#fde68a',
-    borderWidth: 1, borderRadius: 14, padding: 12,
+    marginTop: space.lg - 2, backgroundColor: colors.surface, borderColor: colors.caution,
+    borderWidth: 1, borderRadius: radius.lg, padding: space.md,
   },
-  dueButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, marginTop: 10 },
+  dueButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm - 1, marginTop: space.sm + 2 },
   dueButton: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingHorizontal: 13, paddingVertical: 8,
+    backgroundColor: colors.surfaceSunken, borderColor: colors.rule, borderWidth: 1,
+    borderRadius: radius.md, paddingHorizontal: 13, paddingVertical: space.sm,
   },
-  dueButtonText: { color: '#0f172a', fontSize: 12, fontWeight: '800' },
-  finishedCard: {
-    backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 16, padding: 14, marginBottom: 10,
-  },
-  finishedName: { color: '#0f172a', fontSize: 14, fontWeight: '800' },
-  finishedMeta: { color: '#64748b', fontSize: 12, marginTop: 3 },
-  deleteLink: { color: '#dc2626', fontSize: 12, fontWeight: '700', marginTop: 12 },
-  disclaimer: { color: '#64748b', fontSize: 12, lineHeight: 18, marginTop: 14, marginBottom: 18 },
-  backButton: {
-    backgroundColor: '#f1f5f9', borderColor: '#e2e8f0', borderWidth: 1,
-    borderRadius: 999, paddingVertical: 14, alignItems: 'center',
-  },
-  backButtonText: { color: '#0f172a', fontSize: 15, fontWeight: '800' },
+  dueButtonText: { color: colors.ink, fontSize: 12, fontWeight: '800' },
+  finishedCard: { ...surfaces.card, padding: space.md, marginBottom: space.sm + 2 },
+  finishedName: { color: colors.ink, fontSize: 14, fontWeight: '800' },
+  finishedMeta: { color: colors.inkMuted, fontSize: 12, marginTop: 3 },
+  deleteLink: { color: colors.alert, fontSize: 12, fontWeight: '700', marginTop: space.md },
+  disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.lg - 2, marginBottom: space.lg },
+  backButton: { ...surfaces.buttonQuiet },
+  backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });

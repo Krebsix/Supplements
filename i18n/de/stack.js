@@ -10,7 +10,7 @@ export default {
   'stack.warning.aboveLimit_other':
     '{name}: Die Tagessumme aus {count} Produkten liegt bei {amount} {unit} und damit über der Obergrenze von {limit} {unit}.',
   'stack.warning.aboveReference':
-    '{name}: Zusammengerechnet {amount} {unit} aus {count} Produkten — über dem Referenzwert von {reference} {unit}, aber unter der Obergrenze.',
+    '{name}: Zusammengerechnet {amount} {unit} aus {count} Produkten, über dem Referenzwert von {reference} {unit}, aber unter der Obergrenze.',
   'stack.warning.duplicate': '{name} steckt in {count} Produkten deines Bestands.',
   'stack.title': 'Tagessumme über alle Produkte',
   'stack.subtitle':
