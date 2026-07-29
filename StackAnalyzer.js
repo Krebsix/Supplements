@@ -30,6 +30,7 @@
 import { matchIngredient, convertAmount } from './SubstanceMatcher';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { checkAgainstReference, REFERENCE_STATUS } from './ReferenceCheck';
+import { tr } from './i18n/runtime';
 import { getReferenceValue } from './data/referenceValues';
 
 /**
@@ -266,21 +267,39 @@ export function getStackWarnings(analysis) {
       warnings.push({
         level: 'critical',
         substanceId: entry.substanceId,
-        text: `${entry.name}: Die Tagessumme aus ${entry.sources.length} ${
-          entry.sources.length === 1 ? 'Produkt' : 'Produkten'
-        } liegt bei ${entry.totalMax} ${entry.unit} und damit über der Obergrenze von ${entry.referenceCheck.upperLimit} ${entry.unit}.`,
+        text: tr(
+          entry.sources.length === 1
+            ? 'stack.warning.aboveLimit_one'
+            : 'stack.warning.aboveLimit_other',
+          {
+            name: entry.name,
+            count: entry.sources.length,
+            amount: entry.totalMax,
+            unit: entry.unit,
+            limit: entry.referenceCheck.upperLimit,
+          }
+        ),
       });
     } else if (status === REFERENCE_STATUS.ABOVE_REFERENCE && entry.sources.length > 1) {
       warnings.push({
         level: 'notice',
         substanceId: entry.substanceId,
-        text: `${entry.name}: Zusammengerechnet ${entry.totalMax} ${entry.unit} aus ${entry.sources.length} Produkten — über dem Referenzwert von ${entry.referenceCheck.reference} ${entry.unit}, aber unter der Obergrenze.`,
+        text: tr('stack.warning.aboveReference', {
+          name: entry.name,
+          count: entry.sources.length,
+          amount: entry.totalMax,
+          unit: entry.unit,
+          reference: entry.referenceCheck.reference,
+        }),
       });
     } else if (entry.sources.length > 1) {
       warnings.push({
         level: 'info',
         substanceId: entry.substanceId,
-        text: `${entry.name} steckt in ${entry.sources.length} Produkten deines Bestands.`,
+        text: tr('stack.warning.duplicate', {
+          name: entry.name,
+          count: entry.sources.length,
+        }),
       });
     }
   }

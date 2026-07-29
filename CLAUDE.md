@@ -68,6 +68,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
 | `ProfileCheck.js` | Verknuepft das persoenliche Profil (Medikamentengruppen) mit dem Bestand und zitiert die belegten Hinweise |
 | `OutcomeTracker.js` | Wirkungskontrolle: Ausgangswert, Verlauf, Einnahmetreue — und die Stoerfaktoren, die gegen eine Zuordnung sprechen |
+| `CostAnalyzer.js` | Kosten je Produkt aus TATSAECHLICHEM Verbrauch, plus die Verbindung zur Wirkungskontrolle (was lief nie ueberprueft mit) |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 
 ### Wirkstoff-Datenbank (`data/`)
@@ -165,6 +166,10 @@ Loeschen der App bedeutet Datenverlust.
   gestiegen". `OutcomeTracker.js` liefert deshalb Zahlen und Stoerfaktoren
   GETRENNT zurueck, und die Oberflaeche zeigt beides nebeneinander. Ohne den
   Stoerfaktor-Block waere das Feature ein Bestaetigungsautomat.
+- **"Nie ueberprueft" ist kein Urteil ueber das Produkt.** Die Kostenanalyse
+  zeigt, welche Ausgaben ohne Wirkungskontrolle mitlaufen. Das ist eine
+  Beobachtungsluecke, keine Aussage ueber Wirksamkeit — die Formulierung muss
+  das offenhalten.
 - **Ein Treffer ist keine Bewertung der Person.** Die App kennt weder Praeparat
   noch Dosis noch Befund. Formulierung deshalb immer "dazu ist ein Hinweis
   hinterlegt", nie "das ist fuer dich gefaehrlich".

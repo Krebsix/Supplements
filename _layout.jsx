@@ -65,6 +65,13 @@ export default function Layout() {
       />
 
       <Stack.Screen
+        name="analysis"
+        options={{
+          title: t('nav.analysis'),
+        }}
+      />
+
+      <Stack.Screen
         name="outcome"
         options={{
           title: t('nav.outcome'),

@@ -37,6 +37,9 @@ export default {
   'home.nav.profile.title': 'Persönliches Profil',
   'home.nav.profile.subtitle':
     'Medikamentengruppen hinterlegen und sehen, wo die Quellen dazu etwas zu deinem Bestand sagen.',
+  'home.nav.analysis.title': 'Analyse',
+  'home.nav.analysis.subtitle':
+    'Tagessummen über alle Produkte, laufende Kosten und was davon je überprüft wurde.',
   'home.nav.outcome.title': 'Wirkungskontrolle',
   'home.nav.outcome.subtitle':
     'Festhalten, warum du etwas nimmst — und über die Zeit sehen, was sich verändert und was dagegen spricht, es der Einnahme zuzuschreiben.',

@@ -10,6 +10,7 @@ export default {
   'nav.results': 'Analyse',
   'nav.addSupplement': 'Supplement erfassen',
   'nav.profile': 'Profil',
+  'nav.analysis': 'Analyse',
   'nav.outcome': 'Wirkung',
   'nav.settings': 'Einstellungen',
   'nav.history': 'Verlauf',

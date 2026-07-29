@@ -37,6 +37,9 @@ export default {
   'home.nav.profile.title': 'Personal profile',
   'home.nav.profile.subtitle':
     'Record medication groups and see where the sources say something about your products.',
+  'home.nav.analysis.title': 'Analysis',
+  'home.nav.analysis.subtitle':
+    'Daily totals across all products, running costs, and what has ever been reviewed.',
   'home.nav.outcome.title': 'Outcome tracking',
   'home.nav.outcome.subtitle':
     'Record why you take something — and see over time what changes and what argues against attributing it to the product.',

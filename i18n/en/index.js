@@ -6,6 +6,7 @@
 
 import addSupplement from './addSupplement';
 import analyzer from './analyzer';
+import analysis from './analysis';
 import common from './common';
 import components from './components';
 import dashboard from './dashboard';
@@ -24,6 +25,7 @@ import stack from './stack';
 export default {
   ...common,
   ...analyzer,
+  ...analysis,
   ...components,
   ...logic,
   ...reference,
