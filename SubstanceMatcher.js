@@ -189,6 +189,11 @@ export function matchIngredient(ingredient) {
     form: detectForm(substance, normalized, isObject ? ingredient.form : ''),
     amount: Number.isFinite(amount) ? amount : null,
     unit,
+    // Normalisierter Text und Tokens werden mitgegeben, weil DoseNormalizer.js
+    // daran erkennt, ob sich die Menge auf die Verbindung ("Magnesiumcitrat
+    // 500 mg") oder auf das Element ("Magnesium 300 mg") bezieht.
+    normalizedLabel: normalized,
+    tokens,
   };
 }
 

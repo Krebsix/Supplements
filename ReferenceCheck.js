@@ -15,6 +15,7 @@
  */
 
 import { convertAmount } from './SubstanceMatcher';
+import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { getAdvisories } from './data/lifeStageAdvisories';
 import { getReferenceValue } from './data/referenceValues';
 import { normalizeSources } from './data/substances';
@@ -107,8 +108,35 @@ export function checkAgainstReference(match, lifeStageId) {
     };
   }
 
+  // Verbindung oder Element? Referenzwerte sind immer elementar, deshalb
+  // muss "Magnesiumcitrat 500 mg" auf den Magnesium-Anteil heruntergerechnet
+  // werden, bevor verglichen wird (siehe DoseNormalizer.js).
+  const dose = resolveAmountBasis(match);
+
+  if (dose.basis === AMOUNT_BASIS.COMPOUND_UNKNOWN) {
+    // Verbindung erkannt, Elementanteil aber nicht belastbar hinterlegt.
+    // Ein Vergleich waere hier eine Scheingenauigkeit.
+    return {
+      status: REFERENCE_STATUS.UNKNOWN,
+      substanceId: match.substanceId,
+      substanceName: match.substance.name,
+      lifeStageId,
+      unit: reference.unit,
+      amount: null,
+      reference: reference.reference,
+      upperLimit: reference.upperLimit,
+      upperLimitNote: reference.upperLimitNote,
+      percentOfReference: null,
+      amountBasis: dose.basis,
+      summary: `Die Angabe bezieht sich auf ${dose.formName}, nicht auf elementares ${match.substance.name}. Für diese Verbindung ist kein gesicherter Elementanteil hinterlegt, deshalb ist kein Abgleich mit dem Referenzwert von ${formatNumber(reference.reference)} ${reference.unit} möglich. Die elementare Menge steht in der Nährwerttabelle des Produkts.`,
+    };
+  }
+
+  const basisAmount =
+    dose.basis === AMOUNT_BASIS.COMPOUND ? dose.elementalAmount : match.amount;
+
   const amount = convertAmount(
-    match.amount,
+    basisAmount,
     match.unit,
     reference.unit,
     match.substance
@@ -177,6 +205,24 @@ export function checkAgainstReference(match, lifeStageId) {
       summary = `${amountText} decken rund ${percentOfReference} % des Referenzwerts von ${refText} pro Tag ab. Die restliche Menge stammt üblicherweise aus der Ernährung.`;
   }
 
+  // Wurde von der Verbindung auf das Element heruntergerechnet, muss die
+  // Rechnung sichtbar sein — sonst wundert sich die Nutzerin, warum aus
+  // 500 mg auf dem Etikett plötzlich 81 mg werden.
+  if (dose.basis === AMOUNT_BASIS.COMPOUND) {
+    // Auf ganze Prozent runden: der Anteil schwankt je nach Hydratform,
+    // eine Nachkommastelle wuerde eine Genauigkeit vortaeuschen, die es
+    // bei Handelsware nicht gibt.
+    const percentOfCompound = Math.round(dose.fraction * 100);
+    // Das Etikettenwort nehmen ("Magnesiumcitrat"), nicht den internen
+    // Formnamen ("Citrat") — sonst liest sich der Satz wie ein Tippfehler.
+    const compoundLabel = match.label || dose.formName;
+    summary += ` Grundlage der Rechnung: ${formatNumber(dose.originalAmount)} ${match.unit} ${compoundLabel} enthalten rund ${percentOfCompound} % elementares ${match.substance.name}. Referenzwerte beziehen sich immer auf die elementare Menge.`;
+
+    if (dose.varies) {
+      summary += ' Der Anteil schwankt je nach Handelsform — maßgeblich ist die Nährwerttabelle des Produkts.';
+    }
+  }
+
   return {
     status,
     substanceId: match.substanceId,
@@ -189,6 +235,16 @@ export function checkAgainstReference(match, lifeStageId) {
     upperLimitNote: reference.upperLimitNote,
     percentOfReference,
     summary,
+    // Herkunft der verglichenen Zahl — die UI kann damit kennzeichnen,
+    // ob der Wert vom Etikett stammt oder umgerechnet wurde.
+    amountBasis: dose.basis,
+    originalAmount: dose.originalAmount,
+    formName: dose.formName,
+    elementalFraction: dose.fraction,
+    elementalFractionVaries: dose.varies,
+    // Stoechiometrie-Herkunft (Summenformel, Hydratzustand) fuer die
+    // Detailansicht — bewusst nicht im Fliesstext, das ist Beleg, nicht Satz.
+    elementalFractionNote: dose.fractionNote,
   };
 }
 

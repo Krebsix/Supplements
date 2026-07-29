@@ -63,7 +63,9 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `CureManager.js` | Kur-Zyklen: `cycle` (z. B. 21/7) und `stepped` (Dosis-Stufen) |
 | `SupplementResearchLogic.js` | Aeltere Mini-Wissensdatenbank (Default-Slot, Hinweis) |
 | `SubstanceMatcher.js` | Ordnet Etikettentexte Substanzen und chemischen Formen zu |
+| `DoseNormalizer.js` | Entscheidet, ob eine Menge die Verbindung oder das Element meint, und rechnet nur im ersten Fall herunter |
 | `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase, sammelt Lebensphasen-Hinweise |
+| `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 
 ### Wirkstoff-Datenbank (`data/`)
@@ -74,6 +76,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `data/referenceValues.js` | Referenzwerte und Obergrenzen (UL) je Lebensphase — 8 Gruppen von Kind bis 65+ |
 | `data/lifeStageAdvisories.js` | Was in einer bestimmten Lebensphase gilt (z. B. Retinol in der Schwangerschaft). Severity: `contraindicated`, `medical`, `attention`, `increased` |
 | `data/certifications.js` | Pruefsiegel mit Geltungsbereich. Das Feld `scope` sagt, was ein Siegel NICHT abdeckt — bewusst so |
+| `data/elementalFractions.js` | Massenanteil des Elements in einer Verbindung (500 mg Magnesiumcitrat = rund 81 mg Magnesium). Stoechiometrie mit Summenformel als Beleg |
 
 Bewusst als versioniertes JS-Modul im Repo, nicht in einer Datenbank:
 Katalogwissen aendert sich selten, die App bleibt offline-faehig, und jede
@@ -115,6 +118,17 @@ Loeschen der App bedeutet Datenverlust.
   werden als fehlend gespeichert — frueher wurden sie still auf `'1'` bzw. `'Kapsel'`
   gesetzt, was wie ein erkannter Wert aussah. Das war ein Bug, siehe Commit
   `6bd60b6`.
+- **Verbindungsmenge ist nicht Elementmenge.** Referenzwerte sind immer elementar.
+  „Magnesiumcitrat 500 mg" enthaelt rund 81 mg Magnesium — ungeprueft verglichen
+  ergab das eine Grenzwert-Warnung, wo keine war. Umgerechnet wird aber NUR, wenn
+  die Menge erkennbar an der Verbindung haengt: nach Richtlinie 2002/46/EG und LMIV
+  muss die Naehrwerttabelle bereits die elementare Menge nennen, pauschales
+  Herunterrechnen wuerde eine echte Ueberdosierung verschleiern. Die Entscheidung
+  trifft `DoseNormalizer.js`; ohne gesicherten Elementanteil wird gar nicht
+  gerechnet, sondern gekennzeichnet.
+- **Obergrenzen gelten fuer die Tagessumme, nicht pro Dose.** Wirkstoffmengen
+  muessen ueber alle aktiven Produkte addiert werden (`StackAnalyzer.js`) —
+  drei unauffaellige Praeparate koennen zusammen die Obergrenze reissen.
 - Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`, `'vision'`
   fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer)
   und eine `captureSummary`, damit nachvollziehbar ist, woher ein Eintrag stammt.
