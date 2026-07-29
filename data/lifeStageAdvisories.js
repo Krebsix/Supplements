@@ -316,6 +316,118 @@ export const advisories = {
       text: 'Kann die Wirkung von Vitamin-K-Antagonisten beeinflussen. Häufiges Anwendungsgebiet ist die Begleitung einer Statin-Therapie.',
     },
   ],
+  // ── Erweiterung Juli 2026 ──────────────────────────────────
+  'panax-ginseng': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'HMPC: Sicherheit in Schwangerschaft und Stillzeit nicht belegt, Anwendung bei unzureichender Datenlage nicht empfohlen. Ein Inhaltsstoff hat im Tierversuch Fehlbildungen ausgelöst.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern und Jugendlichen unter 18 Jahren mangels Daten nicht empfohlen (HMPC).',
+    },
+  ],
+  'ginkgo-biloba': [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Offizielle HMPC-Kontraindikation (nicht nur Warnhinweis) — kann die Thrombozytenaggregation beeinträchtigen und die Blutungsneigung erhöhen.',
+    },
+    {
+      lifeStages: ['breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Unklar, ob Metaboliten in die Muttermilch übergehen; Anwendung laut HMPC nicht empfohlen.',
+    },
+  ],
+  'rhodiola-rosea': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'HMPC: Sicherheit nicht belegt, Anwendung bei unzureichender Datenlage nicht empfohlen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern und Jugendlichen unter 18 Jahren mangels Daten nicht empfohlen (HMPC).',
+    },
+  ],
+  'milk-thistle': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'HMPC: Sicherheit nicht belegt, Anwendung bei unzureichender Datenlage nicht empfohlen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern und Jugendlichen unter 18 Jahren mangels Daten nicht empfohlen (HMPC).',
+    },
+  ],
+  maca: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Das BfR stellt ausdrücklich fest, dass aus den vorliegenden Daten keine gesundheitlich unbedenkliche Verzehrsmenge abgeleitet werden kann. Diese Zurückhaltung ist aus der allgemein unzureichenden Datenlage abgeleitet, keine wörtlich zitierbare Behördenaussage speziell zu Schwangerschaft/Stillzeit.',
+    },
+  ],
+  gaba: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Laut einer USP-Sicherheitsbewertung unzureichende Datenlage, da GABA Neurotransmitter- und Hormonhaushalt beeinflussen kann. Regulatorischer Status in Deutschland uneinheitlich (siehe Hinweis zur Substanz).',
+    },
+  ],
+  'l-theanine': [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Im laufenden EU-Zulassungsverfahren für isoliertes L-Theanin als Zielgruppen-Ausschluss vorgeschlagen — keine ausreichende Datenlage für diese Gruppen.',
+    },
+  ],
+  melatonin: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding', 'child-4-10'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Laut BfR liegt keine gesicherte Unbedenklichkeitsbewertung für isoliertes Melatonin vor; die Einordnung als pharmakologisch wirksamer Stoff gilt dosisunabhängig.',
+    },
+  ],
+  'n-acetylcysteine': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Regulatorischer Status als Nahrungsergänzungsmittel in Deutschland ist behördlich umstritten und wurde bereits mehrfach unterschiedlich bewertet.',
+    },
+  ],
+  resveratrol: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding', 'child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die EU-Zulassung als Novel Food gilt ausdrücklich nur für die erwachsene Bevölkerung.',
+    },
+  ],
+  glucosamine: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Laut NCCIH liegen wenig belastbare Daten zur Sicherheit in Schwangerschaft und Stillzeit vor.',
+    },
+  ],
+  niacin: [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Das BfR empfiehlt für Nicotinamid-Zusätze über 16 mg/Tag einen Warnhinweis für Schwangere wegen unzureichender Sicherheitsdaten. Die formspezifische Obergrenze ist außerdem 200-fach unterschiedlich zwischen Nicotinsäure und Nicotinamid — siehe "Formen im Vergleich".',
+    },
+  ],
+  biotin: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Vor Labor-Bluttests relevant: Die Einnahme kann bestimmte Testergebnisse (z. B. Schilddrüsen-, Herzmarker) verfälschen.',
+    },
+  ],
   'vitamin-e': [
     {
       lifeStages: 'all',

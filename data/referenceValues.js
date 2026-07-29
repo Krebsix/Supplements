@@ -306,6 +306,175 @@ export const referenceValues = {
     upperLimitNote:
       'Werte beziehen sich auf EPA + DHA zusammen, nicht auf die Gesamtmenge Öl. In Schwangerschaft und Stillzeit wird zusätzlich DHA berücksichtigt.',
   },
+
+  // ── Erweiterung Juli 2026 ──────────────────────────────────
+  biotin: {
+    unit: 'µg',
+    values: {
+      'child-4-10': { reference: 25, upperLimit: null },
+      'teen-11-17': { reference: 35, upperLimit: null },
+      'adult-woman': { reference: 40, upperLimit: null },
+      'adult-man': { reference: 40, upperLimit: null },
+      pregnancy: { reference: 40, upperLimit: null },
+      breastfeeding: { reference: 45, upperLimit: null },
+      menopause: { reference: 40, upperLimit: null },
+      senior: { reference: 40, upperLimit: null },
+    },
+    upperLimitNote:
+      'Keine Obergrenze abgeleitet (SCF 2001, bestätigt BfR 2024). Ab ca. 150 µg/Tag sind Verfälschungen bestimmter Labor-Bluttests dokumentiert — vor Bluttests relevant, unabhängig von einer Obergrenze.',
+  },
+  niacin: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: 10, upperLimit: null },
+      'teen-11-17': { reference: 13, upperLimit: null },
+      'adult-woman': { reference: 13, upperLimit: null },
+      'adult-man': { reference: 16, upperLimit: null },
+      pregnancy: { reference: 16, upperLimit: null },
+      breastfeeding: { reference: 16, upperLimit: null },
+      menopause: { reference: 13, upperLimit: null },
+      senior: { reference: 13, upperLimit: null },
+    },
+    upperLimitNote:
+      'Obergrenze bewusst weggelassen: Sie unterscheidet sich um mehr als das 200-Fache zwischen den chemischen Formen (Nicotinsäure ca. 10 mg/Tag, Nicotinamid ca. 900 mg/Tag) — eine einzelne Zahl würde eine der beiden Formen falsch bewerten. Details siehe "Formen im Vergleich".',
+  },
+  riboflavin: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: 0.9, upperLimit: null },
+      'teen-11-17': { reference: 1.3, upperLimit: null },
+      'adult-woman': { reference: 1.1, upperLimit: null },
+      'adult-man': { reference: 1.4, upperLimit: null },
+      pregnancy: { reference: 1.4, upperLimit: null },
+      breastfeeding: { reference: 1.4, upperLimit: null },
+      menopause: { reference: 1.1, upperLimit: null },
+      senior: { reference: 1.1, upperLimit: null },
+    },
+    upperLimitNote: 'Keine Obergrenze abgeleitet (SCF 2000, bestätigt BfR 2024).',
+  },
+  thiamin: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: 0.8, upperLimit: null },
+      'teen-11-17': { reference: 1.2, upperLimit: null },
+      'adult-woman': { reference: 1.0, upperLimit: null },
+      'adult-man': { reference: 1.2, upperLimit: null },
+      pregnancy: { reference: 1.3, upperLimit: null },
+      breastfeeding: { reference: 1.3, upperLimit: null },
+      menopause: { reference: 1.0, upperLimit: null },
+      senior: { reference: 1.0, upperLimit: null },
+    },
+    upperLimitNote: 'Keine Obergrenze abgeleitet (SCF 2001, bestätigt BfR 2024).',
+  },
+  pantothensaeure: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: 4, upperLimit: null },
+      'teen-11-17': { reference: 5, upperLimit: null },
+      'adult-woman': { reference: 6, upperLimit: null },
+      'adult-man': { reference: 6, upperLimit: null },
+      pregnancy: { reference: 6, upperLimit: null },
+      breastfeeding: { reference: 6, upperLimit: null },
+      menopause: { reference: 6, upperLimit: null },
+      senior: { reference: 6, upperLimit: null },
+    },
+    upperLimitNote: 'Keine Obergrenze abgeleitet (SCF 2002, bestätigt BfR 2024).',
+  },
+  choline: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: 240, upperLimit: null },
+      'teen-11-17': { reference: 340, upperLimit: null },
+      'adult-woman': { reference: 400, upperLimit: null },
+      'adult-man': { reference: 400, upperLimit: null },
+      pregnancy: { reference: 480, upperLimit: null },
+      breastfeeding: { reference: 520, upperLimit: null },
+      menopause: { reference: 400, upperLimit: null },
+      senior: { reference: 400, upperLimit: null },
+    },
+    upperLimitNote:
+      'Referenzwert von EFSA (2016), da die DGE keinen eigenen D-A-CH-Wert für Cholin veröffentlicht hat. EFSA hat keine Obergrenze abgeleitet (Datenlage laut EFSA unzureichend).',
+  },
+  manganese: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: 3, upperLimit: 8 },
+      'adult-man': { reference: 3, upperLimit: 8 },
+      pregnancy: { reference: 3, upperLimit: 8 },
+      breastfeeding: { reference: 3, upperLimit: 8 },
+      menopause: { reference: 3, upperLimit: 8 },
+      senior: { reference: 3, upperLimit: 8 },
+    },
+    upperLimitNote:
+      'Werte von EFSA (Adequate Intake 3 mg/Tag, sichere Gesamtzufuhr 8 mg/Tag, 2023) — präziser als die DGE-Schätzspanne (2–5 mg/Tag). Für Kinder und Jugendliche liegt kein eigener EFSA-Wert vor, deshalb hier ohne Eintrag statt geraten.',
+  },
+  copper: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: 1.3, upperLimit: 5 },
+      'adult-man': { reference: 1.6, upperLimit: 5 },
+      pregnancy: { reference: 1.3, upperLimit: 5 },
+      breastfeeding: { reference: 1.3, upperLimit: 5 },
+      menopause: { reference: 1.3, upperLimit: 5 },
+      senior: { reference: 1.3, upperLimit: 5 },
+    },
+    upperLimitNote:
+      'Werte von EFSA (2015). Die Obergrenze von 5 mg/Tag gilt laut BfR ausdrücklich nicht für Kinder und Jugendliche, deren übliche Ernährung bereits vergleichsweise viel Kupfer liefert — für diese Gruppen deshalb kein Eintrag statt eines falsch übertragenen Erwachsenenwerts.',
+  },
+  phosphorus: {
+    unit: 'mg',
+    values: {
+      'child-4-10': { reference: 500, upperLimit: null },
+      'teen-11-17': { reference: 660, upperLimit: null },
+      'adult-woman': { reference: 550, upperLimit: null },
+      'adult-man': { reference: 550, upperLimit: null },
+      pregnancy: { reference: 550, upperLimit: null },
+      breastfeeding: { reference: 550, upperLimit: null },
+      menopause: { reference: 550, upperLimit: null },
+      senior: { reference: 550, upperLimit: null },
+    },
+    upperLimitNote:
+      'DGE-Referenzwerte (2022er Neuableitung). Weder DGE noch EFSA haben eine Obergrenze abgeleitet. Das BfR rät von gezielter Phosphor-Zugabe in Nahrungsergänzungsmitteln grundsätzlich ab — eigenständige Phosphor-Präparate sind entsprechend unüblich.',
+  },
+  // Substanzen ohne echten Referenzwert (nicht essenziell), aber mit einer
+  // EFSA-Sicherheitsobergrenze: reference bewusst null, damit die App nicht
+  // "unter Referenzwert" anzeigt, wo es gar keinen anzustrebenden Zielwert
+  // gibt (siehe REFERENCE_STATUS.SAFE_LEVEL in ReferenceCheck.js).
+  betaine: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 400 },
+      'adult-man': { reference: null, upperLimit: 400 },
+      pregnancy: { reference: null, upperLimit: 400 },
+      breastfeeding: { reference: null, upperLimit: 400 },
+      menopause: { reference: null, upperLimit: 400 },
+      senior: { reference: null, upperLimit: 400 },
+    },
+    upperLimitNote:
+      'EFSA-Sicherheitsbewertung (2017): 6 mg/kg Körpergewicht/Tag zusätzlich zur Ernährung, hier für ca. 65 kg Körpergewicht auf 400 mg gerundet. Für Sporttreibende ab 10 Jahren wurde eine höhere Menge (bis 2,5 g/Tag) bewertet — individuelles Körpergewicht und Sportkontext bitte gegen die Originalquelle prüfen.',
+  },
+  astaxanthin: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 8 },
+      'adult-man': { reference: null, upperLimit: 8 },
+      pregnancy: { reference: null, upperLimit: 8 },
+      breastfeeding: { reference: null, upperLimit: 8 },
+      menopause: { reference: null, upperLimit: 8 },
+      senior: { reference: null, upperLimit: 8 },
+    },
+    upperLimitNote:
+      'EFSA-Sicherheitsbewertung (2020): 8 mg/Tag als Gesamtaufnahme inklusive Hintergrundernährung aus Fisch/Krustentieren, nicht nur aus dem Präparat.',
+  },
+  resveratrol: {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 150 },
+      'adult-man': { reference: null, upperLimit: 150 },
+    },
+    upperLimitNote:
+      'EU-Novel-Food-Zulassungsgrenze (2016): 150 mg/Tag, ausdrücklich nur für Erwachsene. Für Schwangerschaft, Stillzeit, Kinder und Jugendliche liegt keine Zulassung vor, deshalb hier ohne Eintrag statt eines falsch übertragenen Werts.',
+  },
 };
 
 export function getLifeStage(id) {

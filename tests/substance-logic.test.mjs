@@ -73,12 +73,24 @@ check('Alle Substanzen haben useCases', substances.every(s => s.useCases?.length
 check('Alle Substanzen haben forms', substances.every(s => s.forms?.length > 0));
 check('Alle Substanzen haben what', substances.every(s => s.what?.length > 20));
 
+// Substanzen, bei denen fehlende Lebensphasen ABSICHTLICH sind, weil keine
+// Behoerde (EFSA/DGE/BfR) fuer diese Gruppe einen Wert veroeffentlicht hat.
+// Lieber Luecke als erfundener Wert (siehe CLAUDE.md "Keine erfundenen Werte").
+const INTENTIONAL_COVERAGE_GAPS = {
+  manganese: ['child-4-10', 'teen-11-17'],
+  copper: ['child-4-10', 'teen-11-17'],
+  betaine: ['child-4-10', 'teen-11-17'],
+  astaxanthin: ['child-4-10', 'teen-11-17'],
+  resveratrol: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
+};
+
 for (const [sid, entry] of Object.entries(referenceValues)) {
   if (!ids.includes(sid)) { console.log(`  FAIL Referenzwert für unbekannte Substanz: ${sid}`); failed++; }
-  const missing = LIFE_STAGE_IDS.filter(ls => !entry.values[ls]);
-  if (missing.length) { console.log(`  FAIL ${sid} fehlen Lebensphasen: ${missing}`); failed++; }
+  const allowedGaps = INTENTIONAL_COVERAGE_GAPS[sid] ?? [];
+  const missing = LIFE_STAGE_IDS.filter(ls => !entry.values[ls] && !allowedGaps.includes(ls));
+  if (missing.length) { console.log(`  FAIL ${sid} fehlen unerwartet Lebensphasen: ${missing}`); failed++; }
 }
-check('Referenzwerte vollständig über alle Lebensphasen', true);
+check('Referenzwerte vollständig über alle Lebensphasen (außer dokumentierten Lücken)', true);
 
 // Referenzwert-Einheit muss zur Substanz-Einheit passen
 for (const [sid, entry] of Object.entries(referenceValues)) {
@@ -136,6 +148,54 @@ check('Alle Siegel haben scope-Feld', certifications.every(c => c.scope?.length 
 check('Leere Eingabe → leeres Ergebnis', matchCertifications([]).matched.length === 0);
 check('Keine Herstellernamen in der Siegel-DB',
   !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
+
+console.log('\n— Erweiterung Juli 2026: neue Substanzen —');
+check('Substanz-Datenbank hat 62 Einträge', substances.length === 62, substances.length);
+
+const biotinMatch = matchIngredient({ name: 'Biotin', amount: '50', unit: 'µg' });
+check('Biotin erkannt', biotinMatch.substanceId === 'biotin', biotinMatch.substanceId);
+check('Biotin 50µg Frau → above_reference (Ref 40)',
+  checkAgainstReference(biotinMatch, 'adult-woman').status === 'above_reference');
+
+const ginkgoMatch = matchIngredient({ name: 'Ginkgo Biloba' });
+const ginkgoPreg = buildSubstanceProfile(ginkgoMatch, 'pregnancy');
+check('Ginkgo in Schwangerschaft → contraindicated',
+  ginkgoPreg.advisories.some(a => a.severity === 'contraindicated'));
+
+const nacMatch = matchIngredient({ name: 'N-Acetylcystein' });
+check('NAC erkannt', nacMatch.substanceId === 'n-acetylcysteine', nacMatch.substanceId);
+check('NAC hat regulatorischen Hinweis in cautionNote',
+  /regulatorisch/i.test(nacMatch.substance.cautionNote));
+
+console.log('\n— SAFE_LEVEL-Status (Substanzen ohne Referenzwert, nur Obergrenze) —');
+const betaineLow = matchIngredient({ name: 'Betain', amount: '200', unit: 'mg' });
+const betaineLowCheck = checkAgainstReference(betaineLow, 'adult-woman');
+check('Betain 200mg → safe_level (kein Referenzwert, unter UL 400)',
+  betaineLowCheck.status === 'safe_level', betaineLowCheck.status);
+check('safe_level-Text nennt "kein eigener Tages-Referenzwert"',
+  /kein eigener Tages-Referenzwert/.test(betaineLowCheck.summary), betaineLowCheck.summary);
+
+const betaineHigh = matchIngredient({ name: 'Betain', amount: '600', unit: 'mg' });
+const betaineHighCheck = checkAgainstReference(betaineHigh, 'adult-woman');
+check('Betain 600mg → above_limit (über UL 400)',
+  betaineHighCheck.status === 'above_limit', betaineHighCheck.status);
+
+const astaxanthinMatch = matchIngredient({ name: 'Astaxanthin', amount: '4', unit: 'mg' });
+check('Astaxanthin 4mg → safe_level',
+  checkAgainstReference(astaxanthinMatch, 'adult-man').status === 'safe_level');
+
+// Resveratrol hat bewusst keine Lebensphasen-Werte fuer Kinder -> kein Absturz
+const resveratrolChild = matchIngredient({ name: 'Resveratrol', amount: '50', unit: 'mg' });
+check('Resveratrol bei Kind ohne Referenzwert → kein Crash, referenceCheck null',
+  buildSubstanceProfile(resveratrolChild, 'child-4-10').referenceCheck === null);
+
+// Kupfer: Kinder bewusst ohne Wert (BfR-Ausnahme) -- kein Absturz
+const copperChild = matchIngredient({ name: 'Kupfer', amount: '1', unit: 'mg' });
+check('Kupfer bei Kind ohne Referenzwert → kein Crash, referenceCheck null',
+  buildSubstanceProfile(copperChild, 'child-4-10').referenceCheck === null);
+const copperWoman = matchIngredient({ name: 'Kupfer', amount: '6', unit: 'mg' });
+check('Kupfer 6mg Frau → above_limit (UL 5)',
+  checkAgainstReference(copperWoman, 'adult-woman').status === 'above_limit');
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

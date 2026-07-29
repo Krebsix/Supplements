@@ -17,12 +17,14 @@
 import { convertAmount } from './SubstanceMatcher';
 import { getAdvisories } from './data/lifeStageAdvisories';
 import { getReferenceValue } from './data/referenceValues';
+import { normalizeSources } from './data/substances';
 
 export const REFERENCE_STATUS = {
   BELOW: 'below',
   WITHIN: 'within',
   ABOVE_REFERENCE: 'above_reference',
   ABOVE_LIMIT: 'above_limit',
+  SAFE_LEVEL: 'safe_level',
   UNKNOWN: 'unknown',
 };
 
@@ -46,6 +48,11 @@ const STATUS_META = {
     label: 'Über Obergrenze',
     tone: 'warn',
     hex: '#dc2626',
+  },
+  [REFERENCE_STATUS.SAFE_LEVEL]: {
+    label: 'Innerhalb sicherer Menge',
+    tone: 'ok',
+    hex: '#0f766e',
   },
   [REFERENCE_STATUS.UNKNOWN]: {
     label: 'Kein Referenzwert hinterlegt',
@@ -124,28 +131,37 @@ export function checkAgainstReference(match, lifeStageId) {
   }
 
   const { reference: refValue, upperLimit } = reference;
-  const percentOfReference = refValue
+  const hasReference = Number.isFinite(refValue) && refValue > 0;
+  const percentOfReference = hasReference
     ? Math.round((amount / refValue) * 100)
     : null;
 
   let status;
   if (upperLimit !== null && amount > upperLimit) {
     status = REFERENCE_STATUS.ABOVE_LIMIT;
-  } else if (refValue && amount > refValue) {
+  } else if (!hasReference && upperLimit !== null) {
+    // Kein Referenzwert vorhanden, weil kein essenzieller Naehrstoff --
+    // nur eine EFSA/BfR-Sicherheitsobergrenze. "Unter dem Referenzwert"
+    // waere hier irrefuehrend, es gibt keinen anzustrebenden Zielwert.
+    status = REFERENCE_STATUS.SAFE_LEVEL;
+  } else if (hasReference && amount > refValue) {
     status = REFERENCE_STATUS.ABOVE_REFERENCE;
-  } else if (refValue && amount >= refValue * WITHIN_TOLERANCE) {
+  } else if (hasReference && amount >= refValue * WITHIN_TOLERANCE) {
     status = REFERENCE_STATUS.WITHIN;
   } else {
     status = REFERENCE_STATUS.BELOW;
   }
 
   const amountText = `${formatNumber(amount)} ${reference.unit}`;
-  const refText = `${formatNumber(refValue)} ${reference.unit}`;
+  const refText = hasReference ? `${formatNumber(refValue)} ${reference.unit}` : '';
 
   let summary;
   switch (status) {
     case REFERENCE_STATUS.ABOVE_LIMIT:
       summary = `${amountText} liegen über der tolerierbaren Gesamtzufuhr von ${formatNumber(upperLimit)} ${reference.unit} pro Tag. Diese Grenze bezieht sich auf alle Quellen zusammen, also auch auf Lebensmittel und weitere Präparate.`;
+      break;
+    case REFERENCE_STATUS.SAFE_LEVEL:
+      summary = `${amountText} liegen innerhalb der von EFSA/BfR als sicher bewerteten Tagesmenge von ${formatNumber(upperLimit)} ${reference.unit}. Für diesen Stoff existiert kein eigener Tages-Referenzwert, da er kein essenzieller Nährstoff ist.`;
       break;
     case REFERENCE_STATUS.ABOVE_REFERENCE:
       summary = `${amountText} liegen über dem Referenzwert von ${refText} pro Tag${
@@ -211,7 +227,7 @@ export function buildSubstanceProfile(match, lifeStageId) {
     allForms: substance.forms ?? [],
     fatSoluble: Boolean(substance.fatSoluble),
     cautionNote: substance.cautionNote ?? '',
-    sources: substance.sources ?? [],
+    sources: normalizeSources(substance.sources ?? []),
     referenceCheck: checkAgainstReference(match, lifeStageId),
     // Was in DIESER Lebensphase besonders gilt (Phase 3)
     advisories: getAdvisories(substance.id, lifeStageId),

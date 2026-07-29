@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { getStatusMeta } from '../ReferenceCheck';
 
@@ -142,6 +142,28 @@ export default function SubstanceInsightCard({ profile }) {
             <View style={styles.cautionBox}>
               <Text style={styles.cautionLabel}>Zu beachten</Text>
               <Text style={styles.cautionText}>{profile.cautionNote}</Text>
+            </View>
+          ) : null}
+
+          {profile.sources?.length > 0 ? (
+            <View style={styles.sourcesBox}>
+              <Text style={styles.sourcesLabel}>Quellen</Text>
+              {profile.sources.map((source, index) => (
+                <TouchableOpacity
+                  key={`${source.label}-${index}`}
+                  disabled={!source.url}
+                  onPress={() => source.url && Linking.openURL(source.url)}
+                  activeOpacity={0.7}
+                  accessibilityRole={source.url ? 'link' : undefined}
+                >
+                  <Text
+                    style={[styles.sourceText, source.url && styles.sourceTextLinked]}
+                  >
+                    {source.url ? '↗ ' : '· '}
+                    {source.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           ) : null}
         </>
@@ -392,6 +414,30 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     marginTop: 4,
+  },
+  sourcesBox: {
+    backgroundColor: '#f8fafc',
+    borderRadius: 12,
+    padding: 11,
+    marginTop: 10,
+  },
+  sourcesLabel: {
+    color: '#475569',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 0.7,
+    textTransform: 'uppercase',
+    marginBottom: 5,
+  },
+  sourceText: {
+    color: '#64748b',
+    fontSize: 11,
+    lineHeight: 17,
+    marginTop: 3,
+  },
+  sourceTextLinked: {
+    color: '#0f766e',
+    fontWeight: '700',
   },
   expandButton: {
     minHeight: 40,

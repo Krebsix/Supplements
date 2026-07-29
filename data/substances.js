@@ -26,7 +26,18 @@
  *   useCases     Anwendungsgebiete (deskriptiv, je Eintrag ein Stichwort + Erklaerung)
  *   forms        chemische Formen mit Unterschieden
  *   fatSoluble   fettloeslich → Einnahme mit Mahlzeit relevant
- *   sources      Quellenhinweise fuer Nachvollziehbarkeit
+ *   sources      Quellenverweise fuer Nachvollziehbarkeit. Zwei Formen:
+ *                  - String-Key (Legacy, erste 27 Substanzen): verweist
+ *                    auf eine allgemeine Uebersichtsseite der Organisation
+ *                    (siehe SOURCE_LABELS/SOURCE_URLS) -- nicht so praezise
+ *                    wie die neueren Eintraege, aber immerhin verlinkt.
+ *                  - {label, url}-Objekt (ab Juli 2026, per Web-Recherche
+ *                    verifiziert): verweist direkt auf das Dokument/die
+ *                    Seite, die den konkreten Wert zeigt.
+ *                Beide Formen werden von normalizeSources() vereinheitlicht.
+ *
+ * Wo eine Zahl NICHT in einer Primaerquelle verifiziert werden konnte,
+ * steht das explizit im cautionNote-Feld -- lieber Luecke als Erfindung.
  */
 
 export const SOURCE_LABELS = {
@@ -36,6 +47,38 @@ export const SOURCE_LABELS = {
   'dach': 'D-A-CH Referenzwerte (DGE/ÖGE/SGE)',
   'bfr': 'Bundesinstitut für Risikobewertung (BfR), Höchstmengen-Empfehlungen',
 };
+
+// Allgemeine Uebersichtsseiten fuer die Legacy-String-Keys (siehe oben).
+// Weniger praezise als die per-Substanz-Links der neueren Eintraege, aber
+// besser als ein unverlinktes Label.
+export const SOURCE_URLS = {
+  'nih-ods': 'https://ods.od.nih.gov/factsheets/list-all/',
+  'efsa-drv': 'https://multimedia.efsa.europa.eu/drvs/index.htm',
+  'efsa-ul': 'https://multimedia.efsa.europa.eu/drvs/index.htm',
+  'dach': 'https://www.dge.de/wissenschaft/referenzwerte/',
+  'bfr': 'https://www.bfr.bund.de/de/hoechstmengenvorschlaege_fuer_vitamine_und_mineralstoffe_in_nahrungsergaenzungsmitteln-54155.html',
+};
+
+/**
+ * normalizeSources(sources)
+ * Bringt beide sources-Formen (String-Key oder {label,url}-Objekt) auf
+ * eine einheitliche {label, url}-Form fuer die UI.
+ */
+export function normalizeSources(sources = []) {
+  return sources
+    .map((entry) => {
+      if (typeof entry === 'string') {
+        const label = SOURCE_LABELS[entry];
+        if (!label) return null;
+        return { label, url: SOURCE_URLS[entry] ?? null };
+      }
+      if (entry && typeof entry === 'object' && entry.label) {
+        return { label: entry.label, url: entry.url ?? null };
+      }
+      return null;
+    })
+    .filter(Boolean);
+}
 
 export const substances = [
   // ── Mineralien ─────────────────────────────────────────────
@@ -615,6 +658,798 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Nicht in Schwangerschaft und Stillzeit. Bei Schilddrüsen- und Autoimmunerkrankungen ärztlich abklären. Kein Wirkstoff für Kinder.',
     sources: ['nih-ods'],
+  },
+
+  // ── Vitamine (Erweiterung Juli 2026) ──────────────────────
+  {
+    id: 'biotin',
+    name: 'Biotin',
+    category: 'Vitamine',
+    synonyms: ['biotin', 'vitamin b7', 'vitamin b8', 'vitamin h', 'coenzym r', 'd-biotin'],
+    unit: 'µg',
+    what: 'Wasserlösliches B-Vitamin, Cofaktor mehrerer Carboxylasen im Fett-, Aminosäure- und Glucosestoffwechsel.',
+    useCases: [
+      { topic: 'Fettsäure- und Energiestoffwechsel', note: 'Wird als Cofaktor von Carboxylasen im Stoffwechsel eingesetzt.' },
+      { topic: 'Haut, Haare, Nägel', note: 'Häufig genannter Zusammenhang bei Nahrungsergänzung; laut DGE nur bei nachgewiesenem Mangel belegt.' },
+      { topic: 'Nervensystem', note: 'An der Myelinbildung beteiligt.' },
+    ],
+    forms: [
+      { name: 'D-Biotin', aka: ['reines Biotin'], bioavailability: 'gut resorbierbar, biologisch aktive Form', note: 'einzige in Nahrungsergänzungsmitteln übliche Form' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Ab oralen Aufnahmen von ca. 150 µg/Tag sind Verfälschungen bestimmter Labor-Immunoassays (z. B. Schilddrüsen-, Herzmarker) dokumentiert (EMA/PRAC 2019). Kein UL abgeleitet (SCF/BfR 2024).',
+    sources: [
+      { label: 'BfR Stellungnahme 2024 – Höchstmengenvorschläge Biotin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'DGE FAQ Biotin', url: 'https://www.dge.de/gesunde-ernaehrung/faq/biotin/' },
+      { label: 'EFSA Dietary Reference Values Biotin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3580' },
+    ],
+  },
+  {
+    id: 'niacin',
+    name: 'Niacin',
+    category: 'Vitamine',
+    synonyms: ['niacin', 'vitamin b3', 'nicotinsäure', 'nicotinsaeure', 'nicotinamid', 'niacinamid', 'nikotinsäure', 'nikotinamid', 'vitamin pp'],
+    unit: 'mg',
+    what: 'Sammelbegriff für Nicotinsäure und Nicotinamid, Baustein der Coenzyme NAD/NADP im Energiestoffwechsel.',
+    useCases: [
+      { topic: 'Energiestoffwechsel', note: 'Bestandteil von NAD/NADP in praktisch allen Zellen.' },
+      { topic: 'Haut- und Schleimhautfunktion', note: 'Historisch mit Pellagra-Prophylaxe verknüpft.' },
+      { topic: 'Nervensystem', note: 'An neuronalen Stoffwechselprozessen beteiligt.' },
+    ],
+    forms: [
+      { name: 'Nicotinamid', aka: ['Nicotinsäureamid', 'Niacinamid'], bioavailability: 'gut, kein Flush-Effekt', note: 'übliche Supplementform. Obergrenze rund 900 mg/Tag (Erwachsene) — deutlich höher als bei Nicotinsäure.' },
+      { name: 'Nicotinsäure', aka: ['Niacin i. e. S.'], bioavailability: 'gut', note: 'kann bereits ab niedrigen mg-Dosen Flush (Hautrötung) auslösen. Obergrenze rund 10 mg/Tag (Erwachsene) — deutlich niedriger als bei Nicotinamid.' },
+      { name: 'Inosithexanicotinat', aka: ['Inositolniacinat'], bioavailability: 'verzögerte Nicotinsäure-Freisetzung', note: 'nur in Nahrungsergänzungsmitteln, nicht in angereicherten Lebensmitteln zugelassen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Wichtig: Die drei Formen haben stark unterschiedliche Höchstmengen (Faktor über 200 zwischen Nicotinsäure- und Nicotinamid-Obergrenze) — ein Nicotinsäure-Produkt darf nicht mit dem Nicotinamid-Wert verglichen werden. In der Schwangerschaft empfiehlt das BfR bei Nicotinamid-Zusätzen über 16 mg/Tag einen Warnhinweis wegen unzureichender Sicherheitsdaten.',
+    sources: [
+      { label: 'BfR Stellungnahme 2024 – Höchstmengenvorschläge Niacin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'EFSA Dietary Reference Values Niacin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3759' },
+    ],
+  },
+  {
+    id: 'riboflavin',
+    name: 'Riboflavin',
+    category: 'Vitamine',
+    synonyms: ['riboflavin', 'vitamin b2', 'lactoflavin', 'riboflavin-5-phosphat', 'e101'],
+    unit: 'mg',
+    what: 'Wasserlösliches B-Vitamin, Baustein der Coenzyme FAD/FMN in Redoxreaktionen des Energiestoffwechsels.',
+    useCases: [
+      { topic: 'Energiestoffwechsel', note: 'Elektronentransportkette, Zellatmung.' },
+      { topic: 'Zellwachstum und Regeneration', note: 'Beteiligt an Zellteilungsprozessen.' },
+      { topic: 'Rote Blutkörperchen', note: 'An deren Bildung beteiligt.' },
+    ],
+    forms: [
+      { name: 'Riboflavin', aka: ['Lactoflavin'], bioavailability: 'gut', note: 'Standardform.' },
+      { name: "Riboflavin-5'-Phosphat", aka: ['FMN'], bioavailability: 'aktive Coenzymform, gut wasserlöslich', note: 'auch als Lebensmittelfarbstoff (E101) zugelassen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Keine relevanten Wechselwirkungen dokumentiert; harmlose Gelbverfärbung des Urins bei höheren Aufnahmen. Kein UL abgeleitet (SCF 2000, bestätigt BfR 2024).',
+    sources: [
+      { label: 'BfR Stellungnahme 2024 – Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'EFSA Dietary Reference Values Riboflavin (2017)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4919' },
+    ],
+  },
+  {
+    id: 'thiamin',
+    name: 'Thiamin',
+    category: 'Vitamine',
+    synonyms: ['thiamin', 'thiamine', 'vitamin b1', 'aneurin', 'thiaminhydrochlorid', 'thiaminmononitrat', 'benfotiamin'],
+    unit: 'mg',
+    what: 'Wasserlösliches B-Vitamin, Cofaktor bei der Decarboxylierung im Kohlenhydratstoffwechsel und für Nervenfunktionen.',
+    useCases: [
+      { topic: 'Kohlenhydratstoffwechsel', note: 'Cofaktor bei enzymatischer Decarboxylierung.' },
+      { topic: 'Nervenfunktion', note: 'Beteiligt an Reizleitung im Nervensystem.' },
+      { topic: 'Herzmuskelfunktion', note: 'Am Energiestoffwechsel des Herzmuskels beteiligt.' },
+    ],
+    forms: [
+      { name: 'Thiaminhydrochlorid', bioavailability: 'gut, wasserlöslich', note: 'übliche Supplementform.' },
+      { name: 'Thiaminmononitrat', bioavailability: 'gut, stabiler bei Lagerung', note: 'häufig in angereicherten Lebensmitteln.' },
+      { name: 'Benfotiamin', aka: ['fettlösliches Thiaminderivat'], bioavailability: 'höhere Aufnahme in Studien beschrieben', note: 'synthetisches Derivat, seltener in klassischen Nahrungsergänzungsmitteln.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Keine relevante Kontraindikation bei üblichen Supplement-Dosen bekannt; überschüssiges Thiamin wird über den Urin ausgeschieden. Kein UL abgeleitet (SCF 2001, bestätigt BfR 2024).',
+    sources: [
+      { label: 'BfR Stellungnahme 2024 – Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'EFSA Dietary Reference Values Thiamin (2016)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4653' },
+    ],
+  },
+  {
+    id: 'pantothensaeure',
+    name: 'Pantothensäure',
+    category: 'Vitamine',
+    synonyms: ['pantothensäure', 'pantothensaeure', 'vitamin b5', 'pantothenic acid', 'calcium-pantothenat', 'panthenol', 'dexpanthenol'],
+    unit: 'mg',
+    what: 'Wasserlösliches B-Vitamin, Baustein von Coenzym A, zentral im Fett-, Kohlenhydrat- und Proteinstoffwechsel.',
+    useCases: [
+      { topic: 'Fett- und Energiestoffwechsel', note: 'Bestandteil von Coenzym A.' },
+      { topic: 'Bildung von Hormonen und Neurotransmittern', note: 'An deren Synthese über Coenzym A beteiligt.' },
+      { topic: 'Haut', note: 'Panthenol als Provitaminform häufig topisch eingesetzt.' },
+    ],
+    forms: [
+      { name: 'Calcium-D-Pantothenat', aka: ['Calciumpantothenat'], bioavailability: 'gut, stabile Salzform', note: 'übliche orale Supplementform.' },
+      { name: 'D-Panthenol', aka: ['Dexpanthenol'], bioavailability: 'wird im Körper zu Pantothensäure umgewandelt', note: 'vor allem in topischen/kosmetischen Produkten.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Keine relevanten Wechselwirkungen in Supplement-Dosen dokumentiert. Kein UL abgeleitet (SCF 2002, bestätigt BfR 2024).',
+    sources: [
+      { label: 'BfR Stellungnahme 2024 – Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'EFSA Dietary Reference Values Pantothenic Acid (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3581' },
+    ],
+  },
+  {
+    id: 'choline',
+    name: 'Cholin',
+    category: 'Vitamine',
+    synonyms: ['cholin', 'choline', 'vitamin b4', 'cholinchlorid', 'cholinbitartrat'],
+    unit: 'mg',
+    what: 'Vitaminähnlicher, semi-essenzieller Nährstoff; wird für den Aufbau von Zellmembranen (Phosphatidylcholin) und den Neurotransmitter Acetylcholin benötigt und teilweise vom Körper selbst gebildet.',
+    useCases: [
+      { topic: 'Leberfunktion', note: 'EFSA ordnet Cholin eine Rolle bei der normalen Leberfunktion zu.' },
+      { topic: 'Schwangerschaft und Stillzeit', note: 'EFSA und das US Food and Nutrition Board setzen hier höhere Schätzwerte an als für Nicht-Schwangere.' },
+    ],
+    forms: [
+      { name: 'Cholinchlorid / Cholinbitartrat', aka: ['gängige Salzformen'], bioavailability: 'gut', note: 'häufigste Supplementform.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Die DGE hat keinen eigenen D-A-CH-Referenzwert für Cholin veröffentlicht; in Deutschland wird ersatzweise auf den EFSA-Schätzwert zurückgegriffen. EFSA hat keinen UL abgeleitet (Datenlage laut EFSA unzureichend).',
+    sources: [
+      { label: 'EFSA Dietary Reference Values for Choline (2016)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4484' },
+      { label: 'NIH ODS Choline Fact Sheet', url: 'https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/' },
+    ],
+  },
+
+  // ── Mineralien (Erweiterung Juli 2026) ────────────────────
+  {
+    id: 'chromium',
+    name: 'Chrom',
+    category: 'Mineralien',
+    synonyms: ['chrom', 'chromium', 'chrom(iii)', 'chromium picolinate', 'chrompicolinat', 'chromchlorid', 'chromhefe', 'chromium chloride'],
+    unit: 'µg',
+    what: 'Spurenelement, dem eine Rolle im Kohlenhydratstoffwechsel zugeschrieben wird; der genaue Wirkmechanismus im Menschen gilt als wissenschaftlich nicht abschließend geklärt.',
+    useCases: [
+      { topic: 'Kohlenhydratstoffwechsel', note: 'Wird im Zusammenhang mit der Regulation des Blutzuckerspiegels diskutiert.' },
+      { topic: 'Nahrungsergänzung bei einseitiger Ernährung', note: 'Wird als Ergänzung bei geringer Zufuhr über Lebensmittel eingesetzt.' },
+      { topic: 'Sporternährung', note: 'Wird in manchen Produkten zur Unterstützung des Energiestoffwechsels eingesetzt.' },
+    ],
+    forms: [
+      { name: 'Chrompicolinat', aka: ['chromium picolinate'], bioavailability: 'verbreitetste Form in Nahrungsergänzungsmitteln, gilt als vergleichsweise gut resorbierbar', note: 'meistgenutzte Form.' },
+      { name: 'Chromchlorid', aka: ['chromium chloride'], bioavailability: 'geringere Resorption als Picolinat', note: 'einfachere, günstigere Salzform.' },
+      { name: 'Chromhefe', aka: ['chromium yeast'], bioavailability: 'organisch gebunden', note: 'wird in manchen Präparaten als natürliche Trägerform verwendet.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'EFSA konnte Chrom(III) nicht als essenziell für die Allgemeinbevölkerung bestätigen, daher existiert kein offizieller Referenzwert. Das BfR schlägt für Nahrungsergänzungsmittel eine Höchstmenge von 60 µg pro Tagesdosis vor (Stand 2021).',
+    sources: [
+      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'BfR – Höchstmengenvorschläge für Chrom', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-chrom-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'NIH ODS Chromium Fact Sheet', url: 'https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/' },
+    ],
+  },
+  {
+    id: 'manganese',
+    name: 'Mangan',
+    category: 'Mineralien',
+    synonyms: ['mangan', 'manganese', 'manganbisglycinat', 'manganchlorid', 'mangansulfat', 'manganglukonat'],
+    unit: 'mg',
+    what: 'Spurenelement, Bestandteil mehrerer Enzyme, u. a. antioxidativer Enzyme und solcher des Knochenstoffwechsels.',
+    useCases: [
+      { topic: 'Knochenstoffwechsel', note: 'Cofaktor knochenrelevanter Enzyme.' },
+      { topic: 'Antioxidative Enzymsysteme', note: 'Bestandteil der Mangan-Superoxid-Dismutase.' },
+      { topic: 'Kombi-Mineralstoffpräparate', note: 'häufig in Multi-Mineral-Präparaten enthalten.' },
+    ],
+    forms: [
+      { name: 'Manganbisglycinat', aka: ['manganese bisglycinate'], bioavailability: 'an Aminosäuren gebunden, gilt als gut verträglich', note: 'in Nahrungsergänzungsmitteln verbreitete Chelatform.' },
+      { name: 'Mangansulfat', aka: ['manganese sulfate'], bioavailability: 'anorganisches Salz', note: 'günstige Standardform.' },
+      { name: 'Manganchlorid', aka: ['manganese chloride'], bioavailability: 'anorganisches Salz', note: 'seltener eingesetzt.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Das BfR schlägt für Nahrungsergänzungsmittel aktuell 0,5 mg pro Tagesdosis vor.',
+    sources: [
+      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'EFSA Scientific Opinion – Tolerable Upper Intake Level for Manganese (2023)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/8413' },
+      { label: 'BfR – Höchstmengenvorschläge für Mangan', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-mangan-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln/' },
+    ],
+  },
+  {
+    id: 'copper',
+    name: 'Kupfer',
+    category: 'Mineralien',
+    synonyms: ['kupfer', 'copper', 'kupferbisglycinat', 'kupfergluconat', 'kupfersulfat'],
+    unit: 'mg',
+    what: 'Spurenelement, Bestandteil kupferabhängiger Enzyme, u. a. im Eisenstoffwechsel und beim Bindegewebsaufbau.',
+    useCases: [
+      { topic: 'Eisenstoffwechsel', note: 'Kupferabhängige Enzyme sind am Eisentransport beteiligt.' },
+      { topic: 'Bindegewebe', note: 'Wird mit der Quervernetzung von Kollagen und Elastin in Verbindung gebracht.' },
+      { topic: 'Kombi-Mineralstoffpräparate', note: 'häufig gemeinsam mit Zink dosiert.' },
+    ],
+    forms: [
+      { name: 'Kupferbisglycinat', aka: ['copper bisglycinate'], bioavailability: 'Chelatform, gilt als gut verträglich', note: 'in Nahrungsergänzungsmitteln verbreitet.' },
+      { name: 'Kupfergluconat', aka: ['copper gluconate'], bioavailability: 'organisches Salz', note: 'gängige Supplementform.' },
+      { name: 'Kupfersulfat', aka: ['copper sulfate'], bioavailability: 'anorganisches Salz', note: 'Standardform, u. a. in Lebensmittelanreicherung.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Eine hohe Zinkzufuhr senkt die Kupferaufnahme im Darm (kompetitive Hemmung) — diese Wechselwirkung ist gut belegt. Das BfR weist darauf hin, dass seine Höchstmengen-Empfehlung von 1 mg pro Tagesdosis nicht für Kinder und Jugendliche gilt, da diese Gruppe bereits über die übliche Ernährung vergleichsweise hohe Kupfermengen aufnimmt.',
+    sources: [
+      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'EFSA Dietary Reference Values for Copper (2015)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4253' },
+      { label: 'BfR – Höchstmengenvorschläge für Kupfer', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-kupfer-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+    ],
+  },
+  {
+    id: 'molybdenum',
+    name: 'Molybdän',
+    category: 'Mineralien',
+    synonyms: ['molybdän', 'molybdaen', 'molybdenum', 'natriummolybdat', 'molybdänglycinat'],
+    unit: 'µg',
+    what: 'Spurenelement, Cofaktor mehrerer Oxidoreduktasen, u. a. im Purin- und Sulfitstoffwechsel.',
+    useCases: [
+      { topic: 'Enzymcofaktor', note: 'Bestandteil molybdänabhängiger Enzyme (z. B. Sulfitoxidase, Xanthinoxidase).' },
+      { topic: 'Kombi-Mineralstoffpräparate', note: 'meist als Nebenkomponente in Multi-Mineral-Präparaten enthalten.' },
+    ],
+    forms: [
+      { name: 'Natriummolybdat', aka: ['sodium molybdate'], bioavailability: 'gut wasserlösliches Salz, Standardform', note: 'häufigste Form in Nahrungsergänzungsmitteln.' },
+      { name: 'Molybdänglycinat', aka: ['molybdenum glycinate'], bioavailability: 'Chelatform', note: 'seltener eingesetzt.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'EFSA-Schätzwert (AI) für Erwachsene: 65 µg/Tag. Ein älterer SCF-Wert von 0,6 mg/Tag (Jahr 2000) ist nicht Teil der aktuellen EFSA-Referenzwert-Bewertung von 2013 und wird hier bewusst nicht als aktuelle Obergrenze übernommen.',
+    sources: [
+      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'EFSA Dietary Reference Values for Molybdenum (2013)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2013.3333' },
+      { label: 'BfR – Höchstmengenvorschläge für Molybdän', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-molybdaen-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel.pdf' },
+    ],
+  },
+  {
+    id: 'phosphorus',
+    name: 'Phosphor',
+    category: 'Mineralien',
+    synonyms: ['phosphor', 'phosphorus', 'phosphat', 'phosphate'],
+    unit: 'mg',
+    what: 'Mengenelement, zentraler Baustein von Knochen und Zähnen (als Hydroxylapatit), von Nukleinsäuren und energieliefernden Molekülen wie ATP.',
+    useCases: [
+      { topic: 'Knochen- und Zahnmineralisation', note: 'Hauptbestandteil des Knochenminerals gemeinsam mit Calcium.' },
+      { topic: 'Energiestoffwechsel', note: 'Bestandteil von ATP und anderen energietragenden Molekülen.' },
+      { topic: 'Zellmembranen und Nukleinsäuren', note: 'Baustein von Phospholipiden, DNA und RNA.' },
+    ],
+    forms: [
+      { name: 'Phosphat (allgemein)', aka: ['phosphate', 'PO4'], bioavailability: 'wird in Nahrungsergänzungsmitteln praktisch nicht isoliert dosiert', note: 'eigenständige Phosphor-Präparate sind unüblich, Phosphor kommt meist als Begleition anderer Mineralstoffverbindungen vor.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Das BfR rät von einer gezielten Phosphor-Zugabe in Nahrungsergänzungsmitteln grundsätzlich ab. Weder EFSA noch DGE haben eine Obergrenze abgeleitet (Datenlage laut EFSA 2015 nicht ausreichend).',
+    sources: [
+      { label: 'DGE Referenzwerte – Phosphor', url: 'https://www.dge.de/wissenschaft/referenzwerte/phosphor/' },
+      { label: 'EFSA Dietary Reference Values for Phosphorus (2015)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4185' },
+      { label: 'BfR – Höchstmengenvorschläge für Phosphor/Phosphat', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-phosphor-phosphat-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel/' },
+    ],
+  },
+
+  // ── Gelenke ────────────────────────────────────────────────
+  {
+    id: 'glucosamine',
+    name: 'Glucosamin',
+    category: 'Gelenke',
+    synonyms: ['glucosamin', 'glucosamine', 'glukosamin', 'glucosaminsulfat', 'glucosamine sulfate', 'glucosaminhydrochlorid', 'glucosamine hcl', 'aminozucker'],
+    unit: 'mg',
+    what: 'Aminozucker, der als natürlicher Baustein für Glykosaminoglykane dient — Moleküle, die Teil der Knorpelstruktur sind. Präparate werden meist aus Krebstierschalen (Chitin) oder fermentativ hergestellt.',
+    useCases: [
+      { topic: 'Kniegelenksarthrose', note: 'Studienlage widersprüchlich — einige Studien zeigen Schmerzlinderung, große Studien fanden wenig bis keine Wirkung. Fachgesellschaften bewerten unterschiedlich.' },
+      { topic: 'Hüftgelenksarthrose', note: 'Moderate Evidenz stützt keinen klaren Nutzen.' },
+      { topic: 'Kombination mit Chondroitin', note: 'Eine Metaanalyse (29 Studien, 2018) fand: einzeln genommen Schmerzreduktion, in Kombination keinen signifikanten Zusatzeffekt.' },
+    ],
+    forms: [
+      { name: 'Glucosaminsulfat', aka: ['glucosamine sulfate'], bioavailability: 'in Studien am häufigsten untersuchte Form', note: 'in einer Cochrane-Subgruppenanalyse die einzige Form mit signifikantem Effekt gegenüber Placebo.' },
+      { name: 'Glucosaminhydrochlorid', aka: ['glucosamine HCl'], bioavailability: 'in Studien uneinheitlicher untersucht', note: 'häufig in Kombinationspräparaten mit Chondroitin.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Kann laut NCCIH bei manchen Personen den Blutzuckerspiegel erhöhen; in Kombination mit dem Gerinnungshemmer Warfarin wird ein erhöhtes Blutungsrisiko beschrieben. Ein EFSA-Health-Claim zum Gelenkerhalt wurde mehrfach abgelehnt (Kausalzusammenhang nicht belegt). Handelsübliches Glucosamin stammt meist aus Chitin der Schale, nicht aus dem allergenen Fleisch — dennoch listen viele Hersteller einen Vorsichtshinweis bei Schalentier-Allergie.',
+    sources: [
+      { label: 'NCCIH – Glucosamine and Chondroitin for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis-what-you-need-to-know' },
+      { label: 'EFSA Journal 2009 (Opinion 1264)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2009.1264' },
+      { label: 'Cochrane – Glucosamine for osteoarthritis', url: 'https://www.cochrane.org/evidence/CD002946_glucosamine-osteoarthritis' },
+    ],
+  },
+  {
+    id: 'chondroitin',
+    name: 'Chondroitin',
+    category: 'Gelenke',
+    synonyms: ['chondroitin', 'chondroitinsulfat', 'chondroitin sulfate', 'chondroitin sulphate'],
+    unit: 'mg',
+    what: 'Sulfatiertes Glykosaminoglykan, natürlicher Bestandteil des Gelenkknorpels; beeinflusst dessen Widerstandsfähigkeit gegen Druckbelastung.',
+    useCases: [
+      { topic: 'Kniegelenksarthrose', note: 'Studienlage widersprüchlich; eine Metaanalyse (2018) zeigte Schmerzreduktion bei alleiniger Einnahme, nicht in Kombination mit Glucosamin.' },
+      { topic: 'Handgelenksarthrose', note: 'Eine Studie zeigte Schmerzreduktion und verbesserte Funktion — Einzelbefund, keine breite Bestätigung.' },
+    ],
+    forms: [
+      { name: 'Chondroitinsulfat', aka: ['chondroitin sulphate'], bioavailability: 'einzige kommerziell relevante Form', note: 'Molekulargewicht und Reinheit variieren stark je nach Ausgangsstoff (Rind-, Schweine-, Fisch- oder Geflügelknorpel).' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Wie Glucosamin mit einem beschriebenen erhöhten Blutungsrisiko unter Warfarin assoziiert. Ein EFSA-Health-Claim zum Gelenkerhalt wurde abgelehnt (Kausalität nicht nachgewiesen).',
+    sources: [
+      { label: 'NCCIH – Glucosamine and Chondroitin for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis-what-you-need-to-know' },
+      { label: 'EFSA Journal 2009 (Opinion 1262)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2009.1262' },
+    ],
+  },
+  {
+    id: 'msm',
+    name: 'MSM (Methylsulfonylmethan)',
+    category: 'Gelenke',
+    synonyms: ['msm', 'methylsulfonylmethan', 'methylsulfonylmethane', 'dimethylsulfon', 'dmso2'],
+    unit: 'mg',
+    what: 'Organische Schwefelverbindung, chemisch verwandt mit DMSO (Dimethylsulfoxid); wird allein oder in Kombination mit Glucosamin angeboten.',
+    useCases: [
+      { topic: 'Kniegelenksarthrose', note: 'Laut NCCIH nur geringer Forschungsumfang — keine gesicherte Aussage zur Wirksamkeit möglich.' },
+      { topic: 'Kombinationspräparate', note: 'häufig zusammen mit Glucosamin vermarktet, eigenständiger Zusatznutzen nicht belegt.' },
+    ],
+    forms: [
+      { name: 'Methylsulfonylmethan', aka: ['MSM'], bioavailability: 'keine belastbaren Vergleichsdaten gefunden', note: 'einzige gebräuchliche Form.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Als Nebenwirkungen werden allergische Reaktionen, Magen-Darm-Beschwerden und Hautausschläge beschrieben. Die Gesamtsicherheit gilt laut NCCIH als unsicher, da nur wenig Forschung vorliegt.',
+    sources: [
+      { label: 'NCCIH – DMSO and MSM for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/dimethyl-sulfoxide-dmso-and-methylsulfonylmethane-msm-for-osteoarthritis' },
+    ],
+  },
+  {
+    id: 'collagen-peptides',
+    name: 'Kollagenpeptide (hydrolysiertes Kollagen)',
+    category: 'Gelenke',
+    synonyms: ['kollagen', 'kollagenpeptide', 'hydrolysiertes kollagen', 'collagen peptides', 'collagen hydrolysate', 'hydrolyzed collagen', 'kollagenhydrolysat'],
+    unit: 'g',
+    what: 'Enzymatisch in kleine Peptide gespaltenes Kollagen (meist aus Rind-, Schweine-, Fisch- oder Geflügelhaut/-knochen); liefert Aminosäuren wie Glycin, Prolin und Hydroxyprolin.',
+    useCases: [
+      { topic: 'Kniegelenksarthrose (Schmerzen/Funktion)', note: 'Neuere Metaanalysen (u. a. 35 Studien, 2024) zeigen kleine bis moderate Effekte gegenüber Kontrolle; Studienlage insgesamt heterogen bezüglich Dosis, Kollagentyp und Dauer.' },
+      { topic: 'Haut', note: 'EFSA hat einen Health Claim zur Hautelastizität abgelehnt (2013) — gemessene Effekte erfüllten nicht die EFSA-Definition von Hautfunktion.' },
+    ],
+    forms: [
+      { name: 'Kollagen Typ I', aka: ['collagen type I'], bioavailability: 'hydrolysiert gut resorbierbar', note: 'Hauptbestandteil von Haut, Knochen, Sehnen, Bändern.' },
+      { name: 'Kollagen Typ II', aka: ['collagen type II'], bioavailability: 'hydrolysiert vs. undenaturiert unterschiedliche Wirkhypothese', note: 'Hauptbestandteil des Knorpels, im Gelenkkontext am meisten untersucht.' },
+      { name: 'Kollagen Typ III', aka: ['collagen type III'], bioavailability: 'meist gemeinsam mit Typ I in Kombipräparaten', note: 'ergänzt Typ I in Haut, Blutgefäßen, elastischem Bindegewebe.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Häufige Quellen sind Rind, Schwein, Fisch oder Geflügel — bei entsprechenden Nahrungsmittelallergien relevant für die Herkunftsprüfung. EFSA-Health-Claims zu Gelenken (2011) und Hautelastizität (2013) wurden jeweils abgelehnt.',
+    sources: [
+      { label: 'EFSA Journal 2011 (Opinion 2291, Gelenke)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2011.2291' },
+      { label: 'EFSA Journal 2013 (Opinion 3257, Haut/VeriSol)', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2013.3257' },
+    ],
+  },
+  {
+    id: 'hyaluronic-acid-oral',
+    name: 'Hyaluronsäure (oral)',
+    category: 'Gelenke',
+    synonyms: ['hyaluronsäure', 'hyaluronsaeure', 'hyaluronic acid', 'hyaluronan', 'natriumhyaluronat', 'sodium hyaluronate'],
+    unit: 'mg',
+    what: 'Glykosaminoglykan, natürlicher Bestandteil von Gelenkflüssigkeit, Knorpel und Haut; oral als niedrig- bis hochmolekulare Form angeboten (zu unterscheiden von injizierter Hyaluronsäure in der Gelenktherapie).',
+    useCases: [
+      { topic: 'Kniegelenksarthrose (Symptome)', note: 'Einzelne placebokontrollierte Studien berichten reduzierte Schmerz-/Steifigkeits-Scores; Evidenz insgesamt als limitiert eingestuft.' },
+      { topic: 'Hautfeuchtigkeit', note: 'Moderate Evidenzlage, meist mit niedrigmolekularer Hyaluronsäure über 8–12 Wochen untersucht.' },
+    ],
+    forms: [
+      { name: 'Niedrigmolekulare Hyaluronsäure', aka: ['low molecular weight HA'], bioavailability: 'in den meisten Studien mit positiven Daten verwendet', note: 'in Studien überwiegend in Dosen von 80–200 mg/Tag eingesetzt.' },
+      { name: 'Hochmolekulare Hyaluronsäure', aka: ['high molecular weight HA'], bioavailability: 'weniger Daten zu oraler Resorption', note: 'vor allem in injizierbarer Form für die Gelenktherapie etabliert.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Keine spezifischen Wechselwirkungen oder Kontraindikationen in den geprüften Quellen gefunden. Ein EFSA-Health-Claim zum Gelenkerhalt zählt zu den insgesamt 71 abgelehnten gelenkbezogenen Claims im EU-Register.',
+    sources: [
+      { label: 'EFSA Journal 2009 (Opinion 1266)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/1266' },
+    ],
+  },
+
+  // ── Antioxidantien ─────────────────────────────────────────
+  {
+    id: 'alpha-lipoic-acid',
+    name: 'Alpha-Liponsäure',
+    category: 'Antioxidantien',
+    synonyms: ['alpha-liponsäure', 'alpha-liponsaeure', 'thioctic acid', 'thioctsäure', 'ala', 'r-ala', 'lipoic acid'],
+    unit: 'mg',
+    what: 'Schwefelhaltige Fettsäure, die im Körper natürlich als Cofaktor mitochondrialer Enzyme vorkommt und als Antioxidans wirkt; regeneriert zusätzlich verbrauchte Antioxidantien wie Vitamin C.',
+    useCases: [
+      { topic: 'Oxidativer Stress', note: 'Wird als Radikalfänger diskutiert und ist Gegenstand von Studien zu oxidativem Stress.' },
+      { topic: 'Diabetische Neuropathie', note: 'Wird in Studien im Kontext von Nervenfunktion bei Diabetes untersucht.' },
+      { topic: 'Blutzuckerstoffwechsel', note: 'Wird im Zusammenhang mit Insulinsensitivität diskutiert.' },
+    ],
+    forms: [
+      { name: 'R-Alpha-Liponsäure (R-ALA)', aka: ['natürliche Form'], bioavailability: 'wird als besser bioverfügbar beschrieben als die S-Form', note: 'körpereigene, biologisch aktive Form.' },
+      { name: 'Racemische Mischung (R/S-ALA)', aka: ['synthetisches 50/50-Gemisch'], bioavailability: 'geringere Bioverfügbarkeit der S-Form', note: 'Standard in den meisten kommerziellen Präparaten.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Kann die blutzuckersenkende Wirkung von Insulin/Antidiabetika verstärken; Fälle von Unterzuckerung wurden berichtet. Kein EU-weit zugelassener Health Claim. Für eine belastbare Höchstmenge konnte trotz Prüfung keine eindeutig im Volltext verifizierbare Primärquelle bestätigt werden — kursierende Angaben (z. B. 600 mg/Tag) stammen aus Sekundärquellen und werden hier bewusst nicht als gesicherter Wert übernommen.',
+    sources: [
+      { label: 'Verbraucherzentrale Klartext Nahrungsergänzung – Alpha-Liponsäure', url: 'https://www.klartext-nahrungsergaenzung.de/wissen/lebensmittel/gesund-ernaehren/alphaliponsaeure-eine-fettsaeure-gegen-diabetes-107229' },
+    ],
+  },
+  {
+    id: 'n-acetylcysteine',
+    name: 'N-Acetylcystein (NAC)',
+    category: 'Antioxidantien',
+    synonyms: ['nac', 'n-acetylcystein', 'n-acetyl-l-cystein', 'acetylcystein', 'n-acetyl cysteine'],
+    unit: 'mg',
+    what: 'Synthetisiertes Derivat der Aminosäure Cystein, das im Körper als Vorstufe für die Bildung von Glutathion dient; kommt nicht natürlich in Lebensmitteln vor.',
+    useCases: [
+      { topic: 'Glutathion-Vorstufe', note: 'Wird als Substrat für die körpereigene Glutathion-Synthese eingeordnet.' },
+      { topic: 'Atemwege', note: 'Als Arzneistoff seit den 1960er-Jahren bei Schleimlösung in der Atemwegsmedizin zugelassen.' },
+      { topic: 'Oxidativer Stress', note: 'Gegenstand von Forschung zu antioxidativen Prozessen.' },
+    ],
+    forms: [
+      { name: 'N-Acetyl-L-Cystein', aka: ['Standardform'], bioavailability: 'oral, moderat', note: 'einzige gängige Handelsform.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Regulatorisch umstritten in Deutschland: NAC ist gleichzeitig zugelassener, teils apothekenpflichtiger Arzneistoff UND wird als Nahrungsergänzungsmittel gehandelt. Diese Doppelrolle wurde wiederholt behördlich geprüft (u. a. Regierungspräsidium Tübingen, Sachverständigenausschuss für Apothekenpflicht beim BfArM 2009) — der Status kann je nach Produkt und Zeitpunkt variieren. EFSA hat für NAC bislang keine positive Novel-Food-Bewertung veröffentlicht.',
+    sources: [
+      { label: 'Apotheke Adhoc – dm verkauft NAC als Lebensmittel', url: 'https://www.apotheke-adhoc.de/nachrichten/detail/markt/dm-verkauft-nac-als-lebensmittel/' },
+      { label: 'EFSA – Novel Food (Verfahrensübersicht)', url: 'https://www.efsa.europa.eu/en/topics/topic/novel-food' },
+    ],
+  },
+  {
+    id: 'resveratrol',
+    name: 'Resveratrol',
+    category: 'Antioxidantien',
+    synonyms: ['resveratrol', 'trans-resveratrol', 'polygonum-cuspidatum-extrakt', 'japanischer staudenknöterich extrakt'],
+    unit: 'mg',
+    what: 'Polyphenol (Stilben) aus der Gruppe der Phytoalexine, natürlich u. a. in Rotwein, Traubenschalen und Knöterich-Wurzel enthalten; als synthetisches trans-Resveratrol EU-weit als Novel Food zugelassen.',
+    useCases: [
+      { topic: 'Antioxidative Prozesse', note: 'Wird im Zusammenhang mit Zellschutz vor oxidativem Stress diskutiert.' },
+      { topic: 'Stoffwechsel- und Alterungsforschung', note: 'Gegenstand von Forschung zu Sirtuin-/AMPK-Signalwegen.' },
+    ],
+    forms: [
+      { name: 'Synthetisches trans-Resveratrol', aka: ['EU-zugelassener Novel-Food-Stoff'], bioavailability: 'EU-geprüfte, regulierte Form', note: 'einzige EU-weit als Novel Food für Nahrungsergänzungsmittel zugelassene Form.' },
+      { name: 'Polygonum-cuspidatum-Extrakt', aka: ['natürlicher Pflanzenextrakt'], bioavailability: 'variiert je nach Extraktqualität', note: 'gängige Ausgangsquelle in Präparaten.' },
+    ],
+    fatSoluble: true,
+    cautionNote: 'EFSA weist auf mögliche Wechselwirkungen mit bestimmten Arzneimitteln hin. Die Novel-Food-Zulassung gilt ausdrücklich nur für Erwachsene, nicht für Schwangere, Stillende, Kinder und Jugendliche.',
+    sources: [
+      { label: 'EFSA Journal – Safety of synthetic trans-resveratrol as a novel food (2016)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2016.4368' },
+      { label: 'EU-Durchführungsbeschluss (EU) 2016/1190', url: 'https://www.legislation.gov.uk/eudn/2016/1190/data.xht?view=snippet&wrap=true' },
+    ],
+  },
+  {
+    id: 'astaxanthin',
+    name: 'Astaxanthin',
+    category: 'Antioxidantien',
+    synonyms: ['astaxanthin', 'haematococcus pluvialis extrakt', 'algen-carotinoid'],
+    unit: 'mg',
+    what: 'Rotes Carotinoid-Pigment, das vor allem von der Mikroalge Haematococcus pluvialis gebildet wird und über die Nahrungskette (z. B. Lachs, Krill) auch in tierischen Lebensmitteln vorkommt.',
+    useCases: [
+      { topic: 'Oxidativer Stress', note: 'Wird als eines der potentesten bekannten Carotinoid-Antioxidantien beschrieben.' },
+      { topic: 'Sehkraft/Augen', note: 'Gegenstand von Studien zu Augenermüdung.' },
+      { topic: 'Haut', note: 'Wird im Kontext von Hautschutz vor UV-bedingtem oxidativem Stress untersucht.' },
+    ],
+    forms: [
+      { name: 'Natürliches Astaxanthin (Algenextrakt)', aka: ['Haematococcus-pluvialis-Extrakt'], bioavailability: 'Referenzform der EFSA-Bewertung', note: 'meistverbreitete Form in Nahrungsergänzungsmitteln.' },
+      { name: 'Synthetisches Astaxanthin', bioavailability: 'primär in Aquakultur/Futtermittel eingesetzt', note: 'andere Zulassungshistorie als die Algenform, seltener für Menschen.' },
+    ],
+    fatSoluble: true,
+    cautionNote: 'EFSA bewertet die kombinierte Aufnahme aus Hintergrundernährung (Fisch/Krustentiere) plus Nahrungsergänzung gemeinsam.',
+    sources: [
+      { label: 'EFSA Journal – Safety of astaxanthin as a novel food in food supplements (2020)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2020.5993' },
+    ],
+  },
+  {
+    id: 'quercetin',
+    name: 'Quercetin',
+    category: 'Antioxidantien',
+    synonyms: ['quercetin', 'quercetin-dihydrat', 'isoquercetin', 'quercetin-glykoside'],
+    unit: 'mg',
+    what: 'Flavonoid (Flavonol) aus der Gruppe sekundärer Pflanzenstoffe, natürlich enthalten u. a. in Zwiebeln, Äpfeln und Kapern; in Nahrungsergänzungsmitteln meist als isoliertes Quercetin-Dihydrat.',
+    useCases: [
+      { topic: 'Oxidativer Stress', note: 'Wird als Radikalfänger im Rahmen sekundärer Pflanzenstoffe eingeordnet.' },
+      { topic: 'Entzündungsprozesse', note: 'Gegenstand von Forschung zu entzündungsbezogenen Mechanismen.' },
+      { topic: 'Immunsystem', note: 'Wird in Studien im Zusammenhang mit Infektabwehr diskutiert.' },
+    ],
+    forms: [
+      { name: 'Quercetin-Dihydrat', aka: ['Standardform'], bioavailability: 'gering, wird durch Bioverfügbarkeitsformulierungen (z. B. Phytosome-Komplexe) verbessert', note: 'häufigste isolierte Form.' },
+      { name: 'Quercetin-Glykoside', aka: ['z. B. Rutin, Isoquercetin'], bioavailability: 'unterschiedlich, teils besser resorbiert als das Aglykon', note: 'kommen so natürlich in Lebensmitteln vor.' },
+    ],
+    fatSoluble: true,
+    cautionNote: 'In tierexperimentellen Untersuchungen wurde eine mögliche Verstärkung nephrotoxischer Effekte bei vorgeschädigter Niere sowie ein Effekt auf hormonabhängige Tumore diskutiert. Für Quercetin liegt keine offizielle EFSA-Sicherheitsbewertung/Novel-Food-Entscheidung vor, da es kein Novel Food ist — entsprechend fehlt eine verbindliche EU-Höchstmenge; kursierende Zahlen (500–860 mg) stammen aus wissenschaftlichen Übersichtsarbeiten, nicht aus einer bindenden Behördenfestlegung.',
+    sources: [
+      { label: 'Andres et al. 2018 – Safety Aspects of Quercetin as a Dietary Supplement', url: 'https://onlinelibrary.wiley.com/doi/10.1002/mnfr.201700447' },
+      { label: 'VKM (Norwegen) – Risk assessment of quercetin dihydrate and rutin (2024)', url: 'https://vkm.no/download/18.111b9bb51900c58335fcde26/1718703086649/Rapport%20quercetin_rutin_final_130624-komprimert.pdf' },
+    ],
+  },
+
+  // ── Aminosäuren und Neurotransmitter (Erweiterung) ────────
+  {
+    id: 'taurine',
+    name: 'Taurin',
+    category: 'Aminosäuren',
+    synonyms: ['taurin', 'taurine', '2-aminoethansulfonsäure', '2-aminoethanesulfonic acid'],
+    unit: 'mg',
+    what: 'Körpereigene, schwefelhaltige Aminosulfonsäure, wird aus Cystein synthetisiert und kommt vor allem in tierischen Lebensmitteln vor. Funktionen: Gallensäure-Konjugation, Zellvolumenregulation, antioxidative Prozesse.',
+    useCases: [
+      { topic: 'Energy-Drink-Formulierung', note: 'Häufigster Kontext, in dem Taurin behördlich bewertet wurde, meist in Kombination mit Koffein.' },
+      { topic: 'Sportlerernährung', note: 'In Studien zu Ausdauerleistung und Erholung untersucht, Ergebnislage uneinheitlich.' },
+    ],
+    forms: [
+      { name: 'Freies Taurin', aka: ['Pulver/Kapsel'], bioavailability: 'hoch, nahezu vollständige Resorption', note: 'Standardform in Nahrungsergänzungsmitteln.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Das BfR rät explizit von Energy-Drinks mit Taurin für Kinder, Schwangere und Stillende ab; Wechselwirkungen mit weiteren Energy-Drink-Inhaltsstoffen sind nicht vollständig erforscht.',
+    sources: [
+      { label: 'EFSA Journal 2009 – Taurine and D-glucurono-gamma-lactone in energy drinks', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2009.935' },
+      { label: 'BfR – Energydrinks: Bewertung gesundheitlicher Risiken', url: 'https://www.bfr.bund.de/stellungnahme/energydrinks-bfr-aktualisiert-bewertung-der-gesundheitlichen-risiken-fuer-kinder-und-jugendliche-bei-akutem-und-chronischem-verzehr/' },
+    ],
+  },
+  {
+    id: 'glycine',
+    name: 'Glycin',
+    category: 'Aminosäuren',
+    synonyms: ['glycin', 'glycine', 'aminoessigsäure', 'glykokoll'],
+    unit: 'g',
+    what: 'Einfachste proteinogene Aminosäure, Baustein von Kollagen, Glutathion und Kreatin; wirkt zugleich als hemmender Neurotransmitter.',
+    useCases: [
+      { topic: 'Schlafforschung', note: 'In placebokontrollierten Studien mit ca. 3 g vor dem Zubettgehen auf subjektive Schlafqualität und Einschlaflatenz untersucht.' },
+      { topic: 'Kollagen- und Bindegewebsforschung', note: 'Baustein körpereigener Kollagensynthese, daher Bestandteil vieler Kollagen-Präparate.' },
+    ],
+    forms: [
+      { name: 'Freies Glycin', aka: ['Pulver'], bioavailability: 'hoch', note: 'leicht süßlicher Geschmack, meist als Pulver dosiert.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Keine spezifische behördliche Warnung gefunden; in Studien mit mehreren Gramm/Tag überwiegend gut vertragen.',
+    sources: [
+      { label: 'PubMed – Sleep-promoting effects of glycine mediated by NMDA receptors', url: 'https://pubmed.ncbi.nlm.nih.gov/25533534/' },
+    ],
+  },
+  {
+    id: 'gaba',
+    name: 'GABA (Gamma-Aminobuttersäure)',
+    category: 'Neurotransmitter',
+    synonyms: ['gaba', 'gamma-aminobuttersäure', 'gamma-aminobutyric acid', '4-aminobuttersäure'],
+    unit: 'mg',
+    what: 'Wichtigster hemmender Neurotransmitter des zentralen Nervensystems. Oral aufgenommenes GABA überwindet die Blut-Hirn-Schranke nach aktuellem Kenntnisstand nur eingeschränkt — die Übertragbarkeit der zentralen Wirkung auf orale Einnahme wird kontrovers diskutiert.',
+    useCases: [
+      { topic: 'Entspannung/Stressempfinden', note: 'In klinischen Studien zu subjektivem Stressempfinden untersucht (u. a. 100 mg/Tag über 12 Wochen).' },
+      { topic: 'Schlafunterstützung', note: 'Gegenstand von Studien zum Einschlafverhalten.' },
+    ],
+    forms: [
+      { name: 'Freies GABA', aka: ['Pulver/Kapsel'], bioavailability: 'oral eingeschränkt, geringe Passage der Blut-Hirn-Schranke', note: 'häufig fermentativ aus Glutamat hergestellt.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'In Studien milder, vorübergehender Blutdruckabfall beobachtet. Regulatorischer Status uneinheitlich: In Deutschland existiert seit einem Gerichtsurteil von 2008 eine Allgemeinverfügung, die eine Tagesdosis von 100 mg als Nahrungsergänzungsmittel zulässt; einzelne Behörden haben seither dennoch Beanstandungen ausgesprochen. Das BfR sieht die Datenlage für eine belastbare gesundheitliche Bewertung aktuell als nicht ausreichend an.',
+    sources: [
+      { label: 'USP – Safety Review of Gamma-Aminobutyric Acid (GABA)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8399837/' },
+    ],
+  },
+  {
+    id: 'l-theanine',
+    name: 'L-Theanin',
+    category: 'Aminosäuren',
+    synonyms: ['l-theanin', 'theanin', 'l-theanine', 'theanine', 'gamma-glutamylethylamid'],
+    unit: 'mg',
+    what: 'Nicht-proteinogene Aminosäure aus Teeblättern (v. a. grüner Tee), strukturell dem Glutamat verwandt.',
+    useCases: [
+      { topic: 'Entspannung ohne Sedierung', note: 'Meistuntersuchtes Einsatzgebiet, häufig in Kombination mit Koffein betrachtet.' },
+      { topic: 'Aufmerksamkeit', note: 'In Kombination mit Koffein in Studien zu Reaktionszeit und Aufmerksamkeit untersucht.' },
+      { topic: 'Schlafqualität', note: 'Gegenstand von Studien zur subjektiven Schlafqualität.' },
+    ],
+    forms: [
+      { name: 'Isoliertes L-Theanin', aka: ['Kapsel/Pulver'], bioavailability: 'hoch, gut resorbierbar', note: 'in Deutschland als Kapsel-Nahrungsergänzungsmittel im Handel.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'EFSA hat 2011 einen wissenschaftlich hinreichend belegten Zusammenhang zwischen L-Theanin und kognitiver Funktion, Stressminderung oder Schlaf verneint und entsprechende Health-Claim-Anträge abgelehnt. Isoliertes, aus Tee extrahiertes L-Theanin gilt als Novel Food; ein EU-Zulassungsverfahren mit vorgeschlagenem Ausschluss von Kindern/Jugendlichen sowie Schwangeren/Stillenden lief zum Recherchezeitpunkt noch.',
+    sources: [
+      { label: 'EFSA Journal 2011 – Health claims related to L-theanine (Ablehnung)', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2011.2238' },
+      { label: 'EU-Kommission – Novel Food Summary Application L-Theanine', url: 'https://food.ec.europa.eu/document/download/a498e343-3403-427d-a95d-6a8fa4226c3b_en?filename=novel-food_sum_ongoing-app_2024-15277.pdf' },
+    ],
+  },
+  {
+    id: 'betaine',
+    name: 'Betain (Trimethylglycin, TMG)',
+    category: 'Aminosäuren',
+    synonyms: ['betain', 'betaine', 'trimethylglycin', 'tmg', 'glycinbetain', 'glycine betaine', 'betain-hcl', 'betain-hydrochlorid'],
+    unit: 'mg',
+    what: 'Methylgruppen-Donor im Homocystein-Stoffwechsel, kommt natürlich u. a. in Roter Bete, Vollkorn und Spinat vor. Betain-Anhydrat/TMG (Stoffwechselfunktion) ist von Betain-Hydrochlorid (zur Ansäuerung des Magenmilieus) zu unterscheiden — beide werden im Handel als "Betain" bezeichnet, haben aber unterschiedliche Einsatzgebiete.',
+    useCases: [
+      { topic: 'Homocystein-Stoffwechsel', note: 'Als Methylgruppen-Donor am Homocystein-Stoffwechsel beteiligt.' },
+      { topic: 'Sport-/Leistungsergänzung', note: 'EFSA-Zulassung als Novel Food explizit für Sportgetränke/-pulver vorgesehen.' },
+      { topic: 'Magenmilieu (Betain-HCl)', note: 'Als Hydrochlorid-Form zur Ansäuerung des Magenmilieus eingesetzt — separate Anwendung von TMG.' },
+    ],
+    forms: [
+      { name: 'Betain-Anhydrat (TMG)', bioavailability: 'hoch', note: 'wasserfreie Form, für Stoffwechsel-/Sport-Anwendungen zugelassen.' },
+      { name: 'Betain-Hydrochlorid (Betain-HCl)', bioavailability: 'hoch', note: '76 % Betain + 24 % HCl-Anteil; verändert das Magenmilieu, kann die Resorption von Arzneimitteln beeinflussen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Betain-HCl verändert das Magenmilieu, was die Aufnahme bestimmter Arzneimittel beeinflussen kann. EFSA bezog bei der Sicherheitsbewertung ausdrücklich auch Säuglinge und Kleinkinder ein, da eine Verwendung durch diese Gruppen nicht ausgeschlossen werden kann.',
+    sources: [
+      { label: 'EFSA Journal 2017 – Safety of betaine as a Novel Food', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7009179/' },
+    ],
+  },
+
+  // ── Pflanzenstoffe (Erweiterung) ──────────────────────────
+  {
+    id: 'rhodiola-rosea',
+    name: 'Rosenwurz (Rhodiola rosea)',
+    category: 'Pflanzenstoffe',
+    synonyms: ['rhodiola', 'rhodiola rosea', 'rosenwurz', 'rosenwurzel', 'arctic root', 'golden root'],
+    unit: 'mg',
+    what: 'Wurzelstock einer Pflanze aus arktischen/subarktischen Höhenlagen. In der EU als traditionelles pflanzliches Arzneimittel (HMPC) registriert, Leitsubstanzen sind Rosavine und Salidrosid. Der Wirkmechanismus ist laut HMPC nicht abschließend geklärt.',
+    useCases: [
+      { topic: 'Stresssymptome (Müdigkeit, Schwächegefühl)', note: 'Einzige offizielle Indikation laut EU-Kräutermonographie (Traditional Use): vorübergehende Linderung. Ein Health-Claim-Antrag zur Reduktion von Müdigkeit bei Stress wurde von EFSA mangels Wirksamkeitsnachweis abgelehnt.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt', aka: ['Ethanol-Extrakt 67–70 % v/v'], bioavailability: 'einzige in der HMPC-Monographie anerkannte Zubereitungsform', note: 'Handelsübliche Extrakte werden oft zusätzlich auf Rosavin-/Salidrosid-Gehalt standardisiert — das ist jedoch keine offizielle HMPC-Vorgabe.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Offiziell (HMPC) einzige Kontraindikation: Überempfindlichkeit gegen den Wirkstoff. Keine Anwendung bei Kindern/Jugendlichen unter 18 Jahren. Eine Wechselwirkung mit Losartan ist beschrieben. Ein in manchen Quellen genannter Hinweis auf Vorsicht bei bipolarer Störung/Manie konnte in offiziellen Primärquellen nicht verifiziert werden.',
+    sources: [
+      { label: 'EMA/HMPC – Community herbal monograph on Rhodiola rosea', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-rhodiola-rosea_en.pdf' },
+      { label: 'NCCIH – Rhodiola: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/rhodiola' },
+    ],
+  },
+  {
+    id: 'panax-ginseng',
+    name: 'Ginseng (Panax ginseng)',
+    category: 'Pflanzenstoffe',
+    synonyms: ['ginseng', 'panax ginseng', 'asiatischer ginseng', 'koreanischer ginseng', 'roter ginseng', 'weißer ginseng', 'ginsengwurzel'],
+    unit: 'mg',
+    what: 'Wurzel einer in China/Korea beheimateten Pflanze, botanisch unterschieden von amerikanischem Ginseng (Panax quinquefolius). Leitsubstanzen sind Ginsenoside.',
+    useCases: [
+      { topic: 'Symptome der Asthenie (Müdigkeit, Schwäche)', note: 'Offizielle HMPC-Indikation (Traditional Use), Anwendungsdauer bis zu 3 Monate.' },
+      { topic: 'Blutzucker- und Stoffwechselparameter', note: 'Eine Übersichtsarbeit (2022) zeigte Verbesserungen bei Nüchternblutzucker und Entzündungsmarkern bei Prädiabetes/Diabetes; Evidenz insgesamt nicht abschließend.' },
+      { topic: 'Sportliche Leistungsfähigkeit', note: 'Überwiegender Teil der Forschung zeigt laut NCCIH keinen Nutzen für die Leistungssteigerung im Sport.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt, standardisiert auf 4 % Ginsenoside', aka: ['DER 3–7:1'], bioavailability: 'am stärksten standardisierte Form laut HMPC', note: 'Einzeldosis 40–200 mg, Tagesdosis 40–200 mg.' },
+      { name: 'Pulverisierte Droge (weißer Ginseng)', bioavailability: 'n/a', note: 'Tagesdosis 600–2000 mg (HMPC).' },
+      { name: 'Pulverisierte Droge (roter Ginseng)', aka: ['dampfbehandelt'], bioavailability: 'n/a', note: 'Tagesdosis 1200–1800 mg (HMPC).' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Berichtete Nebenwirkungen: Magen-Darm-Beschwerden, Hypersensitivitätsreaktionen, Schlaflosigkeit. Möglicher Einfluss auf Autoimmunerkrankungen und Blutgerinnung. Keine Anwendung bei Kindern/Jugendlichen unter 18 Jahren.',
+    sources: [
+      { label: 'EMA/HMPC – EU herbal monograph on Panax ginseng (Revision 1, 2024)', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf' },
+      { label: 'NCCIH – Asian Ginseng: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/asian-ginseng' },
+    ],
+  },
+  {
+    id: 'ginkgo-biloba',
+    name: 'Ginkgo (Ginkgo biloba)',
+    category: 'Pflanzenstoffe',
+    synonyms: ['ginkgo', 'ginkgo biloba', 'ginkgoblätter', 'fächerblattbaum', 'egb 761'],
+    unit: 'mg',
+    what: 'Blätter des Ginkgobaums. Standardisierter Trockenextrakt mit Flavonglykosiden und Terpenlactonen (Ginkgolide, Bilobalid) als Leitsubstanzen; einziges Präparat dieser Gruppe mit HMPC-"Well-established-use"-Status (höchster Evidenzstatus für pflanzliche Zubereitungen in der EU).',
+    useCases: [
+      { topic: 'Altersbedingte kognitive Beeinträchtigung / leichte Demenz', note: 'HMPC Well-established-use-Indikation. Große Studien (u. a. mit über 3000 Teilnehmenden 75+) zeigten laut NCCIH keinen Unterschied zu Placebo bei der Demenz-Prävention; allenfalls begrenzter Nutzen bei bestehenden Symptomen.' },
+      { topic: 'Durchblutungsstörungen (Schweregefühl in den Beinen)', note: 'HMPC Traditional-Use-Indikation, nach ärztlichem Ausschluss ernster Ursachen.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt (DER 35–67:1), standardisiert', aka: ['entspricht dem in Studien verwendeten EGb-761-Typ'], bioavailability: 'Well-established-use gemäß HMPC', note: 'Tagesdosis 240 mg, Anwendung mindestens 8 Wochen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Kontraindiziert in der Schwangerschaft (offizielle HMPC-Kontraindikation, nicht nur Warnhinweis). Kann die Blutgerinnung beeinflussen — bei Antikoagulanzien/Thrombozytenaggregationshemmern (z. B. Phenprocoumon, Warfarin, ASS) nur nach ärztlicher Rücksprache. Absetzen 3–4 Tage vor geplanten Operationen als Vorsichtsmaßnahme. Bei Epilepsie kann laut HMPC ein Auftreten weiterer Anfälle nicht ausgeschlossen werden.',
+    sources: [
+      { label: 'EMA/HMPC – EU herbal monograph on Ginkgo biloba', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-ginkgo-biloba-l-folium_en.pdf' },
+      { label: 'NCCIH – Ginkgo: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/ginkgo' },
+    ],
+  },
+  {
+    id: 'maca',
+    name: 'Maca (Lepidium meyenii)',
+    category: 'Pflanzenstoffe',
+    synonyms: ['maca', 'lepidium meyenii', 'peruanischer ginseng', 'maca-wurzel', 'maca-pulver'],
+    unit: 'mg',
+    what: 'Hypocotyl (verdickter Wurzelhals) einer Kreuzblütlerpflanze aus den peruanischen Anden, traditionell als Nahrungsmittel nach Erhitzen verzehrt. Anders als bei anderen Pflanzenstoffen dieser Datenbank existiert keine EMA/HMPC-Kräutermonographie.',
+    useCases: [
+      { topic: 'Traditioneller Verzehr als Nahrungsmittel', note: 'In den Anden seit langem nach Erhitzen als Lebensmittel verzehrt.' },
+      { topic: 'Sexuelles Verlangen (Männer)', note: 'Das BfR zitiert kleine Humanstudien mit Hinweisen auf gesteigertes sexuelles Verlangen bei 1,5–3 g/Tag über 12 Wochen — Studien waren klein (n=15–30) und nicht primär auf Sicherheit ausgelegt.' },
+    ],
+    forms: [
+      { name: 'Wurzelpulver (roh oder geliert)', aka: ['Maca-Pulver'], bioavailability: 'keine behördlich bestätigten Angaben', note: 'Handelsübliche Tagesdosierungen laut einer 2007 zitierten Liste zwischen 400 und 5000 mg, meist 600–2400 mg.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Das BfR stellt in seiner Risikobewertung (2007) ausdrücklich fest, dass auf Basis der vorliegenden Daten KEINE gesundheitlich unbedenkliche Verzehrsmenge abgeleitet werden kann — nicht nur, dass keine bekannt ist. Tierstudien zeigen Hinweise auf Effekte auf Geschlechtsorgane und Hormonhaushalt (abhängig von der Farbvariante); konkrete Belege für unerwünschte Wirkungen beim Menschen liegen laut BfR nicht vor, die Datenlage gilt aber als unzureichend.',
+    sources: [
+      { label: 'BfR – Risikobewertung macahaltiger Nahrungsergänzungsmittel (024/2007)', url: 'https://www.bfr.bund.de/cm/343/risikobewertung_macahaltiger_nahrungsergaenzungsmittel.pdf' },
+    ],
+  },
+  {
+    id: 'milk-thistle',
+    name: 'Mariendistel (Silybum marianum) / Silymarin',
+    category: 'Pflanzenstoffe',
+    synonyms: ['mariendistel', 'milk thistle', 'silymarin', 'silybum marianum', 'mariendistelfrüchte'],
+    unit: 'mg',
+    what: 'Getrocknete Früchte der Mariendistel. Silymarin ist die Sammelbezeichnung für den Flavonolignan-Komplex (u. a. Silybin) der Pflanze und Leitsubstanz der Extrakte.',
+    useCases: [
+      { topic: 'Verdauungsbeschwerden, Völlegefühl, Blähungen', note: 'HMPC Traditional-Use-Indikation, nach ärztlichem Ausschluss ernster Ursachen.' },
+      { topic: 'Unterstützung der Leberfunktion', note: 'Teil der traditionellen HMPC-Indikation. Bei Hepatitis C zeigte eine Auswertung von 5 Studien (2014) laut NCCIH keinen Nutzen für Leberfunktion oder Viruslast.' },
+    ],
+    forms: [
+      { name: 'Pulverisierte Droge', bioavailability: 'n/a', note: 'Einzeldosis 300–600 mg, 2–3×/Tag, Tagesdosis bis 1800 mg (HMPC).' },
+      { name: 'Trockenextrakt (DER 30–40:1), Ethanol 96 %', aka: ['hochkonzentrierter Extrakt'], bioavailability: 'am stärksten konzentrierte HMPC-Form', note: 'Einzel-/Tagesdosis 200 mg.' },
+      { name: 'Trockenextrakt (DER 20–70:1), Aceton', aka: ['Standardextrakt'], bioavailability: 'gängigste kommerzielle Extraktform', note: 'Tagesdosis bis 478 mg.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Kontraindiziert bei Überempfindlichkeit gegen den Wirkstoff und gegen Pflanzen der Familie der Asteraceae/Compositae (Kreuzreaktion). Bei Gelbsucht oder Veränderung der Urin-/Stuhlfarbe soll laut HMPC sofort ärztlicher Rat eingeholt werden.',
+    sources: [
+      { label: 'EMA/HMPC – EU herbal monograph on Silybum marianum', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-silybum-marianum-l-gaertn-fructus_en.pdf' },
+      { label: 'NCCIH – Milk Thistle: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/milk-thistle' },
+    ],
+  },
+
+  // ── Augen, Sport, Schlaf ───────────────────────────────────
+  {
+    id: 'lutein-zeaxanthin',
+    name: 'Lutein & Zeaxanthin',
+    category: 'Augen',
+    synonyms: ['lutein', 'zeaxanthin', 'xanthophylle', 'carotinoide', 'macular pigment'],
+    unit: 'mg',
+    what: 'Zwei Carotinoide (Xanthophylle), die als einzige Carotinoide in nennenswerter Konzentration in der Makula des Auges eingelagert werden, dort blaues Licht filtern und antioxidativ wirken.',
+    useCases: [
+      { topic: 'Makuladichte', note: 'Werden im Zusammenhang mit dem Schutz der Makula vor oxidativem Stress eingeordnet.' },
+      { topic: 'Sehen bei hellem Licht', note: 'EFSA hat einen Health Claim zu verbessertem Sehen unter hellen Lichtbedingungen für die Kombination Lutein/Zeaxanthin wissenschaftlich bestätigt.' },
+      { topic: 'Altersbedingte Netzhautveränderungen', note: 'In der NIH-AREDS2-Studie wurde eine Formulierung mit 10 mg Lutein/2 mg Zeaxanthin als Ersatz für Beta-Carotin bei bestehenden Netzhautveränderungen untersucht.' },
+    ],
+    forms: [
+      { name: 'Freies Lutein/Zeaxanthin', aka: ['aus Tagetes erecta'], bioavailability: 'Referenzform in den meisten Studien', note: 'häufigste Rohstoffquelle.' },
+      { name: 'Lutein-Ester', bioavailability: 'muss vor Aufnahme im Darm gespalten werden', note: 'kommt so auch natürlich in Pflanzen vor.' },
+    ],
+    fatSoluble: true,
+    cautionNote: 'Als fettlösliche Substanz wird die Aufnahme durch gleichzeitige Nahrungsfette begünstigt. EFSA hat lediglich sicherheitsbezogene Grenzwerte für den Einsatz als Lebensmittelfarbstoff festgelegt, keinen Tages-Referenzwert für Nahrungsergänzungsmittel.',
+    sources: [
+      { label: 'EFSA Journal – Health Claim Lutein/Zeaxanthin und Sehen (2014)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2014.3753' },
+      { label: 'NIH – Age-Related Eye Disease Study 2 (AREDS2)', url: 'https://www.nei.nih.gov/research/clinical-trials/age-related-eye-disease-studies-aredsareds2' },
+    ],
+  },
+  {
+    id: 'beta-alanine',
+    name: 'Beta-Alanin',
+    category: 'Sport',
+    synonyms: ['beta-alanin', 'beta alanin', '3-aminopropionsäure', 'beta-ala'],
+    unit: 'mg',
+    what: 'Nicht-proteinogene Aminosäure, die als geschwindigkeitsbestimmender Baustein der körpereigenen Carnosin-Synthese in der Skelettmuskulatur dient.',
+    useCases: [
+      { topic: 'Muskel-Carnosin-Spiegel', note: '4–6 g/Tag über 10 Wochen können den Muskel-Carnosin-Spiegel laut NIH um bis zu 80 % erhöhen.' },
+      { topic: 'Kurzzeitige, hochintensive Belastung', note: 'Wird im Kontext von Trainingseinheiten mit hoher Intensität eingeordnet, bei denen Carnosin als Puffer gegen Muskelübersäuerung diskutiert wird.' },
+    ],
+    forms: [
+      { name: 'Freies Beta-Alanin', aka: ['Pulver/Kapsel'], bioavailability: 'gut resorbierbar', note: 'Standardform.' },
+      { name: 'Retardiert (sustained-release)', aka: ['verzögerte Freisetzung'], bioavailability: 'soll Spitzenkonzentrationen im Blut senken', note: 'wird zur Reduktion von Kribbeln (Parästhesie) eingesetzt.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei Einzeldosen oberhalb von ca. 800 mg wird vorübergehendes Kribbeln der Haut (Parästhesie) beschrieben. Keine offizielle Höchstmenge einer Behörde gefunden — Beta-Alanin ist kein essenzieller Nährstoff.',
+    sources: [
+      { label: 'NIH ODS – Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
+    ],
+  },
+  {
+    id: 'hmb',
+    name: 'HMB (Beta-Hydroxy-Beta-Methylbutyrat)',
+    category: 'Sport',
+    synonyms: ['hmb', 'beta-hydroxy-beta-methylbutyrat', 'hmb-ca', 'calcium-hmb', 'hmb-fa'],
+    unit: 'g',
+    what: 'Stoffwechselprodukt der Aminosäure Leucin (rund 5 % des körpereigenen Leucins werden zu HMB umgewandelt); wird mit Muskelproteinstoffwechsel und Regeneration nach muskelschädigender Belastung in Verbindung gebracht.',
+    useCases: [
+      { topic: 'Regeneration nach intensiver Belastung', note: 'Laut NIH ODS besteht Einigkeit, dass HMB die Erholung nach Training mit ausreichender Intensität für Muskelschäden unterstützen kann.' },
+    ],
+    forms: [
+      { name: 'HMB-Calcium (HMB-Ca)', bioavailability: 'in einer 2024er-Studie höhere relative Bioverfügbarkeit als HMB-FA', note: 'gängigste Kapsel-/Pulverform.' },
+      { name: 'HMB freie Säure (HMB-FA)', bioavailability: 'schnellerer, aber insgesamt niedrigerer Bioverfügbarkeitswert als HMB-Ca laut neueren Daten', note: 'meist als Gel oder flüssige Form.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Laut NIH ODS gilt 3 g/Tag für Erwachsene bei kurzzeitiger Anwendung als unbedenklich; Sicherheit und Wirksamkeit bei Jugendlichen sind nicht untersucht.',
+    sources: [
+      { label: 'NIH ODS – Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
+    ],
+  },
+  {
+    id: 'melatonin',
+    name: 'Melatonin',
+    category: 'Schlaf',
+    synonyms: ['melatonin', 'n-acetyl-5-methoxytryptamin', 'schlafhormon'],
+    unit: 'mg',
+    what: 'Körpereigenes Hormon der Zirbeldrüse, hauptsächlich nachts gebildet, beteiligt an der Steuerung des Tag-Nacht-Rhythmus.',
+    useCases: [
+      { topic: 'Jetlag', note: 'EFSA hat einen Health Claim zur Linderung subjektiver Jetlag-Symptome ab 0,5 mg pro Portion wissenschaftlich bestätigt.' },
+      { topic: 'Einschlafzeit', note: 'EFSA hat einen Health Claim zur Verkürzung der Einschlafzeit ab 1 mg pro Portion, unmittelbar vor dem Zubettgehen eingenommen, wissenschaftlich bestätigt.' },
+    ],
+    forms: [
+      { name: 'Melatonin, isoliert', bioavailability: 'oral, individuell stark schwankend', note: 'in Nahrungsergänzungsmitteln meist 0,5–2 mg, in Arzneimitteln 2–5 mg pro Einheit.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Regulatorischer Sonderstatus in Deutschland: Es gibt keine gesetzlich fixierte mg-Grenze, ab der Melatonin zwingend als Arzneimittel gilt — das BfR vertritt die Position, dass isoliertes Melatonin dosisunabhängig als pharmakologisch wirksamer Stoff einzustufen ist, während Gerichte Einzelfälle unterschiedlich entschieden haben. Als zugelassenes Arzneimittel ist Melatonin zu 3 mg je Packung bis 30 mg bei Jetlag rezeptfrei; andere Dosierungen und Indikationen bleiben verschreibungspflichtig. Das BfR warnte 2024 zusätzlich vor möglichen Gesundheitsrisiken melatoninhaltiger Nahrungsergänzungsmittel.',
+    sources: [
+      { label: 'BfR – Melatonin als Arzneimittel zulassungspflichtig (dosisunabhängig)', url: 'https://www.bfr.bund.de/veroeffentlichung/melatonin-als-arzneimittel-zulassungspflichtig-empfehlung-der-bundesinstitute-erfolgt-dosisunabhaengig/' },
+      { label: 'BfR – Stellungnahme 042/2024 zu melatoninhaltigen Nahrungsergänzungsmitteln', url: 'https://www.bfr.bund.de/cm/343/melatoninhaltige-nahrungsergaenzungsmittel-bfr-weist-auf-moegliche-gesundheitsrisiken-hin-2024.pdf' },
+      { label: 'BVL – FAQ Melatonin (Rechtslage)', url: 'https://www.bvl.bund.de/DE/Arbeitsbereiche/01_Lebensmittel/04_AntragstellerUnternehmen/13_FAQ/FAQ_Melatonin/FAQ_Melatonin_node.html' },
+    ],
   },
 ];
 
