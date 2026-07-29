@@ -10,3 +10,4 @@ build/
 package.json.backup*
 package-lock.json.backup*
 metro.config.backup*
+supabase/.temp/
