@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import TabBar from '../components/TabBar';
+
 import { analyzeCosts, findSharedGoals } from '../CostAnalyzer';
 import { analyzeStack, getStackWarnings } from '../StackAnalyzer';
 import { getOutcomeMetric } from '../data/outcomeMetrics';
@@ -56,7 +58,8 @@ export default function AnalysisScreen() {
   );
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <View style={styles.screenWrap}>
+      <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.kicker}>{t('analysis.kicker')}</Text>
       <Text style={styles.title}>{t('analysis.title')}</Text>
       <Text style={styles.subtitle}>{t('analysis.subtitle')}</Text>
@@ -250,6 +253,8 @@ export default function AnalysisScreen() {
         <Text style={styles.backButtonText}>{t('common.backToHome')}</Text>
       </TouchableOpacity>
     </ScrollView>
+      <TabBar active="analysis" />
+    </View>
   );
 }
 
@@ -341,6 +346,7 @@ function PriceEditor({ entries, onSave, t }) {
 }
 
 const styles = StyleSheet.create({
+  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
   screen: { flex: 1, backgroundColor: '#f8fafc' },
   content: { paddingHorizontal: 20, paddingTop: 28, paddingBottom: 44 },
   kicker: {

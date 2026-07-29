@@ -2,6 +2,8 @@ import React from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import TabBar from '../components/TabBar';
+
 import { getBlockMessage, isBlocked } from '../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../ConflictLogic';
 import { useTranslation } from '../i18n';
@@ -202,7 +204,8 @@ export default function Dashboard() {
   }
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <View style={styles.screenWrap}>
+      <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <View style={styles.kickerRow}>
           <Text style={styles.kicker}>{t('dashboard.kicker')}</Text>
@@ -450,6 +453,8 @@ export default function Dashboard() {
         <Text style={styles.disclaimerText}>{t('dashboard.disclaimer')}</Text>
       </View>
     </ScrollView>
+      <TabBar active="today" />
+    </View>
   );
 }
 
@@ -472,6 +477,7 @@ function MetricCard({ label, value }) {
 }
 
 const styles = StyleSheet.create({
+  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
   screen: {
     flex: 1,
     backgroundColor: '#F4F7FA',

@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import TabBar from '../components/TabBar';
+
 import LifeStagePicker from '../components/LifeStagePicker';
 import SubstanceInsightCard from '../components/SubstanceInsightCard';
 import { buildSubstanceProfile } from '../ReferenceCheck';
@@ -59,7 +61,8 @@ export default function SearchScreen() {
   const hasQuery = query.trim().length >= 2;
 
   return (
-    <ScrollView
+    <View style={styles.screenWrap}>
+      <ScrollView
       style={styles.screen}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
@@ -144,10 +147,13 @@ export default function SearchScreen() {
         {t('search.disclaimer')}
       </Text>
     </ScrollView>
+      <TabBar active="discover" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
   screen: {
     flex: 1,
     backgroundColor: '#f8fafc',

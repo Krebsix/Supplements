@@ -2,6 +2,8 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import TabBar from '../components/TabBar';
+
 import LanguagePicker from '../components/LanguagePicker';
 import { useTranslation } from '../i18n';
 
@@ -10,7 +12,8 @@ export default function Home() {
   const { t } = useTranslation();
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <View style={styles.screenWrap}>
+      <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.kicker}>{t('home.kicker')}</Text>
       <Text style={styles.title}>{t('home.title')}</Text>
       <Text style={styles.subtitle}>{t('home.subtitle')}</Text>
@@ -19,20 +22,6 @@ export default function Home() {
           Wer die App auf Englisch braucht, soll sie nicht erst auf Deutsch
           durchsuchen muessen. */}
       <LanguagePicker />
-
-      <View style={styles.heroCard}>
-        <Text style={styles.heroLabel}>{t('home.hero.label')}</Text>
-        <Text style={styles.heroTitle}>{t('home.hero.title')}</Text>
-        <Text style={styles.heroText}>{t('home.hero.text')}</Text>
-
-        <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/scanner')}>
-          <Text style={styles.primaryButtonText}>{t('home.hero.scan')}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push('/search')}>
-          <Text style={styles.secondaryButtonText}>{t('home.hero.manual')}</Text>
-        </TouchableOpacity>
-      </View>
 
       <View style={styles.trustCard}>
         <Text style={styles.trustLabel}>{t('home.trust.label')}</Text>
@@ -57,53 +46,41 @@ export default function Home() {
 
       <NavCard
         index="01"
-        title={t('home.nav.today.title')}
-        subtitle={t('home.nav.today.subtitle')}
-        onPress={() => router.push('/Dashboard')}
-      />
-
-      <NavCard
-        index="02"
         title={t('home.nav.add.title')}
         subtitle={t('home.nav.add.subtitle')}
         onPress={() => router.push('/AddSupplement')}
       />
 
       <NavCard
-        index="03"
+        index="02"
         title={t('home.nav.history.title')}
         subtitle={t('home.nav.history.subtitle')}
         onPress={() => router.push('/history')}
       />
 
       <NavCard
-        index="04"
-        title={t('home.nav.analysis.title')}
-        subtitle={t('home.nav.analysis.subtitle')}
-        onPress={() => router.push('/analysis')}
-      />
-
-      <NavCard
-        index="05"
+        index="03"
         title={t('home.nav.outcome.title')}
         subtitle={t('home.nav.outcome.subtitle')}
         onPress={() => router.push('/outcome')}
       />
 
       <NavCard
-        index="06"
+        index="04"
         title={t('home.nav.profile.title')}
         subtitle={t('home.nav.profile.subtitle')}
         onPress={() => router.push('/profile')}
       />
 
       <NavCard
-        index="07"
+        index="05"
         title={t('home.nav.settings.title')}
         subtitle={t('home.nav.settings.subtitle')}
         onPress={() => router.push('/settings')}
       />
     </ScrollView>
+      <TabBar active="more" />
+    </View>
   );
 }
 
@@ -131,6 +108,7 @@ function NavCard({ index, title, subtitle, onPress }) {
 }
 
 const styles = StyleSheet.create({
+  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
   screen: {
     flex: 1,
     backgroundColor: '#f8fafc',
@@ -160,65 +138,6 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     marginTop: 10,
     marginBottom: 20,
-  },
-  heroCard: {
-    backgroundColor: '#ffffff',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 24,
-    padding: 18,
-    marginBottom: 16,
-    shadowColor: '#0f172a',
-    shadowOpacity: 0.05,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 8 },
-  },
-  heroLabel: {
-    color: '#64748b',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    marginBottom: 8,
-  },
-  heroTitle: {
-    color: '#0f172a',
-    fontSize: 20,
-    lineHeight: 26,
-    fontWeight: '800',
-  },
-  heroText: {
-    color: '#475569',
-    fontSize: 14,
-    lineHeight: 21,
-    marginTop: 8,
-    marginBottom: 16,
-  },
-  primaryButton: {
-    backgroundColor: '#0f766e',
-    borderRadius: 999,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '800',
-  },
-  secondaryButton: {
-    backgroundColor: '#f1f5f9',
-    borderColor: '#e2e8f0',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  secondaryButtonText: {
-    color: '#0f172a',
-    fontSize: 15,
-    fontWeight: '800',
   },
   trustCard: {
     backgroundColor: '#ffffff',

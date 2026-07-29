@@ -4,6 +4,11 @@
  */
 
 export default {
+  'tabs.today': 'Heute',
+  'tabs.discover': 'Entdecken',
+  'tabs.scan': 'Scannen',
+  'tabs.analysis': 'Analyse',
+  'tabs.more': 'Mehr',
   'nav.home': 'Supplement OS',
   'nav.dashboard': 'Tagesplan',
   'nav.scanner': 'Scanner',

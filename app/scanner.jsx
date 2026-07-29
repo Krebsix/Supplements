@@ -12,6 +12,8 @@ import {
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 
+import TabBar from '../components/TabBar';
+
 import { lookupBarcode } from '../BarcodeLookup';
 import { analyzeCaptures, isAnalyzerConfigured } from '../ScanAnalyzer';
 import mockScanResult from '../data/mockScanResult';
@@ -279,7 +281,8 @@ export default function ScannerScreen() {
   }
 
   return (
-    <ScrollView
+    <View style={styles.screenWrap}>
+      <ScrollView
       style={styles.screen}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
@@ -700,10 +703,13 @@ export default function ScannerScreen() {
           : t('scanner.disclaimer.mock')}
       </Text>
     </ScrollView>
+      <TabBar active="scan" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenWrap: { flex: 1, backgroundColor: '#f8fafc' },
   screen: {
     flex: 1,
     backgroundColor: '#f8fafc',
