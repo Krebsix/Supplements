@@ -728,6 +728,132 @@ export const advisories = {
       text: 'Bei liegendem zentralvenösem Katheter und/oder schwerer Immunsuppression sind dokumentierte Fungämie-Fälle mit teils schwerem Verlauf beschrieben.',
     },
   ],
+  bcaa: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Kontraindiziert bei Ahornsirupkrankheit (angeborener Defekt im BCAA-Abbau).',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei fortgeschrittener Leber- oder Nierenerkrankung sowie bei ALS wird hochdosierte Einnahme in der Literatur kontrovers diskutiert und sollte ärztlich begleitet werden.',
+    },
+  ],
+  'green-lipped-mussel-extract': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Kontraindiziert bei bekannter Muschel-/Schalentierallergie (Kreuzreaktionsrisiko).',
+    },
+  ],
+  valerian: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Sicherheit in Schwangerschaft/Stillzeit laut EMA/HMPC nicht belegt, Anwendung nicht empfohlen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern unter 12 Jahren laut EMA/HMPC nicht empfohlen bzw. mangels Daten nicht belegt.',
+    },
+  ],
+  'st-johns-wort': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Bei Hyperforin-Tagesdosen über 1 mg kontraindiziert mit Cumarin-Antikoagulanzien, Ciclosporin, Tacrolimus, Sirolimus, Everolimus, Proteaseinhibitoren und bestimmten Zytostatika (u. a. Irinotecan, Imatinib) — CYP3A4/CYP2B6/CYP2C9/CYP2C19/P-Glykoprotein-Induktion laut EMA/HMPC.',
+    },
+    {
+      lifeStages: ['adult-woman', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Kann die Plasmakonzentration hormoneller Kontrazeptiva senken und dadurch die Verhütungssicherheit verringern (vermehrte Zwischenblutungen als Warnzeichen).',
+    },
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'In Kombination mit Serotonin-Wiederaufnahmehemmern oder anderen serotonergen Wirkstoffen sehr selten Serotonin-Syndrom möglich.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern und Jugendlichen unter 18 Jahren mangels Daten nicht empfohlen (HMPC).',
+    },
+  ],
+  passionflower: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Sicherheit in Schwangerschaft/Stillzeit laut EMA/HMPC nicht belegt.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern unter 12 Jahren mangels Daten nicht empfohlen (HMPC).',
+    },
+  ],
+  echinacea: [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Anwendung bei Kindern unter 12 Jahren mangels Sicherheitsdaten nicht empfohlen (HMPC).',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Begrenzte Daten zeigen laut HMPC keine nachteiligen Effekte auf Schwangerschaft/Fetus; mangels weiterer epidemiologischer Daten wird Anwendung ohne ärztlichen Rat dennoch nicht empfohlen.',
+    },
+  ],
+  reishi: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Erhöhtes Blutungsrisiko in Kombination mit Antikoagulanzien/Thrombozytenaggregationshemmern — vor operativen Eingriffen wird in mehreren Quellen ein Pausieren der Einnahme empfohlen.',
+    },
+  ],
+  chaga: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Bei Nierenerkrankung oder Oxalat-Nierensteinen in der Vorgeschichte relevant: dokumentierte Fälle von akutem Nierenversagen durch Oxalatablagerung nach hochdosiertem/langfristigem Konsum.',
+    },
+  ],
+  cordyceps: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Theoretisch erhöhtes Blutungsrisiko durch Hemmung der Thrombozytenaggregation (relevant mit Antikoagulanzien) sowie additive Effekte mit Antidiabetika/Insulin.',
+    },
+  ],
+  maitake: [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Dokumentierter INR-Anstieg in Kombination mit Warfarin sowie additive blutzuckersenkende Effekte mit Antidiabetika.',
+    },
+  ],
+  'coriolus-versicolor': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Keine Anwendung ohne ärztliche Rücksprache mangels Sicherheitsdaten.',
+    },
+  ],
+  'agaricus-blazei': [
+    {
+      lifeStages: 'all',
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei hormonsensiblen Erkrankungen wird wegen möglicher östrogenartiger Aktivität ärztliche Rücksprache empfohlen.',
+    },
+  ],
+  'nicotinamide-riboside': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'EU-Zulassung setzt für diese Gruppe eine reduzierte Höchstmenge an (230 mg/Tag statt 300 mg).',
+    },
+  ],
 };
 
 /**

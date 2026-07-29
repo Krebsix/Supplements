@@ -530,6 +530,17 @@ export const referenceValues = {
     upperLimitNote:
       'EFSA-Bewertung (2015): 400 mg/Tag aus allen Quellen gelten für die übrige erwachsene Bevölkerung als unbedenklich, eine Einzeldosis bis 200 mg ebenso. Für Schwangere und Stillende liegt die unbedenkliche Gesamt-Tagesmenge niedriger bei 200 mg. Für Kinder und Jugendliche nennt EFSA einen körpergewichtsbezogenen Wert von 3 mg/kg Körpergewicht/Tag, der sich nicht sinnvoll in einen festen mg-Wert übersetzen lässt — deshalb hier ohne Eintrag. Für Menopause/Senior nennt EFSA keinen gesonderten Wert.',
   },
+  'nicotinamide-riboside': {
+    unit: 'mg',
+    values: {
+      'adult-woman': { reference: null, upperLimit: 300 },
+      'adult-man': { reference: null, upperLimit: 300 },
+      pregnancy: { reference: null, upperLimit: 230 },
+      breastfeeding: { reference: null, upperLimit: 230 },
+    },
+    upperLimitNote:
+      'EU-Novel-Food-Zulassung (Durchführungsverordnung (EU) 2020/16, EFSA-Opinion 2019): 300 mg/Tag für die erwachsene Allgemeinbevölkerung, 230 mg/Tag für Schwangere und Stillende (reduzierte, gesondert festgelegte Grenze). Für Kinder und Jugendliche liegen keine ausreichenden Daten vor, die Zulassung gilt nur für Erwachsene.',
+  },
 };
 
 export function getLifeStage(id) {

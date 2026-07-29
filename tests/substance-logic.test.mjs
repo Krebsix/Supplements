@@ -86,6 +86,7 @@ const INTENTIONAL_COVERAGE_GAPS = {
   spermidine: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
   'green-tea-extract-egcg': ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding', 'menopause', 'senior'],
   caffeine: ['child-4-10', 'teen-11-17', 'menopause', 'senior'],
+  'nicotinamide-riboside': ['child-4-10', 'teen-11-17', 'menopause', 'senior'],
 };
 
 for (const [sid, entry] of Object.entries(referenceValues)) {
@@ -154,7 +155,7 @@ check('Keine Herstellernamen in der Siegel-DB',
   !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
 
 console.log('\n— Erweiterung Juli 2026: neue Substanzen —');
-check('Substanz-Datenbank hat 108 Einträge', substances.length === 108, substances.length);
+check('Substanz-Datenbank hat 126 Einträge', substances.length === 126, substances.length);
 
 const biotinMatch = matchIngredient({ name: 'Biotin', amount: '50', unit: 'µg' });
 check('Biotin erkannt', biotinMatch.substanceId === 'biotin', biotinMatch.substanceId);
@@ -308,6 +309,46 @@ check('Saccharomyces boulardii → contraindicated (Fungämie-Risiko bei Kathete
 check('MCT-Öl: kein Referenzwert erfunden', !referenceValues['mct-oil']);
 check('L-Citrullin: kein Referenzwert erfunden', !referenceValues['l-citrulline']);
 check('D-Mannose: kein Referenzwert erfunden', !referenceValues['d-mannose']);
+
+console.log('\n— Erweiterung Juli 2026, vierte Runde: Sport-Aminosäuren, Beruhigungspflanzen, Heilpilze, Longevity —');
+
+const bccaMatch = matchIngredient({ name: 'Leucin' });
+check('BCAA-Synonym "Leucin" erkannt', bccaMatch.substanceId === 'bcaa', bccaMatch.substanceId);
+
+const johanniskrautProfile = buildSubstanceProfile(matchIngredient({ name: 'Johanniskraut' }), 'adult-woman');
+check('Johanniskraut → contraindicated (CYP3A4-Interaktion) unabhaengig von Lebensphase',
+  johanniskrautProfile.advisories.some(a => a.severity === 'contraindicated'));
+check('Johanniskraut: cautionNote nennt Verschreibungspflicht',
+  /verschreibungspflichtig/.test(johanniskrautProfile.cautionNote));
+
+const valerianProfile = buildSubstanceProfile(matchIngredient({ name: 'Baldrian' }), 'pregnancy');
+check('Baldrian in Schwangerschaft → contraindicated',
+  valerianProfile.advisories.some(a => a.severity === 'contraindicated'));
+
+const echinaceaMatch = matchIngredient({ name: 'Sonnenhut' });
+check('Echinacea-Synonym "Sonnenhut" erkannt', echinaceaMatch.substanceId === 'echinacea');
+
+// Heilpilze: Novel-Food-Unterscheidung Fruchtkoerper vs. Myzel muss im cautionNote stehen
+const reishiMatch = matchIngredient({ name: 'Reishi' });
+check('Reishi: cautionNote nennt Fallberichte zur Lebertoxizität',
+  /Leberschädigung/.test(reishiMatch.substance?.cautionNote ?? ''));
+const agaricusMatch = matchIngredient({ name: 'Agaricus blazei' });
+check('Agaricus blazei: cautionNote unterscheidet Fruchtkörper (kein Novel Food) von Myzel (Novel Food)',
+  /Novel Food eingestuft/.test(agaricusMatch.substance?.cautionNote ?? ''));
+const shiitakeMatch = matchIngredient({ name: 'Lentinan' });
+check('Shiitake-Synonym "Lentinan" erkannt', shiitakeMatch.substanceId === 'shiitake');
+
+// NR: einzige neue Substanz mit EU-Novel-Food-Referenzwert dieser Runde
+const nrHigh = matchIngredient({ name: 'Nicotinamid-Ribosid', amount: '350', unit: 'mg' });
+check('NR 350mg → above_limit (über EU-Zulassungsgrenze 300mg)',
+  checkAgainstReference(nrHigh, 'adult-woman').status === 'above_limit');
+const nrPregnancy = matchIngredient({ name: 'Nicotinamid-Ribosid', amount: '250', unit: 'mg' });
+check('NR 250mg in Schwangerschaft → above_limit (niedrigere Grenze 230mg)',
+  checkAgainstReference(nrPregnancy, 'pregnancy').status === 'above_limit');
+
+// Urolithin A/AKG: bewusst kein Referenzwert erfunden trotz "Longevity"-Trendthema
+check('Urolithin A: kein Referenzwert erfunden', !referenceValues['urolithin-a']);
+check('Alpha-Ketoglutarat: kein Referenzwert erfunden', !referenceValues['alpha-ketoglutarate']);
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);
