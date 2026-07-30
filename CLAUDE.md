@@ -66,6 +66,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `DoseNormalizer.js` | Entscheidet, ob eine Menge die Verbindung oder das Element meint, und rechnet nur im ersten Fall herunter |
 | `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase, sammelt Lebensphasen-Hinweise |
 | `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
+| `ComplaintSearch.js` | Beschwerdesuche: findet Beschwerdebilder aus Alltagssprache und verknuepft sie mit dem Bestand |
 | `ProfileCheck.js` | Verknuepft das persoenliche Profil (Medikamentengruppen) mit dem Bestand und zitiert die belegten Hinweise |
 | `OutcomeTracker.js` | Wirkungskontrolle: Ausgangswert, Verlauf, Einnahmetreue — und die Stoerfaktoren, die gegen eine Zuordnung sprechen |
 | `LabValues.js` | Laborwerte erfassen und im Verlauf zeigen. Bewertet NICHT — Referenzbereiche kommen aus dem Befund |
@@ -83,6 +84,7 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `data/certifications.js` | Pruefsiegel mit Geltungsbereich. Das Feld `scope` sagt, was ein Siegel NICHT abdeckt — bewusst so |
 | `data/elementalFractions.js` | Massenanteil des Elements in einer Verbindung (500 mg Magnesiumcitrat = rund 81 mg Magnesium). Stoechiometrie mit Summenformel als Beleg |
 | `data/outcomeMetrics.js` | Zielgroessen der Wirkungskontrolle (5er-Skala). `direction` sagt, wo "besser" liegt — bei Beschwerden unten |
+| `data/complaints.js` | 12 Beschwerdebilder: Einordnung, Ursachenbereiche, Warnsignale, Naehrstoffbezuege, Fragen fuer die Praxis |
 | `data/labMarkers.js` | Gaengige Laborwerte als Eingabehilfe. Bewusst OHNE Referenzbereiche — die haengen von Labor und Methode ab |
 | `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
 
@@ -198,6 +200,13 @@ Loeschen der App bedeutet Datenverlust.
   zeigt, welche Ausgaben ohne Wirkungskontrolle mitlaufen. Das ist eine
   Beobachtungsluecke, keine Aussage ueber Wirksamkeit — die Formulierung muss
   das offenhalten.
+- **Aus einer Beschwerde folgt kein Mangel.** Die Beschwerdesuche fuehrt mit der
+  Einordnung ("Muedigkeit ist unspezifisch"), dann den Ursachenbereichen — bei
+  den meisten Beschwerden Schlaf, Stress und Medikamente, nicht Naehrstoffe —,
+  dann den Warnsignalen. Naehrstoffe stehen bewusst ganz unten und eingeklappt.
+  Wer bei "muede" mit Eisen anfaengt, hat die Beschwerde bereits gedeutet.
+  Warnsignale bleiben beobachtend formuliert ("kommt gemeinsam vor mit"), nie
+  deutend ("deutet hin auf").
 - **Laborwerte werden nicht interpretiert.** Kein "zu niedrig", kein "Mangel",
   keine Ampelfarbe. Referenzbereiche bringt die App nicht mit: Sie unterscheiden
   sich je Labor und Messmethode, ein hinterlegter Wert waere im Einzelfall

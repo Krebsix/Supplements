@@ -15,6 +15,7 @@ import addSupplement from './addSupplement';
 import analyzer from './analyzer';
 import analysis from './analysis';
 import common from './common';
+import complaint from './complaint';
 import components from './components';
 import dashboard from './dashboard';
 import history from './history';
@@ -35,6 +36,7 @@ export default {
   ...analyzer,
   ...analysis,
   ...components,
+  ...complaint,
   ...logic,
   ...lab,
   ...reference,

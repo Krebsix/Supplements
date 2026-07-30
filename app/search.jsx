@@ -8,6 +8,8 @@ import LifeStagePicker from '../components/LifeStagePicker';
 import SubstanceInsightCard from '../components/SubstanceInsightCard';
 import { buildSubstanceProfile } from '../ReferenceCheck';
 import { matchIngredient } from '../SubstanceMatcher';
+import { buildComplaintView, findComplaints } from '../ComplaintSearch';
+import ComplaintCard from '../components/ComplaintCard';
 import { substances } from '../data/substances';
 import useStore from '../useStore';
 import { useTranslation } from '../i18n';
@@ -45,6 +47,7 @@ export default function SearchScreen() {
 
   const activeLifeStageId = useStore((state) => state.activeLifeStageId);
   const setActiveLifeStage = useStore((state) => state.setActiveLifeStage);
+  const activeSupplements = useStore((state) => state.getActiveSupplements());
 
   const results = useMemo(() => searchSubstances(query), [query]);
 
@@ -57,6 +60,14 @@ export default function SearchScreen() {
         .filter((match) => match?.matched)
         .map((match) => buildSubstanceProfile(match, activeLifeStageId)),
     [results, activeLifeStageId]
+  );
+
+  // Beschwerdebilder zuerst: Wer einen ganzen Satz eingibt, meint eine
+  // Beschwerde und keinen Wirkstoffnamen.
+  const complaintHits = useMemo(() => findComplaints(query), [query]);
+  const complaintViews = useMemo(
+    () => complaintHits.map((complaint) => buildComplaintView(complaint, activeSupplements)),
+    [complaintHits, activeSupplements]
   );
 
   const hasQuery = query.trim().length >= 2;
@@ -111,7 +122,7 @@ export default function SearchScreen() {
             </Text>
           </View>
         </>
-      ) : profiles.length === 0 ? (
+      ) : complaintViews.length === 0 && profiles.length === 0 ? (
         <View style={styles.emptyBox}>
           <Text style={styles.emptyTitle}>{t('search.emptyTitle')}</Text>
           <Text style={styles.emptyText}>
@@ -120,18 +131,40 @@ export default function SearchScreen() {
         </View>
       ) : (
         <>
-          <LifeStagePicker
-            value={activeLifeStageId}
-            onChange={setActiveLifeStage}
-          />
+          {/* Beschwerdebilder stehen vor den Wirkstoffen: Wer einen ganzen
+              Satz eingibt, sucht eine Einordnung und keine Stoffliste. */}
+          {complaintViews.length > 0 ? (
+            <>
+              <Text style={styles.sectionLabel}>
+                {t('search.complaintSectionTitle')}
+              </Text>
 
-          <Text style={styles.resultCount}>
-            {t('search.hits', { count: profiles.length })}
-          </Text>
+              {complaintViews.map((view) => (
+                <ComplaintCard key={view.id} view={view} />
+              ))}
+            </>
+          ) : null}
 
-          {profiles.map((profile) => (
-            <SubstanceInsightCard key={profile.substanceId} profile={profile} />
-          ))}
+          {profiles.length > 0 ? (
+            <>
+              <Text style={styles.sectionLabel}>
+                {t('search.substanceSectionTitle')}
+              </Text>
+
+              <LifeStagePicker
+                value={activeLifeStageId}
+                onChange={setActiveLifeStage}
+              />
+
+              <Text style={styles.resultCount}>
+                {t('search.hits', { count: profiles.length })}
+              </Text>
+
+              {profiles.map((profile) => (
+                <SubstanceInsightCard key={profile.substanceId} profile={profile} />
+              ))}
+            </>
+          ) : null}
         </>
       )}
 
@@ -156,6 +189,8 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   screenWrap: surfaces.screen,
   screen: surfaces.screen,
+  // Trennt die Beschwerde-Antwort von den Wirkstoff-Treffern
+  sectionLabel: { ...type.label, marginTop: space.md, marginBottom: space.sm },
   content: {
     paddingHorizontal: space.xl - 2,
     paddingTop: space.xl + 4,
