@@ -128,4 +128,14 @@ export default {
   'settings.deleteAllConfirm2.message':
     'Das ist der letzte Schritt. Danach sind alle Daten weg.',
   'settings.deleteAllConfirm2.confirmButton': 'Endgültig löschen',
+  'settings.quotaLabel': 'Kontingent',
+  'settings.quotaTitle': 'Tarif und Scans',
+  'settings.quotaText':
+    'Barcode-Scans sind unbegrenzt frei. KI-Foto-Scans laufen über das Freikontingent, das Pro-Abo oder nachgekaufte Scans.',
+  'settings.quotaTierLabel': 'Tarif',
+  'settings.quotaTierFree': 'Free',
+  'settings.quotaTierPro': 'Pro',
+  'settings.quotaFreeLabel': 'Freie KI-Scans übrig',
+  'settings.quotaFairUseLabel': 'Fair-Use übrig (Monat)',
+  'settings.quotaCreditsLabel': 'Zusatz-Scans',
 };

@@ -12,6 +12,8 @@ import {
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { SLOTS, SLOT_ORDER } from '../TimingEngine';
+import { canAddSupplement, canUseProFeature } from '../Entitlements';
+import ProGate from '../components/ProGate';
 import useStore from '../useStore';
 import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
 import { useTranslation } from '../i18n';
@@ -27,6 +29,7 @@ export default function AddSupplement() {
   const clearPendingScanResult = useStore((state) => state.clearPendingScanResult);
   const pendingScanResult = useStore((state) => state.pendingScanResult);
   const userSupplements = useStore((state) => state.userSupplements);
+  const entitlement = useStore((state) => state.entitlement);
   const inventory = useStore((state) => state.librarySupplements);
 
   const [name, setName] = useState('');
@@ -209,7 +212,31 @@ export default function AddSupplement() {
     .filter(Boolean)
     .join(' · ');
 
+  // Kur-Zyklen sind Pro (Entitlements.js). Gesperrt wird nur der
+  // Einstieg: Ein bestehender Zyklus (cureEnabled aus den geladenen
+  // Daten) bleibt sichtbar und bearbeitbar, damit gespeicherte Daten
+  // nicht hinter dem Gate verschwinden.
+  const cureLocked = !canUseProFeature(entitlement).allowed && !cureEnabled;
+
   function handleSave() {
+    // 5-Praeparate-Grenze des Free-Tarifs (Entitlements.js). Gilt nur fuer
+    // NEUE Eintraege — Bearbeiten bleibt immer moeglich, sonst kaeme
+    // niemand mehr an seine bestehenden Daten. Solange PAYWALL_ENFORCED
+    // aus ist, blockiert das nie.
+    if (!editId) {
+      const activeCount = userSupplements.filter(
+        (supplement) => supplement.status !== 'archived'
+      ).length;
+      const gate = canAddSupplement(entitlement, activeCount);
+      if (!gate.allowed) {
+        Alert.alert(
+          t('addSupplement.alert.limitTitle'),
+          t('addSupplement.alert.limitMessage', { limit: gate.limit })
+        );
+        return;
+      }
+    }
+
     const trimmedName = name.trim();
 
     if (!trimmedName) {
@@ -440,21 +467,25 @@ export default function AddSupplement() {
         />
       </View>
 
-      <View style={styles.switchCard}>
-        <View style={styles.switchTextWrap}>
-          <Text style={styles.switchTitle}>{t('addSupplement.cureTitle')}</Text>
-          <Text style={styles.switchSubtitle}>
-            {t('addSupplement.cureSubtitle')}
-          </Text>
+      {cureLocked ? (
+        <ProGate />
+      ) : (
+        <View style={styles.switchCard}>
+          <View style={styles.switchTextWrap}>
+            <Text style={styles.switchTitle}>{t('addSupplement.cureTitle')}</Text>
+            <Text style={styles.switchSubtitle}>
+              {t('addSupplement.cureSubtitle')}
+            </Text>
+          </View>
+          <Switch
+            value={cureEnabled}
+            onValueChange={setCureEnabled}
+            trackColor={{ false: colors.rule, true: colors.accent }}
+            thumbColor={cureEnabled ? colors.surface : colors.canvas}
+            accessibilityLabel={t('addSupplement.cureTitle')}
+          />
         </View>
-        <Switch
-          value={cureEnabled}
-          onValueChange={setCureEnabled}
-          trackColor={{ false: colors.rule, true: colors.accent }}
-          thumbColor={cureEnabled ? colors.surface : colors.canvas}
-          accessibilityLabel={t('addSupplement.cureTitle')}
-        />
-      </View>
+      )}
 
       {cureEnabled ? (
         <View style={styles.row}>

@@ -36,4 +36,8 @@ export default {
   'language.title': 'Language',
   'language.hint':
     'The whole app switches instantly, including the substance texts. Literature references stay as published by the source.',
+  'proGate.label': 'Pro',
+  'proGate.title': 'Part of the Pro subscription',
+  'proGate.text':
+    'This area belongs to the Pro subscription. The subscription funds the AI analysis and the ongoing upkeep of the reference data.',
 };

@@ -126,4 +126,14 @@ export default {
   'settings.deleteAllConfirm2.message':
     'This is the last step. After this, all data is gone.',
   'settings.deleteAllConfirm2.confirmButton': 'Delete permanently',
+  'settings.quotaLabel': 'Quota',
+  'settings.quotaTitle': 'Plan and scans',
+  'settings.quotaText':
+    'Barcode scans are free without limit. AI photo scans draw on the free quota, the Pro subscription or purchased scans.',
+  'settings.quotaTierLabel': 'Plan',
+  'settings.quotaTierFree': 'Free',
+  'settings.quotaTierPro': 'Pro',
+  'settings.quotaFreeLabel': 'Free AI scans left',
+  'settings.quotaFairUseLabel': 'Fair use left (month)',
+  'settings.quotaCreditsLabel': 'Extra scans',
 };

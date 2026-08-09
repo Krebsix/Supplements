@@ -24,6 +24,8 @@ import {
   TRIAL_DURATIONS,
   getOutcomeMetric,
 } from '../../../data/outcomeMetrics';
+import { canUseProFeature } from '../../../Entitlements';
+import ProGate from '../../../components/ProGate';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
 import { colors, radius, space, surfaces, type } from '../../../theme';
@@ -56,6 +58,7 @@ export default function OutcomeScreen() {
   const concludeTrialById = useStore((state) => state.concludeTrialById);
   const deleteTrial = useStore((state) => state.deleteTrial);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
+  const entitlement = useStore((state) => state.entitlement);
 
   const supplements = getActiveSupplements();
 
@@ -111,6 +114,12 @@ export default function OutcomeScreen() {
         { text: t('common.delete'), style: 'destructive', onPress: () => deleteTrial(trialId) },
       ]
     );
+  }
+
+  // Wirkungskontrolle ist Pro (Entitlements.js). Nach den Hooks geprueft,
+  // damit die Hook-Reihenfolge stabil bleibt.
+  if (!canUseProFeature(entitlement).allowed) {
+    return <ProGate screen />;
   }
 
   return (

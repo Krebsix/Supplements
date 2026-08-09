@@ -13,6 +13,8 @@ import { useRouter } from 'expo-router';
 import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 
 import { analyzeCosts, findSharedGoals } from '../../../CostAnalyzer';
+import { canUseProFeature } from '../../../Entitlements';
+import ProGate from '../../../components/ProGate';
 import { analyzeStack, getStackWarnings } from '../../../StackAnalyzer';
 import { getOutcomeMetric } from '../../../data/outcomeMetrics';
 import { useTranslation } from '../../../i18n';
@@ -38,6 +40,7 @@ export default function AnalysisScreen() {
   const stockBySupplementId = useStore((state) => state.stockBySupplementId);
   const setStock = useStore((state) => state.setStock);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
+  const entitlement = useStore((state) => state.entitlement);
 
   const supplements = getActiveSupplements();
 
@@ -135,7 +138,11 @@ export default function AnalysisScreen() {
       {/* ── Kosten ──────────────────────────────────────────── */}
       <Text style={styles.sectionTitle}>{t('analysis.cost.title')}</Text>
 
-      {costs.items.length === 0 ? (
+      {/* Kostenanalyse ist Pro (Entitlements.js); die Stack-Analyse
+          darueber bleibt in jedem Tier frei. */}
+      {!canUseProFeature(entitlement).allowed ? (
+        <ProGate />
+      ) : costs.items.length === 0 ? (
         <View style={styles.emptyCard}>
           <Text style={styles.emptyText}>{t('analysis.cost.empty')}</Text>
         </View>

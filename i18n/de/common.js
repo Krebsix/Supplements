@@ -35,4 +35,8 @@ export default {
   'common.language': 'Sprache',
   'language.title': 'Sprache',
   'language.hint': 'Die gesamte App wechselt sofort, auch die Fachtexte. Literaturangaben bleiben so, wie die Quelle veröffentlicht ist.',
+  'proGate.label': 'Pro',
+  'proGate.title': 'Teil des Pro-Abos',
+  'proGate.text':
+    'Dieser Bereich gehört zum Pro-Abo. Das Abo finanziert die KI-Auswertung und die laufende Pflege der Referenzdaten.',
 };

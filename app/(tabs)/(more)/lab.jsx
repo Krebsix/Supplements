@@ -12,6 +12,8 @@ import { useRouter } from 'expo-router';
 
 import { getGroupedValues, getIntakeContext } from '../../../LabValues';
 import { LAB_MARKERS, getLabMarker } from '../../../data/labMarkers';
+import { canUseProFeature } from '../../../Entitlements';
+import ProGate from '../../../components/ProGate';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
 import { colors, radius, space, surfaces, type } from '../../../theme';
@@ -33,6 +35,7 @@ export default function LabScreen() {
   const deleteLabValue = useStore((state) => state.deleteLabValue);
   const intakeLogs = useStore((state) => state.intakeLogs);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
+  const entitlement = useStore((state) => state.entitlement);
 
   const supplements = getActiveSupplements();
 
@@ -80,6 +83,12 @@ export default function LabScreen() {
   }
 
   const grouped = getGroupedValues(labValues);
+
+  // Laborwerte-Verlauf ist Pro (Entitlements.js). Nach den Hooks geprueft,
+  // damit die Hook-Reihenfolge stabil bleibt.
+  if (!canUseProFeature(entitlement).allowed) {
+    return <ProGate screen />;
+  }
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>

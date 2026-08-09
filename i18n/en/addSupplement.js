@@ -114,4 +114,7 @@ export default {
   'addSupplement.alert.cureInvalidTitle': 'Cycle details incomplete',
   'addSupplement.alert.cureInvalidMessage':
     'An intake cycle needs intake days and break days, each at least 1.',
+  'addSupplement.alert.limitTitle': 'Free tier limit reached',
+  'addSupplement.alert.limitMessage':
+    'The free tier holds up to {limit} products at a time. The Pro subscription removes this limit.',
 };

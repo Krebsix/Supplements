@@ -117,4 +117,7 @@ export default {
   'addSupplement.alert.cureInvalidTitle': 'Kur-Angaben unvollständig',
   'addSupplement.alert.cureInvalidMessage':
     'Für einen Kur-Zyklus braucht es Einnahmetage und Pausentage, jeweils mindestens 1.',
+  'addSupplement.alert.limitTitle': 'Grenze im Free-Tarif erreicht',
+  'addSupplement.alert.limitMessage':
+    'Im Free-Tarif lassen sich bis zu {limit} Präparate gleichzeitig führen. Mit dem Pro-Abo entfällt diese Grenze.',
 };

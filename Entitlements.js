@@ -139,6 +139,18 @@ export function setTier(entitlement, tier) {
   return { ...ent, tier: tier === TIERS.PRO ? TIERS.PRO : TIERS.FREE };
 }
 
+/**
+ * Gate fuer die vier Pro-Features (Wirkungskontrolle, Kostenanalyse,
+ * Laborwerte-Verlauf, Kur-Zyklen; Decision 2026-08-09). Solange
+ * PAYWALL_ENFORCED aus ist, bleibt alles offen — die Aufrufstellen sind
+ * trotzdem verdrahtet, damit die Aktivierung ein Flag-Flip ist und kein
+ * Umbau kurz vor dem IAP-Start.
+ */
+export function canUseProFeature(entitlement) {
+  const pro = isPro(entitlement);
+  return { allowed: PAYWALL_ENFORCED ? pro : true, isPro: pro };
+}
+
 /** Darf ein weiteres Praeparat angelegt werden? */
 export function canAddSupplement(entitlement, activeCount) {
   const ent = normalize(entitlement);

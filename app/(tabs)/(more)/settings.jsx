@@ -14,6 +14,7 @@ import {
   parseBackupPayload,
 } from '../../../BackupManager';
 import LifeStagePicker from '../../../components/LifeStagePicker';
+import { evaluateVisionScan, isPro } from '../../../Entitlements';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
 import {
@@ -45,6 +46,7 @@ export default function SettingsScreen() {
   const revokeScanConsent = useStore((state) => state.revokeScanConsent);
   const resetAllData = useStore((state) => state.resetAllData);
   const importBackup = useStore((state) => state.importBackup);
+  const entitlement = useStore((state) => state.entitlement);
 
   const archivedSupplements = userSupplements.filter(
     (supplement) => supplement.status === 'archived'
@@ -54,6 +56,11 @@ export default function SettingsScreen() {
   ).length;
   const activeIntakeLogs = intakeLogs.filter((log) => !log.undoneAt).length;
   const undoneIntakeLogs = intakeLogs.filter((log) => log.undoneAt).length;
+
+  // Tarif und Scan-Kontingente (Entitlements.js): reine Anzeige, die
+  // Verbrauchslogik sitzt im Scanner.
+  const scanQuota = evaluateVisionScan(entitlement);
+  const proTier = isPro(entitlement);
 
   const handleClearIntakeLogs = () => {
     if (intakeLogs.length === 0) {
@@ -262,6 +269,41 @@ export default function SettingsScreen() {
           <View style={styles.statusItem}>
             <Text style={styles.statusValue}>{intakeLogs.length}</Text>
             <Text style={styles.statusLabel}>{t('settings.statusDocumented')}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>{t('settings.quotaLabel')}</Text>
+        <Text style={styles.cardTitle}>{t('settings.quotaTitle')}</Text>
+        <Text style={styles.cardText}>{t('settings.quotaText')}</Text>
+
+        <View style={styles.statusGrid}>
+          <View style={styles.statusItem}>
+            <Text style={styles.statusValue}>
+              {proTier ? t('settings.quotaTierPro') : t('settings.quotaTierFree')}
+            </Text>
+            <Text style={styles.statusLabel}>{t('settings.quotaTierLabel')}</Text>
+          </View>
+
+          <View style={styles.statusDivider} />
+
+          <View style={styles.statusItem}>
+            <Text style={styles.statusValue}>
+              {proTier ? scanQuota.remainingFairUse : scanQuota.remainingFree}
+            </Text>
+            <Text style={styles.statusLabel}>
+              {proTier
+                ? t('settings.quotaFairUseLabel')
+                : t('settings.quotaFreeLabel')}
+            </Text>
+          </View>
+
+          <View style={styles.statusDivider} />
+
+          <View style={styles.statusItem}>
+            <Text style={styles.statusValue}>{scanQuota.credits}</Text>
+            <Text style={styles.statusLabel}>{t('settings.quotaCreditsLabel')}</Text>
           </View>
         </View>
       </View>

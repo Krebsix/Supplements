@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "test": "node tests/run.mjs"
+    "test": "node tests/run.mjs",
+    "build:legal": "node scripts/build-legal-site.mjs"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
