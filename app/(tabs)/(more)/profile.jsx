@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'expo-router';
 
 import { checkProfileAgainstStack, summarizeProfileFindings } from '../../../ProfileCheck';
+import { HEALTH_CONDITIONS } from '../../../data/healthConditions';
 import { MEDICATION_CLASSES } from '../../../data/medicationClasses';
 import { localizeMedicationClass } from '../../../data/localize';
 import { useTranslation } from '../../../i18n';
@@ -38,6 +39,7 @@ export default function ProfileScreen() {
 
   const supplements = getActiveSupplements();
   const selected = profile?.medicationClasses ?? [];
+  const selectedConditions = profile?.conditions ?? [];
 
   const findings = useMemo(
     () => checkProfileAgainstStack(profile, supplements),
@@ -108,6 +110,31 @@ export default function ProfileScreen() {
         ) : null}
       </View>
 
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>{t('profile.conditions.title')}</Text>
+        <Text style={styles.cardHint}>{t('profile.conditions.hint')}</Text>
+
+        <View style={styles.chipWrap}>
+          {HEALTH_CONDITIONS.map((entry) => {
+            const isActive = selectedConditions.includes(entry.id);
+            return (
+              <TouchableOpacity
+                key={entry.id}
+                style={[styles.chip, isActive && styles.chipActive]}
+                onPress={() => toggleProfileEntry('conditions', entry.id)}
+                activeOpacity={0.8}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: isActive }}
+              >
+                <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+                  {entry.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+
       <Text style={styles.sectionTitle}>{t('profile.findings.title')}</Text>
 
       {findings.length === 0 ? (
@@ -124,7 +151,7 @@ export default function ProfileScreen() {
 
           {findings.map((finding, index) => (
             <FindingCard
-              key={`${finding.substanceId}-${finding.medicationClassId}-${index}`}
+              key={`${finding.substanceId}-${finding.medicationClassId ?? finding.conditionId}-${index}`}
               finding={finding}
               t={t}
             />
@@ -153,7 +180,9 @@ function FindingCard({ finding, t }) {
         </Text>
       </View>
 
-      <Text style={styles.findingClass}>{finding.medicationClassLabel}</Text>
+      <Text style={styles.findingClass}>
+        {finding.contextLabel ?? finding.medicationClassLabel}
+      </Text>
 
       <Text style={styles.quoteLabel}>{t('profile.findings.quoteLabel')}</Text>
       {/* Woertliches Zitat aus der Quelle — bewusst nicht paraphrasiert,

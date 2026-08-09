@@ -99,6 +99,7 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `data/complaints.js` | 12 Beschwerdebilder: Einordnung, Ursachenbereiche, Warnsignale, Naehrstoffbezuege, Fragen fuer die Praxis |
 | `data/labMarkers.js` | Gaengige Laborwerte als Eingabehilfe. Bewusst OHNE Referenzbereiche — die haengen von Labor und Methode ab |
 | `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
+| `data/healthConditions.js` | Erkrankungen (Bluthochdruck, Nieren-/Leber-/Gallen-/Herzerkrankung, Salicylat-Unvertraeglichkeit u. a.) nach demselben Muster: jede Zeile zitiert WOERTLICH aus dem cautionNote der Substanz, Zitate programmatisch extrahiert, Substring-Test erzwingt Integritaet. EN-Overlay noch offen (DE-Fallback) |
 | `data/interactions.js` | Substanz-Paar-Regeln (Aufnahme-Hemmung/-Foerderung) und Einnahme-Hinweise, jede Zeile mit Quelle (NIH ODS, EFSA). Deskriptiv formuliert, Tests erzwingen Quelle je Regel |
 | `data/legalContent.js` | Datenschutzerklaerung und Impressum als strukturierter Inhalt mit `PRIVACY_VERSION`. Die Aussagen sind gegen den tatsaechlichen Datenfluss geschrieben: Wer einen Datenfluss aendert, aendert diesen Text mit |
 | `data/en/*` | Englische Text-Overlays je Datendatei, keyed nach stabilen IDs. Deutsch bleibt kanonisch |

@@ -22,6 +22,9 @@ export default {
   'profile.medications.hint':
     'Wähle die Gruppen, aus denen du etwas einnimmst. Präparatenamen brauchst du nicht anzugeben, denn die hinterlegten Hinweise beziehen sich ohnehin auf Gruppen.',
   'profile.medications.none': 'Keine Angabe',
+  'profile.conditions.title': 'Erkrankungen',
+  'profile.conditions.hint':
+    'Wähle zutreffende Bereiche. Die App zeigt dann, zu welchen Stoffen in deinem Bestand ein belegter Hinweis hinterlegt ist. Das ist keine Bewertung deiner Situation und ersetzt keine ärztliche Beratung.',
 
   'profile.findings.title': 'Hinweise aus den Quellen',
   'profile.findings.empty':

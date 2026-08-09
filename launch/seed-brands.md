@@ -90,7 +90,14 @@ NEM — bestehende Eintraege beim Konsolidieren pruefen). Die App behandelt
 alle Klassen als dokumentierbare Einnahmen, kennzeichnet aber die Klasse;
 Arzneimittel-Hinweise bleiben Sache von Arzt/Apotheke.
 
-## Naechstes Arbeitspaket: Erkrankungs-Warnschicht (Design fixiert 2026-08-09)
+## Erkrankungs-Warnschicht: UMGESETZT 2026-08-09 (spaetabends)
+data/healthConditions.js (8 Erkrankungen, 26 belegte Bezuege,
+Zitate programmatisch extrahiert), ProfileCheck-Verdrahtung,
+Erkrankungs-Chips im Profil, tests/health-conditions.test.mjs.
+Offen: EN-Overlay der Zitate (DE-Fallback aktiv), weitere Erkrankungen
+sobald neue cautionNotes sie belegen. Urspruengliches Design darunter:
+
+## Arbeitspaket-Design (Referenz, umgesetzt)
 `data/healthConditions.js` analog zu medicationClasses.js: Erkrankungen
 (Bluthochdruck, Nieren-/Lebererkrankung, Diabetes, Gerinnungsstoerungen,
 Schilddruese, Salicylat-Unvertraeglichkeit, Epilepsie) verweisen mit

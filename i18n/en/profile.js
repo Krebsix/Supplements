@@ -22,6 +22,9 @@ export default {
   'profile.medications.hint':
     'Select the groups you take something from. Product names are not needed, since the documented notes refer to groups anyway.',
   'profile.medications.none': 'Not specified',
+  'profile.conditions.title': 'Health conditions',
+  'profile.conditions.hint':
+    'Select what applies. The app then shows which substances in your stack carry a documented note. This is no assessment of your situation and does not replace medical advice.',
 
   'profile.findings.title': 'Notes from the sources',
   'profile.findings.empty':

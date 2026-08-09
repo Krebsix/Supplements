@@ -3617,17 +3617,17 @@ export const substances = [
     category: 'Mineralien',
     synonyms: ['natrium', 'sodium', 'natriumchlorid', 'natriumcitrat', 'kochsalz', 'nacl'],
     unit: 'mg',
-    what: 'Mengenelement und wichtigster Elektrolyt des Extrazellulaerraums; reguliert Fluessigkeitshaushalt, Blutdruck und Nervenreizleitung. In Supplements vor allem in Elektrolyt-Mischungen enthalten.',
+    what: 'Mengenelement und wichtigster Elektrolyt des Extrazellulärraums; reguliert Flüssigkeitshaushalt, Blutdruck und Nervenreizleitung. In Supplements vor allem in Elektrolyt-Mischungen enthalten.',
     useCases: [
-      { topic: 'Elektrolythaushalt', note: 'Bestandteil von Elektrolyt-Praeparaten, die bei starkem Schwitzen, Sport oder Fluessigkeitsverlust eingesetzt werden.' },
-      { topic: 'Sport', note: 'Wird bei langen Ausdauerbelastungen mit hohem Schweissverlust ergaenzt.' },
+      { topic: 'Elektrolythaushalt', note: 'Bestandteil von Elektrolyt-Präparaten, die bei starkem Schwitzen, Sport oder Flüssigkeitsverlust eingesetzt werden.' },
+      { topic: 'Sport', note: 'Wird bei langen Ausdauerbelastungen mit hohem Schweißverlust ergänzt.' },
     ],
     forms: [
-      { name: 'Chlorid', aka: ['Kochsalz', 'NaCl'], note: 'Haeufigste Form in Elektrolyt-Mischungen.' },
-      { name: 'Citrat', note: 'In Brausetabletten und Sport-Getraenkepulvern verbreitet.' },
+      { name: 'Chlorid', aka: ['Kochsalz', 'NaCl'], note: 'Häufigste Form in Elektrolyt-Mischungen.' },
+      { name: 'Citrat', note: 'In Brausetabletten und Sport-Getränkepulvern verbreitet.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Die uebliche Ernaehrung liefert bereits deutlich mehr Natrium, als die Referenzwerte vorsehen; zusaetzliche Zufuhr ist ausserhalb von Sport- und Verlustsituationen selten sinnvoll. Wer wegen Bluthochdruck, Herz- oder Nierenerkrankung Natrium einschraenken soll, bespricht Elektrolyt-Praeparate aerztlich.',
+    cautionNote: 'Die übliche Ernährung liefert bereits deutlich mehr Natrium, als die Referenzwerte vorsehen; zusätzliche Zufuhr ist außerhalb von Sport- und Verlustsituationen selten sinnvoll. Wer wegen Bluthochdruck, Herz- oder Nierenerkrankung Natrium einschränken soll, bespricht Elektrolyt-Präparate ärztlich.',
     sources: [
       { label: 'NIH ODS: Sodium (Dietary Reference Intakes)', url: 'https://ods.od.nih.gov/factsheets/list-all/' },
       { label: 'D-A-CH Referenzwerte: Natrium', url: 'https://www.dge.de/wissenschaft/referenzwerte/natrium/' },

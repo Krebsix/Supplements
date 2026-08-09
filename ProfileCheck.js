@@ -25,6 +25,10 @@
 
 import { matchIngredient } from './SubstanceMatcher';
 import {
+  getHealthCondition,
+  getInteractionsForConditions,
+} from './data/healthConditions';
+import {
   getInteractionsForClasses,
   getMedicationClass,
 } from './data/medicationClasses';
@@ -79,8 +83,11 @@ export function checkProfileAgainstStack(profile = {}, supplements = []) {
   const classIds = Array.isArray(profile?.medicationClasses)
     ? profile.medicationClasses
     : [];
+  const conditionIds = Array.isArray(profile?.conditions)
+    ? profile.conditions
+    : [];
 
-  if (classIds.length === 0) return [];
+  if (classIds.length === 0 && conditionIds.length === 0) return [];
 
   const inStack = collectSubstanceIds(supplements);
   if (inStack.size === 0) return [];
@@ -116,6 +123,37 @@ export function checkProfileAgainstStack(profile = {}, supplements = []) {
       sources: normalizeSources(substance.sources ?? []),
       // In welchen Produkten des Bestands der Stoff steckt
       productNames,
+      kind: 'medication',
+      contextLabel: medicationClass?.label ?? interaction.medicationClassId,
+    });
+  }
+
+  // Erkrankungen: gleiches Zitat-Prinzip wie Medikamentengruppen
+  // (data/healthConditions.js). Ein Treffer heisst "dazu ist ein Hinweis
+  // hinterlegt", nie "das ist fuer dich gefaehrlich".
+  for (const interaction of getInteractionsForConditions(conditionIds)) {
+    const productNames = inStack.get(interaction.substanceId);
+    if (!productNames) continue;
+
+    const substance = substanceById.get(interaction.substanceId);
+    if (!substance) continue;
+
+    const condition = getHealthCondition(interaction.conditionId);
+
+    results.push({
+      substanceId: interaction.substanceId,
+      substanceName: substance.name,
+      conditionId: interaction.conditionId,
+      severity: interaction.severity,
+      // Woertlich aus dem cautionNote der Substanz (Test erzwingt das).
+      // EN-Overlay folgt; bis dahin faellt Englisch laut Sprachregel
+      // auf den deutschen Originalsatz zurueck.
+      quote: interaction.quote,
+      sourceField: interaction.sourceField,
+      sources: normalizeSources(substance.sources ?? []),
+      productNames,
+      kind: 'condition',
+      contextLabel: condition?.label ?? interaction.conditionId,
     });
   }
 
