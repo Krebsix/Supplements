@@ -125,4 +125,7 @@ export default {
   'scanner.consent.message':
     'For the analysis, your label photos are downscaled and transmitted once to our evaluation function (Supabase) and the Anthropic API (Claude). The photos are not stored there; processing may take place outside the EU. This consent also covers future scans and can be withdrawn at any time in the settings. Details are in the privacy policy.',
   'scanner.consent.confirm': 'Agree and analyse',
+  'scanner.limit.title': 'Scan quota used up',
+  'scanner.limit.message':
+    'Your free AI scans are used up. With the Pro subscription you scan without limits, or you buy a scan pack. Barcode scanning always stays free.',
 };

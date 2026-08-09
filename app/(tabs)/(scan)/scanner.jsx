@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 
 
 import { lookupBarcode } from '../../../BarcodeLookup';
+import { evaluateVisionScan } from '../../../Entitlements';
 import { analyzeCaptures, isAnalyzerConfigured } from '../../../ScanAnalyzer';
 import mockScanResult from '../../../data/mockScanResult';
 import useStore from '../../../useStore';
@@ -67,6 +68,8 @@ export default function ScannerScreen() {
   );
   const scanUploadConsent = useStore((state) => state.consents?.scanUpload);
   const giveScanConsent = useStore((state) => state.giveScanConsent);
+  const entitlement = useStore((state) => state.entitlement);
+  const consumeVisionScan = useStore((state) => state.consumeVisionScan);
 
   const cameraRef = useRef(null);
   const [permission, requestPermission] = useCameraPermissions();
@@ -234,6 +237,16 @@ export default function ScannerScreen() {
       return;
     }
 
+    // Kontingent-Gate (Entitlements.js): Freikontingent, Fair Use oder
+    // Credits. Solange PAYWALL_ENFORCED aus ist, wird nur gezaehlt.
+    if (!evaluateVisionScan(entitlement).allowed) {
+      Alert.alert(
+        t('scanner.limit.title'),
+        t('scanner.limit.message')
+      );
+      return;
+    }
+
     // Einwilligungs-Gate: Erst ab hier verlassen Fotos das Geraet. Die
     // Zustimmung wird einmal aktiv eingeholt (Art. 6 Abs. 1 lit. a DSGVO),
     // im Store festgehalten und ist in den Einstellungen widerrufbar.
@@ -261,6 +274,10 @@ export default function ScannerScreen() {
 
     try {
       const analysis = await analyzeCaptures(captures);
+
+      // Erst nach erfolgreicher Analyse verbrauchen: Ein fehlgeschlagener
+      // Scan kostet die Nutzerin nichts.
+      consumeVisionScan();
 
       storeAndShowResult({
         ...analysis,

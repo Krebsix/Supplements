@@ -10,7 +10,7 @@ Stand: 2026-08-09. App-Name offen, Platzhalter: [APP-NAME].
 | 2 | Impressum vervollständigen: Kontakt-E-Mail, Vertretungsberechtigte | Nadine | offen |
 | 3 | EU-Vertreter nach Art. 27 DSGVO beauftragen und eintragen | Nadine | offen |
 | 4 | AVV mit Supabase und Anthropic dokumentieren | Nadine | offen |
-| 5 | Preismodell: einmaliger Kaufpreis, kein Abo (entschieden 2026-08-09). Preispunkt und Freemium-Frage offen, siehe story.md | Nadine | teils |
+| 5 | Preismodell entschieden (2026-08-09): Freemium, Pro-Abo 29,99/Jahr bzw. 4,99/Monat, Scan-Credit-Pakete. Noch zu bauen: IAP-Integration + Paywall (braucht Developer-Account, Punkt 9). Scan-Modell auf Haiku 4.5 nach Qualitätstest | Claude + Nadine | teils |
 | 6 | App-Icon (1024x1024) und Splash | Claude baut Entwurf, Nadine entscheidet | offen |
 | 7 | Datenschutz-URL: statische Webseite mit der Erklärung | Claude | offen |
 | 8 | Gerätetest: Onboarding, Scan-Einwilligung, Erinnerungen, Backup | Nadine | offen |

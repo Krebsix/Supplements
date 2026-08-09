@@ -126,4 +126,7 @@ export default {
   'scanner.consent.message':
     'Für die Analyse werden deine Etikettenfotos verkleinert und einmalig an unsere Auswertungsfunktion (Supabase) sowie die Anthropic API (Claude) übertragen. Die Fotos werden dort nicht gespeichert, die Verarbeitung kann außerhalb der EU stattfinden. Die Zustimmung gilt auch für künftige Scans und lässt sich in den Einstellungen jederzeit widerrufen. Einzelheiten stehen in der Datenschutzerklärung.',
   'scanner.consent.confirm': 'Zustimmen und analysieren',
+  'scanner.limit.title': 'Scan-Kontingent aufgebraucht',
+  'scanner.limit.message':
+    'Die kostenlosen KI-Scans sind verbraucht. Mit dem Pro-Abo scannst du unbegrenzt, oder du kaufst ein Scan-Paket. Der Barcode-Scan bleibt immer kostenlos.',
 };

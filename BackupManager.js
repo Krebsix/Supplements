@@ -43,6 +43,10 @@ export const BACKUP_DATA_FIELDS = [
   'settings',
   'onboardingCompletedAt',
   'consents',
+  // Zaehlerstaende ja, Kaufrechte nein: Der Tier kommt nach einem
+  // Geraetewechsel aus dem Store-Restore (IAP), nicht aus dem Backup —
+  // sonst waere das Backup ein Pro-Freischalter.
+  'entitlement',
   'language',
 ];
 

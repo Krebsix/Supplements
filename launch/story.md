@@ -73,13 +73,18 @@ home LLC.
 ## Einwände, die kommen werden (und die Antworten)
 
 **"Wovon lebt die App, wenn sie nichts verkauft?"**
-Entschieden (2026-08-09): **einmaliger Kaufpreis, kein Abo.** Ausgeschlossen
-bleiben Affiliate, Werbung, Datenverkauf und Markenkooperationen mit
-Ranking-Einfluss. Das ist zugleich Teil der Story: Die App finanziert sich
-durch die Nutzerin, nicht durch die Branche, und ein Einmalkauf passt zu
-einer App ohne laufende Serverkosten.
-OFFEN: konkreter Preispunkt und ob Freemium-Einstieg (frei testen,
-einmalig freischalten) oder Bezahl-App ab Download.
+Entschieden (2026-08-09, ersetzt den Einmalkauf-Beschluss): **Freemium
+mit Abo und Scan-Credits.** Kostenlos für immer: Barcode-Scan unbegrenzt,
+3 KI-Foto-Scans, bis 5 Präparate, Bericht und Backup. Pro-Abo 29,99 Euro
+im Jahr (7-Tage-Trial) oder 4,99 im Monat: unbegrenzte KI-Scans (Fair
+Use), unbegrenzter Bestand, Wirkungskontrolle, Kostenanalyse,
+Laborwerte-Verlauf, Kur-Zyklen. Wer nicht abonnieren will, kauft
+Scan-Pakete einzeln. Ausgeschlossen bleiben Affiliate, Werbung,
+Datenverkauf und Markenkooperationen mit Ranking-Einfluss.
+Die Begründung nach außen: Das Abo finanziert die KI-Auswertung der
+Scans und die laufende Pflege der Wirkstoff-Datenbank. Beides sind echte
+laufende Kosten, keine künstliche Schranke. Der Barcode-Scan bleibt
+unbegrenzt frei, weil er uns nichts kostet.
 
 **"Warum sagt die App nicht, was ich nehmen soll?"**
 Weil sie weder Befund noch Dosis noch Medikationshistorie beurteilen kann

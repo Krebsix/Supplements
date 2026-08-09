@@ -6,6 +6,12 @@ import { secureStorage } from './secureStorage';
 import { shouldTriggerBlock } from './AbsorptionBlocker';
 import { getCureStatusLabel, isDueToday } from './CureManager';
 import {
+  EMPTY_ENTITLEMENT,
+  addCredits,
+  applyVisionScan,
+  setTier,
+} from './Entitlements';
+import {
   concludeTrial,
   createRating,
   createTrial,
@@ -197,6 +203,7 @@ function migratePersistedState(persistedState = {}) {
       scanUpload: state.consents?.scanUpload || null,
       privacyVersion: state.consents?.privacyVersion || null,
     },
+    entitlement: { ...EMPTY_ENTITLEMENT, ...(state.entitlement || {}) },
   };
 }
 
@@ -236,6 +243,10 @@ export const INITIAL_USER_STATE = {
   // Datenschutzerklaerung.
   onboardingCompletedAt: null,
   consents: { scanUpload: null, privacyVersion: null },
+  // Tier, Scan-Kontingente und Credits (Entitlements.js). Wird von
+  // resetAllData mit zurueckgesetzt; gekaufte Rechte kommen nach einer
+  // Loeschung ueber den Store-Restore (IAP) zurueck, nicht aus dem Backup.
+  entitlement: EMPTY_ENTITLEMENT,
 };
 
 export const useStore = create(
@@ -270,6 +281,17 @@ export const useStore = create(
       // Ausgangszustand zurueck. Danach greift das Onboarding-Gate wieder.
       resetAllData: () => set({ ...INITIAL_USER_STATE }),
 
+      // Erfolgreichen KI-Scan aus der richtigen Quelle verbrauchen
+      // (Freikontingent → Fair Use → Credits, siehe Entitlements.js).
+      consumeVisionScan: () =>
+        set((state) => ({ entitlement: applyVisionScan(state.entitlement) })),
+
+      grantScanCredits: (count) =>
+        set((state) => ({ entitlement: addCredits(state.entitlement, count) })),
+
+      setEntitlementTier: (tier) =>
+        set((state) => ({ entitlement: setTier(state.entitlement, tier) })),
+
       // Backup einspielen (siehe BackupManager.js). Ersetzt den gesamten
       // Bestand; die Daten laufen durch dieselbe Normalisierung wie beim
       // Laden aus dem Speicher, damit auch aeltere Backups sauber ankommen.
@@ -279,6 +301,13 @@ export const useStore = create(
         for (const field of Object.keys(INITIAL_USER_STATE)) {
           next[field] = migrated[field];
         }
+        // Der Tier kommt NIE aus der Backup-Datei: Kaufrechte werden ueber
+        // den Store-Restore (IAP) nachgewiesen, sonst waere ein editiertes
+        // Backup ein Pro-Freischalter. Zaehlerstaende werden uebernommen.
+        next.entitlement = {
+          ...next.entitlement,
+          tier: get().entitlement?.tier === 'pro' ? 'pro' : 'free',
+        };
         set(next);
         if (data?.language === 'de' || data?.language === 'en') {
           get().setLanguage(data.language);
@@ -532,6 +561,7 @@ export const useStore = create(
         settings: state.settings,
         onboardingCompletedAt: state.onboardingCompletedAt,
         consents: state.consents,
+        entitlement: state.entitlement,
       }),
       version: 1,
       migrate: (state) => migratePersistedState(state),
