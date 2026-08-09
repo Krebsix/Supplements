@@ -16,6 +16,34 @@ Stand: 2026-08-09. App-Name offen, Platzhalter: [APP-NAME].
 | 8 | Gerätetest: Onboarding, Scan-Einwilligung, Erinnerungen, Backup | Nadine | offen |
 | 9 | Apple Developer Account auf indoo home LLC + Store-Listing anlegen | Nadine | offen |
 
+## Reihenfolge und Gates (Council-Verdikt 2026-08-09, Konfidenz 80 %)
+
+Kein UX-Nachschärf-Sprint: Die Differenzierung ist gebaut, nicht behauptet,
+und die Konkurrenz (Scores, Mangel-Quizze, Biomarker-Deutung) kann sie nicht
+kopieren, ohne ihr Geschäftsmodell aufzugeben. Stattdessen drei Gates in
+fester Reihenfolge:
+
+1. **Haiku-Test zuerst** (in-house, keine Beta nötig): 10 Etikettenfotos
+   durch `node scripts/scan-quality-test.mjs <ordner>` — vergleicht
+   Produktiv-Modell und Haiku am selben Foto. Kill bis 16.08.: unter 50 %
+   korrekte Substanz+Dosis bei Haiku → Umstellung tot, Scan-Kosten und
+   Fair-Use-Limit neu rechnen.
+2. **Beta ohne Paywall**: Apple-Account → TestFlight, PAYWALL_ENFORCED
+   bleibt false, dort zahlt niemand. Schwellen vorab: mindestens 50 %
+   korrekte Scans, mindestens 30 % der Testerinnen schöpfen die 3
+   Frei-Scans aus. Pivot bis 15.09.: unter 10 aktive Testerinnen oder 0
+   organische Foto-Scans → Zielgruppenzugang neu (Apotheken-Winkel
+   vorziehen), nicht UX umbauen.
+3. **Öffentlicher Launch nur mit funktionierender Zahlung**: Product Hunt
+   und Presse-Pitches werden ERST terminiert, wenn ein Sandbox-Testkauf
+   durchgelaufen ist und PAYWALL_ENFORCED=true steht. Der Spike ist
+   einmalig; bei 2,1 % Freemium-Basisrate liefert er grob 5 bis 25
+   zahlende Kunden — und exakt 0, wenn niemand kaufen kann.
+
+Eskalation bis 01.09.: Apple-Account nicht aktiv → Zeitplan ehrlich neu
+setzen, Delegierbares abgeben. Erwartung kalibrieren: Der dauerhafte Kanal
+(Bericht-Fußzeile, ASO) wiegt mittelfristig schwerer als der Launch-Tag.
+
 ## Phase 1: Stille Beta (2 bis 3 Wochen vor Launch)
 
 - TestFlight-Beta mit 20 bis 50 Leuten: eigene Kontakte, je zwei bis drei

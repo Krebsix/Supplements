@@ -35,6 +35,16 @@ const MAX_IMAGES = 4;
 const MAX_BASE64_LENGTH = 6_000_000; // ~4.5 MB pro Bild
 const ALLOWED_MEDIA_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
+// Modell-Override fuer den Qualitaetsvergleich (Haiku-Test, Decision
+// 2026-08-09). Bewusst NUR Modelle, die guenstiger sind als der
+// Opus-Default — sonst waere der oeffentliche Endpoint ein Kosten-Hebel.
+// Der Produktiv-Default bleibt das ANALYZE_MODEL-Secret.
+const MODEL_OVERRIDE_WHITELIST = new Set([
+  "claude-haiku-4-5-20251001",
+  "claude-haiku-4-5",
+  "claude-sonnet-5",
+]);
+
 // Schema fuer die Extraktion. Grundsatz: Nicht Lesbares ist null/leer —
 // das Modell darf nichts erfinden (Regel aus CLAUDE.md der App).
 const RESULT_SCHEMA = {
@@ -266,6 +276,7 @@ Deno.serve(async (req) => {
 
   let images: IncomingImage[];
   let language = "de";
+  let modelOverride: string | null = null;
   try {
     const body = await req.json();
     images = Array.isArray(body?.images) ? body.images : [];
@@ -273,6 +284,14 @@ Deno.serve(async (req) => {
     // mit einem beliebigen Wert aus dem Request zu fuettern.
     if (typeof body?.language === "string" && body.language in LANGUAGE_RULES) {
       language = body.language;
+    }
+    // Nicht gelistete Modelle werden ignoriert, nicht abgelehnt: Der
+    // Aufruf laeuft dann einfach auf dem Produktiv-Default.
+    if (
+      typeof body?.model === "string" &&
+      MODEL_OVERRIDE_WHITELIST.has(body.model)
+    ) {
+      modelOverride = body.model;
     }
   } catch {
     return jsonResponse(400, { error: "Ungueltiger Request-Body." });
@@ -332,7 +351,7 @@ Deno.serve(async (req) => {
 
   try {
     const response = await client.messages.create({
-      model: Deno.env.get("ANALYZE_MODEL") ?? "claude-opus-5",
+      model: modelOverride ?? Deno.env.get("ANALYZE_MODEL") ?? "claude-opus-5",
       max_tokens: 16000,
       system: buildSystemPrompt(language),
       output_config: {
