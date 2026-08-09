@@ -8,12 +8,6 @@ export default {
   'home.title': 'Scan. Verify. Turn into routine.',
   'home.subtitle':
     'Your structured workspace for supplement data, daily routine, history and scan quality.',
-  'home.hero.label': 'Clinical workflow',
-  'home.hero.title': 'Capture, validate, document.',
-  'home.hero.text':
-    'Supplement OS puts reliable entries first: clear product data, then routine logic, then real scanning intelligence.',
-  'home.hero.scan': 'Scan a product',
-  'home.hero.manual': 'Add manually',
   'home.trust.label': 'Product principles',
   'home.trust.quality.title': 'Data quality before automation',
   'home.trust.quality.text':
@@ -25,9 +19,6 @@ export default {
   'home.trust.advice.text':
     'The app organises and documents. It does not replace medical advice.',
   'home.section.workflow': 'Workflow',
-  'home.nav.today.title': 'Daily plan',
-  'home.nav.today.subtitle':
-    "Today's scheduled intakes, documented routines, open entries and organisational checks.",
   'home.nav.add.title': 'New supplement',
   'home.nav.add.subtitle':
     'Add a manual entry with dosage, timing and purpose to your active routine.',

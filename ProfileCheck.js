@@ -28,6 +28,10 @@ import {
   getInteractionsForClasses,
   getMedicationClass,
 } from './data/medicationClasses';
+import {
+  localizeInteractionQuote,
+  localizeMedicationClass,
+} from './data/localize';
 import { substanceById, normalizeSources } from './data/substances';
 
 const SEVERITY_RANK = {
@@ -90,7 +94,9 @@ export function checkProfileAgainstStack(profile = {}, supplements = []) {
     const substance = substanceById.get(interaction.substanceId);
     if (!substance) continue;
 
-    const medicationClass = getMedicationClass(interaction.medicationClassId);
+    const medicationClass = localizeMedicationClass(
+      getMedicationClass(interaction.medicationClassId)
+    );
 
     results.push({
       substanceId: interaction.substanceId,
@@ -99,8 +105,13 @@ export function checkProfileAgainstStack(profile = {}, supplements = []) {
       medicationClassLabel: medicationClass?.label ?? interaction.medicationClassId,
       severity: interaction.severity,
       // Woertlich aus der belegten Quelle — nicht paraphrasieren, sonst
-      // laesst sich die Aussage nicht mehr gegenpruefen.
-      quote: interaction.quote,
+      // laesst sich die Aussage nicht mehr gegenpruefen. Auf Englisch
+      // kommt der Satz wortwoertlich aus dem EN-Overlay (data/localize.js).
+      quote: localizeInteractionQuote(
+        interaction.medicationClassId,
+        interaction.substanceId,
+        interaction.quote
+      ),
       sourceField: interaction.sourceField,
       sources: normalizeSources(substance.sources ?? []),
       // In welchen Produkten des Bestands der Stoff steckt

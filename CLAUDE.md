@@ -34,23 +34,34 @@ Kein Linter konfiguriert.
 ## Architektur
 
 Routing ueber **expo-router** (dateibasiert), State ueber **zustand**,
-Styling ueber **nativewind/tailwind**.
+Styling ueber StyleSheet + Design-Tokens (theme.js).
 
 ```
-app/                       Routen (expo-router)
-├── index.jsx              Einstieg
-├── Dashboard.jsx          Tagesuebersicht
-├── AddSupplement.jsx      Anlegen/Bearbeiten
-├── scanner.jsx            Kamera-Erfassung (expo-camera)
-├── results.jsx            Scan-Ergebnis pruefen
-├── search.jsx, history.jsx, settings.jsx
-└── _layout.jsx
+app/
+├── _layout.jsx            Root-Stack: Onboarding-Gate (Stack.Protected),
+│                          AddSupplement-Modal, Rechts-Screens, Verdrahtung
+│                          der Erinnerungen
+├── index.jsx              Redirect auf /Dashboard
+├── onboarding.jsx         Erster Start: Lebensphase + Datenschutz-Kenntnisnahme
+├── privacy.jsx            Datenschutzerklaerung (ausserhalb des Gates lesbar)
+├── imprint.jsx            Impressum (Betreiberdaten: data/legalContent.js)
+├── AddSupplement.jsx      Anlegen/Bearbeiten (Modal, inkl. Kur-Zyklus)
+└── (tabs)/                Fuenf echte Router-Tabs, je eigener Stack:
+    ├── (today)/           Dashboard.jsx, history.jsx
+    ├── (discover)/        search.jsx
+    ├── (scan)/            scanner.jsx, results.jsx
+    ├── (analysis)/        analysis.jsx, outcome.jsx
+    └── (more)/            menu.jsx (Hub), profile.jsx, lab.jsx, export.jsx,
+                           notifications.jsx, settings.jsx
 
-components/                AppHeader, FeatureCard, PrimaryButton,
-                           ScreenContainer, StatusBadge, SupplementResultCard
+components/                StatusBadge, SupplementResultCard, LifeStagePicker,
+                           LanguagePicker, SubstanceInsightCard, ComplaintCard,
+                           CertificationPanel, LegalSections, navigationTheme
 
-useStore.js                Hauptzustand (zustand + AsyncStorage)
-useNotificationStore.js    Benachrichtigungs-Zustand
+useStore.js                Hauptzustand (zustand, verschluesselt via secureStorage.js)
+useNotificationStore.js    Erinnerungs-Zustand + refreshNotificationSchedule()
+secureStorage.js           AES-256-Adapter, Schluessel im OS-Schluesselbund
+BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 ```
 
 ### Fachlogik — liegt bewusst ausserhalb der UI
@@ -87,6 +98,9 @@ useNotificationStore.js    Benachrichtigungs-Zustand
 | `data/complaints.js` | 12 Beschwerdebilder: Einordnung, Ursachenbereiche, Warnsignale, Naehrstoffbezuege, Fragen fuer die Praxis |
 | `data/labMarkers.js` | Gaengige Laborwerte als Eingabehilfe. Bewusst OHNE Referenzbereiche — die haengen von Labor und Methode ab |
 | `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
+| `data/legalContent.js` | Datenschutzerklaerung und Impressum als strukturierter Inhalt mit `PRIVACY_VERSION`. Die Aussagen sind gegen den tatsaechlichen Datenfluss geschrieben: Wer einen Datenfluss aendert, aendert diesen Text mit |
+| `data/en/*` | Englische Text-Overlays je Datendatei, keyed nach stabilen IDs. Deutsch bleibt kanonisch |
+| `data/localize.js` | Sprach-Bruecke: blendet EN-Overlays ein, wenn die aktive Sprache Englisch ist. Einzige Stelle, die beide Sprachwelten kennt |
 
 Bewusst als versioniertes JS-Modul im Repo, nicht in einer Datenbank:
 Katalogwissen aendert sich selten, die App bleibt offline-faehig, und jede
@@ -124,9 +138,17 @@ aufgeteilt, Schluessel flach (`dashboard.title`).
   seinen Wert per `setActiveLanguage()` dorthin.
 - Deutsch ist die Pflegesprache. Fehlt ein englischer Schluessel, faellt die App
   auf Deutsch zurueck statt auf eine leere Zeile.
-- **Die Fachtexte der Wirkstoff-Datenbank bleiben vorerst deutsch.** Eine
-  unsaubere englische Uebersetzung von "wird eingesetzt bei" klingt schnell
-  praeskriptiv und waere ein Compliance-Risiko, kein Schoenheitsfehler.
+- **Fachtexte laufen ueber EN-Overlays** (`data/en/*` + `data/localize.js`):
+  Deutsch bleibt die kanonische Quelle, Englisch wird pro Feld eingeblendet,
+  fehlende Overlays fallen auf Deutsch zurueck. Die Verdrahtung sitzt an den
+  Profil-Bauern (`buildSubstanceProfile`, `buildComplaintView`), nicht in
+  Screens. Compliance wird von Tests erzwungen: Vollstaendigkeit,
+  Verbotswoerter (cure/heals/treats/boosts/recommended/you should) und
+  Gedankenstrich-Verbot fuer JEDEN englischen Fachtext
+  (`tests/substances-en.test.mjs`, `tests/data-en.test.mjs`). Wer einen
+  deutschen Fachtext aendert, zieht das Overlay nach, sonst zeigt die
+  EN-App veralteten Text. Literaturzitate (`sources`) und Fachbegriffe
+  (Formnamen, Siegelnamen) werden NICHT uebersetzt.
 
 ---
 
@@ -147,6 +169,11 @@ Signalampel.
   kein Font-Download. Das ist der sichtbarste Unterschied zum Einheitslook.
 - Fliesstext bleibt auf der Systemschrift, weil sie klein besser liest.
 - Keine vollrunden Pillen mehr (`borderRadius: 999`), nur moderate Radien.
+- Tab- und UI-Icons kommen aus `@expo/vector-icons` (Feather, gebuendelt,
+  kein Font-Download). Keine Emojis als Icons: Das war das eine Element,
+  das dem redaktionellen Erscheinungsbild widersprach.
+- Der native Navigations-Header laeuft ueber `components/navigationTheme.js`
+  auf denselben Tokens (Serifen-Titel, canvas-Hintergrund).
 - Statusfarben ueber `toneFor(level)`. Eine Grenzwertueberschreitung ist ein
   Hinweis, kein Alarm — deshalb gedeckt.
 - **Keine Gedankenstriche in Nutzertexten.** Doppelpunkt, Komma oder Punkt
@@ -157,9 +184,21 @@ Signalampel.
 
 ## Datenhaltung
 
-Alles lokal auf dem Geraet: **zustand + AsyncStorage**, kein Server, keine Datenbank.
-Es gibt keine Synchronisation und kein Backup. Ein Geraetewechsel oder das
-Loeschen der App bedeutet Datenverlust.
+Alles lokal auf dem Geraet: **zustand + AsyncStorage**, kein Server, keine
+Datenbank, keine Synchronisation. Der Haupt-Store ist im Ruhezustand
+AES-256-verschluesselt (`secureStorage.js`): Er enthaelt Gesundheitsdaten
+nach Art. 9 DSGVO (Laborwerte, Medikamentengruppen, Erkrankungen); der
+Schluessel liegt im iOS-Keychain bzw. Android-Keystore, Klartext-Bestand
+wird beim ersten Start nach dem Update still migriert.
+
+Fuer Geraetewechsel und Datenauszug gibt es ein **JSON-Backup**
+(`BackupManager.js`, Settings): Export ueber das System-Share-Sheet, Import
+ersetzt den Bestand nach Bestaetigung. Kein Cloud-Sync. Einwilligungen und
+Onboarding-Stand liegen im Store (`consents`, `onboardingCompletedAt`);
+`resetAllData()` ist der zentrale Loeschweg (Art. 17) und setzt beides mit
+zurueck. Wer ein neues Nutzerdaten-Feld ergaenzt, ergaenzt es in
+`INITIAL_USER_STATE` (useStore.js) UND `BACKUP_DATA_FIELDS`
+(BackupManager.js).
 
 `inventory.json` und `data/mockScanResult.js` sind statische Beispieldaten.
 
@@ -190,6 +229,9 @@ Loeschen der App bedeutet Datenverlust.
   die in `data/substances.js` bzw. `data/lifeStageAdvisories.js` bereits mit
   Quelle belegt sind. Ein Test prueft, dass jedes Zitat dort noch woertlich
   steht — sonst behauptet die App etwas, das die Quelle nicht mehr hergibt.
+  Dasselbe gilt fuer Englisch: `data/en/medicationClasses.js` traegt je
+  Bezug das woertliche Zitat aus den EN-Overlays, und
+  `tests/medication-en.test.mjs` prueft die Substring-Integritaet.
 - **Eine Veraenderung ist kein Wirkungsnachweis.** Die Wirkungskontrolle darf
   nie "X hat geholfen" sagen — auch nicht abgeschwaecht ("scheint zu wirken"),
   das ist dieselbe Aussage mit Weichzeichner. Erlaubt ist "deine Bewertung ist

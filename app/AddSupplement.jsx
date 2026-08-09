@@ -38,6 +38,12 @@ export default function AddSupplement() {
   const [notes, setNotes] = useState('');
   const [childSafe, setChildSafe] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState([]);
+  // Kur-Zyklus (CureManager.js): Die Oberflaeche bietet den ON/OFF-Typ an.
+  // Der Stufen-Typ ('stepped') bleibt Fachlogik ohne Formular; er war
+  // bisher nirgends erzeugbar, es gibt also keine Bestandsdaten.
+  const [cureEnabled, setCureEnabled] = useState(false);
+  const [cureOnDays, setCureOnDays] = useState('');
+  const [cureOffDays, setCureOffDays] = useState('');
 
   const editIdParam = Array.isArray(params.editId) ? params.editId[0] : params.editId;
   const fromScanParam = Array.isArray(params.fromScan) ? params.fromScan[0] : params.fromScan;
@@ -59,6 +65,16 @@ export default function AddSupplement() {
     setNotes(existingSupplement.notes || '');
     setChildSafe(Boolean(existingSupplement.childSafe));
     setSelectedSlots(Array.isArray(existingSupplement.timingSlots) ? existingSupplement.timingSlots : []);
+
+    if (existingSupplement.cureConfig?.type === 'cycle') {
+      setCureEnabled(true);
+      setCureOnDays(String(existingSupplement.cureConfig.onDays ?? ''));
+      setCureOffDays(String(existingSupplement.cureConfig.offDays ?? ''));
+    } else {
+      setCureEnabled(false);
+      setCureOnDays('');
+      setCureOffDays('');
+    }
   }, [existingSupplement]);
 
   useEffect(() => {
@@ -212,6 +228,29 @@ export default function AddSupplement() {
       return;
     }
 
+    let cureConfig = null;
+    let cureStartDate = existingSupplement?.cureStartDate || null;
+
+    if (cureEnabled) {
+      const onDays = Number.parseInt(cureOnDays, 10);
+      const offDays = Number.parseInt(cureOffDays, 10);
+
+      if (!Number.isInteger(onDays) || onDays < 1 || !Number.isInteger(offDays) || offDays < 1) {
+        Alert.alert(
+          t('addSupplement.alert.cureInvalidTitle'),
+          t('addSupplement.alert.cureInvalidMessage')
+        );
+        return;
+      }
+
+      cureConfig = { type: 'cycle', onDays, offDays };
+      // Startdatum bleibt beim Bearbeiten erhalten, sonst beginnt der
+      // Zyklus mit dem Speichern.
+      if (!cureStartDate) cureStartDate = new Date().toISOString();
+    } else {
+      cureStartDate = null;
+    }
+
     const derivedTimingRaw =
       timingRaw.trim() ||
       selectedSlots
@@ -233,7 +272,8 @@ export default function AddSupplement() {
       conflictTags: [],
       synergyIds: [],
       stock: null,
-      cureConfig: null,
+      cureConfig,
+      cureStartDate,
       notes: notes.trim(),
     };
 
@@ -400,6 +440,48 @@ export default function AddSupplement() {
         />
       </View>
 
+      <View style={styles.switchCard}>
+        <View style={styles.switchTextWrap}>
+          <Text style={styles.switchTitle}>{t('addSupplement.cureTitle')}</Text>
+          <Text style={styles.switchSubtitle}>
+            {t('addSupplement.cureSubtitle')}
+          </Text>
+        </View>
+        <Switch
+          value={cureEnabled}
+          onValueChange={setCureEnabled}
+          trackColor={{ false: colors.rule, true: colors.accent }}
+          thumbColor={cureEnabled ? colors.surface : colors.canvas}
+          accessibilityLabel={t('addSupplement.cureTitle')}
+        />
+      </View>
+
+      {cureEnabled ? (
+        <View style={styles.row}>
+          <View style={styles.rowField}>
+            <FormField
+              label={t('addSupplement.cureOnLabel')}
+              helper={t('addSupplement.cureOnHelper')}
+              value={cureOnDays}
+              onChangeText={setCureOnDays}
+              placeholder="21"
+              keyboardType="number-pad"
+            />
+          </View>
+          <View style={styles.rowSpacer} />
+          <View style={styles.rowField}>
+            <FormField
+              label={t('addSupplement.cureOffLabel')}
+              helper={t('addSupplement.cureOffHelper')}
+              value={cureOffDays}
+              onChangeText={setCureOffDays}
+              placeholder="7"
+              keyboardType="number-pad"
+            />
+          </View>
+        </View>
+      ) : null}
+
       <FormField
         label={t('addSupplement.notesLabel')}
         helper={t('addSupplement.notesHelper')}
@@ -409,8 +491,24 @@ export default function AddSupplement() {
         multiline
       />
 
-      <TouchableOpacity style={styles.primaryButton} onPress={handleSave}>
+      <TouchableOpacity
+        style={styles.primaryButton}
+        onPress={handleSave}
+        accessibilityRole="button"
+        accessibilityLabel={primaryButtonLabel}
+      >
         <Text style={styles.primaryButtonText}>{primaryButtonLabel}</Text>
+      </TouchableOpacity>
+
+      {/* Das Modal war bisher nur per Geste verlassbar: ein expliziter
+          Abbrechen-Weg gehoert zu jedem Formular. */}
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel={t('common.cancel')}
+      >
+        <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -425,6 +523,9 @@ function FormField({ label, helper, multiline = false, ...props }) {
         multiline={multiline}
         placeholderTextColor={colors.inkFaint}
         style={[styles.input, multiline ? styles.inputMultiline : null]}
+        // Ohne Label liest der Screenreader nur den eingetragenen Wert vor.
+        accessibilityLabel={label}
+        accessibilityHint={helper || undefined}
       />
       {helper ? <Text style={styles.inputHelper}>{helper}</Text> : null}
     </View>
@@ -610,5 +711,12 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     ...surfaces.buttonPrimaryText,
+  },
+  cancelButton: {
+    ...surfaces.buttonQuiet,
+    marginTop: space.sm + 2,
+  },
+  cancelButtonText: {
+    ...surfaces.buttonQuietText,
   },
 });

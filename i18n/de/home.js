@@ -8,12 +8,6 @@ export default {
   'home.title': 'Scannen. Prüfen. In Routine überführen.',
   'home.subtitle':
     'Dein strukturierter Workspace für Supplement-Daten, Tagesroutine, Verlauf und spätere Scanner-Qualität.',
-  'home.hero.label': 'Klinischer Workflow',
-  'home.hero.title': 'Erfassen, validieren, dokumentieren.',
-  'home.hero.text':
-    'Supplement OS priorisiert belastbare Einträge: erst klare Produktdaten, dann Routine-Logik, später echte Scanner-Intelligenz.',
-  'home.hero.scan': 'Produkt scannen',
-  'home.hero.manual': 'Manuell erfassen',
   'home.trust.label': 'Produktprinzip',
   'home.trust.quality.title': 'Datenqualität vor Automatisierung',
   'home.trust.quality.text':
@@ -25,9 +19,6 @@ export default {
   'home.trust.advice.text':
     'Die App organisiert und dokumentiert. Sie ersetzt keine medizinische Beratung.',
   'home.section.workflow': 'Workflow',
-  'home.nav.today.title': 'Tagesplan',
-  'home.nav.today.subtitle':
-    'Heute geplante Einnahmen, dokumentierte Routinen, offene Einträge und organisatorische Prüfhinweise.',
   'home.nav.add.title': 'Neues Supplement',
   'home.nav.add.subtitle':
     'Manuellen Eintrag mit Dosierung, Timing und Zweck sauber in die aktive Routine aufnehmen.',

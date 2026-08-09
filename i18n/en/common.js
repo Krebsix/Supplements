@@ -22,6 +22,11 @@ export default {
   'nav.settings': 'Settings',
   'nav.history': 'History',
   'nav.search': 'Search',
+  'nav.notifications': 'Reminders',
+  'nav.privacy': 'Privacy',
+  'nav.imprint': 'Legal notice',
+  'lifeStage.referenceFor': 'Reference values for',
+  'legal.version': 'Version',
   'common.back': 'Back',
   'common.backToHome': 'Back to start',
   'common.cancel': 'Cancel',
@@ -30,5 +35,5 @@ export default {
   'common.language': 'Language',
   'language.title': 'Language',
   'language.hint':
-    'The interface switches instantly. Substance database texts remain in German for now.',
+    'The whole app switches instantly, including the substance texts. Literature references stay as published by the source.',
 };

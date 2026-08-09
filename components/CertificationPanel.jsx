@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { KIND_LABELS, matchCertifications } from '../data/certifications';
+import {
+  localizeCertification,
+  localizeCertificationKind,
+} from '../data/localize';
 import { colors, radius, space, surfaces, toneFor, type } from '../theme';
 import { useTranslation } from '../i18n';
 
@@ -36,7 +40,8 @@ export default function CertificationPanel({ labels }) {
 
   return (
     <View>
-      {matched.map((cert) => {
+      {matched.map((rawCert) => {
+        const cert = localizeCertification(rawCert);
         const isOpen = expandedId === cert.id;
 
         return (
@@ -49,7 +54,9 @@ export default function CertificationPanel({ labels }) {
           >
             <View style={styles.header}>
               <View style={styles.headerText}>
-                <Text style={styles.kind}>{KIND_LABELS[cert.kind]}</Text>
+                <Text style={styles.kind}>
+                  {localizeCertificationKind(cert.kind, KIND_LABELS[cert.kind])}
+                </Text>
                 <Text style={styles.name}>{cert.name}</Text>
               </View>
               <Text style={styles.toggle}>{isOpen ? '−' : '+'}</Text>

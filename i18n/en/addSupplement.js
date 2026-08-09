@@ -103,4 +103,15 @@ export default {
 
   'addSupplement.defaultPurpose': 'Custom',
   'addSupplement.defaultCategory': 'Custom',
+
+  'addSupplement.cureTitle': 'Intake cycle',
+  'addSupplement.cureSubtitle':
+    'Alternating intake and break phases, for example 21 days on, 7 days off. On break days the product does not appear in the daily plan.',
+  'addSupplement.cureOnLabel': 'Intake days',
+  'addSupplement.cureOnHelper': 'Length of the intake phase in days.',
+  'addSupplement.cureOffLabel': 'Break days',
+  'addSupplement.cureOffHelper': 'Length of the break in days.',
+  'addSupplement.alert.cureInvalidTitle': 'Cycle details incomplete',
+  'addSupplement.alert.cureInvalidMessage':
+    'An intake cycle needs intake days and break days, each at least 1.',
 };

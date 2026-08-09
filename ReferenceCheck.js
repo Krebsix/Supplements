@@ -18,6 +18,7 @@ import { convertAmount } from './SubstanceMatcher';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { tr } from './i18n/runtime';
 import { getAdvisories } from './data/lifeStageAdvisories';
+import { localizeAdvisory, localizeSubstanceTexts } from './data/localize';
 import { getReferenceValue } from './data/referenceValues';
 import { normalizeSources } from './data/substances';
 
@@ -37,32 +38,26 @@ const STATUS_META = {
   [REFERENCE_STATUS.BELOW]: {
     labelKey: 'reference.status.below',
     tone: 'neutral',
-    hex: '#64748b',
   },
   [REFERENCE_STATUS.WITHIN]: {
     labelKey: 'reference.status.within',
     tone: 'ok',
-    hex: '#0f766e',
   },
   [REFERENCE_STATUS.ABOVE_REFERENCE]: {
     labelKey: 'reference.status.aboveReference',
     tone: 'notice',
-    hex: '#b45309',
   },
   [REFERENCE_STATUS.ABOVE_LIMIT]: {
     labelKey: 'reference.status.aboveLimit',
     tone: 'warn',
-    hex: '#dc2626',
   },
   [REFERENCE_STATUS.SAFE_LEVEL]: {
     labelKey: 'reference.status.safeLevel',
     tone: 'ok',
-    hex: '#0f766e',
   },
   [REFERENCE_STATUS.UNKNOWN]: {
     labelKey: 'reference.status.unknown',
     tone: 'muted',
-    hex: '#94a3b8',
   },
 };
 
@@ -295,7 +290,12 @@ export function buildSubstanceProfile(match, lifeStageId) {
     };
   }
 
-  const { substance, form } = match;
+  // Sprach-Overlay an EINER Stelle: Alles, was die UI aus diesem Profil
+  // rendert, ist damit lokalisiert. Auf Deutsch ist das ein No-op.
+  const substance = localizeSubstanceTexts(match.substance);
+  const form = match.form
+    ? substance.forms?.find((item) => item.name === match.form.name) ?? match.form
+    : null;
 
   return {
     matched: true,
@@ -318,6 +318,8 @@ export function buildSubstanceProfile(match, lifeStageId) {
     sources: normalizeSources(substance.sources ?? []),
     referenceCheck: checkAgainstReference(match, lifeStageId),
     // Was in DIESER Lebensphase besonders gilt (Phase 3)
-    advisories: getAdvisories(substance.id, lifeStageId),
+    advisories: getAdvisories(substance.id, lifeStageId).map((advisory) =>
+      localizeAdvisory(substance.id, advisory)
+    ),
   };
 }

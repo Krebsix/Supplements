@@ -1,1 +1,105 @@
-export { default } from '../_layout';
+import React, { useEffect, useState } from 'react';
+import { Stack } from 'expo-router';
+
+import { useTranslation } from '../i18n';
+import { useStore } from '../useStore';
+import useNotificationStore, {
+  refreshNotificationSchedule,
+} from '../useNotificationStore';
+import {
+  createResponseHandler,
+  setupNotifications,
+} from '../NotificationScheduler';
+import { stackScreenOptions } from '../components/navigationTheme';
+
+/**
+ * Wurzel-Layout.
+ *
+ * Die Tab-Bereiche liegen in der (tabs)-Gruppe und bringen ihre eigenen
+ * Stacks samt Header mit. Hier oben bleiben nur die Ebenen, die ueber den
+ * Tabs liegen: das Erfassen-Modal und das Onboarding.
+ *
+ * ONBOARDING-GATE: Solange die Lebensphase nicht aktiv gewaehlt und die
+ * Datenschutzerklaerung nicht zur Kenntnis genommen wurde, ist nur die
+ * Onboarding-Route erreichbar. Frueher setzte der Store still
+ * "erwachsene Frau" als Lebensphase — fuer alle anderen Nutzergruppen
+ * waren damit die Referenzwerte vom ersten Tag an falsch.
+ */
+function useStoreHydrated() {
+  const [hydrated, setHydrated] = useState(() => useStore.persist.hasHydrated());
+
+  useEffect(() => {
+    const unsubscribe = useStore.persist.onFinishHydration(() => setHydrated(true));
+    return unsubscribe;
+  }, []);
+
+  return hydrated;
+}
+
+export default function Layout() {
+  const { t } = useTranslation();
+  const hydrated = useStoreHydrated();
+  const onboardingCompletedAt = useStore((state) => state.onboardingCompletedAt);
+
+  // Bis der Speicher gelesen ist, nichts entscheiden: sonst blitzt fuer
+  // Bestandsnutzerinnen kurz das Onboarding auf.
+  const onboarded = Boolean(onboardingCompletedAt);
+
+  // Erinnerungen verdrahten: Handler und Kanal registrieren, danach den
+  // Tagesplan planen und bei jeder relevanten Aenderung (Einnahme, Bestand,
+  // Flohsamen-Sperre) neu planen. Der Permission-Dialog kommt hier NICHT,
+  // sondern erst beim bewussten Einschalten im Erinnerungs-Screen.
+  useEffect(() => {
+    if (!hydrated || !onboarded) return undefined;
+
+    let responseListener = null;
+
+    setupNotifications()
+      .then((granted) => {
+        useNotificationStore.setState({ permissionGranted: granted });
+        return refreshNotificationSchedule();
+      })
+      .catch((error) =>
+        console.error('[Layout] Notification-Setup fehlgeschlagen', error)
+      );
+
+    responseListener = createResponseHandler(useStore);
+
+    const unsubscribe = useStore.subscribe((state, previous) => {
+      if (
+        state.intakeLogs !== previous.intakeLogs ||
+        state.userSupplements !== previous.userSupplements ||
+        state.absorptionBlockedAt !== previous.absorptionBlockedAt
+      ) {
+        refreshNotificationSchedule().catch(() => {});
+      }
+    });
+
+    return () => {
+      responseListener?.remove();
+      unsubscribe();
+    };
+  }, [hydrated, onboarded]);
+
+  if (!hydrated) return null;
+
+  return (
+    <Stack screenOptions={stackScreenOptions(t)}>
+      <Stack.Protected guard={onboarded}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="AddSupplement"
+          options={{ title: t('nav.addSupplement'), presentation: 'modal' }}
+        />
+      </Stack.Protected>
+      <Stack.Protected guard={!onboarded}>
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+      </Stack.Protected>
+      {/* Rechtstexte bewusst ausserhalb beider Gates: Die Datenschutz-
+          erklaerung muss lesbar sein, BEVOR jemand im Onboarding zustimmt. */}
+      <Stack.Screen name="privacy" options={{ title: t('nav.privacy') }} />
+      <Stack.Screen name="imprint" options={{ title: t('nav.imprint') }} />
+    </Stack>
+  );
+}

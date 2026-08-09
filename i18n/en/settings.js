@@ -77,4 +77,53 @@ export default {
   'settings.restoreConfirm.message':
     '{name} is removed from the archive and listed as an active supplement again.',
   'settings.restoreConfirm.confirmButton': 'Restore',
+  'settings.backupLabel': 'Backup',
+  'settings.backupTitle': 'Save and transfer your data',
+  'settings.backupText':
+    'All data lives only on this device. The backup is a JSON file with your complete records: for switching devices, as a safeguard, or as a full data extract. You decide via the share menu where the file goes.',
+  'settings.backupExportButton': 'Create backup',
+  'settings.backupImportButton': 'Restore backup',
+  'settings.backupExportError.title': 'Backup failed',
+  'settings.backupExportError.message': 'The file could not be created.',
+  'settings.backupImportError.title': 'Restore failed',
+  'settings.backupImportError.invalidJson': 'The file is not readable JSON.',
+  'settings.backupImportError.wrongSchema':
+    'The file is not a backup of this app.',
+  'settings.backupImportError.newerVersion':
+    'The backup comes from a newer app version. Please update the app first.',
+  'settings.backupImportError.missingData': 'The file contains no data.',
+  'settings.backupImportConfirm.title': 'Restore backup?',
+  'settings.backupImportConfirm.message':
+    'Backup from {date}. The current records on this device will be completely replaced.',
+  'settings.backupImportConfirm.confirmButton': 'Replace',
+  'settings.backupImportDone.title': 'Backup restored',
+  'settings.backupImportDone.message': 'The records were imported.',
+  'settings.legalLabel': 'Legal',
+  'settings.legalTitle': 'Privacy and legal notice',
+  'settings.legalText':
+    'What the app stores, what leaves the device and who operates it.',
+  'settings.privacyLink': 'Privacy policy',
+  'settings.imprintLink': 'Legal notice',
+  'settings.scanConsentTitle': 'Photo analysis consent',
+  'settings.scanConsentGiven':
+    'Given on {date}. Label photos may be transmitted for evaluation.',
+  'settings.scanConsentNone':
+    'Not given. The app asks before the first photo analysis.',
+  'settings.scanConsentRevoke': 'Withdraw consent',
+  'settings.scanConsentRevoked.title': 'Consent withdrawn',
+  'settings.scanConsentRevoked.message':
+    'The photo analysis will ask again before the next use.',
+  'settings.deleteAllLabel': 'All data',
+  'settings.deleteAllTitle': 'Delete all data',
+  'settings.deleteAllText':
+    'Removes all products, intakes, scan results, your profile, lab values, observations and consents from this device. There is no server backup; deleted means deleted.',
+  'settings.deleteAllButton': 'Delete all data',
+  'settings.deleteAllConfirm.title': 'Really delete everything?',
+  'settings.deleteAllConfirm.message':
+    'All entries are irrevocably removed from this device. Afterwards the app starts like on first launch.',
+  'settings.deleteAllConfirm.confirmButton': 'Continue',
+  'settings.deleteAllConfirm2.title': 'Final confirmation',
+  'settings.deleteAllConfirm2.message':
+    'This is the last step. After this, all data is gone.',
+  'settings.deleteAllConfirm2.confirmButton': 'Delete permanently',
 };

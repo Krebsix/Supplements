@@ -82,4 +82,5 @@ export default {
   'dashboard.profileAdult': 'Adult',
   'dashboard.profileChild': 'Child',
   'dashboard.profileDefault': 'Default',
+  'dashboard.curePausedTitle': 'Cycle break today',
 };

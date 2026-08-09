@@ -65,9 +65,9 @@ export default {
     '⛔ Nattokinase + ID 59: Verstärkte Blutungsneigung möglich.',
 
   // ── Kur-Zyklen (CureManager) ────────────────────────────────
-  'logic.cure.cycle':
-    '{emoji} {phase} – Tag {day}/{total} (noch {left} Tage)',
-  'logic.cure.phase.on': 'ON',
-  'logic.cure.phase.off': 'OFF',
-  'logic.cure.stepped': '📈 Woche {week}: {drops} Tropfen',
+  // Ohne Ampel-Emoji: Eine Kur-Phase ist ein Zustand, kein Alarm.
+  'logic.cure.cycle': '{phase}, Tag {day} von {total}, noch {left} Tage',
+  'logic.cure.phase.on': 'Einnahmephase',
+  'logic.cure.phase.off': 'Pause',
+  'logic.cure.stepped': 'Woche {week}: {drops} Tropfen',
 };

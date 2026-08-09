@@ -22,6 +22,11 @@ export default {
   'nav.settings': 'Einstellungen',
   'nav.history': 'Verlauf',
   'nav.search': 'Suche',
+  'nav.notifications': 'Erinnerungen',
+  'nav.privacy': 'Datenschutz',
+  'nav.imprint': 'Impressum',
+  'lifeStage.referenceFor': 'Referenzwerte für',
+  'legal.version': 'Stand',
   'common.back': 'Zurück',
   'common.backToHome': 'Zurück zur Startseite',
   'common.cancel': 'Abbrechen',
@@ -29,5 +34,5 @@ export default {
   'common.delete': 'Löschen',
   'common.language': 'Sprache',
   'language.title': 'Sprache',
-  'language.hint': 'Die Oberfläche wechselt sofort. Fachtexte der Wirkstoff-Datenbank bleiben vorerst auf Deutsch.',
+  'language.hint': 'Die gesamte App wechselt sofort, auch die Fachtexte. Literaturangaben bleiben so, wie die Quelle veröffentlicht ist.',
 };

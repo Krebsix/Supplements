@@ -106,4 +106,15 @@ export default {
 
   'addSupplement.defaultPurpose': 'Benutzerdefiniert',
   'addSupplement.defaultCategory': 'Benutzerdefiniert',
+
+  'addSupplement.cureTitle': 'Kur-Zyklus',
+  'addSupplement.cureSubtitle':
+    'Einnahmephase und Pause im Wechsel, zum Beispiel 21 Tage Einnahme, 7 Tage Pause. An Pausentagen erscheint das Präparat nicht im Tagesplan.',
+  'addSupplement.cureOnLabel': 'Einnahmetage',
+  'addSupplement.cureOnHelper': 'Länge der Einnahmephase in Tagen.',
+  'addSupplement.cureOffLabel': 'Pausentage',
+  'addSupplement.cureOffHelper': 'Länge der Pause in Tagen.',
+  'addSupplement.alert.cureInvalidTitle': 'Kur-Angaben unvollständig',
+  'addSupplement.alert.cureInvalidMessage':
+    'Für einen Kur-Zyklus braucht es Einnahmetage und Pausentage, jeweils mindestens 1.',
 };

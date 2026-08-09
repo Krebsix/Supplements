@@ -13,7 +13,10 @@
 
 import de from '../i18n/de/index.js';
 import en from '../i18n/en/index.js';
-import { translate, isSupportedLanguage, LANGUAGES, DEFAULT_LANGUAGE } from '../i18n/index.js';
+// Direkt aus runtime, nicht aus i18n/index: Der Index importiert den
+// Store, und der Store zieht seit der Verschluesselung native Module
+// (expo-secure-store), die im Node-Bundle nichts verloren haben.
+import { translate, isSupportedLanguage, LANGUAGES, DEFAULT_LANGUAGE } from '../i18n/runtime.js';
 
 let failed = 0;
 function check(name, cond, extra = '') {
@@ -65,8 +68,8 @@ check('Deutsche und englische Platzhalter sind identisch',
   placeholderMismatches.map((k) => `${k}: "${placeholders(de[k])}" vs "${placeholders(en[k])}"`).join(' | '));
 
 console.log('\n— Nachschlagen und Ersetzen —');
-check('Deutscher Text wird gefunden', translate('home.hero.scan', 'de') === 'Produkt scannen');
-check('Englischer Text wird gefunden', translate('home.hero.scan', 'en') === 'Scan a product');
+check('Deutscher Text wird gefunden', translate('nav.dashboard', 'de') === 'Tagesplan');
+check('Englischer Text wird gefunden', translate('nav.dashboard', 'en') === 'Daily plan');
 check('Fehlender englischer Text fällt auf Deutsch zurück',
   translate('__nur_de_test__', 'en') === '__nur_de_test__');
 check('Unbekannter Schlüssel gibt den Schlüssel zurück (sichtbar statt leer)',

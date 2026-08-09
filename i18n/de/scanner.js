@@ -122,4 +122,8 @@ export default {
     'Erfasse Dosierung, Portionsgröße und Anwendungshinweise des Herstellers.',
   'scanner.step.dosage.requirement':
     'Achte besonders auf Einheit und empfohlene Tagesmenge.',
+  'scanner.consent.title': 'Fotos zur Auswertung übertragen?',
+  'scanner.consent.message':
+    'Für die Analyse werden deine Etikettenfotos verkleinert und einmalig an unsere Auswertungsfunktion (Supabase) sowie die Anthropic API (Claude) übertragen. Die Fotos werden dort nicht gespeichert, die Verarbeitung kann außerhalb der EU stattfinden. Die Zustimmung gilt auch für künftige Scans und lässt sich in den Einstellungen jederzeit widerrufen. Einzelheiten stehen in der Datenschutzerklärung.',
+  'scanner.consent.confirm': 'Zustimmen und analysieren',
 };

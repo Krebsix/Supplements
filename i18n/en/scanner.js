@@ -121,4 +121,8 @@ export default {
     "Capture dosage, serving size and the manufacturer's usage information.",
   'scanner.step.dosage.requirement':
     "Pay close attention to unit and the manufacturer's stated daily amount.",
+  'scanner.consent.title': 'Transmit photos for evaluation?',
+  'scanner.consent.message':
+    'For the analysis, your label photos are downscaled and transmitted once to our evaluation function (Supabase) and the Anthropic API (Claude). The photos are not stored there; processing may take place outside the EU. This consent also covers future scans and can be withdrawn at any time in the settings. Details are in the privacy policy.',
+  'scanner.consent.confirm': 'Agree and analyse',
 };

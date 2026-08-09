@@ -18,11 +18,10 @@
 import * as Notifications from 'expo-notifications';
 import { Platform }        from 'react-native';
 
-import inventory from './inventory.json';
-
-// TODO Phase 2: Notifications nur aus userSupplements mit status === 'active' planen, nicht direkt aus inventory.json.
 import { SLOTS, SLOT_ORDER } from './TimingEngine';
 import { BLOCK_DURATION_MS } from './AbsorptionBlocker';
+import { tr } from './i18n/runtime';
+import { colors } from './theme';
 
 // ─────────────────────────────────────────────────────────────
 // KONSTANTEN
@@ -59,10 +58,10 @@ export async function setupNotifications() {
   // Android Channel
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
-      name:        'Supplement-Erinnerungen',
+      name:        tr('logic.notifications.channelName'),
       importance:  Notifications.AndroidImportance.HIGH,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor:  '#4ade80',
+      lightColor:  colors.accent,
     });
   }
 
@@ -70,17 +69,21 @@ export async function setupNotifications() {
   await Notifications.setNotificationCategoryAsync('supplement_reminder', [
     {
       identifier: ACTION_TAKEN,
-      buttonTitle: '✅ Eingenommen',
+      buttonTitle: tr('logic.notifications.actionTaken'),
       options: { isDestructive: false, opensAppToForeground: false },
     },
     {
       identifier: ACTION_SNOOZE,
-      buttonTitle: '⏰ +15 Min.',
+      buttonTitle: tr('logic.notifications.actionSnooze'),
       options: { isDestructive: false, opensAppToForeground: false },
     },
   ]);
 
-  return requestPermissions();
+  // Nur den vorhandenen Status lesen, NICHT beim App-Start den
+  // Systemdialog ausloesen. Die Abfrage passiert bewusst erst, wenn die
+  // Nutzerin Erinnerungen aktiv einschaltet (Einstellungs-Screen).
+  const { status } = await Notifications.getPermissionsAsync();
+  return status === 'granted';
 }
 
 /** Fragt Push-Permission an und gibt Status zurück */
@@ -97,19 +100,25 @@ export async function requestPermissions() {
 // ─────────────────────────────────────────────────────────────
 
 /**
- * scheduleAllNotificationsForToday(userSlotTimes, profile, state)
+ * scheduleAllNotificationsForToday(userSlotTimes, profile, state, supplements)
  *
  * @param {Object} userSlotTimes  – { fasted: '06:30', morning: '07:00', ... }
  * @param {string} profile        – 'adult' | 'child'
- * @param {Object} state          – { loggedToday: number[], absorptionBlockedAt: string|null }
+ * @param {Object} state          – { loggedToday: string[], absorptionBlockedAt: string|null }
+ * @param {Array}  supplements    – die zu erinnernden Praeparate (aktiver
+ *                                  Nutzerbestand, Kur-Pausen bereits gefiltert)
  *
  * Cancelt alle bestehenden Alarme und plant die heutigen neu.
- * Ruft _buildSlotTime() auf, um Delays zu berücksichtigen.
+ *
+ * Frueher wurde hier aus inventory.json geplant, also aus dem statischen
+ * Katalog: Erinnerungen fuer Praeparate, die niemand erfasst hatte. Die
+ * Liste kommt jetzt vom Aufrufer aus dem Nutzerbestand.
  */
 export async function scheduleAllNotificationsForToday(
   userSlotTimes,
   profile = 'adult',
-  state   = {}
+  state   = {},
+  supplements = []
 ) {
   // Alle alten Alarme löschen
   await Notifications.cancelAllScheduledNotificationsAsync();
@@ -125,7 +134,7 @@ export async function scheduleAllNotificationsForToday(
   const scheduledIds = [];
 
   for (const slotId of SLOT_ORDER) {
-    const slotSupplements = inventory.filter(s => {
+    const slotSupplements = supplements.filter(s => {
       const inSlot    = s.timingSlots?.includes(slotId);
       const notLogged = !loggedToday.includes(s.id);
       const childOk   = profile === 'adult' || s.childSafe;
@@ -185,13 +194,14 @@ async function _scheduleOne(supplement, slotId, triggerTimestamp) {
         : String(value).trim()
     )
     .filter(Boolean)
-    .join(' ') || 'Dosierung nicht hinterlegt';
+    // Als fehlend gekennzeichnet, nicht erfunden (siehe Harte Regeln).
+    .join(' ') || tr('logic.notifications.noDosage');
 
   const purposeLabel =
     typeof supplement?.purpose === 'string' &&
     supplement.purpose.trim()
       ? supplement.purpose.trim()
-      : 'Zweck nicht hinterlegt';
+      : tr('logic.notifications.noPurpose');
 
   try {
     const notifId = await Notifications.scheduleNotificationAsync({
@@ -225,7 +235,7 @@ async function _scheduleOne(supplement, slotId, triggerTimestamp) {
 // ─────────────────────────────────────────────────────────────
 
 /**
- * rescheduleAfterAbsorptionBlock(userSlotTimes, profile, state)
+ * rescheduleAfterAbsorptionBlock(userSlotTimes, profile, state, supplements)
  *
  * Wird direkt nach dem Loggen von Flohsamenschalen (ID 43) aufgerufen.
  * Verschiebt alle noch nicht getriggerten Notifications um BLOCK_DURATION_MS.
@@ -233,13 +243,18 @@ async function _scheduleOne(supplement, slotId, triggerTimestamp) {
 export async function rescheduleAfterAbsorptionBlock(
   userSlotTimes,
   profile,
-  state
+  state,
+  supplements = []
 ) {
-  console.log('[NotificationScheduler] Flohsamen-Block aktiv – rescheduling...');
-  return scheduleAllNotificationsForToday(userSlotTimes, profile, {
-    ...state,
-    absorptionBlockedAt: new Date().toISOString(),
-  });
+  return scheduleAllNotificationsForToday(
+    userSlotTimes,
+    profile,
+    {
+      ...state,
+      absorptionBlockedAt: new Date().toISOString(),
+    },
+    supplements
+  );
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -247,12 +262,12 @@ export async function rescheduleAfterAbsorptionBlock(
 // ─────────────────────────────────────────────────────────────
 
 /**
- * snoozeNotification(supplementId, slotId, snoozeMinutes)
- * Schickt eine neue Notification in N Minuten.
+ * snoozeNotification(supplement, slotId, snoozeMinutes)
+ * Schickt eine neue Notification in N Minuten. Erwartet das Praeparat
+ * selbst, nicht nur die ID — der Aufrufer kennt den Bestand.
  */
-export async function snoozeNotification(supplementId, slotId, snoozeMinutes = 15) {
-  const supplement = inventory.find(s => s.id === supplementId);
-  if (!supplement) return;
+export async function snoozeNotification(supplement, slotId, snoozeMinutes = 15) {
+  if (!supplement) return null;
 
   const triggerTime = Date.now() + snoozeMinutes * 60_000;
   return _scheduleOne(supplement, slotId, triggerTime);
@@ -279,18 +294,22 @@ export function createResponseHandler(store) {
 
     if (!data?.supplementId) return;
 
-    const supplementId = Number(data.supplementId);
+    // IDs des Nutzerbestands sind Strings ('user-...'). Ein Number()-Cast
+    // wie frueher machte daraus NaN und der Log lief ins Leere.
+    const supplementId = data.supplementId;
 
     if (actionIdentifier === ACTION_TAKEN) {
-      // ✅ Eingenommen: loggen + Bestand -1
-      const result = store.getState().logSupplement(supplementId);
-      console.log(`[NotifHandler] Eingenommen: ${supplementId}`, result);
+      // Eingenommen: loggen + Bestand -1
+      store.getState().logSupplement(supplementId);
     }
 
     if (actionIdentifier === ACTION_SNOOZE) {
-      // ⏰ Snooze: neue Notification in 15 Min.
-      await snoozeNotification(supplementId, data.slotId, 15);
-      console.log(`[NotifHandler] Snoozed: ${supplementId}`);
+      const supplement = store
+        .getState()
+        .userSupplements.find(
+          (item) => item.id === supplementId || item.libraryId === supplementId
+        );
+      await snoozeNotification(supplement, data.slotId, 15);
     }
   });
 }

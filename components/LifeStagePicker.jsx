@@ -1,7 +1,9 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { localizeLifeStage } from '../data/localize';
 import { LIFE_STAGES, getLifeStage } from '../data/referenceValues';
+import { useTranslation } from '../i18n';
 import { colors, radius, space, surfaces, type } from '../theme';
 
 /**
@@ -12,18 +14,20 @@ import { colors, radius, space, surfaces, type } from '../theme';
  * nicht aussagekraeftig.
  */
 export default function LifeStagePicker({ value, onChange }) {
-  const active = getLifeStage(value);
+  const { t } = useTranslation();
+  const active = value ? localizeLifeStage(getLifeStage(value)) : null;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Referenzwerte für</Text>
+      <Text style={styles.label}>{t('lifeStage.referenceFor')}</Text>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.chipRow}
       >
-        {LIFE_STAGES.map((stage) => {
+        {LIFE_STAGES.map((rawStage) => {
+          const stage = localizeLifeStage(rawStage);
           const isActive = stage.id === value;
 
           return (

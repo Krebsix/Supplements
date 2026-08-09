@@ -81,4 +81,5 @@ export default {
   'dashboard.profileAdult': 'Erwachsen',
   'dashboard.profileChild': 'Kind',
   'dashboard.profileDefault': 'Standard',
+  'dashboard.curePausedTitle': 'Heute Kur-Pause',
 };

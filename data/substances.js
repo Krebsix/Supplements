@@ -125,7 +125,7 @@ export const substances = [
     ],
     forms: [
       { name: 'Citrat', bioavailability: 'hoch', note: 'Auch bei geringer Magensäure gut verfügbar, unabhängig von Mahlzeiten.' },
-      { name: 'Carbonat', bioavailability: 'mittel', note: 'Hoher Calciumanteil, benötigt aber Magensäure — mit dem Essen einnehmen.' },
+      { name: 'Carbonat', bioavailability: 'mittel', note: 'Hoher Calciumanteil, benötigt aber Magensäure: mit dem Essen einnehmen.' },
       { name: 'Gluconat', bioavailability: 'mittel', note: 'Niedriger Calciumanteil pro Gramm, entsprechend größere Mengen nötig.' },
     ],
     fatSoluble: false,
@@ -152,7 +152,7 @@ export const substances = [
       { name: 'Gluconat', bioavailability: 'mittel', note: 'Besser verträglich, geringerer Eisenanteil.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Eisen sollte nicht ohne festgestellten Mangel ergänzt werden — überschüssiges Eisen wird gespeichert und ist nicht einfach ausscheidbar.',
+    cautionNote: 'Eisen sollte nicht ohne festgestellten Mangel ergänzt werden: überschüssiges Eisen wird gespeichert und ist nicht einfach ausscheidbar.',
     sources: ['nih-ods', 'dach'],
   },
   {
@@ -198,7 +198,7 @@ export const substances = [
       { name: 'Natriumselenit', bioavailability: 'mittel bis hoch', note: 'Anorganische Form; wird nicht in Proteine eingebaut.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Der Abstand zwischen Bedarf und Obergrenze ist bei Selen gering — Mengenangaben genau beachten.',
+    cautionNote: 'Der Abstand zwischen Bedarf und Obergrenze ist bei Selen gering: Mengenangaben genau beachten.',
     sources: ['nih-ods', 'efsa-ul'],
   },
   {
@@ -214,7 +214,7 @@ export const substances = [
     ],
     forms: [
       { name: 'Kaliumiodid', bioavailability: 'hoch', note: 'Standardform in Ergänzungen und Jodsalz.' },
-      { name: 'Algenpulver (z. B. Kelp)', bioavailability: 'variabel', note: 'Jodgehalt schwankt stark und kann sehr hoch sein — Mengenangabe genau prüfen.' },
+      { name: 'Algenpulver (z. B. Kelp)', bioavailability: 'variabel', note: 'Jodgehalt schwankt stark und kann sehr hoch sein: Mengenangabe genau prüfen.' },
     ],
     fatSoluble: false,
     cautionNote: 'Bei Schilddrüsenerkrankungen ist die Jodzufuhr ärztlich abzuklären.',
@@ -262,7 +262,7 @@ export const substances = [
     ],
     fatSoluble: true,
     unitConversion: { note: '1 µg Vitamin D entspricht 40 IE.', factorToIE: 40 },
-    cautionNote: 'Fettlöslich und speicherbar — dauerhaft hohe Dosen ohne Blutwertkontrolle sind nicht sinnvoll.',
+    cautionNote: 'Fettlöslich und speicherbar: dauerhaft hohe Dosen ohne Blutwertkontrolle sind nicht sinnvoll.',
     sources: ['nih-ods', 'dach', 'efsa-ul'],
   },
   {
@@ -297,11 +297,11 @@ export const substances = [
     useCases: [
       { topic: 'Immunfunktion', note: 'Häufigstes Anwendungsgebiet, besonders in der Erkältungszeit.' },
       { topic: 'Kollagen, Haut und Bindegewebe', note: 'Unverzichtbar für die Kollagensynthese und damit für Haut, Gefäße und Wundheilung.' },
-      { topic: 'Eisenaufnahme', note: 'Verbessert die Resorption pflanzlichen Eisens deutlich — gemeinsame Einnahme ist gängig.' },
+      { topic: 'Eisenaufnahme', note: 'Verbessert die Resorption pflanzlichen Eisens deutlich: gemeinsame Einnahme ist gängig.' },
       { topic: 'Oxidativer Stress', note: 'Wird bei Rauchen und erhöhter Belastung ergänzt.' },
     ],
     forms: [
-      { name: 'Ascorbinsäure', bioavailability: 'hoch', note: 'Standardform, sauer — kann bei empfindlichem Magen stören.' },
+      { name: 'Ascorbinsäure', bioavailability: 'hoch', note: 'Standardform, sauer. Kann bei empfindlichem Magen stören.' },
       { name: 'Calciumascorbat (Ester-C)', bioavailability: 'hoch', note: 'Gepuffert und magenfreundlicher, enthält zusätzlich Calcium.' },
       { name: 'Natriumascorbat', bioavailability: 'hoch', note: 'Gepuffert, enthält Natrium.' },
       { name: 'Liposomal', bioavailability: 'hoch', note: 'Beworben mit höherer Aufnahme; Datenlage begrenzt, deutlich teurer.' },
@@ -319,7 +319,7 @@ export const substances = [
     unit: 'µg',
     what: 'Wasserlösliches Vitamin, notwendig für Blutbildung, Nervenfunktion und den Homocystein-Abbau.',
     useCases: [
-      { topic: 'Vegane und vegetarische Ernährung', note: 'Wichtigstes Anwendungsgebiet — B12 kommt praktisch nur in tierischen Lebensmitteln vor. Bei veganer Ernährung ist eine Ergänzung notwendig.' },
+      { topic: 'Vegane und vegetarische Ernährung', note: 'Wichtigstes Anwendungsgebiet: B12 kommt praktisch nur in tierischen Lebensmitteln vor. Bei veganer Ernährung ist eine Ergänzung notwendig.' },
       { topic: 'Nervenfunktion', note: 'Mangel kann neurologische Beschwerden verursachen, die teils irreversibel sind.' },
       { topic: 'Höheres Alter', note: 'Die Aufnahmefähigkeit im Magen nimmt mit dem Alter ab.' },
       { topic: 'Magensäurehemmer und Metformin', note: 'Dauereinnahme kann die B12-Aufnahme reduzieren.' },
@@ -351,7 +351,7 @@ export const substances = [
       { name: 'Folsäure', bioavailability: 'hoch', note: 'Synthetische Form, muss enzymatisch umgewandelt werden; Datenbasis der Studien.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Hohe Folatzufuhr kann einen Vitamin-B12-Mangel maskieren — beides gemeinsam betrachten.',
+    cautionNote: 'Hohe Folatzufuhr kann einen Vitamin-B12-Mangel maskieren: beides gemeinsam betrachten.',
     sources: ['nih-ods', 'dach', 'efsa-ul'],
   },
   {
@@ -372,7 +372,7 @@ export const substances = [
       { name: 'Pyridoxin-HCl', bioavailability: 'hoch', note: 'Standardform, muss aktiviert werden.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Dauerhaft hohe Dosen können Nervenschädigungen verursachen — bei B6 ist die Obergrenze besonders relevant.',
+    cautionNote: 'Dauerhaft hohe Dosen können Nervenschädigungen verursachen: bei B6 ist die Obergrenze besonders relevant.',
     sources: ['nih-ods', 'efsa-ul'],
   },
   {
@@ -389,7 +389,7 @@ export const substances = [
     ],
     forms: [
       { name: 'Retinol / Retinylester', bioavailability: 'hoch', note: 'Vorgeformtes Vitamin A, direkt wirksam und speicherbar.' },
-      { name: 'Beta-Carotin', bioavailability: 'variabel', note: 'Provitamin, wird bedarfsabhängig umgewandelt — deutlich geringeres Überdosierungsrisiko.' },
+      { name: 'Beta-Carotin', bioavailability: 'variabel', note: 'Provitamin, wird bedarfsabhängig umgewandelt: deutlich geringeres Überdosierungsrisiko.' },
     ],
     fatSoluble: true,
     cautionNote: 'In der Schwangerschaft ist vorgeformtes Vitamin A (Retinol) in höheren Dosen zu vermeiden. Beta-Carotin ist in dieser Hinsicht unkritischer.',
@@ -413,7 +413,7 @@ export const substances = [
       { name: 'Gemischte Tocopherole', bioavailability: 'hoch', note: 'Näher am natürlichen Vorkommen in Lebensmitteln.' },
     ],
     fatSoluble: true,
-    cautionNote: 'Hohe Dosen können die Blutungsneigung erhöhen — relevant bei Gerinnungshemmern und vor Operationen.',
+    cautionNote: 'Hohe Dosen können die Blutungsneigung erhöhen: relevant bei Gerinnungshemmern und vor Operationen.',
     sources: ['nih-ods', 'efsa-ul'],
   },
 
@@ -430,7 +430,7 @@ export const substances = [
     useCases: [
       { topic: 'Herz-Kreislauf-System', note: 'Am besten untersuchtes Anwendungsgebiet; betrifft unter anderem Triglyzeridwerte.' },
       { topic: 'Entzündliche Prozesse', note: 'EPA ist Ausgangsstoff entzündungsauflösender Mediatoren.' },
-      { topic: 'Gehirn und Sehkraft', note: 'DHA ist Strukturbestandteil von Gehirn und Netzhaut — auch in Schwangerschaft und Stillzeit relevant.' },
+      { topic: 'Gehirn und Sehkraft', note: 'DHA ist Strukturbestandteil von Gehirn und Netzhaut: auch in Schwangerschaft und Stillzeit relevant.' },
       { topic: 'Trockene Augen', note: 'Häufiges Anwendungsgebiet.' },
     ],
     forms: [
@@ -457,10 +457,10 @@ export const substances = [
       { topic: 'Stimmung', note: 'Ausgangsstoff für Serotonin.' },
     ],
     forms: [
-      { name: 'L-Tryptophan', bioavailability: 'hoch', note: 'Aufnahme ins Gehirn wird durch andere Aminosäuren gehemmt — daher nüchtern oder mit Kohlenhydraten.' },
+      { name: 'L-Tryptophan', bioavailability: 'hoch', note: 'Aufnahme ins Gehirn wird durch andere Aminosäuren gehemmt: daher nüchtern oder mit Kohlenhydraten.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, MAO-Hemmer) kombinieren — Risiko eines Serotonin-Syndroms.',
+    cautionNote: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, MAO-Hemmer) kombinieren: Risiko eines Serotonin-Syndroms.',
     sources: ['nih-ods'],
   },
   {
@@ -478,7 +478,7 @@ export const substances = [
       { name: '5-HTP', bioavailability: 'hoch', note: 'Passiert die Blut-Hirn-Schranke ohne Transporterkonkurrenz.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, MAO-Hemmer, Methylenblau) kombinieren — Risiko eines Serotonin-Syndroms.',
+    cautionNote: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, MAO-Hemmer, Methylenblau) kombinieren: Risiko eines Serotonin-Syndroms.',
     sources: ['nih-ods'],
   },
   {
@@ -510,7 +510,7 @@ export const substances = [
       { topic: 'Kollagen und Bindegewebe', note: 'Baustein der Kollagen-Quervernetzung.' },
     ],
     forms: [
-      { name: 'L-Lysin (HCl)', bioavailability: 'hoch', note: 'Konkurriert mit L-Arginin um dieselben Transporter — zeitlich trennen.' },
+      { name: 'L-Lysin (HCl)', bioavailability: 'hoch', note: 'Konkurriert mit L-Arginin um dieselben Transporter: zeitlich trennen.' },
     ],
     fatSoluble: false,
     sources: ['nih-ods'],
@@ -546,7 +546,7 @@ export const substances = [
     what: 'Fettlösliche Substanz in den Mitochondrien, zentral für die zelluläre Energiegewinnung und antioxidativ wirksam.',
     useCases: [
       { topic: 'Energie und Müdigkeit', note: 'Körpereigene Produktion nimmt mit dem Alter ab.' },
-      { topic: 'Statin-Einnahme', note: 'Statine senken die körpereigene Q10-Bildung — häufiges Anwendungsgebiet.' },
+      { topic: 'Statin-Einnahme', note: 'Statine senken die körpereigene Q10-Bildung: häufiges Anwendungsgebiet.' },
       { topic: 'Herzfunktion', note: 'Herzmuskelzellen haben einen besonders hohen Energiebedarf.' },
     ],
     forms: [
@@ -593,7 +593,7 @@ export const substances = [
     ],
     fatSoluble: false,
     isAbsorptionBlocker: true,
-    cautionNote: 'Blockiert die Aufnahme anderer Wirkstoffe und Medikamente — mindestens 2 Stunden Abstand einhalten. Unbedingt mit reichlich Wasser einnehmen.',
+    cautionNote: 'Blockiert die Aufnahme anderer Wirkstoffe und Medikamente: mindestens 2 Stunden Abstand einhalten. Unbedingt mit reichlich Wasser einnehmen.',
     sources: ['nih-ods'],
   },
   {
@@ -632,7 +632,7 @@ export const substances = [
     ],
     forms: [
       { name: 'Standardextrakt (95 % Curcuminoide)', bioavailability: 'sehr niedrig', note: 'Ohne Aufnahmeverstärker kaum resorbierbar.' },
-      { name: 'Mit Piperin', bioavailability: 'erhöht', note: 'Schwarzpfefferextrakt steigert die Aufnahme deutlich — kann aber auch die Aufnahme von Medikamenten beeinflussen.' },
+      { name: 'Mit Piperin', bioavailability: 'erhöht', note: 'Schwarzpfefferextrakt steigert die Aufnahme deutlich, kann aber auch die Aufnahme von Medikamenten beeinflussen.' },
       { name: 'Mizellar / Phytosom', bioavailability: 'hoch', note: 'Technologisch verbesserte Aufnahme ohne Piperin.' },
     ],
     fatSoluble: true,
@@ -678,7 +678,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Ab oralen Aufnahmen von ca. 150 µg/Tag sind Verfälschungen bestimmter Labor-Immunoassays (z. B. Schilddrüsen-, Herzmarker) dokumentiert (EMA/PRAC 2019). Kein UL abgeleitet (SCF/BfR 2024).',
     sources: [
-      { label: 'BfR Stellungnahme 2024 – Höchstmengenvorschläge Biotin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Biotin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'DGE FAQ Biotin', url: 'https://www.dge.de/gesunde-ernaehrung/faq/biotin/' },
       { label: 'EFSA Dietary Reference Values Biotin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3580' },
     ],
@@ -696,14 +696,14 @@ export const substances = [
       { topic: 'Nervensystem', note: 'An neuronalen Stoffwechselprozessen beteiligt.' },
     ],
     forms: [
-      { name: 'Nicotinamid', aka: ['Nicotinsäureamid', 'Niacinamid'], bioavailability: 'gut, kein Flush-Effekt', note: 'übliche Supplementform. Obergrenze rund 900 mg/Tag (Erwachsene) — deutlich höher als bei Nicotinsäure.' },
-      { name: 'Nicotinsäure', aka: ['Niacin i. e. S.'], bioavailability: 'gut', note: 'kann bereits ab niedrigen mg-Dosen Flush (Hautrötung) auslösen. Obergrenze rund 10 mg/Tag (Erwachsene) — deutlich niedriger als bei Nicotinamid.' },
+      { name: 'Nicotinamid', aka: ['Nicotinsäureamid', 'Niacinamid'], bioavailability: 'gut, kein Flush-Effekt', note: 'übliche Supplementform. Obergrenze rund 900 mg/Tag (Erwachsene), deutlich höher als bei Nicotinsäure.' },
+      { name: 'Nicotinsäure', aka: ['Niacin i. e. S.'], bioavailability: 'gut', note: 'kann bereits ab niedrigen mg-Dosen Flush (Hautrötung) auslösen. Obergrenze rund 10 mg/Tag (Erwachsene), deutlich niedriger als bei Nicotinamid.' },
       { name: 'Inosithexanicotinat', aka: ['Inositolniacinat'], bioavailability: 'verzögerte Nicotinsäure-Freisetzung', note: 'nur in Nahrungsergänzungsmitteln, nicht in angereicherten Lebensmitteln zugelassen.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Wichtig: Die drei Formen haben stark unterschiedliche Höchstmengen (Faktor über 200 zwischen Nicotinsäure- und Nicotinamid-Obergrenze) — ein Nicotinsäure-Produkt darf nicht mit dem Nicotinamid-Wert verglichen werden. In der Schwangerschaft empfiehlt das BfR bei Nicotinamid-Zusätzen über 16 mg/Tag einen Warnhinweis wegen unzureichender Sicherheitsdaten.',
+    cautionNote: 'Wichtig: Die drei Formen haben stark unterschiedliche Höchstmengen (Faktor über 200 zwischen Nicotinsäure- und Nicotinamid-Obergrenze): ein Nicotinsäure-Produkt darf nicht mit dem Nicotinamid-Wert verglichen werden. In der Schwangerschaft empfiehlt das BfR bei Nicotinamid-Zusätzen über 16 mg/Tag einen Warnhinweis wegen unzureichender Sicherheitsdaten.',
     sources: [
-      { label: 'BfR Stellungnahme 2024 – Höchstmengenvorschläge Niacin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Niacin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Niacin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3759' },
     ],
   },
@@ -726,7 +726,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Keine relevanten Wechselwirkungen dokumentiert; harmlose Gelbverfärbung des Urins bei höheren Aufnahmen. Kein UL abgeleitet (SCF 2000, bestätigt BfR 2024).',
     sources: [
-      { label: 'BfR Stellungnahme 2024 – Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR Stellungnahme 2024: Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Riboflavin (2017)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4919' },
     ],
   },
@@ -750,7 +750,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Keine relevante Kontraindikation bei üblichen Supplement-Dosen bekannt; überschüssiges Thiamin wird über den Urin ausgeschieden. Kein UL abgeleitet (SCF 2001, bestätigt BfR 2024).',
     sources: [
-      { label: 'BfR Stellungnahme 2024 – Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR Stellungnahme 2024: Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Thiamin (2016)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4653' },
     ],
   },
@@ -773,7 +773,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Keine relevanten Wechselwirkungen in Supplement-Dosen dokumentiert. Kein UL abgeleitet (SCF 2002, bestätigt BfR 2024).',
     sources: [
-      { label: 'BfR Stellungnahme 2024 – Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR Stellungnahme 2024: Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Pantothenic Acid (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3581' },
     ],
   },
@@ -820,8 +820,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'EFSA konnte Chrom(III) nicht als essenziell für die Allgemeinbevölkerung bestätigen, daher existiert kein offizieller Referenzwert. Das BfR schlägt für Nahrungsergänzungsmittel eine Höchstmenge von 60 µg pro Tagesdosis vor (Stand 2021).',
     sources: [
-      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
-      { label: 'BfR – Höchstmengenvorschläge für Chrom', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-chrom-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'BfR: Höchstmengenvorschläge für Chrom', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-chrom-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'NIH ODS Chromium Fact Sheet', url: 'https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/' },
     ],
   },
@@ -845,9 +845,9 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Das BfR schlägt für Nahrungsergänzungsmittel aktuell 0,5 mg pro Tagesdosis vor.',
     sources: [
-      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
-      { label: 'EFSA Scientific Opinion – Tolerable Upper Intake Level for Manganese (2023)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/8413' },
-      { label: 'BfR – Höchstmengenvorschläge für Mangan', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-mangan-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln/' },
+      { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'EFSA Scientific Opinion: Tolerable Upper Intake Level for Manganese (2023)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/8413' },
+      { label: 'BfR: Höchstmengenvorschläge für Mangan', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-mangan-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln/' },
     ],
   },
   {
@@ -868,11 +868,11 @@ export const substances = [
       { name: 'Kupfersulfat', aka: ['copper sulfate'], bioavailability: 'anorganisches Salz', note: 'Standardform, u. a. in Lebensmittelanreicherung.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Eine hohe Zinkzufuhr senkt die Kupferaufnahme im Darm (kompetitive Hemmung) — diese Wechselwirkung ist gut belegt. Das BfR weist darauf hin, dass seine Höchstmengen-Empfehlung von 1 mg pro Tagesdosis nicht für Kinder und Jugendliche gilt, da diese Gruppe bereits über die übliche Ernährung vergleichsweise hohe Kupfermengen aufnimmt.',
+    cautionNote: 'Eine hohe Zinkzufuhr senkt die Kupferaufnahme im Darm (kompetitive Hemmung): diese Wechselwirkung ist gut belegt. Das BfR weist darauf hin, dass seine Höchstmengen-Empfehlung von 1 mg pro Tagesdosis nicht für Kinder und Jugendliche gilt, da diese Gruppe bereits über die übliche Ernährung vergleichsweise hohe Kupfermengen aufnimmt.',
     sources: [
-      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
       { label: 'EFSA Dietary Reference Values for Copper (2015)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4253' },
-      { label: 'BfR – Höchstmengenvorschläge für Kupfer', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-kupfer-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR: Höchstmengenvorschläge für Kupfer', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-kupfer-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
     ],
   },
   {
@@ -893,9 +893,9 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'EFSA-Schätzwert (AI) für Erwachsene: 65 µg/Tag. Ein älterer SCF-Wert von 0,6 mg/Tag (Jahr 2000) ist nicht Teil der aktuellen EFSA-Referenzwert-Bewertung von 2013 und wird hier bewusst nicht als aktuelle Obergrenze übernommen.',
     sources: [
-      { label: 'DGE Referenzwerte – Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
+      { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
       { label: 'EFSA Dietary Reference Values for Molybdenum (2013)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2013.3333' },
-      { label: 'BfR – Höchstmengenvorschläge für Molybdän', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-molybdaen-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel.pdf' },
+      { label: 'BfR: Höchstmengenvorschläge für Molybdän', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-molybdaen-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel.pdf' },
     ],
   },
   {
@@ -916,9 +916,9 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Das BfR rät von einer gezielten Phosphor-Zugabe in Nahrungsergänzungsmitteln grundsätzlich ab. Weder EFSA noch DGE haben eine Obergrenze abgeleitet (Datenlage laut EFSA 2015 nicht ausreichend).',
     sources: [
-      { label: 'DGE Referenzwerte – Phosphor', url: 'https://www.dge.de/wissenschaft/referenzwerte/phosphor/' },
+      { label: 'DGE Referenzwerte: Phosphor', url: 'https://www.dge.de/wissenschaft/referenzwerte/phosphor/' },
       { label: 'EFSA Dietary Reference Values for Phosphorus (2015)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4185' },
-      { label: 'BfR – Höchstmengenvorschläge für Phosphor/Phosphat', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-phosphor-phosphat-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel/' },
+      { label: 'BfR: Höchstmengenvorschläge für Phosphor/Phosphat', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-phosphor-phosphat-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel/' },
     ],
   },
 
@@ -929,9 +929,9 @@ export const substances = [
     category: 'Gelenke',
     synonyms: ['glucosamin', 'glucosamine', 'glukosamin', 'glucosaminsulfat', 'glucosamine sulfate', 'glucosaminhydrochlorid', 'glucosamine hcl', 'aminozucker'],
     unit: 'mg',
-    what: 'Aminozucker, der als natürlicher Baustein für Glykosaminoglykane dient — Moleküle, die Teil der Knorpelstruktur sind. Präparate werden meist aus Krebstierschalen (Chitin) oder fermentativ hergestellt.',
+    what: 'Aminozucker, der als natürlicher Baustein für Glykosaminoglykane dient: Moleküle, die Teil der Knorpelstruktur sind. Präparate werden meist aus Krebstierschalen (Chitin) oder fermentativ hergestellt.',
     useCases: [
-      { topic: 'Kniegelenksarthrose', note: 'Studienlage widersprüchlich — einige Studien zeigen Schmerzlinderung, große Studien fanden wenig bis keine Wirkung. Fachgesellschaften bewerten unterschiedlich.' },
+      { topic: 'Kniegelenksarthrose', note: 'Studienlage widersprüchlich: einige Studien zeigen Schmerzlinderung, große Studien fanden wenig bis keine Wirkung. Fachgesellschaften bewerten unterschiedlich.' },
       { topic: 'Hüftgelenksarthrose', note: 'Moderate Evidenz stützt keinen klaren Nutzen.' },
       { topic: 'Kombination mit Chondroitin', note: 'Eine Metaanalyse (29 Studien, 2018) fand: einzeln genommen Schmerzreduktion, in Kombination keinen signifikanten Zusatzeffekt.' },
     ],
@@ -940,11 +940,11 @@ export const substances = [
       { name: 'Glucosaminhydrochlorid', aka: ['glucosamine HCl'], bioavailability: 'in Studien uneinheitlicher untersucht', note: 'häufig in Kombinationspräparaten mit Chondroitin.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Kann laut NCCIH bei manchen Personen den Blutzuckerspiegel erhöhen; in Kombination mit dem Gerinnungshemmer Warfarin wird ein erhöhtes Blutungsrisiko beschrieben. Ein EFSA-Health-Claim zum Gelenkerhalt wurde mehrfach abgelehnt (Kausalzusammenhang nicht belegt). Handelsübliches Glucosamin stammt meist aus Chitin der Schale, nicht aus dem allergenen Fleisch — dennoch listen viele Hersteller einen Vorsichtshinweis bei Schalentier-Allergie.',
+    cautionNote: 'Kann laut NCCIH bei manchen Personen den Blutzuckerspiegel erhöhen; in Kombination mit dem Gerinnungshemmer Warfarin wird ein erhöhtes Blutungsrisiko beschrieben. Ein EFSA-Health-Claim zum Gelenkerhalt wurde mehrfach abgelehnt (Kausalzusammenhang nicht belegt). Handelsübliches Glucosamin stammt meist aus Chitin der Schale, nicht aus dem allergenen Fleisch; dennoch listen viele Hersteller einen Vorsichtshinweis bei Schalentier-Allergie.',
     sources: [
-      { label: 'NCCIH – Glucosamine and Chondroitin for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis-what-you-need-to-know' },
+      { label: 'NCCIH: Glucosamine and Chondroitin for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis-what-you-need-to-know' },
       { label: 'EFSA Journal 2009 (Opinion 1264)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2009.1264' },
-      { label: 'Cochrane – Glucosamine for osteoarthritis', url: 'https://www.cochrane.org/evidence/CD002946_glucosamine-osteoarthritis' },
+      { label: 'Cochrane: Glucosamine for osteoarthritis', url: 'https://www.cochrane.org/evidence/CD002946_glucosamine-osteoarthritis' },
     ],
   },
   {
@@ -956,7 +956,7 @@ export const substances = [
     what: 'Sulfatiertes Glykosaminoglykan, natürlicher Bestandteil des Gelenkknorpels; beeinflusst dessen Widerstandsfähigkeit gegen Druckbelastung.',
     useCases: [
       { topic: 'Kniegelenksarthrose', note: 'Studienlage widersprüchlich; eine Metaanalyse (2018) zeigte Schmerzreduktion bei alleiniger Einnahme, nicht in Kombination mit Glucosamin.' },
-      { topic: 'Handgelenksarthrose', note: 'Eine Studie zeigte Schmerzreduktion und verbesserte Funktion — Einzelbefund, keine breite Bestätigung.' },
+      { topic: 'Handgelenksarthrose', note: 'Eine Studie zeigte Schmerzreduktion und verbesserte Funktion: Einzelbefund, keine breite Bestätigung.' },
     ],
     forms: [
       { name: 'Chondroitinsulfat', aka: ['chondroitin sulphate'], bioavailability: 'einzige kommerziell relevante Form', note: 'Molekulargewicht und Reinheit variieren stark je nach Ausgangsstoff (Rind-, Schweine-, Fisch- oder Geflügelknorpel).' },
@@ -964,7 +964,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Wie Glucosamin mit einem beschriebenen erhöhten Blutungsrisiko unter Warfarin assoziiert. Ein EFSA-Health-Claim zum Gelenkerhalt wurde abgelehnt (Kausalität nicht nachgewiesen).',
     sources: [
-      { label: 'NCCIH – Glucosamine and Chondroitin for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis-what-you-need-to-know' },
+      { label: 'NCCIH: Glucosamine and Chondroitin for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis-what-you-need-to-know' },
       { label: 'EFSA Journal 2009 (Opinion 1262)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2009.1262' },
     ],
   },
@@ -976,7 +976,7 @@ export const substances = [
     unit: 'mg',
     what: 'Organische Schwefelverbindung, chemisch verwandt mit DMSO (Dimethylsulfoxid); wird allein oder in Kombination mit Glucosamin angeboten.',
     useCases: [
-      { topic: 'Kniegelenksarthrose', note: 'Laut NCCIH nur geringer Forschungsumfang — keine gesicherte Aussage zur Wirksamkeit möglich.' },
+      { topic: 'Kniegelenksarthrose', note: 'Laut NCCIH nur geringer Forschungsumfang: keine gesicherte Aussage zur Wirksamkeit möglich.' },
       { topic: 'Kombinationspräparate', note: 'häufig zusammen mit Glucosamin vermarktet, eigenständiger Zusatznutzen nicht belegt.' },
     ],
     forms: [
@@ -985,7 +985,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Als Nebenwirkungen werden allergische Reaktionen, Magen-Darm-Beschwerden und Hautausschläge beschrieben. Die Gesamtsicherheit gilt laut NCCIH als unsicher, da nur wenig Forschung vorliegt.',
     sources: [
-      { label: 'NCCIH – DMSO and MSM for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/dimethyl-sulfoxide-dmso-and-methylsulfonylmethane-msm-for-osteoarthritis' },
+      { label: 'NCCIH: DMSO and MSM for Osteoarthritis', url: 'https://www.nccih.nih.gov/health/dimethyl-sulfoxide-dmso-and-methylsulfonylmethane-msm-for-osteoarthritis' },
     ],
   },
   {
@@ -997,7 +997,7 @@ export const substances = [
     what: 'Enzymatisch in kleine Peptide gespaltenes Kollagen (meist aus Rind-, Schweine-, Fisch- oder Geflügelhaut/-knochen); liefert Aminosäuren wie Glycin, Prolin und Hydroxyprolin.',
     useCases: [
       { topic: 'Kniegelenksarthrose (Schmerzen/Funktion)', note: 'Neuere Metaanalysen (u. a. 35 Studien, 2024) zeigen kleine bis moderate Effekte gegenüber Kontrolle; Studienlage insgesamt heterogen bezüglich Dosis, Kollagentyp und Dauer.' },
-      { topic: 'Haut', note: 'EFSA hat einen Health Claim zur Hautelastizität abgelehnt (2013) — gemessene Effekte erfüllten nicht die EFSA-Definition von Hautfunktion.' },
+      { topic: 'Haut', note: 'EFSA hat einen Health Claim zur Hautelastizität abgelehnt (2013): gemessene Effekte erfüllten nicht die EFSA-Definition von Hautfunktion.' },
     ],
     forms: [
       { name: 'Kollagen Typ I', aka: ['collagen type I'], bioavailability: 'hydrolysiert gut resorbierbar', note: 'Hauptbestandteil von Haut, Knochen, Sehnen, Bändern.' },
@@ -1005,7 +1005,7 @@ export const substances = [
       { name: 'Kollagen Typ III', aka: ['collagen type III'], bioavailability: 'meist gemeinsam mit Typ I in Kombipräparaten', note: 'ergänzt Typ I in Haut, Blutgefäßen, elastischem Bindegewebe.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Häufige Quellen sind Rind, Schwein, Fisch oder Geflügel — bei entsprechenden Nahrungsmittelallergien relevant für die Herkunftsprüfung. EFSA-Health-Claims zu Gelenken (2011) und Hautelastizität (2013) wurden jeweils abgelehnt.',
+    cautionNote: 'Häufige Quellen sind Rind, Schwein, Fisch oder Geflügel: bei entsprechenden Nahrungsmittelallergien relevant für die Herkunftsprüfung. EFSA-Health-Claims zu Gelenken (2011) und Hautelastizität (2013) wurden jeweils abgelehnt.',
     sources: [
       { label: 'EFSA Journal 2011 (Opinion 2291, Gelenke)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2011.2291' },
       { label: 'EFSA Journal 2013 (Opinion 3257, Haut/VeriSol)', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2013.3257' },
@@ -1051,9 +1051,9 @@ export const substances = [
       { name: 'Racemische Mischung (R/S-ALA)', aka: ['synthetisches 50/50-Gemisch'], bioavailability: 'geringere Bioverfügbarkeit der S-Form', note: 'Standard in den meisten kommerziellen Präparaten.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Kann die blutzuckersenkende Wirkung von Insulin/Antidiabetika verstärken; Fälle von Unterzuckerung wurden berichtet. Kein EU-weit zugelassener Health Claim. Für eine belastbare Höchstmenge konnte trotz Prüfung keine eindeutig im Volltext verifizierbare Primärquelle bestätigt werden — kursierende Angaben (z. B. 600 mg/Tag) stammen aus Sekundärquellen und werden hier bewusst nicht als gesicherter Wert übernommen.',
+    cautionNote: 'Kann die blutzuckersenkende Wirkung von Insulin/Antidiabetika verstärken; Fälle von Unterzuckerung wurden berichtet. Kein EU-weit zugelassener Health Claim. Für eine belastbare Höchstmenge konnte trotz Prüfung keine eindeutig im Volltext verifizierbare Primärquelle bestätigt werden: kursierende Angaben (z. B. 600 mg/Tag) stammen aus Sekundärquellen und werden hier bewusst nicht als gesicherter Wert übernommen.',
     sources: [
-      { label: 'Verbraucherzentrale Klartext Nahrungsergänzung – Alpha-Liponsäure', url: 'https://www.klartext-nahrungsergaenzung.de/wissen/lebensmittel/gesund-ernaehren/alphaliponsaeure-eine-fettsaeure-gegen-diabetes-107229' },
+      { label: 'Verbraucherzentrale Klartext Nahrungsergänzung: Alpha-Liponsäure', url: 'https://www.klartext-nahrungsergaenzung.de/wissen/lebensmittel/gesund-ernaehren/alphaliponsaeure-eine-fettsaeure-gegen-diabetes-107229' },
     ],
   },
   {
@@ -1072,10 +1072,10 @@ export const substances = [
       { name: 'N-Acetyl-L-Cystein', aka: ['Standardform'], bioavailability: 'oral, moderat', note: 'einzige gängige Handelsform.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Regulatorisch umstritten in Deutschland: NAC ist gleichzeitig zugelassener, teils apothekenpflichtiger Arzneistoff UND wird als Nahrungsergänzungsmittel gehandelt. Diese Doppelrolle wurde wiederholt behördlich geprüft (u. a. Regierungspräsidium Tübingen, Sachverständigenausschuss für Apothekenpflicht beim BfArM 2009) — der Status kann je nach Produkt und Zeitpunkt variieren. EFSA hat für NAC bislang keine positive Novel-Food-Bewertung veröffentlicht.',
+    cautionNote: 'Regulatorisch umstritten in Deutschland: NAC ist gleichzeitig zugelassener, teils apothekenpflichtiger Arzneistoff UND wird als Nahrungsergänzungsmittel gehandelt. Diese Doppelrolle wurde wiederholt behördlich geprüft (u. a. Regierungspräsidium Tübingen, Sachverständigenausschuss für Apothekenpflicht beim BfArM 2009): der Status kann je nach Produkt und Zeitpunkt variieren. EFSA hat für NAC bislang keine positive Novel-Food-Bewertung veröffentlicht.',
     sources: [
-      { label: 'Apotheke Adhoc – dm verkauft NAC als Lebensmittel', url: 'https://www.apotheke-adhoc.de/nachrichten/detail/markt/dm-verkauft-nac-als-lebensmittel/' },
-      { label: 'EFSA – Novel Food (Verfahrensübersicht)', url: 'https://www.efsa.europa.eu/en/topics/topic/novel-food' },
+      { label: 'Apotheke Adhoc: dm verkauft NAC als Lebensmittel', url: 'https://www.apotheke-adhoc.de/nachrichten/detail/markt/dm-verkauft-nac-als-lebensmittel/' },
+      { label: 'EFSA: Novel Food (Verfahrensübersicht)', url: 'https://www.efsa.europa.eu/en/topics/topic/novel-food' },
     ],
   },
   {
@@ -1096,7 +1096,7 @@ export const substances = [
     fatSoluble: true,
     cautionNote: 'EFSA weist auf mögliche Wechselwirkungen mit bestimmten Arzneimitteln hin. Die Novel-Food-Zulassung gilt ausdrücklich nur für Erwachsene, nicht für Schwangere, Stillende, Kinder und Jugendliche.',
     sources: [
-      { label: 'EFSA Journal – Safety of synthetic trans-resveratrol as a novel food (2016)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2016.4368' },
+      { label: 'EFSA Journal: Safety of synthetic trans-resveratrol as a novel food (2016)', url: 'https://efsa.onlinelibrary.wiley.com/doi/pdf/10.2903/j.efsa.2016.4368' },
       { label: 'EU-Durchführungsbeschluss (EU) 2016/1190', url: 'https://www.legislation.gov.uk/eudn/2016/1190/data.xht?view=snippet&wrap=true' },
     ],
   },
@@ -1119,7 +1119,7 @@ export const substances = [
     fatSoluble: true,
     cautionNote: 'EFSA bewertet die kombinierte Aufnahme aus Hintergrundernährung (Fisch/Krustentiere) plus Nahrungsergänzung gemeinsam.',
     sources: [
-      { label: 'EFSA Journal – Safety of astaxanthin as a novel food in food supplements (2020)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2020.5993' },
+      { label: 'EFSA Journal: Safety of astaxanthin as a novel food in food supplements (2020)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2020.5993' },
     ],
   },
   {
@@ -1139,10 +1139,10 @@ export const substances = [
       { name: 'Quercetin-Glykoside', aka: ['z. B. Rutin, Isoquercetin'], bioavailability: 'unterschiedlich, teils besser resorbiert als das Aglykon', note: 'kommen so natürlich in Lebensmitteln vor.' },
     ],
     fatSoluble: true,
-    cautionNote: 'In tierexperimentellen Untersuchungen wurde eine mögliche Verstärkung nephrotoxischer Effekte bei vorgeschädigter Niere sowie ein Effekt auf hormonabhängige Tumore diskutiert. Für Quercetin liegt keine offizielle EFSA-Sicherheitsbewertung/Novel-Food-Entscheidung vor, da es kein Novel Food ist — entsprechend fehlt eine verbindliche EU-Höchstmenge; kursierende Zahlen (500–860 mg) stammen aus wissenschaftlichen Übersichtsarbeiten, nicht aus einer bindenden Behördenfestlegung.',
+    cautionNote: 'In tierexperimentellen Untersuchungen wurde eine mögliche Verstärkung nephrotoxischer Effekte bei vorgeschädigter Niere sowie ein Effekt auf hormonabhängige Tumore diskutiert. Für Quercetin liegt keine offizielle EFSA-Sicherheitsbewertung/Novel-Food-Entscheidung vor, da es kein Novel Food ist, entsprechend fehlt eine verbindliche EU-Höchstmenge; kursierende Zahlen (500–860 mg) stammen aus wissenschaftlichen Übersichtsarbeiten, nicht aus einer bindenden Behördenfestlegung.',
     sources: [
-      { label: 'Andres et al. 2018 – Safety Aspects of Quercetin as a Dietary Supplement', url: 'https://onlinelibrary.wiley.com/doi/10.1002/mnfr.201700447' },
-      { label: 'VKM (Norwegen) – Risk assessment of quercetin dihydrate and rutin (2024)', url: 'https://vkm.no/download/18.111b9bb51900c58335fcde26/1718703086649/Rapport%20quercetin_rutin_final_130624-komprimert.pdf' },
+      { label: 'Andres et al. 2018: Safety Aspects of Quercetin as a Dietary Supplement', url: 'https://onlinelibrary.wiley.com/doi/10.1002/mnfr.201700447' },
+      { label: 'VKM (Norwegen): Risk assessment of quercetin dihydrate and rutin (2024)', url: 'https://vkm.no/download/18.111b9bb51900c58335fcde26/1718703086649/Rapport%20quercetin_rutin_final_130624-komprimert.pdf' },
     ],
   },
 
@@ -1164,8 +1164,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Das BfR rät explizit von Energy-Drinks mit Taurin für Kinder, Schwangere und Stillende ab; Wechselwirkungen mit weiteren Energy-Drink-Inhaltsstoffen sind nicht vollständig erforscht.',
     sources: [
-      { label: 'EFSA Journal 2009 – Taurine and D-glucurono-gamma-lactone in energy drinks', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2009.935' },
-      { label: 'BfR – Energydrinks: Bewertung gesundheitlicher Risiken', url: 'https://www.bfr.bund.de/stellungnahme/energydrinks-bfr-aktualisiert-bewertung-der-gesundheitlichen-risiken-fuer-kinder-und-jugendliche-bei-akutem-und-chronischem-verzehr/' },
+      { label: 'EFSA Journal 2009: Taurine and D-glucurono-gamma-lactone in energy drinks', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2009.935' },
+      { label: 'BfR: Energydrinks: Bewertung gesundheitlicher Risiken', url: 'https://www.bfr.bund.de/stellungnahme/energydrinks-bfr-aktualisiert-bewertung-der-gesundheitlichen-risiken-fuer-kinder-und-jugendliche-bei-akutem-und-chronischem-verzehr/' },
     ],
   },
   {
@@ -1185,7 +1185,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Keine spezifische behördliche Warnung gefunden; in Studien mit mehreren Gramm/Tag überwiegend gut vertragen.',
     sources: [
-      { label: 'PubMed – Sleep-promoting effects of glycine mediated by NMDA receptors', url: 'https://pubmed.ncbi.nlm.nih.gov/25533534/' },
+      { label: 'PubMed: Sleep-promoting effects of glycine mediated by NMDA receptors', url: 'https://pubmed.ncbi.nlm.nih.gov/25533534/' },
     ],
   },
   {
@@ -1194,7 +1194,7 @@ export const substances = [
     category: 'Neurotransmitter',
     synonyms: ['gaba', 'gamma-aminobuttersäure', 'gamma-aminobutyric acid', '4-aminobuttersäure'],
     unit: 'mg',
-    what: 'Wichtigster hemmender Neurotransmitter des zentralen Nervensystems. Oral aufgenommenes GABA überwindet die Blut-Hirn-Schranke nach aktuellem Kenntnisstand nur eingeschränkt — die Übertragbarkeit der zentralen Wirkung auf orale Einnahme wird kontrovers diskutiert.',
+    what: 'Wichtigster hemmender Neurotransmitter des zentralen Nervensystems. Oral aufgenommenes GABA überwindet die Blut-Hirn-Schranke nach aktuellem Kenntnisstand nur eingeschränkt: die Übertragbarkeit der zentralen Wirkung auf orale Einnahme wird kontrovers diskutiert.',
     useCases: [
       { topic: 'Entspannung/Stressempfinden', note: 'In klinischen Studien zu subjektivem Stressempfinden untersucht (u. a. 100 mg/Tag über 12 Wochen).' },
       { topic: 'Schlafunterstützung', note: 'Gegenstand von Studien zum Einschlafverhalten.' },
@@ -1205,7 +1205,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'In Studien milder, vorübergehender Blutdruckabfall beobachtet. Regulatorischer Status uneinheitlich: In Deutschland existiert seit einem Gerichtsurteil von 2008 eine Allgemeinverfügung, die eine Tagesdosis von 100 mg als Nahrungsergänzungsmittel zulässt; einzelne Behörden haben seither dennoch Beanstandungen ausgesprochen. Das BfR sieht die Datenlage für eine belastbare gesundheitliche Bewertung aktuell als nicht ausreichend an.',
     sources: [
-      { label: 'USP – Safety Review of Gamma-Aminobutyric Acid (GABA)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8399837/' },
+      { label: 'USP: Safety Review of Gamma-Aminobutyric Acid (GABA)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8399837/' },
     ],
   },
   {
@@ -1226,8 +1226,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'EFSA hat 2011 einen wissenschaftlich hinreichend belegten Zusammenhang zwischen L-Theanin und kognitiver Funktion, Stressminderung oder Schlaf verneint und entsprechende Health-Claim-Anträge abgelehnt. Isoliertes, aus Tee extrahiertes L-Theanin gilt als Novel Food; ein EU-Zulassungsverfahren mit vorgeschlagenem Ausschluss von Kindern/Jugendlichen sowie Schwangeren/Stillenden lief zum Recherchezeitpunkt noch.',
     sources: [
-      { label: 'EFSA Journal 2011 – Health claims related to L-theanine (Ablehnung)', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2011.2238' },
-      { label: 'EU-Kommission – Novel Food Summary Application L-Theanine', url: 'https://food.ec.europa.eu/document/download/a498e343-3403-427d-a95d-6a8fa4226c3b_en?filename=novel-food_sum_ongoing-app_2024-15277.pdf' },
+      { label: 'EFSA Journal 2011: Health claims related to L-theanine (Ablehnung)', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2011.2238' },
+      { label: 'EU-Kommission: Novel Food Summary Application L-Theanine', url: 'https://food.ec.europa.eu/document/download/a498e343-3403-427d-a95d-6a8fa4226c3b_en?filename=novel-food_sum_ongoing-app_2024-15277.pdf' },
     ],
   },
   {
@@ -1236,11 +1236,11 @@ export const substances = [
     category: 'Aminosäuren',
     synonyms: ['betain', 'betaine', 'trimethylglycin', 'tmg', 'glycinbetain', 'glycine betaine', 'betain-hcl', 'betain-hydrochlorid'],
     unit: 'mg',
-    what: 'Methylgruppen-Donor im Homocystein-Stoffwechsel, kommt natürlich u. a. in Roter Bete, Vollkorn und Spinat vor. Betain-Anhydrat/TMG (Stoffwechselfunktion) ist von Betain-Hydrochlorid (zur Ansäuerung des Magenmilieus) zu unterscheiden — beide werden im Handel als "Betain" bezeichnet, haben aber unterschiedliche Einsatzgebiete.',
+    what: 'Methylgruppen-Donor im Homocystein-Stoffwechsel, kommt natürlich u. a. in Roter Bete, Vollkorn und Spinat vor. Betain-Anhydrat/TMG (Stoffwechselfunktion) ist von Betain-Hydrochlorid (zur Ansäuerung des Magenmilieus) zu unterscheiden: beide werden im Handel als "Betain" bezeichnet, haben aber unterschiedliche Einsatzgebiete.',
     useCases: [
       { topic: 'Homocystein-Stoffwechsel', note: 'Als Methylgruppen-Donor am Homocystein-Stoffwechsel beteiligt.' },
       { topic: 'Sport-/Leistungsergänzung', note: 'EFSA-Zulassung als Novel Food explizit für Sportgetränke/-pulver vorgesehen.' },
-      { topic: 'Magenmilieu (Betain-HCl)', note: 'Als Hydrochlorid-Form zur Ansäuerung des Magenmilieus eingesetzt — separate Anwendung von TMG.' },
+      { topic: 'Magenmilieu (Betain-HCl)', note: 'Als Hydrochlorid-Form zur Ansäuerung des Magenmilieus eingesetzt: separate Anwendung von TMG.' },
     ],
     forms: [
       { name: 'Betain-Anhydrat (TMG)', bioavailability: 'hoch', note: 'wasserfreie Form, für Stoffwechsel-/Sport-Anwendungen zugelassen.' },
@@ -1249,7 +1249,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Betain-HCl verändert das Magenmilieu, was die Aufnahme bestimmter Arzneimittel beeinflussen kann. EFSA bezog bei der Sicherheitsbewertung ausdrücklich auch Säuglinge und Kleinkinder ein, da eine Verwendung durch diese Gruppen nicht ausgeschlossen werden kann.',
     sources: [
-      { label: 'EFSA Journal 2017 – Safety of betaine as a Novel Food', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7009179/' },
+      { label: 'EFSA Journal 2017: Safety of betaine as a Novel Food', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7009179/' },
     ],
   },
 
@@ -1265,13 +1265,13 @@ export const substances = [
       { topic: 'Stresssymptome (Müdigkeit, Schwächegefühl)', note: 'Einzige offizielle Indikation laut EU-Kräutermonographie (Traditional Use): vorübergehende Linderung. Ein Health-Claim-Antrag zur Reduktion von Müdigkeit bei Stress wurde von EFSA mangels Wirksamkeitsnachweis abgelehnt.' },
     ],
     forms: [
-      { name: 'Trockenextrakt', aka: ['Ethanol-Extrakt 67–70 % v/v'], bioavailability: 'einzige in der HMPC-Monographie anerkannte Zubereitungsform', note: 'Handelsübliche Extrakte werden oft zusätzlich auf Rosavin-/Salidrosid-Gehalt standardisiert — das ist jedoch keine offizielle HMPC-Vorgabe.' },
+      { name: 'Trockenextrakt', aka: ['Ethanol-Extrakt 67–70 % v/v'], bioavailability: 'einzige in der HMPC-Monographie anerkannte Zubereitungsform', note: 'Handelsübliche Extrakte werden oft zusätzlich auf Rosavin-/Salidrosid-Gehalt standardisiert, das ist jedoch keine offizielle HMPC-Vorgabe.' },
     ],
     fatSoluble: false,
     cautionNote: 'Offiziell (HMPC) einzige Kontraindikation: Überempfindlichkeit gegen den Wirkstoff. Keine Anwendung bei Kindern/Jugendlichen unter 18 Jahren. Eine Wechselwirkung mit Losartan ist beschrieben. Ein in manchen Quellen genannter Hinweis auf Vorsicht bei bipolarer Störung/Manie konnte in offiziellen Primärquellen nicht verifiziert werden.',
     sources: [
-      { label: 'EMA/HMPC – Community herbal monograph on Rhodiola rosea', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-rhodiola-rosea_en.pdf' },
-      { label: 'NCCIH – Rhodiola: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/rhodiola' },
+      { label: 'EMA/HMPC: Community herbal monograph on Rhodiola rosea', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-rhodiola-rosea_en.pdf' },
+      { label: 'NCCIH: Rhodiola: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/rhodiola' },
     ],
   },
   {
@@ -1294,8 +1294,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Berichtete Nebenwirkungen: Magen-Darm-Beschwerden, Hypersensitivitätsreaktionen, Schlaflosigkeit. Möglicher Einfluss auf Autoimmunerkrankungen und Blutgerinnung. Keine Anwendung bei Kindern/Jugendlichen unter 18 Jahren.',
     sources: [
-      { label: 'EMA/HMPC – EU herbal monograph on Panax ginseng (Revision 1, 2024)', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf' },
-      { label: 'NCCIH – Asian Ginseng: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/asian-ginseng' },
+      { label: 'EMA/HMPC: EU herbal monograph on Panax ginseng (Revision 1, 2024)', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf' },
+      { label: 'NCCIH: Asian Ginseng: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/asian-ginseng' },
     ],
   },
   {
@@ -1313,10 +1313,10 @@ export const substances = [
       { name: 'Trockenextrakt (DER 35–67:1), standardisiert', aka: ['entspricht dem in Studien verwendeten EGb-761-Typ'], bioavailability: 'Well-established-use gemäß HMPC', note: 'Tagesdosis 240 mg, Anwendung mindestens 8 Wochen.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Kontraindiziert in der Schwangerschaft (offizielle HMPC-Kontraindikation, nicht nur Warnhinweis). Kann die Blutgerinnung beeinflussen — bei Antikoagulanzien/Thrombozytenaggregationshemmern (z. B. Phenprocoumon, Warfarin, ASS) nur nach ärztlicher Rücksprache. Absetzen 3–4 Tage vor geplanten Operationen als Vorsichtsmaßnahme. Bei Epilepsie kann laut HMPC ein Auftreten weiterer Anfälle nicht ausgeschlossen werden.',
+    cautionNote: 'Kontraindiziert in der Schwangerschaft (offizielle HMPC-Kontraindikation, nicht nur Warnhinweis). Kann die Blutgerinnung beeinflussen: bei Antikoagulanzien/Thrombozytenaggregationshemmern (z. B. Phenprocoumon, Warfarin, ASS) nur nach ärztlicher Rücksprache. Absetzen 3–4 Tage vor geplanten Operationen als Vorsichtsmaßnahme. Bei Epilepsie kann laut HMPC ein Auftreten weiterer Anfälle nicht ausgeschlossen werden.',
     sources: [
-      { label: 'EMA/HMPC – EU herbal monograph on Ginkgo biloba', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-ginkgo-biloba-l-folium_en.pdf' },
-      { label: 'NCCIH – Ginkgo: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/ginkgo' },
+      { label: 'EMA/HMPC: EU herbal monograph on Ginkgo biloba', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-ginkgo-biloba-l-folium_en.pdf' },
+      { label: 'NCCIH: Ginkgo: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/ginkgo' },
     ],
   },
   {
@@ -1328,15 +1328,15 @@ export const substances = [
     what: 'Hypocotyl (verdickter Wurzelhals) einer Kreuzblütlerpflanze aus den peruanischen Anden, traditionell als Nahrungsmittel nach Erhitzen verzehrt. Anders als bei anderen Pflanzenstoffen dieser Datenbank existiert keine EMA/HMPC-Kräutermonographie.',
     useCases: [
       { topic: 'Traditioneller Verzehr als Nahrungsmittel', note: 'In den Anden seit langem nach Erhitzen als Lebensmittel verzehrt.' },
-      { topic: 'Sexuelles Verlangen (Männer)', note: 'Das BfR zitiert kleine Humanstudien mit Hinweisen auf gesteigertes sexuelles Verlangen bei 1,5–3 g/Tag über 12 Wochen — Studien waren klein (n=15–30) und nicht primär auf Sicherheit ausgelegt.' },
+      { topic: 'Sexuelles Verlangen (Männer)', note: 'Das BfR zitiert kleine Humanstudien mit Hinweisen auf gesteigertes sexuelles Verlangen bei 1,5–3 g/Tag über 12 Wochen: Studien waren klein (n=15–30) und nicht primär auf Sicherheit ausgelegt.' },
     ],
     forms: [
       { name: 'Wurzelpulver (roh oder geliert)', aka: ['Maca-Pulver'], bioavailability: 'keine behördlich bestätigten Angaben', note: 'Handelsübliche Tagesdosierungen laut einer 2007 zitierten Liste zwischen 400 und 5000 mg, meist 600–2400 mg.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Das BfR stellt in seiner Risikobewertung (2007) ausdrücklich fest, dass auf Basis der vorliegenden Daten KEINE gesundheitlich unbedenkliche Verzehrsmenge abgeleitet werden kann — nicht nur, dass keine bekannt ist. Tierstudien zeigen Hinweise auf Effekte auf Geschlechtsorgane und Hormonhaushalt (abhängig von der Farbvariante); konkrete Belege für unerwünschte Wirkungen beim Menschen liegen laut BfR nicht vor, die Datenlage gilt aber als unzureichend.',
+    cautionNote: 'Das BfR stellt in seiner Risikobewertung (2007) ausdrücklich fest, dass auf Basis der vorliegenden Daten KEINE gesundheitlich unbedenkliche Verzehrsmenge abgeleitet werden kann: nicht nur, dass keine bekannt ist. Tierstudien zeigen Hinweise auf Effekte auf Geschlechtsorgane und Hormonhaushalt (abhängig von der Farbvariante); konkrete Belege für unerwünschte Wirkungen beim Menschen liegen laut BfR nicht vor, die Datenlage gilt aber als unzureichend.',
     sources: [
-      { label: 'BfR – Risikobewertung macahaltiger Nahrungsergänzungsmittel (024/2007)', url: 'https://www.bfr.bund.de/cm/343/risikobewertung_macahaltiger_nahrungsergaenzungsmittel.pdf' },
+      { label: 'BfR: Risikobewertung macahaltiger Nahrungsergänzungsmittel (024/2007)', url: 'https://www.bfr.bund.de/cm/343/risikobewertung_macahaltiger_nahrungsergaenzungsmittel.pdf' },
     ],
   },
   {
@@ -1358,8 +1358,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Kontraindiziert bei Überempfindlichkeit gegen den Wirkstoff und gegen Pflanzen der Familie der Asteraceae/Compositae (Kreuzreaktion). Bei Gelbsucht oder Veränderung der Urin-/Stuhlfarbe soll laut HMPC sofort ärztlicher Rat eingeholt werden.',
     sources: [
-      { label: 'EMA/HMPC – EU herbal monograph on Silybum marianum', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-silybum-marianum-l-gaertn-fructus_en.pdf' },
-      { label: 'NCCIH – Milk Thistle: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/milk-thistle' },
+      { label: 'EMA/HMPC: EU herbal monograph on Silybum marianum', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-silybum-marianum-l-gaertn-fructus_en.pdf' },
+      { label: 'NCCIH: Milk Thistle: Usefulness and Safety', url: 'https://www.nccih.nih.gov/health/milk-thistle' },
     ],
   },
 
@@ -1383,8 +1383,8 @@ export const substances = [
     fatSoluble: true,
     cautionNote: 'Als fettlösliche Substanz wird die Aufnahme durch gleichzeitige Nahrungsfette begünstigt. EFSA hat lediglich sicherheitsbezogene Grenzwerte für den Einsatz als Lebensmittelfarbstoff festgelegt, keinen Tages-Referenzwert für Nahrungsergänzungsmittel.',
     sources: [
-      { label: 'EFSA Journal – Health Claim Lutein/Zeaxanthin und Sehen (2014)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2014.3753' },
-      { label: 'NIH – Age-Related Eye Disease Study 2 (AREDS2)', url: 'https://www.nei.nih.gov/research/clinical-trials/age-related-eye-disease-studies-aredsareds2' },
+      { label: 'EFSA Journal: Health Claim Lutein/Zeaxanthin und Sehen (2014)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2014.3753' },
+      { label: 'NIH: Age-Related Eye Disease Study 2 (AREDS2)', url: 'https://www.nei.nih.gov/research/clinical-trials/age-related-eye-disease-studies-aredsareds2' },
     ],
   },
   {
@@ -1403,9 +1403,9 @@ export const substances = [
       { name: 'Retardiert (sustained-release)', aka: ['verzögerte Freisetzung'], bioavailability: 'soll Spitzenkonzentrationen im Blut senken', note: 'wird zur Reduktion von Kribbeln (Parästhesie) eingesetzt.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Bei Einzeldosen oberhalb von ca. 800 mg wird vorübergehendes Kribbeln der Haut (Parästhesie) beschrieben. Keine offizielle Höchstmenge einer Behörde gefunden — Beta-Alanin ist kein essenzieller Nährstoff.',
+    cautionNote: 'Bei Einzeldosen oberhalb von ca. 800 mg wird vorübergehendes Kribbeln der Haut (Parästhesie) beschrieben. Keine offizielle Höchstmenge einer Behörde gefunden: Beta-Alanin ist kein essenzieller Nährstoff.',
     sources: [
-      { label: 'NIH ODS – Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
+      { label: 'NIH ODS: Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
     ],
   },
   {
@@ -1425,7 +1425,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Laut NIH ODS gilt 3 g/Tag für Erwachsene bei kurzzeitiger Anwendung als unbedenklich; Sicherheit und Wirksamkeit bei Jugendlichen sind nicht untersucht.',
     sources: [
-      { label: 'NIH ODS – Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
+      { label: 'NIH ODS: Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
     ],
   },
   {
@@ -1443,11 +1443,11 @@ export const substances = [
       { name: 'Melatonin, isoliert', bioavailability: 'oral, individuell stark schwankend', note: 'in Nahrungsergänzungsmitteln meist 0,5–2 mg, in Arzneimitteln 2–5 mg pro Einheit.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Regulatorischer Sonderstatus in Deutschland: Es gibt keine gesetzlich fixierte mg-Grenze, ab der Melatonin zwingend als Arzneimittel gilt — das BfR vertritt die Position, dass isoliertes Melatonin dosisunabhängig als pharmakologisch wirksamer Stoff einzustufen ist, während Gerichte Einzelfälle unterschiedlich entschieden haben. Als zugelassenes Arzneimittel ist Melatonin zu 3 mg je Packung bis 30 mg bei Jetlag rezeptfrei; andere Dosierungen und Indikationen bleiben verschreibungspflichtig. Das BfR warnte 2024 zusätzlich vor möglichen Gesundheitsrisiken melatoninhaltiger Nahrungsergänzungsmittel.',
+    cautionNote: 'Regulatorischer Sonderstatus in Deutschland: Es gibt keine gesetzlich fixierte mg-Grenze, ab der Melatonin zwingend als Arzneimittel gilt: das BfR vertritt die Position, dass isoliertes Melatonin dosisunabhängig als pharmakologisch wirksamer Stoff einzustufen ist, während Gerichte Einzelfälle unterschiedlich entschieden haben. Als zugelassenes Arzneimittel ist Melatonin zu 3 mg je Packung bis 30 mg bei Jetlag rezeptfrei; andere Dosierungen und Indikationen bleiben verschreibungspflichtig. Das BfR warnte 2024 zusätzlich vor möglichen Gesundheitsrisiken melatoninhaltiger Nahrungsergänzungsmittel.',
     sources: [
-      { label: 'BfR – Melatonin als Arzneimittel zulassungspflichtig (dosisunabhängig)', url: 'https://www.bfr.bund.de/veroeffentlichung/melatonin-als-arzneimittel-zulassungspflichtig-empfehlung-der-bundesinstitute-erfolgt-dosisunabhaengig/' },
-      { label: 'BfR – Stellungnahme 042/2024 zu melatoninhaltigen Nahrungsergänzungsmitteln', url: 'https://www.bfr.bund.de/cm/343/melatoninhaltige-nahrungsergaenzungsmittel-bfr-weist-auf-moegliche-gesundheitsrisiken-hin-2024.pdf' },
-      { label: 'BVL – FAQ Melatonin (Rechtslage)', url: 'https://www.bvl.bund.de/DE/Arbeitsbereiche/01_Lebensmittel/04_AntragstellerUnternehmen/13_FAQ/FAQ_Melatonin/FAQ_Melatonin_node.html' },
+      { label: 'BfR: Melatonin als Arzneimittel zulassungspflichtig (dosisunabhängig)', url: 'https://www.bfr.bund.de/veroeffentlichung/melatonin-als-arzneimittel-zulassungspflichtig-empfehlung-der-bundesinstitute-erfolgt-dosisunabhaengig/' },
+      { label: 'BfR: Stellungnahme 042/2024 zu melatoninhaltigen Nahrungsergänzungsmitteln', url: 'https://www.bfr.bund.de/cm/343/melatoninhaltige-nahrungsergaenzungsmittel-bfr-weist-auf-moegliche-gesundheitsrisiken-hin-2024.pdf' },
+      { label: 'BVL: FAQ Melatonin (Rechtslage)', url: 'https://www.bvl.bund.de/DE/Arbeitsbereiche/01_Lebensmittel/04_AntragstellerUnternehmen/13_FAQ/FAQ_Melatonin/FAQ_Melatonin_node.html' },
     ],
   },
 
@@ -1470,10 +1470,10 @@ export const substances = [
       { name: 'Kapsel/Pulver (oral)', bioavailability: 'nur ein Teil des oral aufgenommenen NMN wird unverändert resorbiert, ein relevanter Anteil wird durch die Darmflora zu Nicotinsäure umgewandelt', note: 'Standardform.' },
     ],
     fatSoluble: false,
-    cautionNote: 'NMN ist in der EU aktuell nicht als Nahrungsergänzungsmittel zugelassen. EFSA hat im Mai 2026 eine positive Sicherheitsbewertung für einen Zulassungsantrag abgegeben (300 mg/Tag, ausgenommen Schwangere/Stillende) — die formale EU-weite Zulassung durch die Kommission steht noch aus. Bis dahin ist die Verkehrsfähigkeit als Nahrungsergänzungsmittel je nach EU-Mitgliedstaat unterschiedlich geregelt.',
+    cautionNote: 'NMN ist in der EU aktuell nicht als Nahrungsergänzungsmittel zugelassen. EFSA hat im Mai 2026 eine positive Sicherheitsbewertung für einen Zulassungsantrag abgegeben (300 mg/Tag, ausgenommen Schwangere/Stillende): die formale EU-weite Zulassung durch die Kommission steht noch aus. Bis dahin ist die Verkehrsfähigkeit als Nahrungsergänzungsmittel je nach EU-Mitgliedstaat unterschiedlich geregelt.',
     sources: [
-      { label: 'EFSA Journal – Safety opinion NMN (2026)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2026.10007' },
-      { label: 'EFSA Journal 2021 – Nicotinamide Riboside Chloride (zur Abgrenzung)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2021.6843' },
+      { label: 'EFSA Journal: Safety opinion NMN (2026)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2026.10007' },
+      { label: 'EFSA Journal 2021: Nicotinamide Riboside Chloride (zur Abgrenzung)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2021.6843' },
     ],
   },
   {
@@ -1491,11 +1491,11 @@ export const substances = [
       { name: 'NSK-SD (standardisierter fermentierter Sojabohnenextrakt)', bioavailability: 'nicht veröffentlicht', note: 'einzige durch EFSA 2016 im Novel-Food-Verfahren bewertete Spezifikation, standardisiert auf 20.000–28.000 FU/g.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Kann die Wirkung von Antikoagulanzien/Thrombozytenaggregationshemmern (Vitamin-K-Antagonisten, DOAK) theoretisch verstärken; Fallberichte beschreiben sowohl Blutungsereignisse als auch thrombotische Komplikationen, wenn Nattokinase eigenmächtig eine Blutverdünner-Therapie ersetzte. Die EFSA-Sicherheitsbewertung 2016 (100 mg NSK-SD/Tag, ≈2000 FU) bezieht sich ausdrücklich auf Erwachsene über 35 Jahre und schließt Schwangere/Stillende aus — deshalb hier ohne strukturierten Referenzwert, da sich die Altersgrenze nicht auf die üblichen Lebensphasen-Gruppen abbilden lässt.',
+    cautionNote: 'Kann die Wirkung von Antikoagulanzien/Thrombozytenaggregationshemmern (Vitamin-K-Antagonisten, DOAK) theoretisch verstärken; Fallberichte beschreiben sowohl Blutungsereignisse als auch thrombotische Komplikationen, wenn Nattokinase eigenmächtig eine Blutverdünner-Therapie ersetzte. Die EFSA-Sicherheitsbewertung 2016 (100 mg NSK-SD/Tag, ≈2000 FU) bezieht sich ausdrücklich auf Erwachsene über 35 Jahre und schließt Schwangere/Stillende aus, deshalb hier ohne strukturierten Referenzwert, da sich die Altersgrenze nicht auf die üblichen Lebensphasen-Gruppen abbilden lässt.',
     sources: [
-      { label: 'EFSA Journal 2016 – Novel Food Opinion Nattokinase', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4541' },
-      { label: 'arznei-telegramm – Fallbericht Blutungsrisiko mit Phenprocoumon', url: 'https://www.arznei-telegramm.de/html/2011_02/1102023_02.html' },
-      { label: 'Verbraucherzentrale – Nattokinase bei Herz-Kreislauf-Problemen', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/nattokinase-hilfe-bei-herzkreislaufproblemen-93467' },
+      { label: 'EFSA Journal 2016: Novel Food Opinion Nattokinase', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4541' },
+      { label: 'arznei-telegramm: Fallbericht Blutungsrisiko mit Phenprocoumon', url: 'https://www.arznei-telegramm.de/html/2011_02/1102023_02.html' },
+      { label: 'Verbraucherzentrale: Nattokinase bei Herz-Kreislauf-Problemen', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/nattokinase-hilfe-bei-herzkreislaufproblemen-93467' },
     ],
   },
   {
@@ -1504,22 +1504,22 @@ export const substances = [
     category: 'Pilze',
     synonyms: ["lion's mane", 'hericium erinaceus', 'igelstachelbart', 'affenkopfpilz', 'yamabushitake', 'löwenmähne'],
     unit: 'mg',
-    what: 'Vitalpilz; der Fruchtkörper enthält vor allem Hericenone, das Myzel vor allem Erinacine — beides Verbindungen mit in präklinischen Studien beschriebener nervenwachstumsfördernder Wirkung.',
+    what: 'Vitalpilz; der Fruchtkörper enthält vor allem Hericenone, das Myzel vor allem Erinacine: beides Verbindungen mit in präklinischen Studien beschriebener nervenwachstumsfördernder Wirkung.',
     useCases: [
       { topic: 'Leichte kognitive Beeinträchtigung', note: 'Eine kleine japanische Studie (n=30, 3 g Pulver/Tag über 16 Wochen) zeigte Verbesserungen auf Demenz-Symptom-Skalen gegenüber Placebo.' },
-      { topic: 'Kognition und Stimmung bei Gesunden', note: 'Placebokontrollierte Studien an gesunden Erwachsenen mit gemischten Ergebnissen — teils schnellere Reaktion in Tests, teils kein signifikanter Gesamteffekt.' },
+      { topic: 'Kognition und Stimmung bei Gesunden', note: 'Placebokontrollierte Studien an gesunden Erwachsenen mit gemischten Ergebnissen: teils schnellere Reaktion in Tests, teils kein signifikanter Gesamteffekt.' },
       { topic: 'Tiermodelle Nervenwachstum', note: 'Effekte auf Gedächtnisleistung und Nervenwachstum in Mäusestudien; Übertragbarkeit auf den Menschen nicht belegt.' },
     ],
     forms: [
       { name: 'Fruchtkörper-Extrakt/-Pulver', bioavailability: 'nicht veröffentlicht', note: 'EU-weit als "nicht neuartig" eingestuft (Verzehr vor 1997 belegt).' },
-      { name: 'Myzel-Extrakt/-Pulver', bioavailability: 'Bioverfügbarkeit von Erinacin A ca. 24 %, von Erinacin S ca. 15 % (Tiermodell)', note: 'gilt als Novel Food und benötigt eine gesonderte EU-Zulassung — nicht jedes Marktprodukt verfügt nachweislich darüber.' },
+      { name: 'Myzel-Extrakt/-Pulver', bioavailability: 'Bioverfügbarkeit von Erinacin A ca. 24 %, von Erinacin S ca. 15 % (Tiermodell)', note: 'gilt als Novel Food und benötigt eine gesonderte EU-Zulassung: nicht jedes Marktprodukt verfügt nachweislich darüber.' },
     ],
     fatSoluble: false,
     cautionNote: 'Kein zugelassener EFSA-Health-Claim; Aussagen zur kognitiven Wirkung sind wissenschaftlich nicht abschließend belegt (kleine, gemischte Studienlage).',
     sources: [
-      { label: 'EU Novel Food Status Catalogue – Hericium erinaceus', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_hericium-erinaceus_aesan.pdf' },
-      { label: 'PMC – RCT Kognition/Stimmung bei Erwachsenen', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12018234/' },
-      { label: 'PMC – Bioverfügbarkeit Erinacin S', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6514545/' },
+      { label: 'EU Novel Food Status Catalogue: Hericium erinaceus', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_hericium-erinaceus_aesan.pdf' },
+      { label: 'PMC: RCT Kognition/Stimmung bei Erwachsenen', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12018234/' },
+      { label: 'PMC: Bioverfügbarkeit Erinacin S', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6514545/' },
     ],
   },
   {
@@ -1530,19 +1530,19 @@ export const substances = [
     unit: 'mg',
     what: 'Synthetischer Phenothiazin-Farbstoff mit Zulassungsgeschichte als Arzneistoff (u. a. bei Methämoglobinämie, historisch als Antimalariamittel); wird zunehmend niedrigdosiert als "Nootropikum" außerhalb dieses zugelassenen Rahmens vertrieben.',
     useCases: [
-      { topic: 'Methämoglobinämie (Arzneimittelindikation)', note: 'Als Arzneistoff intravenös zugelassen zur Behandlung erworbener Methämoglobinämie — betrifft nicht die orale Einnahme als Nahrungsergänzungsmittel.' },
-      { topic: 'Vermarktung als Nootropikum', note: 'Wird von Online-Anbietern als Konzentrationsmittel beworben — diese Anwendung ist von keiner der geprüften Behörden (EFSA, BfR, BfArM) bewertet oder zugelassen.' },
+      { topic: 'Methämoglobinämie (Arzneimittelindikation)', note: 'Als Arzneistoff intravenös zugelassen zur Behandlung erworbener Methämoglobinämie: betrifft nicht die orale Einnahme als Nahrungsergänzungsmittel.' },
+      { topic: 'Vermarktung als Nootropikum', note: 'Wird von Online-Anbietern als Konzentrationsmittel beworben: diese Anwendung ist von keiner der geprüften Behörden (EFSA, BfR, BfArM) bewertet oder zugelassen.' },
     ],
     forms: [
-      { name: 'Wässrige Lösung/Tropfen', bioavailability: 'nicht veröffentlicht für den Einnahmekontext als Nahrungsergänzungsmittel', note: 'In Online-Shops teils explizit als "Farbstoff zum Anfärben von Fasern" oder "Laborchemikalie" deklariert — ein erkennbares Schlupfloch, um die Einstufung als Lebensmittel zu umgehen.' },
+      { name: 'Wässrige Lösung/Tropfen', bioavailability: 'nicht veröffentlicht für den Einnahmekontext als Nahrungsergänzungsmittel', note: 'In Online-Shops teils explizit als "Farbstoff zum Anfärben von Fasern" oder "Laborchemikalie" deklariert: ein erkennbares Schlupfloch, um die Einstufung als Lebensmittel zu umgehen.' },
       { name: 'Kapsel (als Nahrungsergänzungsmittel beworben)', bioavailability: 'nicht veröffentlicht', note: 'Werbung mit "USP-Qualität"/"Pharmaqualität" stammt aus Herstellerangaben, nicht aus behördlicher Prüfung, und ist ohne chargenspezifisches Analysenzertifikat nicht verifizierbar.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Regulatorischer Status: Methylenblau ist in Deutschland/der EU nicht als Lebensmittel oder Nahrungsergänzungsmittel zugelassen — keine E-Nummer, kein Novel-Food-Beschluss für den oralen Verzehr. Als Arzneistoff (intravenöse Zubereitung) ist es in Deutschland verschreibungspflichtig. Reinheit: Technische bzw. Labor-Qualität kann Schwermetalle und Restlösungsmittel in Konzentrationen enthalten, die für den menschlichen Verzehr nicht zugelassen wären — eine als "USP" beworbene Kapsel ist ohne unabhängiges Analysenzertifikat nicht überprüfbar. G6PD-Mangel gilt laut Fachinformation als Kontraindikation (Risiko schwerer Hämolyse). Methylenblau wirkt als potenter MAO-A-Hemmer — das Serotonin-Syndrom-Risiko in Kombination mit SSRI, SNRI, MAO-Hemmern, 5-HTP und Tryptophan gilt laut behördlicher Warnung bei JEDER Dosierung, nicht nur bei hohen (Arzneimittel-)Mengen.',
+    cautionNote: 'Regulatorischer Status: Methylenblau ist in Deutschland/der EU nicht als Lebensmittel oder Nahrungsergänzungsmittel zugelassen: keine E-Nummer, kein Novel-Food-Beschluss für den oralen Verzehr. Als Arzneistoff (intravenöse Zubereitung) ist es in Deutschland verschreibungspflichtig. Reinheit: Technische bzw. Labor-Qualität kann Schwermetalle und Restlösungsmittel in Konzentrationen enthalten, die für den menschlichen Verzehr nicht zugelassen wären: eine als "USP" beworbene Kapsel ist ohne unabhängiges Analysenzertifikat nicht überprüfbar. G6PD-Mangel gilt laut Fachinformation als Kontraindikation (Risiko schwerer Hämolyse). Methylenblau wirkt als potenter MAO-A-Hemmer: das Serotonin-Syndrom-Risiko in Kombination mit SSRI, SNRI, MAO-Hemmern, 5-HTP und Tryptophan gilt laut behördlicher Warnung bei JEDER Dosierung, nicht nur bei hohen (Arzneimittel-)Mengen.',
     sources: [
-      { label: 'FDA – Prescribing Information Methylene Blue Injection (2024)', url: 'https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/204630Orig1s023lbl.pdf' },
-      { label: 'BfArM – Zulassung von Arzneimitteln (Verfahrensrahmen)', url: 'https://www.bfarm.de/DE/Arzneimittel/Zulassung/_node.html' },
-      { label: 'Apotheken Umschau – Einordnung als Gefahr statt Wundermittel', url: 'https://www.apotheken-umschau.de/news/methylenblau-kein-wundermittel-sondern-gefahr-fuer-gesundheit-1168173.html' },
+      { label: 'FDA: Prescribing Information Methylene Blue Injection (2024)', url: 'https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/204630Orig1s023lbl.pdf' },
+      { label: 'BfArM: Zulassung von Arzneimitteln (Verfahrensrahmen)', url: 'https://www.bfarm.de/DE/Arzneimittel/Zulassung/_node.html' },
+      { label: 'Apotheken Umschau: Einordnung als Gefahr statt Wundermittel', url: 'https://www.apotheken-umschau.de/news/methylenblau-kein-wundermittel-sondern-gefahr-fuer-gesundheit-1168173.html' },
     ],
   },
 
@@ -1567,7 +1567,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Ab ca. 3 g/Tag können Übelkeit, Erbrechen, Bauchkrämpfe, Durchfall und Fischgeruch auftreten. Bei Anfallsleiden wird unter hohen Dosen ein erhöhtes Anfallsrisiko beschrieben. Kein DGE- oder EFSA-Referenzwert vorhanden, da Carnitin aus Lebensmitteln als sicher gilt.',
     sources: [
-      { label: 'NIH ODS – Carnitine (Health Professional Fact Sheet)', url: 'https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/' },
+      { label: 'NIH ODS: Carnitine (Health Professional Fact Sheet)', url: 'https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/' },
     ],
   },
   {
@@ -1585,10 +1585,10 @@ export const substances = [
       { name: 'Berberin-HCl', bioavailability: 'sehr niedrig (unter 1 %), ausgeprägter First-Pass-Metabolismus', note: 'gängigste Supplementform.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Wechselwirkungen mit Statinen, Metformin/Antidiabetika und Blutdrucksenkern werden in der Literatur beschrieben. WICHTIG: EFSA konnte in einer laufenden, noch nicht final abgeschlossenen Risikobewertung (Konsultation 2026) bislang KEINE sichere Aufnahmemenge für berberinhaltige Pflanzenzubereitungen ableiten — eine Obergrenze existiert deshalb nicht, weil die zuständige Behörde selbst keine festlegen konnte.',
+    cautionNote: 'Wechselwirkungen mit Statinen, Metformin/Antidiabetika und Blutdrucksenkern werden in der Literatur beschrieben. WICHTIG: EFSA konnte in einer laufenden, noch nicht final abgeschlossenen Risikobewertung (Konsultation 2026) bislang KEINE sichere Aufnahmemenge für berberinhaltige Pflanzenzubereitungen ableiten: eine Obergrenze existiert deshalb nicht, weil die zuständige Behörde selbst keine festlegen konnte.',
     sources: [
-      { label: 'NutraIngredients – EFSA-Konsultation zu Berberin (2026)', url: 'https://www.nutraingredients.com/Article/2026/03/10/no-safe-intake-level-for-berberine-efsa-opens-consultation/' },
-      { label: 'UK Committee on Toxicity – Draft Scientific Opinion Berberine', url: 'https://www.gov.uk/government/publications/31st-march-2026-committee-on-toxicity-meeting/draft-scientific-opinion-on-the-safety-of-plant-preparations-containing-berberine' },
+      { label: 'NutraIngredients: EFSA-Konsultation zu Berberin (2026)', url: 'https://www.nutraingredients.com/Article/2026/03/10/no-safe-intake-level-for-berberine-efsa-opens-consultation/' },
+      { label: 'UK Committee on Toxicity: Draft Scientific Opinion Berberine', url: 'https://www.gov.uk/government/publications/31st-march-2026-committee-on-toxicity-meeting/draft-scientific-opinion-on-the-safety-of-plant-preparations-containing-berberine' },
     ],
   },
   {
@@ -1606,10 +1606,10 @@ export const substances = [
       { name: 'CLA-Isomerengemisch (c9,t11 / t10,c12)', bioavailability: 'gut resorbiert wie andere Fettsäuren', note: 'übliche Supplementform.' },
     ],
     fatSoluble: true,
-    cautionNote: 'EFSA (2010) verweist auf einen Anstieg von Isoprostanen (Marker für Lipidperoxidation) und Entzündungsmarkern unter CLA-Einnahme (ca. 3 g/Tag) und sah darin ein mögliches Risiko für Gefäßschäden bei längerer Einnahme — deshalb wurden mehrere Health-Claim-Anträge zu CLA abgelehnt. Kein DGE- oder EFSA-Referenzwert vorhanden.',
+    cautionNote: 'EFSA (2010) verweist auf einen Anstieg von Isoprostanen (Marker für Lipidperoxidation) und Entzündungsmarkern unter CLA-Einnahme (ca. 3 g/Tag) und sah darin ein mögliches Risiko für Gefäßschäden bei längerer Einnahme, deshalb wurden mehrere Health-Claim-Anträge zu CLA abgelehnt. Kein DGE- oder EFSA-Referenzwert vorhanden.',
     sources: [
-      { label: 'EFSA Journal 2010 – Scientific Opinion on CLA isomers', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1794' },
-      { label: 'NutraIngredients – EFSA rejects CLA body fat claim (2015)', url: 'https://www.nutraingredients.com/Article/2015/01/09/EFSA-rejects-CLA-and-body-fat-reduction-claim/' },
+      { label: 'EFSA Journal 2010: Scientific Opinion on CLA isomers', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1794' },
+      { label: 'NutraIngredients: EFSA rejects CLA body fat claim (2015)', url: 'https://www.nutraingredients.com/Article/2015/01/09/EFSA-rejects-CLA-and-body-fat-reduction-claim/' },
     ],
   },
   {
@@ -1618,7 +1618,7 @@ export const substances = [
     category: 'Antioxidantien',
     synonyms: ['grüntee-extrakt', 'grüner tee extrakt', 'egcg', 'epigallocatechingallat', 'green tea extract', 'catechine'],
     unit: 'mg',
-    what: 'Hochkonzentrierter Extrakt aus Blättern von Camellia sinensis, standardisiert auf den Hauptcatechin Epigallocatechin-3-gallat (EGCG) — deutlich höhere EGCG-Konzentration als aufgegossener Tee.',
+    what: 'Hochkonzentrierter Extrakt aus Blättern von Camellia sinensis, standardisiert auf den Hauptcatechin Epigallocatechin-3-gallat (EGCG): deutlich höhere EGCG-Konzentration als aufgegossener Tee.',
     useCases: [
       { topic: 'Antioxidative Wirkung', note: 'Catechine gelten als radikalfangende Polyphenole, gut belegt in vitro und präklinisch.' },
       { topic: 'Stoffwechsel/Thermogenese', note: 'Wird mit Effekten auf den Energiestoffwechsel in Verbindung gebracht; Humandatenlage zu klinisch relevanten Effekten uneinheitlich.' },
@@ -1627,10 +1627,10 @@ export const substances = [
       { name: 'Grüntee-Blattextrakt, EGCG-standardisiert', bioavailability: 'gering, nüchtern deutlich erhöht', note: 'Bioverfügbarkeit und Toxizität steigen bei Einnahme auf nüchternen Magen deutlich an.' },
     ],
     fatSoluble: false,
-    cautionNote: 'EFSA kam 2018 zu dem Schluss, dass ab einer EGCG-Dosis von 800 mg/Tag aus Nahrungsergänzungsmitteln mit ersten Anzeichen einer Leberschädigung zu rechnen ist. Aufgegossener Grüntee (kein Extrakt) wurde als generell unbedenklich eingestuft — die dokumentierten Leberschadensfälle betreffen praktisch ausschließlich hochkonzentrierte Extrakte. Die Einnahme auf nüchternen Magen erhöht Bioverfügbarkeit und Risiko zusätzlich.',
+    cautionNote: 'EFSA kam 2018 zu dem Schluss, dass ab einer EGCG-Dosis von 800 mg/Tag aus Nahrungsergänzungsmitteln mit ersten Anzeichen einer Leberschädigung zu rechnen ist. Aufgegossener Grüntee (kein Extrakt) wurde als generell unbedenklich eingestuft: die dokumentierten Leberschadensfälle betreffen praktisch ausschließlich hochkonzentrierte Extrakte. Die Einnahme auf nüchternen Magen erhöht Bioverfügbarkeit und Risiko zusätzlich.',
     sources: [
-      { label: 'EFSA Journal 2018 – Safety of green tea catechins', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2018.5239' },
-      { label: 'Verbraucherzentrale – Grüntee-Extrakt', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/gar-nicht-so-harmlos-gruenteeextrakt-80386' },
+      { label: 'EFSA Journal 2018: Safety of green tea catechins', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2018.5239' },
+      { label: 'Verbraucherzentrale: Grüntee-Extrakt', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/gar-nicht-so-harmlos-gruenteeextrakt-80386' },
     ],
   },
 
@@ -1650,9 +1650,9 @@ export const substances = [
       { name: 'Gummiharz-/Trockenextrakt', bioavailability: 'keine einheitliche Standardisierung in den geprüften Quellen belegbar', note: 'Kapsel, Tablette oder Tinktur.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Für Weihrauch/Boswellia serrata existiert — anders als bei Teufelskralle — KEINE offizielle EU-Kräutermonographie (HMPC), da keine belegte traditionelle Verwendung in Europa vorliegt. Die einzige belastbare Quelle ist die internationale Studienübersicht der NCCIH: "There is not enough high-quality evidence to determine whether boswellia is useful for any health condition." Bis 1000 mg/Tag über 6 Monate bzw. 2400 mg/Tag über 1 Monat gilt als im Allgemeinen unbedenklich getestet; Sicherheitsdaten zu Schwangerschaft/Stillzeit sind begrenzt.',
+    cautionNote: 'Für Weihrauch/Boswellia serrata existiert, anders als bei Teufelskralle, KEINE offizielle EU-Kräutermonographie (HMPC), da keine belegte traditionelle Verwendung in Europa vorliegt. Die einzige belastbare Quelle ist die internationale Studienübersicht der NCCIH: "There is not enough high-quality evidence to determine whether boswellia is useful for any health condition." Bis 1000 mg/Tag über 6 Monate bzw. 2400 mg/Tag über 1 Monat gilt als im Allgemeinen unbedenklich getestet; Sicherheitsdaten zu Schwangerschaft/Stillzeit sind begrenzt.',
     sources: [
-      { label: 'NCCIH – Boswellia', url: 'https://www.nccih.nih.gov/health/boswellia' },
+      { label: 'NCCIH: Boswellia', url: 'https://www.nccih.nih.gov/health/boswellia' },
     ],
   },
   {
@@ -1673,7 +1673,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'HMPC-Kontraindikation: aktives Magen- oder Zwölffingerdarmgeschwür. Bei Gallensteinen soll vor Anwendung ärztlicher Rat eingeholt werden. Anwendung länger als 4 Wochen (Gelenkschmerzen) bzw. 2 Wochen (Verdauung) ohne ärztlichen Rat nicht vorgesehen. Berichtete Nebenwirkungen: Magen-Darm-Beschwerden, Kopfschmerz, Schwindel, Überempfindlichkeitsreaktionen.',
     sources: [
-      { label: 'EMA/HMPC – Harpagophytum procumbens/zeyheri, radix', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-harpagophytum-procumbens-dc-andor-harpagophytum-zeyheri-decne-radix_en.pdf' },
+      { label: 'EMA/HMPC: Harpagophytum procumbens/zeyheri, radix', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-harpagophytum-procumbens-dc-andor-harpagophytum-zeyheri-decne-radix_en.pdf' },
     ],
   },
   {
@@ -1691,9 +1691,9 @@ export const substances = [
       { name: 'Bromelain-Extrakt/-Pulver', bioavailability: 'n/a', note: 'Potenzangabe auf Etiketten häufig über Wirkeinheiten (GDU/MCU/FIP) statt Masse.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Im Allgemeinen gut verträglich; häufigste Nebenwirkungen sind Magenbeschwerden und Durchfall. Als proteinspaltendes Enzym wird eine mögliche Wechselwirkung mit gerinnungshemmenden Wirkstoffen diskutiert. Für Bromelain liegt keine finale EFSA-Bewertung vor — entsprechende Health-Claim-Anträge sind seit Jahren unentschieden ("on hold").',
+    cautionNote: 'Im Allgemeinen gut verträglich; häufigste Nebenwirkungen sind Magenbeschwerden und Durchfall. Als proteinspaltendes Enzym wird eine mögliche Wechselwirkung mit gerinnungshemmenden Wirkstoffen diskutiert. Für Bromelain liegt keine finale EFSA-Bewertung vor: entsprechende Health-Claim-Anträge sind seit Jahren unentschieden ("on hold").',
     sources: [
-      { label: 'NCCIH – Bromelain', url: 'https://www.nccih.nih.gov/health/bromelain' },
+      { label: 'NCCIH: Bromelain', url: 'https://www.nccih.nih.gov/health/bromelain' },
     ],
   },
   {
@@ -1713,10 +1713,10 @@ export const substances = [
       { name: 'Organisches Silicium (Monomethylsilantriol)', bioavailability: 'n/a', note: 'als Novel Food zugelassen, BfR-Höchstmengenempfehlung bis 10 mg Silicium/Tag.' },
     ],
     fatSoluble: false,
-    cautionNote: 'EFSA (2004) konnte mangels Daten keine Obergrenze ableiten; Silicium gilt als nicht-essenzieller Nährstoff, ein Mangel wurde beim Menschen bisher nicht beobachtet. Die D-A-CH-Referenzwerte führen keinen Wert für Silicium. Wichtig: Die BfR-Höchstmengenempfehlung unterscheidet sich stark je nach Form (Faktor 35 zwischen SiO2 und Bambusextrakt) — eine einzelne Zahl ohne Formangabe wäre irreführend, deshalb hier ohne strukturierten Referenzwert.',
+    cautionNote: 'EFSA (2004) konnte mangels Daten keine Obergrenze ableiten; Silicium gilt als nicht-essenzieller Nährstoff, ein Mangel wurde beim Menschen bisher nicht beobachtet. Die D-A-CH-Referenzwerte führen keinen Wert für Silicium. Wichtig: Die BfR-Höchstmengenempfehlung unterscheidet sich stark je nach Form (Faktor 35 zwischen SiO2 und Bambusextrakt): eine einzelne Zahl ohne Formangabe wäre irreführend, deshalb hier ohne strukturierten Referenzwert.',
     sources: [
-      { label: 'BfR – Höchstmengenvorschläge für Silicium', url: 'https://www.bfr.bund.de/cm/349/proposed-maximum-levels-for-the-addition-of-silicon-to-foods-including-food-supplements.pdf' },
-      { label: 'DGE – Referenzwerte-Übersicht', url: 'https://www.dge.de/wissenschaft/referenzwerte/' },
+      { label: 'BfR: Höchstmengenvorschläge für Silicium', url: 'https://www.bfr.bund.de/cm/349/proposed-maximum-levels-for-the-addition-of-silicon-to-foods-including-food-supplements.pdf' },
+      { label: 'DGE: Referenzwerte-Übersicht', url: 'https://www.dge.de/wissenschaft/referenzwerte/' },
     ],
   },
 
@@ -1739,8 +1739,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Marktchecks dokumentieren wiederholt Belastungen mit Schwermetallen (Blei, Cadmium, Quecksilber), lebertoxischen Mikrocystinen bei Kontamination durch andere Cyanobakterien sowie punktuell Mikroplastik und Pestizidrückstände. Enthält Phenylalanin.',
     sources: [
-      { label: 'Verbraucherzentrale – Spirulina: Viel Grün und wenig dahinter', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/spirulina-viel-gruen-und-wenig-dahinter-21053' },
-      { label: 'NIH LiverTox – Spirulina', url: 'https://www.ncbi.nlm.nih.gov/books/NBK548312/' },
+      { label: 'Verbraucherzentrale: Spirulina: Viel Grün und wenig dahinter', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/spirulina-viel-gruen-und-wenig-dahinter-21053' },
+      { label: 'NIH LiverTox: Spirulina', url: 'https://www.ncbi.nlm.nih.gov/books/NBK548312/' },
     ],
   },
   {
@@ -1756,12 +1756,12 @@ export const substances = [
     ],
     forms: [
       { name: 'Tablette (cracked cell wall)', bioavailability: 'höher als bei intakter Zellwand laut Herstellerangaben', note: 'unabhängige Vergleichsdaten dazu nicht verifiziert.' },
-      { name: 'Pulver', bioavailability: 'n/a', note: '—' },
+      { name: 'Pulver', bioavailability: 'n/a' },
     ],
     fatSoluble: false,
     cautionNote: 'Marktchecks dokumentieren für Algenprodukte generell und Chlorella im Speziellen Belastungen mit Cadmium, Blei, Kupfer sowie Anreicherung von Arsen und Aluminium. Enthält vergleichsweise hohe Mengen Vitamin K.',
     sources: [
-      { label: 'Verbraucherzentrale – Marktcheck essbare Algen', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/kennzeichnung-und-inhaltsstoffe/marktcheck-essbare-algen-naehrstoffquelle-mit-potenziellem-gesundheitsrisiko-102668' },
+      { label: 'Verbraucherzentrale: Marktcheck essbare Algen', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/kennzeichnung-und-inhaltsstoffe/marktcheck-essbare-algen-naehrstoffquelle-mit-potenziellem-gesundheitsrisiko-102668' },
     ],
   },
   {
@@ -1770,7 +1770,7 @@ export const substances = [
     category: 'Darm',
     synonyms: ['verdauungsenzyme', 'digestive enzymes', 'enzymkomplex', 'amylase', 'lipase', 'protease'],
     unit: 'mg',
-    what: 'Kombinationspräparate aus verdauungsunterstützenden Enzymen (typisch: Amylase, Lipase, Protease), im Freiverkauf meist pflanzlichen/mikrobiellen Ursprungs — zu unterscheiden von der verschreibungspflichtigen Pankreasenzym-Ersatztherapie bei nachgewiesener Pankreasinsuffizienz.',
+    what: 'Kombinationspräparate aus verdauungsunterstützenden Enzymen (typisch: Amylase, Lipase, Protease), im Freiverkauf meist pflanzlichen/mikrobiellen Ursprungs, zu unterscheiden von der verschreibungspflichtigen Pankreasenzym-Ersatztherapie bei nachgewiesener Pankreasinsuffizienz.',
     useCases: [
       { topic: 'Amylase', note: 'Spaltet Stärke/Polysaccharide zu Zuckerbausteinen.' },
       { topic: 'Lipase', note: 'Katalysiert die Spaltung von Triglyceriden zu Fettsäuren und Glycerin.' },
@@ -1780,9 +1780,9 @@ export const substances = [
       { name: 'Amylase/Lipase/Protease-Kombination', bioavailability: 'wirkt lokal im Verdauungstrakt', note: 'keine systemische Bioverfügbarkeit im eigentlichen Sinn.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Die EU-Lebensmittelenzym-Verordnung gilt ausdrücklich NICHT für Enzyme, die zum unmittelbaren menschlichen Verzehr bestimmt sind — Verdauungsenzym-Präparate fallen unter das allgemeine Nahrungsergänzungsmittelrecht. Keine EFSA-Health-Claim-Zulassung für Enzymkombinationen als Supplement gefunden.',
+    cautionNote: 'Die EU-Lebensmittelenzym-Verordnung gilt ausdrücklich NICHT für Enzyme, die zum unmittelbaren menschlichen Verzehr bestimmt sind: Verdauungsenzym-Präparate fallen unter das allgemeine Nahrungsergänzungsmittelrecht. Keine EFSA-Health-Claim-Zulassung für Enzymkombinationen als Supplement gefunden.',
     sources: [
-      { label: 'EUR-Lex – Verordnung (EG) Nr. 1332/2008', url: 'https://eur-lex.europa.eu/legal-content/DE/ALL/?uri=CELEX:32008R1332' },
+      { label: 'EUR-Lex: Verordnung (EG) Nr. 1332/2008', url: 'https://eur-lex.europa.eu/legal-content/DE/ALL/?uri=CELEX:32008R1332' },
     ],
   },
   {
@@ -1803,7 +1803,7 @@ export const substances = [
     fatSoluble: true,
     cautionNote: 'Wechselwirkungen mit Blutverdünnern (erhöhtes Blutungsrisiko), Blutdruckmedikamenten, Diabetesmedikamenten und Immunsuppressiva werden in Sekundärquellen beschrieben; empfohlenes Absetzen mindestens zwei Wochen vor Operationen. Eine explizite BfR-Stellungnahme zu Schwarzkümmelöl wurde nicht gefunden.',
     sources: [
-      { label: 'PMC – The Use of Nigella sativa in Cardiometabolic Diseases', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10886913/' },
+      { label: 'PMC: The Use of Nigella sativa in Cardiometabolic Diseases', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10886913/' },
     ],
   },
 
@@ -1827,8 +1827,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'HMPC beschränkt die Anwendung auf erwachsene und ältere Männer. Vor Einnahme sollen ernste Erkrankungen (z. B. Prostatakarzinom) ärztlich ausgeschlossen werden.',
     sources: [
-      { label: 'EMA/HMPC – Sabalis serrulatae fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/sabalis-serrulatae-fructus' },
-      { label: 'NCCIH – Saw Palmetto', url: 'https://www.nccih.nih.gov/health/saw-palmetto' },
+      { label: 'EMA/HMPC: Sabalis serrulatae fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/sabalis-serrulatae-fructus' },
+      { label: 'NCCIH: Saw Palmetto', url: 'https://www.nccih.nih.gov/health/saw-palmetto' },
     ],
   },
   {
@@ -1837,7 +1837,7 @@ export const substances = [
     category: 'Männergesundheit',
     synonyms: ['brennnesselwurzel', 'nettle root', 'urtica dioica radix', 'urticae radix'],
     unit: 'mg',
-    what: 'Wurzelextrakt der Großen Brennnessel — von Brennnesselblatt (andere Indikation) klar zu unterscheiden.',
+    what: 'Wurzelextrakt der Großen Brennnessel, von Brennnesselblatt (andere Indikation) klar zu unterscheiden.',
     useCases: [
       { topic: 'Untere Harnwegssymptome bei BPH', note: 'EU-Kräutermonographie (HMPC, Revision 2024): traditionell eingesetzt zur Linderung von Miktionsbeschwerden im Rahmen einer benignen Prostatahyperplasie, nachdem ernste Erkrankungen ärztlich ausgeschlossen wurden.' },
     ],
@@ -1847,7 +1847,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Nicht zu verwechseln mit Brennnesselblatt (andere Monographie, andere Indikation). Ernste Erkrankungen der Harnwege sollten vor Einnahme ärztlich ausgeschlossen werden.',
     sources: [
-      { label: 'EMA/HMPC – Urticae radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/urticae-radix' },
+      { label: 'EMA/HMPC: Urticae radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/urticae-radix' },
     ],
   },
   {
@@ -1868,8 +1868,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'HMPC beschränkt Anwendung auf erwachsene Frauen. NCCIH warnt vor Anwendung bei hormonempfindlichen Erkrankungen (Brust-, Gebärmutter-, Eierstockkrebs). Die dopaminerge Wirkung kann mit hormonellen Kontrazeptiva und dopaminwirksamen Medikamenten interagieren.',
     sources: [
-      { label: 'EMA/HMPC – Agni casti fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/agni-casti-fructus' },
-      { label: 'NCCIH – Chasteberry', url: 'https://www.nccih.nih.gov/health/chasteberry' },
+      { label: 'EMA/HMPC: Agni casti fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/agni-casti-fructus' },
+      { label: 'NCCIH: Chasteberry', url: 'https://www.nccih.nih.gov/health/chasteberry' },
     ],
   },
   {
@@ -1889,8 +1889,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Leberwarnhinweis (HMPC): Einnahme sofort beenden und Arzt aufsuchen bei Anzeichen von Leberproblemen (Müdigkeit, Appetitlosigkeit, Gelbfärbung von Haut/Augen, starke Oberbauchschmerzen mit Übelkeit, dunkler Urin). NCCIH bestätigt gemeldete Fälle teils schwerer Leberschäden bei als Traubensilberkerze deklarierten Präparaten (Kausalität unsicher, Fälle selten, teils Qualitätsprobleme durch falsche Pflanze/nicht deklarierte Beimischungen). Sicherheit bei hormonempfindlichen Krebserkrankungen ungeklärt.',
     sources: [
-      { label: 'EMA/HMPC – Cimicifugae rhizoma', url: 'https://www.ema.europa.eu/en/medicines/herbal/cimicifugae-rhizoma' },
-      { label: 'NCCIH – Black Cohosh', url: 'https://www.nccih.nih.gov/health/black-cohosh' },
+      { label: 'EMA/HMPC: Cimicifugae rhizoma', url: 'https://www.ema.europa.eu/en/medicines/herbal/cimicifugae-rhizoma' },
+      { label: 'NCCIH: Black Cohosh', url: 'https://www.nccih.nih.gov/health/black-cohosh' },
     ],
   },
   {
@@ -1907,9 +1907,9 @@ export const substances = [
       { name: 'Myo-Inositol (Pulver/Kapsel)', bioavailability: 'n/a', note: 'in Studien meist als Reinstoff, teils kombiniert mit D-Chiro-Inositol.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Keine gesundheitliche Empfehlung ableitbar — die Studienlage (Cochrane) stuft die Evidenz selbst als sehr niedrig ein. Weder DGE noch EFSA führen einen offiziellen Referenzwert.',
+    cautionNote: 'Keine gesundheitliche Empfehlung ableitbar: die Studienlage (Cochrane) stuft die Evidenz selbst als sehr niedrig ein. Weder DGE noch EFSA führen einen offiziellen Referenzwert.',
     sources: [
-      { label: 'Cochrane – Inositol for women with PCOS and subfertility', url: 'https://www.cochrane.org/evidence/CD012378_inositol-women-diagnosis-polycystic-ovary-syndrome-and-subfertility' },
+      { label: 'Cochrane: Inositol for women with PCOS and subfertility', url: 'https://www.cochrane.org/evidence/CD012378_inositol-women-diagnosis-polycystic-ovary-syndrome-and-subfertility' },
     ],
   },
 
@@ -1931,8 +1931,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'In der EU als Novel Food nur für Erwachsene zugelassen, Schwangere und Stillende ausdrücklich ausgenommen. Langzeit-Humansicherheitsdaten sind begrenzt.',
     sources: [
-      { label: 'EUR-Lex – Durchführungsverordnung (EU) 2018/1122', url: 'https://eur-lex.europa.eu/eli/reg_impl/2018/1122/oj/eng' },
-      { label: 'EFSA Journal 2017 – Safety of PQQ disodium salt', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2017.5058' },
+      { label: 'EUR-Lex: Durchführungsverordnung (EU) 2018/1122', url: 'https://eur-lex.europa.eu/eli/reg_impl/2018/1122/oj/eng' },
+      { label: 'EFSA Journal 2017: Safety of PQQ disodium salt', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2017.5058' },
     ],
   },
   {
@@ -1952,8 +1952,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Spermidinreicher Weizenkeimextrakt ist in der EU als Novel Food zugelassen und reguliert. Die Wirkforschung zu Longevity-Effekten stammt überwiegend aus Zell-/Tiermodellen; kontrollierte Humanstudien mit harten Endpunkten fehlen weitgehend.',
     sources: [
-      { label: 'EUR-Lex – Durchführungsverordnung (EU) 2020/443', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020R0443' },
-      { label: 'JAMA Network Open – SmartAge Trial (2022)', url: 'https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2792725' },
+      { label: 'EUR-Lex: Durchführungsverordnung (EU) 2020/443', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020R0443' },
+      { label: 'JAMA Network Open: SmartAge Trial (2022)', url: 'https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2792725' },
     ],
   },
   {
@@ -1973,7 +1973,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Die Forschung zu Fisetin als Senolytikum befindet sich überwiegend im Tier-/Zellkulturstadium; Humandaten stammen aus wenigen kleinen Pilotstudien. Keine gesicherten Interaktionsdaten verfügbar. Keine dedizierte EFSA- oder DGE-Bewertung auffindbar.',
     sources: [
-      { label: 'ClinicalTrials.gov – NCT03325322 (Fisetin, Gebrechlichkeit bei älteren Frauen)', url: 'https://clinicaltrials.gov/study/NCT03325322' },
+      { label: 'ClinicalTrials.gov: NCT03325322 (Fisetin, Gebrechlichkeit bei älteren Frauen)', url: 'https://clinicaltrials.gov/study/NCT03325322' },
     ],
   },
   {
@@ -1982,7 +1982,7 @@ export const substances = [
     category: 'Mineralien',
     synonyms: ['bor', 'boron', 'borsäure', 'natriumborat', 'bortriglycinat'],
     unit: 'mg',
-    what: 'Spurenelement, das von EFSA als nicht-essenziell eingestuft wird — eine spezifische physiologische Funktion beim Menschen ist bislang nicht identifiziert.',
+    what: 'Spurenelement, das von EFSA als nicht-essenziell eingestuft wird: eine spezifische physiologische Funktion beim Menschen ist bislang nicht identifiziert.',
     useCases: [
       { topic: 'Knochenstoffwechsel', note: 'Wird in Tierstudien mit Calcium-/Vitamin-D-Stoffwechsel in Verbindung gebracht; keine zugelassene gesundheitsbezogene Aussage in der EU.' },
     ],
@@ -1993,8 +1993,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Die DGE führt für Bor keinen D-A-CH-Referenzwert. Das BfR empfiehlt für Nahrungsergänzungsmittel eine deutlich niedrigere Höchstmenge (0,5 mg/Tag) als der EFSA-UL (10 mg/Tag für Erwachsene), da die Hintergrundaufnahme aus anderen Quellen bei Kindern/Jugendlichen bereits den UL ausschöpfen kann. Das BfR empfiehlt einen Verbraucherhinweis "Für Kinder und Jugendliche nicht geeignet".',
     sources: [
-      { label: 'BfR – Höchstmengenvorschläge für Bor', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-bor-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
-      { label: 'EFSA 2004 – Tolerable Upper Intake Level of Boron', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2004.80' },
+      { label: 'BfR: Höchstmengenvorschläge für Bor', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-bor-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'EFSA 2004: Tolerable Upper Intake Level of Boron', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2004.80' },
     ],
   },
   {
@@ -2015,7 +2015,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Da L-Carnosin durch körpereigene Carnosinase schnell abgebaut wird, ist der tatsächliche Nutzen einer oralen Zufuhr gegenüber Beta-Alanin-Supplementierung umstritten. Keine dedizierte EFSA- oder D-A-CH-Referenzwertbewertung auffindbar.',
     sources: [
-      { label: 'NIH ODS – Verwandte Aminosäure-Fachinformation (Kontext Beta-Alanin/Carnosin)', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
+      { label: 'NIH ODS: Verwandte Aminosäure-Fachinformation (Kontext Beta-Alanin/Carnosin)', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
     ],
   },
   {
@@ -2035,10 +2035,10 @@ export const substances = [
       { name: 'Hochkonzentriertes Koffeinpulver', note: 'identische Menge Pulver = identische Menge Koffein; mit haushaltsüblichen Waagen/Löffeln nicht präzise abmessbar.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Laut BfR-Mitteilung 46/2024 gelten 5–10 g reines Koffein bereits als potenziell akut tödliche Dosis für Erwachsene — das entspricht 1–2 Teelöffeln hochkonzentriertem Pulver. Dokumentiert ist ein Todesfall in Deutschland durch versehentliche Einnahme von ca. 9 g Koffeinpulver (Wellershoff, Notarzt 2018;34:85-89). Haushaltsübliche Küchenwaagen messen laut BfR meist erst ab 1 g relativ genau — die unbedenkliche Einzeldosis von 0,2 g lässt sich damit nicht zuverlässig abmessen.',
+    cautionNote: 'Laut BfR-Mitteilung 46/2024 gelten 5–10 g reines Koffein bereits als potenziell akut tödliche Dosis für Erwachsene: das entspricht 1–2 Teelöffeln hochkonzentriertem Pulver. Dokumentiert ist ein Todesfall in Deutschland durch versehentliche Einnahme von ca. 9 g Koffeinpulver (Wellershoff, Notarzt 2018;34:85-89). Haushaltsübliche Küchenwaagen messen laut BfR meist erst ab 1 g relativ genau: die unbedenkliche Einzeldosis von 0,2 g lässt sich damit nicht zuverlässig abmessen.',
     sources: [
-      { label: 'EFSA – Scientific Opinion on the safety of caffeine (2015), EFSA Journal 13(5):4102', url: 'https://doi.org/10.2903/j.efsa.2015.4102' },
-      { label: 'BfR Mitteilung 46/2024 – Hochkonzentriertes Koffein-Pulver kann bereits in geringen Mengen schwere Vergiftungen hervorrufen', url: 'https://www.bfr.bund.de/cm/343/hochkonzentriertes-koffein-pulver-kann-bereits-in-geringen-mengen-schwere-vergiftungen-hervorrufen.pdf' },
+      { label: 'EFSA: Scientific Opinion on the safety of caffeine (2015), EFSA Journal 13(5):4102', url: 'https://doi.org/10.2903/j.efsa.2015.4102' },
+      { label: 'BfR Mitteilung 46/2024: Hochkonzentriertes Koffein-Pulver kann bereits in geringen Mengen schwere Vergiftungen hervorrufen', url: 'https://www.bfr.bund.de/cm/343/hochkonzentriertes-koffein-pulver-kann-bereits-in-geringen-mengen-schwere-vergiftungen-hervorrufen.pdf' },
     ],
   },
   {
@@ -2047,7 +2047,7 @@ export const substances = [
     category: 'Stimulanzien',
     synonyms: ['guarana', 'paullinia cupana', 'guaranin', 'guarana-samen', 'guarana-extrakt', 'guarana-pulver'],
     unit: 'mg',
-    what: 'Samen einer Kletterpflanze aus dem Amazonasgebiet mit einem Koffeingehalt von bis zu 6 % — deutlich höher als bei Kaffeebohnen. Die stimulierende Wirkung beruht im Wesentlichen auf diesem Koffeingehalt.',
+    what: 'Samen einer Kletterpflanze aus dem Amazonasgebiet mit einem Koffeingehalt von bis zu 6 %, deutlich höher als bei Kaffeebohnen. Die stimulierende Wirkung beruht im Wesentlichen auf diesem Koffeingehalt.',
     useCases: [
       { topic: 'Kognitive Leistung', note: 'in einer systematischen Übersichtsarbeit mit akuter kognitiver Leistung in Verbindung gebracht (Hack et al. 2023).' },
       { topic: 'Energy-Drinks/Sportgetränke', note: 'gängige Zutat als Koffeinquelle.' },
@@ -2058,10 +2058,10 @@ export const substances = [
       { name: 'Standardisierter Guarana-Extrakt', note: 'auf definierten Koffeingehalt (%) standardisiert, dadurch besser dosierbar.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Die Wirkung beruht überwiegend auf dem enthaltenen Koffein — faktisch gelten dieselben Aufnahmegrenzen wie bei isoliertem Koffein (siehe dortiger Eintrag). Bei nicht standardisierten Produkten ist der tatsächliche Koffeingehalt pro Portion oft unklar deklariert, was die Einordnung der Gesamt-Koffeinaufnahme aus mehreren Quellen (Kaffee, Energy-Drinks) erschwert.',
+    cautionNote: 'Die Wirkung beruht überwiegend auf dem enthaltenen Koffein: faktisch gelten dieselben Aufnahmegrenzen wie bei isoliertem Koffein (siehe dortiger Eintrag). Bei nicht standardisierten Produkten ist der tatsächliche Koffeingehalt pro Portion oft unklar deklariert, was die Einordnung der Gesamt-Koffeinaufnahme aus mehreren Quellen (Kaffee, Energy-Drinks) erschwert.',
     sources: [
-      { label: 'Schimpl et al. 2013, Phytochemistry – Guarana: revisiting a highly caffeinated plant from the Amazon', url: 'https://pubmed.ncbi.nlm.nih.gov/23981847/' },
-      { label: 'Patrick et al. 2019 – Safety of Guarana Seed as a Dietary Ingredient: A Review', url: 'https://pubmed.ncbi.nlm.nih.gov/31539257/' },
+      { label: 'Schimpl et al. 2013, Phytochemistry: Guarana: revisiting a highly caffeinated plant from the Amazon', url: 'https://pubmed.ncbi.nlm.nih.gov/23981847/' },
+      { label: 'Patrick et al. 2019: Safety of Guarana Seed as a Dietary Ingredient: A Review', url: 'https://pubmed.ncbi.nlm.nih.gov/31539257/' },
     ],
   },
   {
@@ -2081,10 +2081,10 @@ export const substances = [
       { name: 'MCT-Pulver', aka: ['an Trägerstoff gebundenes MCT'], note: 'bessere Dosierbarkeit/Löslichkeit als flüssiges Öl.' },
     ],
     fatSoluble: true,
-    cautionNote: 'In der Fachliteratur wird bei hohen Einzeldosen wiederholt auf gastrointestinale Beschwerden hingewiesen; eine durch EFSA/BfR verifizierte Gramm-Schwelle dafür ist nicht auffindbar — daher hier ohne erfundene Zahl.',
+    cautionNote: 'In der Fachliteratur wird bei hohen Einzeldosen wiederholt auf gastrointestinale Beschwerden hingewiesen; eine durch EFSA/BfR verifizierte Gramm-Schwelle dafür ist nicht auffindbar, daher hier ohne erfundene Zahl.',
     sources: [
-      { label: 'Jadhav & Annapure 2023 – Triglycerides of medium-chain fatty acids: a concise review', url: 'https://pubmed.ncbi.nlm.nih.gov/35761969/' },
-      { label: 'Watanabe & Tsujino 2022 – Applications of Medium-Chain Triglycerides in Foods', url: 'https://pubmed.ncbi.nlm.nih.gov/35719157/' },
+      { label: 'Jadhav & Annapure 2023: Triglycerides of medium-chain fatty acids: a concise review', url: 'https://pubmed.ncbi.nlm.nih.gov/35761969/' },
+      { label: 'Watanabe & Tsujino 2022: Applications of Medium-Chain Triglycerides in Foods', url: 'https://pubmed.ncbi.nlm.nih.gov/35719157/' },
     ],
   },
   {
@@ -2106,8 +2106,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Reviews beschreiben milde gastrointestinale Beschwerden als mögliche Begleiterscheinung, aber keine schwerwiegenden Sicherheitssignale (Gonzalez & Trexler 2020). Eine EFSA-geprüfte Höchstmengen-Zahl ist nicht auffindbar.',
     sources: [
-      { label: 'Gough et al. 2021 – A critical review of citrulline malate supplementation and exercise performance', url: 'https://pubmed.ncbi.nlm.nih.gov/34417881/' },
-      { label: 'Gonzalez & Trexler 2020 – Effects of Citrulline Supplementation on Exercise Performance in Humans: A Review', url: 'https://pubmed.ncbi.nlm.nih.gov/31977835/' },
+      { label: 'Gough et al. 2021: A critical review of citrulline malate supplementation and exercise performance', url: 'https://pubmed.ncbi.nlm.nih.gov/34417881/' },
+      { label: 'Gonzalez & Trexler 2020: Effects of Citrulline Supplementation on Exercise Performance in Humans: A Review', url: 'https://pubmed.ncbi.nlm.nih.gov/31977835/' },
     ],
   },
   {
@@ -2127,11 +2127,11 @@ export const substances = [
       { name: 'Trockenextrakt (standardisiert)', aka: ['PAC-standardisierter Extrakt'], note: 'in Nahrungsergänzungsmitteln verbreitet, aber außerhalb der offiziellen Monographie-Dosierung.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Die EMA-Monographie nennt als Kontraindikation die gleichzeitige Einnahme von Tacrolimus und Warfarin (Cranberry kann die Warfarin-Wirkung verstärken; bei einem nierentransplantierten Patienten wurden gesenkte Tacrolimus-Spiegel dokumentiert). Cranberry-Konzentrat hat einen hohen Oxalatgehalt — bei Nierensteinen in der Vorgeschichte besteht ein erhöhtes Risiko für erneute Steinbildung. EFSA hat 2025 einen Health Claim zur Bakterienabwehr in den Harnwegen mangels konsistenter Kausalitätsbelege abgelehnt (EFSA Journal 2025;23(4):e9319).',
+    cautionNote: 'Die EMA-Monographie nennt als Kontraindikation die gleichzeitige Einnahme von Tacrolimus und Warfarin (Cranberry kann die Warfarin-Wirkung verstärken; bei einem nierentransplantierten Patienten wurden gesenkte Tacrolimus-Spiegel dokumentiert). Cranberry-Konzentrat hat einen hohen Oxalatgehalt: bei Nierensteinen in der Vorgeschichte besteht ein erhöhtes Risiko für erneute Steinbildung. EFSA hat 2025 einen Health Claim zur Bakterienabwehr in den Harnwegen mangels konsistenter Kausalitätsbelege abgelehnt (EFSA Journal 2025;23(4):e9319).',
     sources: [
-      { label: 'EMA/HMPC – European Union herbal monograph on Vaccinium macrocarpon Aiton, fructus', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-vaccinium-macrocarpon-aiton-fructus_en.pdf' },
-      { label: 'EFSA Journal 2025 – abgelehnter Health Claim zu Cranberrypulver (DOI 10.2903/j.efsa.2025.9319)', url: 'https://doi.org/10.2903/j.efsa.2025.9319' },
-      { label: 'NCCIH – Cranberry', url: 'https://www.nccih.nih.gov/health/cranberry' },
+      { label: 'EMA/HMPC: European Union herbal monograph on Vaccinium macrocarpon Aiton, fructus', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-vaccinium-macrocarpon-aiton-fructus_en.pdf' },
+      { label: 'EFSA Journal 2025: abgelehnter Health Claim zu Cranberrypulver (DOI 10.2903/j.efsa.2025.9319)', url: 'https://doi.org/10.2903/j.efsa.2025.9319' },
+      { label: 'NCCIH: Cranberry', url: 'https://www.nccih.nih.gov/health/cranberry' },
     ],
   },
   {
@@ -2142,7 +2142,7 @@ export const substances = [
     unit: 'g',
     what: 'Einfachzucker, strukturell mit Glucose verwandt; wird kaum verstoffwechselt und weitgehend unverändert über den Urin ausgeschieden. Bindet an Typ-1-Fimbrien von E. coli und blockiert dadurch deren Anhaftung an die Blasenschleimhaut.',
     useCases: [
-      { topic: 'Vorbeugung wiederkehrender Harnwegsinfektionen', note: 'Systematisches Review 2026 (Int Urogynecol J): vergleichbare Wirksamkeit wie Antibiotika in spezialisierten Settings, jedoch kein Vorteil gegenüber Placebo in breiter hausärztlicher Population — uneinheitliche Evidenz.' },
+      { topic: 'Vorbeugung wiederkehrender Harnwegsinfektionen', note: 'Systematisches Review 2026 (Int Urogynecol J): vergleichbare Wirksamkeit wie Antibiotika in spezialisierten Settings, jedoch kein Vorteil gegenüber Placebo in breiter hausärztlicher Population: uneinheitliche Evidenz.' },
     ],
     forms: [
       { name: 'Pulver', bioavailability: 'renal ausgeschieden, keine relevante Verstoffwechslung', note: 'in Studien meist 1,5–2 g 1–3×/Tag, kein einheitliches Dosierschema etabliert.' },
@@ -2151,7 +2151,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Keine EMA-Monographie und keine EFSA-Bewertung für D-Mannose als Einzelsubstanz auffindbar. Langzeit-Sicherheitsdaten sind begrenzt; als Einfachzucker potenziell relevant für Personen, die ihre Zuckerzufuhr überwachen, auch wenn D-Mannose kaum in den Glukosestoffwechsel eingeht.',
     sources: [
-      { label: 'Int Urogynecol J 2026 – Systematic Review nicht-antibiotischer Therapien bei rezidivierenden HWI', url: 'https://pubmed.ncbi.nlm.nih.gov/42133003/' },
+      { label: 'Int Urogynecol J 2026: Systematic Review nicht-antibiotischer Therapien bei rezidivierenden HWI', url: 'https://pubmed.ncbi.nlm.nih.gov/42133003/' },
     ],
   },
   {
@@ -2172,7 +2172,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Laut EMA keine bekannten Wechselwirkungen mit anderen Arzneimitteln. Milde gastrointestinale Beschwerden wurden häufig (ca. 4 %) berichtet. Für Extrakte ist die Sicherheit in Schwangerschaft/Stillzeit nicht belegt; der Verzehr von Kürbiskernen/-öl in Lebensmittelmengen gilt dagegen laut EMA als unbedenklich.',
     sources: [
-      { label: 'EMA/HMPC – Community herbal monograph on Cucurbita pepo L., semen', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-cucurbita-pepo-l-semen_en.pdf' },
+      { label: 'EMA/HMPC: Community herbal monograph on Cucurbita pepo L., semen', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-cucurbita-pepo-l-semen_en.pdf' },
     ],
   },
   {
@@ -2181,7 +2181,7 @@ export const substances = [
     category: 'Pflanzenstoffe',
     synonyms: ['gse', 'grapefruitkernextrakt', 'grapefruit seed extract', 'citrus paradisi seed extract', 'grapefruitkern-extrakt'],
     unit: 'mg',
-    what: 'Extrakt aus Samen, Fruchtfleisch und weißer Schale der Grapefruit (Citrus paradisi), im Handel als "natürliches antimikrobielles Mittel" beworben. Es existiert keine EMA/HMPC-Monographie für diese Droge — sie ist in der EU nicht als anerkannte pflanzliche Arzneidroge registriert.',
+    what: 'Extrakt aus Samen, Fruchtfleisch und weißer Schale der Grapefruit (Citrus paradisi), im Handel als "natürliches antimikrobielles Mittel" beworben. Es existiert keine EMA/HMPC-Monographie für diese Droge: sie ist in der EU nicht als anerkannte pflanzliche Arzneidroge registriert.',
     useCases: [
       { topic: 'Als antimikrobiell beworbener Nahrungsergänzungsstoff', note: 'kein anerkanntes Anwendungsgebiet durch EMA oder EFSA dokumentiert; die beworbene antimikrobielle Aktivität ist wissenschaftlich uneinheitlich belegt, siehe cautionNote.' },
     ],
@@ -2190,10 +2190,10 @@ export const substances = [
       { name: 'Kapseln', note: 'ebenfalls ohne Monographie-Referenz.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Eine Laboranalyse (von Woedtke et al., Pharmazie 1999) untersuchte sechs Handelsprodukte: In allen fünf antimikrobiell wirksamen Extrakten wurde der synthetische Konservierungsstoff Benzethoniumchlorid nachgewiesen, bei drei zusätzlich Triclosan und Methylparaben — der einzige Extrakt ohne Konservierungsstoff zeigte keine Wirkung. Die vielfach behauptete antimikrobielle Wirkung beruht demnach offenbar auf synthetischen Zusätzen, nicht auf der Pflanzensubstanz selbst. Zusätzlich enthält Grapefruit Furanocumarine, die intestinales CYP3A4 hemmen und dadurch Blutspiegel zahlreicher darüber verstoffwechselter Medikamente erhöhen können (Miedziaszczyk et al. 2022) — z. B. Tacrolimus, mit erhöhtem Nephrotoxizitätsrisiko.',
+    cautionNote: 'Eine Laboranalyse (von Woedtke et al., Pharmazie 1999) untersuchte sechs Handelsprodukte: In allen fünf antimikrobiell wirksamen Extrakten wurde der synthetische Konservierungsstoff Benzethoniumchlorid nachgewiesen, bei drei zusätzlich Triclosan und Methylparaben: der einzige Extrakt ohne Konservierungsstoff zeigte keine Wirkung. Die vielfach behauptete antimikrobielle Wirkung beruht demnach offenbar auf synthetischen Zusätzen, nicht auf der Pflanzensubstanz selbst. Zusätzlich enthält Grapefruit Furanocumarine, die intestinales CYP3A4 hemmen und dadurch Blutspiegel zahlreicher darüber verstoffwechselter Medikamente erhöhen können (Miedziaszczyk et al. 2022), z. B. Tacrolimus, mit erhöhtem Nephrotoxizitätsrisiko.',
     sources: [
-      { label: 'von Woedtke et al., Pharmazie 1999 – Antimicrobial efficacy of grapefruit seed extract and its relation to preservative substances', url: 'https://pubmed.ncbi.nlm.nih.gov/10399191/' },
-      { label: 'Miedziaszczyk et al., Pharmaceutics 2022 – Controversial Interactions of Tacrolimus with Dietary Supplements, Herbs and Food', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9611668/' },
+      { label: 'von Woedtke et al., Pharmazie 1999: Antimicrobial efficacy of grapefruit seed extract and its relation to preservative substances', url: 'https://pubmed.ncbi.nlm.nih.gov/10399191/' },
+      { label: 'Miedziaszczyk et al., Pharmaceutics 2022: Controversial Interactions of Tacrolimus with Dietary Supplements, Herbs and Food', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9611668/' },
     ],
   },
   {
@@ -2212,8 +2212,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Zentrales Risiko ist die Argyrie: eine irreversible, bläulich-graue Verfärbung von Haut und Schleimhäuten durch Silbereinlagerung, für die laut Fachliteratur keine befriedigende Therapie bekannt ist. Ältere Literatur nennt kumulative Schwellenwerte von ca. 1–1,8 g Gesamt-Silberaufnahme; entscheidend ist die kumulative Dosis, nicht ein Zeitraum. Das BfR rät generell von Nanosilber in Lebensmitteln ab, solange keine ausreichende Datenlage für eine Risikobewertung vorliegt. Silber kann zudem die Aufnahme bestimmter Medikamente hemmen (u. a. Antibiotika, L-Thyroxin). In Deutschland rechtlich als Nahrungsergänzungsmittel frei verkäuflich, jedoch ohne zulässige krankheitsbezogene Werbeaussagen, da die Wirksamkeit nicht belegt ist.',
     sources: [
-      { label: 'BfR – Nanosilber in Lebensmitteln und Produkten des täglichen Bedarfs', url: 'https://www.bfr.bund.de/cm/343/bfr_raet_von_nanosilber_in_lebensmitteln_und_produkten_des_taeglichen_bedarfs_ab.pdf' },
-      { label: 'BARMER – Kolloidales Silber: Gesundes Silberwasser?', url: 'https://www.barmer.de/gesundheit-verstehen/medizin/medikamente/kolloidales-silber-1481650' },
+      { label: 'BfR: Nanosilber in Lebensmitteln und Produkten des täglichen Bedarfs', url: 'https://www.bfr.bund.de/cm/343/bfr_raet_von_nanosilber_in_lebensmitteln_und_produkten_des_taeglichen_bedarfs_ab.pdf' },
+      { label: 'BARMER: Kolloidales Silber: Gesundes Silberwasser?', url: 'https://www.barmer.de/gesundheit-verstehen/medizin/medikamente/kolloidales-silber-1481650' },
     ],
   },
   {
@@ -2222,20 +2222,20 @@ export const substances = [
     category: 'Pflanzenstoffe',
     synonyms: ['vitamin b17', 'amygdalin', 'laetrile', 'laetril', 'bittermandelglykosid', 'aprikosenkernextrakt', 'bitter apricot kernel extract', 'nitrilosid'],
     unit: 'mg',
-    what: 'Cyanogenes Glykosid, das u. a. in bitteren Aprikosenkernen und Bittermandeln vorkommt. Kein Vitamin — der Name "Vitamin B17" ist eine Marketingbezeichnung ohne biochemische Grundlage.',
+    what: 'Cyanogenes Glykosid, das u. a. in bitteren Aprikosenkernen und Bittermandeln vorkommt. Kein Vitamin: der Name "Vitamin B17" ist eine Marketingbezeichnung ohne biochemische Grundlage.',
     useCases: [
       { topic: 'Als angebliches Krebsheilmittel vermarktet', note: 'wissenschaftlich widerlegt: Deutsche Krebsgesellschaft verweist auf eine kontrollierte Studie mit 178 Patienten ohne Nutzen für Tumorstabilisierung; Vertrieb als Krebsmittel ist in der EU illegale Arzneimittelwerbung.' },
     ],
     forms: [
-      { name: 'Bittere Aprikosenkerne (roh)', bioavailability: 'hoch — Amygdalin wird im Darm/Gewebe zu Blausäure (HCN) gespalten', note: '1 g Amygdalin setzt ca. 59 mg Blausäure frei.' },
+      { name: 'Bittere Aprikosenkerne (roh)', bioavailability: 'hoch: Amygdalin wird im Darm/Gewebe zu Blausäure (HCN) gespalten', note: '1 g Amygdalin setzt ca. 59 mg Blausäure frei.' },
       { name: 'Kapseln/Extrakt (Laetrile)', note: 'in Deutschland als Fertigarzneimittel nicht im Verkehr.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Amygdalin gilt in Deutschland als "bedenkliches Arzneimittel" nach § 5 Arzneimittelgesetz — das BfArM hat diese Einstufung 2014 bekräftigt; danach darf Amygdalin nicht in Verkehr gebracht werden, auch nicht über private Weitergabe. LD50 bei Ratten 405 mg/kg, bei Mäusen 443 mg/kg (oral, reine Substanz). Für einen 60-kg-Erwachsenen gelten ca. 40 Aprikosenkerne innerhalb einer Stunde als potenziell tödlich; der Körper kann ca. 7 Kerne/Stunde noch metabolisch entgiften. Das BfArM dokumentiert seit 1977 22 Vergiftungsfälle weltweit, davon 4 mit Todesfolge. Vitamin C erhöht nachweislich die Toxizität von Amygdalin. Das BfR empfiehlt für rohe bittere Aprikosenkerne als Lebensmittel maximal 2 Kerne pro Tag für Erwachsene; Kinder sollten ganz darauf verzichten (Grenzwert: max. 20 mg Blausäure/kg Rohkerne). Kein Nachweis einer krebshemmenden Wirkung durch randomisiert-kontrollierte Studien.',
+    cautionNote: 'Amygdalin gilt in Deutschland als "bedenkliches Arzneimittel" nach § 5 Arzneimittelgesetz: das BfArM hat diese Einstufung 2014 bekräftigt; danach darf Amygdalin nicht in Verkehr gebracht werden, auch nicht über private Weitergabe. LD50 bei Ratten 405 mg/kg, bei Mäusen 443 mg/kg (oral, reine Substanz). Für einen 60-kg-Erwachsenen gelten ca. 40 Aprikosenkerne innerhalb einer Stunde als potenziell tödlich; der Körper kann ca. 7 Kerne/Stunde noch metabolisch entgiften. Das BfArM dokumentiert seit 1977 22 Vergiftungsfälle weltweit, davon 4 mit Todesfolge. Vitamin C erhöht nachweislich die Toxizität von Amygdalin. Das BfR empfiehlt für rohe bittere Aprikosenkerne als Lebensmittel maximal 2 Kerne pro Tag für Erwachsene; Kinder sollten ganz darauf verzichten (Grenzwert: max. 20 mg Blausäure/kg Rohkerne). Kein Nachweis einer krebshemmenden Wirkung durch randomisiert-kontrollierte Studien.',
     sources: [
-      { label: 'BfR – Zwei bittere Aprikosenkerne pro Tag sind für Erwachsene das Limit', url: 'https://www.bfr.bund.de/cm/343/zwei-bittere-aprikosenkerne-pro-tag-sind-fuer-erwachsene-das-limit-kinder-sollten-darauf-verzichten.pdf' },
-      { label: 'Deutsche Krebsgesellschaft – Vitamin B17 (Amygdalin) bei Krebs', url: 'https://www.krebsgesellschaft.de/media/positionen/alle-wissenschaftlichen-stellungnahmen/vitamin-b17-amygdalin-2' },
-      { label: 'Wikipedia (DE) – Amygdalin', url: 'https://de.wikipedia.org/wiki/Amygdalin' },
+      { label: 'BfR: Zwei bittere Aprikosenkerne pro Tag sind für Erwachsene das Limit', url: 'https://www.bfr.bund.de/cm/343/zwei-bittere-aprikosenkerne-pro-tag-sind-fuer-erwachsene-das-limit-kinder-sollten-darauf-verzichten.pdf' },
+      { label: 'Deutsche Krebsgesellschaft: Vitamin B17 (Amygdalin) bei Krebs', url: 'https://www.krebsgesellschaft.de/media/positionen/alle-wissenschaftlichen-stellungnahmen/vitamin-b17-amygdalin-2' },
+      { label: 'Wikipedia (DE): Amygdalin', url: 'https://de.wikipedia.org/wiki/Amygdalin' },
     ],
   },
   {
@@ -2253,10 +2253,10 @@ export const substances = [
       { name: 'Kapseln/Tabletten (frei verkäuflich in den USA)', bioavailability: 'oral bioverfügbar, wandelt sich in Sexualhormone um', note: 'in Deutschland/EU nicht als Nahrungsergänzungsmittel verkehrsfähig.' },
     ],
     fatSoluble: false,
-    cautionNote: 'In Deutschland ist DHEA nicht legal als Nahrungsergänzungsmittel verkehrsfähig. Die Gemeinsame Expertenkommission von BVL und Ländern hat am 10.02.2025 festgelegt: DHEA-haltige Erzeugnisse werden ab einer Tagesdosis von 10 mg als Arzneimittel eingestuft — und rät zusätzlich generell von isolierten Steroidhormonen in als Lebensmittel vermarkteten Produkten ab. Eine EU-Novel-Food-Zulassung existiert bislang nicht. Das BfR nennt bereits 25 mg/Tag als Schwelle, ab der messbare Hormonveränderungen auftreten können, insbesondere bei postmenopausalen Frauen. Offene Risiken: unklarer Einfluss auf das Wachstum hormonabhängiger Tumoren (Brust, Prostata), mögliche Akne. DHEA steht zudem auf der WADA-Dopingliste. In den USA ist DHEA dagegen frei verkäuflich — der zentrale regulatorische Unterschied zu Deutschland/EU.',
+    cautionNote: 'In Deutschland ist DHEA nicht legal als Nahrungsergänzungsmittel verkehrsfähig. Die Gemeinsame Expertenkommission von BVL und Ländern hat am 10.02.2025 festgelegt: DHEA-haltige Erzeugnisse werden ab einer Tagesdosis von 10 mg als Arzneimittel eingestuft, und rät zusätzlich generell von isolierten Steroidhormonen in als Lebensmittel vermarkteten Produkten ab. Eine EU-Novel-Food-Zulassung existiert bislang nicht. Das BfR nennt bereits 25 mg/Tag als Schwelle, ab der messbare Hormonveränderungen auftreten können, insbesondere bei postmenopausalen Frauen. Offene Risiken: unklarer Einfluss auf das Wachstum hormonabhängiger Tumoren (Brust, Prostata), mögliche Akne. DHEA steht zudem auf der WADA-Dopingliste. In den USA ist DHEA dagegen frei verkäuflich: der zentrale regulatorische Unterschied zu Deutschland/EU.',
     sources: [
-      { label: 'BVL – Einstufung von Dehydroepiandrosteron (Fachmeldung)', url: 'https://www.bvl.bund.de/SharedDocs/Fachmeldungen/01_lebensmittel/2025/2024_02_12_Einstufung_Dehydroepiandrosteron.html' },
-      { label: 'Verbraucherzentrale – Anti-Aging-Hormon DHEA', url: 'https://www.verbraucherzentrale.de/faq/antiaginghormon-dhea-33125' },
+      { label: 'BVL: Einstufung von Dehydroepiandrosteron (Fachmeldung)', url: 'https://www.bvl.bund.de/SharedDocs/Fachmeldungen/01_lebensmittel/2025/2024_02_12_Einstufung_Dehydroepiandrosteron.html' },
+      { label: 'Verbraucherzentrale: Anti-Aging-Hormon DHEA', url: 'https://www.verbraucherzentrale.de/faq/antiaginghormon-dhea-33125' },
     ],
   },
   {
@@ -2267,16 +2267,16 @@ export const substances = [
     unit: 'mg',
     what: 'Extrakt aus der Fruchtschale des Malabar-Tamarindenbaums (Garcinia gummi-gutta); Hauptwirkstoff ist Hydroxyzitronensäure (HCA), vermarktet zur Unterstützung bei Gewichtsreduktion.',
     useCases: [
-      { topic: 'Gewichtsmanagement/"Fettblocker" (Marketingaussage)', note: 'kein zugelassener Health Claim für HCA/Garcinia unter EU-Verordnung 1924/2006 — entsprechende Werbeaussagen sind nicht zulässig.' },
+      { topic: 'Gewichtsmanagement/"Fettblocker" (Marketingaussage)', note: 'kein zugelassener Health Claim für HCA/Garcinia unter EU-Verordnung 1924/2006: entsprechende Werbeaussagen sind nicht zulässig.' },
       { topic: 'Appetitzügelung (Marketingaussage)', note: 'Studienlage uneinheitlich; aktuelle EFSA-Bewertung stellt Sicherheitsbedenken in den Vordergrund, nicht Wirksamkeitsnachweise.' },
     ],
     forms: [
       { name: 'Kapseln/Tabletten mit standardisiertem HCA-Extrakt', aka: ['meist 50–60 % HCA'], bioavailability: 'oral resorbiert, Studienlage zur Bioverfügbarkeit uneinheitlich' },
     ],
     fatSoluble: false,
-    cautionNote: 'Ein EFSA/COT-Entwurfsgutachten (30.06.2026, öffentliche Konsultation bis 04.05.2026) kommt zu dem Schluss, dass sich keine sicheren Aufnahmemengen für (–)-HCA bzw. Garcinia-gummi-gutta-Zubereitungen festlegen lassen — wegen unzureichender Datenlage und identifizierter Sicherheitsbedenken: idiosynkratische, arzneimittelähnliche Leberschädigung sowie Hodentoxizität in Tierstudien. Die FDA warnte bereits 2009 vor HCA-haltigen Hydroxycut-Produkten wegen Fällen von Gelbsucht, erhöhten Leberwerten bis hin zu Lebertransplantation und tödlichem Leberversagen. Die französische Behörde ANSES hat Garcinia-gummi-gutta-Zubereitungen verboten und rät zusätzlich ab bei psychiatrischen, kardiometabolischen Erkrankungen, Pankreatitis oder Hepatitis in der Vorgeschichte sowie bei Kindern und Schwangeren/Stillenden.',
+    cautionNote: 'Ein EFSA/COT-Entwurfsgutachten (30.06.2026, öffentliche Konsultation bis 04.05.2026) kommt zu dem Schluss, dass sich keine sicheren Aufnahmemengen für (–)-HCA bzw. Garcinia-gummi-gutta-Zubereitungen festlegen lassen, wegen unzureichender Datenlage und identifizierter Sicherheitsbedenken: idiosynkratische, arzneimittelähnliche Leberschädigung sowie Hodentoxizität in Tierstudien. Die FDA warnte bereits 2009 vor HCA-haltigen Hydroxycut-Produkten wegen Fällen von Gelbsucht, erhöhten Leberwerten bis hin zu Lebertransplantation und tödlichem Leberversagen. Die französische Behörde ANSES hat Garcinia-gummi-gutta-Zubereitungen verboten und rät zusätzlich ab bei psychiatrischen, kardiometabolischen Erkrankungen, Pankreatitis oder Hepatitis in der Vorgeschichte sowie bei Kindern und Schwangeren/Stillenden.',
     sources: [
-      { label: 'EFSA/COT – Draft Scientific Opinion on the safety of hydroxycitric acid and plant preparations containing hydroxycitric acid (2026)', url: 'https://www.gov.uk/government/publications/31st-march-2026-committee-on-toxicity-meeting/draft-scientific-opinion-on-the-safety-of-hydroxycitric-acid-and-plant-preparations-containing-hydroxycitric-acid-for-public-consultation' },
+      { label: 'EFSA/COT: Draft Scientific Opinion on the safety of hydroxycitric acid and plant preparations containing hydroxycitric acid (2026)', url: 'https://www.gov.uk/government/publications/31st-march-2026-committee-on-toxicity-meeting/draft-scientific-opinion-on-the-safety-of-hydroxycitric-acid-and-plant-preparations-containing-hydroxycitric-acid-for-public-consultation' },
     ],
   },
   {
@@ -2285,7 +2285,7 @@ export const substances = [
     category: 'Stoffwechsel',
     synonyms: ['grüner kaffee extrakt', 'green coffee bean extract', 'gcbe', 'gca', 'chlorogensäure', 'chlorogenic acid', 'svetol', 'grüne kaffeebohnen-extrakt', 'cga'],
     unit: 'mg',
-    what: 'Extrakt aus ungerösteten Kaffeebohnen, standardisiert auf seinen Gehalt an Chlorogensäuren — Polyphenolen, die beim Rösten größtenteils abgebaut werden.',
+    what: 'Extrakt aus ungerösteten Kaffeebohnen, standardisiert auf seinen Gehalt an Chlorogensäuren: Polyphenolen, die beim Rösten größtenteils abgebaut werden.',
     useCases: [
       { topic: 'Gewichtsreduktion', note: 'EFSA hat 2011 einen Health Claim zu Gewichtsverlust/Körperfettreduktion mangels ausreichender Evidenz nicht bestätigt.' },
       { topic: 'Blutzucker-Homöostase', note: 'ebenfalls von der EFSA in derselben Stellungnahme geprüfter und nicht bestätigter Claim.' },
@@ -2295,7 +2295,7 @@ export const substances = [
       { name: 'Extrakt-Kapsel/Tablette', aka: ['meist standardisiert auf 45–50 % Chlorogensäure'], note: 'Herstellerübliche Dosierung 200–800 mg/Tag; kein etablierter Wirkdosisbereich.' },
     ],
     fatSoluble: false,
-    cautionNote: '2014 verhängte die US-Handelsaufsicht FTC eine Strafe von 3,5 Mio. USD gegen den Hersteller Applied Food Sciences: Die zur Bewerbung genutzte Studie (angeblich 10,5 % Körpergewichtsverlust in 22 Wochen) wurde als "so gravierend fehlerhaft, dass sich daraus keine verlässlichen Schlüsse ziehen lassen" eingestuft — der beauftragte Prüfarzt in Indien soll Gewichtsdaten, Studiendauer und Placebo-Zuordnung nachträglich verändert haben. Enthält je nach Extraktionsgrad natürliches Koffein.',
+    cautionNote: '2014 verhängte die US-Handelsaufsicht FTC eine Strafe von 3,5 Mio. USD gegen den Hersteller Applied Food Sciences: Die zur Bewerbung genutzte Studie (angeblich 10,5 % Körpergewichtsverlust in 22 Wochen) wurde als "so gravierend fehlerhaft, dass sich daraus keine verlässlichen Schlüsse ziehen lassen" eingestuft: der beauftragte Prüfarzt in Indien soll Gewichtsdaten, Studiendauer und Placebo-Zuordnung nachträglich verändert haben. Enthält je nach Extraktionsgrad natürliches Koffein.',
     sources: [
       { label: 'EFSA NDA Panel, Scientific Opinion, EFSA Journal 2011;9(4):2057', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2011.2057' },
       { label: 'FTC, Case 142-3054, Applied Food Sciences, Inc.', url: 'https://www.ftc.gov/legal-library/browse/cases-proceedings/142-3054-applied-food-sciences-inc' },
@@ -2316,9 +2316,9 @@ export const substances = [
       { name: 'Extrakt-/Reinsubstanz-Kapsel', aka: ['meist synthetisches Frambinon'], note: 'Herstellerübliche Dosierung 100–200 mg/Tag; keine etablierte Wirkdosis am Menschen.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Himbeerketon-Präparate wurden ab ca. 2012 intensiv als "Fettverbrenner" vermarktet, obwohl zu diesem Zeitpunkt keine kontrollierten Humanstudien zur Gewichtsreduktion vorlagen; ein entsprechender Health Claim wurde von der EFSA abgelehnt. Die in Supplements verwendeten Dosen liegen deutlich über dem, was über Früchte realistisch aufgenommen wird — Toxizitätsdaten dazu sind rar.',
+    cautionNote: 'Himbeerketon-Präparate wurden ab ca. 2012 intensiv als "Fettverbrenner" vermarktet, obwohl zu diesem Zeitpunkt keine kontrollierten Humanstudien zur Gewichtsreduktion vorlagen; ein entsprechender Health Claim wurde von der EFSA abgelehnt. Die in Supplements verwendeten Dosen liegen deutlich über dem, was über Früchte realistisch aufgenommen wird: Toxizitätsdaten dazu sind rar.',
     sources: [
-      { label: 'NutraIngredients – Weight loss raspberry ketone legal confusion (2015)', url: 'https://www.nutraingredients.com/Article/2015/03/27/Weight-loss-raspberry-ketone-legal-confusion/' },
+      { label: 'NutraIngredients: Weight loss raspberry ketone legal confusion (2015)', url: 'https://www.nutraingredients.com/Article/2015/03/27/Weight-loss-raspberry-ketone-legal-confusion/' },
       { label: 'EU-Register der Health Claims (Verordnung (EG) Nr. 1924/2006)', url: 'https://food.ec.europa.eu/food-safety/labelling-and-nutrition/nutrition-and-health-claims/eu-register-health-claims_en' },
     ],
   },
@@ -2340,8 +2340,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Propolis zählt zu den häufigsten Kontaktallergenen unter Naturprodukten: In dermatologischen Patch-Test-Kollektiven zeigen 1,2–6,6 % der getesteten Personen eine Sensibilisierung. Da Propolis Pflanzenharze und Pollenbestandteile enthält, sind Personen mit Pollenallergie sowie mit bekannter Allergie gegen Bienenstiche/Bienenprodukte besonders gefährdet (BfR-Stellungnahme Nr. 002/2009).',
     sources: [
-      { label: 'BfR, Stellungnahme Nr. 002/2009 – Einschätzung von Propolis und Gelée Royale', url: 'https://www.bfr.bund.de/stellungnahme/einschaetzung-von-propolis-und-gelee-royal/' },
-      { label: 'de Groot AC – Propolis: a review of properties, applications, chemical composition, contact allergy, and other adverse effects, Dermatitis 2013', url: 'https://pubmed.ncbi.nlm.nih.gov/24201459/' },
+      { label: 'BfR, Stellungnahme Nr. 002/2009: Einschätzung von Propolis und Gelée Royale', url: 'https://www.bfr.bund.de/stellungnahme/einschaetzung-von-propolis-und-gelee-royal/' },
+      { label: 'de Groot AC: Propolis: a review of properties, applications, chemical composition, contact allergy, and other adverse effects, Dermatitis 2013', url: 'https://pubmed.ncbi.nlm.nih.gov/24201459/' },
     ],
   },
   {
@@ -2362,9 +2362,9 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Gelée Royale kann bei entsprechender Veranlagung schwere, teils lebensbedrohliche allergische Reaktionen auslösen: Besonders gefährdet sind Personen mit Atopie/Asthma und mit bekannter Allergie gegen Bienenstiche oder andere Bienenprodukte. Die Verbraucherzentrale verweist auf 19 bei der australischen Gesundheitsbehörde gemeldete unerwünschte Ereignisse im Zusammenhang mit Gelée-Royale-Präparaten, darunter drei Todesfälle.',
     sources: [
-      { label: 'BfR, Stellungnahme Nr. 002/2009 – Einschätzung von Propolis und Gelée Royale', url: 'https://www.bfr.bund.de/stellungnahme/einschaetzung-von-propolis-und-gelee-royal/' },
-      { label: 'Verbraucherzentrale – Gelée Royale: königliches Anti-Aging?', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/gelee-royale-koenigliches-antiaging-21063' },
-      { label: 'Thien FC et al. – Asthma and anaphylaxis induced by royal jelly, Clin Exp Allergy 1996', url: 'https://pubmed.ncbi.nlm.nih.gov/8835130/' },
+      { label: 'BfR, Stellungnahme Nr. 002/2009: Einschätzung von Propolis und Gelée Royale', url: 'https://www.bfr.bund.de/stellungnahme/einschaetzung-von-propolis-und-gelee-royal/' },
+      { label: 'Verbraucherzentrale: Gelée Royale: königliches Anti-Aging?', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/gelee-royale-koenigliches-antiaging-21063' },
+      { label: 'Thien FC et al.: Asthma and anaphylaxis induced by royal jelly, Clin Exp Allergy 1996', url: 'https://pubmed.ncbi.nlm.nih.gov/8835130/' },
     ],
   },
   {
@@ -2373,7 +2373,7 @@ export const substances = [
     category: 'Fettsäuren',
     synonyms: ['leinöl', 'leinsamenöl', 'flachsöl', 'flaxseed oil', 'flax oil', 'linseed oil', 'linum usitatissimum oil', 'ala-öl'],
     unit: 'g',
-    what: 'Öl aus Leinsamen, Hauptbestandteil ist Alpha-Linolensäure (ALA) — eine pflanzliche Omega-3-Fettsäure. Im Unterschied zu Fischöl liefert Leinöl kein EPA/DHA direkt; der Körper wandelt ALA nur in begrenztem Umfang um.',
+    what: 'Öl aus Leinsamen, Hauptbestandteil ist Alpha-Linolensäure (ALA): eine pflanzliche Omega-3-Fettsäure. Im Unterschied zu Fischöl liefert Leinöl kein EPA/DHA direkt; der Körper wandelt ALA nur in begrenztem Umfang um.',
     useCases: [
       { topic: 'Gestationsdiabetes', note: 'NCCIH: begrenzte Evidenz, dass ALA-haltiges Leinöl Nüchternwerte und Insulinresistenz bei Gestationsdiabetes verbessern könnte.' },
       { topic: 'Typ-2-Diabetes', note: 'NCCIH: weitere Forschung nötig, ob Leinsamen-Lignan-Extrakt oder Leinöl die Blutzuckerkontrolle beeinflusst.' },
@@ -2386,8 +2386,8 @@ export const substances = [
     fatSoluble: true,
     cautionNote: 'NCCIH nennt theoretische Wechselwirkungen mit gerinnungshemmenden Medikamenten (Antikoagulantien/Thrombozytenaggregationshemmer). Sicherheitsdaten für Schwangerschaft/Stillzeit sind laut NCCIH begrenzt.',
     sources: [
-      { label: 'EFSA – Scientific Opinion on Dietary Reference Values for fats (2010)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461' },
-      { label: 'NCCIH – Flaxseed and Flaxseed Oil', url: 'https://www.nccih.nih.gov/health/flaxseed-and-flaxseed-oil' },
+      { label: 'EFSA: Scientific Opinion on Dietary Reference Values for fats (2010)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461' },
+      { label: 'NCCIH: Flaxseed and Flaxseed Oil', url: 'https://www.nccih.nih.gov/health/flaxseed-and-flaxseed-oil' },
     ],
   },
   {
@@ -2408,7 +2408,7 @@ export const substances = [
     fatSoluble: true,
     cautionNote: 'NCCIH stuft Nachtkerzenöl für die meisten Erwachsenen oral als wahrscheinlich sicher ein, häufigste Nebenwirkungen sind gastrointestinal (Bauchschmerzen, Übelkeit, Durchfall). Bei widersprüchlicher Studienlage zur Wirkung auf Wehen am Schwangerschaftsende rät NCCIH zur Rücksprache mit medizinischem Fachpersonal vor Einnahme neben anderen Medikamenten. Sicherheit bei Kindern ist nicht ausreichend belegt.',
     sources: [
-      { label: 'NCCIH – Evening Primrose Oil', url: 'https://www.nccih.nih.gov/health/evening-primrose-oil' },
+      { label: 'NCCIH: Evening Primrose Oil', url: 'https://www.nccih.nih.gov/health/evening-primrose-oil' },
     ],
   },
   {
@@ -2417,7 +2417,7 @@ export const substances = [
     category: 'Antioxidantien',
     synonyms: ['traubenkernextrakt', 'traubenkernöl-extrakt', 'grape seed extract', 'opc', 'oligomere proanthocyanidine', 'procyanidine', 'vitis vinifera seed extract'],
     unit: 'mg',
-    what: 'Extrakt aus Traubenkernen, reich an Proanthocyanidinen (OPC) — einer Gruppe von Polyphenolen mit antioxidativen Eigenschaften.',
+    what: 'Extrakt aus Traubenkernen, reich an Proanthocyanidinen (OPC): einer Gruppe von Polyphenolen mit antioxidativen Eigenschaften.',
     useCases: [
       { topic: 'Blutcholesterin (LDL, Triglyceride)', note: 'NCCIH zu einer Übersichtsarbeit 2020 (11 Studien, 536 Teilnehmende): positive Effekte auf LDL-Cholesterin und Triglyceride, jedoch nicht auf Gesamtcholesterin oder HDL.' },
       { topic: 'Blutdruck', note: 'NCCIH zu einer Übersichtsarbeit 2022 (19 Studien, 1.080 Teilnehmende): Reduktion des diastolischen Blutdruckwerts, kein Effekt auf den systolischen Wert.' },
@@ -2428,7 +2428,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'NCCIH stuft Traubenkernextrakt bei oraler/topischer Anwendung als allgemein gut verträglich ein und weist allgemein auf mögliche Wechselwirkungen mit Medikamenten hin, ohne eine konkrete Studie dazu zu benennen. Sicherheit in Schwangerschaft/Stillzeit ist laut NCCIH unklar.',
     sources: [
-      { label: 'NCCIH – Grape Seed Extract', url: 'https://www.nccih.nih.gov/health/grape-seed-extract' },
+      { label: 'NCCIH: Grape Seed Extract', url: 'https://www.nccih.nih.gov/health/grape-seed-extract' },
     ],
   },
   {
@@ -2446,11 +2446,11 @@ export const substances = [
       { name: 'Kapsel/Sachet (lyophilisierte Hefe)', bioavailability: 'wirkt lokal im Darm, keine systemische Resorption als Hefe', note: 'muss lebende Zellzahl (KBE) enthalten, um wirksam zu sein.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Dokumentierte, seltene, aber ernstzunehmende Fungämie-Fälle sind in der Literatur beschrieben (Enache-Angoulvant & Hennequin 2005: 92 analysierte Fälle invasiver Saccharomyces-Infektion, S.-boulardii-Anteil 51,3 %; Rannikko et al. 2021, Finnland: 46 Fungämie-Fälle über 10 Jahre, 43 % der Betroffenen hatten das Probiotikum erhalten vs. 5 % in der Kontrollgruppe, 28-Tage-Mortalität 37 %). Risikofaktoren sind liegende zentralvenöse Katheter und schwere Immunsuppression — Kontamination beim Öffnen der Kapseln kann auf Katheter übertragen werden.',
+    cautionNote: 'Dokumentierte, seltene, aber ernstzunehmende Fungämie-Fälle sind in der Literatur beschrieben (Enache-Angoulvant & Hennequin 2005: 92 analysierte Fälle invasiver Saccharomyces-Infektion, S.-boulardii-Anteil 51,3 %; Rannikko et al. 2021, Finnland: 46 Fungämie-Fälle über 10 Jahre, 43 % der Betroffenen hatten das Probiotikum erhalten vs. 5 % in der Kontrollgruppe, 28-Tage-Mortalität 37 %). Risikofaktoren sind liegende zentralvenöse Katheter und schwere Immunsuppression: Kontamination beim Öffnen der Kapseln kann auf Katheter übertragen werden.',
     sources: [
-      { label: 'Cochrane Database of Systematic Reviews – Guo et al. 2019, Probiotics for prevention of pediatric antibiotic-associated diarrhea', url: 'https://www.cochrane.org/evidence/CD004827_probiotics-prevention-antibiotic-associated-diarrhea-children' },
+      { label: 'Cochrane Database of Systematic Reviews: Guo et al. 2019, Probiotics for prevention of pediatric antibiotic-associated diarrhea', url: 'https://www.cochrane.org/evidence/CD004827_probiotics-prevention-antibiotic-associated-diarrhea-children' },
       { label: 'Enache-Angoulvant & Hennequin, Clin Infect Dis 2005', url: 'https://pubmed.ncbi.nlm.nih.gov/16267727/' },
-      { label: 'CDC Emerging Infectious Diseases – Rannikko et al. 2021, Fungemia Associated with Use of S. boulardii Probiotic Supplements', url: 'https://wwwnc.cdc.gov/eid/article/27/8/21-0018_article' },
+      { label: 'CDC Emerging Infectious Diseases: Rannikko et al. 2021, Fungemia Associated with Use of S. boulardii Probiotic Supplements', url: 'https://wwwnc.cdc.gov/eid/article/27/8/21-0018_article' },
     ],
   },
   {
@@ -2461,12 +2461,12 @@ export const substances = [
     unit: 'g',
     what: 'Sammelbegriff für die drei essenziellen Aminosäuren Leucin, Isoleucin und Valin mit verzweigter Seitenkette; werden anders als die meisten Aminosäuren primär im Muskel statt in der Leber verstoffwechselt.',
     useCases: [
-      { topic: 'Muskelproteinsynthese/Muskelmasse', note: 'Leucin gilt als zentraler Trigger der Muskelproteinsynthese. EFSA hat 2010 den Zusammenhang mit Erhalt/Wachstum der Muskelmasse geprüft und keine hinreichend belegte Kausalität festgestellt — kein zugelassener Health Claim (EFSA Journal 2010;8(10):1790).' },
+      { topic: 'Muskelproteinsynthese/Muskelmasse', note: 'Leucin gilt als zentraler Trigger der Muskelproteinsynthese. EFSA hat 2010 den Zusammenhang mit Erhalt/Wachstum der Muskelmasse geprüft und keine hinreichend belegte Kausalität festgestellt: kein zugelassener Health Claim (EFSA Journal 2010;8(10):1790).' },
       { topic: 'Erholung nach Belastung', note: 'wird im Ausdauer-/Kraftsport zur Reduktion von Muskelkater eingesetzt; von EFSA in derselben Opinion geprüft, ebenfalls nicht bestätigt.' },
       { topic: 'Muskelkraft in großer Höhe', note: 'in einzelnen Studien zu Höhentraining untersucht; EFSA sah auch hier keinen belegten Zusammenhang.' },
     ],
     forms: [
-      { name: 'Freie Aminosäuren (Pulver/Kapseln)', aka: ['L-Leucin, L-Isoleucin, L-Valin'], bioavailability: 'hohe orale Bioverfügbarkeit über neutrale Aminosäuretransporter im Dünndarm', note: 'übliches Verhältnis 2:1:1 (Leucin:Isoleucin:Valin) ist Markt-/Forschungskonvention, keine behördliche Vorgabe — Produkte reichen von 2:1:1 bis 8:1:1 oder 10:1:1.' },
+      { name: 'Freie Aminosäuren (Pulver/Kapseln)', aka: ['L-Leucin, L-Isoleucin, L-Valin'], bioavailability: 'hohe orale Bioverfügbarkeit über neutrale Aminosäuretransporter im Dünndarm', note: 'übliches Verhältnis 2:1:1 (Leucin:Isoleucin:Valin) ist Markt-/Forschungskonvention, keine behördliche Vorgabe: Produkte reichen von 2:1:1 bis 8:1:1 oder 10:1:1.' },
     ],
     fatSoluble: false,
     cautionNote: 'Kontraindiziert bei Ahornsirupkrankheit (angeborener Defekt im BCAA-Abbau). Bei ALS wird hochdosierte BCAA-Gabe in der Literatur kontrovers diskutiert (eine ältere Studie zeigte erhöhte Mortalität unter Hochdosis). Bei fortgeschrittener Leber-/Nierenerkrankung nur ärztlich begleitet.',
@@ -2482,15 +2482,15 @@ export const substances = [
     unit: 'g',
     what: 'Bedingt essenzielle Aminosäure, wichtigster Energieträger für Darmzellen (Enterozyten) und Immunzellen; wird bei hoher Stoffwechsel-Belastung (z. B. Krankheit, Verbrennungen) im Körper knapp.',
     useCases: [
-      { topic: 'Darmschleimhaut/intestinale Permeabilität', note: 'EFSA hat 2009 den Zusammenhang zwischen Glutamin und Erhalt der Darmschleimhaut-Integrität geprüft und keine hinreichend belegte Kausalität festgestellt — kein zugelassener Health Claim (EFSA Journal 2009;7(9):1235).' },
+      { topic: 'Darmschleimhaut/intestinale Permeabilität', note: 'EFSA hat 2009 den Zusammenhang zwischen Glutamin und Erhalt der Darmschleimhaut-Integrität geprüft und keine hinreichend belegte Kausalität festgestellt: kein zugelassener Health Claim (EFSA Journal 2009;7(9):1235).' },
       { topic: 'Immunfunktion', note: 'dieselbe EFSA-Opinion prüfte auch normale Immunfunktion; ebenfalls nicht bestätigt.' },
       { topic: 'Regeneration im Sport', note: 'wird zur Erholung nach intensivem Training eingesetzt; Humanstudien außerhalb klinischer Kontexte (Verbrennungen, Intensivmedizin) sind begrenzt und uneinheitlich.' },
     ],
     forms: [
-      { name: 'Freies L-Glutamin (Pulver/Kapseln)', bioavailability: 'gut wasserlöslich; ein erheblicher Teil wird bereits in der Darmmukosa verstoffwechselt, bevor er in den Blutkreislauf gelangt', note: 'in der Klinik (z. B. Verbrennungsmedizin) werden andere, deutlich höhere Dosierungen verwendet als im Supplement-Kontext — nicht vergleichbar.' },
+      { name: 'Freies L-Glutamin (Pulver/Kapseln)', bioavailability: 'gut wasserlöslich; ein erheblicher Teil wird bereits in der Darmmukosa verstoffwechselt, bevor er in den Blutkreislauf gelangt', note: 'in der Klinik (z. B. Verbrennungsmedizin) werden andere, deutlich höhere Dosierungen verwendet als im Supplement-Kontext: nicht vergleichbar.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Kein EFSA/NIH-Primärbeleg für einen konkreten Grenzwert auffindbar. In Sekundärquellen wird Vorsicht bei Leber-/Niereninsuffizienz genannt, allerdings ohne belastbare Primärquelle mit Zahlenwert — deshalb hier nur als Hinweis, nicht als geprüfter Fakt vermerkt.',
+    cautionNote: 'Kein EFSA/NIH-Primärbeleg für einen konkreten Grenzwert auffindbar. In Sekundärquellen wird Vorsicht bei Leber-/Niereninsuffizienz genannt, allerdings ohne belastbare Primärquelle mit Zahlenwert, deshalb hier nur als Hinweis, nicht als geprüfter Fakt vermerkt.',
     sources: [
       { label: 'EFSA Journal 2009;7(9):1235', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2009.1235' },
     ],
@@ -2512,7 +2512,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Kontraindiziert bei bekannter Muschel-/Schalentierallergie (Kreuzreaktionsrisiko). Kein EFSA-Referenzwert vorhanden. EU-Novel-Food-Status des Extrakts war über die verfügbaren Quellen nicht abschließend zu verifizieren.',
     sources: [
-      { label: 'NCCIH – Rheumatoid Arthritis In Depth', url: 'https://www.nccih.nih.gov/health/rheumatoid-arthritis-in-depth' },
+      { label: 'NCCIH: Rheumatoid Arthritis In Depth', url: 'https://www.nccih.nih.gov/health/rheumatoid-arthritis-in-depth' },
     ],
   },
   {
@@ -2523,14 +2523,14 @@ export const substances = [
     unit: 'mg',
     what: 'Phospholipid und natürlicher Baustein von Zellmembranen, besonders konzentriert in Nervenzellmembranen des Gehirns.',
     useCases: [
-      { topic: 'Gedächtnis/kognitive Funktion im Alter', note: 'EFSA hat 2010 den Zusammenhang geprüft und keine hinreichend belegte Ursache-Wirkungs-Beziehung festgestellt — u. a. weil aus Rind bzw. Soja gewonnenes Phosphatidylserin als chemisch unterschiedliche Substanzen bewertet wurden. Kein zugelassener Health Claim, keine damit verbundene offizielle Tagesdosis (EFSA Journal 2010;8(10):1749).' },
+      { topic: 'Gedächtnis/kognitive Funktion im Alter', note: 'EFSA hat 2010 den Zusammenhang geprüft und keine hinreichend belegte Ursache-Wirkungs-Beziehung festgestellt: u. a. weil aus Rind bzw. Soja gewonnenes Phosphatidylserin als chemisch unterschiedliche Substanzen bewertet wurden. Kein zugelassener Health Claim, keine damit verbundene offizielle Tagesdosis (EFSA Journal 2010;8(10):1749).' },
       { topic: 'Stressreaktion', note: 'in derselben EFSA-Opinion mitgeprüft, ebenfalls nicht bestätigt.' },
     ],
     forms: [
       { name: 'Soja-basiertes Phosphatidylserin', aka: ['Soy-derived PS'], bioavailability: 'orale Resorption über intestinale Phospholipid-Verdauung; in Studien meist 100–300 mg/Tag auf mehrere Einnahmen verteilt', note: 'heute Marktstandard, da Rinderhirn-Extrakt wegen BSE-Risiko kaum mehr verwendet wird.' },
     ],
     fatSoluble: true,
-    cautionNote: 'Keine EFSA-anerkannte Wechselwirkung dokumentiert. In Sekundärquellen wird eine theoretische Wechselwirkung mit gerinnungshemmenden Medikamenten diskutiert, allerdings ohne bezifferte Primärquelle — deshalb hier nur als Hinweis, nicht als geprüfter Fakt vermerkt. Die verbreitete Angabe "300 mg/Tag" stammt aus einzelnen Studiendesigns, nicht aus einer behördlichen Zulassung.',
+    cautionNote: 'Keine EFSA-anerkannte Wechselwirkung dokumentiert. In Sekundärquellen wird eine theoretische Wechselwirkung mit gerinnungshemmenden Medikamenten diskutiert, allerdings ohne bezifferte Primärquelle, deshalb hier nur als Hinweis, nicht als geprüfter Fakt vermerkt. Die verbreitete Angabe "300 mg/Tag" stammt aus einzelnen Studiendesigns, nicht aus einer behördlichen Zulassung.',
     sources: [
       { label: 'EFSA Journal 2010;8(10):1749', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1749' },
     ],
@@ -2554,8 +2554,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Nicht bei Kindern unter 12 Jahren (Well-established Use) bzw. keine ausreichenden Daten für unter 12-Jährige (Traditional Use). Sicherheit in Schwangerschaft/Stillzeit nicht belegt. Kann die Fahrtüchtigkeit beeinträchtigen. Laut EMA-Monographie sind keine Wechselwirkungen mit anderen Arzneimitteln bekannt. Bei Dosen um 20 g wurden Symptome wie Müdigkeit, Bauchkrämpfe und Engegefühl in der Brust beobachtet.',
     sources: [
-      { label: 'EMA/HMPC – Final European Union herbal monograph on Valeriana officinalis L., radix', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-valeriana-officinalis-l-radix_en.pdf' },
-      { label: 'NCCIH – Valerian', url: 'https://www.nccih.nih.gov/health/valerian' },
+      { label: 'EMA/HMPC: Final European Union herbal monograph on Valeriana officinalis L., radix', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-valeriana-officinalis-l-radix_en.pdf' },
+      { label: 'NCCIH: Valerian', url: 'https://www.nccih.nih.gov/health/valerian' },
     ],
   },
   {
@@ -2564,10 +2564,10 @@ export const substances = [
     category: 'Nervensystem',
     synonyms: ['johanniskraut', 'st johns wort', "st. john's wort", 'hypericum perforatum', 'hyperici herba', 'hypericum', 'echtes johanniskraut'],
     unit: 'mg',
-    what: 'Heilpflanze, deren Kraut (Hyperici herba) in der EU als zulassungspflichtiges Arzneimittel geführt wird — je nach Hyperforin-/Hypericin-Dosis entweder als vollwertiges Arzneimittel (u. a. bei leichten bis mittelschweren depressiven Episoden) oder als registriertes traditionelles pflanzliches Arzneimittel. Eine legale Einstufung als Nahrungsergänzungsmittel existiert in Deutschland für wirksame Dosen nicht.',
+    what: 'Heilpflanze, deren Kraut (Hyperici herba) in der EU als zulassungspflichtiges Arzneimittel geführt wird: je nach Hyperforin-/Hypericin-Dosis entweder als vollwertiges Arzneimittel (u. a. bei leichten bis mittelschweren depressiven Episoden) oder als registriertes traditionelles pflanzliches Arzneimittel. Eine legale Einstufung als Nahrungsergänzungsmittel existiert in Deutschland für wirksame Dosen nicht.',
     useCases: [
       { topic: 'Psychische Verfassung', note: 'Arzneimittel zur Behandlung leichter bis mittelschwerer depressiver Episoden bzw. zur Kurzzeitbehandlung von Symptomen bei leichten depressiven Störungen.' },
-      { topic: 'Vorübergehende geistige Erschöpfung', note: 'Traditionelles Arzneimittel zur Linderung vorübergehender geistiger Erschöpfung — ausschließlich auf Basis langjähriger Anwendung.' },
+      { topic: 'Vorübergehende geistige Erschöpfung', note: 'Traditionelles Arzneimittel zur Linderung vorübergehender geistiger Erschöpfung: ausschließlich auf Basis langjähriger Anwendung.' },
       { topic: 'Haut/leichte Wunden', note: 'traditionell zur unterstützenden Behandlung kleinerer Hautentzündungen und zur Wundheilung, äußerliche Anwendung.' },
     ],
     forms: [
@@ -2575,11 +2575,11 @@ export const substances = [
       { name: 'Traditionelle Zubereitungen (niedriger dosiert)', note: 'z. B. Trockenextrakt 60–180 mg 2–3×/Tag; regulatorisch entscheidend ist nicht die mg-Zahl allein, sondern der resultierende Hyperforin-Gehalt (siehe cautionNote).' },
     ],
     fatSoluble: false,
-    cautionNote: 'Johanniskraut-Zubereitungen sind in Deutschland und der EU als Arzneimittel reguliert, nicht als Nahrungsergänzungsmittel — unabhängig davon, ob Well-established Use oder Traditional Use vorliegt. Nach deutscher Arzneimittelverschreibungsverordnung ist Johanniskraut verschreibungspflichtig speziell zur Behandlung mittelschwerer Depressionen, bei anderer Indikation apothekenpflichtig, aber weiterhin Arzneimittel. Die entscheidende pharmakologische Schwelle liegt beim Hyperforin-Gehalt: Bei einer Tagesdosis Hyperforin ≤ 1 mg und Anwendungsdauer ≤ 2 Wochen werden laut EMA/HMPC-Monographie keine klinisch relevanten Interaktionen berichtet; bei einer Tagesdosis über 1 mg induzieren Johanniskraut-Zubereitungen nachweislich CYP3A4, CYP2B6, CYP2C9, CYP2C19 und P-Glykoprotein. Die gleichzeitige Einnahme mit Cumarin-Antikoagulanzien, Ciclosporin, Tacrolimus, Sirolimus, Everolimus, Proteaseinhibitoren und bestimmten Zytostatika (u. a. Irinotecan, Imatinib) ist laut Monographie kontraindiziert. Explizit benannt: Die Reduktion der Plasmakonzentration hormoneller Kontrazeptiva kann zu vermehrten Zwischenblutungen und verminderter Verhütungssicherheit führen. In Kombination mit Serotonin-Wiederaufnahmehemmern wurde in sehr seltenen Fällen ein Serotonin-Syndrom beobachtet. Während der Anwendung soll intensive UV-Exposition vermieden werden (Photosensibilisierung).',
+    cautionNote: 'Johanniskraut-Zubereitungen sind in Deutschland und der EU als Arzneimittel reguliert, nicht als Nahrungsergänzungsmittel, unabhängig davon, ob Well-established Use oder Traditional Use vorliegt. Nach deutscher Arzneimittelverschreibungsverordnung ist Johanniskraut verschreibungspflichtig speziell zur Behandlung mittelschwerer Depressionen, bei anderer Indikation apothekenpflichtig, aber weiterhin Arzneimittel. Die entscheidende pharmakologische Schwelle liegt beim Hyperforin-Gehalt: Bei einer Tagesdosis Hyperforin ≤ 1 mg und Anwendungsdauer ≤ 2 Wochen werden laut EMA/HMPC-Monographie keine klinisch relevanten Interaktionen berichtet; bei einer Tagesdosis über 1 mg induzieren Johanniskraut-Zubereitungen nachweislich CYP3A4, CYP2B6, CYP2C9, CYP2C19 und P-Glykoprotein. Die gleichzeitige Einnahme mit Cumarin-Antikoagulanzien, Ciclosporin, Tacrolimus, Sirolimus, Everolimus, Proteaseinhibitoren und bestimmten Zytostatika (u. a. Irinotecan, Imatinib) ist laut Monographie kontraindiziert. Explizit benannt: Die Reduktion der Plasmakonzentration hormoneller Kontrazeptiva kann zu vermehrten Zwischenblutungen und verminderter Verhütungssicherheit führen. In Kombination mit Serotonin-Wiederaufnahmehemmern wurde in sehr seltenen Fällen ein Serotonin-Syndrom beobachtet. Während der Anwendung soll intensive UV-Exposition vermieden werden (Photosensibilisierung).',
     sources: [
-      { label: 'EMA/HMPC – Final European Union herbal monograph on Hypericum perforatum L., herba, Revision 1', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-hypericum-perforatum-l-herba-revision-1_en.pdf' },
-      { label: 'Gesetze im Internet – AMVV Anlage 1 (Verschreibungspflicht Johanniskraut bei mittelschwerer Depression)', url: 'https://www.gesetze-im-internet.de/amvv/anlage_1.html' },
-      { label: "NCCIH – St. John's Wort and Depression", url: 'https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth' },
+      { label: 'EMA/HMPC: Final European Union herbal monograph on Hypericum perforatum L., herba, Revision 1', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-hypericum-perforatum-l-herba-revision-1_en.pdf' },
+      { label: 'Gesetze im Internet: AMVV Anlage 1 (Verschreibungspflicht Johanniskraut bei mittelschwerer Depression)', url: 'https://www.gesetze-im-internet.de/amvv/anlage_1.html' },
+      { label: "NCCIH: St. John's Wort and Depression", url: 'https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth' },
     ],
   },
   {
@@ -2600,7 +2600,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Anwendung bei Kindern unter 12 Jahren mangels Daten nicht empfohlen. Sicherheit in Schwangerschaft/Stillzeit nicht belegt. Bei Verschlechterung der Symptome oder wenn sie länger als 2 Wochen anhalten, soll ärztlicher Rat eingeholt werden. Laut EMA-Monographie sind keine Wechselwirkungen mit anderen Arzneimitteln bekannt.',
     sources: [
-      { label: 'EMA/HMPC – Community herbal monograph on Passiflora incarnata L., herba', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-passiflora-incarnata-l-herba_en.pdf' },
+      { label: 'EMA/HMPC: Community herbal monograph on Passiflora incarnata L., herba', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-community-herbal-monograph-passiflora-incarnata-l-herba_en.pdf' },
     ],
   },
   {
@@ -2619,10 +2619,10 @@ export const substances = [
       { name: 'Presssaft/Trockenpresssaft, äußerlich', note: '10–20 g/100 g Presssaft als Salbe, 2–3×/Tag auf betroffene Stelle; max. 1 Woche.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Kontraindiziert bei Überempfindlichkeit gegen Korbblütler (Asteraceae/Compositae). Nicht empfohlen bei fortschreitenden Systemerkrankungen, Autoimmunerkrankungen, Immundefizienz, Immunsuppression und Erkrankungen des weißen Blutbilds. Risiko schwerer Überempfindlichkeitsreaktionen bei atopischen Personen. Laut EMA-Monographie keine Wechselwirkungen mit anderen Arzneimitteln bekannt; NCCIH weist ergänzend auf theoretische, nicht abschließend geklärte Wechselwirkungsbedenken bei Immunsuppressiva hin. Bezieht sich ausschließlich auf Echinacea purpurea, herba recens (Frischpflanzenpresssaft) — für Echinacea angustifolia (Wurzel) liegt keine vergleichbare EMA-Monographie mit Dosierungsangaben vor.',
+    cautionNote: 'Kontraindiziert bei Überempfindlichkeit gegen Korbblütler (Asteraceae/Compositae). Nicht empfohlen bei fortschreitenden Systemerkrankungen, Autoimmunerkrankungen, Immundefizienz, Immunsuppression und Erkrankungen des weißen Blutbilds. Risiko schwerer Überempfindlichkeitsreaktionen bei atopischen Personen. Laut EMA-Monographie keine Wechselwirkungen mit anderen Arzneimitteln bekannt; NCCIH weist ergänzend auf theoretische, nicht abschließend geklärte Wechselwirkungsbedenken bei Immunsuppressiva hin. Bezieht sich ausschließlich auf Echinacea purpurea, herba recens (Frischpflanzenpresssaft): für Echinacea angustifolia (Wurzel) liegt keine vergleichbare EMA-Monographie mit Dosierungsangaben vor.',
     sources: [
-      { label: 'EMA/HMPC – Final European Union herbal monograph on Echinacea purpurea (L.) Moench, herba recens', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-echinacea-purpurea-l-moench-herba-recens_en.pdf' },
-      { label: 'NCCIH – Echinacea', url: 'https://www.nccih.nih.gov/health/echinacea' },
+      { label: 'EMA/HMPC: Final European Union herbal monograph on Echinacea purpurea (L.) Moench, herba recens', url: 'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-echinacea-purpurea-l-moench-herba-recens_en.pdf' },
+      { label: 'NCCIH: Echinacea', url: 'https://www.nccih.nih.gov/health/echinacea' },
     ],
   },
   {
@@ -2634,20 +2634,20 @@ export const substances = [
     what: 'Baumpilz mit glänzender, lackartiger Oberfläche, in Ostasien traditionell genutzt; verkauft als Fruchtkörper- oder Myzelpulver/-extrakt.',
     useCases: [
       { topic: 'Immunmodulation', note: 'kleine klinische Studien und Tiermodelle zeigen Effekte auf Immunzellen; belastbare Humandaten zu klinischen Endpunkten fehlen.' },
-      { topic: 'Symptome der unteren Harnwege beim Mann', note: 'kleine Humanstudien berichten Verbesserungen — Evidenz gilt als begrenzt.' },
+      { topic: 'Symptome der unteren Harnwege beim Mann', note: 'kleine Humanstudien berichten Verbesserungen: Evidenz gilt als begrenzt.' },
       { topic: 'Blutzucker/Cholesterin bei Typ-2-Diabetes', note: 'keine Unterstützung für einen Effekt auf kardiovaskuläre Risikofaktoren in kontrollierten Studien gefunden.' },
-      { topic: 'Antitumorale/chemoprotektive Effekte', note: 'ausschließlich Zellkultur- und Tiermodelle — nicht auf den Menschen übertragen.' },
+      { topic: 'Antitumorale/chemoprotektive Effekte', note: 'ausschließlich Zellkultur- und Tiermodelle: nicht auf den Menschen übertragen.' },
     ],
     forms: [
       { name: 'Fruchtkörper-Extrakt/-Pulver', note: 'gilt EU-weit als nicht neuartig (Verzehrsgeschichte vor 1997 belegt).' },
-      { name: 'Myzel-Pulver/-Extrakt', note: 'laut AESAN-Konsultationsdokument (2019) als Novel Food eingestuft — keine Verzehrsgeschichte vor 15.5.1997 nachweisbar und keine belegte Äquivalenz zum Fruchtkörper.' },
+      { name: 'Myzel-Pulver/-Extrakt', note: 'laut AESAN-Konsultationsdokument (2019) als Novel Food eingestuft: keine Verzehrsgeschichte vor 15.5.1997 nachweisbar und keine belegte Äquivalenz zum Fruchtkörper.' },
     ],
     fatSoluble: false,
     cautionNote: 'Fallberichte akuter Leberschädigung sind dokumentiert, u. a. ein 2023 publizierter Fall mit starkem ALT/AST-Anstieg nach mehrtägiger Einnahme in Kombination mit Alkohol (vermuteter Mechanismus: CYP2E1-Hemmung verlangsamt Ethanolabbau). Weitere berichtete Effekte: Übelkeit, Schlaflosigkeit, Mundtrockenheit, erhöhtes Blutungsrisiko in Kombination mit Antikoagulanzien/Thrombozytenaggregationshemmern, mögliche Verstärkung von Immunsuppressiva-Wirkung. Reishi-Sporenpulver kann den Tumormarker CA72-4 erhöhen (labordiagnostisch relevant, kein Krankheitszeichen).',
     sources: [
-      { label: 'MSKCC About Herbs – Reishi Mushroom', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/reishi-mushroom' },
-      { label: 'EU Novel Food Consultation Status (AESAN, 2019) – Ganoderma lucidum Myzelpulver', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_ganoderma-lucidum_aesan.pdf' },
-      { label: 'PMC – Case Report akute Leberschädigung (Reishi + Alkohol)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10599861/' },
+      { label: 'MSKCC About Herbs: Reishi Mushroom', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/reishi-mushroom' },
+      { label: 'EU Novel Food Consultation Status (AESAN, 2019): Ganoderma lucidum Myzelpulver', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_ganoderma-lucidum_aesan.pdf' },
+      { label: 'PMC: Case Report akute Leberschädigung (Reishi + Alkohol)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10599861/' },
     ],
   },
   {
@@ -2659,18 +2659,18 @@ export const substances = [
     what: 'Parasitischer Baumpilz, wächst v. a. auf Birken in kalten Klimazonen; traditionell als Tee/Sud genutzt, heute auch als Pulver/Extrakt.',
     useCases: [
       { topic: 'Immunmodulation', note: 'nur Zellkultur-/Tiermodelle; Sicherheit und Wirksamkeit beim Menschen sind bislang nicht in klinischen Studien geprüft.' },
-      { topic: 'Antioxidative Wirkung', note: 'Laborstudien (Zellkultur) zeigen radikalfangende Effekte — keine Humanstudien.' },
+      { topic: 'Antioxidative Wirkung', note: 'Laborstudien (Zellkultur) zeigen radikalfangende Effekte: keine Humanstudien.' },
       { topic: 'Entzündungshemmung/Hepatoprotektion', note: 'ausschließlich präklinisch (Tiermodelle).' },
     ],
     forms: [
       { name: 'Getrocknetes Pulver/Sud (traditionell)', note: 'traditionelle Teezubereitung mit langer Verzehrsgeschichte in Nordeuropa/Russland.' },
-      { name: 'Konzentrierter Extrakt (Wasser/Alkohol)', note: 'höherer Wirkstoff- und vermutlich auch Oxalatgehalt als traditioneller Tee — genau hierzu liegen die Vergiftungsfälle vor.' },
+      { name: 'Konzentrierter Extrakt (Wasser/Alkohol)', note: 'höherer Wirkstoff- und vermutlich auch Oxalatgehalt als traditioneller Tee: genau hierzu liegen die Vergiftungsfälle vor.' },
     ],
     fatSoluble: false,
     cautionNote: 'Mehrere publizierte Fälle akuter Oxalat-Nephropathie nach Chaga-Konsum sind dokumentiert, u. a. ein 2022 publizierter Fall (10–15 g Pulver/Tag über 3 Monate plus 500 mg Vitamin C täglich) mit akutem Nierenversagen und Calciumoxalat-Kristallen in der Nierenbiopsie. Zusätzlich erhöhtes Blutungsrisiko mit Antikoagulanzien/Thrombozytenaggregationshemmern und additive blutzuckersenkende Effekte mit Antidiabetika. Der EU-Novel-Food-Status je Extraktform war über die verfügbaren Quellen nicht abschließend zu verifizieren.',
     sources: [
-      { label: 'MSKCC About Herbs – Chaga Mushroom', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/chaga-mushroom' },
-      { label: 'PMC – Case Report Chaga-induzierte Oxalat-Nephropathie (2022)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8913114/' },
+      { label: 'MSKCC About Herbs: Chaga Mushroom', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/chaga-mushroom' },
+      { label: 'PMC: Case Report Chaga-induzierte Oxalat-Nephropathie (2022)', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8913114/' },
     ],
   },
   {
@@ -2682,7 +2682,7 @@ export const substances = [
     what: 'Sammelbegriff für zwei unterschiedliche Pilzarten: Cordyceps sinensis (wildwachsend, parasitiert Schmetterlingsraupen, selten/geschützt) und Cordyceps militaris (kultivierbar auf Getreidesubstrat, deutlich häufiger die tatsächliche Quelle kommerzieller Präparate).',
     useCases: [
       { topic: 'Nierenfunktion nach Transplantation', note: 'begrenzte klinische Evidenz für unterstützende Effekte.' },
-      { topic: 'Sportliche Leistungsfähigkeit/Ausdauer', note: 'uneinheitliche Ergebnisse in Humanstudien an Gesunden — kein konsistenter Nachweis.' },
+      { topic: 'Sportliche Leistungsfähigkeit/Ausdauer', note: 'uneinheitliche Ergebnisse in Humanstudien an Gesunden: kein konsistenter Nachweis.' },
       { topic: 'Adjuvante Krebsbehandlung', note: 'mehrere Analysen kommen zum Schluss, dass die Evidenz für einen Nutzen unzureichend ist.' },
     ],
     forms: [
@@ -2692,7 +2692,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Ein Fall verstärkter Blutung nach Zahnextraktion ist dokumentiert, dazu theoretisch erhöhtes Blutungsrisiko durch Hemmung der Thrombozytenaggregation (relevant in Kombination mit Antikoagulanzien) und additive Effekte mit Antidiabetika/Insulin. Die EU-Novel-Food-Einstufung konzentrierter Extrakte ist uneinheitlich recherchiert und über die verfügbaren Primärquellen nicht abschließend zu verifizieren.',
     sources: [
-      { label: 'MSKCC About Herbs – Cordyceps', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/cordyceps' },
+      { label: 'MSKCC About Herbs: Cordyceps', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/cordyceps' },
     ],
   },
   {
@@ -2703,20 +2703,20 @@ export const substances = [
     unit: 'mg',
     what: 'Speise- und Vitalpilz aus Ostasien, wächst büschelartig an Baumstämmen; medizinisch v. a. wegen beta-glucan-reicher Extraktfraktionen ("D-Fraktion"/"MD-Fraktion") untersucht.',
     useCases: [
-      { topic: 'Immunmodulation bei Krebspatientinnen', note: 'kleine Phase-I/II-Studien bei Brustkrebs zeigen immunmodulatorische Effekte — keine großen kontrollierten Studien.' },
+      { topic: 'Immunmodulation bei Krebspatientinnen', note: 'kleine Phase-I/II-Studien bei Brustkrebs zeigen immunmodulatorische Effekte: keine großen kontrollierten Studien.' },
       { topic: 'Reduktion chemotherapiebedingter Nebenwirkungen', note: 'berichtet bei einzelnen Krebsarten in kleinen Studien.' },
       { topic: 'Blutzucker/Cholesterin/Blutdruck', note: 'umfangreiche Tier-/Zellkulturdaten; Humanevidenz deutlich schwächer und limitiert.' },
     ],
     forms: [
       { name: 'Fruchtkörper-Extrakt/-Pulver', note: 'gilt EU-weit als nicht neuartig (Verzehrsgeschichte vor 1997 als Speisepilz belegt).' },
-      { name: 'Myzel-Pulver/-Extrakt', note: 'laut AESAN-Konsultationsdokument (2019) als Novel Food eingestuft — keine belegte Verzehrsgeschichte vor 15.5.1997 und keine nachgewiesene Äquivalenz zum Fruchtkörper.' },
-      { name: 'Standardisierte D-Fraktion/MD-Fraktion', note: 'spezifische, beta-glucan-angereicherte Extraktfraktion aus klinischen Studien — nicht gleichzusetzen mit generischem Maitake-Pulver aus dem Handel.' },
+      { name: 'Myzel-Pulver/-Extrakt', note: 'laut AESAN-Konsultationsdokument (2019) als Novel Food eingestuft: keine belegte Verzehrsgeschichte vor 15.5.1997 und keine nachgewiesene Äquivalenz zum Fruchtkörper.' },
+      { name: 'Standardisierte D-Fraktion/MD-Fraktion', note: 'spezifische, beta-glucan-angereicherte Extraktfraktion aus klinischen Studien: nicht gleichzusetzen mit generischem Maitake-Pulver aus dem Handel.' },
     ],
     fatSoluble: false,
     cautionNote: 'Ein Fallbericht mit INR-Anstieg unter Maitake-Extrakt in Kombination mit Warfarin ist dokumentiert, dazu additive blutzuckersenkende Effekte mit Antidiabetika und erhöhtes Blutungsrisiko mit Antikoagulanzien. Als mögliche, meist milde Nebenwirkung wird asymptomatische Eosinophilie genannt.',
     sources: [
-      { label: 'MSKCC About Herbs – Maitake', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/maitake' },
-      { label: 'EU Novel Food Consultation Status (AESAN, 2019) – Grifola frondosa Myzelpulver', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_grifola-frondosa_aesan.pdf' },
+      { label: 'MSKCC About Herbs: Maitake', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/maitake' },
+      { label: 'EU Novel Food Consultation Status (AESAN, 2019): Grifola frondosa Myzelpulver', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_grifola-frondosa_aesan.pdf' },
     ],
   },
   {
@@ -2727,8 +2727,8 @@ export const substances = [
     unit: 'mg',
     what: 'Ostasiatischer Speise- und Vitalpilz, der sowohl als Lebensmittel (Fruchtkörper frisch/getrocknet) als auch als Nahrungsergänzung in Extraktform verkauft wird.',
     useCases: [
-      { topic: 'Immunsystem (allgemein)', note: 'traditionell zur Unterstützung des Immunsystems verwendet; kleine randomisierte Humanstudien zeigen Effekte auf Immunparameter — schwache, kleinteilige Datenlage.' },
-      { topic: 'Begleitend zur Chemotherapie (Lentinan)', note: 'in Japan ist injizierbares Lentinan als Arzneimittel begleitend zur Chemotherapie bei bestimmten Krebsarten zugelassen — das betrifft ein reguliertes Arzneimittel, nicht das frei verkäufliche Nahrungsergänzungsmittel.' },
+      { topic: 'Immunsystem (allgemein)', note: 'traditionell zur Unterstützung des Immunsystems verwendet; kleine randomisierte Humanstudien zeigen Effekte auf Immunparameter: schwache, kleinteilige Datenlage.' },
+      { topic: 'Begleitend zur Chemotherapie (Lentinan)', note: 'in Japan ist injizierbares Lentinan als Arzneimittel begleitend zur Chemotherapie bei bestimmten Krebsarten zugelassen: das betrifft ein reguliertes Arzneimittel, nicht das frei verkäufliche Nahrungsergänzungsmittel.' },
       { topic: 'Cholesterinspiegel', note: 'Laborevidenz und einzelne kleine Humanstudien; keine belastbare klinische Evidenz.' },
     ],
     forms: [
@@ -2736,11 +2736,11 @@ export const substances = [
       { name: 'Polysaccharid-Extrakt (Lentinan, teils als "LEM" aus Myzel)', note: 'Konzentration je nach Extraktionsverfahren stark unterschiedlich; injizierbares Lentinan (Arzneimittel Japan) ist nicht gleichzusetzen mit oralen Kapselpräparaten.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nach Verzehr von rohem oder nicht ausreichend erhitztem Shiitake kann eine toxische Reaktion auf Lentinan auftreten — ein juckender, streifenartiger Hautausschlag ("Shiitake-Dermatitis"). Lentinan ist hitzelabil und wird beim ausreichenden Erhitzen zersetzt. Weitere berichtete Nebenwirkungen: Eosinophilie, Photosensibilität, Magen-Darm-Beschwerden, vereinzelt Hypersensitivitätspneumonitis durch Sporeninhalation. Der ganze Fruchtkörper gilt als traditionelles Lebensmittel (keine Novel-Food-Einstufung); eine spezifische sterile wässrige Myzelextrakt-Zubereitung wurde per Kommissionsentscheidung 2011/73/EU als neuartige Lebensmittelzutat zugelassen — das betrifft nur dieses eine Extraktprodukt, nicht Shiitake allgemein.',
+    cautionNote: 'Nach Verzehr von rohem oder nicht ausreichend erhitztem Shiitake kann eine toxische Reaktion auf Lentinan auftreten: ein juckender, streifenartiger Hautausschlag ("Shiitake-Dermatitis"). Lentinan ist hitzelabil und wird beim ausreichenden Erhitzen zersetzt. Weitere berichtete Nebenwirkungen: Eosinophilie, Photosensibilität, Magen-Darm-Beschwerden, vereinzelt Hypersensitivitätspneumonitis durch Sporeninhalation. Der ganze Fruchtkörper gilt als traditionelles Lebensmittel (keine Novel-Food-Einstufung); eine spezifische sterile wässrige Myzelextrakt-Zubereitung wurde per Kommissionsentscheidung 2011/73/EU als neuartige Lebensmittelzutat zugelassen: das betrifft nur dieses eine Extraktprodukt, nicht Shiitake allgemein.',
     sources: [
-      { label: 'MSKCC – Shiitake Mushroom', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/shiitake-mushroom' },
-      { label: 'NCI PDQ – Mushrooms (Patient Version)', url: 'https://www.cancer.gov/about-cancer/treatment/cam/patient/mushrooms-pdq' },
-      { label: 'EU-Kommission – Entscheidung 2011/73/EU (Lentinula edodes Myzelextrakt)', url: 'https://eur-lex.europa.eu/eli/dec/2011/73(1)/oj/eng' },
+      { label: 'MSKCC: Shiitake Mushroom', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/shiitake-mushroom' },
+      { label: 'NCI PDQ: Mushrooms (Patient Version)', url: 'https://www.cancer.gov/about-cancer/treatment/cam/patient/mushrooms-pdq' },
+      { label: 'EU-Kommission: Entscheidung 2011/73/EU (Lentinula edodes Myzelextrakt)', url: 'https://eur-lex.europa.eu/eli/dec/2011/73(1)/oj/eng' },
     ],
   },
   {
@@ -2751,18 +2751,18 @@ export const substances = [
     unit: 'mg',
     what: 'Holzbewohnender Porenpilz, der nicht als Speisepilz gilt, sondern ausschließlich als standardisierter Extrakt (v. a. PSK und PSP) in der traditionellen chinesischen Medizin und als Nahrungsergänzung verwendet wird.',
     useCases: [
-      { topic: 'Begleitend zur Chemotherapie, Magenkrebs (PSK)', note: 'PSK ist in Japan als Arzneimittel zugelassen; große randomisierte Studien zeigten längeres Überleben zusätzlich zur Chemotherapie — reguliertes Arzneimittel in Japan, kein vergleichbarer Status als freiverkäufliches Supplement in der EU/Deutschland.' },
+      { topic: 'Begleitend zur Chemotherapie, Magenkrebs (PSK)', note: 'PSK ist in Japan als Arzneimittel zugelassen; große randomisierte Studien zeigten längeres Überleben zusätzlich zur Chemotherapie: reguliertes Arzneimittel in Japan, kein vergleichbarer Status als freiverkäufliches Supplement in der EU/Deutschland.' },
       { topic: 'Darmkrebs (adjuvant)', note: 'Auswertung mehrerer Studien zeigte weniger Rückfälle und längeres Überleben unter PSK nach Operation.' },
-      { topic: 'Lungenkrebs', note: 'randomisierte Studien zeigten Verbesserungen bei Immunfunktion, Gewicht und Wohlbefinden — keine einheitlichen Überlebensdaten.' },
+      { topic: 'Lungenkrebs', note: 'randomisierte Studien zeigten Verbesserungen bei Immunfunktion, Gewicht und Wohlbefinden: keine einheitlichen Überlebensdaten.' },
     ],
     forms: [
       { name: 'Polysaccharid-Extrakt (PSK/PSP)', note: 'standardisierte Protein-Polysaccharid-Komplexe aus Pilzkultur; in Japan arzneimittelreguliert, in Europa ohne diesen Status. Kapsel-, Pulver- oder Teeform.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Seltene berichtete Nebenwirkungen: dunkel gefärbter Stuhl, Dunkelfärbung der Fingernägel. Keine Anwendung in Schwangerschaft/Stillzeit ohne ärztliche Rücksprache mangels Sicherheitsdaten. Die FDA hat Coriolus-Extrakte nicht als Krebstherapie zugelassen. Der EU-Novel-Food-Status ist über die verfügbaren Quellen nicht abschließend zu verifizieren — da der Pilz traditionell nicht als Lebensmittel, sondern nur als Extrakt verwendet wurde, ist eine Novel-Food-Einstufung plausibel, aber nicht durch eine aufrufbare Primärquelle belegt.',
+    cautionNote: 'Seltene berichtete Nebenwirkungen: dunkel gefärbter Stuhl, Dunkelfärbung der Fingernägel. Keine Anwendung in Schwangerschaft/Stillzeit ohne ärztliche Rücksprache mangels Sicherheitsdaten. Die FDA hat Coriolus-Extrakte nicht als Krebstherapie zugelassen. Der EU-Novel-Food-Status ist über die verfügbaren Quellen nicht abschließend zu verifizieren, da der Pilz traditionell nicht als Lebensmittel, sondern nur als Extrakt verwendet wurde, ist eine Novel-Food-Einstufung plausibel, aber nicht durch eine aufrufbare Primärquelle belegt.',
     sources: [
-      { label: 'MSKCC – Coriolus versicolor', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/coriolus-versicolor' },
-      { label: 'NCI PDQ – Mushrooms (Turkey Tail/PSK)', url: 'https://www.cancer.gov/about-cancer/treatment/cam/patient/mushrooms-pdq' },
+      { label: 'MSKCC: Coriolus versicolor', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/coriolus-versicolor' },
+      { label: 'NCI PDQ: Mushrooms (Turkey Tail/PSK)', url: 'https://www.cancer.gov/about-cancer/treatment/cam/patient/mushrooms-pdq' },
     ],
   },
   {
@@ -2771,21 +2771,21 @@ export const substances = [
     category: 'Pilze',
     synonyms: ['agaricus blazei', 'agaricus subrufescens', 'agaricus brasiliensis', 'mandelpilz', 'abm', 'himematsutake', 'sonnenpilz'],
     unit: 'mg',
-    what: 'Aus Brasilien stammender, in Japan kultivierter Speisepilz mit mandelartigem Aroma; wird als Fruchtkörper (getrocknet/Extrakt) oder als Myzelpulver angeboten — mit regulatorisch unterschiedlichem Status je nach Pilzteil.',
+    what: 'Aus Brasilien stammender, in Japan kultivierter Speisepilz mit mandelartigem Aroma; wird als Fruchtkörper (getrocknet/Extrakt) oder als Myzelpulver angeboten: mit regulatorisch unterschiedlichem Status je nach Pilzteil.',
     useCases: [
-      { topic: 'Begleitend zur Chemotherapie/Lebensqualität', note: 'einzelne Studien bei Krebspatientinnen zeigen verbesserte NK-Zell-Aktivität und Lebensqualität unter oralem Extrakt — keine breite Evidenzbasis.' },
-      { topic: 'Blutzucker/Insulinresistenz', note: 'Hinweise auf verbesserte Insulinresistenz bei Diabetikerinnen — vorläufige Datenlage.' },
+      { topic: 'Begleitend zur Chemotherapie/Lebensqualität', note: 'einzelne Studien bei Krebspatientinnen zeigen verbesserte NK-Zell-Aktivität und Lebensqualität unter oralem Extrakt: keine breite Evidenzbasis.' },
+      { topic: 'Blutzucker/Insulinresistenz', note: 'Hinweise auf verbesserte Insulinresistenz bei Diabetikerinnen: vorläufige Datenlage.' },
       { topic: 'Multiples Myelom', note: 'keine Überlebensverbesserung trotz messbarer immunmodulatorischer Effekte.' },
     ],
     forms: [
       { name: 'Fruchtkörper (getrocknet/Extrakt)', note: 'gilt in der EU als Lebensmittel mit Verzehrsgeschichte vor 1997.' },
-      { name: 'Myzelpulver (dehydriert)', note: 'keine belegte Äquivalenz zum Fruchtkörper bei Nährstoffzusammensetzung/Wirkstoffgehalt — als Novel Food eingestuft (Verordnung (EU) 2015/2283).' },
+      { name: 'Myzelpulver (dehydriert)', note: 'keine belegte Äquivalenz zum Fruchtkörper bei Nährstoffzusammensetzung/Wirkstoffgehalt: als Novel Food eingestuft (Verordnung (EU) 2015/2283).' },
     ],
     fatSoluble: false,
-    cautionNote: 'In Laborproben wurden teils hohe Gehalte an anorganischem Arsen nachgewiesen. Berichtete Nebenwirkungen: Leberfunktionsstörungen, Lippenschwellung. Kann CYP3A4 hemmen und so den Abbau anderer Medikamente beeinflussen. Nicht bei bekannter Pilzallergie anwenden. Laut AESAN/EU-Kommissions-Konsultation (Oktober 2019) gilt: Der Fruchtkörper hat eine belegte Verzehrsgeschichte in der EU vor dem 15.05.1997 und ist kein Novel Food; das dehydrierte Myzelpulver hat diese Verzehrsgeschichte nicht und ist als Novel Food eingestuft — für Supplement-Etiketten heißt das konkret: Produkte auf Fruchtkörperbasis sind unproblematisch, Produkte auf Myzelbasis benötigen eine Novel-Food-Zulassung.',
+    cautionNote: 'In Laborproben wurden teils hohe Gehalte an anorganischem Arsen nachgewiesen. Berichtete Nebenwirkungen: Leberfunktionsstörungen, Lippenschwellung. Kann CYP3A4 hemmen und so den Abbau anderer Medikamente beeinflussen. Nicht bei bekannter Pilzallergie anwenden. Laut AESAN/EU-Kommissions-Konsultation (Oktober 2019) gilt: Der Fruchtkörper hat eine belegte Verzehrsgeschichte in der EU vor dem 15.05.1997 und ist kein Novel Food; das dehydrierte Myzelpulver hat diese Verzehrsgeschichte nicht und ist als Novel Food eingestuft, für Supplement-Etiketten heißt das konkret: Produkte auf Fruchtkörperbasis sind unproblematisch, Produkte auf Myzelbasis benötigen eine Novel-Food-Zulassung.',
     sources: [
-      { label: 'MSKCC – Agaricus', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/agaricus' },
-      { label: 'EU-Kommission/AESAN – Novel-Food-Konsultation Agaricus blazei Myzelpulver (29.10.2019)', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_agaricus-blazei_aesan.pdf' },
+      { label: 'MSKCC: Agaricus', url: 'https://www.mskcc.org/cancer-care/integrative-medicine/herbs/agaricus' },
+      { label: 'EU-Kommission/AESAN: Novel-Food-Konsultation Agaricus blazei Myzelpulver (29.10.2019)', url: 'https://food.ec.europa.eu/system/files/2019-10/novel-food_consult-status_agaricus-blazei_aesan.pdf' },
     ],
   },
   {
@@ -2794,11 +2794,11 @@ export const substances = [
     category: 'Longevity',
     synonyms: ['nicotinamide riboside', 'nicotinamide riboside chloride', 'nr', 'nrc', 'nicotinamid-ribosid', 'nicotinamid-ribosid-chlorid', 'nicotinamidribosid'],
     unit: 'mg',
-    what: 'Nucleosid-Form von Vitamin B3, die über die Enzyme NRK1/NRK2 zu NMN und weiter zu NAD+ umgewandelt wird — ein anderer Stoffwechselweg als bei NMN. NR besitzt seit 2020 eine EU-Novel-Food-Zulassung mit festgelegten Höchstmengen, während für NMN in der EU keine vergleichbare Zulassung mit definierten Höchstmengen vorliegt.',
+    what: 'Nucleosid-Form von Vitamin B3, die über die Enzyme NRK1/NRK2 zu NMN und weiter zu NAD+ umgewandelt wird: ein anderer Stoffwechselweg als bei NMN. NR besitzt seit 2020 eine EU-Novel-Food-Zulassung mit festgelegten Höchstmengen, während für NMN in der EU keine vergleichbare Zulassung mit definierten Höchstmengen vorliegt.',
     useCases: [
       { topic: 'NAD+-Spiegel im Blut', note: 'RCTs zeigen dosisabhängigen Anstieg von NAD+ nach oraler Einnahme (Conze et al. 2019, bis 1000 mg/Tag über 8 Wochen).' },
-      { topic: 'Stoffwechsel bei Adipositas', note: 'RCT bei übergewichtigen Männern fand trotz NAD+-Anstieg keine Verbesserung der Insulinsensitivität (Dollerup et al. 2018) — Humandaten zu Stoffwechseleffekten sind uneinheitlich.' },
-      { topic: 'Kognitive Funktion im Alter', note: 'kleine placebokontrollierte Pilotstudie (2023) bei leichter kognitiver Beeinträchtigung — frühe, noch nicht replizierte Datenlage.' },
+      { topic: 'Stoffwechsel bei Adipositas', note: 'RCT bei übergewichtigen Männern fand trotz NAD+-Anstieg keine Verbesserung der Insulinsensitivität (Dollerup et al. 2018): Humandaten zu Stoffwechseleffekten sind uneinheitlich.' },
+      { topic: 'Kognitive Funktion im Alter', note: 'kleine placebokontrollierte Pilotstudie (2023) bei leichter kognitiver Beeinträchtigung: frühe, noch nicht replizierte Datenlage.' },
     ],
     forms: [
       { name: 'Nicotinamid-Ribosid-Chlorid (NRC)', note: 'einzige Form mit EU-Novel-Food-Zulassung; in Studien meist 250–1000 mg/Tag.' },
@@ -2817,16 +2817,16 @@ export const substances = [
     category: 'Longevity',
     synonyms: ['urolithin a', 'urolithin-a', 'ua'],
     unit: 'mg',
-    what: 'Metabolit, der von Darmbakterien aus Ellagitannin-haltigen Lebensmitteln (Granatapfel, manche Beeren, Walnüsse) gebildet wird — nicht jeder Mensch produziert es in relevanter Menge. Anders als NMN/NR (NAD+-Vorstufen) oder Spermidin (allgemeiner Autophagie-Induktor) wird Urolithin A spezifisch mit Mitophagie (gezieltem Abbau geschädigter Mitochondrien) in Verbindung gebracht.',
+    what: 'Metabolit, der von Darmbakterien aus Ellagitannin-haltigen Lebensmitteln (Granatapfel, manche Beeren, Walnüsse) gebildet wird: nicht jeder Mensch produziert es in relevanter Menge. Anders als NMN/NR (NAD+-Vorstufen) oder Spermidin (allgemeiner Autophagie-Induktor) wird Urolithin A spezifisch mit Mitophagie (gezieltem Abbau geschädigter Mitochondrien) in Verbindung gebracht.',
     useCases: [
-      { topic: 'Muskelkraft und Ausdauer im mittleren/höheren Alter', note: 'RCT mit 88 Teilnehmenden (Singh et al. 2022, 500/1000 mg/Tag über 4 Monate): ca. 12 % höhere Muskelkraft, verbesserte VO2peak-Werte — primärer Endpunkt verfehlte jedoch statistische Signifikanz.' },
-      { topic: 'Mitochondriale Biomarker', note: 'erste placebokontrollierte Humanstudie (Andreux et al. 2019) fand nach 4 Wochen Veränderungen bei Plasma-Acylcarnitinen und Muskel-Genexpression — Surrogatparameter, kein klinischer Endpunkt.' },
+      { topic: 'Muskelkraft und Ausdauer im mittleren/höheren Alter', note: 'RCT mit 88 Teilnehmenden (Singh et al. 2022, 500/1000 mg/Tag über 4 Monate): ca. 12 % höhere Muskelkraft, verbesserte VO2peak-Werte; primärer Endpunkt verfehlte jedoch statistische Signifikanz.' },
+      { topic: 'Mitochondriale Biomarker', note: 'erste placebokontrollierte Humanstudie (Andreux et al. 2019) fand nach 4 Wochen Veränderungen bei Plasma-Acylcarnitinen und Muskel-Genexpression: Surrogatparameter, kein klinischer Endpunkt.' },
     ],
     forms: [
       { name: 'Synthetisches/gereinigtes Urolithin A', note: 'über Nahrung stark abhängig vom individuellen Darmmikrobiom; als isolierte Substanz standardisierte Aufnahme, in Studien meist 500–1000 mg/Tag.' },
     ],
     fatSoluble: false,
-    cautionNote: 'In Humanstudien bis 1000 mg/Tag über bis zu 4 Monate als gut verträglich mit milden Nebenwirkungen beschrieben. Die US-amerikanische FDA hat Urolithin A 2018 als GRAS für Lebensmittel im Bereich 250 mg–1 g pro Portion eingestuft. Keine EU-Novel-Food-Zulassung gefunden — Rechtsstatus als Nahrungsergänzungsmittel in der EU damit uneinheitlich/ungeklärt. Insgesamt wenige, meist kleine, teils vom Ingredient-Hersteller mitfinanzierte Studien; unabhängige Replikation und Langzeitdaten fehlen.',
+    cautionNote: 'In Humanstudien bis 1000 mg/Tag über bis zu 4 Monate als gut verträglich mit milden Nebenwirkungen beschrieben. Die US-amerikanische FDA hat Urolithin A 2018 als GRAS für Lebensmittel im Bereich 250 mg–1 g pro Portion eingestuft. Keine EU-Novel-Food-Zulassung gefunden: Rechtsstatus als Nahrungsergänzungsmittel in der EU damit uneinheitlich/ungeklärt. Insgesamt wenige, meist kleine, teils vom Ingredient-Hersteller mitfinanzierte Studien; unabhängige Replikation und Langzeitdaten fehlen.',
     sources: [
       { label: 'PubMed, Andreux et al. 2019 (Nat Metab)', url: 'https://pubmed.ncbi.nlm.nih.gov/32694802/' },
       { label: 'PubMed, Singh et al. 2022 (Cell Rep Med)', url: 'https://pubmed.ncbi.nlm.nih.gov/35584623/' },
@@ -2838,17 +2838,17 @@ export const substances = [
     category: 'Longevity',
     synonyms: ['alpha-ketoglutarate', 'alpha-ketoglutarat', 'ca-akg', 'calcium alpha-ketoglutarate', 'calcium-alpha-ketoglutarat', '2-oxoglutarat', 'akg', 'alpha-ketoglutarsäure'],
     unit: 'mg',
-    what: 'Natürliches Zwischenprodukt des Zitratzyklus (zellulärer Energiestoffwechsel), meist als Calciumsalz (Ca-AKG) supplementiert. Anders als NMN/NR oder Spermidin wird AKG in Tiermodellen mit epigenetischen Alterungsmarkern und Lebensspanne-Effekten in Verbindung gebracht — die Humandatenlage ist von den Longevity-Substanzen in der Datenbank die früheste und schwächste.',
+    what: 'Natürliches Zwischenprodukt des Zitratzyklus (zellulärer Energiestoffwechsel), meist als Calciumsalz (Ca-AKG) supplementiert. Anders als NMN/NR oder Spermidin wird AKG in Tiermodellen mit epigenetischen Alterungsmarkern und Lebensspanne-Effekten in Verbindung gebracht: die Humandatenlage ist von den Longevity-Substanzen in der Datenbank die früheste und schwächste.',
     useCases: [
-      { topic: 'Lebensspanne in Tiermodellen', note: 'bei C. elegans nahezu verdoppelte Lebensspanne (Chin et al. 2014); bei Mäusen verlängerte Lebensspanne und verkürzte Gebrechlichkeitsphase unter Ca-AKG (Asadi Shahmirzadi et al. 2020) — Tierstudien, nicht direkt auf den Menschen übertragbar.' },
-      { topic: 'Biologisches Alter beim Menschen', note: 'eine unkontrollierte, nicht-randomisierte Anwenderstudie berichtete nach ca. 7 Monaten eine rechnerische Verringerung des epigenetischen Alters — allerdings mit einer Kombination aus Ca-AKG und weiteren Vitaminen und ohne Placebogruppe, sodass der Anteil von AKG selbst nicht bestimmbar ist.' },
-      { topic: 'Laufende kontrollierte Humanforschung', note: 'eine RCT in Rekrutierungs-/Machbarkeitsphase bei biologisch älteren, mittelalten Erwachsenen läuft — Ergebnisse stehen noch aus.' },
+      { topic: 'Lebensspanne in Tiermodellen', note: 'bei C. elegans nahezu verdoppelte Lebensspanne (Chin et al. 2014); bei Mäusen verlängerte Lebensspanne und verkürzte Gebrechlichkeitsphase unter Ca-AKG (Asadi Shahmirzadi et al. 2020): Tierstudien, nicht direkt auf den Menschen übertragbar.' },
+      { topic: 'Biologisches Alter beim Menschen', note: 'eine unkontrollierte, nicht-randomisierte Anwenderstudie berichtete nach ca. 7 Monaten eine rechnerische Verringerung des epigenetischen Alters, allerdings mit einer Kombination aus Ca-AKG und weiteren Vitaminen und ohne Placebogruppe, sodass der Anteil von AKG selbst nicht bestimmbar ist.' },
+      { topic: 'Laufende kontrollierte Humanforschung', note: 'eine RCT in Rekrutierungs-/Machbarkeitsphase bei biologisch älteren, mittelalten Erwachsenen läuft: Ergebnisse stehen noch aus.' },
     ],
     forms: [
       { name: 'Calcium-Alpha-Ketoglutarat (Ca-AKG)', note: 'als Calciumsalz stabiler und in Studien besser charakterisiert als freie Alpha-Ketoglutarsäure; systematische Bioverfügbarkeitsdaten beim Menschen fehlen, keine etablierte Standarddosis.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Keine systematischen Sicherheitsstudien am Menschen über eine methodisch schwache Anwenderbeobachtung und eine laufende RCT-Rekrutierung hinaus gefunden. Keine EU-Novel-Food-Zulassung und keine Höchstmenge auffindbar — Rechtsstatus als Nahrungsergänzungsmittel in der EU damit ungeklärt. Keine abgeschlossene kontrollierte Humanstudie mit Wirksamkeitsnachweis.',
+    cautionNote: 'Keine systematischen Sicherheitsstudien am Menschen über eine methodisch schwache Anwenderbeobachtung und eine laufende RCT-Rekrutierung hinaus gefunden. Keine EU-Novel-Food-Zulassung und keine Höchstmenge auffindbar: Rechtsstatus als Nahrungsergänzungsmittel in der EU damit ungeklärt. Keine abgeschlossene kontrollierte Humanstudie mit Wirksamkeitsnachweis.',
     sources: [
       { label: 'PubMed, Lim et al. 2025 (ABLE-Trial)', url: 'https://pubmed.ncbi.nlm.nih.gov/40819772/' },
     ],

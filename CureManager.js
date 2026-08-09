@@ -76,7 +76,6 @@ export function getCureStatusLabel(cureConfig, startDate) {
   if (cureConfig.type === 'cycle') {
     const s = getCycleStatus(cureConfig, startDate);
     return tr('logic.cure.cycle', {
-      emoji: s.phase === 'on' ? '🟢' : '🔴',
       phase: tr(`logic.cure.phase.${s.phase}`),
       day: s.dayInPhase,
       total: s.totalDays,

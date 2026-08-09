@@ -141,19 +141,6 @@ export function checkAllConflictsForSlot(ids = [], supplements = null) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// getSeverityColor(severity)  → Tailwind / NativeWind Klasse
-// ─────────────────────────────────────────────────────────────
-export function getSeverityColor(severity) {
-  switch (severity) {
-    case 'CRITICAL': return { bg: 'bg-red-600',    text: 'text-red-600',    hex: '#dc2626' };
-    case 'HIGH':     return { bg: 'bg-orange-500', text: 'text-orange-500', hex: '#f97316' };
-    case 'MEDIUM':   return { bg: 'bg-yellow-400', text: 'text-yellow-500', hex: '#eab308' };
-    case 'INFO':     return { bg: 'bg-green-500',  text: 'text-green-500',  hex: '#22c55e' };
-    default:         return { bg: 'bg-gray-400',   text: 'text-gray-400',   hex: '#9ca3af' };
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
 //  INTERNE HELPERS
 // ─────────────────────────────────────────────────────────────
 function _severityByPair(idA, idB) {

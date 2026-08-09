@@ -50,7 +50,7 @@ export const MEDICATION_CLASSES = [
   {
     id: 'immunosuppressants',
     label: 'Immunsuppressiva',
-    examples: 'z. B. Ciclosporin, Tacrolimus — etwa nach Transplantation',
+    examples: 'z. B. Ciclosporin, Tacrolimus, etwa nach Transplantation',
   },
   {
     id: 'antidiabetics',
@@ -90,7 +90,7 @@ export const MEDICATION_CLASSES = [
   {
     id: 'cyp3a4',
     label: 'Arzneimittel mit CYP3A4-Abhängigkeit',
-    examples: 'viele Wirkstoffe — im Zweifel in der Packungsbeilage nachsehen',
+    examples: 'viele Wirkstoffe, im Zweifel in der Packungsbeilage nachsehen',
   },
   {
     id: 'sedatives',
@@ -146,7 +146,7 @@ export const medicationInteractions = [
   { substanceId: 'st-johns-wort', medicationClassId: 'anticoagulants', severity: 'contraindicated', sourceField: 'cautionNote',
     quote: 'Die gleichzeitige Einnahme mit Cumarin-Antikoagulanzien, Ciclosporin, Tacrolimus, Sirolimus, Everolimus, Proteaseinhibitoren und bestimmten Zytostatika (u. a. Irinotecan, Imatinib) ist laut Monographie kontraindiziert.' },
   { substanceId: 'vitamin-e', medicationClassId: 'anticoagulants', severity: 'attention', sourceField: 'advisory',
-    quote: 'Höhere Dosen können die Blutungsneigung erhöhen — relevant bei Gerinnungshemmern und vor Operationen.' },
+    quote: 'Höhere Dosen können die Blutungsneigung erhöhen: relevant bei Gerinnungshemmern und vor Operationen.' },
   { substanceId: 'vitamin-k2', medicationClassId: 'anticoagulants', severity: 'medical', sourceField: 'advisory',
     quote: 'Bei Einnahme von Vitamin-K-Antagonisten (Cumarine wie Marcumar/Warfarin) beeinflusst Vitamin K direkt die Wirkung des Medikaments. Nur nach ärztlicher Absprache.' },
   { substanceId: 'omega-3', medicationClassId: 'anticoagulants', severity: 'medical', sourceField: 'advisory',

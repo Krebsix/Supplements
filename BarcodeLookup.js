@@ -22,13 +22,14 @@ const OFF_FIELDS = [
 ].join(',');
 const REQUEST_TIMEOUT_MS = 15000;
 
-function cleanText(value) {
+// Exportiert fuer Tests: reine Normalisierungslogik, kein Netzwerkzugriff.
+export function cleanText(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
 // Zutatenliste ("Magnesiumcitrat, Kapselhuelle: HPMC, ...") grob in
 // Einzeleintraege zerlegen — bewusst ohne Interpretation der Mengen.
-function splitIngredients(text) {
+export function splitIngredients(text) {
   return cleanText(text)
     .split(/[,;]/)
     .map((part) => part.trim())
@@ -71,7 +72,16 @@ export async function lookupBarcode(barcode) {
   const json = await response.json();
   if (json?.status !== 1 || !json?.product) return null;
 
-  const product = json.product;
+  return mapOffProductToScanResult(json.product, code);
+}
+
+/**
+ * mapOffProductToScanResult(product, code)
+ * Reine Mapping-/Normalisierungslogik: OFF-Produktobjekt → Scan-Ergebnis
+ * im App-Format. Bewusst ohne Netzwerkzugriff, damit sie isoliert testbar
+ * ist. Ausgelagert aus lookupBarcode(), Verhalten unveraendert.
+ */
+export function mapOffProductToScanResult(product, code) {
   const productName =
     cleanText(product.product_name_de) || cleanText(product.product_name);
   const ingredientsText =

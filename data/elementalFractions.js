@@ -57,7 +57,7 @@ export const elementalFractions = {
     },
     'L-Threonat': {
       fraction: 0.083,
-      note: 'Mg(C4H7O5)2, 294,5 g/mol — der niedrigste Elementanteil der gaengigen Magnesiumformen.',
+      note: 'Mg(C4H7O5)2, 294,5 g/mol: der niedrigste Elementanteil der gaengigen Magnesiumformen.',
     },
     Oxid: {
       fraction: 0.603,
@@ -90,7 +90,7 @@ export const elementalFractions = {
   iron: {
     Bisglycinat: {
       fraction: 0.274,
-      note: 'FeC4H8N2O4, 204,0 g/mol (reine Stoechiometrie). Kommerzielle Chelate deklarieren wegen Hydratanteil und Reinheitsspezifikation haeufig nur rund 20 % — Herstellerangabe hat Vorrang.',
+      note: 'FeC4H8N2O4, 204,0 g/mol (reine Stoechiometrie). Kommerzielle Chelate deklarieren wegen Hydratanteil und Reinheitsspezifikation haeufig nur rund 20 %, Herstellerangabe hat Vorrang.',
       varies: true,
     },
     Sulfat: {

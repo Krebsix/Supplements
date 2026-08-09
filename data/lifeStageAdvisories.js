@@ -30,22 +30,18 @@ export const ADVISORY_SEVERITY = {
 export const SEVERITY_META = {
   [ADVISORY_SEVERITY.CONTRAINDICATED]: {
     label: 'Nicht vorgesehen',
-    hex: '#dc2626',
     rank: 4,
   },
   [ADVISORY_SEVERITY.MEDICAL]: {
     label: 'Ärztlich abklären',
-    hex: '#b45309',
     rank: 3,
   },
   [ADVISORY_SEVERITY.ATTENTION]: {
     label: 'Besonderheit',
-    hex: '#0f766e',
     rank: 2,
   },
   [ADVISORY_SEVERITY.INCREASED]: {
     label: 'Erhöhter Bedarf',
-    hex: '#0369a1',
     rank: 1,
   },
 };
@@ -98,7 +94,7 @@ export const advisories = {
     {
       lifeStages: ['adult-man', 'menopause', 'senior'],
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Ohne nachgewiesenen Mangel ist eine Eisenergänzung in dieser Gruppe unüblich — überschüssiges Eisen wird gespeichert und nicht aktiv ausgeschieden.',
+      text: 'Ohne nachgewiesenen Mangel ist eine Eisenergänzung in dieser Gruppe unüblich: überschüssiges Eisen wird gespeichert und nicht aktiv ausgeschieden.',
     },
     {
       lifeStages: ['adult-woman', 'teen-11-17'],
@@ -120,7 +116,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Bei bestehenden Schilddrüsenerkrankungen — insbesondere Schilddrüsenüberfunktion und Autonomie — ist die Jodzufuhr ärztlich abzuklären.',
+      text: 'Bei bestehenden Schilddrüsenerkrankungen, insbesondere Schilddrüsenüberfunktion und Autonomie, ist die Jodzufuhr ärztlich abzuklären.',
     },
   ],
   folate: [
@@ -168,7 +164,7 @@ export const advisories = {
     {
       lifeStages: ['teen-11-17'],
       severity: ADVISORY_SEVERITY.INCREASED,
-      text: 'In der Wachstumsphase wird die maximale Knochendichte aufgebaut — der Bedarf ist in dieser Zeit am höchsten.',
+      text: 'In der Wachstumsphase wird die maximale Knochendichte aufgebaut: der Bedarf ist in dieser Zeit am höchsten.',
     },
   ],
   'omega-3': [
@@ -194,7 +190,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.MEDICAL,
-      text: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, SNRI, MAO-Hemmer) kombinieren — Risiko eines Serotonin-Syndroms.',
+      text: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, SNRI, MAO-Hemmer) kombinieren: Risiko eines Serotonin-Syndroms.',
     },
     {
       lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
@@ -206,7 +202,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.MEDICAL,
-      text: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, SNRI, MAO-Hemmer, Methylenblau) kombinieren — Risiko eines Serotonin-Syndroms.',
+      text: 'Nicht mit serotonerg wirkenden Medikamenten (SSRI, SNRI, MAO-Hemmer, Methylenblau) kombinieren: Risiko eines Serotonin-Syndroms.',
     },
     {
       lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
@@ -218,7 +214,7 @@ export const advisories = {
     {
       lifeStages: ['child-4-10'],
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Die Obergrenze liegt bei Kindern dieser Altersgruppe bei 10 mg pro Tag — viele Erwachsenenpräparate überschreiten das mit einer einzigen Kapsel.',
+      text: 'Die Obergrenze liegt bei Kindern dieser Altersgruppe bei 10 mg pro Tag: viele Erwachsenenpräparate überschreiten das mit einer einzigen Kapsel.',
     },
     {
       lifeStages: ['breastfeeding'],
@@ -237,7 +233,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Die EFSA hat die Obergrenze 2023 auf 12 mg pro Tag gesenkt. Dauerhaft höhere Zufuhr kann Nervenschäden verursachen — viele B-Komplex-Präparate liegen darüber.',
+      text: 'Die EFSA hat die Obergrenze 2023 auf 12 mg pro Tag gesenkt. Dauerhaft höhere Zufuhr kann Nervenschäden verursachen, viele B-Komplex-Präparate liegen darüber.',
     },
     {
       lifeStages: ['child-4-10'],
@@ -266,7 +262,7 @@ export const advisories = {
     {
       lifeStages: ['senior', 'menopause'],
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Wird in dieser Lebensphase im Zusammenhang mit Muskelerhalt untersucht — in Kombination mit Krafttraining.',
+      text: 'Wird in dieser Lebensphase im Zusammenhang mit Muskelerhalt untersucht, in Kombination mit Krafttraining.',
     },
   ],
   psyllium: [
@@ -333,7 +329,7 @@ export const advisories = {
     {
       lifeStages: ['pregnancy'],
       severity: ADVISORY_SEVERITY.CONTRAINDICATED,
-      text: 'Offizielle HMPC-Kontraindikation (nicht nur Warnhinweis) — kann die Thrombozytenaggregation beeinträchtigen und die Blutungsneigung erhöhen.',
+      text: 'Offizielle HMPC-Kontraindikation (nicht nur Warnhinweis): kann die Thrombozytenaggregation beeinträchtigen und die Blutungsneigung erhöhen.',
     },
     {
       lifeStages: ['breastfeeding'],
@@ -383,7 +379,7 @@ export const advisories = {
     {
       lifeStages: ['child-4-10', 'teen-11-17', 'pregnancy', 'breastfeeding'],
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Im laufenden EU-Zulassungsverfahren für isoliertes L-Theanin als Zielgruppen-Ausschluss vorgeschlagen — keine ausreichende Datenlage für diese Gruppen.',
+      text: 'Im laufenden EU-Zulassungsverfahren für isoliertes L-Theanin als Zielgruppen-Ausschluss vorgeschlagen: keine ausreichende Datenlage für diese Gruppen.',
     },
   ],
   melatonin: [
@@ -418,7 +414,7 @@ export const advisories = {
     {
       lifeStages: ['pregnancy'],
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Das BfR empfiehlt für Nicotinamid-Zusätze über 16 mg/Tag einen Warnhinweis für Schwangere wegen unzureichender Sicherheitsdaten. Die formspezifische Obergrenze ist außerdem 200-fach unterschiedlich zwischen Nicotinsäure und Nicotinamid — siehe "Formen im Vergleich".',
+      text: 'Das BfR empfiehlt für Nicotinamid-Zusätze über 16 mg/Tag einen Warnhinweis für Schwangere wegen unzureichender Sicherheitsdaten. Die formspezifische Obergrenze ist außerdem 200-fach unterschiedlich zwischen Nicotinsäure und Nicotinamid, siehe "Formen im Vergleich".',
     },
   ],
   biotin: [
@@ -439,7 +435,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Kann die Wirkung von Antikoagulanzien/Thrombozytenaggregationshemmern theoretisch verstärken — Fallberichte beschreiben sowohl Blutungsereignisse als auch thrombotische Komplikationen, wenn Nattokinase eigenmächtig eine Blutverdünner-Therapie ersetzte.',
+      text: 'Kann die Wirkung von Antikoagulanzien/Thrombozytenaggregationshemmern theoretisch verstärken. Fallberichte beschreiben sowohl Blutungsereignisse als auch thrombotische Komplikationen, wenn Nattokinase eigenmächtig eine Blutverdünner-Therapie ersetzte.',
     },
   ],
   'methylene-blue': [
@@ -451,7 +447,7 @@ export const advisories = {
     {
       lifeStages: ['pregnancy', 'breastfeeding'],
       severity: ADVISORY_SEVERITY.CONTRAINDICATED,
-      text: 'Keine der geprüften Quellen liefert eine Sicherheitsbewertung für Schwangerschaft/Stillzeit im Nahrungsergänzungsmittel-Kontext — es handelt sich ohnehin um kein zugelassenes Nahrungsergänzungsmittel.',
+      text: 'Keine der geprüften Quellen liefert eine Sicherheitsbewertung für Schwangerschaft/Stillzeit im Nahrungsergänzungsmittel-Kontext, es handelt sich ohnehin um kein zugelassenes Nahrungsergänzungsmittel.',
     },
   ],
   'l-carnitine': [
@@ -510,7 +506,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.CONTRAINDICATED,
-      text: 'Enthält Phenylalanin — bei Phenylketonurie (PKU) muss die Zufuhr von Phenylalanin-Quellen strikt kontrolliert werden.',
+      text: 'Enthält Phenylalanin: bei Phenylketonurie (PKU) muss die Zufuhr von Phenylalanin-Quellen strikt kontrolliert werden.',
     },
     {
       lifeStages: ['pregnancy', 'breastfeeding'],
@@ -565,7 +561,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Höhere Dosen können die Blutungsneigung erhöhen — relevant bei Gerinnungshemmern und vor Operationen.',
+      text: 'Höhere Dosen können die Blutungsneigung erhöhen: relevant bei Gerinnungshemmern und vor Operationen.',
     },
   ],
   caffeine: [
@@ -584,7 +580,7 @@ export const advisories = {
     {
       lifeStages: ['pregnancy', 'breastfeeding'],
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Die Wirkung beruht auf dem enthaltenen Koffein — für Schwangere und Stillende gilt daher dieselbe niedrigere unbedenkliche Gesamt-Tagesaufnahme wie bei isoliertem Koffein.',
+      text: 'Die Wirkung beruht auf dem enthaltenen Koffein: für Schwangere und Stillende gilt daher dieselbe niedrigere unbedenkliche Gesamt-Tagesaufnahme wie bei isoliertem Koffein.',
     },
   ],
   'cranberry-extract': [
@@ -639,7 +635,7 @@ export const advisories = {
     {
       lifeStages: ['child-4-10', 'teen-11-17'],
       severity: ADVISORY_SEVERITY.CONTRAINDICATED,
-      text: 'Laut Verbraucherzentrale kann bereits ein einzelner Kern gefährlich sein — vollständiger Verzicht wird empfohlen.',
+      text: 'Laut Verbraucherzentrale kann bereits ein einzelner Kern gefährlich sein: vollständiger Verzicht wird empfohlen.',
     },
     {
       lifeStages: 'all',
@@ -763,7 +759,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.CONTRAINDICATED,
-      text: 'Bei Hyperforin-Tagesdosen über 1 mg kontraindiziert mit Cumarin-Antikoagulanzien, Ciclosporin, Tacrolimus, Sirolimus, Everolimus, Proteaseinhibitoren und bestimmten Zytostatika (u. a. Irinotecan, Imatinib) — CYP3A4/CYP2B6/CYP2C9/CYP2C19/P-Glykoprotein-Induktion laut EMA/HMPC.',
+      text: 'Bei Hyperforin-Tagesdosen über 1 mg kontraindiziert mit Cumarin-Antikoagulanzien, Ciclosporin, Tacrolimus, Sirolimus, Everolimus, Proteaseinhibitoren und bestimmten Zytostatika (u. a. Irinotecan, Imatinib), CYP3A4/CYP2B6/CYP2C9/CYP2C19/P-Glykoprotein-Induktion laut EMA/HMPC.',
     },
     {
       lifeStages: ['adult-woman', 'teen-11-17'],
@@ -809,7 +805,7 @@ export const advisories = {
     {
       lifeStages: 'all',
       severity: ADVISORY_SEVERITY.ATTENTION,
-      text: 'Erhöhtes Blutungsrisiko in Kombination mit Antikoagulanzien/Thrombozytenaggregationshemmern — vor operativen Eingriffen wird in mehreren Quellen ein Pausieren der Einnahme empfohlen.',
+      text: 'Erhöhtes Blutungsrisiko in Kombination mit Antikoagulanzien/Thrombozytenaggregationshemmern: vor operativen Eingriffen wird in mehreren Quellen ein Pausieren der Einnahme empfohlen.',
     },
   ],
   chaga: [
@@ -874,6 +870,9 @@ export function getAdvisories(substanceId, lifeStageId) {
     .map((entry) => ({
       severity: entry.severity,
       text: entry.text,
+      // lifeStages mit durchreichen: data/localize.js braucht sie als
+      // Schluessel fuer das englische Text-Overlay.
+      lifeStages: entry.lifeStages,
       meta: SEVERITY_META[entry.severity],
     }))
     .sort((a, b) => (b.meta?.rank ?? 0) - (a.meta?.rank ?? 0));

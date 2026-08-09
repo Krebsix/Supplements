@@ -1,8 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { secureStorage } from './secureStorage';
+
 import { shouldTriggerBlock } from './AbsorptionBlocker';
+import { getCureStatusLabel, isDueToday } from './CureManager';
 import {
   concludeTrial,
   createRating,
@@ -187,36 +189,101 @@ function migratePersistedState(persistedState = {}) {
     trialRatings: Array.isArray(state.trialRatings) ? state.trialRatings : [],
     absorptionBlockedAt: state.absorptionBlockedAt || null,
     settings: state.settings || {},
+    // Bestandsdaten kennen weder Onboarding noch Einwilligungen: Beides
+    // bleibt leer, dadurch durchlaufen auch Bestandsnutzerinnen einmal das
+    // Onboarding (aktive Lebensphasen-Wahl + Datenschutz-Kenntnisnahme).
+    onboardingCompletedAt: state.onboardingCompletedAt || null,
+    consents: {
+      scanUpload: state.consents?.scanUpload || null,
+      privacyVersion: state.consents?.privacyVersion || null,
+    },
   };
 }
+
+/**
+ * Ausgangszustand aller Nutzerdaten. Einmal definiert, zweimal verwendet:
+ * als Startwert beim ersten Oeffnen und als Ziel von resetAllData() —
+ * so kann der Loeschweg (Art. 17 DSGVO) kein Feld vergessen, das spaeter
+ * dazukommt.
+ */
+export const INITIAL_USER_STATE = {
+  userSupplements: [],
+  intakeLogs: [],
+  stockBySupplementId: {},
+  scanResults: [],
+  pendingScanResult: null,
+  activeProfileId: 'adult',
+  // Lebensphase fuer den Referenzwert-Abgleich (siehe data/referenceValues.js).
+  // Der Wert ist nur ein technischer Platzhalter: Bis zum Abschluss des
+  // Onboardings ist die App gate't (app/_layout.jsx), es gibt also keine
+  // Referenzwert-Aussage ohne aktive Wahl.
+  activeLifeStageId: 'adult-woman',
+  // Persoenliches Profil (Medikamentengruppen, Erkrankungen, Ziele).
+  // Bleibt wie alles andere lokal auf dem Geraet.
+  profile: EMPTY_PROFILE,
+  // Wirkungskontrolle: laufende und abgeschlossene Beobachtungen samt
+  // der einzelnen Bewertungen (siehe OutcomeTracker.js).
+  trials: [],
+  trialRatings: [],
+  // Laborwerte: bleiben wie alles andere lokal. Die App bewertet sie
+  // nicht, sie dokumentiert und stellt den Verlauf dar.
+  labValues: [],
+  absorptionBlockedAt: null,
+  settings: {},
+  // Erststart und Einwilligungen. scanUpload haelt den Zeitpunkt der
+  // Einwilligung zur Foto-Uebertragung an die KI-Auswertung fest,
+  // privacyVersion den Stand der zur Kenntnis genommenen
+  // Datenschutzerklaerung.
+  onboardingCompletedAt: null,
+  consents: { scanUpload: null, privacyVersion: null },
+};
 
 export const useStore = create(
   persist(
     (set, get) => ({
       librarySupplements: inventoryData,
-      userSupplements: [],
-      intakeLogs: [],
-      stockBySupplementId: {},
-      scanResults: [],
-      pendingScanResult: null,
-      activeProfileId: 'adult',
-      // Lebensphase fuer den Referenzwert-Abgleich (siehe data/referenceValues.js)
-      activeLifeStageId: 'adult-woman',
+      ...INITIAL_USER_STATE,
       // Oberflaechensprache (siehe i18n/). Deutsch ist die Pflegesprache,
-      // deshalb auch der Startwert.
+      // deshalb auch der Startwert. Bewusst nicht Teil von
+      // INITIAL_USER_STATE: Die Sprachwahl ist eine Geraeteeinstellung,
+      // kein Nutzerdatum, und ueberlebt deshalb resetAllData().
       language: 'de',
-      // Persoenliches Profil (Medikamentengruppen, Erkrankungen, Ziele).
-      // Bleibt wie alles andere lokal auf dem Geraet.
-      profile: EMPTY_PROFILE,
-      // Wirkungskontrolle: laufende und abgeschlossene Beobachtungen samt
-      // der einzelnen Bewertungen (siehe OutcomeTracker.js).
-      trials: [],
-      trialRatings: [],
-      // Laborwerte: bleiben wie alles andere lokal. Die App bewertet sie
-      // nicht, sie dokumentiert und stellt den Verlauf dar.
-      labValues: [],
-      absorptionBlockedAt: null,
-      settings: {},
+
+      completeOnboarding: ({ lifeStageId, privacyVersion } = {}) =>
+        set((state) => ({
+          activeLifeStageId: lifeStageId || state.activeLifeStageId,
+          onboardingCompletedAt: new Date().toISOString(),
+          consents: { ...state.consents, privacyVersion: privacyVersion || null },
+        })),
+
+      giveScanConsent: () =>
+        set((state) => ({
+          consents: { ...state.consents, scanUpload: new Date().toISOString() },
+        })),
+
+      revokeScanConsent: () =>
+        set((state) => ({
+          consents: { ...state.consents, scanUpload: null },
+        })),
+
+      // Zentraler Loeschweg: setzt saemtliche Nutzerdaten auf den
+      // Ausgangszustand zurueck. Danach greift das Onboarding-Gate wieder.
+      resetAllData: () => set({ ...INITIAL_USER_STATE }),
+
+      // Backup einspielen (siehe BackupManager.js). Ersetzt den gesamten
+      // Bestand; die Daten laufen durch dieselbe Normalisierung wie beim
+      // Laden aus dem Speicher, damit auch aeltere Backups sauber ankommen.
+      importBackup: (data) => {
+        const migrated = migratePersistedState(data);
+        const next = {};
+        for (const field of Object.keys(INITIAL_USER_STATE)) {
+          next[field] = migrated[field];
+        }
+        set(next);
+        if (data?.language === 'de' || data?.language === 'en') {
+          get().setLanguage(data.language);
+        }
+      },
 
       setActiveLifeStage: (lifeStageId) =>
         set({ activeLifeStageId: lifeStageId }),
@@ -398,8 +465,33 @@ export const useStore = create(
       },
       getTodaySchedule: (date = new Date()) => {
         const loggedIds = get().getLoggedToday(date).map((log) => log.userSupplementId);
-        return buildDailySchedule(loggedIds, get().activeProfileId, get().getActiveSupplements());
+        // Kur-Pausentage (CureManager): Was heute in der OFF-Phase ist,
+        // gehoert nicht in die Slots. Es verschwindet aber nicht still,
+        // sondern erscheint ueber getPausedCuresToday() als eigener Block.
+        const dueSupplements = get()
+          .getActiveSupplements()
+          .filter((supplement) =>
+            isDueToday(supplement.cureConfig, supplement.cureStartDate)
+          );
+        return buildDailySchedule(loggedIds, get().activeProfileId, dueSupplements);
       },
+
+      // Aktive Supplements, deren Kur heute pausiert, samt Status-Text.
+      getPausedCuresToday: () =>
+        get()
+          .getActiveSupplements()
+          .filter(
+            (supplement) =>
+              supplement.cureConfig &&
+              !isDueToday(supplement.cureConfig, supplement.cureStartDate)
+          )
+          .map((supplement) => ({
+            supplement,
+            statusLabel: getCureStatusLabel(
+              supplement.cureConfig,
+              supplement.cureStartDate
+            ),
+          })),
       setStock: (userSupplementId, stockData) => set((state) => ({
         stockBySupplementId: { ...state.stockBySupplementId, [userSupplementId]: stockData },
       })),
@@ -420,7 +512,9 @@ export const useStore = create(
     }),
     {
       name: 'supplement-os-store-v1',
-      storage: createJSONStorage(() => AsyncStorage),
+      // Verschluesselt im Ruhezustand: Der Store enthaelt Laborwerte und
+      // Medikamentengruppen (Art. 9 DSGVO). Siehe secureStorage.js.
+      storage: createJSONStorage(() => secureStorage),
       partialize: (state) => ({
         userSupplements: state.userSupplements,
         intakeLogs: state.intakeLogs,
@@ -436,6 +530,8 @@ export const useStore = create(
         labValues: state.labValues,
         absorptionBlockedAt: state.absorptionBlockedAt,
         settings: state.settings,
+        onboardingCompletedAt: state.onboardingCompletedAt,
+        consents: state.consents,
       }),
       version: 1,
       migrate: (state) => migratePersistedState(state),

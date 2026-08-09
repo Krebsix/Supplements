@@ -23,6 +23,7 @@
 
 import { matchIngredient } from './SubstanceMatcher';
 import { COMPLAINTS } from './data/complaints';
+import { localizeComplaint } from './data/localize';
 import { substanceById } from './data/substances';
 
 function normalize(text) {
@@ -78,8 +79,11 @@ export function findComplaints(query) {
  * Naehrstoffe, die schon eingenommen werden, sind markiert — samt der
  * Produkte, in denen sie stecken.
  */
-export function buildComplaintView(complaint, supplements = []) {
-  if (!complaint) return null;
+export function buildComplaintView(rawComplaint, supplements = []) {
+  if (!rawComplaint) return null;
+
+  // Sprach-Overlay (data/localize.js): auf Deutsch ein No-op.
+  const complaint = localizeComplaint(rawComplaint);
 
   // Was steckt im Bestand? Gescannte Multivitamine mitzaehlen.
   const inStack = new Map();

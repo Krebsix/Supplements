@@ -60,8 +60,8 @@ export default {
     '⛔ Nattokinase + ID 59: increased bleeding tendency possible.',
 
   // Cure cycles
-  'logic.cure.cycle': '{emoji} {phase} – day {day}/{total} ({left} days left)',
-  'logic.cure.phase.on': 'ON',
-  'logic.cure.phase.off': 'OFF',
-  'logic.cure.stepped': '📈 Week {week}: {drops} drops',
+  'logic.cure.cycle': '{phase}, day {day} of {total}, {left} days left',
+  'logic.cure.phase.on': 'Intake phase',
+  'logic.cure.phase.off': 'Break',
+  'logic.cure.stepped': 'Week {week}: {drops} drops',
 };

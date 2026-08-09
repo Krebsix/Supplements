@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Supplement OS",
+    "slug": "supplement-os",
+    "version": "1.0.0",
+    "scheme": "supplementos",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.krebsi.supplementos",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Die Kamera wird nur genutzt, um Etiketten von Nahrungsergänzungsmitteln zu fotografieren oder ihren Barcode zu lesen. Es findet keine Aufnahme ohne dein aktives Auslösen statt.",
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": [
+          "de",
+          "en"
+        ],
+        "CFBundleDevelopmentRegion": "de"
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.krebsi.supplementos",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.POST_NOTIFICATIONS"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Die Kamera wird nur genutzt, um Etiketten von Nahrungsergänzungsmitteln zu fotografieren oder ihren Barcode zu lesen.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "defaultChannel": "einnahme-erinnerungen"
+        }
+      ],
+      "expo-secure-store"
+    ]
+  }
+}

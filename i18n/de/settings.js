@@ -77,4 +77,55 @@ export default {
   'settings.restoreConfirm.message':
     '{name} wird aus dem Archiv entfernt und wieder als aktives Supplement geführt.',
   'settings.restoreConfirm.confirmButton': 'Wiederherstellen',
+  'settings.backupLabel': 'Backup',
+  'settings.backupTitle': 'Daten sichern und übertragen',
+  'settings.backupText':
+    'Alle Daten liegen nur auf diesem Gerät. Das Backup ist eine JSON-Datei mit deinem kompletten Bestand: für den Gerätewechsel, als Sicherung, oder als vollständiger Datenauszug. Du entscheidest über das Teilen-Menü, wo die Datei landet.',
+  'settings.backupExportButton': 'Backup erstellen',
+  'settings.backupImportButton': 'Backup einspielen',
+  'settings.backupExportError.title': 'Backup fehlgeschlagen',
+  'settings.backupExportError.message': 'Die Datei konnte nicht erstellt werden.',
+  'settings.backupImportError.title': 'Einspielen fehlgeschlagen',
+  'settings.backupImportError.invalidJson':
+    'Die Datei ist kein lesbares JSON.',
+  'settings.backupImportError.wrongSchema':
+    'Die Datei ist kein Backup dieser App.',
+  'settings.backupImportError.newerVersion':
+    'Das Backup stammt aus einer neueren App-Version. Bitte erst die App aktualisieren.',
+  'settings.backupImportError.missingData':
+    'Die Datei enthält keinen Datenbestand.',
+  'settings.backupImportConfirm.title': 'Backup einspielen?',
+  'settings.backupImportConfirm.message':
+    'Backup vom {date}. Der aktuelle Bestand auf diesem Gerät wird dabei vollständig ersetzt.',
+  'settings.backupImportConfirm.confirmButton': 'Ersetzen',
+  'settings.backupImportDone.title': 'Backup eingespielt',
+  'settings.backupImportDone.message': 'Der Bestand wurde übernommen.',
+  'settings.legalLabel': 'Rechtliches',
+  'settings.legalTitle': 'Datenschutz und Impressum',
+  'settings.legalText':
+    'Was die App speichert, was das Gerät verlässt und wer sie betreibt.',
+  'settings.privacyLink': 'Datenschutzerklärung',
+  'settings.imprintLink': 'Impressum',
+  'settings.scanConsentTitle': 'Einwilligung Foto-Analyse',
+  'settings.scanConsentGiven':
+    'Erteilt am {date}. Etikettenfotos dürfen zur Auswertung übertragen werden.',
+  'settings.scanConsentNone':
+    'Nicht erteilt. Die App fragt vor der ersten Foto-Analyse.',
+  'settings.scanConsentRevoke': 'Einwilligung widerrufen',
+  'settings.scanConsentRevoked.title': 'Einwilligung widerrufen',
+  'settings.scanConsentRevoked.message':
+    'Die Foto-Analyse fragt vor der nächsten Nutzung erneut.',
+  'settings.deleteAllLabel': 'Alle Daten',
+  'settings.deleteAllTitle': 'Sämtliche Daten löschen',
+  'settings.deleteAllText':
+    'Entfernt alle Präparate, Einnahmen, Scan-Ergebnisse, dein Profil, Laborwerte, Beobachtungen und Einwilligungen von diesem Gerät. Es gibt kein Backup auf einem Server, gelöscht ist gelöscht.',
+  'settings.deleteAllButton': 'Alle Daten löschen',
+  'settings.deleteAllConfirm.title': 'Wirklich alles löschen?',
+  'settings.deleteAllConfirm.message':
+    'Alle Einträge werden unwiederbringlich von diesem Gerät entfernt. Die App startet danach wie beim ersten Öffnen.',
+  'settings.deleteAllConfirm.confirmButton': 'Weiter',
+  'settings.deleteAllConfirm2.title': 'Letzte Bestätigung',
+  'settings.deleteAllConfirm2.message':
+    'Das ist der letzte Schritt. Danach sind alle Daten weg.',
+  'settings.deleteAllConfirm2.confirmButton': 'Endgültig löschen',
 };

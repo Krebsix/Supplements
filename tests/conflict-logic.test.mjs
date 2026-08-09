@@ -1,7 +1,6 @@
 import {
   checkConflicts,
   checkAllConflictsForSlot,
-  getSeverityColor,
 } from '../ConflictLogic.js';
 
 let failed = 0;
@@ -155,14 +154,6 @@ console.log('\n— checkAllConflictsForSlot: Deduplizierung über mehrere Paare 
   check('Supplements ohne jede Wechselwirkung → leeres Ergebnis', slot.length === 0, slot.length);
 }
 
-console.log('\n— getSeverityColor —');
-{
-  check('CRITICAL → rot', getSeverityColor('CRITICAL').hex === '#dc2626');
-  check('HIGH → orange', getSeverityColor('HIGH').hex === '#f97316');
-  check('MEDIUM → gelb', getSeverityColor('MEDIUM').hex === '#eab308');
-  check('INFO → grün', getSeverityColor('INFO').hex === '#22c55e');
-  check('Unbekannt → grauer Default', getSeverityColor('UNKNOWN').hex === '#9ca3af');
-}
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

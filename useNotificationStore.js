@@ -10,6 +10,8 @@ import { create }                     from 'zustand';
 import { persist, createJSONStorage }  from 'zustand/middleware';
 import AsyncStorage                    from '@react-native-async-storage/async-storage';
 
+import * as Notifications from 'expo-notifications';
+
 import {
   DEFAULT_SLOT_TIMES,
   scheduleAllNotificationsForToday,
@@ -17,6 +19,14 @@ import {
   snoozeNotification,
   requestPermissions,
 } from './NotificationScheduler';
+
+async function cancelAllNotifications() {
+  try {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  } catch (error) {
+    console.error('[useNotificationStore] cancelAll fehlgeschlagen', error);
+  }
+}
 
 // ─────────────────────────────────────────────────────────────
 const useNotificationStore = create(
@@ -64,14 +74,26 @@ const useNotificationStore = create(
        *  - nach jeder Einnahme (logSupplement)
        *  - wenn User Zeiten in Settings ändert
        */
-      refreshSchedule: async ({ loggedToday = [], absorptionBlockedAt = null, profile = 'adult' } = {}) => {
+      refreshSchedule: async ({
+        loggedToday = [],
+        absorptionBlockedAt = null,
+        profile = 'adult',
+        supplements = [],
+      } = {}) => {
         const { notificationsEnabled, permissionGranted, slotTimes } = get();
-        if (!notificationsEnabled || !permissionGranted) return;
+        if (!notificationsEnabled || !permissionGranted) {
+          // Abgeschaltet heisst abgeschaltet: bestehende Alarme raeumen,
+          // sonst feuern Erinnerungen aus der Zeit davor weiter.
+          await cancelAllNotifications();
+          set({ scheduledToday: [] });
+          return [];
+        }
 
         const scheduled = await scheduleAllNotificationsForToday(
           slotTimes,
           profile,
-          { loggedToday, absorptionBlockedAt }
+          { loggedToday, absorptionBlockedAt },
+          supplements
         );
 
         set({ scheduledToday: scheduled });
@@ -83,14 +105,19 @@ const useNotificationStore = create(
        * triggerAbsorptionReschedule({ loggedToday, profile })
        * Direkt nach Loggen von ID 43 aufrufen.
        */
-      triggerAbsorptionReschedule: async ({ loggedToday = [], profile = 'adult' } = {}) => {
+      triggerAbsorptionReschedule: async ({
+        loggedToday = [],
+        profile = 'adult',
+        supplements = [],
+      } = {}) => {
         const { notificationsEnabled, permissionGranted, slotTimes } = get();
         if (!notificationsEnabled || !permissionGranted) return;
 
         const scheduled = await rescheduleAfterAbsorptionBlock(
           slotTimes,
           profile,
-          { loggedToday, absorptionBlockedAt: new Date().toISOString() }
+          { loggedToday, absorptionBlockedAt: new Date().toISOString() },
+          supplements
         );
 
         set({ scheduledToday: scheduled });
@@ -98,8 +125,8 @@ const useNotificationStore = create(
       },
 
       // ── Snooze ────────────────────────────────────────────
-      snooze: async (supplementId, slotId, minutes = 15) => {
-        return snoozeNotification(supplementId, slotId, minutes);
+      snooze: async (supplement, slotId, minutes = 15) => {
+        return snoozeNotification(supplement, slotId, minutes);
       },
 
       // ── Debug-Helfer ──────────────────────────────────────
@@ -125,3 +152,33 @@ const useNotificationStore = create(
 );
 
 export default useNotificationStore;
+
+// ─────────────────────────────────────────────────────────────
+// Bruecke zum Haupt-Store.
+// Sammelt alles ein, was die Planung braucht (heutige Logs, aktiver
+// Bestand ohne Kur-Pausen, Flohsamen-Sperre) und stoesst refreshSchedule
+// an. Liegt hier und nicht im Haupt-Store, damit useStore.js frei von
+// expo-notifications bleibt (Node-Tests buendeln useStore-Abhaengigkeiten).
+// ─────────────────────────────────────────────────────────────
+
+import useStore from './useStore';
+import { isDueToday } from './CureManager';
+
+export async function refreshNotificationSchedule() {
+  const main = useStore.getState();
+  const loggedToday = main
+    .getLoggedToday()
+    .map((log) => log.userSupplementId);
+  const supplements = main
+    .getActiveSupplements()
+    .filter((supplement) =>
+      isDueToday(supplement.cureConfig, supplement.cureStartDate)
+    );
+
+  return useNotificationStore.getState().refreshSchedule({
+    loggedToday,
+    absorptionBlockedAt: main.absorptionBlockedAt,
+    profile: main.activeProfileId,
+    supplements,
+  });
+}

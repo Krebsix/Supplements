@@ -19,9 +19,11 @@
  *
  * ABGRENZUNG:
  * Hier stehen nur Oberflaechen-Texte. Die Wirkstoff-Fachtexte in data/
- * bleiben vorerst deutsch (bewusste Entscheidung: eine unsaubere englische
- * Uebersetzung von "wird eingesetzt bei" klingt schnell praeskriptiv und
- * waere ein Compliance-Risiko, kein blosser Lokalisierungsfehler).
+ * laufen ueber englische Text-Overlays (data/en/ + data/localize.js):
+ * Deutsch bleibt die kanonische Quelle, Englisch wird eingeblendet, wenn
+ * ein Overlay-Text existiert. Die Formulierungsdisziplin (deskriptiv,
+ * nie praeskriptiv) wird fuer beide Sprachen von Tests erzwungen
+ * (tests/substances-en.test.mjs, tests/data-en.test.mjs).
  */
 
 import { useStore } from '../useStore';

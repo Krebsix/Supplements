@@ -22,6 +22,8 @@ import history from './history';
 import home from './home';
 import lab from './lab';
 import logic from './logic';
+import notifications from './notifications';
+import onboarding from './onboarding';
 import reference from './reference';
 import outcome from './outcome';
 import profile from './profile';
@@ -39,6 +41,8 @@ export default {
   ...complaint,
   ...logic,
   ...lab,
+  ...notifications,
+  ...onboarding,
   ...reference,
   ...home,
   ...dashboard,
