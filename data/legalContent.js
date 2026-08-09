@@ -15,16 +15,28 @@
 
 export const PRIVACY_VERSION = '2026-08-09';
 
-// VOR VEROEFFENTLICHUNG EINSETZEN: echte Betreiberdaten. Ohne vollstaendiges
-// Impressum ist ein Launch im DACH-Raum nicht zulaessig (§ 5 DDG).
+// Betreiberin laut Nadine (2026-08-09): die bestehende LLC.
+// OFFEN vor Veroeffentlichung:
+//   1. Kontakt-E-Mail einsetzen (Pflichtangabe § 5 DDG).
+//   2. Vertretungsberechtigte Person ergaenzen.
+//   3. Art. 27 DSGVO: Ein Verantwortlicher OHNE Niederlassung in der EU,
+//      der Gesundheitsdaten von EU-Nutzerinnen verarbeitet, braucht einen
+//      benannten EU-Vertreter. Der muss hier und in der
+//      Datenschutzerklaerung namentlich stehen.
 export const OPERATOR_PLACEHOLDER = {
-  name: '[Name der Betreiberin]',
-  address: '[Anschrift]',
-  email: '[Kontakt-E-Mail]',
+  name: 'indoo home LLC',
+  address: '30 N Gould St Ste N\nSheridan, WY 82801\nUSA',
+  email: '[Kontakt-E-Mail einsetzen]',
+  representative: '[Vertretungsberechtigte Person einsetzen]',
+  euRepresentative: '[EU-Vertreter nach Art. 27 DSGVO einsetzen]',
 };
 
 export const PRIVACY_SECTIONS = {
   de: [
+    {
+      heading: 'Verantwortliche Stelle',
+      body: `${OPERATOR_PLACEHOLDER.name}\n${OPERATOR_PLACEHOLDER.address}\nKontakt: ${OPERATOR_PLACEHOLDER.email}\nEU-Vertreter (Art. 27 DSGVO): ${OPERATOR_PLACEHOLDER.euRepresentative}`,
+    },
     {
       heading: 'Grundprinzip',
       body:
@@ -67,6 +79,10 @@ export const PRIVACY_SECTIONS = {
     },
   ],
   en: [
+    {
+      heading: 'Controller',
+      body: `${OPERATOR_PLACEHOLDER.name}\n${OPERATOR_PLACEHOLDER.address}\nContact: ${OPERATOR_PLACEHOLDER.email}\nEU representative (Art. 27 GDPR): ${OPERATOR_PLACEHOLDER.euRepresentative}`,
+    },
     {
       heading: 'Core principle',
       body:
@@ -119,6 +135,14 @@ export const IMPRINT_SECTIONS = {
     {
       heading: 'Kontakt',
       body: OPERATOR_PLACEHOLDER.email,
+    },
+    {
+      heading: 'Vertreten durch',
+      body: OPERATOR_PLACEHOLDER.representative,
+    },
+    {
+      heading: 'EU-Vertreter (Art. 27 DSGVO)',
+      body: OPERATOR_PLACEHOLDER.euRepresentative,
     },
     {
       heading: 'Inhaltlich verantwortlich',
