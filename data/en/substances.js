@@ -1776,4 +1776,122 @@ export default {
     },
     cautionNote: 'Fennel contains estragole; the EMA advises using tea and oil only for limited periods and not giving fennel tea to children under 4 as self-medication. Do not use with an allergy to Apiaceae.',
   },
+  'yarrow': {
+    what: 'A medicinal plant whose herb (Millefolii herba) is traditionally used for loss of appetite, digestive complaints and menstrual cramps.',
+    useCases: [
+      { topic: 'Digestive Complaints', note: 'traditionally used for loss of appetite and mild spasmodic gastrointestinal complaints.' },
+      { topic: 'Menstrual Complaints', note: 'traditionally used for mild cramp-like complaints during menstruation.' },
+      { topic: 'Skin', note: 'traditionally used externally for small superficial wounds.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the herb.',
+      'Extrakt': 'Liquid or solid preparations.',
+    },
+    cautionNote: 'Do not use with an allergy to Asteraceae. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'hops': {
+    what: 'Cones of the hop plant (Lupuli flos); traditionally used for restlessness and sleep disturbances, usually combined with valerian.',
+    useCases: [
+      { topic: 'Restlessness and Sleep', note: 'traditionally used for mild symptoms of stress and to support falling asleep.' },
+    ],
+    forms: {
+      'Trockenextrakt': 'Often in combination products with valerian or lemon balm.',
+      'Tee/Aufguss': 'Traditional form of use for the cones.',
+    },
+    cautionNote: 'Can cause drowsiness; consider the effect on the ability to drive. Insufficient data for children under 12 and for pregnancy and breastfeeding.',
+  },
+  'dandelion': {
+    what: 'Root with herb of the dandelion (Taraxaci radix cum herba); traditionally used for digestive complaints and to flush the urinary tract.',
+    useCases: [
+      { topic: 'Digestive Complaints', note: 'traditionally used for a feeling of fullness, bloating and temporary loss of appetite.' },
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume as part of flushing the urinary tract.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for root and herb.',
+      'Extrakt': 'Liquid or solid preparations, also as fresh plant juice.',
+    },
+    cautionNote: 'Not with bile duct obstruction or active gallstones; with biliary disease, clarify use with a doctor. Do not use with an allergy to Asteraceae. Drink enough fluid when flushing.',
+  },
+  'rosemary': {
+    what: 'Leaves of rosemary (Rosmarini folium); traditionally used for digestive complaints and externally for muscle complaints.',
+    useCases: [
+      { topic: 'Digestive Complaints', note: 'traditionally used for mild spasmodic gastrointestinal complaints and bloating.' },
+      { topic: 'Muscles and Joints', note: 'traditionally used externally as a rub or bath additive for mild muscle and joint complaints.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the leaves.',
+      'Ätherisches Öl äußerlich': 'Diluted as a rub or bath additive.',
+    },
+    cautionNote: 'For medicinal doses, sufficient data for pregnancy and breastfeeding are lacking; culinary amounts are harmless. Do not take rosemary oil baths with larger skin injuries or severe cardiovascular disease.',
+  },
+  'thyme': {
+    what: 'Herb of thyme (Thymi herba); one of the established herbal cough remedies in Europe.',
+    useCases: [
+      { topic: 'Cough', note: 'EMA monograph: as an expectorant for productive cough associated with a cold.' },
+      { topic: 'Mouth and Throat', note: 'traditionally used as a rinse or gargle for minor inflammation of the mouth and throat.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the herb.',
+      'Extrakt/Saft': 'Liquid preparations, often combined with ivy or primrose root.',
+    },
+    cautionNote: 'Do not use with an allergy to Lamiaceae. If a cough lasts longer than a week or fever and shortness of breath appear, it belongs in medical evaluation.',
+  },
+  'feverfew': {
+    what: 'Herb of feverfew (Tanaceti parthenii herba); traditionally used for the prophylaxis of migraine.',
+    useCases: [
+      { topic: 'Migraine', note: 'traditionally used for the prophylaxis of migraine; use is preventive and does not replace medical evaluation of the headache cause.' },
+    ],
+    forms: {
+      'Pulver': 'Dried, ground herb in capsules; the monograph refers to this form.',
+      'Extrakt': 'Standardized preparations, usually referenced to parthenolide.',
+    },
+    cautionNote: 'Do not use with an allergy to Asteraceae. Not in pregnancy and breastfeeding. After longer intake, complaints on abrupt discontinuation have been reported; taper off instead. Anyone taking anticoagulant medication discusses intake with a doctor.',
+  },
+  'marshmallow-root': {
+    what: 'Root of the marshmallow plant (Althaeae radix); its mucilage is traditionally used for dry cough and an irritated stomach lining.',
+    useCases: [
+      { topic: 'Dry Cough', note: 'traditionally used for dry, tickly cough; the mucilage settles soothingly on the irritated mucosa.' },
+      { topic: 'Stomach Complaints', note: 'traditionally used for mild complaints involving an irritated stomach lining.' },
+    ],
+    forms: {
+      'Kaltauszug/Tee': 'The mucilage dissolves best in a cold infusion.',
+      'Sirup/Lutschpastillen': 'The usual finished forms for dry cough.',
+    },
+    cautionNote: 'The mucilage can delay the absorption of other medicines; keep 30 to 60 minutes between marshmallow and other medication.',
+  },
+  'uva-ursi': {
+    what: 'Leaves of the bearberry (Uvae ursi folium); traditionally used for mild recurrent complaints of the lower urinary tract.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used for mild recurrent complaints of the lower urinary tract in women, after serious causes have been ruled out by a doctor.' },
+    ],
+    forms: {
+      'Trockenextrakt': 'The usual form in tablets or capsules.',
+      'Tee/Aufguss': 'Traditional form of use for the leaves.',
+    },
+    cautionNote: 'Use only short-term (the EMA states a maximum of one week) and no more than five times a year. Not for children, pregnancy or breastfeeding. With fever, flank pain or blood in the urine, seek medical evaluation immediately, as this points to a more serious infection.',
+  },
+  'willow-bark': {
+    what: 'Bark of the willow (Salicis cortex); contains salicin, a precursor of salicylic acid, and is used for pain of the musculoskeletal system.',
+    useCases: [
+      { topic: 'Back Pain', note: 'EMA monograph: short-term use for low back pain.' },
+      { topic: 'Joint Complaints', note: 'traditionally used for mild joint pain.' },
+      { topic: 'Cold Symptoms', note: 'traditionally used for fever and headache complaints associated with a cold.' },
+    ],
+    forms: {
+      'Trockenextrakt': 'Standardized for salicin; the usual form in tablets.',
+      'Tee/Aufguss': 'Traditional form of use for the bark.',
+    },
+    cautionNote: 'Not with salicylate intolerance or asthma triggered by pain relievers (ASA). Not for children and adolescents with feverish infections. Not in the last trimester of pregnancy. Anyone taking anticoagulant medication discusses intake with a doctor.',
+  },
+  'goldenrod': {
+    what: 'Herb of European goldenrod (Solidaginis virgaureae herba); traditionally used to flush the urinary tract.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume and flush the urinary tract in mild urinary complaints.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the herb.',
+      'Extrakt': 'Liquid or solid preparations.',
+    },
+    cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Do not use with an allergy to Asteraceae.',
+  },
 };

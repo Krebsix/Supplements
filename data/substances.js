@@ -3156,6 +3156,214 @@ export const substances = [
       { label: 'EMA/HMPC: European Union herbal monograph on Foeniculum vulgare Mill., fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/foeniculi-dulcis-fructus' },
     ],
   },
+  {
+    id: 'yarrow',
+    name: 'Schafgarbe',
+    category: 'Kräuter',
+    synonyms: ['schafgarbe', 'yarrow', 'achillea millefolium', 'millefolii herba', 'schafgarbenkraut', 'schafgarbentee'],
+    unit: 'mg',
+    what: 'Heilpflanze, deren Kraut (Millefolii herba) traditionell bei Appetitlosigkeit, Verdauungsbeschwerden und Menstruationskrämpfen eingesetzt wird.',
+    useCases: [
+      { topic: 'Verdauungsbeschwerden', note: 'Traditionell bei Appetitlosigkeit und leichten krampfartigen Magen-Darm-Beschwerden.' },
+      { topic: 'Menstruationsbeschwerden', note: 'Traditionell bei leichten krampfartigen Beschwerden während der Menstruation.' },
+      { topic: 'Haut', note: 'Traditionell äußerlich bei kleinen oberflächlichen Wunden.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform des Krauts.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei Allergie gegen Korbblütler nicht anwenden. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Achillea millefolium L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/millefolii-herba' },
+    ],
+  },
+  {
+    id: 'hops',
+    name: 'Hopfen',
+    category: 'Kräuter',
+    synonyms: ['hopfen', 'hops', 'humulus lupulus', 'hopfenzapfen', 'lupuli flos', 'hopfenblüten'],
+    unit: 'mg',
+    what: 'Zapfen des Hopfens (Lupuli flos); traditionell bei Unruhe und Schlafstörungen eingesetzt, meist kombiniert mit Baldrian.',
+    useCases: [
+      { topic: 'Unruhe und Schlaf', note: 'Traditionell bei leichten Symptomen von Stress und zur Unterstützung des Einschlafens.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt', note: 'Häufig in Kombinationspräparaten mit Baldrian oder Melisse.' },
+      { name: 'Tee/Aufguss', note: 'Traditionelle Anwendungsform der Zapfen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Kann müde machen; Wirkung auf die Fahrtüchtigkeit beachten. Keine ausreichenden Daten für Kinder unter 12 Jahren sowie für Schwangerschaft und Stillzeit.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Humulus lupulus L., flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/lupuli-flos' },
+    ],
+  },
+  {
+    id: 'dandelion',
+    name: 'Löwenzahn',
+    category: 'Kräuter',
+    synonyms: ['löwenzahn', 'loewenzahn', 'dandelion', 'taraxacum officinale', 'löwenzahnwurzel', 'taraxaci radix'],
+    unit: 'mg',
+    what: 'Wurzel mit Kraut des Löwenzahns (Taraxaci radix cum herba); traditionell bei Verdauungsbeschwerden und zur Durchspülung der Harnwege eingesetzt.',
+    useCases: [
+      { topic: 'Verdauungsbeschwerden', note: 'Traditionell bei Völlegefühl, Blähungen und vorübergehender Appetitlosigkeit.' },
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge im Rahmen einer Durchspülung der Harnwege.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform von Wurzel und Kraut.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen, auch als Frischpflanzensaft.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Nicht bei Verschluss der Gallenwege oder aktiven Gallensteinen; bei Gallenerkrankungen ärztlich abklären. Bei Allergie gegen Korbblütler nicht anwenden. Zur Durchspülung ausreichend trinken.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Taraxacum officinale, radix cum herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/taraxaci-radix-cum-herba' },
+    ],
+  },
+  {
+    id: 'rosemary',
+    name: 'Rosmarin',
+    category: 'Kräuter',
+    synonyms: ['rosmarin', 'rosemary', 'rosmarinus officinalis', 'salvia rosmarinus', 'rosmarini folium', 'rosmarinblätter'],
+    unit: 'mg',
+    what: 'Blätter des Rosmarins (Rosmarini folium); traditionell bei Verdauungsbeschwerden sowie äußerlich bei Muskelbeschwerden eingesetzt.',
+    useCases: [
+      { topic: 'Verdauungsbeschwerden', note: 'Traditionell bei leichten krampfartigen Magen-Darm-Beschwerden und Blähungen.' },
+      { topic: 'Muskeln und Gelenke', note: 'Traditionell äußerlich als Einreibung oder Badezusatz bei leichten Muskel- und Gelenkbeschwerden.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform der Blätter.' },
+      { name: 'Ätherisches Öl äußerlich', note: 'Verdünnt als Einreibung oder Badezusatz.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten für arzneiliche Dosierungen; Gewürzmengen sind unbedenklich. Bäder mit Rosmarinöl nicht bei größeren Hautverletzungen oder schweren Herz-Kreislauf-Erkrankungen.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Rosmarinus officinalis L., folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/rosmarini-folium' },
+    ],
+  },
+  {
+    id: 'thyme',
+    name: 'Thymian',
+    category: 'Kräuter',
+    synonyms: ['thymian', 'thyme', 'thymus vulgaris', 'thymi herba', 'thymiankraut', 'thymiantee'],
+    unit: 'mg',
+    what: 'Kraut des Thymians (Thymi herba); eines der etablierten pflanzlichen Hustenmittel in Europa.',
+    useCases: [
+      { topic: 'Husten', note: 'EMA-Monographie: als schleimlösendes Mittel bei produktivem Husten im Rahmen einer Erkältung.' },
+      { topic: 'Mund und Rachen', note: 'Traditionell als Spülung oder Gurgellösung bei leichten Entzündungen im Mund- und Rachenraum.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform des Krauts.' },
+      { name: 'Extrakt/Saft', note: 'Flüssige Zubereitungen, oft kombiniert mit Efeu oder Primelwurzel.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei Allergie gegen Lippenblütler nicht anwenden. Hält Husten länger als eine Woche an oder kommen Fieber und Atemnot dazu, gehört das in ärztliche Abklärung.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Thymus vulgaris L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/thymi-herba' },
+    ],
+  },
+  {
+    id: 'feverfew',
+    name: 'Mutterkraut',
+    category: 'Kräuter',
+    synonyms: ['mutterkraut', 'feverfew', 'tanacetum parthenium', 'tanaceti parthenii herba', 'falsche kamille'],
+    unit: 'mg',
+    what: 'Kraut des Mutterkrauts (Tanaceti parthenii herba); traditionell zur Vorbeugung von Migräne eingesetzt.',
+    useCases: [
+      { topic: 'Migräne', note: 'Traditionell zur Prophylaxe von Migräne eingesetzt; die Anwendung ist vorbeugend und ersetzt keine ärztliche Abklärung der Kopfschmerzursache.' },
+    ],
+    forms: [
+      { name: 'Pulver', note: 'Getrocknetes, gemahlenes Kraut in Kapseln; auf diese Form bezieht sich die Monographie.' },
+      { name: 'Extrakt', note: 'Standardisierte Zubereitungen, meist auf Parthenolid bezogen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei Allergie gegen Korbblütler nicht anwenden. Nicht in Schwangerschaft und Stillzeit. Nach längerer Einnahme wird über Beschwerden beim abrupten Absetzen berichtet; eher ausschleichen. Wer gerinnungshemmende Medikamente nimmt, bespricht die Einnahme ärztlich.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Tanacetum parthenium, herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/tanaceti-parthenii-herba' },
+    ],
+  },
+  {
+    id: 'marshmallow-root',
+    name: 'Eibischwurzel',
+    category: 'Kräuter',
+    synonyms: ['eibisch', 'eibischwurzel', 'marshmallow root', 'althaea officinalis', 'althaeae radix', 'echter eibisch'],
+    unit: 'mg',
+    what: 'Wurzel des Echten Eibischs (Althaeae radix); die Schleimstoffe werden traditionell bei Reizhusten und gereizter Magenschleimhaut eingesetzt.',
+    useCases: [
+      { topic: 'Reizhusten', note: 'Traditionell bei trockenem Reizhusten; die Schleimstoffe legen sich beruhigend auf die gereizte Schleimhaut.' },
+      { topic: 'Magenbeschwerden', note: 'Traditionell bei leichten Beschwerden mit gereizter Magenschleimhaut.' },
+    ],
+    forms: [
+      { name: 'Kaltauszug/Tee', note: 'Schleimstoffe lösen sich am besten im Kaltansatz.' },
+      { name: 'Sirup/Lutschpastillen', note: 'Übliche Fertigformen bei Reizhusten.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Die Schleimstoffe können die Aufnahme anderer Medikamente verzögern; zwischen Eibisch und anderen Arzneimitteln 30 bis 60 Minuten Abstand halten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Althaea officinalis L., radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/althaeae-radix' },
+    ],
+  },
+  {
+    id: 'uva-ursi',
+    name: 'Bärentraube',
+    category: 'Kräuter',
+    synonyms: ['bärentraube', 'baerentraube', 'uva ursi', 'arctostaphylos uva-ursi', 'bärentraubenblätter', 'uvae ursi folium'],
+    unit: 'mg',
+    what: 'Blätter der Echten Bärentraube (Uvae ursi folium); traditionell bei leichten wiederkehrenden Beschwerden der unteren Harnwege eingesetzt.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell bei leichten wiederkehrenden Beschwerden der unteren Harnwege bei Frauen, nachdem ernste Ursachen ärztlich ausgeschlossen wurden.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt', note: 'Übliche Form in Tabletten oder Kapseln.' },
+      { name: 'Tee/Aufguss', note: 'Traditionelle Anwendungsform der Blätter.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Nur kurzzeitig anwenden (die EMA nennt maximal eine Woche) und nicht häufiger als fünfmal im Jahr. Nicht für Kinder, Schwangerschaft oder Stillzeit. Bei Fieber, Flankenschmerz oder Blut im Urin sofort ärztlich abklären, das spricht für eine ernstere Infektion.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Arctostaphylos uva-ursi, folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/uvae-ursi-folium' },
+    ],
+  },
+  {
+    id: 'willow-bark',
+    name: 'Weidenrinde',
+    category: 'Kräuter',
+    synonyms: ['weidenrinde', 'willow bark', 'salix', 'salicis cortex', 'silberweide', 'weidenrindenextrakt'],
+    unit: 'mg',
+    what: 'Rinde der Weide (Salicis cortex); enthält Salicin, eine Vorstufe der Salicylsäure, und wird bei Schmerzen des Bewegungsapparats eingesetzt.',
+    useCases: [
+      { topic: 'Rückenschmerzen', note: 'EMA-Monographie: kurzzeitige Anwendung bei Kreuzschmerzen.' },
+      { topic: 'Gelenkbeschwerden', note: 'Traditionell bei leichten Gelenkschmerzen.' },
+      { topic: 'Erkältungsbeschwerden', note: 'Traditionell bei Fieber- und Kopfschmerzbeschwerden im Rahmen einer Erkältung.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt', note: 'Standardisiert auf Salicin; übliche Form in Tabletten.' },
+      { name: 'Tee/Aufguss', note: 'Traditionelle Anwendungsform der Rinde.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Nicht bei Salicylat-Unverträglichkeit oder Asthma durch Schmerzmittel (ASS). Nicht für Kinder und Jugendliche mit fieberhaften Infekten. Nicht im letzten Schwangerschaftsdrittel. Wer gerinnungshemmende Medikamente nimmt, bespricht die Einnahme ärztlich.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Salix, cortex', url: 'https://www.ema.europa.eu/en/medicines/herbal/salicis-cortex' },
+    ],
+  },
+  {
+    id: 'goldenrod',
+    name: 'Goldrute',
+    category: 'Kräuter',
+    synonyms: ['goldrute', 'goldenrod', 'solidago virgaurea', 'goldrutenkraut', 'solidaginis virgaureae herba', 'echte goldrute'],
+    unit: 'mg',
+    what: 'Kraut der Echten Goldrute (Solidaginis virgaureae herba); traditionell zur Durchspülung der Harnwege eingesetzt.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge und Durchspülung bei leichten Beschwerden der Harnwege.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform des Krauts.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Zur Durchspülung ausreichend trinken. Nicht anwenden, wenn wegen einer Herz- oder Nierenerkrankung die Flüssigkeitszufuhr eingeschränkt ist. Bei Allergie gegen Korbblütler nicht anwenden.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Solidago virgaurea L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/solidaginis-virgaureae-herba' },
+    ],
+  },
 ];
 
 // Schneller Zugriff per ID
