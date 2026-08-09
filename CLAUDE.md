@@ -69,7 +69,8 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | Datei | Aufgabe |
 |---|---|
 | `TimingEngine.js` | Tages-Slots, ordnet Supplements ein |
-| `ConflictLogic.js` | Regelwerk fuer Konflikte und Synergien |
+| `ConflictLogic.js` | Regelwerk fuer Konflikte und Synergien (haengt am Beispiel-Inventar) |
+| `InteractionCheck.js` | Wechselwirkungen und Einnahme-Hinweise auf Ebene der kanonischen Substanzen (`data/interactions.js`): Paar-Regeln mit Severity und Quelle, Einnahme-Hinweise (nuechtern, viel trinken, Tageszeit). UI-Verdrahtung noch offen |
 | `AbsorptionBlocker.js` | 2h-Globalsperre nach Flohsamenschalen (ID 43) |
 | `CureManager.js` | Kur-Zyklen: `cycle` (z. B. 21/7) und `stepped` (Dosis-Stufen) |
 | `SupplementResearchLogic.js` | Aeltere Mini-Wissensdatenbank (Default-Slot, Hinweis) |
@@ -98,6 +99,7 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `data/complaints.js` | 12 Beschwerdebilder: Einordnung, Ursachenbereiche, Warnsignale, Naehrstoffbezuege, Fragen fuer die Praxis |
 | `data/labMarkers.js` | Gaengige Laborwerte als Eingabehilfe. Bewusst OHNE Referenzbereiche — die haengen von Labor und Methode ab |
 | `data/medicationClasses.js` | Medikamentengruppen und ihre BELEGTEN Bezuege zu Wirkstoffen. Keine eigene Interaktionsdatenbank — jede Zeile zitiert woertlich aus substances.js/lifeStageAdvisories.js |
+| `data/interactions.js` | Substanz-Paar-Regeln (Aufnahme-Hemmung/-Foerderung) und Einnahme-Hinweise, jede Zeile mit Quelle (NIH ODS, EFSA). Deskriptiv formuliert, Tests erzwingen Quelle je Regel |
 | `data/legalContent.js` | Datenschutzerklaerung und Impressum als strukturierter Inhalt mit `PRIVACY_VERSION`. Die Aussagen sind gegen den tatsaechlichen Datenfluss geschrieben: Wer einen Datenfluss aendert, aendert diesen Text mit |
 | `data/en/*` | Englische Text-Overlays je Datendatei, keyed nach stabilen IDs. Deutsch bleibt kanonisch |
 | `data/localize.js` | Sprach-Bruecke: blendet EN-Overlays ein, wenn die aktive Sprache Englisch ist. Einzige Stelle, die beide Sprachwelten kennt |
