@@ -108,5 +108,5 @@ export default {
   'export.outcomesNote':
     'Die Angaben zur Wirkung sind Selbsteinschätzungen im Zeitverlauf, keine Wirksamkeitsmessung.',
   'export.adherenceSummary': 'Dokumentierte Einnahmen in den letzten 30 Tagen: {count}',
-  'export.footer': 'Erstellt mit einer lokal geführten Supplement-App. Keine ärztliche Beratung.',
+  'export.footer': 'Erstellt mit {app}. Alle Daten liegen ausschließlich auf dem Gerät der Nutzerin, die App überträgt nichts an Server. Dieser Bericht ist eine Dokumentation, keine ärztliche Beratung.',
 };

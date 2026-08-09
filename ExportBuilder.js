@@ -26,6 +26,7 @@
  * Abhaengigkeit von einer PDF-Bibliothek.
  */
 
+import { APP_NAME } from './appInfo';
 import { analyzeStack } from './StackAnalyzer';
 import { checkProfileAgainstStack } from './ProfileCheck';
 import { evaluateTrial, TRIAL_STATUS } from './OutcomeTracker';
@@ -284,7 +285,11 @@ export function buildReport(data = {}, options = {}) {
   }
 
   out.push('---');
-  out.push(tr('export.footer'));
+  // Die Fusszeile ist der einzige Ort, an dem die App sich selbst nennt:
+  // Jeder Bericht landet bei einer Fachperson, das ist der organische
+  // Verbreitungsweg. Dezent halten — der Bericht gehoert der Nutzerin,
+  // nicht dem Marketing.
+  out.push(tr('export.footer', { app: APP_NAME }));
 
   return out.join('\n');
 }

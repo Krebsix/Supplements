@@ -107,5 +107,5 @@ export default {
   'export.outcomesNote':
     'Outcome entries are self-assessments over time, not measurements of efficacy.',
   'export.adherenceSummary': 'Recorded intakes in the last 30 days: {count}',
-  'export.footer': 'Created with a locally kept supplement app. Not medical advice.',
+  'export.footer': 'Created with {app}. All data lives only on the user\'s device; the app transmits nothing to servers. This report is documentation, not medical advice.',
 };
