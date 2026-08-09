@@ -5,7 +5,7 @@
  */
 
 export default {
-  'dashboard.kicker': 'Supplement OS',
+  'dashboard.kicker': 'MySuplea',
   'dashboard.profileLabel': 'Profile: {profile}',
   'dashboard.title': 'Daily plan',
   'dashboard.subtitle':
@@ -78,7 +78,7 @@ export default {
   'dashboard.noAlertsText':
     'No additional organizational notices are currently documented for the current daily plan.',
   'dashboard.disclaimer':
-    'Supplement OS supports the structured documentation of your routine. Notices remain general, serve organization and do not replace medical advice.',
+    'MySuplea supports the structured documentation of your routine. Notices remain general, serve organization and do not replace medical advice.',
   'dashboard.profileAdult': 'Adult',
   'dashboard.profileChild': 'Child',
   'dashboard.profileDefault': 'Default',

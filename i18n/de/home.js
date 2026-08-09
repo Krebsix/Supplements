@@ -4,7 +4,7 @@
  */
 
 export default {
-  'home.kicker': 'Supplement OS',
+  'home.kicker': 'MySuplea',
   'home.title': 'Scannen. Prüfen. In Routine überführen.',
   'home.subtitle':
     'Dein strukturierter Workspace für Supplement-Daten, Tagesroutine, Verlauf und spätere Scanner-Qualität.',

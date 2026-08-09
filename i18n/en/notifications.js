@@ -12,7 +12,7 @@ export default {
   'notifications.enableSubtitle':
     'Each occupied intake slot gets a reminder at the configured time. Already logged products and cycle breaks are skipped.',
   'notifications.permissionDenied':
-    'The system permission is missing. Enable notifications for Supplement OS in the device settings.',
+    'The system permission is missing. Enable notifications for MySuplea in the device settings.',
   'notifications.timesTitle': 'Slot times',
   'notifications.timesSubtitle':
     'Format 24 hours, for example 07:30. The slot after the fasted slot automatically waits 30 minutes.',

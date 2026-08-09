@@ -84,5 +84,5 @@ export default {
     'These label claims are not listed in the certification database. Marketing terms such as "lab-tested" or "premium" are not protected certifications.',
 
   // AppHeader.jsx
-  'components.header.kicker': 'Supplement OS',
+  'components.header.kicker': 'MySuplea',
 };

@@ -12,7 +12,7 @@ export default {
   'notifications.enableSubtitle':
     'Für jeden belegten Einnahme-Slot kommt zur eingestellten Uhrzeit eine Erinnerung. Bereits eingenommene Präparate und Kur-Pausen werden ausgelassen.',
   'notifications.permissionDenied':
-    'Die System-Berechtigung fehlt. Aktiviere Mitteilungen für Supplement OS in den Geräte-Einstellungen.',
+    'Die System-Berechtigung fehlt. Aktiviere Mitteilungen für MySuplea in den Geräte-Einstellungen.',
   'notifications.timesTitle': 'Uhrzeiten der Slots',
   'notifications.timesSubtitle':
     'Format 24 Stunden, zum Beispiel 07:30. Der Slot nach dem Nüchtern-Slot wartet automatisch 30 Minuten.',

@@ -79,8 +79,11 @@ for (const [fileName, html] of Object.entries(site)) {
   );
 }
 check(
-  'Seiten sind namensneutral (kein App-Name, solange er nicht entschieden ist)',
-  !privacy.includes('Supplement OS') && !imprint.includes('Supplement OS')
+  'Seiten sind namensneutral (bewusst: die URL uebersteht jede Umbenennung)',
+  !privacy.includes('Supplement OS') &&
+    !imprint.includes('Supplement OS') &&
+    !privacy.includes('MySuplea') &&
+    !imprint.includes('MySuplea')
 );
 
 if (failures > 0) {

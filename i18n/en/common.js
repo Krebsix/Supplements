@@ -9,7 +9,7 @@ export default {
   'tabs.scan': 'Scan',
   'tabs.analysis': 'Analysis',
   'tabs.more': 'More',
-  'nav.home': 'Supplement OS',
+  'nav.home': 'MySuplea',
   'nav.dashboard': 'Daily plan',
   'nav.scanner': 'Scanner',
   'nav.results': 'Analysis',

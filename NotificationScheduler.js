@@ -1,7 +1,7 @@
 /**
  * NotificationScheduler.js
  * ─────────────────────────────────────────────────────────────
- * Push-Engine für Supplement OS.
+ * Push-Engine für MySuplea.
  *
  * Verantwortlichkeiten:
  *  1. Permissions anfordern

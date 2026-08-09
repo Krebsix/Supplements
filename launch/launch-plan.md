@@ -1,12 +1,12 @@
 # Launch-Plan
 
-Stand: 2026-08-09. App-Name offen, Platzhalter: [APP-NAME].
+Stand: 2026-08-09. App-Name entschieden: MySuplea (2026-08-09).
 
 ## Phase 0: Blocker (ohne die kein Launch)
 
 | # | Punkt | Wer | Status |
 |---|---|---|---|
-| 1 | App-Name entscheiden (inkl. Store- und Markenkollisions-Check) | Nadine + Claude | Recherche läuft |
+| 1 | App-Name: MySuplea (entschieden 2026-08-09, Store/Web-Kollisions-Check ohne Treffer). Offen: formale Markenrecherche DPMA/EUIPO | Nadine + Claude | entschieden |
 | 2 | Impressum vervollständigen: Kontakt-E-Mail, Vertretungsberechtigte | Nadine | offen |
 | 3 | EU-Vertreter nach Art. 27 DSGVO beauftragen und eintragen | Nadine | offen |
 | 4 | AVV mit Supabase und Anthropic dokumentieren | Nadine | offen |
@@ -65,16 +65,16 @@ dann die Pitch-Mails raus (die brauchen ohnehin Vorlauf, siehe unten).
 
 ### Product Hunt (englisch)
 
-- **Name:** [APP-NAME]
+- **Name:** MySuplea
 - **Tagline:** `The supplement tracker that sells you nothing`
 - **First Comment (Maker Comment), Entwurf:**
 
 ```
-Hi Product Hunt! I built [APP-NAME] because every supplement app I tried
+Hi Product Hunt! I built MySuplea because every supplement app I tried
 was secretly a shop: affiliate links, brand rankings, "you might be
 deficient" quizzes.
 
-[APP-NAME] takes the opposite position:
+MySuplea takes the opposite position:
 · It shows published upper limits instead of recommendations ("contains
   400 mg, the upper limit is 250 mg")
 · It adds up daily totals across ALL your products, because three
@@ -120,7 +120,7 @@ Produkte zu verkaufen
 
 Guten Tag [Name],
 
-kurz und konkret: [APP-NAME] ist eine neue App für Menschen, die mehrere
+kurz und konkret: MySuplea ist eine neue App für Menschen, die mehrere
 Nahrungsergänzungsmittel nehmen. Sie empfiehlt nichts und verkauft nichts.
 Stattdessen addiert sie Wirkstoffmengen über alle Präparate, vergleicht
 sie mit veröffentlichten Obergrenzen (EFSA, BfR), zeigt belegte

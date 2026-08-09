@@ -1,6 +1,6 @@
 # ASO-Paket (App Store Optimization)
 
-Stand: 2026-08-09. App-Name offen, Platzhalter: [APP-NAME].
+Stand: 2026-08-09. App-Name entschieden: MySuplea (2026-08-09).
 Zeichenlimits: iOS-Titel 30, iOS-Untertitel 30, iOS-Keyword-Feld 100,
 Android-Titel 30, Android-Kurzbeschreibung 80.
 
@@ -13,7 +13,7 @@ Alles hier ist danach geschrieben.
 
 ## Titel und Untertitel
 
-**iOS-Titel:** `[APP-NAME]: Supplement Tracker`
+**iOS-Titel:** `MySuplea: Supplement Tracker`
 (Der beschreibende Zusatz macht die Store-Suche. Bei kurzem Namen passt
 beides in 30 Zeichen; sonst Zusatz in den Untertitel schieben.)
 
@@ -40,7 +40,7 @@ indexiert. Keine Markennamen von Präparaten, das gibt Ablehnungen.)
 ## Lang-Beschreibung DE (App Store und Play Store)
 
 ```
-[APP-NAME] ordnet deine Nahrungsergänzungsmittel, ohne dir etwas zu
+MySuplea ordnet deine Nahrungsergänzungsmittel, ohne dir etwas zu
 verkaufen.
 
 WAS DIE APP MACHT
@@ -74,7 +74,7 @@ HMPC und NIH. Was nicht belegt ist, steht nicht in der App.
 ## Lang-Beschreibung EN
 
 ```
-[APP-NAME] organises your supplements without selling you anything.
+MySuplea organises your supplements without selling you anything.
 
 WHAT THE APP DOES
 · Intake plan: products in daily slots, with local reminders

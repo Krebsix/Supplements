@@ -84,5 +84,5 @@ export default {
     'Diese Angaben vom Etikett sind in der Siegel-Datenbank nicht hinterlegt. Werbeaussagen wie „laborgeprüft“ oder „Premium“ sind keine geschützten Zertifizierungen.',
 
   // AppHeader.jsx
-  'components.header.kicker': 'Supplement OS',
+  'components.header.kicker': 'MySuplea',
 };

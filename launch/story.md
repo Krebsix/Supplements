@@ -1,6 +1,6 @@
 # Story und Positionierung
 
-Stand: 2026-08-09. App-Name offen, Platzhalter: [APP-NAME].
+Stand: 2026-08-09. App-Name entschieden: MySuplea (2026-08-09).
 Alle Texte sind copy-paste-fertig und halten die Compliance-Regeln der App
 ein: keine Heilversprechen, keine Empfehlungen, keine Gedankenstriche.
 
@@ -8,7 +8,7 @@ ein: keine Heilversprechen, keine Empfehlungen, keine Gedankenstriche.
 
 ## Ein-Satz-Positionierung
 
-**[APP-NAME] ist die Supplement-App, die dir nichts verkaufen will:
+**MySuplea ist die Supplement-App, die dir nichts verkaufen will:
 Sie ordnet ein, was du nimmst, zitiert ihre Quellen wörtlich und behält
 alle Daten auf deinem Gerät.**
 
@@ -53,7 +53,7 @@ Jeder Punkt ist im Produkt nachprüfbar gebaut, nicht behauptet:
 ## Boilerplate (Presse-Kurzbeschreibung)
 
 **Deutsch:**
-[APP-NAME] ist eine Supplement-App für iPhone und Android, die bewusst
+MySuplea ist eine Supplement-App für iPhone und Android, die bewusst
 nichts verkauft und nichts verspricht. Sie plant Einnahmezeitpunkte, warnt
 vor bekannten Wechselwirkungen, vergleicht Mengen mit veröffentlichten
 Referenzwerten und erstellt auf Wunsch einen Bericht für Praxis oder
@@ -62,7 +62,7 @@ bleiben verschlüsselt auf dem Gerät: kein Konto, keine Cloud, kein
 Tracking. Entwickelt wird die App von indoo home LLC.
 
 **English:**
-[APP-NAME] is a supplement app for iPhone and Android that deliberately
+MySuplea is a supplement app for iPhone and Android that deliberately
 sells nothing and promises nothing. It organises intake timing, warns
 about known interactions, compares amounts against published reference
 values and, on request, produces a report for a doctor or pharmacist.

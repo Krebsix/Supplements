@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Supplement OS",
-    "slug": "supplement-os",
+    "name": "MySuplea",
+    "slug": "mysuplea",
     "version": "1.0.0",
-    "scheme": "supplementos",
+    "scheme": "mysuplea",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -11,7 +11,7 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.krebsi.supplementos",
+      "bundleIdentifier": "com.indoohome.mysuplea",
       "supportsTablet": false,
       "infoPlist": {
         "NSCameraUsageDescription": "Die Kamera wird nur genutzt, um Etiketten von Nahrungsergänzungsmitteln zu fotografieren oder ihren Barcode zu lesen. Es findet keine Aufnahme ohne dein aktives Auslösen statt.",
@@ -27,7 +27,7 @@
       }
     },
     "android": {
-      "package": "com.krebsi.supplementos",
+      "package": "com.indoohome.mysuplea",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.POST_NOTIFICATIONS"
