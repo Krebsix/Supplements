@@ -56,7 +56,7 @@ export const SOURCE_URLS = {
   'efsa-drv': 'https://multimedia.efsa.europa.eu/drvs/index.htm',
   'efsa-ul': 'https://multimedia.efsa.europa.eu/drvs/index.htm',
   'dach': 'https://www.dge.de/wissenschaft/referenzwerte/',
-  'bfr': 'https://www.bfr.bund.de/de/hoechstmengenvorschlaege_fuer_vitamine_und_mineralstoffe_in_nahrungsergaenzungsmitteln-54155.html',
+  'bfr': 'https://www.bfr.bund.de/de/höchstmengenvorschlaege_für_vitamine_und_mineralstoffe_in_nahrungsergaenzungsmitteln-54155.html',
 };
 
 /**
@@ -290,7 +290,7 @@ export const substances = [
     id: 'vitamin-c',
     name: 'Vitamin C',
     category: 'Vitamine',
-    synonyms: ['vitamin c', 'ascorbinsaeure', 'ascorbinsäure', 'ascorbic acid',
+    synonyms: ['vitamin c', 'ascorbinsäure', 'ascorbinsäure', 'ascorbic acid',
       'ester-c', 'calciumascorbat', 'natriumascorbat', 'l-ascorbinsäure', 'vit c'],
     unit: 'mg',
     what: 'Wasserlösliches Vitamin, antioxidativ wirksam und notwendig für die Kollagenbildung.',
@@ -337,7 +337,7 @@ export const substances = [
     id: 'folate',
     name: 'Folat (Vitamin B9)',
     category: 'Vitamine',
-    synonyms: ['folat', 'folate', 'folsaeure', 'folsäure', 'folic acid',
+    synonyms: ['folat', 'folate', 'folsäure', 'folsäure', 'folic acid',
       'vitamin b9', 'b9', 'methylfolat', '5-mthf', 'l-methylfolat', 'quatrefolic'],
     unit: 'µg',
     what: 'Wasserlösliches B-Vitamin, notwendig für Zellteilung, Blutbildung und die Entwicklung des Neuralrohrs.',
@@ -423,7 +423,7 @@ export const substances = [
     name: 'Omega-3 (EPA/DHA)',
     category: 'Fettsäuren',
     synonyms: ['omega 3', 'omega-3', 'omega3', 'fischoel', 'fischöl', 'fish oil',
-      'epa', 'dha', 'eicosapentaensaeure', 'docosahexaensaeure', 'algenoel',
+      'epa', 'dha', 'eicosapentaensäure', 'docosahexaensäure', 'algenoel',
       'algenöl', 'krillöl', 'krilloel'],
     unit: 'mg',
     what: 'Langkettige mehrfach ungesättigte Fettsäuren; Bausteine von Zellmembranen und Ausgangsstoffe entzündungsregulierender Botenstoffe.',
@@ -601,7 +601,7 @@ export const substances = [
     name: 'Probiotika',
     category: 'Darm',
     synonyms: ['probiotika', 'probiotic', 'probiotics', 'lactobacillus',
-      'bifidobacterium', 'laktobazillen', 'milchsaeurebakterien',
+      'bifidobacterium', 'laktobazillen', 'milchsäurebakterien',
       'milchsäurebakterien', 'kulturen'],
     unit: 'KBE',
     what: 'Lebende Mikroorganismen, die die Zusammensetzung der Darmflora beeinflussen. Wirkung ist stammspezifisch.',
@@ -678,8 +678,8 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Ab oralen Aufnahmen von ca. 150 µg/Tag sind Verfälschungen bestimmter Labor-Immunoassays (z. B. Schilddrüsen-, Herzmarker) dokumentiert (EMA/PRAC 2019). Kein UL abgeleitet (SCF/BfR 2024).',
     sources: [
-      { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Biotin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
-      { label: 'DGE FAQ Biotin', url: 'https://www.dge.de/gesunde-ernaehrung/faq/biotin/' },
+      { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Biotin', url: 'https://www.bfr.bund.de/cm/343/höchstmengenvorschlaege-für-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'DGE FAQ Biotin', url: 'https://www.dge.de/gesunde-ernährung/faq/biotin/' },
       { label: 'EFSA Dietary Reference Values Biotin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3580' },
     ],
   },
@@ -687,7 +687,7 @@ export const substances = [
     id: 'niacin',
     name: 'Niacin',
     category: 'Vitamine',
-    synonyms: ['niacin', 'vitamin b3', 'nicotinsäure', 'nicotinsaeure', 'nicotinamid', 'niacinamid', 'nikotinsäure', 'nikotinamid', 'vitamin pp'],
+    synonyms: ['niacin', 'vitamin b3', 'nicotinsäure', 'nicotinsäure', 'nicotinamid', 'niacinamid', 'nikotinsäure', 'nikotinamid', 'vitamin pp'],
     unit: 'mg',
     what: 'Sammelbegriff für Nicotinsäure und Nicotinamid, Baustein der Coenzyme NAD/NADP im Energiestoffwechsel.',
     useCases: [
@@ -703,7 +703,7 @@ export const substances = [
     fatSoluble: false,
     cautionNote: 'Wichtig: Die drei Formen haben stark unterschiedliche Höchstmengen (Faktor über 200 zwischen Nicotinsäure- und Nicotinamid-Obergrenze): ein Nicotinsäure-Produkt darf nicht mit dem Nicotinamid-Wert verglichen werden. In der Schwangerschaft empfiehlt das BfR bei Nicotinamid-Zusätzen über 16 mg/Tag einen Warnhinweis wegen unzureichender Sicherheitsdaten.',
     sources: [
-      { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Niacin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Niacin', url: 'https://www.bfr.bund.de/cm/343/höchstmengenvorschlaege-für-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Niacin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3759' },
     ],
   },
@@ -1542,7 +1542,7 @@ export const substances = [
     sources: [
       { label: 'FDA: Prescribing Information Methylene Blue Injection (2024)', url: 'https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/204630Orig1s023lbl.pdf' },
       { label: 'BfArM: Zulassung von Arzneimitteln (Verfahrensrahmen)', url: 'https://www.bfarm.de/DE/Arzneimittel/Zulassung/_node.html' },
-      { label: 'Apotheken Umschau: Einordnung als Gefahr statt Wundermittel', url: 'https://www.apotheken-umschau.de/news/methylenblau-kein-wundermittel-sondern-gefahr-fuer-gesundheit-1168173.html' },
+      { label: 'Apotheken Umschau: Einordnung als Gefahr statt Wundermittel', url: 'https://www.apotheken-umschau.de/news/methylenblau-kein-wundermittel-sondern-gefahr-für-gesundheit-1168173.html' },
     ],
   },
 
@@ -1630,7 +1630,7 @@ export const substances = [
     cautionNote: 'EFSA kam 2018 zu dem Schluss, dass ab einer EGCG-Dosis von 800 mg/Tag aus Nahrungsergänzungsmitteln mit ersten Anzeichen einer Leberschädigung zu rechnen ist. Aufgegossener Grüntee (kein Extrakt) wurde als generell unbedenklich eingestuft: die dokumentierten Leberschadensfälle betreffen praktisch ausschließlich hochkonzentrierte Extrakte. Die Einnahme auf nüchternen Magen erhöht Bioverfügbarkeit und Risiko zusätzlich.',
     sources: [
       { label: 'EFSA Journal 2018: Safety of green tea catechins', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2018.5239' },
-      { label: 'Verbraucherzentrale: Grüntee-Extrakt', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/gar-nicht-so-harmlos-gruenteeextrakt-80386' },
+      { label: 'Verbraucherzentrale: Grüntee-Extrakt', url: 'https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel/gar-nicht-so-harmlos-grünteeextrakt-80386' },
     ],
   },
 

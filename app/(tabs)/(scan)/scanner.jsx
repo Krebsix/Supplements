@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,7 +15,12 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 
 
-import { extractProductCode, lookupBarcode } from '../../../BarcodeLookup';
+import {
+  extractProductCode,
+  lookupBarcode,
+  mapOffProductToScanResult,
+  searchProductsByName,
+} from '../../../BarcodeLookup';
 import { evaluateVisionScan } from '../../../Entitlements';
 import { analyzeCaptures, isAnalyzerConfigured, lookupProductCache } from '../../../ScanAnalyzer';
 import mockScanResult from '../../../data/mockScanResult';
@@ -82,6 +88,10 @@ export default function ScannerScreen() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [scannedBarcode, setScannedBarcode] = useState('');
   const [isLookingUpBarcode, setIsLookingUpBarcode] = useState(false);
+  const [nameQuery, setNameQuery] = useState('');
+  const [nameResults, setNameResults] = useState([]);
+  const [isSearchingName, setIsSearchingName] = useState(false);
+  const [nameSearchDone, setNameSearchDone] = useState(false);
 
   const analyzerReady = isAnalyzerConfigured();
 
@@ -134,10 +144,22 @@ export default function ScannerScreen() {
     setCaptureError('');
 
     try {
-      const photo = await cameraRef.current.takePictureAsync({
-        quality: 0.85,
-        skipProcessing: false,
-      });
+      // Wachhund gegen haengende Aufnahmen: takePictureAsync kann auf
+      // manchen Geraeten nie aufloesen (beobachtet beim vierten Foto,
+      // wenn der Barcode-Leser parallel Frames analysiert). Lieber ein
+      // ehrlicher Fehler mit Neuversuch als ein endloser Spinner.
+      const photo = await Promise.race([
+        cameraRef.current.takePictureAsync({
+          quality: 0.85,
+          skipProcessing: false,
+        }),
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(new Error(t('scanner.error.captureTimeout'))),
+            12000
+          )
+        ),
+      ]);
 
       if (!photo?.uri) {
         throw new Error(t('scanner.error.noPhotoFile'));
@@ -157,10 +179,58 @@ export default function ScannerScreen() {
         setIsCameraReady(false);
         setActiveIndex(captureIndex + 1);
       }
-    } catch {
-      setCaptureError(t('scanner.error.captureFailed'));
+    } catch (error) {
+      setCaptureError(error?.message || t('scanner.error.captureFailed'));
     } finally {
       setIsCapturing(false);
+    }
+  }
+
+  async function handleNameSearch() {
+    const query = nameQuery.trim();
+    if (query.length < 3 || isSearchingName) return;
+
+    setIsSearchingName(true);
+    setCaptureError('');
+    setNameResults([]);
+    setNameSearchDone(false);
+
+    try {
+      const results = await searchProductsByName(query);
+      setNameResults(results);
+      setNameSearchDone(true);
+    } catch (error) {
+      setCaptureError(error?.message || t('scanner.nameSearch.failed'));
+    } finally {
+      setIsSearchingName(false);
+    }
+  }
+
+  async function handlePickNameResult(candidate) {
+    if (isSearchingName) return;
+    setIsSearchingName(true);
+    setCaptureError('');
+
+    try {
+      // Der Suchtreffer ist nur ein Zeiger; die vollstaendigen
+      // Produktdaten (Zutaten, Menge) kommen aus dem Produkt-Endpoint,
+      // demselben Pfad wie beim Barcode-Scan.
+      const full = await lookupBarcode(candidate.code);
+      const result = full ?? mapOffProductToScanResult(
+        { product_name: candidate.productName, brands: candidate.brand },
+        candidate.code
+      );
+      setNameQuery('');
+      setNameResults([]);
+      setNameSearchDone(false);
+      storeAndShowResult({
+        ...result,
+        captureSummary: buildCaptureSummary(),
+      });
+    } catch (error) {
+      setCaptureError(error?.message || t('scanner.nameSearch.failed'));
+    } finally {
+      setIsSearchingName(false);
     }
   }
 
@@ -461,6 +531,62 @@ export default function ScannerScreen() {
         </View>
       ) : null}
 
+      <View style={styles.barcodeCard}>
+        <Text style={styles.barcodeKicker}>{t('scanner.nameSearch.label')}</Text>
+        <Text style={styles.barcodeText}>{t('scanner.nameSearch.text')}</Text>
+
+        <TextInput
+          value={nameQuery}
+          onChangeText={setNameQuery}
+          placeholder={t('scanner.nameSearch.placeholder')}
+          placeholderTextColor={colors.inkFaint}
+          style={styles.nameSearchInput}
+          autoCorrect={false}
+          returnKeyType="search"
+          onSubmitEditing={handleNameSearch}
+          accessibilityLabel={t('scanner.nameSearch.label')}
+        />
+
+        <TouchableOpacity
+          style={[
+            styles.barcodeButton,
+            (isSearchingName || nameQuery.trim().length < 3) &&
+              styles.primaryButtonDisabled,
+          ]}
+          onPress={handleNameSearch}
+          disabled={isSearchingName || nameQuery.trim().length < 3}
+          activeOpacity={0.85}
+          accessibilityRole="button"
+        >
+          <Text style={styles.barcodeButtonText}>
+            {isSearchingName
+              ? t('scanner.nameSearch.searching')
+              : t('scanner.nameSearch.button')}
+          </Text>
+        </TouchableOpacity>
+
+        {nameSearchDone && nameResults.length === 0 ? (
+          <Text style={styles.nameSearchEmpty}>
+            {t('scanner.nameSearch.empty')}
+          </Text>
+        ) : null}
+
+        {nameResults.map((candidate, index) => (
+          <TouchableOpacity
+            key={candidate.code || `${candidate.productName}-${index}`}
+            style={styles.nameResultRow}
+            onPress={() => handlePickNameResult(candidate)}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+          >
+            <Text style={styles.nameResultName}>{candidate.productName}</Text>
+            {candidate.brand ? (
+              <Text style={styles.nameResultBrand}>{candidate.brand}</Text>
+            ) : null}
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <View style={styles.captureCard}>
         <View style={styles.captureHeader}>
           <View style={styles.stepNumberBadge}>
@@ -529,9 +655,14 @@ export default function ScannerScreen() {
                 // ist, entscheidet handleBarcodeScanned.
                 barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'qr', 'code128', 'datamatrix'],
               }}
-              // Immer zuhoeren: Der Handler selbst entscheidet, ob ein
-              // Code uebernommen, ersetzt oder ignoriert wird.
-              onBarcodeScanned={handleBarcodeScanned}
+              // Zuhoeren, ausser waehrend einer Foto-Aufnahme (die
+              // parallele Frame-Analyse kann takePictureAsync blockieren)
+              // und nach dem letzten Foto (nichts mehr zu suchen).
+              // Sonst entscheidet der Handler, ob ein Code uebernommen,
+              // ersetzt oder ignoriert wird.
+              onBarcodeScanned={
+                isCapturing || allCaptured ? undefined : handleBarcodeScanned
+              }
             />
           ) : (
             <View style={styles.cameraPlaceholder}>
@@ -559,6 +690,19 @@ export default function ScannerScreen() {
           <View style={[styles.corner, styles.cornerTopRight]} />
           <View style={[styles.corner, styles.cornerBottomLeft]} />
           <View style={[styles.corner, styles.cornerBottomRight]} />
+
+          {/* Sichtbarer Hinweis auf den mitlaufenden Code-Leser: Ohne ihn
+              wirkt der Screen wie ein reines Foto-Tool, obwohl die Kamera
+              Barcodes und QR-Codes automatisch erkennt. */}
+          {permission?.granted && isCameraReady && !scannedBarcode ? (
+            <View style={styles.scanHint}>
+              <Text style={styles.scanHintText}>
+                {isLookingUpBarcode
+                  ? t('scanner.liveHint.searching')
+                  : t('scanner.liveHint.ready')}
+              </Text>
+            </View>
+          ) : null}
 
           <View
             style={[
@@ -1091,6 +1235,49 @@ const styles = StyleSheet.create({
     width: '64%',
     borderRadius: radius.md,
     backgroundColor: colors.rule,
+  },
+  nameSearchInput: {
+    ...surfaces.input,
+    marginTop: space.md,
+  },
+  nameSearchEmpty: {
+    ...type.small,
+    marginTop: space.md,
+  },
+  nameResultRow: {
+    borderTopWidth: 1,
+    borderTopColor: colors.rule,
+    paddingVertical: space.md - 2,
+    marginTop: space.md - 2,
+  },
+  nameResultName: {
+    ...type.bodyStrong,
+  },
+  nameResultBrand: {
+    ...type.small,
+    marginTop: 2,
+  },
+  scanHint: {
+    position: 'absolute',
+    zIndex: 3,
+    left: 14,
+    right: 14,
+    top: 12,
+    borderRadius: radius.md,
+    backgroundColor: colors.accentSoft,
+    borderWidth: 1,
+    borderColor: colors.rule,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: space.md,
+    paddingVertical: 7,
+  },
+  scanHintText: {
+    color: colors.accentInk,
+    fontSize: 11,
+    lineHeight: 16,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   frameState: {
     position: 'absolute',

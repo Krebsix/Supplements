@@ -94,6 +94,20 @@ export default {
   'scanner.error.barcodeLookupFailed': 'Die Barcode-Suche ist fehlgeschlagen.',
   'scanner.error.codeNotProduct':
     'Dieser Code enthält keine Produktnummer (EAN/GTIN). Bitte für die Analyse die vier Fotos aufnehmen.',
+  'scanner.liveHint.ready':
+    'Barcode oder QR-Code ins Bild halten, die Suche startet automatisch',
+  'scanner.liveHint.searching': 'Code erkannt, Produkt wird gesucht …',
+  'scanner.error.captureTimeout':
+    'Die Aufnahme hat zu lange gedauert. Bitte erneut auslösen.',
+  'scanner.nameSearch.label': 'Ohne Code: nach Name suchen',
+  'scanner.nameSearch.text':
+    'Produktname und Hersteller eingeben. Die Daten kommen aus der Community-Datenbank Open Food Facts und werden entsprechend gekennzeichnet.',
+  'scanner.nameSearch.placeholder': 'z. B. Doppelherz Magnesium 400',
+  'scanner.nameSearch.button': 'Produkt suchen',
+  'scanner.nameSearch.searching': 'Suche läuft …',
+  'scanner.nameSearch.empty':
+    'Kein Treffer in der Datenbank. Dann helfen die vier Fotos weiter.',
+  'scanner.nameSearch.failed': 'Die Produktsuche ist fehlgeschlagen.',
   'scanner.error.analysisFailed':
     'Die Analyse ist fehlgeschlagen. Bitte erneut versuchen.',
 

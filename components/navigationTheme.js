@@ -10,11 +10,7 @@
  * app/ als Route interpretieren.
  */
 
-import { Platform } from 'react-native';
-
-import { colors } from '../theme';
-
-const serif = Platform.select({ ios: 'Georgia', android: 'serif', default: 'Georgia' });
+import { colors, fonts } from '../theme';
 
 export function stackScreenOptions(t) {
   return {
@@ -26,7 +22,7 @@ export function stackScreenOptions(t) {
       color: colors.ink,
       // Serife wie die Screen-Ueberschriften: der Header gehoert zum
       // redaktionellen Erscheinungsbild, nicht zum Framework.
-      fontFamily: serif,
+      fontFamily: fonts.display,
       fontSize: 17,
     },
     headerBackTitle: t('common.back'),
@@ -43,8 +39,8 @@ export const tabBarOptions = {
     borderTopWidth: 1,
   },
   tabBarLabelStyle: {
+    fontFamily: fonts.sansBold,
     fontSize: 10,
-    fontWeight: '700',
   },
   headerShown: false,
 };

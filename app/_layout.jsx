@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import {
+  Newsreader_400Regular_Italic,
+  Newsreader_500Medium,
+  Newsreader_600SemiBold,
+} from '@expo-google-fonts/newsreader';
+import {
+  InstrumentSans_400Regular,
+  InstrumentSans_500Medium,
+  InstrumentSans_600SemiBold,
+  InstrumentSans_700Bold,
+} from '@expo-google-fonts/instrument-sans';
 
 import { useTranslation } from '../i18n';
 import { useStore } from '../useStore';
@@ -39,6 +51,19 @@ function useStoreHydrated() {
 export default function Layout() {
   const { t } = useTranslation();
   const hydrated = useStoreHydrated();
+
+  // Eigene Schriften (theme.js/fonts): Newsreader fuer die redaktionelle
+  // Identitaet, Instrument Sans fuer Fliesstext und Bedienung. Bei einem
+  // Ladefehler startet die App mit Systemschrift, statt zu blockieren.
+  const [fontsLoaded, fontError] = useFonts({
+    Newsreader_400Regular_Italic,
+    Newsreader_500Medium,
+    Newsreader_600SemiBold,
+    InstrumentSans_400Regular,
+    InstrumentSans_500Medium,
+    InstrumentSans_600SemiBold,
+    InstrumentSans_700Bold,
+  });
   const onboardingCompletedAt = useStore((state) => state.onboardingCompletedAt);
 
   // Bis der Speicher gelesen ist, nichts entscheiden: sonst blitzt fuer
@@ -81,7 +106,7 @@ export default function Layout() {
     };
   }, [hydrated, onboarded]);
 
-  if (!hydrated) return null;
+  if (!hydrated || (!fontsLoaded && !fontError)) return null;
 
   return (
     <Stack screenOptions={stackScreenOptions(t)}>

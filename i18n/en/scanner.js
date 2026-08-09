@@ -94,6 +94,20 @@ export default {
   'scanner.error.barcodeLookupFailed': 'The barcode lookup failed.',
   'scanner.error.codeNotProduct':
     'This code does not contain a product number (EAN/GTIN). Please take the four photos for the analysis.',
+  'scanner.liveHint.ready':
+    'Hold a barcode or QR code in view, the search starts automatically',
+  'scanner.liveHint.searching': 'Code detected, looking up the product …',
+  'scanner.error.captureTimeout':
+    'Taking the photo took too long. Please try again.',
+  'scanner.nameSearch.label': 'No code: search by name',
+  'scanner.nameSearch.text':
+    'Enter the product name and manufacturer. The data comes from the community database Open Food Facts and is labelled accordingly.',
+  'scanner.nameSearch.placeholder': 'e.g. Doppelherz Magnesium 400',
+  'scanner.nameSearch.button': 'Search product',
+  'scanner.nameSearch.searching': 'Searching …',
+  'scanner.nameSearch.empty':
+    'No match in the database. The four photos will help instead.',
+  'scanner.nameSearch.failed': 'The product search failed.',
   'scanner.error.analysisFailed': 'The analysis failed. Please try again.',
 
   'scanner.step.front.title': 'Front',

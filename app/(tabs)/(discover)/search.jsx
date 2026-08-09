@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 
@@ -43,6 +44,10 @@ export default function SearchScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState(null);
+  // In der Kategorie-Ansicht ist immer nur ein Eintrag aufgeklappt:
+  // kompakte Zeilen halten die Uebersicht, die Vollkarte kommt auf Tipp.
+  const [expandedSubstanceId, setExpandedSubstanceId] = useState(null);
 
   const activeLifeStageId = useStore((state) => state.activeLifeStageId);
   const setActiveLifeStage = useStore((state) => state.setActiveLifeStage);
@@ -50,26 +55,38 @@ export default function SearchScreen() {
 
   const results = useMemo(() => searchSubstances(query), [query]);
 
-  // Kategorie-Chips: Tippen setzt die Suche auf den Kategorienamen. Die
-  // Freitextsuche matcht das category-Feld bereits, deshalb braucht es
-  // keinen eigenen Filterzustand.
-  const categories = useMemo(
-    () =>
-      [...new Set(substances.map((substance) => substance.category).filter(Boolean))].sort(
-        (a, b) => a.localeCompare(b, 'de')
-      ),
-    []
-  );
+  // Register: alle Kategorien mit Bestandszahl, alphabetisch — wie das
+  // Verzeichnis eines Nachschlagewerks, nicht wie eine Chip-Wolke.
+  const categories = useMemo(() => {
+    const counts = new Map();
+    for (const substance of substances) {
+      if (!substance.category) continue;
+      counts.set(substance.category, (counts.get(substance.category) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'de'));
+  }, []);
+
+  const categoryResults = useMemo(() => {
+    if (!activeCategory) return [];
+    return substances
+      .filter((substance) => substance.category === activeCategory)
+      .sort((a, b) => a.name.localeCompare(b.name, 'de'));
+  }, [activeCategory]);
 
   // Ohne Mengenangabe zeigt die Karte Wissen und Referenzwert,
-  // aber keinen Mengenabgleich — das ist hier korrekt.
+  // aber keinen Mengenabgleich — das ist hier korrekt. Die Freitextsuche
+  // hat Vorrang vor dem Kategorie-Register.
+  const hasQuery = query.trim().length >= 2;
+  const profileSource = hasQuery ? results : categoryResults;
   const profiles = useMemo(
     () =>
-      results
+      profileSource
         .map((substance) => matchIngredient({ name: substance.name }))
         .filter((match) => match?.matched)
         .map((match) => buildSubstanceProfile(match, activeLifeStageId)),
-    [results, activeLifeStageId]
+    [profileSource, activeLifeStageId]
   );
 
   // Beschwerdebilder zuerst: Wer einen ganzen Satz eingibt, meint eine
@@ -79,8 +96,6 @@ export default function SearchScreen() {
     () => complaintHits.map((complaint) => buildComplaintView(complaint, activeSupplements)),
     [complaintHits, activeSupplements]
   );
-
-  const hasQuery = query.trim().length >= 2;
 
   return (
     <View style={styles.screenWrap}>
@@ -107,7 +122,7 @@ export default function SearchScreen() {
         accessibilityLabel={t('search.placeholder')}
       />
 
-      {!hasQuery ? (
+      {!hasQuery && !activeCategory ? (
         <>
           <Text style={styles.label}>{t('search.frequentLabel')}</Text>
           <View style={styles.chips}>
@@ -124,17 +139,33 @@ export default function SearchScreen() {
             ))}
           </View>
 
+          {/* Kategorien als Register eines Nachschlagewerks: vertikale
+              Zeilen mit Bestandszahl und Haarlinien statt Chip-Wolke. */}
           <Text style={styles.label}>{t('search.categoriesLabel')}</Text>
-          <View style={styles.chips}>
-            {categories.map((categoryName) => (
+          <View style={styles.registerCard}>
+            {categories.map((entry, index) => (
               <TouchableOpacity
-                key={categoryName}
-                style={styles.chip}
-                onPress={() => setQuery(categoryName)}
-                activeOpacity={0.8}
+                key={entry.name}
+                style={[
+                  styles.registerRow,
+                  index === 0 && styles.registerRowFirst,
+                ]}
+                onPress={() => {
+                  setActiveCategory(entry.name);
+                  setExpandedSubstanceId(null);
+                }}
+                activeOpacity={0.7}
                 accessibilityRole="button"
               >
-                <Text style={styles.chipText}>{categoryName}</Text>
+                <Text style={styles.registerName}>{entry.name}</Text>
+                <View style={styles.registerMeta}>
+                  <Text style={styles.registerCount}>{entry.count}</Text>
+                  <Feather
+                    name="chevron-right"
+                    size={16}
+                    color={colors.inkFaint}
+                  />
+                </View>
               </TouchableOpacity>
             ))}
           </View>
@@ -147,6 +178,61 @@ export default function SearchScreen() {
               {t('search.infoText')}
             </Text>
           </View>
+        </>
+      ) : !hasQuery && activeCategory ? (
+        <>
+          <TouchableOpacity
+            style={styles.registerBack}
+            onPress={() => setActiveCategory(null)}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+          >
+            <Feather name="chevron-left" size={16} color={colors.accent} />
+            <Text style={styles.registerBackText}>
+              {t('search.registerAll')}
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.registerHeading}>{activeCategory}</Text>
+          <Text style={styles.resultCount}>
+            {t('search.hits', { count: profiles.length })}
+          </Text>
+
+          <LifeStagePicker
+            value={activeLifeStageId}
+            onChange={setActiveLifeStage}
+          />
+
+          {profiles.map((profile) => {
+            const expanded = expandedSubstanceId === profile.substanceId;
+            return (
+              <View key={profile.substanceId}>
+                <TouchableOpacity
+                  style={styles.entryRowCard}
+                  onPress={() =>
+                    setExpandedSubstanceId(expanded ? null : profile.substanceId)
+                  }
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                >
+                  <View style={styles.entryTextWrap}>
+                    <Text style={styles.registerName}>{profile.name}</Text>
+                    {!expanded ? (
+                      <Text style={styles.entrySummary} numberOfLines={2}>
+                        {profile.what}
+                      </Text>
+                    ) : null}
+                  </View>
+                  <Feather
+                    name={expanded ? 'chevron-up' : 'chevron-down'}
+                    size={16}
+                    color={colors.inkFaint}
+                  />
+                </TouchableOpacity>
+                {expanded ? <SubstanceInsightCard profile={profile} /> : null}
+              </View>
+            );
+          })}
         </>
       ) : complaintViews.length === 0 && profiles.length === 0 ? (
         <View style={styles.emptyBox}>
@@ -260,6 +346,66 @@ const styles = StyleSheet.create({
     color: colors.ink,
     fontSize: 13,
     fontWeight: '800',
+  },
+  registerCard: {
+    ...surfaces.card,
+    paddingVertical: 2,
+    marginBottom: space.lg,
+  },
+  registerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: space.md + 1,
+    borderTopWidth: 1,
+    borderTopColor: colors.rule,
+  },
+  registerRowFirst: {
+    borderTopWidth: 0,
+  },
+  registerName: {
+    ...type.subheading,
+  },
+  registerMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  registerCount: {
+    ...type.small,
+    color: colors.inkFaint,
+    marginRight: space.sm - 2,
+    fontVariant: ['tabular-nums'],
+  },
+  entryRowCard: {
+    ...surfaces.card,
+    paddingVertical: space.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: space.sm,
+  },
+  entryTextWrap: {
+    flex: 1,
+    marginRight: space.sm,
+  },
+  entrySummary: {
+    ...type.small,
+    marginTop: 2,
+  },
+  registerBack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: space.sm,
+  },
+  registerBackText: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '700',
+    marginLeft: 2,
+  },
+  registerHeading: {
+    ...type.heading,
+    marginBottom: space.xs,
   },
   infoBox: {
     backgroundColor: colors.accentSoft,

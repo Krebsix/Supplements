@@ -36,7 +36,7 @@ export const COMPLAINTS = [
     // "antriebslos" steht bewusst nur bei der niedergeschlagenen Stimmung:
     // Der Begriff beschreibt eher fehlenden Antrieb als koerperliche
     // Erschoepfung, und dort ist die Einordnung die wichtigere.
-    synonyms: ['müde', 'muede', 'immer müde', 'schlapp', 'keine energie', 'kaputt', 'ausgelaugt', 'erschöpft', 'erschoepft', 'energielos', 'abgeschlagen', 'tired', 'tiredness', 'fatigue', 'exhausted', 'no energy', 'worn out'],
+    synonyms: ['müde', 'müde', 'immer müde', 'schlapp', 'keine energie', 'kaputt', 'ausgelaugt', 'erschöpft', 'erschoepft', 'energielos', 'abgeschlagen', 'tired', 'tiredness', 'fatigue', 'exhausted', 'no energy', 'worn out'],
     intro:
       'Müdigkeit ist eines der unspezifischsten Symptome überhaupt. Von Alltagsfaktoren bis zu behandlungsbedürftigen Erkrankungen kommt vieles in Frage. Aus der Müdigkeit allein lässt sich keine Ursache und kein Nährstoffmangel ableiten.',
     contextAreas: [
@@ -442,7 +442,7 @@ export const COMPLAINTS = [
   {
     id: 'recovery',
     label: 'Regeneration nach Sport',
-    synonyms: ['regeneration', 'muskelkater', 'erholung', 'nach dem training', 'schlechte regeneration', 'übertraining', 'uebertraining', 'recovery', 'sore muscles', 'doms', 'after training', 'overtraining'],
+    synonyms: ['regeneration', 'muskelkater', 'erholung', 'nach dem training', 'schlechte regeneration', 'übertraining', 'übertraining', 'recovery', 'sore muscles', 'doms', 'after training', 'overtraining'],
     intro:
       'Verzögerte Erholung und Krämpfe beim Sport haben viele mögliche Erklärungen und sind für sich genommen kein Beleg für einen Nährstoffmangel.',
     contextAreas: [

@@ -164,10 +164,11 @@ Tinte" — warmes Off-White statt blaustichigem Grau, tiefes Petrol
 (`colors.accent`) statt Teal, gedeckte Erdtoene fuer Warnungen statt
 Signalampel.
 
-- Ueberschriften laufen auf einer **Serifenschrift** (`type.display`,
-  `type.heading`, `type.subheading`, `type.numeral`). Systemschriften,
-  kein Font-Download. Das ist der sichtbarste Unterschied zum Einheitslook.
-- Fliesstext bleibt auf der Systemschrift, weil sie klein besser liest.
+- Eigene Schriften (seit 2026-08-09): **Newsreader** (Serife) fuer
+  `type.display/heading/subheading/numeral/quote`, **Instrument Sans**
+  fuer Fliesstext und Bedienelemente. Geladen in `app/_layout.jsx`
+  (useFonts), Namen in `theme.js` (`fonts`). Bei Schnitt-Fonts nie
+  zusaetzlich `fontWeight` setzen (Android-Faux-Bold).
 - Keine vollrunden Pillen mehr (`borderRadius: 999`), nur moderate Radien.
 - Tab- und UI-Icons kommen aus `@expo/vector-icons` (Feather, gebuendelt,
   kein Font-Download). Keine Emojis als Icons: Das war das eine Element,

@@ -103,6 +103,60 @@ export async function lookupBarcode(barcode) {
 }
 
 /**
+ * searchProductsByName(query)
+ * Freitextsuche ueber den Search-a-licious-Dienst von Open Food Facts
+ * (der alte cgi/search.pl-Endpoint ist abgeschaltet). Liefert bis zu 5
+ * leichte Kandidaten { code, productName, brand } — die vollstaendigen
+ * Produktdaten holt danach lookupBarcode(code), derselbe Pfad wie beim
+ * Barcode-Scan. Leere Liste bei keinem Treffer; wirft bei Netzwerkfehlern.
+ */
+export async function searchProductsByName(query) {
+  const needle = cleanText(query);
+  if (needle.length < 3) return [];
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let response;
+  try {
+    const params = new URLSearchParams({
+      q: needle,
+      page_size: '5',
+      fields: 'code,product_name,product_name_de,brands',
+    });
+    response = await fetch(
+      `https://search.openfoodfacts.org/search?${params.toString()}`,
+      { signal: controller.signal }
+    );
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      throw new Error('Die Produktsuche hat zu lange gedauert.');
+    }
+    throw new Error('Die Produktdatenbank ist nicht erreichbar.');
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!response.ok) {
+    throw new Error(`Produktsuche fehlgeschlagen (Status ${response.status}).`);
+  }
+
+  const json = await response.json();
+  const hits = Array.isArray(json?.hits) ? json.hits : [];
+  return hits
+    .map((hit) => ({
+      code: cleanText(hit?.code),
+      productName:
+        cleanText(hit?.product_name_de) || cleanText(hit?.product_name),
+      // brands kommt hier als Array, im Produkt-Endpoint als String
+      brand: Array.isArray(hit?.brands)
+        ? hit.brands.map(cleanText).filter(Boolean).join(', ')
+        : cleanText(hit?.brands),
+    }))
+    .filter((candidate) => candidate.productName && candidate.code);
+}
+
+/**
  * mapOffProductToScanResult(product, code)
  * Reine Mapping-/Normalisierungslogik: OFF-Produktobjekt → Scan-Ergebnis
  * im App-Format. Bewusst ohne Netzwerkzugriff, damit sie isoliert testbar

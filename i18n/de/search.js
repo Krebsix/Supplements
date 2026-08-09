@@ -10,7 +10,8 @@ export default {
     'Suche nach einem Wirkstoff oder nach einem Anwendungsgebiet, etwa „Krämpfe“, „Schlaf“ oder „Immunsystem“.',
   'search.placeholder': 'z. B. Magnesium oder Krämpfe',
   'search.frequentLabel': 'Häufig gesucht',
-  'search.categoriesLabel': 'Kategorien',
+  'search.categoriesLabel': 'Register',
+  'search.registerAll': 'Alle Kategorien',
   'search.infoTitle': '{count} Wirkstoffe hinterlegt',
   'search.infoText':
     'Zu jedem Wirkstoff: Anwendungsgebiete, Unterschiede zwischen den chemischen Formen und der Abgleich mit öffentlichen Referenzwerten je Lebensphase.',

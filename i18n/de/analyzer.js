@@ -19,5 +19,5 @@ export default {
   'analyzer.manufacturerNote': 'Herstellerangabe: {text}',
   'analyzer.uncertain': 'Unsicher erkannt: {text}',
   'analyzer.uncertaintyNote':
-    'KI-Auswertung der Etikettenfotos. Alle Angaben stammen vom Produktetikett und muessen vor der Uebernahme kontrolliert werden. Keine gesundheitliche Beratung.',
+    'KI-Auswertung der Etikettenfotos. Alle Angaben stammen vom Produktetikett und müssen vor der Übernahme kontrolliert werden. Keine gesundheitliche Beratung.',
 };

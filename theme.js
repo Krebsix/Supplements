@@ -18,17 +18,16 @@
  * wie ein Wellness-Dashboard.
  *
  * TYPOGRAFIE:
- * Ueberschriften laufen auf einer Serifenschrift. Das ist der sichtbarste
- * Unterschied zum Einheitslook, kostet nichts (Systemschriften, kein
- * Font-Download) und unterstuetzt den redaktionellen Charakter. Fliesstext
- * bleibt auf der Systemschrift, weil sie auf kleinen Groessen besser liest.
+ * Seit 2026-08-09 eigene Schriften statt Systemschrift (Nadines Vorgabe:
+ * Professionalitaet, kein Baukasten-Look): Newsreader als redaktionelle
+ * Serife fuer Titel, Zahlen und Zitate; Instrument Sans fuer Fliesstext
+ * und Bedienelemente. Geladen per expo-font in app/_layout.jsx, gebuendelt
+ * ueber @expo-google-fonts (kein Laufzeit-Download aus dem Netz).
  *
  * RADIEN:
  * Die vollrunden Pillen (borderRadius 999) sind raus. Moderate Radien
  * wirken weniger nach Framework-Vorgabe und mehr nach Dokument.
  */
-
-import { Platform } from 'react-native';
 
 export const colors = {
   // Flaechen
@@ -62,43 +61,55 @@ export const colors = {
   affirmSoft: '#e8efe9',
 };
 
-const serif = Platform.select({
-  ios: 'Georgia',
-  android: 'serif',
-  default: 'Georgia',
-});
+/**
+ * Schriften: eigene Ladung statt Systemschrift (Entscheidung 2026-08-09).
+ * Newsreader traegt die redaktionelle Identitaet (Titel, Zahlen, Zitate),
+ * Instrument Sans den Fliesstext und die Bedienelemente. Geladen wird in
+ * app/_layout.jsx (useFonts); die Namen hier muessen exakt den Keys dort
+ * entsprechen. Bei Font-Dateien mit festem Schnitt KEIN fontWeight
+ * daneben setzen — Android rendert sonst einen Faux-Bold darueber.
+ */
+export const fonts = {
+  display: 'Newsreader_600SemiBold',
+  displayMedium: 'Newsreader_500Medium',
+  serifItalic: 'Newsreader_400Regular_Italic',
+  sans: 'InstrumentSans_400Regular',
+  sansMedium: 'InstrumentSans_500Medium',
+  sansSemiBold: 'InstrumentSans_600SemiBold',
+  sansBold: 'InstrumentSans_700Bold',
+};
 
 export const type = {
   // Ueberschriften: Serife, das Unterscheidungsmerkmal
-  display: { fontFamily: serif, fontSize: 27, lineHeight: 34, color: colors.ink },
-  heading: { fontFamily: serif, fontSize: 19, lineHeight: 25, color: colors.ink },
-  subheading: { fontFamily: serif, fontSize: 15, lineHeight: 21, color: colors.ink },
+  display: { fontFamily: fonts.display, fontSize: 27, lineHeight: 34, color: colors.ink },
+  heading: { fontFamily: fonts.display, fontSize: 19, lineHeight: 25, color: colors.ink },
+  subheading: { fontFamily: fonts.displayMedium, fontSize: 15, lineHeight: 21, color: colors.ink },
 
-  // Fliesstext: Systemschrift, liest sich klein besser
-  body: { fontSize: 14, lineHeight: 21, color: colors.inkMuted },
-  bodyStrong: { fontSize: 14, lineHeight: 21, color: colors.ink, fontWeight: '600' },
-  small: { fontSize: 12, lineHeight: 18, color: colors.inkMuted },
-  tiny: { fontSize: 11, lineHeight: 16, color: colors.inkFaint },
+  // Fliesstext
+  body: { fontFamily: fonts.sans, fontSize: 14, lineHeight: 21, color: colors.inkMuted },
+  bodyStrong: { fontFamily: fonts.sansSemiBold, fontSize: 14, lineHeight: 21, color: colors.ink },
+  small: { fontFamily: fonts.sans, fontSize: 12, lineHeight: 18, color: colors.inkMuted },
+  tiny: { fontFamily: fonts.sans, fontSize: 11, lineHeight: 16, color: colors.inkFaint },
 
   // Bereichsmarke ueber einer Ueberschrift. Gesperrt gesetzt, wie eine
   // Rubrik im Print.
   eyebrow: {
+    fontFamily: fonts.sansBold,
     fontSize: 11,
     letterSpacing: 1.6,
     textTransform: 'uppercase',
     color: colors.accent,
-    fontWeight: '700',
   },
   label: {
+    fontFamily: fonts.sansBold,
     fontSize: 10,
     letterSpacing: 0.9,
     textTransform: 'uppercase',
     color: colors.inkFaint,
-    fontWeight: '700',
   },
   // Zahlen und Zitate
-  numeral: { fontFamily: serif, fontSize: 21, color: colors.ink },
-  quote: { fontFamily: serif, fontSize: 14, lineHeight: 22, color: colors.ink },
+  numeral: { fontFamily: fonts.displayMedium, fontSize: 21, color: colors.ink },
+  quote: { fontFamily: fonts.serifItalic, fontSize: 14, lineHeight: 22, color: colors.ink },
 };
 
 export const space = {
@@ -151,7 +162,7 @@ export const surfaces = {
     paddingVertical: 14,
     alignItems: 'center',
   },
-  buttonPrimaryText: { color: colors.surface, fontSize: 15, fontWeight: '700' },
+  buttonPrimaryText: { fontFamily: fonts.sansBold, color: colors.surface, fontSize: 15 },
   buttonQuiet: {
     backgroundColor: colors.surfaceSunken,
     borderColor: colors.rule,
@@ -160,7 +171,7 @@ export const surfaces = {
     paddingVertical: 13,
     alignItems: 'center',
   },
-  buttonQuietText: { color: colors.ink, fontSize: 14, fontWeight: '700' },
+  buttonQuietText: { fontFamily: fonts.sansBold, color: colors.ink, fontSize: 14 },
   chip: {
     backgroundColor: colors.surfaceSunken,
     borderColor: colors.rule,
@@ -170,7 +181,7 @@ export const surfaces = {
     paddingVertical: 7,
   },
   chipActive: { backgroundColor: colors.accent, borderColor: colors.accent },
-  chipText: { color: colors.inkMuted, fontSize: 12, fontWeight: '600' },
+  chipText: { fontFamily: fonts.sansSemiBold, color: colors.inkMuted, fontSize: 12 },
   chipTextActive: { color: colors.surface },
 };
 
