@@ -37,6 +37,20 @@ was auf dem Etikett steht.
   IronMaxx, ZEC+, All Stars, Foodspring, Peak, ProFuel
   (Sport-Prioritaet: Whey, Kreatin, Elektrolyte, Isolate, EAA,
   Pre-Workout, Magnesium, D3, Omega-3)
+- **Discounter/Elektrolyte (Welle 4):** Mivolis (dm), altapharma
+  (Rossmann), Mueller-Eigenmarken, Aldi (Multinorm/Curamed), Lidl
+  (Eigenmarke verifizieren), Dextro Energy (Krefeld; Elektrolyt-,
+  Magnesium- und Vitamin-Linien), Elotrans (STADA, PZN), Xenofit
+- **Direktvertrieb (Welle 4 + 5):** Prioritaet A: FitLine
+  (PM-International), Herbalife, Juice Plus+, LR Health & Beauty (Ahlen),
+  Forever Living, Amway/Nutrilite, Lifeplus, Zinzino, RINGANA (AT).
+  Prioritaet B: Nu Skin/Pharmanex, Young Living und doTERRA (NUR die als
+  Nahrungsergaenzung vertriebenen Produkte, keine Oele/Kosmetik), ASEA,
+  Partner.Co. Nur offizielle Herstellerseiten als Quelle, keine
+  Partner-/Reseller-Shops. Seed-Schema ergaenzt um "channel"
+  (drogerie|apotheke|discounter|online|sport|direct); das
+  "verantwortliche Lebensmittelunternehmen" ist eine Etikett-Angabe und
+  wird vom Foto-Scan erfasst, nicht aus dem Web geraten.
 
 Bei D2C-Marken Markeninhaber und Produktionsland einzeln pruefen, bevor
 "deutscher Hersteller" behauptet wird.
@@ -49,6 +63,43 @@ Endkunden-relevante Marken fuer den Produkt-Seed:
   OEKOPHARM, PANACEO, Kwizda
 - **CH:** Burgerstein (Antistress AG), Kingnature, Phytopharma,
   Alpinamed, Nahrin, SPONSER
+
+## Offene Produkt-Dimensionen (Backlog, als Etikett-Fakten machbar)
+- **vegan/vegetarisch:** Kapselhuelle (Gelatine vs. HPMC) und V-Label sind
+  Etikett-Fakten; fuer viele Nutzerinnen ein K.-o.-Kriterium. Aufnahme in
+  Scan-Schema (Vision-Prompt), Seed und Filter der Namenssuche.
+- **Allergene:** Soja, Laktose, Gluten sind LMIV-Pflichtangaben; als
+  deskriptive Etikett-Fakten erfassbar, nie als Vertraeglichkeitsurteil.
+- **Chemische Form je Produkt:** ab Welle 4 im Seed (form-Feld), im
+  Vision-Schema bereits vorhanden.
+
+## Welle 6 (geplant): Premium, Mikrobiom, Schwangerschaft, Import, Produktklassen
+Neue Marken (nicht in Wellen 1-5): Centrum (Haleon), Supradyn (Bayer),
+Solgar, Kijimea (Synformulas), Femibion (P&G), K-Concept+ Vital
+(Kaufland-Eigenmarke), MyProtein, Bulk, Optimum Nutrition; Import-Marken
+mit DACH-Reichweite: NOW Foods, Thorne, Life Extension, Nordic Naturals,
+Vital Proteins (Quelle: offizielle Herstellerseiten, iHerb & Co. sind
+Haendler und als Quelle gesperrt).
+Themenwelten: Darm/Mikrobiom (Kijimea, OMNi-BiOTiC vertiefen; Substanz
+Inulin fehlt noch in data/substances.js), Schwangerschaft/Kinderwunsch
+(Femibion-Linie; Substanzseite existiert: Folat, Eisen, Jod, Cholin, DHA).
+SCHEMA-ERWEITERUNG "productClass": "nem" (Default) | "arznei" |
+"medizinprodukt" | "sportlebensmittel" | "fsmp". Arzneimittel erkennbar
+an Zulassungsnummer/PZN-Pflicht (z. B. Vigantol ist ARZNEIMITTEL, nicht
+NEM — bestehende Eintraege beim Konsolidieren pruefen). Die App behandelt
+alle Klassen als dokumentierbare Einnahmen, kennzeichnet aber die Klasse;
+Arzneimittel-Hinweise bleiben Sache von Arzt/Apotheke.
+
+## Naechstes Arbeitspaket: Erkrankungs-Warnschicht (Design fixiert 2026-08-09)
+`data/healthConditions.js` analog zu medicationClasses.js: Erkrankungen
+(Bluthochdruck, Nieren-/Lebererkrankung, Diabetes, Gerinnungsstoerungen,
+Schilddruese, Salicylat-Unvertraeglichkeit, Epilepsie) verweisen mit
+WOERTLICHEM Zitat auf bereits belegte cautionNotes in substances.js;
+Zitat-Integritaetstest wie tests/medication-en.test.mjs; Verdrahtung in
+ProfileCheck.js (profile.conditions existiert schon); Formulierung immer
+"dazu ist ein Hinweis hinterlegt". KEINE Gewichts-/Groessenerfassung
+(Art.-9-Datensparsamkeit, MDR-Abgrenzung); Koffein-Sonderfall deskriptiv
+("EFSA nennt 3 mg/kg"), ohne Gewicht zu erheben.
 
 ## Lohnhersteller (separate Kategorie, NICHT im Produkt-Seed)
 - **DE:** Plantafood Medical, Biohealth International, Goerlich Pharma,
