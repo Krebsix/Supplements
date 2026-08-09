@@ -2,6 +2,13 @@
 
 Stand: 2026-08-09. App-Name entschieden: MySuplea (2026-08-09).
 
+**AENDERUNG 2026-08-09 abends: Launch verschoben.** Nadines Entscheidung
+(Abweichung vom Council-Verdikt, Brain: decisions/2026-08-09-supplements-
+launch-verschoben-datenbank-zuerst.md): Erst die vollstaendige
+DACH-Produktdatenbank, dann Launch. Die Gates unten bleiben als
+Qualitaetsschritte bestehen, ihre Termine sind ausgesetzt. OFFEN: das
+messbare "100-Prozent"-Fertig-Kriterium (definiert Nadine).
+
 ## Phase 0: Blocker (ohne die kein Launch)
 
 | # | Punkt | Wer | Status |
