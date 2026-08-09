@@ -14,9 +14,9 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 
 
-import { lookupBarcode } from '../../../BarcodeLookup';
+import { extractProductCode, lookupBarcode } from '../../../BarcodeLookup';
 import { evaluateVisionScan } from '../../../Entitlements';
-import { analyzeCaptures, isAnalyzerConfigured } from '../../../ScanAnalyzer';
+import { analyzeCaptures, isAnalyzerConfigured, lookupProductCache } from '../../../ScanAnalyzer';
 import mockScanResult from '../../../data/mockScanResult';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
@@ -216,6 +216,11 @@ export default function ScannerScreen() {
   function storeAndShowResult(scanDraft) {
     const storedScan = saveScanResult(scanDraft);
     setPendingScanResult(storedScan);
+    // Frischer Stand fuer den naechsten Scan: Code und Fotos sind im
+    // Ergebnis aufgehoben, im Scanner haben sie nichts mehr verloren.
+    setScannedBarcode('');
+    setCaptures({});
+    setActiveIndex(0);
     router.push('/results');
   }
 
@@ -273,7 +278,9 @@ export default function ScannerScreen() {
     setCaptureError('');
 
     try {
-      const analysis = await analyzeCaptures(captures);
+      // Ein zuvor gescannter, nicht aufgeloester Barcode wandert mit:
+      // Er heftet sich ans Ergebnis und fuellt den geteilten Produkt-Cache.
+      const analysis = await analyzeCaptures(captures, { barcode: scannedBarcode });
 
       // Erst nach erfolgreicher Analyse verbrauchen: Ein fehlgeschlagener
       // Scan kostet die Nutzerin nichts.
@@ -293,31 +300,70 @@ export default function ScannerScreen() {
 
   function handleBarcodeScanned(scan) {
     const code = scan?.data;
-    if (!code || scannedBarcode) return;
-    setScannedBarcode(String(code));
+    if (!code) return;
+
+    // Produktnummer aus dem Roh-Code ziehen: reine Ziffernfolgen
+    // (EAN/UPC/GTIN) direkt, GS1-Digital-Link-QR-Codes ueber den
+    // Pfadabschnitt nach "/01/". QR-Codes ohne Produktnummer (URLs,
+    // Text) sagen es einmal deutlich, statt stumm zu bleiben.
+    const value = extractProductCode(String(code));
+    if (!value) {
+      if (!scannedBarcode) setCaptureError(t('scanner.error.codeNotProduct'));
+      return;
+    }
+
+    if (scannedBarcode === value || isLookingUpBarcode) return;
+    // Ein neuer, anderer Code ersetzt den alten, solange noch keine
+    // Fotos aufgenommen wurden — sonst bliebe die Kamera nach einem
+    // Fehlschlag stumm. Sobald Fotos existieren, bleibt der Code
+    // angeheftet, damit die Cache-Zuordnung stimmt.
+    if (scannedBarcode && completedCount > 0) return;
+
+    setScannedBarcode(value);
+    // Sofort nachschlagen statt auf einen zweiten Tipp zu warten: Ein
+    // erkannter Code IST bereits die Nutzerabsicht. Der Button in der
+    // Barcode-Karte bleibt als manueller Neuversuch bestehen.
+    runBarcodeLookup(value);
   }
 
   async function handleBarcodeLookup() {
-    if (!scannedBarcode || isLookingUpBarcode) return;
+    runBarcodeLookup(scannedBarcode);
+  }
+
+  async function runBarcodeLookup(code) {
+    if (!code || isLookingUpBarcode) return;
 
     setIsLookingUpBarcode(true);
     setCaptureError('');
 
     try {
-      const result = await lookupBarcode(scannedBarcode);
+      const result = await lookupBarcode(code);
 
-      if (!result) {
-        setCaptureError(
-          t('scanner.error.barcodeNotFound', { code: scannedBarcode })
-        );
-        setScannedBarcode('');
+      if (result) {
+        storeAndShowResult({
+          ...result,
+          captureSummary: buildCaptureSummary(),
+        });
         return;
       }
 
-      storeAndShowResult({
-        ...result,
-        captureSummary: buildCaptureSummary(),
-      });
+      // Zweite Chance vor dem Foto-Weg: der geteilte Produkt-Cache
+      // (fruehere Foto-Analysen anderer Nutzerinnen zum selben Code).
+      const cached = await lookupProductCache(code);
+      if (cached) {
+        storeAndShowResult({
+          ...cached,
+          captureSummary: buildCaptureSummary(),
+        });
+        return;
+      }
+
+      // Kein Treffer: Der Code bleibt gesetzt, damit die anschliessende
+      // Foto-Analyse ihn ans Ergebnis heftet und der naechste Scan
+      // desselben Produkts aus dem Cache beantwortet werden kann.
+      setCaptureError(
+        t('scanner.error.barcodeNotFound', { code })
+      );
     } catch (error) {
       setCaptureError(error?.message || t('scanner.error.barcodeLookupFailed'));
     } finally {
@@ -478,11 +524,14 @@ export default function ScannerScreen() {
               }}
               onMountError={handleCameraMountError}
               barcodeScannerSettings={{
-                barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e'],
+                // QR und Code128/DataMatrix mitlesen: manche Verpackungen
+                // tragen nur solche Codes. Ob der Inhalt eine Produktnummer
+                // ist, entscheidet handleBarcodeScanned.
+                barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'qr', 'code128', 'datamatrix'],
               }}
-              onBarcodeScanned={
-                scannedBarcode ? undefined : handleBarcodeScanned
-              }
+              // Immer zuhoeren: Der Handler selbst entscheidet, ob ein
+              // Code uebernommen, ersetzt oder ignoriert wird.
+              onBarcodeScanned={handleBarcodeScanned}
             />
           ) : (
             <View style={styles.cameraPlaceholder}>

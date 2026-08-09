@@ -211,6 +211,73 @@ Deno.serve(async (req) => {
   // und so das Limit umgehen). Der LETZTE Eintrag wird vom naechsten,
   // vertrauenswuerdigen Hop (Supabase-Edge) angehaengt und ist die
   // einzige Stelle, die der Client nicht kontrolliert.
+  // Body zuerst parsen (billig): Ein reiner Cache-Lookup (barcode ohne
+  // Bilder) ist eine Datenbank-Abfrage und soll das knappe Scan-Rate-Limit
+  // nicht verbrauchen — das schuetzt Claude-API-Kosten, keine DB-Reads.
+  let images: IncomingImage[];
+  let language = "de";
+  let modelOverride: string | null = null;
+  let barcode: string | null = null;
+  try {
+    const body = await req.json();
+    images = Array.isArray(body?.images) ? body.images : [];
+    // Unbekannte Sprachcodes fallen auf Deutsch zurueck, statt den Prompt
+    // mit einem beliebigen Wert aus dem Request zu fuettern.
+    if (typeof body?.language === "string" && body.language in LANGUAGE_RULES) {
+      language = body.language;
+    }
+    // Nicht gelistete Modelle werden ignoriert, nicht abgelehnt: Der
+    // Aufruf laeuft dann einfach auf dem Produktiv-Default.
+    if (
+      typeof body?.model === "string" &&
+      MODEL_OVERRIDE_WHITELIST.has(body.model)
+    ) {
+      modelOverride = body.model;
+    }
+    // EAN-8 bis GTIN-14. Alles andere wird ignoriert statt abgelehnt.
+    if (typeof body?.barcode === "string" && /^[0-9]{6,14}$/.test(body.barcode)) {
+      barcode = body.barcode;
+    }
+  } catch {
+    return jsonResponse(400, { error: "Ungueltiger Request-Body." });
+  }
+
+  const supabaseAdmin = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+
+  // Reiner Cache-Lookup: barcode ohne Bilder. Liefert fruehere
+  // erfolgreiche Analysen zum selben Code, ohne Claude-Aufruf.
+  if (barcode && images.length === 0) {
+    const { data, error } = await supabaseAdmin
+      .from("product_cache")
+      .select("result, model, hit_count")
+      .eq("barcode", barcode)
+      .eq("language", language)
+      .maybeSingle();
+
+    if (error) {
+      console.error("product_cache lookup failed:", error);
+      return jsonResponse(503, {
+        error: "Dienst vorübergehend nicht verfügbar. Bitte später erneut versuchen.",
+      });
+    }
+    if (!data) {
+      return jsonResponse(404, { error: "Kein Cache-Eintrag zu diesem Barcode." });
+    }
+
+    // Zaehler best effort — ein Fehlschlag darf den Treffer nicht kosten.
+    supabaseAdmin
+      .from("product_cache")
+      .update({ hit_count: (data.hit_count ?? 0) + 1 })
+      .eq("barcode", barcode)
+      .eq("language", language)
+      .then(() => {}, () => {});
+
+    return jsonResponse(200, { result: data.result, model: data.model, cached: true });
+  }
+
   const forwardedFor = req.headers.get("x-forwarded-for");
   const trustedIp = forwardedFor
     ?.split(",")
@@ -232,11 +299,6 @@ Deno.serve(async (req) => {
   const clientKey = trustedIp;
 
   try {
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
-
     const { data: allowed, error: rateLimitError } = await supabaseAdmin.rpc(
       "check_scan_rate_limit",
       {
@@ -272,29 +334,6 @@ Deno.serve(async (req) => {
     return jsonResponse(500, {
       error: "ANTHROPIC_API_KEY ist nicht als Secret gesetzt.",
     });
-  }
-
-  let images: IncomingImage[];
-  let language = "de";
-  let modelOverride: string | null = null;
-  try {
-    const body = await req.json();
-    images = Array.isArray(body?.images) ? body.images : [];
-    // Unbekannte Sprachcodes fallen auf Deutsch zurueck, statt den Prompt
-    // mit einem beliebigen Wert aus dem Request zu fuettern.
-    if (typeof body?.language === "string" && body.language in LANGUAGE_RULES) {
-      language = body.language;
-    }
-    // Nicht gelistete Modelle werden ignoriert, nicht abgelehnt: Der
-    // Aufruf laeuft dann einfach auf dem Produktiv-Default.
-    if (
-      typeof body?.model === "string" &&
-      MODEL_OVERRIDE_WHITELIST.has(body.model)
-    ) {
-      modelOverride = body.model;
-    }
-  } catch {
-    return jsonResponse(400, { error: "Ungueltiger Request-Body." });
   }
 
   if (images.length === 0 || images.length > MAX_IMAGES) {
@@ -375,6 +414,22 @@ Deno.serve(async (req) => {
     }
 
     const result = JSON.parse(textBlock.text);
+
+    // Erfolgreiche Analyse mit bekanntem Barcode in den geteilten
+    // Produkt-Cache legen: reine Produktdaten, keine Fotos, keine
+    // Nutzerdaten. Best effort — ein Cache-Fehler kostet kein Ergebnis.
+    if (barcode) {
+      const { error: cacheError } = await supabaseAdmin
+        .from("product_cache")
+        .upsert({
+          barcode,
+          language,
+          result,
+          model: response.model,
+          updated_at: new Date().toISOString(),
+        });
+      if (cacheError) console.error("product_cache upsert failed:", cacheError);
+    }
 
     return jsonResponse(200, {
       result,

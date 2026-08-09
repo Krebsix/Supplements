@@ -92,6 +92,8 @@ export default {
   'scanner.error.barcodeNotFound':
     'Barcode {code} wurde in der Produktdatenbank nicht gefunden. Bitte die vier Fotos aufnehmen.',
   'scanner.error.barcodeLookupFailed': 'Die Barcode-Suche ist fehlgeschlagen.',
+  'scanner.error.codeNotProduct':
+    'Dieser Code enthält keine Produktnummer (EAN/GTIN). Bitte für die Analyse die vier Fotos aufnehmen.',
   'scanner.error.analysisFailed':
     'Die Analyse ist fehlgeschlagen. Bitte erneut versuchen.',
 

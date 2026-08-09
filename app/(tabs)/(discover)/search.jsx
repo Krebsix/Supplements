@@ -50,6 +50,17 @@ export default function SearchScreen() {
 
   const results = useMemo(() => searchSubstances(query), [query]);
 
+  // Kategorie-Chips: Tippen setzt die Suche auf den Kategorienamen. Die
+  // Freitextsuche matcht das category-Feld bereits, deshalb braucht es
+  // keinen eigenen Filterzustand.
+  const categories = useMemo(
+    () =>
+      [...new Set(substances.map((substance) => substance.category).filter(Boolean))].sort(
+        (a, b) => a.localeCompare(b, 'de')
+      ),
+    []
+  );
+
   // Ohne Mengenangabe zeigt die Karte Wissen und Referenzwert,
   // aber keinen Mengenabgleich — das ist hier korrekt.
   const profiles = useMemo(
@@ -109,6 +120,21 @@ export default function SearchScreen() {
                 accessibilityRole="button"
               >
                 <Text style={styles.chipText}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <Text style={styles.label}>{t('search.categoriesLabel')}</Text>
+          <View style={styles.chips}>
+            {categories.map((categoryName) => (
+              <TouchableOpacity
+                key={categoryName}
+                style={styles.chip}
+                onPress={() => setQuery(categoryName)}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+              >
+                <Text style={styles.chipText}>{categoryName}</Text>
               </TouchableOpacity>
             ))}
           </View>

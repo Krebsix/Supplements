@@ -27,6 +27,33 @@ export function cleanText(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+/**
+ * extractProductCode(raw)
+ * Zieht aus einem gescannten Code die Produktnummer (GTIN):
+ *   - reine Ziffernfolgen (EAN-8/13, UPC, GTIN-14) unveraendert
+ *   - GS1 Digital Link QR-Codes (z. B. https://id.gs1.org/01/<gtin>/...):
+ *     der Pfadabschnitt nach dem Application Identifier "01"
+ * Fuehrende Nullen werden bis zur EAN-8-Laenge entfernt (GTIN-14-Schreibweise
+ * derselben Nummer). Liefert '' wenn keine Produktnummer enthalten ist.
+ */
+export function extractProductCode(raw) {
+  const value = cleanText(raw);
+  if (!value) return '';
+
+  let code = '';
+  if (/^[0-9]{6,14}$/.test(value)) {
+    code = value;
+  } else {
+    const match = value.match(/\/01\/([0-9]{8,14})(?:[/?#]|$)/);
+    code = match ? match[1] : '';
+  }
+
+  while (code.length > 8 && code.startsWith('0')) {
+    code = code.slice(1);
+  }
+  return code;
+}
+
 // Zutatenliste ("Magnesiumcitrat, Kapselhuelle: HPMC, ...") grob in
 // Einzeleintraege zerlegen — bewusst ohne Interpretation der Mengen.
 export function splitIngredients(text) {

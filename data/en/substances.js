@@ -1606,4 +1606,174 @@ export default {
     },
     cautionNote: 'No systematic human safety studies found beyond a methodologically weak user observation and an ongoing RCT recruitment. No EU novel food approval and no maximum amount found: legal status as a food supplement in the EU is therefore unclear. No completed controlled human study demonstrating efficacy.',
   },
+  'ginger': {
+    what: 'A spice and medicinal plant whose rhizome (Zingiberis rhizoma) is used as a herbal medicinal product and food supplement.',
+    useCases: [
+      { topic: 'Motion Sickness', note: 'EMA indication (well-established use): prevention of nausea and vomiting in motion sickness.' },
+      { topic: 'Digestive Complaints', note: 'traditionally used for mild spasmodic gastrointestinal complaints and bloating.' },
+    ],
+    forms: {
+      'Pulver': 'The EMA monograph refers to the powdered rhizome in capsules or tablets.',
+      'Extrakt': 'Concentrates standardized for pungent compounds (gingerols); composition differs by manufacturer.',
+      'Tee/Frischwurzel': 'Traditional form of use; the content of active compounds varies widely.',
+    },
+    cautionNote: 'With gallstones, clarify use with a doctor first. The safety of high doses in pregnancy is not conclusively established; use for pregnancy-related nausea belongs under medical supervision. An influence on blood clotting is under discussion, the data are inconsistent.',
+  },
+  'clove': {
+    what: 'Dried flower buds of the clove tree (Caryophylli flos); the essential oil with its main constituent eugenol is traditionally applied locally.',
+    useCases: [
+      { topic: 'Mouth and Throat', note: 'traditionally used for minor inflammation of the mouth and throat lining (local application).' },
+      { topic: 'Toothache', note: 'traditionally used for temporary local application for toothache; no substitute for dental care.' },
+    ],
+    forms: {
+      'Ätherisches Öl': 'Apply only diluted and locally; undiluted it irritates skin and mucous membranes.',
+      'Ganze/gemahlene Knospen': 'Spice and traditional form of use, e.g. as an infusion for rinsing.',
+    },
+    cautionNote: 'Do not use the essential oil undiluted and do not use it in children. In laboratory studies eugenol inhibits platelet aggregation; anyone taking anticoagulant medication discusses regular high-dose use with a doctor. Beyond culinary amounts, data for pregnancy and breastfeeding are lacking.',
+  },
+  'chamomile': {
+    what: 'A medicinal plant whose flowers (Matricariae flos) are among the longest-documented traditional herbal medicines in Europe.',
+    useCases: [
+      { topic: 'Digestive Tract', note: 'traditionally used for mild gastrointestinal complaints such as bloating and mild cramps.' },
+      { topic: 'Cold Symptoms', note: 'traditionally used as an inhalation or rinse for cold symptoms in the mouth and throat.' },
+      { topic: 'Skin and Mucosa', note: 'traditionally used externally for minor inflammation of skin and mucous membranes.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the flowers.',
+      'Extrakt': 'Liquid or solid preparations, also for rinses and compresses.',
+    },
+    cautionNote: 'Do not use with a known allergy to Asteraceae (e.g. mugwort, arnica). For highly concentrated preparations, sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'peppermint-oil': {
+    what: 'Essential oil from the leaves of peppermint; as a gastro-resistant capsule one of the best-studied herbal products for the gut.',
+    useCases: [
+      { topic: 'Irritable Bowel', note: 'EMA indication (well-established use): relief of mild cramp-like complaints in irritable bowel syndrome, in gastro-resistant capsules.' },
+      { topic: 'Tension Headache', note: 'traditionally applied externally to the temples and forehead for tension headache.' },
+      { topic: 'Cold Symptoms', note: 'traditionally used as a rub or inhalation for coughs and colds.' },
+    ],
+    forms: {
+      'Magensaftresistente Kapseln': 'Decisive for gut use: the oil is meant to be released only in the intestine, otherwise heartburn and belching can occur.',
+      'Ätherisches Öl äußerlich': 'Diluted for use on the skin; do not apply to the face of infants and small children.',
+    },
+    cautionNote: 'Not with bile duct obstruction, gallbladder inflammation or severe liver damage. Reflux complaints can worsen. Do not apply menthol-containing preparations to the face or chest of infants and small children (risk of breathing spasms).',
+  },
+  'lemon-balm': {
+    what: 'A medicinal plant whose leaves (Melissae folium) are traditionally used for restlessness and gastrointestinal complaints.',
+    useCases: [
+      { topic: 'Restlessness and Sleep', note: 'traditionally used for mild symptoms of stress and to support falling asleep.' },
+      { topic: 'Digestive Tract', note: 'traditionally used for mild spasmodic gastrointestinal complaints and bloating.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the leaves.',
+      'Trockenextrakt': 'In capsules or combination products, often together with valerian.',
+    },
+    cautionNote: 'Insufficient data for children under 12 and for pregnancy and breastfeeding. Can cause drowsiness; consider the effect on the ability to drive.',
+  },
+  'sage': {
+    what: 'A medicinal plant whose leaves (Salviae officinalis folium) are traditionally used for excessive sweating and in the mouth and throat.',
+    useCases: [
+      { topic: 'Sweating', note: 'traditionally used for excessive perspiration.' },
+      { topic: 'Mouth and Throat', note: 'traditionally used as a rinse or gargle for minor inflammation of the mouth and throat lining.' },
+      { topic: 'Digestive Complaints', note: 'traditionally used for mild digestive complaints such as heartburn and bloating.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the leaves, also for gargling.',
+      'Extrakt': 'Liquid or solid preparations; the thujone content depends on the preparation.',
+    },
+    cautionNote: 'Sage contains thujone. Avoid high-dose or long-term intake; the EMA states use limits of a few weeks. Do not use in pregnancy and breastfeeding (thujone; sage can also reduce milk production, an effect that is deliberately used when weaning).',
+  },
+  'cinnamon': {
+    what: 'Bark of the Ceylon cinnamon tree (Cinnamomi cortex); documented as a spice and traditional herbal medicine for digestive complaints.',
+    useCases: [
+      { topic: 'Digestive Complaints', note: 'traditionally used for mild spasmodic gastrointestinal complaints, bloating and a feeling of fullness.' },
+      { topic: 'Blood Sugar', note: 'studied in connection with glucose metabolism; the evidence is inconsistent and does not justify self-treatment.' },
+    ],
+    forms: {
+      'Ceylon-Zimt': 'Contains considerably less coumarin than cassia cinnamon; the EMA monograph refers to this species.',
+      'Cassia-Zimt': 'Rich in coumarin. The BfR warns against regularly high amounts (liver strain), especially in children.',
+    },
+    cautionNote: 'Cassia cinnamon contains coumarin, which can strain the liver in regularly high amounts (BfR assessment); for regular intake, prefer Ceylon cinnamon. Anyone taking blood-sugar-lowering medication discusses cinnamon products with a doctor.',
+  },
+  'garlic': {
+    what: 'Bulb of garlic (Allii sativi bulbus); traditionally documented in connection with cardiovascular health and cold symptoms.',
+    useCases: [
+      { topic: 'Cardiovascular', note: 'traditionally used to support cardiovascular health; effects on blood lipids and blood pressure are being studied, the evidence is inconsistent.' },
+      { topic: 'Cold Symptoms', note: 'traditionally used for cold symptoms.' },
+    ],
+    forms: {
+      'Pulver': 'Dried, ground garlic powder; allicin yield varies greatly with processing.',
+      'Gealterter Extrakt': 'Low odour; a different constituent profile than fresh garlic.',
+    },
+    cautionNote: 'Garlic products can intensify the effect of anticoagulant medication; discuss intake with a doctor before surgery and pause it in good time. Harmless in usual culinary amounts.',
+  },
+  'artichoke': {
+    what: 'Leaves of the artichoke (Cynarae folium); traditionally used for digestive complaints related to bile and fat digestion.',
+    useCases: [
+      { topic: 'Digestive Complaints', note: 'traditionally used for a feeling of fullness, bloating and complaints after high-fat meals.' },
+    ],
+    forms: {
+      'Trockenextrakt': 'The usual form in capsules and tablets.',
+      'Frischpflanzensaft': 'Traditional liquid form of use.',
+    },
+    cautionNote: 'Not with bile duct obstruction; with gallstones only after consulting a doctor. Do not use with an allergy to Asteraceae.',
+  },
+  'hawthorn': {
+    what: 'Leaves with flowers of hawthorn (Crataegi folium cum flore); traditionally documented for nervous heart complaints and to support sleep.',
+    useCases: [
+      { topic: 'Nervous Heart Complaints', note: 'traditionally used for temporary nervous heart complaints, after serious causes have been ruled out by a doctor.' },
+      { topic: 'Restlessness and Sleep', note: 'traditionally used for mild symptoms of stress and to support falling asleep.' },
+    ],
+    forms: {
+      'Trockenextrakt': 'The usual form in capsules and tablets.',
+      'Tee/Aufguss': 'Traditional form of use for the leaves with flowers.',
+    },
+    cautionNote: 'Heart complaints always belong in medical evaluation; hawthorn is no substitute for heart medication. Anyone taking heart medication discusses additional use with a doctor. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'elderflower': {
+    what: 'Flowers of the black elder (Sambuci flos); traditionally used for cold symptoms.',
+    useCases: [
+      { topic: 'Cold Symptoms', note: 'traditionally used to relieve cold symptoms, classically as a hot infusion.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the dried flowers.',
+      'Extrakt': 'A component of many combination cold products.',
+    },
+    cautionNote: 'Unripe berries and other parts of the elder plant contain substances that can cause nausea when raw; the monograph refers to the flowers. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'licorice-root': {
+    what: 'Root of the licorice shrub (Liquiritiae radix); traditionally used for stomach complaints and coughs, the base material of licorice confectionery.',
+    useCases: [
+      { topic: 'Stomach Complaints', note: 'traditionally used for digestive complaints such as heartburn and stomach pressure.' },
+      { topic: 'Cough', note: 'traditionally used as an expectorant for coughs with thick mucus.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the cut root.',
+      'Extrakt': 'Also available deglycyrrhizinated (DGL); the blood-pressure-relevant fraction is then largely removed.',
+    },
+    cautionNote: 'With regularly high intake, glycyrrhizin can raise blood pressure and lower potassium levels. Do not use for longer than 4 weeks without medical advice. Not with high blood pressure, kidney or liver disease, and not in pregnancy. Caution in combination with diuretic medication (additional potassium loss).',
+  },
+  'lavender-oil': {
+    what: 'Essential oil and flowers of true lavender; traditionally used for restlessness and to support sleep.',
+    useCases: [
+      { topic: 'Restlessness', note: 'traditionally used for mild symptoms of stress and inner restlessness; a standardized lavender oil is approved as a medicine in Germany.' },
+      { topic: 'Sleep', note: 'traditionally used to support falling asleep, also as a scent application.' },
+    ],
+    forms: {
+      'Ätherisches Öl in Kapseln': 'The EMA monograph on oral use refers to this form; it can initially cause belching.',
+      'Tee/Duftanwendung': 'Traditional forms of use for the flowers and the oil.',
+    },
+    cautionNote: 'Insufficient data for children under 12 and for pregnancy and breastfeeding. Persistent restlessness or sleep problems belong in medical evaluation.',
+  },
+  'fennel': {
+    what: 'Fruits of fennel (Foeniculi fructus); traditionally used for bloating and mild digestive complaints.',
+    useCases: [
+      { topic: 'Bloating', note: 'traditionally used for mild spasmodic gastrointestinal complaints and bloating.' },
+      { topic: 'Cough', note: 'traditionally used as a mild expectorant for coughs associated with colds.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the freshly crushed fruits.',
+      'Ätherisches Öl': 'Concentrated form; observe the duration of use and dosage stated in the monograph.',
+    },
+    cautionNote: 'Fennel contains estragole; the EMA advises using tea and oil only for limited periods and not giving fennel tea to children under 4 as self-medication. Do not use with an allergy to Apiaceae.',
+  },
 };

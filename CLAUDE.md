@@ -257,13 +257,20 @@ zurueck. Wer ein neues Nutzerdaten-Feld ergaenzt, ergaenzt es in
   noch Dosis noch Befund. Formulierung deshalb immer "dazu ist ein Hinweis
   hinterlegt", nie "das ist fuer dich gefaehrlich".
 - Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`, `'vision'`
-  fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer)
+  fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer,
+  `'community-cache'` fuer Treffer aus dem geteilten Produkt-Cache)
   und eine `captureSummary`, damit nachvollziehbar ist, woher ein Eintrag stammt.
 - Echte Scan-Analyse: `ScanAnalyzer.js` (App) → Supabase Edge Function
   `supabase/functions/analyze-supplement` (Claude Vision, Structured Output).
   Der `ANTHROPIC_API_KEY` liegt NUR als Supabase-Secret, nie in der App.
   Endpoint-Konfiguration in `scanConfig.js` (leere URL = Mock-Fallback).
 - Barcode-Pfad: `BarcodeLookup.js` fragt Open Food Facts ab (kein Key noetig).
+  Bei einem Miss fragt der Scanner den geteilten Produkt-Cache
+  (`lookupProductCache` in ScanAnalyzer.js → Tabelle `product_cache`,
+  Zugriff nur ueber die Edge Function). Erfolgreiche Foto-Analysen mit
+  bekanntem Barcode fuellen den Cache serverseitig: reine Produktdaten,
+  keine Fotos, keine Nutzerdaten. Wer diesen Datenfluss aendert, aendert
+  data/legalContent.js mit.
 - Keine gesundheitlichen Empfehlungen im Ausgabetext — die App ordnet Zeitpunkte und
   Konflikte, sie beraet nicht. Konkret: **Referenzwerte anzeigen statt Dosierungen
   empfehlen** ("enthaelt 400 mg, Obergrenze liegt bei 250 mg"), Anwendungsgebiete

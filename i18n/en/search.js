@@ -12,6 +12,7 @@ export default {
     'Search for a substance or an area of use, for example "cramps", "sleep", or "immune system".',
   'search.placeholder': 'e.g. magnesium or cramps',
   'search.frequentLabel': 'Frequently searched',
+  'search.categoriesLabel': 'Categories',
   'search.infoTitle': '{count} substances documented',
   'search.infoText':
     'For each substance: areas of use, differences between the chemical forms, and the comparison with public reference values by life stage.',

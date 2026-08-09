@@ -70,77 +70,11 @@ async function prepareImage(stepId, capture) {
   };
 }
 
-/**
- * analyzeCaptures(captures)
- * captures: { front: {uri,...}, back: {...}, ingredients: {...}, dosage: {...} }
- * Rueckgabe: Scan-Ergebnis im Format von results.jsx / SupplementResultCard.
- */
-export async function analyzeCaptures(captures) {
-  if (!isAnalyzerConfigured()) {
-    throw new Error(tr('analyzer.notConfigured'));
-  }
-
-  const entries = Object.entries(captures || {}).filter(
-    ([, capture]) => Boolean(capture?.uri)
-  );
-  if (entries.length === 0) {
-    throw new Error(tr('analyzer.noCaptures'));
-  }
-
-  const images = [];
-  for (const [stepId, capture] of entries) {
-    images.push(await prepareImage(stepId, capture));
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-  let response;
-  try {
-    response = await fetch(SCAN_ANALYZE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(SUPABASE_ANON_KEY
-          ? {
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              apikey: SUPABASE_ANON_KEY,
-            }
-          : {}),
-      },
-      // Sprache mitschicken: die Vision-Auswertung formuliert ihre
-      // Freitextfelder in der Sprache, in der die App gerade laeuft.
-      body: JSON.stringify({ images, language: getActiveLanguage() }),
-      signal: controller.signal,
-    });
-  } catch (error) {
-    if (error?.name === 'AbortError') {
-      throw new Error(tr('analyzer.timeout'));
-    }
-    throw new Error(tr('analyzer.unreachable'));
-  } finally {
-    clearTimeout(timeout);
-  }
-
-  if (!response.ok) {
-    let serverMessage = '';
-    try {
-      const body = await response.json();
-      serverMessage = cleanText(body?.error);
-    } catch {
-      // Antwort war kein JSON — generische Meldung verwenden
-    }
-    throw new Error(
-      serverMessage || tr('analyzer.failedWithStatus', { status: response.status })
-    );
-  }
-
-  const payload = await response.json();
-  const result = payload?.result;
-  if (!result || typeof result !== 'object') {
-    throw new Error(tr('analyzer.noResult'));
-  }
-
+// Server-Antwort in das Ergebnis-Format von results.jsx uebersetzen.
+// Gemeinsam fuer die frische Vision-Analyse und Treffer aus dem geteilten
+// Produkt-Cache — beide liefern dasselbe Schema, nur die Herkunft
+// (analysisMode) unterscheidet sich.
+function mapResultToDraft(result, analysisMode, barcode) {
   const ingredients = Array.isArray(result.ingredients) ? result.ingredients : [];
   const labelWarnings = Array.isArray(result.warnings)
     ? result.warnings.map(cleanText).filter(Boolean)
@@ -175,7 +109,123 @@ export async function analyzeCaptures(captures) {
       ...uncertainties.map((item) => tr('analyzer.uncertain', { text: item })),
     ],
     uncertaintyNote: tr('analyzer.uncertaintyNote'),
-    analysisMode: 'vision',
+    analysisMode,
+    barcode: cleanText(barcode) || null,
     analyzedAt: new Date().toISOString(),
   };
+}
+
+/**
+ * lookupProductCache(barcode)
+ * Fragt den geteilten Produkt-Cache ab: fruehere erfolgreiche
+ * Foto-Analysen zum selben Barcode, abgelegt von der Edge Function.
+ * Liefert null bei Miss ODER Fehler — der Cache ist eine Abkuerzung,
+ * nie eine Huerde vor dem Foto-Weg.
+ */
+export async function lookupProductCache(barcode) {
+  const code = cleanText(barcode);
+  if (!code || !isAnalyzerConfigured()) return null;
+
+  try {
+    const response = await fetch(SCAN_ANALYZE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(SUPABASE_ANON_KEY
+          ? {
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              apikey: SUPABASE_ANON_KEY,
+            }
+          : {}),
+      },
+      body: JSON.stringify({ barcode: code, language: getActiveLanguage() }),
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    if (!payload?.result || typeof payload.result !== 'object') return null;
+    return mapResultToDraft(payload.result, 'community-cache', code);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * analyzeCaptures(captures, options)
+ * captures: { front: {uri,...}, back: {...}, ingredients: {...}, dosage: {...} }
+ * options.barcode: zuvor gescannter, nicht aufgeloester Barcode. Wird
+ * mitgeschickt, damit die Edge Function das Ergebnis im geteilten
+ * Produkt-Cache ablegen kann.
+ * Rueckgabe: Scan-Ergebnis im Format von results.jsx / SupplementResultCard.
+ */
+export async function analyzeCaptures(captures, { barcode } = {}) {
+  if (!isAnalyzerConfigured()) {
+    throw new Error(tr('analyzer.notConfigured'));
+  }
+
+  const entries = Object.entries(captures || {}).filter(
+    ([, capture]) => Boolean(capture?.uri)
+  );
+  if (entries.length === 0) {
+    throw new Error(tr('analyzer.noCaptures'));
+  }
+
+  const images = [];
+  for (const [stepId, capture] of entries) {
+    images.push(await prepareImage(stepId, capture));
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let response;
+  try {
+    response = await fetch(SCAN_ANALYZE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(SUPABASE_ANON_KEY
+          ? {
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              apikey: SUPABASE_ANON_KEY,
+            }
+          : {}),
+      },
+      // Sprache mitschicken: die Vision-Auswertung formuliert ihre
+      // Freitextfelder in der Sprache, in der die App gerade laeuft.
+      body: JSON.stringify({
+        images,
+        language: getActiveLanguage(),
+        ...(cleanText(barcode) ? { barcode: cleanText(barcode) } : {}),
+      }),
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      throw new Error(tr('analyzer.timeout'));
+    }
+    throw new Error(tr('analyzer.unreachable'));
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!response.ok) {
+    let serverMessage = '';
+    try {
+      const body = await response.json();
+      serverMessage = cleanText(body?.error);
+    } catch {
+      // Antwort war kein JSON — generische Meldung verwenden
+    }
+    throw new Error(
+      serverMessage || tr('analyzer.failedWithStatus', { status: response.status })
+    );
+  }
+
+  const payload = await response.json();
+  const result = payload?.result;
+  if (!result || typeof result !== 'object') {
+    throw new Error(tr('analyzer.noResult'));
+  }
+
+  return mapResultToDraft(result, 'vision', barcode);
 }

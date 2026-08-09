@@ -92,6 +92,8 @@ export default {
   'scanner.error.barcodeNotFound':
     'Barcode {code} was not found in the product database. Please take the four photos.',
   'scanner.error.barcodeLookupFailed': 'The barcode lookup failed.',
+  'scanner.error.codeNotProduct':
+    'This code does not contain a product number (EAN/GTIN). Please take the four photos for the analysis.',
   'scanner.error.analysisFailed': 'The analysis failed. Please try again.',
 
   'scanner.step.front.title': 'Front',

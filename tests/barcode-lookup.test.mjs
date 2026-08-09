@@ -21,7 +21,7 @@ global.fetch = () => {
   throw new Error('fetch darf in diesem Test nicht aufgerufen werden');
 };
 
-import { mapOffProductToScanResult, cleanText, splitIngredients, lookupBarcode } from '../BarcodeLookup.js';
+import { mapOffProductToScanResult, cleanText, splitIngredients, lookupBarcode, extractProductCode } from '../BarcodeLookup.js';
 
 let failed = 0;
 function check(name, cond, extra = '') {
@@ -115,6 +115,24 @@ check('Leerer Barcode → null, ohne fetch aufzurufen (sonst waere der Test oben
 const whitespaceBarcodeResult = await lookupBarcode('   ');
 check('Nur Leerzeichen als Barcode → ebenfalls null ohne fetch',
   whitespaceBarcodeResult === null);
+
+console.log('\n— extractProductCode: Produktnummer aus Roh-Codes —');
+check('EAN-13 bleibt unveraendert',
+  extractProductCode('4260123456789') === '4260123456789');
+check('EAN-8 bleibt unveraendert',
+  extractProductCode('42601234') === '42601234');
+check('GS1 Digital Link liefert die GTIN aus dem Pfad',
+  extractProductCode('https://id.gs1.org/01/04012345678901/21/ABC') === '4012345678901');
+check('GS1 Digital Link ohne weitere Pfadteile',
+  extractProductCode('https://id.gs1.org/01/09506000134352') === '9506000134352');
+check('GTIN-14-Schreibweise verliert fuehrende Nullen',
+  extractProductCode('00004260123456789'.slice(0, 14)) === '4260123456');
+check('QR mit gewoehnlicher URL → keine Produktnummer',
+  extractProductCode('https://example.com/produktseite') === '');
+check('Freitext → keine Produktnummer',
+  extractProductCode('hallo welt') === '');
+check('Leerer Wert → leere Produktnummer',
+  extractProductCode('') === '');
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);
