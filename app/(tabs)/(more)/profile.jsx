@@ -13,7 +13,7 @@ import { useRouter } from 'expo-router';
 import { checkProfileAgainstStack, summarizeProfileFindings } from '../../../ProfileCheck';
 import { HEALTH_CONDITIONS } from '../../../data/healthConditions';
 import { MEDICATION_CLASSES } from '../../../data/medicationClasses';
-import { localizeMedicationClass } from '../../../data/localize';
+import { localizeHealthCondition, localizeMedicationClass } from '../../../data/localize';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
 import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
@@ -115,7 +115,8 @@ export default function ProfileScreen() {
         <Text style={styles.cardHint}>{t('profile.conditions.hint')}</Text>
 
         <View style={styles.chipWrap}>
-          {HEALTH_CONDITIONS.map((entry) => {
+          {HEALTH_CONDITIONS.map((rawEntry) => {
+            const entry = localizeHealthCondition(rawEntry);
             const isActive = selectedConditions.includes(entry.id);
             return (
               <TouchableOpacity

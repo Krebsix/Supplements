@@ -31,6 +31,10 @@ import {
   MEDICATION_CLASSES_EN,
   getQuoteEN,
 } from './en/medicationClasses';
+import {
+  CONDITION_QUOTES_EN,
+  HEALTH_CONDITIONS_EN,
+} from './en/healthConditions';
 
 const isEnglish = () => getActiveLanguage() === 'en';
 
@@ -128,6 +132,20 @@ export function localizeMedicationClass(medicationClass) {
 export function localizeInteractionQuote(medicationClassId, substanceId, germanQuote) {
   if (!isEnglish()) return germanQuote;
   return getQuoteEN(medicationClassId, substanceId) ?? germanQuote;
+}
+
+/** Erkrankungs-Label (data/healthConditions.js) in der aktiven Sprache. */
+export function localizeHealthCondition(condition) {
+  if (!isEnglish() || !condition) return condition;
+  const en = HEALTH_CONDITIONS_EN[condition.id];
+  return en ? { ...condition, label: en.label } : condition;
+}
+
+/** Woertliches Erkrankungs-Zitat in der aktiven Sprache (EN-Overlay,
+ *  sonst deutscher Originalsatz). */
+export function localizeConditionQuote(conditionId, substanceId, germanQuote) {
+  if (!isEnglish()) return germanQuote;
+  return CONDITION_QUOTES_EN[conditionId]?.[substanceId] ?? germanQuote;
 }
 
 /**

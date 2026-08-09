@@ -33,6 +33,8 @@ import {
   getMedicationClass,
 } from './data/medicationClasses';
 import {
+  localizeConditionQuote,
+  localizeHealthCondition,
   localizeInteractionQuote,
   localizeMedicationClass,
 } from './data/localize';
@@ -138,17 +140,22 @@ export function checkProfileAgainstStack(profile = {}, supplements = []) {
     const substance = substanceById.get(interaction.substanceId);
     if (!substance) continue;
 
-    const condition = getHealthCondition(interaction.conditionId);
+    const condition = localizeHealthCondition(
+      getHealthCondition(interaction.conditionId)
+    );
 
     results.push({
       substanceId: interaction.substanceId,
       substanceName: substance.name,
       conditionId: interaction.conditionId,
       severity: interaction.severity,
-      // Woertlich aus dem cautionNote der Substanz (Test erzwingt das).
-      // EN-Overlay folgt; bis dahin faellt Englisch laut Sprachregel
-      // auf den deutschen Originalsatz zurueck.
-      quote: interaction.quote,
+      // Woertlich aus dem cautionNote der Substanz (Test erzwingt das);
+      // auf Englisch der wortgleiche Satz aus dem EN-Overlay.
+      quote: localizeConditionQuote(
+        interaction.conditionId,
+        interaction.substanceId,
+        interaction.quote
+      ),
       sourceField: interaction.sourceField,
       sources: normalizeSources(substance.sources ?? []),
       productNames,

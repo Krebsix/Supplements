@@ -53,6 +53,22 @@ check('Filter liefert nur gewuenschte Erkrankungen',
   getInteractionsForConditions(['hypertension']).every((e) => e.conditionId === 'hypertension'));
 check('Leere Auswahl → leere Liste', getInteractionsForConditions([]).length === 0);
 
+console.log('— EN-Overlay-Integritaet —');
+const { HEALTH_CONDITIONS_EN, CONDITION_QUOTES_EN } = await import('../data/en/healthConditions.js');
+const substancesEN = (await import('../data/en/substances.js')).default;
+for (const condition of HEALTH_CONDITIONS) {
+  check(`EN-Label fuer ${condition.id}`, Boolean(HEALTH_CONDITIONS_EN[condition.id]?.label));
+}
+for (const entry of conditionInteractions) {
+  const enQuote = CONDITION_QUOTES_EN[entry.conditionId]?.[entry.substanceId];
+  const enCaution = substancesEN[entry.substanceId]?.cautionNote ?? '';
+  check(
+    `EN ${entry.conditionId}/${entry.substanceId}: Zitat woertlich im EN-cautionNote`,
+    Boolean(enQuote) && enCaution.includes(enQuote),
+    enQuote ? 'Substring fehlt' : 'EN-Zitat fehlt'
+  );
+}
+
 console.log('— ProfileCheck-Verdrahtung —');
 const stack = [
   { name: 'Suessholz-Tee', detectedIngredients: [], ingredientDetails: [{ name: 'Süßholzwurzel' }] },
