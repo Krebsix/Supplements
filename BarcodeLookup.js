@@ -44,6 +44,13 @@ export function extractProductCode(raw) {
   if (/^[0-9]{6,14}$/.test(value)) {
     code = value;
   } else {
+    // Deutsche Apotheken-Produkte tragen die PZN als Code 39
+    // ("PZN-12345678" bzw. "-12345678"). Die Ziffernfolge dient als
+    // Produktschluessel im geteilten Cache; Open Food Facts kennt sie
+    // in der Regel nicht, der Foto-Scan fuellt sie.
+    const pzn = value.match(/^(?:PZN)?-?([0-9]{7,8})$/i);
+    if (pzn) return pzn[1];
+
     const match = value.match(/\/01\/([0-9]{8,14})(?:[/?#]|$)/);
     code = match ? match[1] : '';
   }

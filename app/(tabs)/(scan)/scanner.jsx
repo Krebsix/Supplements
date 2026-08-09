@@ -650,10 +650,11 @@ export default function ScannerScreen() {
               }}
               onMountError={handleCameraMountError}
               barcodeScannerSettings={{
-                // QR und Code128/DataMatrix mitlesen: manche Verpackungen
-                // tragen nur solche Codes. Ob der Inhalt eine Produktnummer
+                // QR, Code128/DataMatrix und Code39 mitlesen: manche
+                // Verpackungen tragen nur solche Codes; Code39 traegt die
+                // deutsche Apotheken-PZN. Ob der Inhalt eine Produktnummer
                 // ist, entscheidet handleBarcodeScanned.
-                barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'qr', 'code128', 'datamatrix'],
+                barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'qr', 'code128', 'datamatrix', 'code39'],
               }}
               // Zuhoeren, ausser waehrend einer Foto-Aufnahme (die
               // parallele Frame-Analyse kann takePictureAsync blockieren)

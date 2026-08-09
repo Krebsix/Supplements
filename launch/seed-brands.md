@@ -41,6 +41,20 @@ was auf dem Etikett steht.
 Bei D2C-Marken Markeninhaber und Produktionsland einzeln pruefen, bevor
 "deutscher Hersteller" behauptet wird.
 
+## Oesterreich und Schweiz (Ergaenzung 2026-08-09, Nadines Recherche)
+Endkunden-relevante Marken fuer den Produkt-Seed:
+- **AT:** BIOGENA, Pure Encapsulations (Vertrieb pro medico Graz;
+  Markeninhaber pruefen, urspruenglich US/Nestle Health Science),
+  OMNi-BiOTiC (Institut AllergoSan), Dr. Boehm (Apomedica), Gall Pharma,
+  OEKOPHARM, PANACEO, Kwizda
+- **CH:** Burgerstein (Antistress AG), Kingnature, Phytopharma,
+  Alpinamed, Nahrin, SPONSER
+
 ## Lohnhersteller (separate Kategorie, NICHT im Produkt-Seed)
-Plantafood Medical, Biohealth International, Goerlich Pharma, Nutrilo,
-SternLife, Aakamp. Relevanz: Hintergrundwissen, keine Produktdaten.
+- **DE:** Plantafood Medical, Biohealth International, Goerlich Pharma,
+  Nutrilo, SternLife, Aakamp
+- **AT:** MELASAN, vis vitalis, Bioflora LAB, HKS/1Q Health, R&M,
+  Natural Power, SonnenMoor, Novogenia
+- **CH:** FormuLAB, SFI Health Solutions, Swiss Nutrition Solutions
+Relevanz: Hintergrundwissen und Markeninhaber-Zuordnung, keine
+Produktdaten im Seed.

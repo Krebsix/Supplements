@@ -133,6 +133,12 @@ check('Freitext → keine Produktnummer',
   extractProductCode('hallo welt') === '');
 check('Leerer Wert → leere Produktnummer',
   extractProductCode('') === '');
+check('PZN mit Praefix liefert die Ziffern (Apotheken-Code-39)',
+  extractProductCode('PZN-12345678') === '12345678');
+check('PZN mit fuehrendem Bindestrich (haeufige Code-39-Lesung)',
+  extractProductCode('-12345678') === '12345678');
+check('7-stellige Alt-PZN wird akzeptiert',
+  extractProductCode('PZN-1234567') === '1234567');
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);
