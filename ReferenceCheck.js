@@ -14,6 +14,7 @@
  * ohne in den Bereich Medizinprodukt/Health Claims zu geraten.
  */
 
+import { getIntakeGuidance } from './InteractionCheck';
 import { convertAmount } from './SubstanceMatcher';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { tr } from './i18n/runtime';
@@ -314,6 +315,9 @@ export function buildSubstanceProfile(match, lifeStageId) {
     // Alle Formen mitgeben: Vergleich ist der eigentliche Mehrwert
     allForms: substance.forms ?? [],
     fatSoluble: Boolean(substance.fatSoluble),
+    // Einnahme-Hinweis aus der Interaktions-Schicht (belegt, deskriptiv);
+    // null, wenn nichts hinterlegt ist — kein generierter Fallback.
+    intakeGuidance: getIntakeGuidance(substance.id),
     cautionNote: substance.cautionNote ?? '',
     sources: normalizeSources(substance.sources ?? []),
     referenceCheck: checkAgainstReference(match, lifeStageId),

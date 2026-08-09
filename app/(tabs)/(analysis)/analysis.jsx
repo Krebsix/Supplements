@@ -14,6 +14,7 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 
 import { analyzeCosts, findSharedGoals } from '../../../CostAnalyzer';
 import { canUseProFeature } from '../../../Entitlements';
+import { findPairInteractions } from '../../../InteractionCheck';
 import ProGate from '../../../components/ProGate';
 import { analyzeStack, getStackWarnings } from '../../../StackAnalyzer';
 import { getOutcomeMetric } from '../../../data/outcomeMetrics';
@@ -49,6 +50,16 @@ export default function AnalysisScreen() {
     [supplements, lifeStageId]
   );
   const warnings = useMemo(() => getStackWarnings(stack), [stack]);
+
+  // Paar-Wechselwirkungen ueber die Substanzen des aktiven Bestands
+  // (InteractionCheck.js): Aufnahme-Hemmung und Synergien, quellenbelegt.
+  const interactions = useMemo(
+    () =>
+      findPairInteractions(
+        (stack?.totals ?? []).map((entry) => entry.substanceId)
+      ),
+    [stack]
+  );
 
   const costs = useMemo(
     () => analyzeCosts(supplements, stockBySupplementId, { intakeLogs, trials }),
@@ -134,6 +145,39 @@ export default function AnalysisScreen() {
           ) : null}
         </>
       )}
+
+      {/* ── Wechselwirkungen im Bestand ─────────────────────── */}
+      {interactions.length > 0 ? (
+        <>
+          <Text style={styles.sectionTitle}>
+            {t('analysis.interactions.title')}
+          </Text>
+          {interactions.map((rule) => {
+            const tone = toneFor(rule.severity === 'synergy' ? 'affirm' : rule.severity);
+            return (
+              <View
+                key={`${rule.a}-${rule.b}`}
+                style={[
+                  styles.interactionCard,
+                  { backgroundColor: tone.surface, borderColor: tone.rule },
+                ]}
+              >
+                <Text style={[styles.interactionTitle, { color: tone.ink }]}>
+                  {rule.aName} + {rule.bName}
+                </Text>
+                <Text style={[styles.interactionText, { color: tone.ink }]}>
+                  {rule.note}
+                </Text>
+                {rule.sources?.[0]?.label ? (
+                  <Text style={styles.interactionSource}>
+                    {rule.sources[0].label}
+                  </Text>
+                ) : null}
+              </View>
+            );
+          })}
+        </>
+      ) : null}
 
       {/* ── Kosten ──────────────────────────────────────────── */}
       <Text style={styles.sectionTitle}>{t('analysis.cost.title')}</Text>
@@ -376,6 +420,24 @@ const styles = StyleSheet.create({
   title: { ...type.display },
   subtitle: { ...type.body, marginTop: space.md, marginBottom: space.xl },
   sectionTitle: { ...type.heading, marginTop: space.lg, marginBottom: space.sm },
+  interactionCard: {
+    borderWidth: 1,
+    borderRadius: radius.md,
+    padding: space.md,
+    marginBottom: space.sm,
+  },
+  interactionTitle: {
+    ...type.subheading,
+  },
+  interactionText: {
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: space.xs,
+  },
+  interactionSource: {
+    ...type.tiny,
+    marginTop: space.sm - 2,
+  },
   sectionHint: { ...type.small, marginBottom: space.md },
   card: { ...surfaces.card },
   emptyCard: { ...surfaces.card },

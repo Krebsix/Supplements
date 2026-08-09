@@ -25,6 +25,7 @@ export default {
   'analysis.totals.allClear': 'No daily total exceeds a documented upper limit.',
 
   // Costs
+  'analysis.interactions.title': 'Interactions in your stack',
   'analysis.cost.title': 'Running costs',
   'analysis.cost.perMonth': '{amount} {currency} per month',
   'analysis.cost.perDay': '{amount} {currency} per day',

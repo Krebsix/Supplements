@@ -173,6 +173,17 @@ export default function SubstanceInsightCard({ profile }) {
             </View>
           ) : null}
 
+          {profile.intakeGuidance ? (
+            <View style={styles.intakeBox}>
+              <Text style={styles.intakeLabel}>
+                {t('components.insight.intake')}
+              </Text>
+              <Text style={styles.intakeText}>
+                {profile.intakeGuidance.note}
+              </Text>
+            </View>
+          ) : null}
+
           {profile.cautionNote ? (
             <View style={styles.cautionBox}>
               <Text style={styles.cautionLabel}>
@@ -399,6 +410,22 @@ const styles = StyleSheet.create({
     color: cautionTone.ink,
     fontSize: 12,
     lineHeight: 18,
+  },
+  intakeBox: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.md,
+    padding: space.sm + 3,
+    marginTop: space.sm + 2,
+  },
+  intakeLabel: {
+    ...type.label,
+    color: colors.accentInk,
+  },
+  intakeText: {
+    color: colors.accentInk,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: space.xs,
   },
   cautionBox: {
     backgroundColor: alertTone.surface,

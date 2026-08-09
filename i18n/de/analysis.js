@@ -28,6 +28,7 @@ export default {
     'Keine Tagessumme überschreitet eine hinterlegte Obergrenze.',
 
   // Kosten
+  'analysis.interactions.title': 'Wechselwirkungen im Bestand',
   'analysis.cost.title': 'Laufende Kosten',
   'analysis.cost.perMonth': '{amount} {currency} pro Monat',
   'analysis.cost.perDay': '{amount} {currency} pro Tag',
