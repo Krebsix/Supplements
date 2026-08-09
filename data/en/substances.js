@@ -2020,6 +2020,18 @@ export default {
     },
     cautionNote: 'Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease. Acute urinary tract infections with fever belong in medical care. Sufficient data for pregnancy and breastfeeding are lacking.',
   },
+  'sodium': {
+    what: 'A bulk element and the main electrolyte of the extracellular space; regulates fluid balance, blood pressure and nerve signalling. In supplements mainly found in electrolyte blends.',
+    useCases: [
+      { topic: 'Electrolyte Balance', note: 'a component of electrolyte products used with heavy sweating, sport or fluid loss.' },
+      { topic: 'Sport', note: 'supplemented during long endurance efforts with high sweat loss.' },
+    ],
+    forms: {
+      'Chlorid': 'The most common form in electrolyte blends.',
+      'Citrat': 'Common in effervescent tablets and sports drink powders.',
+    },
+    cautionNote: 'The usual diet already provides considerably more sodium than the reference values intend; additional intake is rarely useful outside sport and fluid-loss situations. Anyone advised to restrict sodium because of high blood pressure, heart or kidney disease discusses electrolyte products with a doctor.',
+  },
   'nettle-leaf': {
     what: 'Leaves and herb of the stinging nettle (Urticae folium/herba); traditionally used to flush the urinary tract and for mild joint complaints. Not to be confused with nettle root, which is documented for prostate complaints.',
     useCases: [

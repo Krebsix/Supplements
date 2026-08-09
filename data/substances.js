@@ -3611,6 +3611,28 @@ export const substances = [
       { label: 'EMA/HMPC: European Union herbal monograph on Urtica, herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/urticae-herba' },
     ],
   },
+  {
+    id: 'sodium',
+    name: 'Natrium',
+    category: 'Mineralien',
+    synonyms: ['natrium', 'sodium', 'natriumchlorid', 'natriumcitrat', 'kochsalz', 'nacl'],
+    unit: 'mg',
+    what: 'Mengenelement und wichtigster Elektrolyt des Extrazellulaerraums; reguliert Fluessigkeitshaushalt, Blutdruck und Nervenreizleitung. In Supplements vor allem in Elektrolyt-Mischungen enthalten.',
+    useCases: [
+      { topic: 'Elektrolythaushalt', note: 'Bestandteil von Elektrolyt-Praeparaten, die bei starkem Schwitzen, Sport oder Fluessigkeitsverlust eingesetzt werden.' },
+      { topic: 'Sport', note: 'Wird bei langen Ausdauerbelastungen mit hohem Schweissverlust ergaenzt.' },
+    ],
+    forms: [
+      { name: 'Chlorid', aka: ['Kochsalz', 'NaCl'], note: 'Haeufigste Form in Elektrolyt-Mischungen.' },
+      { name: 'Citrat', note: 'In Brausetabletten und Sport-Getraenkepulvern verbreitet.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Die uebliche Ernaehrung liefert bereits deutlich mehr Natrium, als die Referenzwerte vorsehen; zusaetzliche Zufuhr ist ausserhalb von Sport- und Verlustsituationen selten sinnvoll. Wer wegen Bluthochdruck, Herz- oder Nierenerkrankung Natrium einschraenken soll, bespricht Elektrolyt-Praeparate aerztlich.',
+    sources: [
+      { label: 'NIH ODS: Sodium (Dietary Reference Intakes)', url: 'https://ods.od.nih.gov/factsheets/list-all/' },
+      { label: 'D-A-CH Referenzwerte: Natrium', url: 'https://www.dge.de/wissenschaft/referenzwerte/natrium/' },
+    ],
+  },
 ];
 
 // Schneller Zugriff per ID
