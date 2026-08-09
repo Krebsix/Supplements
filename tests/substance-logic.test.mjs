@@ -155,7 +155,7 @@ check('Keine Herstellernamen in der Siegel-DB',
   !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
 
 console.log('\n— Erweiterung Juli 2026: neue Substanzen —');
-check('Substanz-Datenbank hat 150 Einträge', substances.length === 150, substances.length);
+check('Substanz-Datenbank hat 162 Einträge', substances.length === 162, substances.length);
 
 const biotinMatch = matchIngredient({ name: 'Biotin', amount: '50', unit: 'µg' });
 check('Biotin erkannt', biotinMatch.substanceId === 'biotin', biotinMatch.substanceId);

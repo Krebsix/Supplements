@@ -1,4 +1,9 @@
-# Kräuter-Backlog (HMPC-verifiziert, noch nicht in data/substances.js)
+# Kräuter-Backlog (HMPC-verifiziert)
+
+ERLEDIGT 2026-08-09 (Batch 2): Alle 12 Kandidaten aus der Tabelle unten
+sind eingebaut (Datenbank: 162 Substanzen). Die Tabelle bleibt als
+Quellen-Referenz stehen; offen ist nur noch die Nicht-Aufnahme-Liste
+als dauerhafte Leitplanke.
 
 Stand: 2026-08-09. Herkunft: Nachfrage-Abgleich der Pflanzenliste aus einem
 kommerziellen Kräuterbuch (nur als Signal genutzt, KEINE Inhaltsquelle)

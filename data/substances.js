@@ -3364,6 +3364,253 @@ export const substances = [
       { label: 'EMA/HMPC: European Union herbal monograph on Solidago virgaurea L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/solidaginis-virgaureae-herba' },
     ],
   },
+  {
+    id: 'mullein',
+    name: 'Königskerze',
+    category: 'Kräuter',
+    synonyms: ['königskerze', 'koenigskerze', 'mullein', 'verbascum', 'königskerzenblüten', 'verbasci flos', 'wollblume'],
+    unit: 'mg',
+    what: 'Blüten der Königskerze (Verbasci flos); traditionell bei Husten und Halsbeschwerden im Rahmen einer Erkältung eingesetzt.',
+    useCases: [
+      { topic: 'Husten', note: 'Traditionell bei Halsbeschwerden und Reizhusten im Rahmen einer Erkältung, klassisch als Bestandteil von Hustentees.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform der Blüten; vor dem Trinken gut abseihen (feine Härchen).' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten. Hält Husten länger als eine Woche an, gehört das in ärztliche Abklärung.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Verbascum, flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/verbasci-flos' },
+    ],
+  },
+  {
+    id: 'motherwort',
+    name: 'Herzgespann',
+    category: 'Kräuter',
+    synonyms: ['herzgespann', 'motherwort', 'leonurus cardiaca', 'herzgespannkraut', 'leonuri cardiacae herba'],
+    unit: 'mg',
+    what: 'Kraut des Herzgespanns (Leonuri cardiacae herba); traditionell bei nervösen Herzbeschwerden eingesetzt, ähnlich dem Weißdorn.',
+    useCases: [
+      { topic: 'Nervöse Herzbeschwerden', note: 'Traditionell bei vorübergehenden nervösen Herzbeschwerden, nachdem ernste Ursachen ärztlich ausgeschlossen wurden.' },
+      { topic: 'Unruhe', note: 'Traditionell bei leichten Symptomen von Stress und innerer Unruhe.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform des Krauts.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen, auch in Kombinationspräparaten.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Herzbeschwerden gehören grundsätzlich in ärztliche Abklärung. Nicht in Schwangerschaft und Stillzeit anwenden. Für Kinder unter 12 Jahren fehlen Daten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Leonurus cardiaca L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/leonuri-cardiacae-herba' },
+    ],
+  },
+  {
+    id: 'calendula',
+    name: 'Ringelblume',
+    category: 'Kräuter',
+    synonyms: ['ringelblume', 'calendula', 'calendula officinalis', 'ringelblumenblüten', 'calendulae flos'],
+    unit: 'mg',
+    what: 'Blüten der Ringelblume (Calendulae flos); traditionell vor allem äußerlich bei Haut- und Schleimhautreizungen eingesetzt.',
+    useCases: [
+      { topic: 'Haut', note: 'Traditionell äußerlich bei leichten Hautentzündungen und zur Unterstützung der Abheilung kleiner oberflächlicher Wunden.' },
+      { topic: 'Mund und Rachen', note: 'Traditionell als Spülung bei leichten Entzündungen der Mund- und Rachenschleimhaut.' },
+    ],
+    forms: [
+      { name: 'Salbe/Creme', note: 'Häufigste äußerliche Anwendungsform.' },
+      { name: 'Tee/Aufguss', note: 'Für Spülungen und Umschläge.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei Allergie gegen Korbblütler nicht anwenden. Die Monographie bezieht sich auf die äußerliche Anwendung und Spülungen.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Calendula officinalis L., flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/calendulae-flos' },
+    ],
+  },
+  {
+    id: 'arnica',
+    name: 'Arnika',
+    category: 'Kräuter',
+    synonyms: ['arnika', 'arnica', 'arnica montana', 'arnikablüten', 'arnicae flos', 'bergwohlverleih'],
+    unit: 'mg',
+    what: 'Blüten der Arnika (Arnicae flos); ausschließlich zur äußerlichen Anwendung bei stumpfen Verletzungen dokumentiert.',
+    useCases: [
+      { topic: 'Stumpfe Verletzungen', note: 'Traditionell äußerlich bei Prellungen, Verstauchungen und lokalen Muskelschmerzen (Gel, Salbe, verdünnte Umschläge).' },
+    ],
+    forms: [
+      { name: 'Gel/Salbe', note: 'Übliche äußerliche Anwendungsform.' },
+      { name: 'Tinktur verdünnt', note: 'Nur verdünnt für Umschläge; unverdünnt reizt sie die Haut.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'AUSSCHLIESSLICH äußerlich anwenden: Eingenommene Arnika ist giftig (Herzrhythmusstörungen, Magen-Darm-Beschwerden). Nicht auf offene Wunden oder geschädigte Haut auftragen. Bei Allergie gegen Korbblütler nicht anwenden.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Arnica montana L., flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/arnicae-flos' },
+    ],
+  },
+  {
+    id: 'meadowsweet',
+    name: 'Mädesüß',
+    category: 'Kräuter',
+    synonyms: ['mädesüß', 'maedesuess', 'meadowsweet', 'filipendula ulmaria', 'mädesüßkraut', 'filipendulae ulmariae herba'],
+    unit: 'mg',
+    what: 'Kraut des Echten Mädesüß (Filipendulae ulmariae herba); enthält Salicylate und wird traditionell bei Erkältungsbeschwerden eingesetzt.',
+    useCases: [
+      { topic: 'Erkältungsbeschwerden', note: 'Traditionell zur unterstützenden Anwendung bei Erkältungen eingesetzt.' },
+      { topic: 'Leichte Schmerzen', note: 'Traditionell bei leichten Gelenkschmerzen, verwandt mit der Weidenrinde (Salicylate).' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform des Krauts.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Enthält Salicylate: nicht bei Salicylat-Unverträglichkeit oder ASS-Allergie, nicht für Kinder und Jugendliche mit fieberhaften Infekten. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Filipendula ulmaria, herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/filipendulae-ulmariae-herba' },
+    ],
+  },
+  {
+    id: 'horse-chestnut',
+    name: 'Rosskastanie',
+    category: 'Kräuter',
+    synonyms: ['rosskastanie', 'horse chestnut', 'aesculus hippocastanum', 'rosskastaniensamen', 'hippocastani semen', 'aescin'],
+    unit: 'mg',
+    what: 'Samen der Rosskastanie (Hippocastani semen); der Extrakt mit dem Wirkstoffkomplex Aescin wird bei Venenbeschwerden eingesetzt.',
+    useCases: [
+      { topic: 'Venen', note: 'EMA-Monographie (Well-established Use): Extrakt bei chronischer Venenschwäche mit schweren Beinen, Schwellungen und nächtlichen Wadenkrämpfen.' },
+    ],
+    forms: [
+      { name: 'Trockenextrakt', aka: ['standardisiert auf Aescin'], note: 'Auf diese Form bezieht sich der Well-established Use; rohe Samen sind ungenießbar.' },
+      { name: 'Gel äußerlich', note: 'Traditionelle äußerliche Anwendung bei müden, schweren Beinen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Rohe Samen, Blätter und Rinde nicht einnehmen. Bei plötzlicher einseitiger Beinschwellung, Hautverfärbung oder Schmerz sofort ärztlich abklären (Thromboseverdacht). Für Schwangerschaft und Stillzeit sowie bei Nieren- oder Lebererkrankungen ärztlich abklären.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Aesculus hippocastanum L., semen', url: 'https://www.ema.europa.eu/en/medicines/herbal/hippocastani-semen' },
+    ],
+  },
+  {
+    id: 'birch-leaf',
+    name: 'Birkenblätter',
+    category: 'Kräuter',
+    synonyms: ['birkenblätter', 'birke', 'birch leaf', 'betula', 'betulae folium', 'birkenblättertee'],
+    unit: 'mg',
+    what: 'Blätter der Birke (Betulae folium); traditionell zur Durchspülung der Harnwege eingesetzt.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge und Durchspülung bei leichten Beschwerden der Harnwege.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform der Blätter.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Zur Durchspülung ausreichend trinken. Nicht anwenden, wenn wegen einer Herz- oder Nierenerkrankung die Flüssigkeitszufuhr eingeschränkt ist. Bei Allergie gegen Birkenpollen kann es zu Reaktionen kommen.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Betula, folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/betulae-folium' },
+    ],
+  },
+  {
+    id: 'horsetail',
+    name: 'Ackerschachtelhalm',
+    category: 'Kräuter',
+    synonyms: ['ackerschachtelhalm', 'schachtelhalm', 'horsetail', 'equisetum arvense', 'zinnkraut', 'equiseti herba'],
+    unit: 'mg',
+    what: 'Kraut des Ackerschachtelhalms (Equiseti herba, Zinnkraut); traditionell zur Durchspülung der Harnwege eingesetzt, enthält viel Silicium.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge und Durchspülung bei leichten Beschwerden der Harnwege.' },
+      { topic: 'Haut, Haare, Nägel', note: 'Wird wegen des Siliciumgehalts in diesem Zusammenhang vermarktet; die Datenlage dazu ist begrenzt.' },
+    ],
+    forms: [
+      { name: 'Tee/Abkochung', note: 'Klassische Anwendungsform; die Kieselsäure löst sich besser beim Abkochen.' },
+      { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Verwechslungsgefahr beim Selbstsammeln mit dem giftigen Sumpfschachtelhalm; auf geprüfte Apotheken- oder Herstellerware achten. Zur Durchspülung ausreichend trinken; nicht bei eingeschränkter Flüssigkeitszufuhr wegen Herz- oder Nierenerkrankung.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Equisetum arvense L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/equiseti-herba' },
+    ],
+  },
+  {
+    id: 'wormwood',
+    name: 'Wermut',
+    category: 'Kräuter',
+    synonyms: ['wermut', 'wormwood', 'artemisia absinthium', 'wermutkraut', 'absinthii herba'],
+    unit: 'mg',
+    what: 'Kraut des Wermuts (Absinthii herba); traditionelles Bittermittel bei Appetitlosigkeit und Verdauungsbeschwerden.',
+    useCases: [
+      { topic: 'Appetitlosigkeit', note: 'Traditionell als Bittermittel bei vorübergehender Appetitlosigkeit.' },
+      { topic: 'Verdauungsbeschwerden', note: 'Traditionell bei leichten Verdauungsbeschwerden wie Völlegefühl und Blähungen.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische, sehr bittere Anwendungsform.' },
+      { name: 'Tinktur/Extrakt', note: 'Flüssige Bitterstoff-Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Wermut enthält Thujon: nur zeitlich begrenzt und in üblicher Dosierung anwenden, die EMA nennt Anwendungsgrenzen von etwa 2 Wochen. Nicht in Schwangerschaft und Stillzeit. Nicht bei Gallenwegsverschluss oder Magen-Darm-Geschwüren.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Artemisia absinthium L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/absinthii-herba' },
+    ],
+  },
+  {
+    id: 'burdock-root',
+    name: 'Klettenwurzel',
+    category: 'Kräuter',
+    synonyms: ['klettenwurzel', 'klette', 'burdock', 'arctium lappa', 'arctii radix', 'klettenwurzelöl'],
+    unit: 'mg',
+    what: 'Wurzel der Großen Klette (Arctii radix); traditionell zur Durchspülung der Harnwege und bei Hautbeschwerden eingesetzt.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge im Rahmen einer Durchspülung.' },
+      { topic: 'Haut', note: 'Traditionell unterstützend bei leichten seborrhoischen Hautzuständen; als Öl-Auszug auch äußerlich für die Kopfhaut.' },
+    ],
+    forms: [
+      { name: 'Tee/Abkochung', note: 'Klassische Anwendungsform der Wurzel.' },
+      { name: 'Öl-Auszug äußerlich', note: 'Traditionelles Klettenwurzelöl für Haut und Kopfhaut.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei Allergie gegen Korbblütler nicht anwenden. Zur Durchspülung ausreichend trinken. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Arctium lappa L., radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/arctii-radix' },
+    ],
+  },
+  {
+    id: 'lovage-root',
+    name: 'Liebstöckel',
+    category: 'Kräuter',
+    synonyms: ['liebstöckel', 'liebstoeckel', 'lovage', 'levisticum officinale', 'liebstöckelwurzel', 'levistici radix', 'maggikraut'],
+    unit: 'mg',
+    what: 'Wurzel des Liebstöckels (Levistici radix); traditionell zur Durchspülung der Harnwege eingesetzt.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge und Durchspülung bei leichten Beschwerden der Harnwege; Bestandteil bekannter Kombinationspräparate.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform der Wurzel.' },
+      { name: 'Extrakt', note: 'Auch in festen Kombinationen mit Rosmarin und Tausendgüldenkraut.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Zur Durchspülung ausreichend trinken; nicht bei eingeschränkter Flüssigkeitszufuhr wegen Herz- oder Nierenerkrankung. Bei akuten Harnwegsentzündungen mit Fieber gehört die Behandlung in ärztliche Hand. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Levisticum officinale, radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/levistici-radix' },
+    ],
+  },
+  {
+    id: 'nettle-leaf',
+    name: 'Brennnesselblätter',
+    category: 'Kräuter',
+    synonyms: ['brennnesselblätter', 'brennnessel', 'nettle leaf', 'urtica dioica', 'urticae folium', 'brennnesseltee', 'brennnesselkraut'],
+    unit: 'mg',
+    what: 'Blätter und Kraut der Brennnessel (Urticae folium/herba); traditionell zur Durchspülung der Harnwege und bei leichten Gelenkbeschwerden eingesetzt. Nicht zu verwechseln mit der Brennnesselwurzel, die bei Prostatabeschwerden dokumentiert ist.',
+    useCases: [
+      { topic: 'Harnwege', note: 'Traditionell zur Erhöhung der Harnmenge und Durchspülung bei leichten Beschwerden der Harnwege.' },
+      { topic: 'Gelenkbeschwerden', note: 'Traditionell unterstützend bei leichten Gelenkbeschwerden.' },
+    ],
+    forms: [
+      { name: 'Tee/Aufguss', note: 'Klassische Anwendungsform der Blätter.' },
+      { name: 'Extrakt/Frischpflanzensaft', note: 'Flüssige oder feste Zubereitungen.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Zur Durchspülung ausreichend trinken; nicht bei eingeschränkter Flüssigkeitszufuhr wegen Herz- oder Nierenerkrankung. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    sources: [
+      { label: 'EMA/HMPC: European Union herbal monograph on Urtica, folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/urticae-folium' },
+      { label: 'EMA/HMPC: European Union herbal monograph on Urtica, herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/urticae-herba' },
+    ],
+  },
 ];
 
 // Schneller Zugriff per ID

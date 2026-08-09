@@ -1894,4 +1894,142 @@ export default {
     },
     cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Do not use with an allergy to Asteraceae.',
   },
+  'mullein': {
+    what: 'Flowers of the great mullein (Verbasci flos); traditionally used for coughs and throat complaints associated with a cold.',
+    useCases: [
+      { topic: 'Cough', note: 'traditionally used for throat complaints and dry cough associated with a cold, classically as part of cough teas.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the flowers; strain well before drinking (fine hairs).',
+    },
+    cautionNote: 'Sufficient data for pregnancy and breastfeeding are lacking. If a cough lasts longer than a week, it belongs in medical evaluation.',
+  },
+  'motherwort': {
+    what: 'Herb of motherwort (Leonuri cardiacae herba); traditionally used for nervous heart complaints, similar to hawthorn.',
+    useCases: [
+      { topic: 'Nervous Heart Complaints', note: 'traditionally used for temporary nervous heart complaints, after serious causes have been ruled out by a doctor.' },
+      { topic: 'Restlessness', note: 'traditionally used for mild symptoms of stress and inner restlessness.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the herb.',
+      'Extrakt': 'Liquid or solid preparations, also in combination products.',
+    },
+    cautionNote: 'Heart complaints always belong in medical evaluation. Do not use in pregnancy and breastfeeding. Data for children under 12 are lacking.',
+  },
+  'calendula': {
+    what: 'Flowers of the marigold (Calendulae flos); traditionally used mainly externally for skin and mucous membrane irritation.',
+    useCases: [
+      { topic: 'Skin', note: 'traditionally used externally for minor skin inflammation and to support the closure of small superficial wounds.' },
+      { topic: 'Mouth and Throat', note: 'traditionally used as a rinse for minor inflammation of the mouth and throat lining.' },
+    ],
+    forms: {
+      'Salbe/Creme': 'The most common external form of use.',
+      'Tee/Aufguss': 'For rinses and compresses.',
+    },
+    cautionNote: 'Do not use with an allergy to Asteraceae. The monograph refers to external use and rinses.',
+  },
+  'arnica': {
+    what: 'Flowers of arnica (Arnicae flos); documented exclusively for external use on blunt injuries.',
+    useCases: [
+      { topic: 'Blunt Injuries', note: 'traditionally used externally for bruises, sprains and local muscle pain (gel, ointment, diluted compresses).' },
+    ],
+    forms: {
+      'Gel/Salbe': 'The usual external form of use.',
+      'Tinktur verdünnt': 'Only diluted for compresses; undiluted it irritates the skin.',
+    },
+    cautionNote: 'For EXTERNAL use only: swallowed arnica is toxic (heart rhythm disturbances, gastrointestinal complaints). Do not apply to open wounds or damaged skin. Do not use with an allergy to Asteraceae.',
+  },
+  'meadowsweet': {
+    what: 'Herb of meadowsweet (Filipendulae ulmariae herba); contains salicylates and is traditionally used for cold symptoms.',
+    useCases: [
+      { topic: 'Cold Symptoms', note: 'traditionally used as supportive care during colds.' },
+      { topic: 'Mild Pain', note: 'traditionally used for mild joint pain, related to willow bark (salicylates).' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the herb.',
+      'Extrakt': 'Liquid or solid preparations.',
+    },
+    cautionNote: 'Contains salicylates: not with salicylate intolerance or ASA allergy, not for children and adolescents with feverish infections. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'horse-chestnut': {
+    what: 'Seeds of the horse chestnut (Hippocastani semen); the extract with the active complex aescin is used for vein complaints.',
+    useCases: [
+      { topic: 'Veins', note: 'EMA monograph (well-established use): extract for chronic venous insufficiency with heavy legs, swelling and night-time calf cramps.' },
+    ],
+    forms: {
+      'Trockenextrakt': 'The well-established use refers to this form; raw seeds are inedible.',
+      'Gel äußerlich': 'Traditional external use for tired, heavy legs.',
+    },
+    cautionNote: 'Do not ingest raw seeds, leaves or bark. With sudden one-sided leg swelling, skin discolouration or pain, seek medical evaluation immediately (suspected thrombosis). Clarify use with a doctor in pregnancy, breastfeeding and with kidney or liver disease.',
+  },
+  'birch-leaf': {
+    what: 'Leaves of the birch (Betulae folium); traditionally used to flush the urinary tract.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume and flush the urinary tract in mild urinary complaints.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the leaves.',
+      'Extrakt': 'Liquid or solid preparations.',
+    },
+    cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Reactions can occur with a birch pollen allergy.',
+  },
+  'horsetail': {
+    what: 'Herb of field horsetail (Equiseti herba); traditionally used to flush the urinary tract, rich in silicon.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume and flush the urinary tract in mild urinary complaints.' },
+      { topic: 'Skin, Hair, Nails', note: 'marketed in this context because of its silicon content; the evidence for this is limited.' },
+    ],
+    forms: {
+      'Tee/Abkochung': 'The classic form of use; the silicic acid dissolves better when decocted.',
+      'Extrakt': 'Liquid or solid preparations.',
+    },
+    cautionNote: 'Risk of confusion with the toxic marsh horsetail when collecting yourself; rely on tested pharmacy or manufacturer products. Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease.',
+  },
+  'wormwood': {
+    what: 'Herb of wormwood (Absinthii herba); a traditional bitter for loss of appetite and digestive complaints.',
+    useCases: [
+      { topic: 'Loss of Appetite', note: 'traditionally used as a bitter for temporary loss of appetite.' },
+      { topic: 'Digestive Complaints', note: 'traditionally used for mild digestive complaints such as a feeling of fullness and bloating.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic, very bitter form of use.',
+      'Tinktur/Extrakt': 'Liquid bitter preparations.',
+    },
+    cautionNote: 'Wormwood contains thujone: use only for limited periods and at usual doses, the EMA states use limits of about 2 weeks. Not in pregnancy and breastfeeding. Not with bile duct obstruction or gastrointestinal ulcers.',
+  },
+  'burdock-root': {
+    what: 'Root of the greater burdock (Arctii radix); traditionally used to flush the urinary tract and for skin complaints.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume as part of flushing.' },
+      { topic: 'Skin', note: 'traditionally used supportively for mild seborrhoeic skin conditions; as an oil infusion also externally for the scalp.' },
+    ],
+    forms: {
+      'Tee/Abkochung': 'The classic form of use for the root.',
+      'Öl-Auszug äußerlich': 'Traditional burdock oil for skin and scalp.',
+    },
+    cautionNote: 'Do not use with an allergy to Asteraceae. Drink enough fluid when flushing. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'lovage-root': {
+    what: 'Root of lovage (Levistici radix); traditionally used to flush the urinary tract.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume and flush the urinary tract in mild urinary complaints; a component of well-known combination products.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the root.',
+      'Extrakt': 'Also in fixed combinations with rosemary and centaury.',
+    },
+    cautionNote: 'Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease. Acute urinary tract infections with fever belong in medical care. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'nettle-leaf': {
+    what: 'Leaves and herb of the stinging nettle (Urticae folium/herba); traditionally used to flush the urinary tract and for mild joint complaints. Not to be confused with nettle root, which is documented for prostate complaints.',
+    useCases: [
+      { topic: 'Urinary Tract', note: 'traditionally used to increase urine volume and flush the urinary tract in mild urinary complaints.' },
+      { topic: 'Joint Complaints', note: 'traditionally used supportively for mild joint complaints.' },
+    ],
+    forms: {
+      'Tee/Aufguss': 'The classic form of use for the leaves.',
+      'Extrakt/Frischpflanzensaft': 'Liquid or solid preparations.',
+    },
+    cautionNote: 'Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease. Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
 };
