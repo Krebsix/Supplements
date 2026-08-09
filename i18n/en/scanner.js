@@ -108,6 +108,7 @@ export default {
   'scanner.nameSearch.empty':
     'No match in the database. The four photos will help instead.',
   'scanner.nameSearch.failed': 'The product search failed.',
+  'scanner.nameSearch.seedOrigin': 'DACH catalogue',
   'scanner.error.analysisFailed': 'The analysis failed. Please try again.',
 
   'scanner.step.front.title': 'Front',

@@ -1,0 +1,2545 @@
+[
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Magnesium 400 + B1 + B6 + B12 + Folsäure",
+    "ean": "4009932004731",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "4.2",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "600",
+        "unit": "µg"
+      }
+    ],
+    "off": true,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-aktiv-magnesium-400",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Magnesium",
+    "ean": "4009932132557",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009932132557.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Magnesium + Calcium + D3",
+    "ean": "4009932133561",
+    "category": "Calcium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009932133561.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "A-Z Depot Langzeit-Vitamine",
+    "ean": "4009932004533",
+    "category": "Multivitamin/A-Z",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009932004533.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Omega-3 1000 vegan",
+    "ean": "4009932132786",
+    "category": "Omega-3",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009932132786.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Calcium + D3",
+    "ean": "4010355570338",
+    "category": "Calcium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4010355570338.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Multivitamine für Kinder",
+    "ean": "4058172309496",
+    "category": "Multivitamin/A-Z",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4058172309496.json",
+    "country": "DE"
+  },
+  {
+    "brand": "altapharma",
+    "brandOwner": "Dirk Rossmann GmbH",
+    "name": "Magnesium 400",
+    "ean": "4305615615905",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4305615615905.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Abtei",
+    "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+    "name": "Zink Plus",
+    "ean": "4009241573003",
+    "category": "Zink",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009241573003.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Abtei",
+    "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+    "name": "Magnesium 500",
+    "ean": "4250752202344",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4250752202344.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Abtei",
+    "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+    "name": "Magnesium + Calcium",
+    "ean": "7640113892043",
+    "category": "Calcium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/7640113892043.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Abtei",
+    "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+    "name": "B-Komplex Forte",
+    "ean": "4026600383004",
+    "category": "B12/B-Komplex",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4026600383004.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Abtei",
+    "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+    "name": "Omega 3-6-9",
+    "ean": "7640115484406",
+    "category": "Omega-3",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/7640115484406.json",
+    "country": "DE"
+  },
+  {
+    "brand": "taxofit",
+    "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+    "name": "Magnesium 400",
+    "ean": "4008617008767",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "2.2",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "6.0",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "6.0",
+        "unit": "µg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "800",
+        "unit": "µg"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4008617008767.json",
+    "country": "DE"
+  },
+  {
+    "brand": "taxofit",
+    "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+    "name": "Vitamin B12 Plus + B5 + Folsäure",
+    "ean": "4008617041849",
+    "category": "B12/B-Komplex",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4008617041849.json",
+    "country": "DE"
+  },
+  {
+    "brand": "taxofit",
+    "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+    "name": "B-Komplex",
+    "ean": "4008617042587",
+    "category": "B12/B-Komplex",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4008617042587.json",
+    "country": "DE"
+  },
+  {
+    "brand": "taxofit",
+    "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+    "name": "Vitamin C 1000",
+    "ean": "4008617044529",
+    "category": "Vitamin C",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4008617044529.json",
+    "country": "DE"
+  },
+  {
+    "brand": "tetesept",
+    "brandOwner": "Merz Consumer Care GmbH",
+    "name": "Magnesium",
+    "ean": "7611618002053",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/7611618002053.json",
+    "country": "DE"
+  },
+  {
+    "brand": "tetesept",
+    "brandOwner": "Merz Consumer Care GmbH",
+    "name": "Vitamin D3",
+    "ean": "4008491277297",
+    "category": "Vitamin D3",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4008491277297.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Orthomol",
+    "brandOwner": "Orthomol pharmazeutische Vertriebs GmbH",
+    "name": "Orthomol Immun",
+    "ean": null,
+    "category": "Multivitamin/A-Z",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "1117",
+        "unit": "µg RE"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "15",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "150",
+        "unit": "mg alpha-TE"
+      },
+      {
+        "name": "Vitamin K",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "950",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "60",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "8.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "6",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "18",
+        "unit": "mg"
+      },
+      {
+        "name": "Eisen",
+        "amount": "8",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "0.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Mangan",
+        "amount": "2",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Chrom",
+        "amount": "30",
+        "unit": "µg"
+      },
+      {
+        "name": "Molybdän",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Citrus-Bioflavonoide",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Lutein",
+        "amount": "800",
+        "unit": "µg"
+      },
+      {
+        "name": "Lycopin",
+        "amount": "200",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.orthomol.com/cache-buster-1730112825/Orthomol%20Corporate/fachkreise/downloads/beipackzettel/Orthomol-Immun-Granulat-Orange-BPZ.pdf",
+    "country": "DE"
+  },
+  {
+    "brand": "Dr. Wolz",
+    "brandOwner": "Dr. Wolz Zell GmbH",
+    "name": "Vitalkomplex",
+    "ean": "4021901640122",
+    "category": "Multivitamin/A-Z",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4021901640122.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Biolectra",
+    "brandOwner": "Hermes Arzneimittel GmbH",
+    "name": "Magnesium 400 mg Nerven & Muskeln Vital",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "1.1",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "2.5",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.biolectra-magnesium.de/fileadmin/produkte/gebrauchsinformationen/Gebrauchsinformation-Biolectra-Magnesium-400-mg-Nerven-Muskeln-Vital.pdf",
+    "country": "DE"
+  },
+  {
+    "brand": "Magnesium-Diasporal",
+    "brandOwner": "Protina Pharm. GmbH",
+    "name": "Magnesium-Diasporal 400 EXTRA direkt",
+    "ean": "4260124360237",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://diasporal.com/products/magnesium-diasporal-400-extra-direktgranulat",
+    "country": "DE"
+  },
+  {
+    "brand": "Sanct Bernhard",
+    "brandOwner": "Kräuterhaus Sanct Bernhard GmbH",
+    "name": "Magnesium-400-supra Kapseln",
+    "ean": "4250382201922",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://www.kraeuterhaus.de/de-DE/produkte/magnesium-400-supra-kapseln-1",
+    "country": "DE"
+  },
+  {
+    "brand": "Sunday Natural",
+    "brandOwner": "Sunday Natural Products GmbH",
+    "name": "Magnesium Komplex 9 Ultra",
+    "ean": "4260677587396",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4260677587396.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Natural Elements",
+    "brandOwner": null,
+    "name": "Magnesium Komplex Kapseln",
+    "ean": "4260558410324",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium (gesamt, aus 5 Verbindungen)",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://naturalelements.de/products/magnesium-komplex-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": null,
+    "name": "Vitamin D3 & K2 Tropfen",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "1000",
+        "unit": "I.E."
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "20",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nature-love.de/products/vitamin-d3-k2-tropfen-50ml-mit-25mcg-d3-20mcg-k2-pro-tropfen",
+    "country": "DE"
+  },
+  {
+    "brand": "GloryFeel",
+    "brandOwner": null,
+    "name": "Magnesium Citrat Kapseln",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gloryfeel.de/products/magnesium-citrat-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "GloryFeel",
+    "brandOwner": null,
+    "name": "Vitamin C 1.000 mg + Zink 20 mg",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "1000",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "20",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gloryfeel.de/products/vitamin-c-kapseln-gepuffert",
+    "country": "DE"
+  },
+  {
+    "brand": "Vit4ever",
+    "brandOwner": null,
+    "name": "Vitamin D3 + K2 Tropfen",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "25",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "20",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://vit4ever.com/en/labtest/vitamin-d3-k2-tropfen/",
+    "country": "DE"
+  },
+  {
+    "brand": "ZeinPharma",
+    "brandOwner": "ZeinPharma Germany GmbH",
+    "name": "Magnesium Bisglycinat Kapseln 375 mg",
+    "ean": "4260085382989",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "375",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.zeinpharma.de/Magnesium-Bisglycinat-Kapseln-375-mg/20203",
+    "country": "DE"
+  },
+  {
+    "brand": "Fairvital",
+    "brandOwner": "Fairvital B.V.",
+    "name": "Magnesium Citrate 120 Capsules",
+    "ean": "8718309440503",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.fairvital.com/en/Magnesium-Citrate-120-Capsules-94012",
+    "country": "DE"
+  },
+  {
+    "brand": "Warnke",
+    "brandOwner": "Warnke Vitalstoffe GmbH",
+    "name": "Magnesiumcitrat 150 Tabletten",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "294",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://warnke.de/Magnesiumcitrat-150-Tabletten-fuer-Knochen-Muskeln-uvm.-Vegan-Warnke-Vitalstoffe/29615",
+    "country": "DE"
+  },
+  {
+    "brand": "NATURTREU",
+    "brandOwner": null,
+    "name": "Sonnenfreund Vitamin D3 + K2 Tropfen",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "25",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "12",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://naturtreu.de/products/sonnenfreund-vitamin-d3-und-k2-tropfen-hochdosiert",
+    "country": "DE"
+  },
+  {
+    "brand": "Vitamaze",
+    "brandOwner": null,
+    "name": "Vitamin D3 + K2 hochdosiert (180 Tabletten)",
+    "ean": "4260435489535",
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "5000",
+        "unit": "I.E."
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "100",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vitamaze.com/vitamaze-vitamin-d3-vitamin-k2-hochdosiert-180-vegetarische-tabletten",
+    "country": "DE"
+  },
+  {
+    "brand": "Raab Vitalfood",
+    "brandOwner": null,
+    "name": "Magnesiumcitrat Kapseln",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "250",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.raabvitalfood.de/products/magnesiumcitrat-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "effective nature",
+    "brandOwner": null,
+    "name": "Vitamin D3 1000 IE",
+    "ean": "7640152280245",
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "1000",
+        "unit": "IE"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/7640152280245.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Avitale",
+    "brandOwner": "Avitale GmbH",
+    "name": "Magnesium 400 mg Kapseln",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.avitale.de/en/product/magnesium-400-120-kapseln/",
+    "country": "DE"
+  },
+  {
+    "brand": "Magnesium Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG",
+    "name": "Magnesium Verla N Dragées",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "40",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.verla.de/produkte/arzneimittel/gastrovegetalin/detail/magnesium-verla-n-dragees",
+    "country": "DE"
+  },
+  {
+    "brand": "Vigantol",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantol Öl 20.000 I.E./ml",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3 (Colecalciferol)",
+        "amount": "500",
+        "unit": "I.E. pro Tropfen"
+      }
+    ],
+    "off": false,
+    "source": "https://www.fachinfo.de/fi/pdf/000670/vigantol-r-oel-20-000-i-e-ml-tropfen-zum-einnehmen-loesung",
+    "country": "DE"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantolvit Vitamin D3, K2 und Calcium",
+    "ean": null,
+    "category": "Calcium",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "1000",
+        "unit": "I.E."
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "75",
+        "unit": "µg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-vitamin-d3-k2-und-calcium",
+    "country": "DE"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantolvit Vitamin D3 Öl 500 I.E.",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "500",
+        "unit": "I.E. pro Tropfen"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-oel-500",
+    "country": "DE"
+  },
+  {
+    "brand": "ESN",
+    "brandOwner": "The Quality Group GmbH",
+    "name": "Omega-3 Vegan",
+    "ean": "4250519603124",
+    "category": "Omega-3",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4250519603124.json",
+    "country": "DE"
+  },
+  {
+    "brand": "ESN",
+    "brandOwner": "The Quality Group GmbH",
+    "name": "Vitamin D3 + K2 (120 Kapseln)",
+    "ean": "4250519604633",
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "140",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "200",
+        "unit": "µg"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4250519604633.json",
+    "country": "DE"
+  },
+  {
+    "brand": "ESN",
+    "brandOwner": "The Quality Group GmbH",
+    "name": "Isoclear Whey Protein Isolate",
+    "ean": "4250519666662",
+    "category": "Whey/Protein",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4250519666662.json",
+    "country": "DE"
+  },
+  {
+    "brand": "More Nutrition",
+    "brandOwner": "The Quality Group GmbH",
+    "name": "Essentials O3-D3-K2",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://morenutrition.de/products/essentials-o3-d3-k2",
+    "country": "DE"
+  },
+  {
+    "brand": "Foodspring",
+    "brandOwner": null,
+    "name": "Whey Protein Schokolade",
+    "ean": "4260363480680",
+    "category": "Whey/Protein",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4260363480680.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Body Attack",
+    "brandOwner": "Body Attack Sports Nutrition GmbH & Co. KG",
+    "name": "Multivitamin Body Attack",
+    "ean": "4250350514955",
+    "category": "Multivitamin/A-Z",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4250350514955.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Body Attack",
+    "brandOwner": "Body Attack Sports Nutrition GmbH & Co. KG",
+    "name": "100% Whey Protein Vanilla Cream",
+    "ean": "4250350518403",
+    "category": "Whey/Protein",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4250350518403.json",
+    "country": "DE"
+  },
+  {
+    "brand": "ZEC+",
+    "brandOwner": "Zec+ Nutrition GmbH & Co. KG",
+    "name": "Health+ Magnesium-Bisglycinat",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "100",
+        "unit": "mg pro Kapsel"
+      }
+    ],
+    "off": false,
+    "source": "https://www.zecplus.de/health-magnesium-bisglycinat-120-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "Peak",
+    "brandOwner": "Peak Performance Products S.A.",
+    "name": "Creatin Monohydrat Pulver",
+    "ean": null,
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Creatin Monohydrat",
+        "amount": "3000",
+        "unit": "mg pro Portion (3 g)"
+      },
+      {
+        "name": "Niacin",
+        "amount": "16",
+        "unit": "mg pro Portion"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1.4",
+        "unit": "mg pro Portion"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "2.5",
+        "unit": "µg pro Portion"
+      }
+    ],
+    "off": false,
+    "source": "https://www.peak.ag/creatin-monohydrat",
+    "country": "DE"
+  },
+  {
+    "brand": "All Stars",
+    "brandOwner": null,
+    "name": "Creatin Monohydrat",
+    "ean": null,
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Creatin Monohydrat",
+        "amount": "5000",
+        "unit": "mg pro 5g-Portion"
+      }
+    ],
+    "off": false,
+    "source": "https://all-stars.de/products/all-stars-creatin-monohydrat-250g-dose",
+    "country": "DE"
+  },
+  {
+    "brand": "ProFuel",
+    "brandOwner": "mewell GmbH",
+    "name": "Omega-3 + D3 + K2 Komplex",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "DHA",
+        "amount": "600",
+        "unit": "mg"
+      },
+      {
+        "name": "EPA",
+        "amount": "300",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "1000",
+        "unit": "I.U."
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "40",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://profuel.de/omega-3-d3-k2-algenoel-90-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Vitamin C 1000 DEPOT",
+    "ean": "4009932135565",
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "1000",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "25",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "12",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009932135565.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Melatonin",
+    "ean": null,
+    "category": "Melatonin",
+    "keyIngredients": [
+      {
+        "name": "Melatonin",
+        "amount": "1",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-aktiv-melatonin/120-mini-tabletten",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "system Coenzym Q10 100",
+    "ean": null,
+    "category": "Q10",
+    "keyIngredients": [
+      {
+        "name": "Coenzym Q10",
+        "amount": "100",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-system-coenzym-q10-100",
+    "country": "DE"
+  },
+  {
+    "brand": "Sanct Bernhard",
+    "brandOwner": "Kräuterhaus Sanct Bernhard GmbH",
+    "name": "Sport Vitamin C + Zink Depot-Kapseln",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "300",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kraeuterhaus.de/de-DE/produkte/sanct-bernhard-sport-vitamin-c-zink-depot-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "Natural Elements",
+    "brandOwner": null,
+    "name": "Vitamin C gepuffert 500mg",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://my-ne.com/products/vitamin-c-gepuffert-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "Natural Elements",
+    "brandOwner": null,
+    "name": "Zink Bisglycinat Tabletten 25mg",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "25",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://naturalelements.de/products/zink-bisglycinat-tabletten-25mg",
+    "country": "DE"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": null,
+    "name": "Selen Komplex Kapseln",
+    "ean": null,
+    "category": "Selen",
+    "keyIngredients": [
+      {
+        "name": "Selen",
+        "amount": "200",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nature-love.de/products/selen-komplex-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "GloryFeel",
+    "brandOwner": null,
+    "name": "Zinkbisglycinat Tabletten",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "25",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gloryfeel.de/products/zinkbisglycinat-tabletten",
+    "country": "DE"
+  },
+  {
+    "brand": "Fairvital",
+    "brandOwner": "Fairvital B.V.",
+    "name": "Premium Calcium with Magnesium (180 Capsules)",
+    "ean": "8718309446864",
+    "category": "Calcium",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://fairvital.com/en/Premium-Calcium-with-Magnesium-180-capsules-67118",
+    "country": "DE"
+  },
+  {
+    "brand": "Warnke",
+    "brandOwner": "Warnke Vitalstoffe GmbH",
+    "name": "Kalium-Magnesiumcitrat (100 Kapseln)",
+    "ean": null,
+    "category": "Elektrolyte",
+    "keyIngredients": [
+      {
+        "name": "Kalium",
+        "amount": "900",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "240",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://warnke.de/Kalium-Magnesiumcitrat-100-Kapseln-fuer-Muskeln-Knochen-Zaehne-uvm.-Warnke-Vitalstoffe/25710",
+    "country": "DE"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Jod + Folsäure + Eisen + B12",
+    "ean": "4009932131253",
+    "category": "Folsäure",
+    "keyIngredients": [
+      {
+        "name": "Jod",
+        "amount": "100",
+        "unit": "µg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "600",
+        "unit": "µg"
+      },
+      {
+        "name": "Eisen",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "50",
+        "unit": "µg"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4009932131253.json",
+    "country": "DE"
+  },
+  {
+    "brand": "altapharma",
+    "brandOwner": "Dirk Rossmann GmbH",
+    "name": "Vitamin D3 Perlen",
+    "ean": "4305615617145",
+    "category": "Vitamin D3",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4305615617145.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Magnesium 400 Tabletten",
+    "ean": "4058172922114",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4058172922114.json",
+    "country": "DE"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Vitamin C 1000 + D3 + Selen Depot",
+    "ean": "4058172921919",
+    "category": "Vitamin C",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4058172921919.json",
+    "country": "DE"
+  },
+  {
+    "brand": "gloryfeel",
+    "brandOwner": "Gloryfeel GmbH",
+    "name": "Natürliches Jod Tabletten",
+    "ean": null,
+    "category": "Jod",
+    "keyIngredients": [
+      {
+        "name": "Jod",
+        "amount": "225",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gloryfeel.de/products/jod-tabletten",
+    "country": "DE"
+  },
+  {
+    "brand": "Sanct Bernhard",
+    "brandOwner": "Kräuterhaus Sanct Bernhard GmbH",
+    "name": "Jod-Meeresalgen-Kapseln",
+    "ean": null,
+    "category": "Jod",
+    "keyIngredients": [
+      {
+        "name": "Jod",
+        "amount": "200",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kraeuterhaus.de/de-DE/produkte/jod-meeresalgen-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "gloryfeel",
+    "brandOwner": "Gloryfeel GmbH",
+    "name": "Kalium Kapseln (Kaliumcitrat)",
+    "ean": null,
+    "category": "Elektrolyte",
+    "keyIngredients": [
+      {
+        "name": "Kalium",
+        "amount": "800",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gloryfeel.de/products/kalium-kapseln",
+    "country": "DE"
+  },
+  {
+    "brand": "Echt Vital",
+    "brandOwner": "Echt Vital GmbH",
+    "name": "Kaliumcitrat Kapseln",
+    "ean": null,
+    "category": "Elektrolyte",
+    "keyIngredients": [
+      {
+        "name": "Kalium",
+        "amount": "756",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://echt-vital.de/kaliumcitrat",
+    "country": "DE"
+  },
+  {
+    "brand": "IronMaxx",
+    "brandOwner": "IronMaxx Nutrition GmbH & Co. KG",
+    "name": "Whey Zero Banana-Yoghurt",
+    "ean": "4260426838120",
+    "category": "Whey/Protein",
+    "keyIngredients": [
+      {
+        "name": "Eiweiß",
+        "amount": "40.5",
+        "unit": "g pro Portion (50g)"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4260426838120.json",
+    "country": "DE"
+  },
+  {
+    "brand": "IronMaxx",
+    "brandOwner": "IronMaxx Nutrition GmbH & Co. KG",
+    "name": "Creatine Powder Monohydrate Neutral 300g",
+    "ean": "4260426830124",
+    "category": "Kreatin",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.ironmaxx.de/products/kreatin-pulver-monohydrat-300g",
+    "country": "DE"
+  },
+  {
+    "brand": "BIOGENA",
+    "brandOwner": "Biogena GmbH & Co KG",
+    "name": "Magnesium 150 mg",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "150",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://biogena.com/en/products/magnesium-150-mg-139",
+    "country": "AT"
+  },
+  {
+    "brand": "BIOGENA",
+    "brandOwner": "Biogena GmbH & Co KG",
+    "name": "Vitamin D3 & K2 1.000 I.U.",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "1000",
+        "unit": "IU"
+      }
+    ],
+    "off": false,
+    "source": "https://biogena.com/en/products/vitamin-d3-and-k2-1000-iu-194",
+    "country": "AT"
+  },
+  {
+    "brand": "BIOGENA",
+    "brandOwner": "Biogena GmbH & Co KG",
+    "name": "Ester-C Gold: Vitamin C buffered 500",
+    "ean": "9008740004044",
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://biogena.com/en/products/ester-c-gold-83",
+    "country": "AT"
+  },
+  {
+    "brand": "BIOGENA",
+    "brandOwner": "Biogena GmbH & Co KG",
+    "name": "Vitamin B12 1000 Superior",
+    "ean": null,
+    "category": "B12",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12",
+        "amount": "1000",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://biogena.com/en/products/vitamin-b12-1000-superior-236",
+    "country": "AT"
+  },
+  {
+    "brand": "BIOGENA",
+    "brandOwner": "Biogena GmbH & Co KG",
+    "name": "Zinc Picolinate 15",
+    "ean": "9120089616716",
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "15",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://biogena.com/en/products/zinc-picolinate-15_p_51936",
+    "country": "AT"
+  },
+  {
+    "brand": "BIOGENA",
+    "brandOwner": "Biogena GmbH & Co KG",
+    "name": "Omni Lactis 20 Gold",
+    "ean": null,
+    "category": "Probiotika",
+    "keyIngredients": [
+      {
+        "name": "Milchsäure- und Bifidobakterien (10 Stämme)",
+        "amount": "20",
+        "unit": "Mrd. KBE pro Tagesdosis"
+      }
+    ],
+    "off": false,
+    "source": "https://biogena.com/en/products/omni-lactis-20-gold-235",
+    "country": "AT"
+  },
+  {
+    "brand": "Pure Encapsulations",
+    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "name": "Magnesiumglycinat",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "120",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.purecaps.net/produkte/magnesiumglycinat",
+    "country": "AT"
+  },
+  {
+    "brand": "Pure Encapsulations",
+    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "name": "Vitamin K&D",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "25",
+        "unit": "µg (1000 IU)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.purecaps.net/produkte/vitamin-kd",
+    "country": "AT"
+  },
+  {
+    "brand": "Pure Encapsulations",
+    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "name": "Vitamin C 1000 gepuffert",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "800",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.purecaps.net/produkte/vitamin-c-1000-gepuffert",
+    "country": "AT"
+  },
+  {
+    "brand": "Pure Encapsulations",
+    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "name": "All-in-one Multivitamin",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.purecaps.net/produkte/all-in-one-multivitamin",
+    "country": "AT"
+  },
+  {
+    "brand": "Pure Encapsulations",
+    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "name": "Zink 30",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.purecaps.net/produkte/zink-at",
+    "country": "AT"
+  },
+  {
+    "brand": "OMNi-BiOTiC",
+    "brandOwner": "Institut AllergoSan Pharma GmbH",
+    "name": "OMNi-BiOTiC 10 AAD",
+    "ean": null,
+    "category": "Probiotika",
+    "keyIngredients": [
+      {
+        "name": "Bakterienkulturen (10 humane Stämme)",
+        "amount": "5",
+        "unit": "Mrd. Bakterien pro 5g-Portion"
+      }
+    ],
+    "off": false,
+    "source": "https://shop.omni-biotic.com/en-uk/products/omni-biotic-10-aad-int-99103",
+    "country": "AT"
+  },
+  {
+    "brand": "OMNi-BiOTiC",
+    "brandOwner": "Institut AllergoSan Pharma GmbH",
+    "name": "OMNi-BiOTiC SR-9 (STRESS Repair)",
+    "ean": null,
+    "category": "Probiotika",
+    "keyIngredients": [
+      {
+        "name": "Bakterienkulturen (9 Stämme)",
+        "amount": "7.5",
+        "unit": "Mrd. Bakterien pro 3g-Portion"
+      }
+    ],
+    "off": false,
+    "source": "https://shop.omni-biotic.com/en-uk/products/omni-biotic-stress-repair-int-99113",
+    "country": "AT"
+  },
+  {
+    "brand": "OMNi-BiOTiC",
+    "brandOwner": "Institut AllergoSan Pharma GmbH",
+    "name": "OMNi-BiOTiC FLORA plus",
+    "ean": null,
+    "category": "Probiotika",
+    "keyIngredients": [
+      {
+        "name": "Bakterienkulturen (4 Stämme)",
+        "amount": "5",
+        "unit": "Mrd. Bakterien pro 2g-Portion"
+      }
+    ],
+    "off": false,
+    "source": "https://shop.omni-biotic.com/en-eu/products/omni-biotic-flora-plus-int-99106",
+    "country": "AT"
+  },
+  {
+    "brand": "OMNi-BiOTiC",
+    "brandOwner": "Institut AllergoSan Pharma GmbH",
+    "name": "OMNi-BiOTiC PANDA",
+    "ean": "9120001437368",
+    "category": "Probiotika",
+    "keyIngredients": [
+      {
+        "name": "Bakterienkulturen (4 Stämme)",
+        "amount": "3",
+        "unit": "Mrd. Bakterien pro 3g-Portion"
+      }
+    ],
+    "off": true,
+    "source": "https://shop.omni-biotic.com/en-eu/products/omni-biotic-panda-int-99108",
+    "country": "AT"
+  },
+  {
+    "brand": "OMNi-BiOTiC",
+    "brandOwner": "Institut AllergoSan Pharma GmbH",
+    "name": "OMNi-BiOTiC HETOX",
+    "ean": null,
+    "category": "Probiotika",
+    "keyIngredients": [
+      {
+        "name": "Bakterienkulturen (9 Stämme)",
+        "amount": "15",
+        "unit": "Mrd. Bakterien pro 6g-Portion"
+      }
+    ],
+    "off": false,
+    "source": "https://shop.omni-biotic.com/en-eu/products/omni-biotic-hetox-int-99107",
+    "country": "AT"
+  },
+  {
+    "brand": "Dr. Boehm",
+    "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
+    "name": "Dr. Böhm Magnesium nur 1 x täglich",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.drboehm.com/at/produkt/magnesium-1x-dr-boehm/",
+    "country": "AT"
+  },
+  {
+    "brand": "Dr. Boehm",
+    "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
+    "name": "Dr. Böhm Vitamin D3 1600 I.E. Kapseln",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "40",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.drboehm.com/at/produkt/vitamin-d3-dr-boehm/",
+    "country": "AT"
+  },
+  {
+    "brand": "Dr. Boehm",
+    "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
+    "name": "Dr. Böhm Vitamin C complex Dragees",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "350",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "6",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.drboehm.com/at/produkt/vitamin-c-complex-dr-boehm/",
+    "country": "AT"
+  },
+  {
+    "brand": "Dr. Boehm",
+    "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
+    "name": "Dr. Böhm Zink plus Dragees",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "30",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "55",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "150",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "3",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.drboehm.com/at/produkt/zink-plus-dr-boehm/",
+    "country": "AT"
+  },
+  {
+    "brand": "Dr. Boehm",
+    "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
+    "name": "Dr. Böhm Immun complex Tabletten",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "200",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "3",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "6",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "55",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.drboehm.com/de/produkt/dr-boehm-immun-complex/",
+    "country": "AT"
+  },
+  {
+    "brand": "Gall Pharma",
+    "brandOwner": "Gall-Pharma GmbH",
+    "name": "Magnesium 200 mg GPH Kapseln",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gall-shop.com/de/eigenprodukte/vitamine-mineralstoffe-und-spurenelemente/magnesium-200-mg-gph-kapseln/magnesium-200-mg-gph-kapseln-4332880",
+    "country": "AT"
+  },
+  {
+    "brand": "Gall Pharma",
+    "brandOwner": "Gall-Pharma GmbH",
+    "name": "Vitamin D3 + K2 GPH Kapseln",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "125",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "100",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gall-shop.com/de/eigenprodukte/vitamine-mineralstoffe-und-spurenelemente/vitamin-d3-k2-gph-kapseln/vitamin-d3-k2-gph-kapseln-5073771",
+    "country": "AT"
+  },
+  {
+    "brand": "Gall Pharma",
+    "brandOwner": "Gall-Pharma GmbH",
+    "name": "Zink 30 mg GPH Kapseln",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "30",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "2",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gall-shop.com/de/eigenprodukte/vitamine-mineralstoffe-und-spurenelemente/zink-30-mg-gph-kapseln/zink-30-mg-gph-kapseln-4600263",
+    "country": "AT"
+  },
+  {
+    "brand": "Gall Pharma",
+    "brandOwner": "Gall-Pharma GmbH",
+    "name": "Vitamin B-Komplex GPH Kapseln",
+    "ean": null,
+    "category": "B12/B-Komplex",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B1",
+        "amount": "11",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "14",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "25",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gall-shop.com/de/eigenprodukte/vitamine-mineralstoffe-und-spurenelemente/vitamin-b-komplex-gph-kapseln/vitamin-b-komplex-gph-kapseln-4068124",
+    "country": "AT"
+  },
+  {
+    "brand": "Gall Pharma",
+    "brandOwner": "Gall-Pharma GmbH",
+    "name": "Omega 3 1000 mg 400/200 GPH Kapseln",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "EPA",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.gall-shop.com/de/eigenprodukte/naturstoffe/omega-3-1000-mg-400-200-gph-kapseln/omega-3-1000-mg-400-200-gph-kapseln-4338902",
+    "country": "AT"
+  },
+  {
+    "brand": "OEKOPHARM",
+    "brandOwner": "SANOVA Pharma GesmbH",
+    "name": "ÖKOPHARM Magnesium PRO Brausepulver (für den Sport)",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "192",
+        "unit": "mg"
+      },
+      {
+        "name": "Kalium",
+        "amount": "360",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "7.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.oekopharm.at/produkt/magnesium-pro/",
+    "country": "AT"
+  },
+  {
+    "brand": "OEKOPHARM",
+    "brandOwner": "SANOVA Pharma GesmbH",
+    "name": "ÖKOPHARM Vitamin D Kapseln",
+    "ean": null,
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "19",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "20",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.oekopharm.at/produkt/vitamin-d/",
+    "country": "AT"
+  },
+  {
+    "brand": "OEKOPHARM",
+    "brandOwner": "SANOVA Pharma GesmbH",
+    "name": "ÖKOPHARM Hochdosierte Vitamin C Kapseln",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Citrus-Bioflavonoide",
+        "amount": "60",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.oekopharm.at/produkt/vitamin-c/",
+    "country": "AT"
+  },
+  {
+    "brand": "OEKOPHARM",
+    "brandOwner": "SANOVA Pharma GesmbH",
+    "name": "ÖKOPHARM Zink Wirkkombination",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "15",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "0.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "80",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.oekopharm.at/produkt/zink/",
+    "country": "AT"
+  },
+  {
+    "brand": "PANACEO",
+    "brandOwner": "Panaceo International GmbH",
+    "name": "PANACEO BASIC DETOX Pulver 200 g",
+    "ean": null,
+    "category": "Detox/Zeolith",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.panaceo.com/basic-detox-pulver-200g-effektive-darmentgiftung-mit-pma-zeolith",
+    "country": "AT"
+  },
+  {
+    "brand": "PANACEO",
+    "brandOwner": "Panaceo International GmbH",
+    "name": "PANACEO SPORT PURE Pulver 200 g",
+    "ean": null,
+    "category": "Detox/Zeolith (Sport)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.panaceo.com/sport-pure-pulver-200g",
+    "country": "AT"
+  },
+  {
+    "brand": "PANACEO",
+    "brandOwner": "Panaceo International GmbH",
+    "name": "PANACEO MED DARM REPAIR Pulver 200 g",
+    "ean": null,
+    "category": "Detox/Zeolith (Medizinprodukt)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.panaceo.com/panaceo-med-darm-repair-pulver-200-g",
+    "country": "AT"
+  },
+  {
+    "brand": "Kwizda",
+    "brandOwner": "Kwizda Pharma GmbH",
+    "name": "Magnesium Verla 400 complex Kapseln",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.kwizda-pharma.at/de/produkte/rezeptfreie-produkte/mineralstoffe/magnesium-verla-400-complex.html",
+    "country": "AT"
+  },
+  {
+    "brand": "Kwizda",
+    "brandOwner": "Kwizda Pharma GmbH",
+    "name": "D3 Kwizda Tabletten",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "3000",
+        "unit": "IE"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kwizda-pharma.at/de/produkte/rezeptfreie-produkte/vitamine/d3-kwizda.html",
+    "country": "AT"
+  },
+  {
+    "brand": "Kwizda",
+    "brandOwner": "Kwizda Pharma GmbH",
+    "name": "ZINK VERLA C Granulat",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kwizda-pharma.at/de/produkte/rezeptfreie-produkte/mineralstoffe/zink-verla-c.html",
+    "country": "AT"
+  },
+  {
+    "brand": "Burgerstein",
+    "brandOwner": "Antistress AG",
+    "name": "Burgerstein MagnesiumVital",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium (Bisglycinat/Citrat)",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.burgerstein.ch/de-DE/produkte/burgerstein-magnesiumvital",
+    "country": "CH"
+  },
+  {
+    "brand": "Burgerstein",
+    "brandOwner": "Antistress AG",
+    "name": "Burgerstein Vitamin D3 2000 IE",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "50",
+        "unit": "µg (2000 IE)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.burgerstein.ch/de-DE/produkte/burgerstein-vitamin-d3-2000-ie",
+    "country": "CH"
+  },
+  {
+    "brand": "Burgerstein",
+    "brandOwner": "Antistress AG",
+    "name": "Burgerstein Vitamin C retard",
+    "ean": "7680442590029",
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/7680442590029.json",
+    "country": "CH"
+  },
+  {
+    "brand": "Burgerstein",
+    "brandOwner": "Antistress AG",
+    "name": "Burgerstein Multivitamin",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A (Beta-Carotin)",
+        "amount": "800",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "3.3",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "2.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "2.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "7.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "32",
+        "unit": "mg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "18",
+        "unit": "mg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "160",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "20",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin K",
+        "amount": "75",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.burgerstein.ch/de-DE/produkte/burgerstein-multivitamin",
+    "country": "CH"
+  },
+  {
+    "brand": "Burgerstein",
+    "brandOwner": "Antistress AG",
+    "name": "Burgerstein Vitamin B12 Boost",
+    "ean": null,
+    "category": "B12/B-Komplex",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12 (Methylcobalamin)",
+        "amount": "500",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.burgerstein.ch/de-DE/produkte/burgerstein-vitamin-b12-boost",
+    "country": "CH"
+  },
+  {
+    "brand": "Burgerstein",
+    "brandOwner": "Antistress AG",
+    "name": "Burgerstein Zink",
+    "ean": "7640121571480",
+    "category": "Zink",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/7640121571480.json",
+    "country": "CH"
+  },
+  {
+    "brand": "Kingnature",
+    "brandOwner": "kingnature AG",
+    "name": "kingnature Magnesium Vida",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "375",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kingnature.ch/en/supplements/minerals/magnesium-vida/",
+    "country": "CH"
+  },
+  {
+    "brand": "Kingnature",
+    "brandOwner": "kingnature AG",
+    "name": "kingnature Vitamin C Vida",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "750",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kingnature.ch/en/supplements/vitamins/vitamin-c/",
+    "country": "CH"
+  },
+  {
+    "brand": "Kingnature",
+    "brandOwner": "kingnature AG",
+    "name": "kingnature Omega-3 Vida",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "EPA",
+        "amount": "1150",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA",
+        "amount": "1000",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kingnature.ch/en/supplements/omega-3/omega-3-vida/",
+    "country": "CH"
+  },
+  {
+    "brand": "Kingnature",
+    "brandOwner": "kingnature AG",
+    "name": "kingnature Zink Vida",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kingnature.ch/en/supplements/minerals/zinc-drops/",
+    "country": "CH"
+  },
+  {
+    "brand": "Kingnature",
+    "brandOwner": "kingnature AG",
+    "name": "kingnature Vitamin D3 Vida",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.kingnature.ch/en/supplements/vitamins/vitamin-d3/",
+    "country": "CH"
+  },
+  {
+    "brand": "Phytopharma",
+    "brandOwner": "Phytopharma SA",
+    "name": "Phytopharma Magnesium Tabletten",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium (aus Magnesiumcarbonat)",
+        "amount": "320",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.phytopharma.ch/de/products/list",
+    "country": "CH"
+  },
+  {
+    "brand": "Phytopharma",
+    "brandOwner": "Phytopharma SA",
+    "name": "Phytopharma Echinacea + Vitamin D3 Kapseln",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "70",
+        "unit": "µg (2800 IE)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.phytopharma.ch/de/products/list",
+    "country": "CH"
+  },
+  {
+    "brand": "Phytopharma",
+    "brandOwner": "Phytopharma SA",
+    "name": "Phytopharma Omegan 3 Algenöl Kapseln",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "DHA",
+        "amount": "334",
+        "unit": "mg"
+      },
+      {
+        "name": "EPA",
+        "amount": "166",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.phytopharma.ch/de/products/list",
+    "country": "CH"
+  },
+  {
+    "brand": "Alpinamed",
+    "brandOwner": "Alpinamed AG",
+    "name": "Alpinamed B12 Trio Lutschtabletten",
+    "ean": null,
+    "category": "B12/B-Komplex",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12",
+        "amount": "500",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.alpinamed.ch/de/produkt/b12-trio-lutschtabletten/",
+    "country": "CH"
+  },
+  {
+    "brand": "Alpinamed",
+    "brandOwner": "Alpinamed AG",
+    "name": "Alpinamed Algenöl plus Omega 3 Kapseln",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "EPA",
+        "amount": "110",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA",
+        "amount": "275",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.alpinamed.ch/de/produkt/algenöl-plus-omega-3-kapseln/",
+    "country": "CH"
+  },
+  {
+    "brand": "Nahrin",
+    "brandOwner": "Nahrin AG",
+    "name": "Nahrin Magnesium Complex",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nahrin.ch/de/magnesium-complex",
+    "country": "CH"
+  },
+  {
+    "brand": "Nahrin",
+    "brandOwner": "Nahrin AG",
+    "name": "Nahrin Vitamin D3 Complex",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "50",
+        "unit": "µg (2000 IE)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nahrin.ch/de/vitamin-d3-complex",
+    "country": "CH"
+  },
+  {
+    "brand": "Nahrin",
+    "brandOwner": "Nahrin AG",
+    "name": "Nahrin Omega-3 Complex",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "EPA/DHA (kombiniert)",
+        "amount": "250",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nahrin.ch/de/omega-3-complex-68-7g",
+    "country": "CH"
+  },
+  {
+    "brand": "Nahrin",
+    "brandOwner": "Nahrin AG",
+    "name": "Nahrin Vitamin B Complex (Folsäure Drops)",
+    "ean": null,
+    "category": "B12/B-Komplex",
+    "keyIngredients": [
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nahrin.ch/de/folsaeure-drops",
+    "country": "CH"
+  },
+  {
+    "brand": "SPONSER",
+    "brandOwner": "SPONSER SPORT FOOD AG",
+    "name": "Sponser Creatine Monohydrate Neutral",
+    "ean": "7611174200023",
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Kreatin Monohydrat",
+        "amount": "3000",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://www.sponser.com/products/creatine-monohydrate",
+    "country": "CH"
+  },
+  {
+    "brand": "SPONSER",
+    "brandOwner": "SPONSER SPORT FOOD AG",
+    "name": "Sponser Creatine PyruMax Neutral",
+    "ean": "7611174440559",
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Kreatin",
+        "amount": "3.0",
+        "unit": "g"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "57",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://www.sponser.com/products/creatine-pyrumax-neutral",
+    "country": "CH"
+  },
+  {
+    "brand": "SPONSER",
+    "brandOwner": "SPONSER SPORT FOOD AG",
+    "name": "Sponser Electrolytes Tabs Berry",
+    "ean": "7611174121373",
+    "category": "Elektrolyte",
+    "keyIngredients": [
+      {
+        "name": "Natrium",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Kalium",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Chlorid",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "40",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "20",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "1.5",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://www.sponser.com/products/electrolytes-tabs-berry",
+    "country": "CH"
+  },
+  {
+    "brand": "SPONSER",
+    "brandOwner": "SPONSER SPORT FOOD AG",
+    "name": "Sponser Magnesium-375 Exotic",
+    "ean": "7611174175178",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "375",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.4",
+        "unit": "mg"
+      }
+    ],
+    "off": true,
+    "source": "https://www.sponser.com/products/magnesium-375-exotic",
+    "country": "CH"
+  }
+]

@@ -261,7 +261,9 @@ zurueck. Wer ein neues Nutzerdaten-Feld ergaenzt, ergaenzt es in
   hinterlegt", nie "das ist fuer dich gefaehrlich".
 - Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`, `'vision'`
   fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer,
-  `'community-cache'` fuer Treffer aus dem geteilten Produkt-Cache)
+  `'community-cache'` fuer Treffer aus dem geteilten Produkt-Cache,
+  `'seed-catalog'` fuer Treffer aus dem gebuendelten DACH-Katalog
+  `data/seedProducts.json`/`SeedCatalog.js`)
   und eine `captureSummary`, damit nachvollziehbar ist, woher ein Eintrag stammt.
 - Echte Scan-Analyse: `ScanAnalyzer.js` (App) → Supabase Edge Function
   `supabase/functions/analyze-supplement` (Claude Vision, Structured Output).

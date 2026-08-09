@@ -21,6 +21,7 @@ import {
   mapOffProductToScanResult,
   searchProductsByName,
 } from '../../../BarcodeLookup';
+import { searchSeedCatalog, seedEntryToScanDraft } from '../../../SeedCatalog';
 import { evaluateVisionScan } from '../../../Entitlements';
 import { analyzeCaptures, isAnalyzerConfigured, lookupProductCache } from '../../../ScanAnalyzer';
 import mockScanResult from '../../../data/mockScanResult';
@@ -196,8 +197,21 @@ export default function ScannerScreen() {
     setNameSearchDone(false);
 
     try {
-      const results = await searchProductsByName(query);
-      setNameResults(results);
+      // Zwei Quellen: Open Food Facts (Netz) und der gebuendelte
+      // DACH-Katalog (SeedCatalog.js). Der Katalog kennt vor allem die
+      // Produkte, die OFF fehlen. Dedupe ueber die EAN, OFF zuerst.
+      let offResults = [];
+      try {
+        offResults = await searchProductsByName(query);
+      } catch (error) {
+        // OFF nicht erreichbar: Der Katalog antwortet trotzdem.
+        if (searchSeedCatalog(query).length === 0) throw error;
+      }
+      const seenCodes = new Set(offResults.map((candidate) => candidate.code).filter(Boolean));
+      const seedResults = searchSeedCatalog(query).filter(
+        (candidate) => !candidate.code || !seenCodes.has(candidate.code)
+      );
+      setNameResults([...offResults, ...seedResults]);
       setNameSearchDone(true);
     } catch (error) {
       setCaptureError(error?.message || t('scanner.nameSearch.failed'));
@@ -214,12 +228,19 @@ export default function ScannerScreen() {
     try {
       // Der Suchtreffer ist nur ein Zeiger; die vollstaendigen
       // Produktdaten (Zutaten, Menge) kommen aus dem Produkt-Endpoint,
-      // demselben Pfad wie beim Barcode-Scan.
-      const full = await lookupBarcode(candidate.code);
-      const result = full ?? mapOffProductToScanResult(
-        { product_name: candidate.productName, brands: candidate.brand },
-        candidate.code
-      );
+      // demselben Pfad wie beim Barcode-Scan. Katalog-Treffer ohne EAN
+      // liefern ihre kuratierten Daten direkt.
+      let result;
+      if (candidate.origin === 'seed') {
+        const full = candidate.code ? await lookupBarcode(candidate.code).catch(() => null) : null;
+        result = full ?? seedEntryToScanDraft(candidate.entry);
+      } else {
+        const full = await lookupBarcode(candidate.code);
+        result = full ?? mapOffProductToScanResult(
+          { product_name: candidate.productName, brands: candidate.brand },
+          candidate.code
+        );
+      }
       setNameQuery('');
       setNameResults([]);
       setNameSearchDone(false);
@@ -580,8 +601,12 @@ export default function ScannerScreen() {
             accessibilityRole="button"
           >
             <Text style={styles.nameResultName}>{candidate.productName}</Text>
-            {candidate.brand ? (
-              <Text style={styles.nameResultBrand}>{candidate.brand}</Text>
+            {candidate.brand || candidate.origin === 'seed' ? (
+              <Text style={styles.nameResultBrand}>
+                {[candidate.brand, candidate.origin === 'seed' ? t('scanner.nameSearch.seedOrigin') : null]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </Text>
             ) : null}
           </TouchableOpacity>
         ))}
