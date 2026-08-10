@@ -505,7 +505,7 @@
   },
   {
     "brand": "Sanct Bernhard",
-    "brandOwner": "Kräuterhaus Sanct Bernhard GmbH",
+    "brandOwner": "Kräuterhaus Sanct Bernhard KG",
     "name": "Magnesium-400-supra Kapseln",
     "ean": "4250382201922",
     "category": "Magnesium",
@@ -1059,7 +1059,7 @@
   {
     "brand": "ProFuel",
     "brandOwner": "mewell GmbH",
-    "name": "Omega-3 + D3 + K2 Komplex",
+    "name": "Omega-3 + D3 + K2",
     "ean": null,
     "category": "Omega-3",
     "keyIngredients": [
@@ -1143,7 +1143,7 @@
   },
   {
     "brand": "Sanct Bernhard",
-    "brandOwner": "Kräuterhaus Sanct Bernhard GmbH",
+    "brandOwner": "Kräuterhaus Sanct Bernhard KG",
     "name": "Sport Vitamin C + Zink Depot-Kapseln",
     "ean": null,
     "category": "Vitamin C",
@@ -1351,7 +1351,7 @@
   },
   {
     "brand": "Sanct Bernhard",
-    "brandOwner": "Kräuterhaus Sanct Bernhard GmbH",
+    "brandOwner": "Kräuterhaus Sanct Bernhard KG",
     "name": "Jod-Meeresalgen-Kapseln",
     "ean": null,
     "category": "Jod",
@@ -1554,15 +1554,15 @@
   },
   {
     "brand": "Pure Encapsulations",
-    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "brandOwner": "pro medico Handels GmbH (Gesellschafter laut Impressum: Nestlé Österreich GmbH)",
     "name": "Magnesiumglycinat",
     "ean": null,
     "category": "Magnesium",
     "keyIngredients": [
       {
         "name": "Magnesium",
-        "amount": "120",
-        "unit": "mg"
+        "amount": "360",
+        "unit": "mg pro Tagesdosis (3 Kapseln)"
       }
     ],
     "off": false,
@@ -1573,7 +1573,7 @@
   },
   {
     "brand": "Pure Encapsulations",
-    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "brandOwner": "pro medico Handels GmbH (Gesellschafter laut Impressum: Nestlé Österreich GmbH)",
     "name": "Vitamin K&D",
     "ean": null,
     "category": "Vitamin D3+K2",
@@ -1592,7 +1592,7 @@
   },
   {
     "brand": "Pure Encapsulations",
-    "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
+    "brandOwner": "pro medico Handels GmbH (Gesellschafter laut Impressum: Nestlé Österreich GmbH)",
     "name": "Vitamin C 1000 gepuffert",
     "ean": null,
     "category": "Vitamin C",
@@ -1612,10 +1612,126 @@
   {
     "brand": "Pure Encapsulations",
     "brandOwner": "pro medico Handels GmbH (Alleingesellschafter laut Impressum: Nestlé Österreich GmbH; Markeninhaber international: Nestlé Health Science, seit Übernahme von Atrium Innovations 2017)",
-    "name": "All-in-one Multivitamin",
+    "name": "All-in-one",
     "ean": null,
     "category": "Multivitamin",
-    "keyIngredients": [],
+    "keyIngredients": [
+      {
+        "name": "Vitamin A (aus Beta-Carotin)",
+        "amount": "250",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "2.8",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "0.8",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin B2 aktiviert",
+        "amount": "2.4",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin B6 aktiviert",
+        "amount": "3",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "3",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin C (42% aus Acerola)",
+        "amount": "95.56",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "7.5",
+        "unit": "µg (300 I.E.) pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "20",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Biotin",
+        "amount": "150",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "134",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Niacin (Vitamin B3)",
+        "amount": "45",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Pantothensäure (Vitamin B5)",
+        "amount": "12",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "300",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Chrom",
+        "amount": "33",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Jod",
+        "amount": "33",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Mangan",
+        "amount": "1.7",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Selen",
+        "amount": "50",
+        "unit": "µg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Zink",
+        "amount": "4.2",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Coenzym Q10",
+        "amount": "10",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Lutein (FloraGLO)",
+        "amount": "2",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      },
+      {
+        "name": "Traubenkernextrakt",
+        "amount": "25",
+        "unit": "mg pro Tagesportion (3 Kapseln)"
+      }
+    ],
     "off": false,
     "source": "https://www.purecaps.net/produkte/all-in-one-multivitamin",
     "country": "AT",
@@ -1628,7 +1744,13 @@
     "name": "Zink 30",
     "ean": null,
     "category": "Zink",
-    "keyIngredients": [],
+    "keyIngredients": [
+      {
+        "name": "Zink (aus 150 mg Zinkpicolinat)",
+        "amount": "30",
+        "unit": "mg pro Kapsel; bei Einnahme jeden 2. Tag entspricht dies 15 mg Zink täglich"
+      }
+    ],
     "off": false,
     "source": "https://www.purecaps.net/produkte/zink-at",
     "country": "AT",
@@ -2122,7 +2244,7 @@
     "source": "https://www.panaceo.com/basic-detox-pulver-200g-effektive-darmentgiftung-mit-pma-zeolith",
     "country": "AT",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": "medizinprodukt"
   },
   {
     "brand": "PANACEO",
@@ -2135,7 +2257,7 @@
     "source": "https://www.panaceo.com/sport-pure-pulver-200g",
     "country": "AT",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": "medizinprodukt"
   },
   {
     "brand": "PANACEO",
@@ -2148,7 +2270,7 @@
     "source": "https://www.panaceo.com/panaceo-med-darm-repair-pulver-200-g",
     "country": "AT",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": "medizinprodukt"
   },
   {
     "brand": "Kwizda",
@@ -2477,8 +2599,8 @@
     "keyIngredients": [
       {
         "name": "Magnesium (aus Magnesiumcarbonat)",
-        "amount": "320",
-        "unit": "mg"
+        "amount": "375",
+        "unit": "mg pro Tagesdosis (5 Tabletten)"
       }
     ],
     "off": false,
@@ -2490,7 +2612,7 @@
   {
     "brand": "Phytopharma",
     "brandOwner": "Phytopharma SA",
-    "name": "Phytopharma Echinacea + Vitamin D3 Kapseln",
+    "name": "Phytopharma Echinacea + D3 Kapseln",
     "ean": null,
     "category": "Vitamin D3",
     "keyIngredients": [
@@ -2666,7 +2788,7 @@
     "source": "https://www.sponser.com/products/creatine-monohydrate",
     "country": "CH",
     "channel": "sport",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "SPONSER",
@@ -2695,7 +2817,7 @@
   {
     "brand": "SPONSER",
     "brandOwner": "SPONSER SPORT FOOD AG",
-    "name": "Sponser Electrolytes Tabs Berry",
+    "name": "Sponser Electrolytes Berry",
     "ean": "7611174121373",
     "category": "Elektrolyte",
     "keyIngredients": [
@@ -2734,7 +2856,7 @@
     "source": "https://www.sponser.com/products/electrolytes-tabs-berry",
     "country": "CH",
     "channel": "sport",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "SPONSER",
