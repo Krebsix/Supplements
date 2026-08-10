@@ -8829,7 +8829,7 @@
   {
     "brand": "DHU Schüßler-Salze",
     "brandOwner": "Deutsche Homöopathie-Union DHU-Arzneimittel GmbH & Co. KG",
-    "name": "DHU Schüßler-Salz Nr. 7 Magnesium phosphoricum D6, 10 g Globuli",
+    "name": "DHU Schüßler-Salz Nr. 7 Magnesium phosphoricum D12, 10 g Globuli",
     "ean": null,
     "pzn": "10545924",
     "category": "Homöopathie",
@@ -8899,7 +8899,7 @@
     "source": "https://www.dhu.de/rhus-toxicodendron-d6-dhu",
     "country": "DE",
     "channel": "apotheke",
-    "productClass": "homoeopathikum"
+    "productClass": "arznei"
   },
   {
     "brand": "DHU",
@@ -8929,7 +8929,7 @@
     "source": "https://www.dhu.de/dhu-rhus-comp-gel",
     "country": "DE",
     "channel": "apotheke",
-    "productClass": "homoeopathikum"
+    "productClass": "arznei"
   },
   {
     "brand": "DHU",
@@ -8944,7 +8944,7 @@
     "source": "https://www.dhu.de/nux-vomica-d6-dhu",
     "country": "DE",
     "channel": "apotheke",
-    "productClass": "homoeopathikum"
+    "productClass": "arznei"
   },
   {
     "brand": "Verla",
@@ -9788,10 +9788,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Agropyron Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "01447861",
     "category": "Erkältung",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9803,10 +9803,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Apis Belladonna Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "00084882",
     "category": "Hals & Mund-Rachen-Raum",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9818,10 +9818,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Archangelica comp., Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "08783697",
     "category": "Atemwege/Husten",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9833,10 +9833,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Aurum/Apis regina comp., Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "08784219",
     "category": "Nerven & Stimmung",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9848,10 +9848,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Bronchi Plantago Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "00085350",
     "category": "Atemwege/Husten",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9863,10 +9863,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Calcium Quercus Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "00081091",
     "category": "Sonstiges",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9878,10 +9878,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Cantharis Blasen Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "00081234",
     "category": "Blase & Harnwege",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9893,10 +9893,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Chamomilla e radice D6, Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "08785087",
     "category": "Baby & Zahnung",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9908,10 +9908,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Gelsemium comp., Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "08785928",
     "category": "Erkältung",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9923,7 +9923,7 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Gentiana Magen Globuli velati",
     "ean": null,
     "pzn": "00081441",
@@ -9938,10 +9938,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Levico comp., Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "08786419",
     "category": "Erschöpfung",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9953,10 +9953,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Meteoreisen Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "01448352",
     "category": "Erkältung/Erschöpfung",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9968,10 +9968,10 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Passiflora comp., Globuli velati",
     "ean": null,
-    "pzn": null,
+    "pzn": "08786974",
     "category": "Nerven & Schlaf",
     "doseForm": "Globuli velati",
     "keyIngredients": [],
@@ -9983,7 +9983,7 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Plantago Hustensaft",
     "ean": null,
     "pzn": "01448435",
@@ -9998,7 +9998,7 @@
   },
   {
     "brand": "WALA",
-    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll/Eckwälden",
     "name": "Akne-Kapseln",
     "ean": null,
     "pzn": "01399961",
