@@ -2,7 +2,7 @@
 // Datenintegritaet des Katalogs (Quelle je Eintrag, gueltige EANs) und
 // Verhalten von Suche und Draft-Erzeugung.
 
-import { searchSeedCatalog, seedEntryToScanDraft } from '../SeedCatalog';
+import { normalizeCatalogText, searchSeedCatalog, seedEntryToScanDraft } from '../SeedCatalog';
 import seedProducts from '../data/seedProducts.json';
 
 let failures = 0;
@@ -33,6 +33,13 @@ check('Treffer tragen origin seed und den Roheintrag', biogena.every((c) => c.or
 check('Leere Suche → leeres Ergebnis', searchSeedCatalog('').length === 0);
 check('Fantasiewort → leeres Ergebnis', searchSeedCatalog('xyzzynichtda').length === 0);
 check('Maximal 5 Treffer', searchSeedCatalog('magnesium').length <= 5);
+
+console.log('— Normalisierung —');
+check('Tausenderpunkt faellt weg (2.000 → 2000)', normalizeCatalogText('Vitamin D3 2.000 I.E.') === 'vitamin d3 2000 i e');
+check('Suche mit 500 findet Vigantolvit 500 I.E.',
+  searchSeedCatalog('vigantolvit 500').some((c) => c.productName.includes('500')));
+check('Suche in Ziffern ohne Punkt trifft gepunktete Namen',
+  searchSeedCatalog('vigantol 20000').some((c) => c.productName.includes('20.000')));
 
 console.log('— Draft-Erzeugung —');
 const entry = seedProducts.find((p) => (p.keyIngredients ?? []).length > 0);

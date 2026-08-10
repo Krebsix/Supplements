@@ -129,7 +129,7 @@ export async function searchProductsByName(query) {
     const params = new URLSearchParams({
       q: needle,
       page_size: '5',
-      fields: 'code,product_name,product_name_de,brands',
+      fields: 'code,product_name,product_name_de,brands,image_front_small_url',
     });
     response = await fetch(
       `https://search.openfoodfacts.org/search?${params.toString()}`,
@@ -159,6 +159,9 @@ export async function searchProductsByName(query) {
       brand: Array.isArray(hit?.brands)
         ? hit.brands.map(cleanText).filter(Boolean).join(', ')
         : cleanText(hit?.brands),
+      // Produktfoto (Open Food Facts, CC BY-SA): hilft, das eigene
+      // Produkt im Suchergebnis wiederzuerkennen
+      imageUrl: cleanText(hit?.image_front_small_url) || null,
     }))
     .filter((candidate) => candidate.productName && candidate.code);
 }

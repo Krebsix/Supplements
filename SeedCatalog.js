@@ -17,6 +17,20 @@ function clean(value) {
 }
 
 /**
+ * normalizeCatalogText(text)
+ * Vergleichsform fuer die Suche: Kleinschreibung, Tausenderpunkte in
+ * Zahlen entfernt ("2.000 I.E." findet auch "2000"), Satzzeichen zu
+ * Leerraum. Exportiert fuer Tests.
+ */
+export function normalizeCatalogText(text) {
+  return clean(text)
+    .toLowerCase()
+    .replace(/(\d)[.,](?=\d)/g, '$1')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+}
+
+/**
  * searchSeedCatalog(query)
  * Tokenbasierte Suche ueber Marke + Produktname. Alle Suchwoerter
  * muessen vorkommen; sortiert nach Treffguete (kuerzere Namen mit
@@ -24,15 +38,14 @@ function clean(value) {
  * wie searchProductsByName, plus origin/entry fuer die Uebernahme.
  */
 export function searchSeedCatalog(query, limit = 5) {
-  const tokens = clean(query)
-    .toLowerCase()
+  const tokens = normalizeCatalogText(query)
     .split(/\s+/)
     .filter((token) => token.length >= 2);
   if (tokens.length === 0) return [];
 
   const hits = [];
   for (const entry of seedProducts) {
-    const haystack = `${entry.brand ?? ''} ${entry.name ?? ''}`.toLowerCase();
+    const haystack = normalizeCatalogText(`${entry.brand ?? ''} ${entry.name ?? ''}`);
     if (!tokens.every((token) => haystack.includes(token))) continue;
     hits.push({ entry, score: haystack.length });
   }

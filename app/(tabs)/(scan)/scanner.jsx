@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 
 
@@ -80,6 +81,10 @@ export default function ScannerScreen() {
 
   const cameraRef = useRef(null);
   const [permission, requestPermission] = useCameraPermissions();
+  // Kamera nur auf dem fokussierten Screen mounten: Nach Navigation zum
+  // Ergebnis und zurueck blieb die Preview sonst eingefroren ("Kamera
+  // wird vorbereitet"), weil onCameraReady nur beim Mount feuert.
+  const isFocused = useIsFocused();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [captures, setCaptures] = useState({});
@@ -600,14 +605,29 @@ export default function ScannerScreen() {
             activeOpacity={0.75}
             accessibilityRole="button"
           >
-            <Text style={styles.nameResultName}>{candidate.productName}</Text>
-            {candidate.brand || candidate.origin === 'seed' ? (
-              <Text style={styles.nameResultBrand}>
-                {[candidate.brand, candidate.origin === 'seed' ? t('scanner.nameSearch.seedOrigin') : null]
-                  .filter(Boolean)
-                  .join(' · ')}
-              </Text>
-            ) : null}
+            {candidate.imageUrl ? (
+              <Image
+                source={{ uri: candidate.imageUrl }}
+                style={styles.nameResultImage}
+                resizeMode="contain"
+              />
+            ) : (
+              <View style={[styles.nameResultImage, styles.nameResultImageEmpty]}>
+                <Text style={styles.nameResultImageLetter}>
+                  {(candidate.brand || candidate.productName || '?').charAt(0)}
+                </Text>
+              </View>
+            )}
+            <View style={styles.nameResultTextWrap}>
+              <Text style={styles.nameResultName}>{candidate.productName}</Text>
+              {candidate.brand || candidate.origin === 'seed' ? (
+                <Text style={styles.nameResultBrand}>
+                  {[candidate.brand, candidate.origin === 'seed' ? t('scanner.nameSearch.seedOrigin') : null]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </Text>
+              ) : null}
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -663,9 +683,9 @@ export default function ScannerScreen() {
               style={styles.capturedImage}
               resizeMode="cover"
             />
-          ) : permission?.granted ? (
+          ) : permission?.granted && isFocused ? (
             <CameraView
-              key={activeStep.id}
+              key={`${activeStep.id}-${isFocused}`}
               ref={cameraRef}
               style={styles.cameraPreview}
               facing="back"
@@ -719,8 +739,10 @@ export default function ScannerScreen() {
 
           {/* Sichtbarer Hinweis auf den mitlaufenden Code-Leser: Ohne ihn
               wirkt der Screen wie ein reines Foto-Tool, obwohl die Kamera
-              Barcodes und QR-Codes automatisch erkennt. */}
-          {permission?.granted && isCameraReady && !scannedBarcode ? (
+              Barcodes und QR-Codes automatisch erkennt. Bewusst NICHT an
+              isCameraReady gekoppelt, damit der Hinweis auch waehrend des
+              Kamera-Starts sichtbar ist. */}
+          {permission?.granted && !scannedBarcode ? (
             <View style={styles.scanHint}>
               <Text style={styles.scanHintText}>
                 {isLookingUpBarcode
@@ -1275,6 +1297,29 @@ const styles = StyleSheet.create({
     borderTopColor: colors.rule,
     paddingVertical: space.md - 2,
     marginTop: space.md - 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  nameResultImage: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.md,
+    backgroundColor: colors.overlay,
+    borderWidth: 1,
+    borderColor: colors.rule,
+    marginRight: space.md,
+  },
+  nameResultImageEmpty: {
+    backgroundColor: colors.surfaceSunken,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nameResultImageLetter: {
+    ...type.subheading,
+    color: colors.inkFaint,
+  },
+  nameResultTextWrap: {
+    flex: 1,
   },
   nameResultName: {
     ...type.bodyStrong,
