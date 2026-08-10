@@ -1165,7 +1165,7 @@
     "off": false,
     "source": "https://www.doppelherz.de/produkte/doppelherz-system-coenzym-q10-100",
     "country": "DE",
-    "channel": "drogerie",
+    "channel": "apotheke",
     "productClass": "nem"
   },
   {
@@ -6232,6 +6232,1138 @@
     ],
     "off": false,
     "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-immun-5-in-1",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Cetebe",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "Vitamin C Retard 500",
+    "ean": null,
+    "pzn": "3884264",
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "form": "Ascorbinsäure, Retard/ZEITPERLEN-Technologie",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.cetebe.de/vitaminkapseln/cetebe-vitamin-c-retard-500",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Cetebe",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "Extra-C 600",
+    "ean": null,
+    "pzn": "173609",
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "form": "Ascorbinsäure",
+        "amount": "600",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.cetebe.de/vitaminkapseln/cetebe-extra-c-600",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Cetebe",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "Immun Aktiv",
+    "ean": null,
+    "pzn": "17513442",
+    "category": "Immunsystem",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "250",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "5.0",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5.0",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "28",
+        "unit": "µg"
+      },
+      {
+        "name": "Holunderbeerenextrakt",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Sanddornfruchtextrakt",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Echinaceawurzelextrakt",
+        "amount": "20",
+        "unit": "mg"
+      },
+      {
+        "name": "Curcumawurzelextrakt",
+        "amount": "17",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.cetebe.de/vitaminkapseln/cetebe-immun-aktiv",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Cetebe",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "ABWEHR plus",
+    "ean": null,
+    "pzn": "02408188",
+    "category": "Immunsystem",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.cetebe.de/vitaminkapseln/cetebe-abwehr-plus",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Cetebe",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "Abwehr Fit",
+    "ean": null,
+    "pzn": "09123997",
+    "category": "Immunsystem",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.cetebe.de/vitaminkapseln/cetebe-abwehr-fit",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Magnetrans",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "ULTRA 375 mg Kapseln",
+    "ean": null,
+    "pzn": "09207553",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "Magnesiumoxid",
+        "amount": "375",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.magnetrans.de/magnesiumpraeparate/magnetrans-ultra",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Magnetrans",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "DUOAKTIV Direktgranulat-Sticks",
+    "ean": null,
+    "pzn": "14367589",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "Magnesiumhydrogencitrat + Magnesiumoxid",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.magnetrans.de/magnesiumpraeparate/magnetrans-duo-aktiv",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Magnetrans",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "RELAXPLUS 400 mg Direktgranulat",
+    "ean": null,
+    "pzn": "19203734",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "Magnesiumcitrat + Magnesiumoxid",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.magnetrans.de/magnesiumpraeparate/magnetrans-relaxplus",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Magnetrans",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "forte 150 mg Hartkapseln",
+    "ean": null,
+    "pzn": "3127830",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "schweres Magnesiumoxid",
+        "amount": "150",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.magnetrans.de/magnesiumpraeparate/magnetrans-forte",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Eunova",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "VivaChrono",
+    "ean": null,
+    "pzn": "18442879",
+    "category": "Multivitamin/Multimineral",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.eunova.de/vitaminpraeparate/eunova-vivachrono",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Eunova",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "D3+K2 DuoProtect Kapseln 1.000 I.E.",
+    "ean": null,
+    "pzn": "13360622",
+    "category": "Vitamin D3+K2",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "25",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "80",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.eunova.de/vitaminpraeparate/eunova-duoprotect-kapseln",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Eunova",
+    "brandOwner": "STADA Consumer Health Deutschland GmbH",
+    "name": "B12 Plus Ampullen",
+    "ean": null,
+    "pzn": "14299942",
+    "category": "B12",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12",
+        "amount": "500",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "1.1",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1.4",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.eunova.de/vitaminpraeparate/eunova-b12-plus",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Orthomol",
+    "brandOwner": "Orthomol pharmazeutische Vertriebs GmbH",
+    "name": "Orthomol Vital",
+    "ean": null,
+    "pzn": null,
+    "category": "Multivitamin/A-Z",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "1117",
+        "unit": "µg RE"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "15",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "150",
+        "unit": "mg alpha-TE"
+      },
+      {
+        "name": "Vitamin K",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "530",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "60",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "8.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "1000",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "165",
+        "unit": "µg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "30",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "150",
+        "unit": "mg"
+      },
+      {
+        "name": "Eisen",
+        "amount": "8",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "0.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Mangan",
+        "amount": "2",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Chrom",
+        "amount": "30",
+        "unit": "µg"
+      },
+      {
+        "name": "Molybdän",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Omega-3-Fettsäuren",
+        "amount": "600",
+        "unit": "mg"
+      },
+      {
+        "name": "Citrus-Bioflavonoide",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Lutein",
+        "amount": "800",
+        "unit": "µg"
+      },
+      {
+        "name": "Lycopin",
+        "amount": "200",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.orthomol.com/de-de/produkte/muedigkeit-erschoepfung/orthomol-vital",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Orthomol",
+    "brandOwner": "Orthomol pharmazeutische Vertriebs GmbH",
+    "name": "Orthomol Cardio",
+    "ean": null,
+    "pzn": null,
+    "category": "Herz-Kreislauf",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "1417",
+        "unit": "µg RE"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "15",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "150",
+        "unit": "mg alpha-TE"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "530",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "50",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "9",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "18",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "150",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "1",
+        "unit": "mg"
+      },
+      {
+        "name": "Mangan",
+        "amount": "2",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Chrom",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Molybdän",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Omega-3-Fettsäuren",
+        "amount": "500",
+        "unit": "mg"
+      },
+      {
+        "name": "Coenzym Q10",
+        "amount": "15",
+        "unit": "mg"
+      },
+      {
+        "name": "L-Carnitin",
+        "amount": "200",
+        "unit": "mg"
+      },
+      {
+        "name": "Polyphenole",
+        "form": "aus Kakaofrucht",
+        "amount": "50",
+        "unit": "mg"
+      },
+      {
+        "name": "OPC",
+        "form": "aus Traubenkernen",
+        "amount": "10",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.orthomol.com/de-de/produkte/herz-kreislauf/orthomol-cardio",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Orthomol",
+    "brandOwner": "Orthomol pharmazeutische Vertriebs GmbH",
+    "name": "Orthomol chondroplus",
+    "ean": null,
+    "pzn": null,
+    "category": "Gelenke/Knorpel",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "708",
+        "unit": "µg RE"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "15",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "120",
+        "unit": "mg alpha-TE"
+      },
+      {
+        "name": "Vitamin K",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "475",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "30",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "9",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "18",
+        "unit": "mg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "200",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "0.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Mangan",
+        "amount": "1",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Molybdän",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Kollagenhydrolysat",
+        "amount": "2500",
+        "unit": "mg"
+      },
+      {
+        "name": "Glucosaminsulfat",
+        "amount": "1100",
+        "unit": "mg"
+      },
+      {
+        "name": "Chondroitinsulfat",
+        "amount": "400",
+        "unit": "mg"
+      },
+      {
+        "name": "Hyaluronsäure",
+        "amount": "50",
+        "unit": "mg"
+      },
+      {
+        "name": "N-Acetyl-L-Cystein",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Omega-3-Fettsäuren",
+        "amount": "750",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.orthomol.com/de-de/produkte/bewegungsapparat/orthomol-chondroplus",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Orthomol",
+    "brandOwner": "Orthomol pharmazeutische Vertriebs GmbH",
+    "name": "Orthomol Sport",
+    "ean": null,
+    "pzn": null,
+    "category": "Multinährstoffkomplex (Sport)",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "1083",
+        "unit": "µg RE"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "15",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "36",
+        "unit": "mg alpha-TE"
+      },
+      {
+        "name": "Vitamin K",
+        "amount": "60",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "300",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "3",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "3.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "35",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "500",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "9",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "18",
+        "unit": "mg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "200",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "150",
+        "unit": "mg"
+      },
+      {
+        "name": "Eisen",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "1",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "30",
+        "unit": "µg"
+      },
+      {
+        "name": "Chrom",
+        "amount": "30",
+        "unit": "µg"
+      },
+      {
+        "name": "Molybdän",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "100",
+        "unit": "µg"
+      },
+      {
+        "name": "L-Carnitin",
+        "amount": "300",
+        "unit": "mg"
+      },
+      {
+        "name": "Coenzym Q10",
+        "amount": "15",
+        "unit": "mg"
+      },
+      {
+        "name": "Omega-3-Fettsäuren",
+        "form": "EPA 150 mg + DHA 100 mg",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.orthomol.com/de-de/produkte/sport/orthomol-sport",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Biolectra",
+    "brandOwner": "Hermes Arzneimittel GmbH",
+    "name": "Magnesium 400 mg ultra Kapseln",
+    "ean": null,
+    "pzn": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "400",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.biolectra-magnesium.de/produkte/biolectra-magnesium-400-mg-ultra-kapseln/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Biolectra",
+    "brandOwner": "Hermes Arzneimittel GmbH",
+    "name": "Magnesium 300 mg Direct",
+    "ean": null,
+    "pzn": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.biolectra-magnesium.de/produkte/biolectra-magnesium-300-mg-direct/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Biolectra",
+    "brandOwner": "Hermes Arzneimittel GmbH",
+    "name": "Magnesium 365 mg fortissimum Brausetabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "leichtes basisches Magnesiumcarbonat + leichtes Magnesiumoxid",
+        "amount": "365",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.biolectra-magnesium.de/produkte/biolectra-magnesium-365-mg-brausetabletten/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Biolectra",
+    "brandOwner": "Hermes Arzneimittel GmbH",
+    "name": "Magnesium 250 mg Muskeln & Knochen Aktiv",
+    "ean": null,
+    "pzn": null,
+    "category": "Calcium/Magnesium/Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "250",
+        "unit": "mg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "500",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "20",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin K2",
+        "amount": "25",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.biolectra-magnesium.de/produkte/biolectra-magnesium-250-mg-aktiv/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Additiva",
+    "brandOwner": "Dr. B. Scheffler Nachfolger GmbH & Co. KG",
+    "name": "Magnesium 375 mg Direktgranulat Sticks",
+    "ean": null,
+    "pzn": "10946706",
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "375",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.additiva.de/produkte/additiva-magnesium-375mg-20-sticks-direktgranulat/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Additiva",
+    "brandOwner": "Dr. B. Scheffler Nachfolger GmbH & Co. KG",
+    "name": "Vitamin C + Zink Depot-Kapseln",
+    "ean": null,
+    "pzn": "03045368",
+    "category": "Immunsystem",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "300",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.additiva.de/produkte/additiva-vitamin-c-zink-60-kapseln/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Additiva",
+    "brandOwner": "Dr. B. Scheffler Nachfolger GmbH & Co. KG",
+    "name": "Multivitamin & Multimineral Orange",
+    "ean": null,
+    "pzn": "10060173",
+    "category": "Multivitamin/Multimineral",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B1",
+        "amount": "2.2",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "2.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "32",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "12",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "2.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "100",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "160",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "24",
+        "unit": "mg alpha-TE"
+      },
+      {
+        "name": "Calcium",
+        "amount": "120",
+        "unit": "mg"
+      },
+      {
+        "name": "Phosphor",
+        "amount": "105",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "56.5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.additiva.de/produkte/additiva-multivitamin-multimineral-orange-20-brausetabletten/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Additiva",
+    "brandOwner": "Dr. B. Scheffler Nachfolger GmbH & Co. KG",
+    "name": "Vitamin B12 Energy Trinkampullen",
+    "ean": null,
+    "pzn": "19405774",
+    "category": "B12",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12",
+        "amount": "500",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "L-Carnitin",
+        "amount": "150",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.additiva.de/produkte/additiva-vitamin-b12-30-trinkampullen/",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Femibion",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Femibion Für Sie & Ihn",
+    "ean": null,
+    "pzn": null,
+    "category": "Schwangerschaft/Folat",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.femibion.de/produkte/femibion-fur-sie-ihn",
     "country": "DE",
     "channel": "apotheke",
     "productClass": "nem"
