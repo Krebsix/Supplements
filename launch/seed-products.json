@@ -1107,23 +1107,7 @@
     "name": "Vitamin C 1000 DEPOT",
     "ean": "4009932135565",
     "category": "Vitamin C",
-    "keyIngredients": [
-      {
-        "name": "Vitamin C",
-        "amount": "1000",
-        "unit": "mg"
-      },
-      {
-        "name": "Vitamin D3",
-        "amount": "25",
-        "unit": "µg"
-      },
-      {
-        "name": "Zink",
-        "amount": "12",
-        "unit": "mg"
-      }
-    ],
+    "keyIngredients": [],
     "off": true,
     "source": "https://world.openfoodfacts.org/api/v2/product/4009932135565.json",
     "country": "DE",
@@ -1134,7 +1118,7 @@
     "brand": "Doppelherz",
     "brandOwner": "Queisser Pharma GmbH & Co. KG",
     "name": "Melatonin",
-    "ean": null,
+    "ean": "4009932137880",
     "category": "Melatonin",
     "keyIngredients": [
       {
@@ -1311,28 +1295,7 @@
     "name": "Jod + Folsäure + Eisen + B12",
     "ean": "4009932131253",
     "category": "Folsäure",
-    "keyIngredients": [
-      {
-        "name": "Jod",
-        "amount": "100",
-        "unit": "µg"
-      },
-      {
-        "name": "Folsäure",
-        "amount": "600",
-        "unit": "µg"
-      },
-      {
-        "name": "Eisen",
-        "amount": "10",
-        "unit": "mg"
-      },
-      {
-        "name": "Vitamin B12",
-        "amount": "50",
-        "unit": "µg"
-      }
-    ],
+    "keyIngredients": [],
     "off": true,
     "source": "https://world.openfoodfacts.org/api/v2/product/4009932131253.json",
     "country": "DE",
@@ -4541,7 +4504,7 @@
     "brand": "Dextro Energy",
     "brandOwner": "Dextro Energy GmbH & Co. KG",
     "name": "Salt Tablets Lemon",
-    "ean": null,
+    "ean": "4046802213459",
     "category": "Elektrolyte",
     "keyIngredients": [
       {
@@ -4555,7 +4518,7 @@
     "source": "https://dextro-energy.com/products/salt-tablets",
     "country": "DE",
     "channel": "sport",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Multinorm",
@@ -4708,7 +4671,7 @@
   },
   {
     "brand": "Centrum",
-    "brandOwner": "Haleon",
+    "brandOwner": "Haleon Germany GmbH",
     "name": "Centrum Von A bis Zink",
     "ean": null,
     "category": "Multivitamin",
@@ -4756,7 +4719,7 @@
   },
   {
     "brand": "Centrum",
-    "brandOwner": "Haleon",
+    "brandOwner": "Haleon Germany GmbH",
     "name": "Centrum Für Sie",
     "ean": null,
     "category": "Multivitamin",
@@ -4801,7 +4764,7 @@
   },
   {
     "brand": "Centrum",
-    "brandOwner": "Haleon",
+    "brandOwner": "Haleon Germany GmbH",
     "name": "Centrum Für Ihn",
     "ean": null,
     "category": "Multivitamin",
@@ -4845,7 +4808,7 @@
   },
   {
     "brand": "Centrum",
-    "brandOwner": "Haleon",
+    "brandOwner": "Haleon Germany GmbH",
     "name": "Centrum Generation 50+",
     "ean": null,
     "category": "Multivitamin",
@@ -4890,7 +4853,7 @@
   },
   {
     "brand": "Centrum",
-    "brandOwner": "Haleon",
+    "brandOwner": "Haleon Germany GmbH",
     "name": "Centrum Multi Vitamin Gummies",
     "ean": null,
     "category": "Multivitamin",
@@ -6260,7 +6223,7 @@
   {
     "brand": "Cetebe",
     "brandOwner": "STADA Consumer Health Deutschland GmbH",
-    "name": "Extra-C 600",
+    "name": "Extra-C 600 mg",
     "ean": null,
     "pzn": "173609",
     "category": "Vitamin C",
@@ -6281,7 +6244,7 @@
   {
     "brand": "Cetebe",
     "brandOwner": "STADA Consumer Health Deutschland GmbH",
-    "name": "Immun Aktiv",
+    "name": "Immun Aktiv +Pflanzenextrakte",
     "ean": null,
     "pzn": "17513442",
     "category": "Immunsystem",
@@ -6307,7 +6270,7 @@
         "unit": "µg"
       },
       {
-        "name": "Holunderbeerenextrakt",
+        "name": "Holunderblütenextrakt",
         "amount": "100",
         "unit": "mg"
       },
