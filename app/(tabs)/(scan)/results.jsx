@@ -212,7 +212,7 @@ export default function ResultsScreen() {
 
           {substanceProfiles.map((profile, index) => (
             <SubstanceInsightCard
-              key={profile.substanceId || `unmatched-${index}`}
+              key={`${profile.substanceId ?? 'unmatched'}-${index}`}
               profile={profile}
             />
           ))}

@@ -90,6 +90,14 @@ NEM — bestehende Eintraege beim Konsolidieren pruefen). Die App behandelt
 alle Klassen als dokumentierbare Einnahmen, kennzeichnet aber die Klasse;
 Arzneimittel-Hinweise bleiben Sache von Arzt/Apotheke.
 
+## Welle 8 (laeuft): Gummis/Weichgummis
+Aus dem ersten Community-Scan entdeckte Segment-Luecke (Vigantolvit
+Weichgummis). Marken: Bears with Benefits (DACH-Marktfuehrer), Gummi-
+Linien von Doppelherz/Mivolis/altapharma/Abtei/Centrum, weitere belegte
+Gummi-Marken. Schema neu: optionales "doseForm"-Feld. Gummi-Fallstrick:
+Etiketten geben oft "pro 2 Gummis" an — Mengen nur bei belegter
+Tagesdosis uebernehmen.
+
 ## Naechstes Arbeitspaket: Lebensphasen-Hinweise fuer die Kraeuter
 Befund (2026-08-10, Nadines Stillzeit-Frage): lifeStageAdvisories.js
 deckt erst 7 Substanzen aktiv ab; die 27 Kraeuter tragen ihre
