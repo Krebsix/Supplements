@@ -4705,5 +4705,1535 @@
     "country": "DE",
     "channel": "direct",
     "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Von A bis Zink",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "form": "L-Ascorbinsäure",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "form": "Cholecalciferol",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "162",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Eisen",
+        "form": "Eisen-II-fumarat",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "form": "Zinkoxid",
+        "amount": "5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-von-a-bis-zink/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Für Sie",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "80",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "300",
+        "unit": "µg"
+      },
+      {
+        "name": "Eisen",
+        "form": "Eisen-II-fumarat",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "320",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-fuer-sie/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Für Ihn",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "80",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "24",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "120",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-fuer-ihn/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Generation 50+",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "120",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "3",
+        "unit": "µg"
+      },
+      {
+        "name": "Calcium",
+        "amount": "162",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "form": "Zinkoxid",
+        "amount": "5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-generation-50-plus/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Multi Vitamin Gummies",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "660",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "80",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "2",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5.6",
+        "unit": "mg"
+      },
+      {
+        "name": "Iod",
+        "amount": "100",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-multi-gummies/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Supradyn",
+    "brandOwner": "Bayer",
+    "name": "Supradyn Energy",
+    "ean": "4057599000450",
+    "category": "Multivitamin",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/api/v2/product/4057599000450.json",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Solgar",
+    "brandOwner": "Solgar",
+    "name": "Solgar Magnesium Citrat 200mg",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "Magnesiumcitrat",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.solgar.de/products/magnesium-tabletten",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Solgar",
+    "brandOwner": "Solgar",
+    "name": "Solgar Vitamin D3 Kapseln",
+    "ean": null,
+    "category": "Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Cholecalciferol",
+        "amount": "15",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.solgar.de/products/vitamin-d3-kapseln",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Solgar",
+    "brandOwner": "Solgar",
+    "name": "Solgar Omega-3 Fischöl",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "Kaltwasser-Fischölkonzentrat",
+        "amount": "2800",
+        "unit": "mg"
+      },
+      {
+        "name": "Omega-3-Fettsäuren",
+        "amount": "1764",
+        "unit": "mg"
+      },
+      {
+        "name": "Eicosapentaensäure (EPA)",
+        "amount": "1008",
+        "unit": "mg"
+      },
+      {
+        "name": "Docosahexaensäure (DHA)",
+        "amount": "756",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.solgar.de/products/omega-3-fischoel",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Solgar",
+    "brandOwner": "Solgar",
+    "name": "Solgar Haut-Haare-Nägel Komplex",
+    "ean": null,
+    "category": "Beauty / Multinährstoff",
+    "keyIngredients": [
+      {
+        "name": "Methylsulfonylmethan",
+        "form": "OptiMSM",
+        "amount": "1000",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "form": "L-Ascorbinsäure",
+        "amount": "120",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "form": "Zinkcitrat",
+        "amount": "15",
+        "unit": "mg"
+      },
+      {
+        "name": "Kupfer",
+        "form": "Kupferbisglycinat (Albion)",
+        "amount": "2",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.solgar.de/products/tabletten-haut-und-haare",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Solgar",
+    "brandOwner": "Solgar",
+    "name": "Solgar Ester-C Plus 1000mg",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "form": "Ester-C (Calcium-L-Ascorbat)",
+        "amount": "1000",
+        "unit": "mg"
+      },
+      {
+        "name": "Citrus-Bioflavonoide",
+        "amount": "200",
+        "unit": "mg"
+      },
+      {
+        "name": "Rutin",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Hagebuttenpulver",
+        "amount": "25",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.solgar.de/products/ester-c",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Solgar",
+    "brandOwner": "Solgar",
+    "name": "Solgar Zinkpicolinat 22mg",
+    "ean": null,
+    "category": "Zink",
+    "keyIngredients": [
+      {
+        "name": "Zink",
+        "form": "Zinkpicolinat",
+        "amount": "22",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.solgar.de/products/zink-tabletten",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Kijimea",
+    "brandOwner": "Synformulas GmbH",
+    "name": "Kijimea Reizdarm PRO",
+    "ean": "4260344391301",
+    "category": "Probiotikum",
+    "keyIngredients": [
+      {
+        "name": "Bifidobacterium bifidum",
+        "form": "Bifidobacterium bifidum HI-MIMBb75 (hitzeinaktiviert)",
+        "amount": "1x10^9",
+        "unit": "Bakterien (Tagesdosis, 2 Kapseln)"
+      }
+    ],
+    "off": true,
+    "source": "https://www.kijimea.de/products/kijimea-reizdarm-pro",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Kijimea",
+    "brandOwner": "Synformulas GmbH",
+    "name": "Kijimea K53 Advance",
+    "ean": "4260344391400",
+    "category": "Probiotikum",
+    "keyIngredients": [
+      {
+        "name": "Mikrokulturenstämme (53 Stämme)",
+        "form": "u.a. B. bifidum AM96-11, P. acidilactici PA09, L. casei FB1",
+        "amount": "20",
+        "unit": "Mrd. KBE/Kapsel"
+      }
+    ],
+    "off": true,
+    "source": "https://www.kijimea.de/products/kijimea-k53-advance",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Kijimea",
+    "brandOwner": "Synformulas GmbH",
+    "name": "Kijimea FloraCare",
+    "ean": null,
+    "category": "Probiotikum (Vaginalflora)",
+    "keyIngredients": [
+      {
+        "name": "Milchsäurebakterien (33 Stämme)",
+        "form": "u.a. L. crispatus SG18/QL33/ID63, L. rhamnosus ZR54/AC94/IX51/HM83/BP73/VN76, L. fermentum LB91/LR28",
+        "amount": "10",
+        "unit": "Mrd. KBE je Kapsel"
+      }
+    ],
+    "off": false,
+    "source": "https://www.kijimea.de/products/kijimea-floracare",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Kijimea",
+    "brandOwner": "Synformulas GmbH",
+    "name": "Kijimea Complete",
+    "ean": null,
+    "category": "Probiotikum",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.kijimea.de/products/kijimea-complete",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Femibion",
+    "brandOwner": "P&G Health",
+    "name": "Femibion 0 BabyPlanung",
+    "ean": null,
+    "category": "Schwangerschaft/Folat",
+    "keyIngredients": [
+      {
+        "name": "Folsäure Plus (Folsäure + L-Methylfolat)",
+        "form": "400 µg Folsäure + 416 µg L-Methylfolat",
+        "amount": "800",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.femibion.de/produkte/femibion-babyplanung",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Femibion",
+    "brandOwner": "P&G Health",
+    "name": "Femibion 1 Frühschwangerschaft",
+    "ean": null,
+    "category": "Schwangerschaft/Folat",
+    "keyIngredients": [
+      {
+        "name": "Folsäure Plus (Folsäure + L-Methylfolat)",
+        "form": "400 µg Folsäure + 416 µg L-Methylfolat",
+        "amount": "800",
+        "unit": "µg"
+      },
+      {
+        "name": "Cholin",
+        "amount": "130",
+        "unit": "mg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.femibion.de/produkte/femibion-1-fruehschwangerschaft",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Femibion",
+    "brandOwner": "P&G Health",
+    "name": "Femibion 1 Frühschwangerschaft Ohne Jod",
+    "ean": null,
+    "category": "Schwangerschaft/Folat",
+    "keyIngredients": [
+      {
+        "name": "Folsäure Plus (Folsäure + L-Methylfolat)",
+        "form": "400 µg Folsäure + 416 µg L-Methylfolat",
+        "amount": "800",
+        "unit": "µg"
+      },
+      {
+        "name": "Cholin",
+        "amount": "130",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.femibion.de/produkte/femibion-1-fruehschwangerschaft-ohne-jod",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Femibion",
+    "brandOwner": "P&G Health",
+    "name": "Femibion 2 Schwangerschaft",
+    "ean": null,
+    "category": "Schwangerschaft/Folat",
+    "keyIngredients": [
+      {
+        "name": "Folsäure Plus (Folsäure + L-Methylfolat)",
+        "form": "200 µg Folsäure + 208 µg L-Methylfolat",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Cholin",
+        "amount": "130",
+        "unit": "mg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Omega-3 DHA",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.femibion.de/produkte/femibion-2-schwangerschaft",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Femibion",
+    "brandOwner": "P&G Health",
+    "name": "Femibion 3 Stillzeit",
+    "ean": null,
+    "category": "Schwangerschaft/Folat",
+    "keyIngredients": [
+      {
+        "name": "Folsäure Plus (Folsäure + L-Methylfolat)",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Cholin",
+        "amount": "130",
+        "unit": "mg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Omega-3 DHA",
+        "amount": "200",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.femibion.de/produkte/femibion-3-stillzeit",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "K-Concept+ Vital",
+    "brandOwner": "Kaufland",
+    "name": "K-Concept+ Vital Vitamin A-Z Komplett ab 50",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
+    "country": "DE",
+    "channel": "discounter",
+    "productClass": "nem"
+  },
+  {
+    "brand": "K-Concept+ Vital",
+    "brandOwner": "Kaufland",
+    "name": "K-Concept+ Vital Darm Plus",
+    "ean": null,
+    "category": "Probiotikum",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
+    "country": "DE",
+    "channel": "discounter",
+    "productClass": "nem"
+  },
+  {
+    "brand": "K-Concept+ Vital",
+    "brandOwner": "Kaufland",
+    "name": "K-Concept+ Vital Magnesium + Kalium Direkt-Sticks",
+    "ean": null,
+    "category": "Mineralstoffe",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
+    "country": "DE",
+    "channel": "discounter",
+    "productClass": "nem"
+  },
+  {
+    "brand": "K-Concept+ Vital",
+    "brandOwner": "Kaufland",
+    "name": "K-Concept+ Vital Multivitamine für Kinder",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
+    "country": "DE",
+    "channel": "discounter",
+    "productClass": "nem"
+  },
+  {
+    "brand": "K-Concept+ Vital",
+    "brandOwner": "Kaufland",
+    "name": "K-Concept+ Vital Vitamin C Pulver",
+    "ean": null,
+    "category": "Vitamin C",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
+    "country": "DE",
+    "channel": "discounter",
+    "productClass": "nem"
+  },
+  {
+    "brand": "K-Concept+ Vital",
+    "brandOwner": "Kaufland",
+    "name": "K-Concept+ Vital Elektrolyt-Refill Brausetabletten",
+    "ean": null,
+    "category": "Elektrolyte",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
+    "country": "DE",
+    "channel": "discounter",
+    "productClass": "nem"
+  },
+  {
+    "brand": "MyProtein",
+    "brandOwner": "THG plc (Rechtstraeger laut Impressum: THG Nutrition Limited, FRN 1022962, trading as Myprotein.com)",
+    "name": "Impact Whey Protein",
+    "ean": null,
+    "category": "Protein",
+    "keyIngredients": [
+      {
+        "name": "Protein",
+        "amount": "23",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.myprotein.com/nutrition/whey-protein/impact-whey-protein/10530943.html",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "MyProtein",
+    "brandOwner": "THG plc (Rechtstraeger laut Impressum: THG Nutrition Limited, FRN 1022962, trading as Myprotein.com)",
+    "name": "Impact Creatine",
+    "ean": null,
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Kreatin",
+        "form": "Monohydrat",
+        "amount": "3",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.myprotein.com/p/sports-nutrition/creatine-monohydrate-powder/10530050/",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "MyProtein",
+    "brandOwner": "THG plc (Rechtstraeger laut Impressum: THG Nutrition Limited, FRN 1022962, trading as Myprotein.com)",
+    "name": "Vitamin D3 Softgels",
+    "ean": null,
+    "category": "Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Cholecalciferol",
+        "amount": "25",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.myprotein.com/p/sports-nutrition/vitamin-d3-softgels/10530530/",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bulk",
+    "brandOwner": "Sports Supplements Limited, t/a Bulk™ (UK, Companies-House-Nr. 05654661)",
+    "name": "Pure Whey Protein (Nicht aromatisiert, 1kg)",
+    "ean": "5060343741614",
+    "category": "Protein",
+    "keyIngredients": [
+      {
+        "name": "Protein",
+        "amount": "23",
+        "unit": "g"
+      }
+    ],
+    "off": true,
+    "source": "https://www.bulk.com/de/products/pure-whey-protein-de/bpb-wpc8-0000",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bulk",
+    "brandOwner": "Sports Supplements Limited, t/a Bulk™ (UK, Companies-House-Nr. 05654661)",
+    "name": "Kreatin Monohydrat",
+    "ean": null,
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Kreatin",
+        "form": "Monohydrat",
+        "amount": "3",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bulk.com/de/products/creatine-monohydrate-eu/bpb-cmon-0000-eu1",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bulk",
+    "brandOwner": "Sports Supplements Limited, t/a Bulk™ (UK, Companies-House-Nr. 05654661)",
+    "name": "ZMA Kapseln",
+    "ean": null,
+    "category": "ZMA",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B6",
+        "amount": "3.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "amount": "150",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bulk.com/de/products/zma-kapseln/bpb-zma-0000",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bulk",
+    "brandOwner": "Sports Supplements Limited, t/a Bulk™ (UK, Companies-House-Nr. 05654661)",
+    "name": "Vitamin D3 Tabletten",
+    "ean": null,
+    "category": "Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Cholecalciferol",
+        "amount": "100",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bulk.com/de/products/vitamin-d3-tabletten/bpb-vd3t-0000",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Optimum Nutrition",
+    "brandOwner": "Glanbia plc",
+    "name": "Gold Standard 100% Whey",
+    "ean": "0748927069532",
+    "category": "Protein",
+    "keyIngredients": [
+      {
+        "name": "Protein",
+        "amount": "24",
+        "unit": "g"
+      }
+    ],
+    "off": true,
+    "source": "https://www.optimumnutrition.com/en-us/products/gold-standard-100-whey-protein-powder",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Optimum Nutrition",
+    "brandOwner": "Glanbia plc",
+    "name": "Micronized Creatine Powder",
+    "ean": "0748927069808",
+    "category": "Kreatin",
+    "keyIngredients": [
+      {
+        "name": "Kreatin",
+        "form": "Monohydrat",
+        "amount": "5",
+        "unit": "g"
+      }
+    ],
+    "off": true,
+    "source": "https://www.optimumnutrition.com/en-us/products/creatine-monohydrate-micronized-powder",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Optimum Nutrition",
+    "brandOwner": "Glanbia plc",
+    "name": "Essential Amino Energy",
+    "ean": "0748927062113",
+    "category": "Aminosaeuren",
+    "keyIngredients": [
+      {
+        "name": "Koffein",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Aminosaeuren",
+        "amount": "5",
+        "unit": "g"
+      }
+    ],
+    "off": true,
+    "source": "https://www.optimumnutrition.com/en-us/products/essential-amino-energy-pre-workout-powder",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Optimum Nutrition",
+    "brandOwner": "Glanbia plc",
+    "name": "Opti-Men Multivitamin",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.optimumnutrition.com/en-us/products/opti-men-multivitamin",
+    "country": "DE",
+    "channel": "sport",
+    "productClass": "nem"
+  },
+  {
+    "brand": "NOW Foods",
+    "brandOwner": "NOW Health Group, Inc.",
+    "name": "Ultra Omega-3",
+    "ean": "0733739016621",
+    "category": "Omega-3",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/product/0733739016621",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "NOW Foods",
+    "brandOwner": "NOW Health Group, Inc.",
+    "name": "Magnesium Citrate Pure Powder",
+    "ean": "0733739012951",
+    "category": "Magnesium",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/product/0733739012951",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "NOW Foods",
+    "brandOwner": "NOW Health Group, Inc.",
+    "name": "Vitamin D-3 Structural Support Softgels 5000 IU",
+    "ean": "0733739003737",
+    "category": "Vitamin D",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/product/0733739003737",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "NOW Foods",
+    "brandOwner": "NOW Health Group, Inc.",
+    "name": "C-1000",
+    "ean": "0733739006905",
+    "category": "Vitamin C",
+    "keyIngredients": [],
+    "off": true,
+    "source": "https://world.openfoodfacts.org/product/0733739006905",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Thorne",
+    "brandOwner": "Thorne Research, Inc.",
+    "name": "Basic Nutrients 2/Day - NSF Certified for Sport",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "50",
+        "unit": "mcg"
+      },
+      {
+        "name": "Vitamin C",
+        "form": "Ascorbic Acid",
+        "amount": "250",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "form": "Methylcobalamin",
+        "amount": "600",
+        "unit": "mcg"
+      },
+      {
+        "name": "Magnesium",
+        "form": "Magnesium Bisglycinate",
+        "amount": "20",
+        "unit": "mg"
+      },
+      {
+        "name": "Zinc",
+        "form": "Bisglycinate Chelate",
+        "amount": "15",
+        "unit": "mg"
+      },
+      {
+        "name": "Selenium",
+        "form": "Selenomethionine",
+        "amount": "200",
+        "unit": "mcg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.thorne.com/products/dp/basic-nutrients-2-day",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Thorne",
+    "brandOwner": "Thorne Research, Inc.",
+    "name": "Vitamin D-5,000 - NSF Certified for Sport",
+    "ean": null,
+    "category": "Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "125",
+        "unit": "mcg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.thorne.com/products/dp/d-5-000-vitamin-d-capsule",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Thorne",
+    "brandOwner": "Thorne Research, Inc.",
+    "name": "Magnesium CitraMate",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "DiMagnesium Malate",
+        "amount": "80",
+        "unit": "mg"
+      },
+      {
+        "name": "Magnesium",
+        "form": "Magnesium Citrate",
+        "amount": "55",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.thorne.com/products/dp/magnesium-citramate",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Thorne",
+    "brandOwner": "Thorne Research, Inc.",
+    "name": "Curcumin Phytosome - 60 Servings",
+    "ean": null,
+    "category": "Curcumin",
+    "keyIngredients": [
+      {
+        "name": "Curcumin Phytosome",
+        "form": "Meriva, Phospholipid-Komplex aus Sonnenblume",
+        "amount": "1",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.thorne.com/products/dp/meriva-500-sf-120",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Life Extension",
+    "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
+    "name": "Magnesium Caps",
+    "ean": null,
+    "category": "Magnesium",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "form": "Magnesium oxide, citrate, succinate",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.lifeextension.com/vitamins-supplements/item01459/magnesium-caps",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Life Extension",
+    "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
+    "name": "BioActive Complete B-Complex",
+    "ean": null,
+    "category": "Vitamin B-Komplex",
+    "keyIngredients": [
+      {
+        "name": "Thiamine (Vitamin B1)",
+        "form": "Thiamine HCl",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "form": "Pyridoxine HCl, Pyridoxal 5'-Phosphat",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Folate",
+        "form": "L-5-Methyltetrahydrofolat, Calciumsalz",
+        "amount": "680",
+        "unit": "mcg"
+      },
+      {
+        "name": "Vitamin B12",
+        "form": "Methylcobalamin",
+        "amount": "300",
+        "unit": "mcg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "1000",
+        "unit": "mcg"
+      },
+      {
+        "name": "Pantothenic acid",
+        "form": "D-Calciumpantothenat",
+        "amount": "500",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.lifeextension.com/vitamins-supplements/item01945/bioactive-complete-b-complex",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Life Extension",
+    "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
+    "name": "Two-Per-Day Multivitamin (Capsules)",
+    "ean": null,
+    "category": "Multivitamin",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "form": "Ascorbic acid, Calcium- und Niacinamid-Ascorbate",
+        "amount": "470",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "form": "Cholecalciferol",
+        "amount": "50",
+        "unit": "mcg"
+      },
+      {
+        "name": "Zinc",
+        "form": "Zinc citrate, L-OptiZinc (Zinc mono-L-methionine sulfate)",
+        "amount": "25",
+        "unit": "mg"
+      },
+      {
+        "name": "Selenium",
+        "form": "Sodium selenite, SelenoExcell, Se-Methyl L-Selenocystein",
+        "amount": "200",
+        "unit": "mcg"
+      },
+      {
+        "name": "Magnesium",
+        "form": "Magnesium oxide",
+        "amount": "100",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "form": "Methylcobalamin",
+        "amount": "300",
+        "unit": "mcg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.lifeextension.com/vitamins-supplements/item02314/two-per-day-capsules",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Life Extension",
+    "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
+    "name": "Super Omega-3 EPA/DHA Fish Oil, Sesame Lignans & Olive Extract",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "EPA (Eicosapentaensaeure)",
+        "amount": "700",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA (Docosahexaensaeure)",
+        "amount": "500",
+        "unit": "mg"
+      },
+      {
+        "name": "Pure+ Wild Fish Oil Concentrate",
+        "amount": "2000",
+        "unit": "mg"
+      },
+      {
+        "name": "Polyphen-Oil Olive extract",
+        "form": "Fruit and leaf",
+        "amount": "300",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.lifeextension.com/vitamins-supplements/item01982/super-omega-3-epa-dha-fish-oil-sesame-lignans-olive-extract",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nordic Naturals",
+    "brandOwner": "Nordic Naturals, Inc.",
+    "name": "Ultimate Omega (Soft Gels, Lemon)",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "Total Omega-3s",
+        "form": "Triglyceridform (rTG)",
+        "amount": "1280",
+        "unit": "mg"
+      },
+      {
+        "name": "EPA (Eicosapentaenoic Acid)",
+        "amount": "650",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA (Docosahexaenoic Acid)",
+        "amount": "450",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nordic.com/products/ultimate-omega/",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nordic Naturals",
+    "brandOwner": "Nordic Naturals, Inc.",
+    "name": "DHA (Soft Gels, Strawberry)",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "Total Omega-3s",
+        "amount": "830",
+        "unit": "mg"
+      },
+      {
+        "name": "EPA (Eicosapentaenoic Acid)",
+        "amount": "205",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA (Docosahexaenoic Acid)",
+        "amount": "480",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nordic.com/products/dha/",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nordic Naturals",
+    "brandOwner": "Nordic Naturals, Inc.",
+    "name": "Baby's DHA (Liquid, Unflavored)",
+    "ean": null,
+    "category": "Omega-3",
+    "keyIngredients": [
+      {
+        "name": "Total Omega-3s",
+        "amount": "1050",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": "300",
+        "unit": "IU"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nordic.com/products/babys-dha/",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nordic Naturals",
+    "brandOwner": "Nordic Naturals, Inc.",
+    "name": "Vitamin D3 5000 (Soft Gels, Orange)",
+    "ean": null,
+    "category": "Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "125",
+        "unit": "mcg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nordic.com/products/vitamin-d3-5000/",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vital Proteins",
+    "brandOwner": "Vital Proteins LLC (Nestlé Health Science)",
+    "name": "Collagen Peptides (Unflavored)",
+    "ean": "0850013279005",
+    "category": "Kollagen",
+    "keyIngredients": [
+      {
+        "name": "Collagen Peptides",
+        "form": "Typ I und III, aus Rinderhaut",
+        "amount": "20",
+        "unit": "g"
+      }
+    ],
+    "off": true,
+    "source": "https://www.vitalproteins.com/products/vp-collagen-peptides",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vital Proteins",
+    "brandOwner": "Vital Proteins LLC (Nestlé Health Science)",
+    "name": "Collagen Peptides Advanced with Hyaluronic Acid & Vitamin C",
+    "ean": null,
+    "category": "Kollagen",
+    "keyIngredients": [
+      {
+        "name": "Collagen Peptides",
+        "form": "aus Rinderhaut",
+        "amount": "20",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vitalproteins.com/products/collagen-peptides",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vital Proteins",
+    "brandOwner": "Vital Proteins LLC (Nestlé Health Science)",
+    "name": "Marine Collagen (Unflavored)",
+    "ean": null,
+    "category": "Kollagen",
+    "keyIngredients": [
+      {
+        "name": "Collagen Peptides",
+        "form": "Marine, aus Schuppen von wildgefangenem Kabeljau",
+        "amount": "12",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vitalproteins.com/products/marine-collagen-peptides",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vital Proteins",
+    "brandOwner": "Vital Proteins LLC (Nestlé Health Science)",
+    "name": "Original Collagen Creamer (Coconut)",
+    "ean": null,
+    "category": "Kollagen",
+    "keyIngredients": [
+      {
+        "name": "Collagen Peptides",
+        "amount": "10",
+        "unit": "g"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vitalproteins.com/products/collagen-creamer-original",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantolvit 2000 I.E. Vitamin D Kapseln",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Colecalciferol",
+        "amount": "2000",
+        "unit": "I.E. (50 µg) pro Kapsel"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-2000",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantolvit 2000 I.E. Vitamin D3 Vegan Weichkapsel",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Colecalciferol, pflanzlich aus Algen",
+        "amount": "2000",
+        "unit": "I.E. (50 µg) pro Kapsel"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-2000-vegan",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantolvit 4000 I.E. Hochdosiertes Vitamin D3",
+    "ean": null,
+    "category": "Vitamin D3",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Colecalciferol",
+        "amount": "4000",
+        "unit": "I.E. (100 µg) pro Tablette"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-4000",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "name": "Vigantolvit Immun 5-in-1",
+    "ean": null,
+    "category": "Immunsystem",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Colecalciferol",
+        "amount": "2000",
+        "unit": "I.E. (50 µg)"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "250",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "10",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "55",
+        "unit": "µg"
+      },
+      {
+        "name": "Kupfer",
+        "amount": "1",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.vigantolvit.de/vigantolvit-produkte/vigantolvit-immun-5-in-1",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
   }
 ]
