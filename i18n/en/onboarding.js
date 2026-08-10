@@ -7,7 +7,7 @@ export default {
   'onboarding.eyebrow': 'Welcome',
   'onboarding.title': 'Before you start',
   'onboarding.intro':
-    'This app organises your supplements into daily slots, shows recorded notes from cited sources and documents what you observe. It does not advise, does not recommend dosages and does not replace medical judgement.',
+    'This app organises your supplements into daily slots, shows recorded notes from cited sources and documents what you observe. It does not advise, does not recommend dosages and does not replace medical judgement. In addition, discuss decisions about preparations with your medical practice or pharmacy.',
   'onboarding.lifeStage.title': 'Your life stage',
   'onboarding.lifeStage.why':
     'Reference values differ strongly between childhood, pregnancy, breastfeeding and older age. Without this selection, any comparison against upper limits would be misleading. You can change it at any time in the settings.',

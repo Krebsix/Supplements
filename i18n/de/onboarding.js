@@ -10,7 +10,7 @@ export default {
   'onboarding.eyebrow': 'Willkommen',
   'onboarding.title': 'Bevor es losgeht',
   'onboarding.intro':
-    'Diese App ordnet deine Nahrungsergänzungsmittel in Tages-Slots ein, zeigt hinterlegte Hinweise aus zitierten Quellen und dokumentiert, was du beobachtest. Sie berät nicht, empfiehlt keine Dosierungen und ersetzt keine ärztliche Einschätzung.',
+    'Diese App ordnet deine Nahrungsergänzungsmittel in Tages-Slots ein, zeigt hinterlegte Hinweise aus zitierten Quellen und dokumentiert, was du beobachtest. Sie berät nicht, empfiehlt keine Dosierungen und ersetzt keine ärztliche Einschätzung. Besprich Entscheidungen zu Präparaten zusätzlich mit deiner Arztpraxis oder Apotheke.',
   'onboarding.lifeStage.title': 'Deine Lebensphase',
   'onboarding.lifeStage.why':
     'Referenzwerte unterscheiden sich stark zwischen Kind, Schwangerschaft, Stillzeit und höherem Alter. Ohne diese Angabe wäre jeder Abgleich mit Obergrenzen irreführend. Die Auswahl lässt sich jederzeit in den Einstellungen ändern.',

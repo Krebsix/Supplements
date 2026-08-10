@@ -98,6 +98,38 @@ Gummi-Marken. Schema neu: optionales "doseForm"-Feld. Gummi-Fallstrick:
 Etiketten geben oft "pro 2 Gummis" an — Mengen nur bei belegter
 Tagesdosis uebernehmen.
 
+## Welle 9b (laeuft): Extrasparte Bachblueten
+Nadine (2026-08-10): auch alle Bachblueten-Produkte aufnehmen. Gleiche
+Extrasparten-Logik wie Homoeopathie, aber EIGENE Produktklasse
+"bachblueten" mit eigenem Hinweistext (seedCatalog.class.bachblueten):
+Bachblueten sind in DE ueberwiegend LEBENSMITTEL oder Kosmetik, keine
+registrierten Arzneimittel — der Packungsbeilagen-Satz der Homoeopathika
+waere hier falsch, stattdessen Verweis auf die Herstellerangaben.
+category "Bachblüten", keyIngredients immer leer, keine Indikationen.
+Marken: Bach Original/RESCUE (Nelsons), Murnauers, weitere nur offiziell
+belegt.
+
+## Welle 9 (laeuft): Extrasparte Homoeopathie (DHU/Schuessler)
+Von Nadine gemeldete Luecke (2026-08-10): Schuessler-Salze und gaengige
+DHU-Praeparate. Entscheidung: eigene SPARTE, klar getrennt von den
+Nahrungsergaenzungsmitteln.
+- Schema: productClass "homoeopathikum", category "Homöopathie",
+  channel "apotheke", PZN von offiziellen DHU-Seiten.
+- keyIngredients bleibt IMMER leer: Potenzen enthalten keine
+  analysierbaren Naehrstoffmengen, "Magnesium phosphoricum D6" ist NICHT
+  Magnesium. Dadurch bleiben die Eintraege automatisch aus Tagessummen,
+  Referenzabgleich und Interaktionspruefung draussen, ohne Sonderlogik.
+- KEINE Indikationen, keine Anwendungsgebiete: registrierte Homoeopathika
+  (§ 38 AMG) tragen keine behoerdlich gepruefte Indikation, die App
+  uebernimmt nur Belegtes. Hinweistext in der App:
+  seedCatalog.class.homoeopathikum (i18n, DE/EN), verweist auf
+  Packungsbeilage und kennzeichnet den Dokumentations-Charakter.
+- Bericht: Homoeopathika erscheinen als eigene Gruppe, getrennt von den
+  Naehrstoff-Produkten (Umsetzung bei ExportBuilder-Anpassung).
+- Apple-Relevanz: Formulierungen strikt nach
+  launch/apple-review-leitfaden.md (kein Wirkversprechen, kein
+  Dosier-Imperativ, Packungsbeilagen-Verweis).
+
 ## Ausbau Pruef-Schleuse: schluessellose Scans (Backlog)
 Produkte ohne EAN/PZN (Kleinsthersteller, Eigenimporte) funktionieren
 fuer die Nutzerin voll lokal, erreichen die Schleuse aber nicht (PK ist

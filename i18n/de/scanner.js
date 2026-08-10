@@ -147,4 +147,15 @@ export default {
   'scanner.limit.title': 'Scan-Kontingent aufgebraucht',
   'scanner.limit.message':
     'Die kostenlosen KI-Scans sind verbraucht. Mit dem Pro-Abo scannst du unbegrenzt, oder du kaufst ein Scan-Paket. Der Barcode-Scan bleibt immer kostenlos.',
+
+  'seedCatalog.warning.catalog':
+    'Eintrag aus dem kuratierten DACH-Produktkatalog (Herstellerangaben). Dosierung und Wirkstoffmengen bitte direkt vom Etikett abgleichen.',
+  'seedCatalog.uncertaintyNote':
+    'Katalog-Treffer aus der Produktrecherche. Vor der Übernahme mit dem Etikett abgleichen.',
+  'seedCatalog.class.arznei':
+    'Dieses Produkt ist als Arzneimittel zugelassen. Für Anwendung und Dosierung gilt die Packungsbeilage, bei Fragen helfen Arztpraxis oder Apotheke.',
+  'seedCatalog.class.homoeopathikum':
+    'Registriertes homöopathisches Arzneimittel, daher ohne Angabe einer therapeutischen Indikation. Für die Anwendung gilt die Packungsbeilage. Der Eintrag dient der Dokumentation und fließt nicht in die Nährstoff-Auswertungen ein.',
+  'seedCatalog.class.bachblueten':
+    'Bachblüten-Zubereitung ohne deklarierte Nährstoffmengen. Für Anwendung und Zusammensetzung gelten die Herstellerangaben auf der Verpackung. Der Eintrag dient der Dokumentation und fließt nicht in die Nährstoff-Auswertungen ein.',
 };

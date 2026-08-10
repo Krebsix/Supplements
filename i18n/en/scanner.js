@@ -146,4 +146,15 @@ export default {
   'scanner.limit.title': 'Scan quota used up',
   'scanner.limit.message':
     'Your free AI scans are used up. With the Pro subscription you scan without limits, or you buy a scan pack. Barcode scanning always stays free.',
+
+  'seedCatalog.warning.catalog':
+    'Entry from the curated DACH product catalogue (manufacturer information). Please compare dosage and substance amounts directly with the label.',
+  'seedCatalog.uncertaintyNote':
+    'Catalogue match from the product research. Compare with the label before applying.',
+  'seedCatalog.class.arznei':
+    'This product is authorised as a medicinal product. The package leaflet applies for use and dosage; your medical practice or pharmacy can answer questions.',
+  'seedCatalog.class.homoeopathikum':
+    'Registered homeopathic medicinal product, therefore without a stated therapeutic indication. The package leaflet applies for use. This entry serves documentation and is not included in the nutrient evaluations.',
+  'seedCatalog.class.bachblueten':
+    'Bach flower preparation without declared nutrient amounts. The manufacturer information on the packaging applies for use and composition. This entry serves documentation and is not included in the nutrient evaluations.',
 };

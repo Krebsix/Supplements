@@ -11,6 +11,7 @@
  */
 
 import seedProducts from './data/seedProducts.json';
+import { tr } from './i18n/runtime';
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -77,6 +78,20 @@ export function seedEntryToScanDraft(entry) {
       }))
     : [];
 
+  // Produktklassen-Hinweis: Arzneimittel und Homoeopathika sind dokumentierbare
+  // Einnahmen, aber keine Nahrungsergaenzungsmittel. Der Hinweis verweist auf die
+  // Packungsbeilage und bleibt bewusst deskriptiv (keine Anwendungs-Empfehlung,
+  // siehe launch/apple-review-leitfaden.md).
+  const classWarnings = [];
+  const productClass = clean(entry.productClass);
+  if (productClass === 'arznei') {
+    classWarnings.push(tr('seedCatalog.class.arznei'));
+  } else if (productClass === 'homoeopathikum') {
+    classWarnings.push(tr('seedCatalog.class.homoeopathikum'));
+  } else if (productClass === 'bachblueten') {
+    classWarnings.push(tr('seedCatalog.class.bachblueten'));
+  }
+
   return {
     productName: clean(entry.name),
     brand: clean(entry.brand),
@@ -91,12 +106,10 @@ export function seedEntryToScanDraft(entry) {
     ingredientDetails: ingredients,
     dosage: { amount: '', unit: '' },
     timingSuggestion: '',
-    warnings: [
-      'Eintrag aus dem kuratierten DACH-Produktkatalog (Herstellerangaben). Dosierung und Wirkstoffmengen bitte direkt vom Etikett abgleichen.',
-    ],
-    uncertaintyNote:
-      'Katalog-Treffer aus der Produktrecherche. Vor der Uebernahme mit dem Etikett abgleichen.',
+    warnings: [...classWarnings, tr('seedCatalog.warning.catalog')],
+    uncertaintyNote: tr('seedCatalog.uncertaintyNote'),
     analysisMode: 'seed-catalog',
+    productClass: productClass || null,
     barcode: clean(entry.ean) || null,
     analyzedAt: new Date().toISOString(),
   };
