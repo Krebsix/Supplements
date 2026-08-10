@@ -7388,5 +7388,33 @@
     "country": "DE",
     "channel": "apotheke",
     "productClass": "nem"
+  },
+  {
+    "brand": "NATURTREU",
+    "brandOwner": null,
+    "name": "sonnen elixier Vitamin D3 & K2 20.000 I.E. + 200 µg Depot",
+    "ean": null,
+    "pzn": "18195665",
+    "category": "Vitamin D3+K2",
+    "doseForm": "Tropfen",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Cholecalciferol aus pflanzlichen Flechten",
+        "amount": "25",
+        "unit": "µg je Tag (Depot: 4 Tropfen = 20 Tagesdosen)"
+      },
+      {
+        "name": "Vitamin K2",
+        "form": "Menachinon MK-7 all-trans",
+        "amount": "10",
+        "unit": "µg je Tag (Depot: 4 Tropfen = 20 Tagesdosen)"
+      }
+    ],
+    "off": false,
+    "source": "Etikett-Scan, redaktionell geprüft 2026-08-10 (PZN-Aufdruck auf der Packung; Händler-Strichcode ist keine EAN)",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
   }
 ]
