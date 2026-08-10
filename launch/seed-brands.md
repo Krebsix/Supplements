@@ -98,6 +98,16 @@ Gummi-Marken. Schema neu: optionales "doseForm"-Feld. Gummi-Fallstrick:
 Etiketten geben oft "pro 2 Gummis" an — Mengen nur bei belegter
 Tagesdosis uebernehmen.
 
+## Welle 10 (laeuft): Verla, Weleda, Wala
+Nadine (2026-08-10): Apotheken-Klassiker fehlten fast komplett (nur
+Magnesium Verla N Dragées war drin). Verla-Pharm (Zinkletten, Zink,
+Magnesium-Linie, Calcium, Ferro, Kalium; viele davon zugelassene
+ARZNEIMITTEL → productClass je Produkt pruefen), Weleda (einnehmbare
+Produkte, keine Kosmetik) und WALA (gaengige einnehmbare Praeparate).
+Anthroposophika: zugelassen mit Indikation → "arznei", registriert ohne
+Indikation → "homoeopathikum". Potenzierte Zusammensetzungen bekommen
+NIE keyIngredients.
+
 ## Welle 9b (laeuft): Extrasparte Bachblueten
 Nadine (2026-08-10): auch alle Bachblueten-Produkte aufnehmen. Gleiche
 Extrasparten-Logik wie Homoeopathie, aber EIGENE Produktklasse

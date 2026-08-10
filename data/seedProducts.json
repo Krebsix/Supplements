@@ -7416,5 +7416,799 @@
     "country": "DE",
     "channel": "online",
     "productClass": "nem"
+  },
+  {
+    "brand": "Bears with Benefits",
+    "brandOwner": "Beautybears GmbH",
+    "name": "Ah-mazing Hair* Vitamin mit Biotin",
+    "ean": "0710535656794",
+    "category": "Haare/Haut/Nägel",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Biotin",
+        "amount": "10000",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "12",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "1.8",
+        "unit": "mg α-TE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1",
+        "unit": "mg"
+      },
+      {
+        "name": "Jod",
+        "amount": "22.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "1.5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bears-with-benefits.com/products/ah-mazing-hair-biotin",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bears with Benefits",
+    "brandOwner": "Beautybears GmbH",
+    "name": "One Bear a Day Immune* Vitamin",
+    "ean": "0745760685165",
+    "category": "Immunsystem",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "6",
+        "unit": "mg α-TE"
+      },
+      {
+        "name": "Niacin",
+        "amount": "8",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.70",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "1.3",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "25",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "20",
+        "unit": "mg"
+      },
+      {
+        "name": "Propolisextrakt",
+        "amount": "10",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bears-with-benefits.com/products/immun-boost-vitamin",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bears with Benefits",
+    "brandOwner": "Beautybears GmbH",
+    "name": "All In One Kids* Vitamin",
+    "ean": null,
+    "category": "Multivitamin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "3",
+        "unit": "mg α-TE"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "0.17",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "0.21",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.35",
+        "unit": "mg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "12",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "1",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "15",
+        "unit": "mg"
+      },
+      {
+        "name": "Jod",
+        "amount": "22.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "1.5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bears-with-benefits.com/products/kids-multivitamin-komplex",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bears with Benefits",
+    "brandOwner": "Beautybears GmbH",
+    "name": "Daily Essentials Vitamin B12",
+    "ean": null,
+    "category": "B12",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12",
+        "form": "Cyanocobalamin",
+        "amount": "400",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bears-with-benefits.com/products/vitamin-b-12",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bears with Benefits",
+    "brandOwner": "Beautybears GmbH",
+    "name": "Super Snooze Sleep* Vitamin",
+    "ean": null,
+    "category": "Melatonin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Melatonin",
+        "amount": "1",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "2",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bears-with-benefits.com/products/melatonin",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Bears with Benefits",
+    "brandOwner": "Beautybears GmbH",
+    "name": "Queen of Iron Power* Complex",
+    "ean": "4260717770535",
+    "category": "Eisen+C",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "0.2",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "17.3",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "150",
+        "unit": "µg"
+      },
+      {
+        "name": "Eisen",
+        "amount": "7",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "30",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.7",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.bears-with-benefits.com/products/eisenkomplex",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Doppelherz aktiv Haut + Haare + Nägel Gums",
+    "ean": "4009932132571",
+    "category": "Haare/Haut/Nägel",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "200",
+        "unit": "µg RE"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "6",
+        "unit": "mg α-TE"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "20",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "8",
+        "unit": "mg NE"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.7",
+        "unit": "mg"
+      },
+      {
+        "name": "Folsäure",
+        "amount": "100",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "2.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "500",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Selen",
+        "amount": "14",
+        "unit": "µg"
+      },
+      {
+        "name": "Jod",
+        "amount": "75",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-aktiv-haut-haare-naegel-gums",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Doppelherz aktiv Kollagen Gums",
+    "ean": "4009932136203",
+    "category": "Kollagen",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Kollagenhydrolysat",
+        "amount": "1000",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-aktiv-kollagen-gums",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Doppelherz aktiv Melatonin Gums",
+    "ean": "4009932134872",
+    "pzn": "18129355",
+    "category": "Melatonin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B6",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Melatonin",
+        "amount": "1",
+        "unit": "mg"
+      },
+      {
+        "name": "Kamillenblüten-Extrakt",
+        "amount": "20",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-aktiv-melatonin-gums",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Doppelherz",
+    "brandOwner": "Queisser Pharma GmbH & Co. KG",
+    "name": "Doppelherz aktiv Vitamin D3 2000 I.E. Gums",
+    "ean": "4009932134483",
+    "category": "Vitamin D3",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "amount": "50",
+        "unit": "µg (2000 I.E.)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.doppelherz.de/produkte/doppelherz-aktiv-vitamin-d3-2000-ie-gums",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Mivolis Melatonin Weichgummies",
+    "ean": "4066447884807",
+    "category": "Melatonin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Melatonin",
+        "amount": "1.6",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1.5",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.dm.de/p/d/3094900/mivolis-melatonin-weichgummies",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Mivolis Multivitamin Gummies",
+    "ean": "4066447833584",
+    "category": "Multivitamin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Folsäure",
+        "amount": "200",
+        "unit": "µg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "16",
+        "unit": "mg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "50",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "0.35",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin A",
+        "amount": "200",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "2.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "1.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "80",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "10",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "12",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.dm.de/p/d/3104293/mivolis-multivitamin-gummies-60-st",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Mivolis",
+    "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+    "name": "Mivolis Multivitamin-Bärchen für Kinder",
+    "ean": "4066447832846",
+    "category": "Multivitamin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.dm.de/p/d/3104247/mivolis-multivitamin-baerchen-fuer-kinder-60-st",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "altapharma",
+    "brandOwner": "Dirk Rossmann GmbH",
+    "name": "altapharma Multivitamin Gummies für Kinder",
+    "ean": "4068134149404",
+    "category": "Multivitamin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.rossmann.de/de/baby-und-spielzeug-altapharma-multivitamin-gummies-fuer-kinder/p/4068134149404",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Kids Immun Vitamin Gummies",
+    "ean": null,
+    "category": "Immunsystem",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "330",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "60",
+        "unit": "mg"
+      },
+      {
+        "name": "Zink",
+        "amount": "2.8",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-Kids-Immun-Gummies/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Centrum",
+    "brandOwner": "Haleon",
+    "name": "Centrum Kids Multi Vitamin Gummies",
+    "ean": null,
+    "category": "Multivitamin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "330",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "40",
+        "unit": "mg"
+      },
+      {
+        "name": "Niacin",
+        "amount": "8",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "1",
+        "unit": "µg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "12",
+        "unit": "µg"
+      },
+      {
+        "name": "Zink",
+        "amount": "2.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Jod",
+        "amount": "50",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.centrum-online.de/produkte/centrum-Kids-Multi-Gummies/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Abtei",
+    "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+    "name": "Abtei Beauty Gummies zuckerfrei",
+    "ean": null,
+    "category": "Haare/Haut/Nägel",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin A",
+        "amount": "400",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "7.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "24",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "48",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "0.7",
+        "unit": "mg"
+      },
+      {
+        "name": "Pantothensäure",
+        "amount": "0.9",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "2.8",
+        "unit": "mg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "3.1",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "5",
+        "unit": "µg"
+      },
+      {
+        "name": "Kollagen",
+        "amount": "500",
+        "unit": "mg"
+      },
+      {
+        "name": "Inosit",
+        "amount": "38.8",
+        "unit": "µg"
+      },
+      {
+        "name": "Cholin",
+        "amount": "40.2",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.abtei.de/produkte/haut-haare-naegel/abtei-beauty-gummies-zuckerfrei/",
+    "country": "DE",
+    "channel": "drogerie",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": "Tauron Ventures GmbH",
+    "name": "Eisen Gummies",
+    "ean": null,
+    "category": "Eisen+C",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Eisen",
+        "amount": "6",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nature-love.de/products/eisen-gummies",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": "Tauron Ventures GmbH",
+    "name": "Magnesium Gummies",
+    "ean": null,
+    "category": "Magnesium",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Magnesium",
+        "amount": "188",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nature-love.de/products/magnesium-gummies",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": "Tauron Ventures GmbH",
+    "name": "Vitamin C Gummies",
+    "ean": null,
+    "category": "Vitamin C",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Vitamin C",
+        "amount": "120",
+        "unit": "mg"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nature-love.de/products/vitamin-c-gummies",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": "Tauron Ventures GmbH",
+    "name": "Multivitamin Gummies Kids",
+    "ean": null,
+    "category": "Multivitamin",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.nature-love.de/products/multivitamin-gummies-kids",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Nature Love",
+    "brandOwner": "Tauron Ventures GmbH",
+    "name": "Bacillus subtilis Gummies",
+    "ean": null,
+    "category": "Probiotikum",
+    "doseForm": "Weichgummi",
+    "keyIngredients": [
+      {
+        "name": "Bacillus subtilis",
+        "amount": "3",
+        "unit": "Mrd. KBE"
+      }
+    ],
+    "off": false,
+    "source": "https://www.nature-love.de/products/bacillus-subtilis-gummies",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
   }
 ]
