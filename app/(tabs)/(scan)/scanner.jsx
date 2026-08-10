@@ -28,7 +28,7 @@ import { analyzeCaptures, isAnalyzerConfigured, lookupProductCache } from '../..
 import mockScanResult from '../../../data/mockScanResult';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
-import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
+import { colors, fonts, radius, space, surfaces, toneFor, type } from '../../../theme';
 
 const affirmTone = toneFor('affirm');
 const cautionTone = toneFor('caution');
@@ -182,7 +182,9 @@ export default function ScannerScreen() {
       }));
 
       if (captureIndex < CAPTURE_STEPS.length - 1) {
-        setIsCameraReady(false);
+        // Kamera laeuft durch — kein Neuaufbau zwischen den Schritten.
+        // Der staendige Remount war die Ursache des "Kamera wird
+        // vorbereitet"-Haengers beim vierten Foto.
         setActiveIndex(captureIndex + 1);
       }
     } catch (error) {
@@ -267,14 +269,24 @@ export default function ScannerScreen() {
       return nextCaptures;
     });
 
-    setIsCameraReady(false);
     setCaptureError('');
   }
 
   function handleSelectStep(index) {
     setActiveIndex(index);
-    setIsCameraReady(false);
     setCaptureError('');
+  }
+
+  // Kompletter Neustart des Scans: Wenn ein Schritt klemmt oder das
+  // falsche Produkt im Feed haengt, darf die Nutzerin jederzeit raus.
+  function handleResetScan() {
+    setCaptures({});
+    setActiveIndex(0);
+    setScannedBarcode('');
+    setCaptureError('');
+    setNameQuery('');
+    setNameResults([]);
+    setNameSearchDone(false);
   }
 
   function handleNextOpenStep() {
@@ -602,15 +614,9 @@ export default function ScannerScreen() {
             activeCaptured && styles.cameraFrameComplete,
           ]}
         >
-          {activeCapture ? (
-            <Image
-              source={{ uri: activeCapture.uri }}
-              style={styles.capturedImage}
-              resizeMode="cover"
-            />
-          ) : permission?.granted && isFocused ? (
+          {permission?.granted && isFocused ? (
             <CameraView
-              key={`${activeStep.id}-${isFocused}`}
+              key={String(isFocused)}
               ref={cameraRef}
               style={styles.cameraPreview}
               facing="back"
@@ -702,6 +708,63 @@ export default function ScannerScreen() {
           </View>
         </View>
 
+
+        {/* Alle vier Schritte auf einen Blick: Mini-Vorschau statt
+            gestapelter Karten — kein Scrollen, automatisches
+            Weiterschalten nach jedem Foto. */}
+        <View style={styles.stepStrip}>
+          {CAPTURE_STEPS.map((step, index) => {
+            const capture = captures[step.id];
+            const isActive = index === activeIndex;
+            return (
+              <TouchableOpacity
+                key={step.id}
+                style={styles.stepChip}
+                onPress={() => handleSelectStep(index)}
+                disabled={isCapturing}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+              >
+                {capture ? (
+                  <Image
+                    source={{ uri: capture.uri }}
+                    style={[styles.stepThumb, isActive && styles.stepThumbActive]}
+                  />
+                ) : (
+                  <View
+                    style={[
+                      styles.stepThumb,
+                      styles.stepThumbEmpty,
+                      isActive && styles.stepThumbActive,
+                    ]}
+                  >
+                    <Text style={styles.stepThumbNumber}>{index + 1}</Text>
+                  </View>
+                )}
+                <Text
+                  style={[styles.stepChipLabel, isActive && styles.stepChipLabelActive]}
+                  numberOfLines={1}
+                >
+                  {t(step.shortLabelKey)}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {completedCount > 0 || scannedBarcode || captureError ? (
+          <TouchableOpacity
+            style={styles.inlineButton}
+            onPress={handleResetScan}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+          >
+            <Text style={styles.inlineButtonText}>
+              {t('scanner.inline.resetScan')}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+
         {captureError ? (
           <View style={styles.captureErrorBox}>
             <Text style={styles.captureErrorText}>{captureError}</Text>
@@ -771,71 +834,6 @@ export default function ScannerScreen() {
             </Text>
           </TouchableOpacity>
         )}
-      </View>
-
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{t('scanner.section.title')}</Text>
-        <Text style={styles.sectionHint}>{t('scanner.section.hint')}</Text>
-      </View>
-
-      <View style={styles.stepList}>
-        {CAPTURE_STEPS.map((step, index) => {
-          const isComplete = capturedIds.includes(step.id);
-          const isActive = index === activeIndex;
-
-          return (
-            <TouchableOpacity
-              key={step.id}
-              style={[
-                styles.stepCard,
-                isActive && styles.stepCardActive,
-                isComplete && styles.stepCardComplete,
-              ]}
-              onPress={() => handleSelectStep(index)}
-              activeOpacity={0.8}
-              accessibilityRole="button"
-              disabled={isCapturing}
-            >
-              <View
-                style={[
-                  styles.stepIndicator,
-                  isActive && styles.stepIndicatorActive,
-                  isComplete && styles.stepIndicatorComplete,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.stepIndicatorText,
-                    (isActive || isComplete) &&
-                      styles.stepIndicatorTextActive,
-                  ]}
-                >
-                  {isComplete ? '✓' : index + 1}
-                </Text>
-              </View>
-
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>{t(step.titleKey)}</Text>
-                <Text style={styles.stepDescription}>
-                  {t(step.shortLabelKey)}
-                </Text>
-              </View>
-
-              <Text
-                style={[
-                  styles.stepState,
-                  isComplete && styles.stepStateComplete,
-                ]}
-              >
-                {isComplete
-                  ? t('scanner.step.stateDone')
-                  : isActive
-                    ? t('scanner.step.stateActive')
-                    : t('scanner.step.stateOpen')}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
       </View>
 
       <View
@@ -1330,6 +1328,44 @@ const styles = StyleSheet.create({
   nameResultBrand: {
     ...type.small,
     marginTop: 2,
+  },
+  stepStrip: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: space.md,
+  },
+  stepChip: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 3,
+  },
+  stepThumb: {
+    width: 52,
+    height: 52,
+    borderRadius: radius.md,
+    borderWidth: 2,
+    borderColor: colors.rule,
+  },
+  stepThumbEmpty: {
+    backgroundColor: colors.surfaceSunken,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepThumbActive: {
+    borderColor: colors.accent,
+  },
+  stepThumbNumber: {
+    ...type.numeral,
+    fontSize: 17,
+    color: colors.inkFaint,
+  },
+  stepChipLabel: {
+    ...type.tiny,
+    marginTop: 4,
+  },
+  stepChipLabelActive: {
+    color: colors.accent,
+    fontFamily: fonts.sansBold,
   },
   scanHint: {
     position: 'absolute',

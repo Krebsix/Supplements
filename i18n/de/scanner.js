@@ -109,6 +109,7 @@ export default {
     'Kein Treffer in der Datenbank. Dann helfen die vier Fotos weiter.',
   'scanner.nameSearch.failed': 'Die Produktsuche ist fehlgeschlagen.',
   'scanner.nameSearch.seedOrigin': 'DACH-Katalog',
+  'scanner.inline.resetScan': 'Scan verwerfen und neu starten',
   'scanner.error.analysisFailed':
     'Die Analyse ist fehlgeschlagen. Bitte erneut versuchen.',
 
