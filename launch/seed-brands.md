@@ -5,6 +5,17 @@ Verbraucherzentrale/IQVIA 2024, Hersteller-Seiten). Dient als Priorisierung
 fuer den Produkt-Cache-Seed; Einzelfakten je Produkt werden bei der
 Erfassung gegen die Originalquelle geprueft.
 
+## Pruefstandard (Nadine, 2026-08-10): VOLLPRUEFUNG statt Stichproben
+Jeder Katalog-Eintrag wird EINZELN gegen seine Quelle geprueft, mit
+woertlichem Beleg je Feld (Name, EAN/PZN, jede Wirkstoffmenge samt
+Tagesdosis-Bezug, Produktklasse, Markeninhaber via Impressum). PZN aus
+URL-Parametern oder Shop-Links zaehlt nicht als Beleg. Nicht Belegbares
+wird geleert oder gestrichen, nie geschaetzt. Ablauf: Verdict-Dateien
+je Charge (scratchpad/verdict-*.json), Korrekturen laufen zentral in
+Katalog UND product_cache. Tranche 1 (Wellen 8-10, 129 Produkte) laeuft;
+Altbestand Wellen 1-7 in 10 Chargen a ~30 Produkte
+(verify-legacy-01..10) rollierend danach.
+
 ## Datenmodell-Grundsatz
 **Marke ≠ Markeninhaber ≠ Lohnhersteller.** Im Seed werden Marke und
 Markeninhaber getrennt erfasst; der tatsaechliche Produktionsbetrieb wird
