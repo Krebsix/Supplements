@@ -108,6 +108,19 @@ Anthroposophika: zugelassen mit Indikation → "arznei", registriert ohne
 Indikation → "homoeopathikum". Potenzierte Zusammensetzungen bekommen
 NIE keyIngredients.
 
+## Welle 10: KONSOLIDIERT 2026-08-10
+Verla 28, Weleda 17, WALA 15 (60 neu, Katalog 412). Klassen-Befund:
+Anthroposophika von Weleda/WALA tragen ECHTE Anwendungsgebiete
+("gemaess der anthroposophischen Menschen- und Naturerkenntnis") und
+sind damit zugelassene ARZNEIMITTEL, keine registrierten Homoeopathika —
+per Stichprobe verifiziert (WALA Gentiana Magen, Weleda Infludoron)
+und entsprechend umklassifiziert. Potenzierte Zusammensetzungen bleiben
+trotzdem OHNE keyIngredients. Weleda-PZN gestrichen (stammten aus
+URL-Parametern, nicht aus woertlicher Nennung). Offen: ~17 weitere
+Verla-Varianten und ~6 WALA-Globuli nur gesichtet (Detailseiten fehlen),
+Weleda Aufbaukalk nicht auffindbar (evtl. aus dem Sortiment), Weleda-PZN
+via Packungsbeilagen-PDF nachtragbar.
+
 ## Welle 9b (laeuft): Extrasparte Bachblueten
 Nadine (2026-08-10): auch alle Bachblueten-Produkte aufnehmen. Gleiche
 Extrasparten-Logik wie Homoeopathie, aber EIGENE Produktklasse

@@ -8945,5 +8945,1070 @@
     "country": "DE",
     "channel": "apotheke",
     "productClass": "homoeopathikum"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla 400 direkt Zitrone",
+    "ean": null,
+    "pzn": "16917605",
+    "category": "Mineralstoffe",
+    "doseForm": "Direkt-Granulat (Stick)",
+    "keyIngredients": [
+      {
+        "name": "Magnesium (Magnesiumcitrat/Magnesiumoxid)",
+        "amount": 400,
+        "unit": "mg pro Stick"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/magnesium-verla/detail/magnesium-verla-400-direkt-zitrone",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla 400 direkt Waldbeere",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Direkt-Granulat (Stick)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/magnesium-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla 300 Orange",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Direkt-Granulat (Stick)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/magnesium-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla Kautabs",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Kautabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/magnesium-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla purKaps",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Kapseln",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/verla-purkaps",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Zinkletten Verla Himbeere",
+    "ean": null,
+    "pzn": "03915467",
+    "category": "Mineralstoffe",
+    "doseForm": "Lutschtabletten",
+    "keyIngredients": [
+      {
+        "name": "Zink (als Zinkcitrat)",
+        "amount": 5,
+        "unit": "mg pro Lutschtablette"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": 30,
+        "unit": "mg pro Lutschtablette"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/zink-verla/detail/zinkletten-verla-himbeere",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Zink Verla C purKaps",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Kapseln",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/verla-purkaps",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Zink Verla immun Caps",
+    "ean": null,
+    "pzn": "17532161",
+    "category": "Mineralstoffe",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      {
+        "name": "Zink (als Zinkcitrat)",
+        "amount": 10,
+        "unit": "mg pro Kapsel"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": 80,
+        "unit": "mg pro Kapsel"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": 20,
+        "unit": "µg (800 I.E.) pro Kapsel"
+      },
+      {
+        "name": "Selen",
+        "amount": 55,
+        "unit": "µg pro Kapsel"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/zink-verla/detail/zink-verla-immun-caps",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Calcium Verla vital",
+    "ean": null,
+    "pzn": "00828383",
+    "category": "Mineralstoffe",
+    "doseForm": "Filmtabletten",
+    "keyIngredients": [
+      {
+        "name": "Calcium",
+        "amount": 600,
+        "unit": "mg pro Tagesdosis (3 Filmtabletten)"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": 20,
+        "unit": "µg (800 I.E.) pro Tagesdosis (3 Filmtabletten)"
+      },
+      {
+        "name": "Magnesium",
+        "amount": 100,
+        "unit": "mg pro Tagesdosis (3 Filmtabletten)"
+      },
+      {
+        "name": "Zink",
+        "amount": 5,
+        "unit": "mg pro Tagesdosis (3 Filmtabletten)"
+      },
+      {
+        "name": "Vitamin K",
+        "amount": 80,
+        "unit": "µg pro Tagesdosis (3 Filmtabletten)"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/calcium-verla/detail/calcium-verla-vital",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Calcium Verla D direkt",
+    "ean": null,
+    "pzn": "14287844",
+    "category": "Mineralstoffe",
+    "doseForm": "Direkt-Granulat (Stick)",
+    "keyIngredients": [
+      {
+        "name": "Calcium",
+        "amount": 400,
+        "unit": "mg pro Stick"
+      },
+      {
+        "name": "Vitamin D3",
+        "amount": 10,
+        "unit": "µg (400 I.E.) pro Stick"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/calcium-verla/detail/calcium-verla-d-direkt",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Eisen Verla plus direkt",
+    "ean": null,
+    "pzn": "11125058",
+    "category": "Mineralstoffe",
+    "doseForm": "Direkt-Granulat (Stick)",
+    "keyIngredients": [
+      {
+        "name": "Eisen (als Eisenfumarat)",
+        "amount": 10,
+        "unit": "mg pro Stick"
+      },
+      {
+        "name": "Folsäure",
+        "amount": 300,
+        "unit": "µg pro Stick"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": 3,
+        "unit": "µg pro Stick"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": 80,
+        "unit": "mg pro Stick"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/eisen-verla/detail/eisen-verla-plus-direkt",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Kalium Verla purKaps",
+    "ean": null,
+    "pzn": "15236257",
+    "category": "Mineralstoffe",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      {
+        "name": "Kalium (als Kaliumcitrat)",
+        "amount": 260,
+        "unit": "mg pro Kapsel"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/kalium-verla/detail/kalium-verla-purkaps",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Vitaverlan",
+    "ean": null,
+    "pzn": null,
+    "category": "Vitamine",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/nahrungsergaenzungsmittel/vitaverlan",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla N Konzentrat",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Konzentrat",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/magnesium-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesium Verla Brausetabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Brausetabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/magnesium-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesiocard 5 mmol",
+    "ean": null,
+    "pzn": "01667858",
+    "category": "Mineralstoffe",
+    "doseForm": "Pulver zur Herstellung einer Lösung zum Einnehmen (Beutel)",
+    "keyIngredients": [
+      {
+        "name": "Magnesium (als Magnesiumaspartat-hydrochlorid-Trihydrat)",
+        "amount": 121.5,
+        "unit": "mg (5 mmol) pro Beutel"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/magnesiocard/produkt/magnesiocard-5-mmol",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesiocard forte 10 mmol",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Pulver zur Herstellung einer Lösung zum Einnehmen (Beutel)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/magnesiocard",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Magnesiocard retard 15 mmol",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Retardtabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/magnesiocard",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Zink Verla 10 mg",
+    "ean": null,
+    "pzn": "08912172",
+    "category": "Mineralstoffe",
+    "doseForm": "Filmtabletten",
+    "keyIngredients": [
+      {
+        "name": "Zink (als Zink-D-gluconat)",
+        "amount": 10,
+        "unit": "mg pro Filmtablette"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/zink-verla/detail/zink-verla-10-mg",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Zinkbrause Verla 25 mg",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Brausetabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/zink-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Calcium Verla 600 mg",
+    "ean": null,
+    "pzn": "01397838",
+    "category": "Mineralstoffe",
+    "doseForm": "Filmtabletten",
+    "keyIngredients": [
+      {
+        "name": "Calcium (als Calciumcarbonat)",
+        "amount": 600,
+        "unit": "mg pro Filmtablette"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/calcium-verla/detail/calcium-verla-600-mg",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Calcium Verla D 400",
+    "ean": null,
+    "pzn": null,
+    "category": "Mineralstoffe",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/calcium-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Eisen Verla 35 mg",
+    "ean": null,
+    "pzn": "11163863",
+    "category": "Mineralstoffe",
+    "doseForm": "Überzogene Tabletten",
+    "keyIngredients": [
+      {
+        "name": "Eisen (Fe2+, als Eisen(II)-gluconat)",
+        "amount": 35,
+        "unit": "mg pro überzogene Tablette"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/eisen-verla/detail/eisen-verla-35-mg",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Folverlan 0,4 mg",
+    "ean": null,
+    "pzn": "01032930",
+    "category": "Vitamine",
+    "doseForm": "Tabletten",
+    "keyIngredients": [
+      {
+        "name": "Folsäure (als Folsäure-Hydrat)",
+        "amount": 0.4,
+        "unit": "mg pro Tablette"
+      }
+    ],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/folverlan/detail/folverlan-04-mg",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Folverlan 5 mg",
+    "ean": null,
+    "pzn": null,
+    "category": "Vitamine",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/folverlan",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Gastrovegetalin",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung",
+    "doseForm": "Lösung",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/gastrovegetalin",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Glutamin Verla",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung",
+    "doseForm": "Granulat",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/glutamin-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Verla",
+    "brandOwner": "Verla-Pharm Arzneimittel GmbH & Co. KG, Hauptstraße 98, 82327 Tutzing",
+    "name": "Thymiverlan",
+    "ean": null,
+    "pzn": null,
+    "category": "Immunsystem",
+    "doseForm": "Lösung",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://verla.de/produkte/arzneimittel/thymiverlan-verla",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Infludoron Streukügelchen",
+    "ean": null,
+    "pzn": null,
+    "category": "Erkältung/Immunsystem",
+    "doseForm": "Streukügelchen (Globuli)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/infludoron-streukuegelchen-gx0010?variant=00537100",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Infludo Mischung",
+    "ean": null,
+    "pzn": null,
+    "category": "Erkältung/Immunsystem",
+    "doseForm": "Tropfen (Mischung)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/infludo-mischung-gx0011?variant=00594100",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Calmedoron Streukügelchen",
+    "ean": null,
+    "pzn": null,
+    "category": "Nerven & Schlaf",
+    "doseForm": "Streukügelchen (Globuli)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/calmedoron-streukuegelchen-gx0019?variant=00536700",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Calmedoron Mischung",
+    "ean": null,
+    "pzn": null,
+    "category": "Nerven & Schlaf",
+    "doseForm": "Tropfen (Mischung)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/calmedoron-mischung-gx0047?variant=00389500",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Hepatodoron Tabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung/Leber",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/hepatodoron-tabletten-gx0036?variant=00326500",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Neurodoron Tabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Nerven & Schlaf",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/neurodoron-tabletten-gx0020?variant=00620300",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Digestodoron Tabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/digestodoron-tabletten-gx0041",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Digestodoron Dilution",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung",
+    "doseForm": "Tropfen (Dilution)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/digestodoron-dilution-gx0040",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Nausyn Tabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Reisekrankheit",
+    "doseForm": "Tabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/nausyn-tabletten-gx0035",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Pyrit / Zinnober Tabletten Weleda",
+    "ean": null,
+    "pzn": null,
+    "category": "Atemwege",
+    "doseForm": "Lutschtabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/pyrit---zinnober-tabletten-weleda-gx800",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Birkenkohle comp. Kapseln",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung",
+    "doseForm": "Kapseln",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/birkenkohle-comp.-kapseln-gx0039",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Anis-Pyrit Tabletten",
+    "ean": null,
+    "pzn": null,
+    "category": "Atemwege",
+    "doseForm": "Lutschtabletten",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/anis-pyrit-tabletten-gx802",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Amara-Tropfen",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung",
+    "doseForm": "Tropfen",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/amara-tropfen-g00322400?variant=00322400",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Weleda Hustenelixier",
+    "ean": null,
+    "pzn": null,
+    "category": "Atemwege/Husten",
+    "doseForm": "Elixier (Sirup)",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/weleda-hustenelixier-gx0012?variant=00656200",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Meine Bakterienkulturen",
+    "ean": null,
+    "pzn": null,
+    "category": "Verdauung/Mikrobiom",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      {
+        "name": "Probiotische Bakterienkulturen (12 Stämme, Lactobacillus/Bifidobacterium)",
+        "amount": 10,
+        "unit": "Mrd. KBE pro Tagesdosis (2 Kapseln)"
+      },
+      {
+        "name": "Inulin (aus Chicoreewurzel)",
+        "amount": 400,
+        "unit": "mg pro Tagesdosis (2 Kapseln)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/meine-bakterienkulturen-g006290",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Meine Nacht",
+    "ean": null,
+    "pzn": null,
+    "category": "Schlaf",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      {
+        "name": "Vitamin B12",
+        "amount": 2.5,
+        "unit": "µg pro Tagesdosis (2 Kapseln)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/meine-nacht-g006288",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "Weleda",
+    "brandOwner": "Weleda AG, Möhlerstraße 3-5, 73525 Schwäbisch Gmünd",
+    "name": "Meine Haare, Wimpern & Nägel",
+    "ean": null,
+    "pzn": null,
+    "category": "Haare, Haut & Nägel",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      {
+        "name": "Biotin",
+        "amount": 50,
+        "unit": "µg pro Tagesdosis (2 Kapseln)"
+      },
+      {
+        "name": "Selen",
+        "amount": 55,
+        "unit": "µg pro Tagesdosis (2 Kapseln)"
+      },
+      {
+        "name": "Silicium",
+        "amount": 71,
+        "unit": "mg pro Tagesdosis (2 Kapseln)"
+      }
+    ],
+    "off": false,
+    "source": "https://www.weleda.de/produkt/meine-haare-wimpern--naegel-g006289",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Agropyron Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Erkältung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/wala-agropyron-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Apis Belladonna Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Hals & Mund-Rachen-Raum",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/wala-apis-belladonna-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Archangelica comp., Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Atemwege/Husten",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/archangelica-comp-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Aurum/Apis regina comp., Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Nerven & Stimmung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/aurum-apis-regina-comp",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Bronchi Plantago Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Atemwege/Husten",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/bronchi-plantago-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Calcium Quercus Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Sonstiges",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/calcium-quercus-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Cantharis Blasen Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Blase & Harnwege",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/cantharis-blasen-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Chamomilla e radice D6, Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Baby & Zahnung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/chamomilla-e-radice-d6-globuli-velati-baby",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Gelsemium comp., Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Erkältung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/gelsemium-comp-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Gentiana Magen Globuli velati",
+    "ean": null,
+    "pzn": "00081441",
+    "category": "Verdauung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/gentiana-magen-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Levico comp., Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Erschöpfung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/levico-comp-globuli-velati-erschoepfung",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Meteoreisen Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Erkältung/Erschöpfung",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/meteoreisen-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Passiflora comp., Globuli velati",
+    "ean": null,
+    "pzn": null,
+    "category": "Nerven & Schlaf",
+    "doseForm": "Globuli velati",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/passiflora-comp-globuli-velati",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Plantago Hustensaft",
+    "ean": null,
+    "pzn": "01448435",
+    "category": "Atemwege/Husten",
+    "doseForm": "Sirup",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/wala-plantago-hustensaft",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
+  },
+  {
+    "brand": "WALA",
+    "brandOwner": "WALA Heilmittel GmbH, Dorfstraße 1, 73087 Bad Boll",
+    "name": "Akne-Kapseln",
+    "ean": null,
+    "pzn": "01399961",
+    "category": "Haut",
+    "doseForm": "Kapseln",
+    "keyIngredients": [],
+    "off": false,
+    "source": "https://www.walaarzneimittel.de/arzneimittel/akne-kapseln",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "arznei"
   }
 ]
