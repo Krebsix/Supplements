@@ -98,6 +98,14 @@ Gummi-Marken. Schema neu: optionales "doseForm"-Feld. Gummi-Fallstrick:
 Etiketten geben oft "pro 2 Gummis" an — Mengen nur bei belegter
 Tagesdosis uebernehmen.
 
+## Ausbau Pruef-Schleuse: schluessellose Scans (Backlog)
+Produkte ohne EAN/PZN (Kleinsthersteller, Eigenimporte) funktionieren
+fuer die Nutzerin voll lokal, erreichen die Schleuse aber nicht (PK ist
+der Barcode). Ausbau: product_cache auf UUID-PK + nullable barcode,
+schluessellose verified-Eintraege dienen der redaktionellen
+KATALOG-Aufnahme (Namenssuche), nie der Barcode-Aufloesung. Kein Name
+als Produktschluessel (Ontologie: Produkt ≠ Name, Varianten kollidieren).
+
 ## Naechstes Arbeitspaket: Lebensphasen-Hinweise fuer die Kraeuter
 Befund (2026-08-10, Nadines Stillzeit-Frage): lifeStageAdvisories.js
 deckt erst 7 Substanzen aktiv ab; die 27 Kraeuter tragen ihre
