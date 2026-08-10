@@ -11,6 +11,7 @@ import { matchIngredient } from '../../../SubstanceMatcher';
 import { buildComplaintView, findComplaints } from '../../../ComplaintSearch';
 import ComplaintCard from '../../../components/ComplaintCard';
 import { substances } from '../../../data/substances';
+import { listCatalogBrandSections } from '../../../SeedCatalog';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
@@ -66,6 +67,19 @@ export default function SearchScreen() {
     return [...counts.entries()]
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => a.name.localeCompare(b.name, 'de'));
+  }, []);
+
+  // Marken-Register: Kennzahlen fuer die Einstiegszeile. Zeigt, wie viele
+  // Marken und Produkte der kuratierte Katalog bereits kennt.
+  const brandStats = useMemo(() => {
+    const sections = listCatalogBrandSections();
+    let brands = 0;
+    let products = 0;
+    for (const section of sections) {
+      brands += section.brands.length;
+      for (const entry of section.brands) products += entry.productCount;
+    }
+    return { brands, products };
   }, []);
 
   const categoryResults = useMemo(() => {
@@ -169,6 +183,28 @@ export default function SearchScreen() {
               </TouchableOpacity>
             ))}
           </View>
+
+          {/* Einstieg ins Marken-Register: welche Marken der Katalog
+              bereits kennt, als eigene Verzeichnis-Seite. */}
+          <TouchableOpacity
+            style={styles.brandsLink}
+            onPress={() => router.push('/brands')}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+          >
+            <View style={styles.brandsLinkTextWrap}>
+              <Text style={styles.registerName}>
+                {t('search.brandsLinkTitle')}
+              </Text>
+              <Text style={styles.entrySummary}>
+                {t('search.brandsLinkText', {
+                  brands: brandStats.brands,
+                  products: brandStats.products,
+                })}
+              </Text>
+            </View>
+            <Feather name="chevron-right" size={16} color={colors.inkFaint} />
+          </TouchableOpacity>
 
           <View style={styles.infoBox}>
             <Text style={styles.infoTitle}>
@@ -383,6 +419,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: space.sm,
+  },
+  brandsLink: {
+    ...surfaces.card,
+    paddingVertical: space.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: space.lg,
+  },
+  brandsLinkTextWrap: {
+    flex: 1,
+    marginRight: space.sm,
   },
   entryTextWrap: {
     flex: 1,

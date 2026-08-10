@@ -10,6 +10,7 @@ export default function DiscoverLayout() {
   return (
     <Stack screenOptions={stackScreenOptions(t)} initialRouteName="search">
       <Stack.Screen name="search" options={{ title: t('nav.search') }} />
+      <Stack.Screen name="brands" options={{ title: t('nav.brands') }} />
     </Stack>
   );
 }

@@ -61,6 +61,86 @@ export function searchSeedCatalog(query, limit = 5) {
   }));
 }
 
+// Kanal-Reihenfolge des Marken-Registers. 'extra' buendelt Marken, deren
+// Produkte komplett zur Extrasparte gehoeren (Homoeopathie, Bachblueten):
+// sie stehen sichtbar getrennt von den Naehrstoff-Marken.
+const BRAND_SECTION_ORDER = [
+  'drogerie',
+  'apotheke',
+  'discounter',
+  'online',
+  'sport',
+  'direct',
+  'extra',
+];
+const EXTRA_CLASSES = new Set(['homoeopathikum', 'bachblueten']);
+
+/**
+ * listCatalogBrandSections()
+ * Marken-Register aus dem gebuendelten Katalog: je Vertriebskanal die
+ * Marken alphabetisch, mit Produktzahl und Markeninhaber. Bewusst ohne
+ * jede Wertung — sortiert wird nach Alphabet, nie nach Rang.
+ */
+export function listCatalogBrandSections() {
+  const brands = new Map();
+  for (const entry of seedProducts) {
+    const name = clean(entry.brand);
+    if (!name) continue;
+    let bucket = brands.get(name);
+    if (!bucket) {
+      bucket = {
+        brand: name,
+        brandOwner: null,
+        productCount: 0,
+        channels: new Set(),
+        extraOnly: true,
+      };
+      brands.set(name, bucket);
+    }
+    bucket.productCount += 1;
+    if (clean(entry.channel)) bucket.channels.add(clean(entry.channel));
+    if (!bucket.brandOwner && clean(entry.brandOwner)) {
+      bucket.brandOwner = clean(entry.brandOwner);
+    }
+    if (!EXTRA_CLASSES.has(clean(entry.productClass))) {
+      bucket.extraOnly = false;
+    }
+  }
+
+  const sections = new Map();
+  for (const bucket of brands.values()) {
+    const sectionId = bucket.extraOnly
+      ? 'extra'
+      : BRAND_SECTION_ORDER.find((channel) => bucket.channels.has(channel)) ??
+        'online';
+    if (!sections.has(sectionId)) sections.set(sectionId, []);
+    sections.get(sectionId).push({
+      brand: bucket.brand,
+      brandOwner: bucket.brandOwner,
+      productCount: bucket.productCount,
+    });
+  }
+
+  return BRAND_SECTION_ORDER.filter((id) => sections.has(id)).map((id) => ({
+    id,
+    brands: sections
+      .get(id)
+      .sort((a, b) => a.brand.localeCompare(b.brand, 'de')),
+  }));
+}
+
+/**
+ * productsForBrand(brand)
+ * Alle Katalog-Eintraege einer Marke, alphabetisch nach Produktname.
+ */
+export function productsForBrand(brand) {
+  const needle = clean(brand);
+  if (!needle) return [];
+  return seedProducts
+    .filter((entry) => clean(entry.brand) === needle)
+    .sort((a, b) => clean(a.name).localeCompare(clean(b.name), 'de'));
+}
+
 /**
  * seedEntryToScanDraft(entry)
  * Katalog-Eintrag → Scan-Ergebnis im App-Format (wie der OFF-Pfad),

@@ -22,6 +22,7 @@ export default {
   'nav.settings': 'Einstellungen',
   'nav.history': 'Verlauf',
   'nav.search': 'Suche',
+  'nav.brands': 'Marken',
   'nav.notifications': 'Erinnerungen',
   'nav.privacy': 'Datenschutz',
   'nav.imprint': 'Impressum',

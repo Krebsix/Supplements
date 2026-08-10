@@ -23,4 +23,27 @@ export default {
   'search.hits': '{count} hits',
   'search.disclaimer':
     'The information is for orientation only and does not replace medical or pharmaceutical advice.',
+
+  'search.brandsLinkTitle': 'Brand register',
+  'search.brandsLinkText': '{brands} brands with {products} products in the curated catalogue',
+
+  'brands.kicker': 'Catalogue',
+  'brands.title': 'Brands in the system',
+  'brands.subtitle':
+    'All brands whose products are already stored in the curated catalogue, grouped by sales channel. Sorting is alphabetical: inclusion is not an assessment.',
+  'brands.registerAll': 'All brands',
+  'brands.section.drogerie': 'Drugstore',
+  'brands.section.apotheke': 'Pharmacy',
+  'brands.section.discounter': 'Discounter',
+  'brands.section.online': 'Online and direct order',
+  'brands.section.sport': 'Sports',
+  'brands.section.direct': 'Direct sales',
+  'brands.section.extra': 'Homeopathy and Bach flowers',
+  'brands.count_one': '1 product',
+  'brands.count_other': '{count} products',
+  'brands.owner': 'Brand owner: {name}',
+  'brands.productHint':
+    'Tapping applies the catalogue data as a draft. Please compare with the label before saving.',
+  'brands.disclaimer':
+    'The register shows which brands are stored in the catalogue. Inclusion of a brand is neither an endorsement nor an assessment; the order follows the alphabet.',
 };
