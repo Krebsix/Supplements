@@ -17,8 +17,8 @@ Altbestand Wellen 1-7 in 10 Chargen a ~30 Produkte
 (verify-legacy-01..10) rollierend danach.
 
 ### VOLLPRUEFUNG ABGESCHLOSSEN 2026-08-10 (alle 411 Produkte)
-Bilanz: 411/411 einzeln gegen die Quelle geprueft, ~128 Korrekturen,
-12 als unverifiable markiert (siehe Liste unten). Fehlerklassen:
+Bilanz: 411/411 einzeln gegen die Quelle geprueft, ~129 Korrekturen,
+15 als unverifiable markiert (siehe Liste unten). Fehlerklassen:
 unbelegte/falsche Schluessel (EAN/PZN entfernt oder belegt nachgetragen),
 Rechtsklassen (Medizinprodukt/FSMP/Arznei statt NEM), Bezugsgroessen
 (pro Kapsel vs. Tagesdosis), Verbindungs- vs. Elementmenge, praezise
