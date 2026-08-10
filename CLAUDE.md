@@ -274,8 +274,10 @@ zurueck. Wer ein neues Nutzerdaten-Feld ergaenzt, ergaenzt es in
   Bei einem Miss fragt der Scanner den geteilten Produkt-Cache
   (`lookupProductCache` in ScanAnalyzer.js → Tabelle `product_cache`,
   Zugriff nur ueber die Edge Function). Erfolgreiche Foto-Analysen mit
-  bekanntem Barcode fuellen den Cache serverseitig: reine Produktdaten,
-  keine Fotos, keine Nutzerdaten. Wer diesen Datenfluss aendert, aendert
+  bekanntem Barcode landen serverseitig in der PRUEF-SCHLEUSE
+  (verified=false) und werden erst nach redaktioneller Freigabe an
+  andere ausgeliefert; kuratierte Seed-Eintraege sind verified=true.
+  Reine Produktdaten, keine Fotos, keine Nutzerdaten. Wer diesen Datenfluss aendert, aendert
   data/legalContent.js mit.
 - Keine gesundheitlichen Empfehlungen im Ausgabetext — die App ordnet Zeitpunkte und
   Konflikte, sie beraet nicht. Konkret: **Referenzwerte anzeigen statt Dosierungen

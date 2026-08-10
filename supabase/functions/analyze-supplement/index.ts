@@ -250,11 +250,15 @@ Deno.serve(async (req) => {
   // Reiner Cache-Lookup: barcode ohne Bilder. Liefert fruehere
   // erfolgreiche Analysen zum selben Code, ohne Claude-Aufruf.
   if (barcode && images.length === 0) {
+    // Nur GEPRUEFTE Eintraege werden an andere ausgeliefert
+    // (Pruef-Schleuse, 2026-08-10): ungepruefte Nutzer-Scans bleiben
+    // unsichtbar, bis die Redaktion sie freigibt.
     const { data, error } = await supabaseAdmin
       .from("product_cache")
       .select("result, model, hit_count")
       .eq("barcode", barcode)
       .eq("language", language)
+      .eq("verified", true)
       .maybeSingle();
 
     if (error) {
@@ -415,20 +419,28 @@ Deno.serve(async (req) => {
 
     const result = JSON.parse(textBlock.text);
 
-    // Erfolgreiche Analyse mit bekanntem Barcode in den geteilten
-    // Produkt-Cache legen: reine Produktdaten, keine Fotos, keine
-    // Nutzerdaten. Best effort — ein Cache-Fehler kostet kein Ergebnis.
+    // Erfolgreiche Analyse mit bekanntem Barcode in die PRUEF-SCHLEUSE
+    // legen (verified=false): reine Produktdaten, keine Fotos, keine
+    // Nutzerdaten. Erst nach redaktioneller Pruefung wird der Eintrag
+    // fuer andere sichtbar; bestehende (insbesondere kuratierte)
+    // Eintraege werden NIE ueberschrieben. Best effort — ein
+    // Cache-Fehler kostet kein Ergebnis.
     if (barcode) {
       const { error: cacheError } = await supabaseAdmin
         .from("product_cache")
-        .upsert({
+        .insert({
           barcode,
           language,
           result,
           model: response.model,
-          updated_at: new Date().toISOString(),
-        });
-      if (cacheError) console.error("product_cache upsert failed:", cacheError);
+          verified: false,
+        })
+        .select()
+        .maybeSingle();
+      if (cacheError && cacheError.code !== "23505") {
+        // 23505 = Eintrag existiert bereits — gewolltes Verhalten
+        console.error("product_cache insert failed:", cacheError);
+      }
     }
 
     return jsonResponse(200, {
