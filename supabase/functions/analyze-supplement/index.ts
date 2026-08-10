@@ -432,18 +432,38 @@ Deno.serve(async (req) => {
     // mindestens ein Buchstabe, keine Sonder-Tokens, keine reine
     // Interpunktion. Lieber ein echtes Siegel verlieren als Muell in die
     // Pruef-Schleuse und die App zu geben.
+    //
+    // Nachtrag 2026-08-10: Die reine Unicode-Range-Sperre liess einzelne
+    // durchgesickerte Steuer-Saetze durch, wenn sie zufaellig nur aus
+    // gewoehnlichen lateinischen Buchstaben bestanden (beobachtetes
+    // Beispiel: "barcode" und "Continue properly." im selben Datensatz
+    // wie die Ġ-Tokens). Echte Pruefsiegel sind Nominalphrasen, keine
+    // vollstaendigen Saetze — deshalb zusaetzlich alles verwerfen, das
+    // wie ein Satz endet (Punkt/Ausrufe-/Fragezeichen) oder das englische
+    // Fuellwort-Vokabular typischer Modell-Leaks trifft. Bleibt weiterhin
+    // eine Heuristik, kein Beweis — siehe Kommentar oben.
+    // WICHTIG: Die Satzende- und Stoppwort-Regeln gelten NUR fuer
+    // certifications. Warnhinweise und Unsicherheiten sind ganze Saetze
+    // (enden mit Punkt) und nennen legitim Woerter wie "Barcode" —
+    // dort filtert nur die Basis-Artefaktregel.
+    const LEAKED_INSTRUCTION_WORDS =
+      /\b(continue|properly|digit correction)\b/i;
+    const isCleanText = (item: unknown): item is string =>
+      typeof item === "string" &&
+      item.trim().length >= 3 &&
+      item.length <= 200 &&
+      /\p{L}/u.test(item) &&
+      !/[Ā-ſ{}\[\]\\]/u.test(item);
     const cleanStringList = (value: unknown): string[] =>
-      Array.isArray(value)
-        ? value.filter(
-            (item): item is string =>
-              typeof item === "string" &&
-              item.trim().length >= 3 &&
-              item.length <= 200 &&
-              /\p{L}/u.test(item) &&
-              !/[Ā-ſ{}\[\]\\]/u.test(item)
-          )
-        : [];
-    result.certifications = cleanStringList(result.certifications);
+      Array.isArray(value) ? value.filter(isCleanText) : [];
+    const cleanCertificationList = (value: unknown): string[] =>
+      cleanStringList(value).filter(
+        (item) =>
+          !/[.!?]\s*$/.test(item.trim()) &&
+          !/^barcode$/i.test(item.trim()) &&
+          !LEAKED_INSTRUCTION_WORDS.test(item)
+      );
+    result.certifications = cleanCertificationList(result.certifications);
     result.warnings = cleanStringList(result.warnings);
     result.uncertainties = cleanStringList(result.uncertainties);
 
