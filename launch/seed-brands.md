@@ -16,6 +16,19 @@ Katalog UND product_cache. Tranche 1 (Wellen 8-10, 129 Produkte) laeuft;
 Altbestand Wellen 1-7 in 10 Chargen a ~30 Produkte
 (verify-legacy-01..10) rollierend danach.
 
+### Offene Pruefpunkte (nicht klaerbar ohne Etikett/Drittzugang)
+- MyProtein Vitamin D3 Softgels: Herstellerseite widerspricht sich
+  (Tabelle 63 µg, Text 25 µg) — Menge geleert, per Etikett klaeren.
+- Mivolis Vitamin C 1000 + D3 + Selen Depot: OFF-Eintrag zu duenn (35%),
+  Namenszusaetze unbelegt — per Etikett-Scan klaeren.
+- Alpinamed B12 Trio (Cloudflare-Block), Biolectra Magnesium 400 Vital
+  (PDF tot), altapharma Kinder-Gummies (SPA): Quellen technisch nicht
+  pruefbar, EAN der altapharma-Gummies geleert.
+- brandOwner mit Restunsicherheit: Multinorm (Aldi vs. eigene GmbH),
+  NOW Foods (Site blockt) — Felder unveraendert, markiert.
+- Body Attack Whey Vanilla: NEM-Kennzeichnung nicht woertlich belegbar
+  (Klasse vorerst belassen, manuell pruefen).
+
 ## Datenmodell-Grundsatz
 **Marke ≠ Markeninhaber ≠ Lohnhersteller.** Im Seed werden Marke und
 Markeninhaber getrennt erfasst; der tatsaechliche Produktionsbetrieb wird

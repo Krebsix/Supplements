@@ -945,7 +945,7 @@
   },
   {
     "brand": "More Nutrition",
-    "brandOwner": "The Quality Group GmbH",
+    "brandOwner": "Quality First GmbH",
     "name": "Essentials O3-D3-K2",
     "ean": null,
     "category": "Omega-3",
@@ -5403,7 +5403,6 @@
     "keyIngredients": [
       {
         "name": "Kreatin",
-        "form": "Monohydrat",
         "amount": "3",
         "unit": "g"
       }
@@ -5424,8 +5423,8 @@
       {
         "name": "Vitamin D3",
         "form": "Cholecalciferol",
-        "amount": "25",
-        "unit": "µg"
+        "amount": "",
+        "unit": ""
       }
     ],
     "off": false,
