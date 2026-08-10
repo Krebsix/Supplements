@@ -25,6 +25,9 @@ export default {
   'profile.conditions.title': 'Erkrankungen',
   'profile.conditions.hint':
     'Wähle zutreffende Bereiche. Die App zeigt dann, zu welchen Stoffen in deinem Bestand ein belegter Hinweis hinterlegt ist. Das ist keine Bewertung deiner Situation und ersetzt keine ärztliche Beratung.',
+  'profile.bodyData.title': 'Warum ohne Gewicht und Größe?',
+  'profile.bodyData.text':
+    'Die wissenschaftlichen Referenzwerte und Obergrenzen für Nährstoffe sind je Alters- und Lebensphasen-Gruppe festgelegt, nicht je Körpergewicht oder Körpergröße. Angaben dazu würden keine Einordnung in dieser App genauer machen. Deshalb fragen wir sie nicht ab: Diese App speichert nur Daten, die eine belegte Funktion haben.',
 
   'profile.findings.title': 'Hinweise aus den Quellen',
   'profile.findings.empty':

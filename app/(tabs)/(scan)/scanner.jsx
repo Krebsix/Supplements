@@ -557,81 +557,6 @@ export default function ScannerScreen() {
         </View>
       ) : null}
 
-      <View style={styles.barcodeCard}>
-        <Text style={styles.barcodeKicker}>{t('scanner.nameSearch.label')}</Text>
-        <Text style={styles.barcodeText}>{t('scanner.nameSearch.text')}</Text>
-
-        <TextInput
-          value={nameQuery}
-          onChangeText={setNameQuery}
-          placeholder={t('scanner.nameSearch.placeholder')}
-          placeholderTextColor={colors.inkFaint}
-          style={styles.nameSearchInput}
-          autoCorrect={false}
-          returnKeyType="search"
-          onSubmitEditing={handleNameSearch}
-          accessibilityLabel={t('scanner.nameSearch.label')}
-        />
-
-        <TouchableOpacity
-          style={[
-            styles.barcodeButton,
-            (isSearchingName || nameQuery.trim().length < 3) &&
-              styles.primaryButtonDisabled,
-          ]}
-          onPress={handleNameSearch}
-          disabled={isSearchingName || nameQuery.trim().length < 3}
-          activeOpacity={0.85}
-          accessibilityRole="button"
-        >
-          <Text style={styles.barcodeButtonText}>
-            {isSearchingName
-              ? t('scanner.nameSearch.searching')
-              : t('scanner.nameSearch.button')}
-          </Text>
-        </TouchableOpacity>
-
-        {nameSearchDone && nameResults.length === 0 ? (
-          <Text style={styles.nameSearchEmpty}>
-            {t('scanner.nameSearch.empty')}
-          </Text>
-        ) : null}
-
-        {nameResults.map((candidate, index) => (
-          <TouchableOpacity
-            key={candidate.code || `${candidate.productName}-${index}`}
-            style={styles.nameResultRow}
-            onPress={() => handlePickNameResult(candidate)}
-            activeOpacity={0.75}
-            accessibilityRole="button"
-          >
-            {candidate.imageUrl ? (
-              <Image
-                source={{ uri: candidate.imageUrl }}
-                style={styles.nameResultImage}
-                resizeMode="contain"
-              />
-            ) : (
-              <View style={[styles.nameResultImage, styles.nameResultImageEmpty]}>
-                <Text style={styles.nameResultImageLetter}>
-                  {(candidate.brand || candidate.productName || '?').charAt(0)}
-                </Text>
-              </View>
-            )}
-            <View style={styles.nameResultTextWrap}>
-              <Text style={styles.nameResultName}>{candidate.productName}</Text>
-              {candidate.brand || candidate.origin === 'seed' ? (
-                <Text style={styles.nameResultBrand}>
-                  {[candidate.brand, candidate.origin === 'seed' ? t('scanner.nameSearch.seedOrigin') : null]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </Text>
-              ) : null}
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <View style={styles.captureCard}>
         <View style={styles.captureHeader}>
           <View style={styles.stepNumberBadge}>
@@ -982,6 +907,84 @@ export default function ScannerScreen() {
       >
         <Text style={styles.secondaryButtonText}>{t('scanner.backHome')}</Text>
       </TouchableOpacity>
+
+      {/* Namenssuche als Rueckfallweg BEWUSST unter der Kamera:
+          Auf dem Handy muss die Kamera ohne Scrollen sichtbar sein
+          (Nadines Geraetetest 2026-08-10). */}
+      <View style={styles.barcodeCard}>
+        <Text style={styles.barcodeKicker}>{t('scanner.nameSearch.label')}</Text>
+        <Text style={styles.barcodeText}>{t('scanner.nameSearch.text')}</Text>
+
+        <TextInput
+          value={nameQuery}
+          onChangeText={setNameQuery}
+          placeholder={t('scanner.nameSearch.placeholder')}
+          placeholderTextColor={colors.inkFaint}
+          style={styles.nameSearchInput}
+          autoCorrect={false}
+          returnKeyType="search"
+          onSubmitEditing={handleNameSearch}
+          accessibilityLabel={t('scanner.nameSearch.label')}
+        />
+
+        <TouchableOpacity
+          style={[
+            styles.barcodeButton,
+            (isSearchingName || nameQuery.trim().length < 3) &&
+              styles.primaryButtonDisabled,
+          ]}
+          onPress={handleNameSearch}
+          disabled={isSearchingName || nameQuery.trim().length < 3}
+          activeOpacity={0.85}
+          accessibilityRole="button"
+        >
+          <Text style={styles.barcodeButtonText}>
+            {isSearchingName
+              ? t('scanner.nameSearch.searching')
+              : t('scanner.nameSearch.button')}
+          </Text>
+        </TouchableOpacity>
+
+        {nameSearchDone && nameResults.length === 0 ? (
+          <Text style={styles.nameSearchEmpty}>
+            {t('scanner.nameSearch.empty')}
+          </Text>
+        ) : null}
+
+        {nameResults.map((candidate, index) => (
+          <TouchableOpacity
+            key={candidate.code || `${candidate.productName}-${index}`}
+            style={styles.nameResultRow}
+            onPress={() => handlePickNameResult(candidate)}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+          >
+            {candidate.imageUrl ? (
+              <Image
+                source={{ uri: candidate.imageUrl }}
+                style={styles.nameResultImage}
+                resizeMode="contain"
+              />
+            ) : (
+              <View style={[styles.nameResultImage, styles.nameResultImageEmpty]}>
+                <Text style={styles.nameResultImageLetter}>
+                  {(candidate.brand || candidate.productName || '?').charAt(0)}
+                </Text>
+              </View>
+            )}
+            <View style={styles.nameResultTextWrap}>
+              <Text style={styles.nameResultName}>{candidate.productName}</Text>
+              {candidate.brand || candidate.origin === 'seed' ? (
+                <Text style={styles.nameResultBrand}>
+                  {[candidate.brand, candidate.origin === 'seed' ? t('scanner.nameSearch.seedOrigin') : null]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </Text>
+              ) : null}
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
 
       <Text style={styles.disclaimer}>
         {analyzerReady

@@ -136,6 +136,28 @@ export default function ProfileScreen() {
         </View>
       </View>
 
+      {/* Transparenz statt Datenfeld: erklaert belegt, warum die App
+          Gewicht und Groesse NICHT erhebt (Referenzwerte sind je
+          Lebensphasen-Gruppe definiert, nicht je Kilogramm). */}
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>{t('profile.bodyData.title')}</Text>
+        <Text style={styles.cardHint}>{t('profile.bodyData.text')}</Text>
+        <TouchableOpacity
+          onPress={() => Linking.openURL('https://www.dge.de/wissenschaft/referenzwerte/')}
+          accessibilityRole="link"
+          activeOpacity={0.7}
+        >
+          <Text style={styles.bodyDataSource}>D-A-CH-Referenzwerte (DGE/ÖGE/SGE)</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => Linking.openURL('https://multimedia.efsa.europa.eu/drvs/index.htm')}
+          accessibilityRole="link"
+          activeOpacity={0.7}
+        >
+          <Text style={styles.bodyDataSource}>EFSA Dietary Reference Values</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.sectionTitle}>{t('profile.findings.title')}</Text>
 
       {findings.length === 0 ? (
@@ -231,6 +253,12 @@ const styles = StyleSheet.create({
   card: { ...surfaces.card, marginBottom: space.xxl - space.sm },
   cardTitle: { ...type.subheading },
   cardHint: { ...type.small, marginTop: space.sm, marginBottom: space.lg },
+  bodyDataSource: {
+    ...type.small,
+    color: colors.accent,
+    marginTop: 2,
+    textDecorationLine: 'underline',
+  },
   chipWrap: { gap: space.sm },
   chip: { ...surfaces.chip, borderRadius: radius.lg, paddingHorizontal: 13, paddingVertical: space.md - 2 },
   chipActive: { ...surfaces.chipActive },

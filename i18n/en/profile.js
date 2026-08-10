@@ -25,6 +25,9 @@ export default {
   'profile.conditions.title': 'Health conditions',
   'profile.conditions.hint':
     'Select what applies. The app then shows which substances in your stack carry a documented note. This is no assessment of your situation and does not replace medical advice.',
+  'profile.bodyData.title': 'Why no weight and height?',
+  'profile.bodyData.text':
+    'The scientific reference values and upper limits for nutrients are defined per age and life-stage group, not per body weight or height. Entering them would not make any assessment in this app more precise. That is why we do not ask for them: this app stores only data with a documented function.',
 
   'profile.findings.title': 'Notes from the sources',
   'profile.findings.empty':
