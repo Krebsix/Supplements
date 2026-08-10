@@ -486,9 +486,9 @@
   },
   {
     "brand": "Magnesium-Diasporal",
-    "brandOwner": "Protina Pharm. GmbH",
+    "brandOwner": "Protina Pharmazeutische GmbH",
     "name": "Magnesium-Diasporal 400 EXTRA direkt",
-    "ean": "4260124360237",
+    "ean": null,
     "category": "Magnesium",
     "keyIngredients": [
       {
@@ -824,7 +824,7 @@
     "source": "https://www.verla.de/produkte/arzneimittel/gastrovegetalin/detail/magnesium-verla-n-dragees",
     "country": "DE",
     "channel": null,
-    "productClass": "nem"
+    "productClass": "arznei"
   },
   {
     "brand": "Vigantol",
@@ -909,21 +909,10 @@
   {
     "brand": "ESN",
     "brandOwner": "The Quality Group GmbH",
-    "name": "Vitamin D3 + K2 (120 Kapseln)",
+    "name": "Vitamin D3K2",
     "ean": "4250519604633",
     "category": "Vitamin D3+K2",
-    "keyIngredients": [
-      {
-        "name": "Vitamin D3",
-        "amount": "140",
-        "unit": "µg"
-      },
-      {
-        "name": "Vitamin K2",
-        "amount": "200",
-        "unit": "µg"
-      }
-    ],
+    "keyIngredients": [],
     "off": true,
     "source": "https://world.openfoodfacts.org/api/v2/product/4250519604633.json",
     "country": "DE",
@@ -933,7 +922,7 @@
   {
     "brand": "ESN",
     "brandOwner": "The Quality Group GmbH",
-    "name": "Isoclear Whey Protein Isolate",
+    "name": "Isoclear - Wild Berry",
     "ean": "4250519666662",
     "category": "Whey/Protein",
     "keyIngredients": [],
@@ -1744,7 +1733,7 @@
   {
     "brand": "Dr. Boehm",
     "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
-    "name": "Dr. Böhm Magnesium nur 1 x täglich",
+    "name": "Dr. Böhm Magnesium nur 1 Dragee täglich",
     "ean": null,
     "category": "Magnesium",
     "keyIngredients": [
@@ -1811,7 +1800,7 @@
   {
     "brand": "Dr. Boehm",
     "brandOwner": "Apomedica Pharmazeutische Produkte GmbH",
-    "name": "Dr. Böhm Zink plus Dragees",
+    "name": "Dr. Böhm Zink plus Dragees zur Unterstützung des Immunsystems",
     "ean": null,
     "category": "Zink",
     "keyIngredients": [
@@ -2889,22 +2878,22 @@
       {
         "name": "Omega-3-Fettsäuren gesamt",
         "amount": "1260",
-        "unit": "mg pro Tagesportion (3 Kapseln)"
+        "unit": "mg pro Tagesration (3 Kapseln)"
       },
       {
         "name": "EPA",
         "amount": "630",
-        "unit": "mg pro Tagesportion (3 Kapseln)"
+        "unit": "mg pro Tagesration (3 Kapseln)"
       },
       {
         "name": "DHA",
         "amount": "420",
-        "unit": "mg pro Tagesportion (3 Kapseln)"
+        "unit": "mg pro Tagesration (3 Kapseln)"
       },
       {
         "name": "Beta-Glucan aus Gerste",
         "amount": "113",
-        "unit": "mg pro Tagesportion (3 Kapseln)"
+        "unit": "mg pro Tagesration (3 Kapseln)"
       }
     ],
     "off": false,
@@ -2923,52 +2912,52 @@
       {
         "name": "Vitamin D",
         "amount": "10",
-        "unit": "µg pro Tagesportion (5 ml)"
+        "unit": "µg pro Tagesration (5 ml)"
       },
       {
         "name": "Vitamin E",
         "amount": "12",
-        "unit": "mg pro Tagesportion (5 ml)"
+        "unit": "mg pro Tagesration (5 ml)"
       },
       {
         "name": "Thiamin",
         "amount": "1,1",
-        "unit": "mg pro Tagesportion (5 ml)"
+        "unit": "mg pro Tagesration (5 ml)"
       },
       {
         "name": "Riboflavin",
         "amount": "1,4",
-        "unit": "mg pro Tagesportion (5 ml)"
+        "unit": "mg pro Tagesration (5 ml)"
       },
       {
         "name": "Vitamin B6",
         "amount": "1,4",
-        "unit": "mg pro Tagesportion (5 ml)"
+        "unit": "mg pro Tagesration (5 ml)"
       },
       {
         "name": "Vitamin B12",
         "amount": "2,5",
-        "unit": "µg pro Tagesportion (5 ml)"
+        "unit": "µg pro Tagesration (5 ml)"
       },
       {
         "name": "Niacin",
         "amount": "16",
-        "unit": "mg pro Tagesportion (5 ml)"
+        "unit": "mg pro Tagesration (5 ml)"
       },
       {
         "name": "Folsäure",
         "amount": "200",
-        "unit": "µg pro Tagesportion (5 ml)"
+        "unit": "µg pro Tagesration (5 ml)"
       },
       {
         "name": "Pantothensäure",
         "amount": "6,0",
-        "unit": "mg pro Tagesportion (5 ml)"
+        "unit": "mg pro Tagesration (5 ml)"
       },
       {
         "name": "Biotin",
         "amount": "50",
-        "unit": "µg pro Tagesportion (5 ml)"
+        "unit": "µg pro Tagesration (5 ml)"
       }
     ],
     "off": false,
@@ -3298,7 +3287,7 @@
     "brand": "Lifeplus",
     "brandOwner": "Lifeplus Europe Ltd.",
     "name": "Daily Plus",
-    "ean": "00005530",
+    "ean": null,
     "category": "Multivitamin/Multimineral",
     "keyIngredients": [],
     "off": true,
@@ -3328,8 +3317,13 @@
     "category": "Omega-3",
     "keyIngredients": [
       {
-        "name": "EPA und DHA (Omega-3-Fettsäuren)",
-        "amount": "250",
+        "name": "EPA (Eicosapentaensäure)",
+        "amount": "90",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA (Docosahexaensäure)",
+        "amount": "430",
         "unit": "mg"
       }
     ],
@@ -3347,12 +3341,12 @@
     "category": "Omega-3 (pflanzlich)",
     "keyIngredients": [
       {
-        "name": "EPA und DHA (Omega-3-Fettsäuren)",
-        "amount": "250",
+        "name": "EPA (Eicosapentaensäure)",
+        "amount": "125",
         "unit": "mg"
       },
       {
-        "name": "DHA",
+        "name": "DHA (Docosahexaensäure)",
         "amount": "250",
         "unit": "mg"
       }
@@ -3371,8 +3365,13 @@
     "category": "Omega-3",
     "keyIngredients": [
       {
-        "name": "EPA und DHA (Omega-3-Fettsäuren)",
-        "amount": "250",
+        "name": "EPA (Eicosapentaenoic Acid)",
+        "amount": "420",
+        "unit": "mg"
+      },
+      {
+        "name": "DHA (Docosahexaenoic Acid)",
+        "amount": "300",
         "unit": "mg"
       }
     ],
@@ -3386,7 +3385,7 @@
     "brand": "Lifeplus",
     "brandOwner": "Lifeplus Europe Ltd.",
     "name": "Vitamin-C-Plus",
-    "ean": "00005534",
+    "ean": null,
     "category": "Vitamin C",
     "keyIngredients": [],
     "off": true,
@@ -3418,14 +3417,14 @@
     "brand": "Lifeplus",
     "brandOwner": "Lifeplus Europe Ltd.",
     "name": "Triple Protein Shake: Vanillegeschmack",
-    "ean": "00004136",
+    "ean": null,
     "category": "Proteinpulver",
     "keyIngredients": [],
     "off": true,
     "source": "https://ww1.lifeplus.com/de/de/web-page/products",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Zinzino",
@@ -5150,7 +5149,7 @@
   },
   {
     "brand": "Femibion",
-    "brandOwner": "P&G Health",
+    "brandOwner": "P&G Health Germany GmbH",
     "name": "Femibion 0 BabyPlanung",
     "ean": null,
     "category": "Schwangerschaft/Folat",
@@ -5175,7 +5174,7 @@
   },
   {
     "brand": "Femibion",
-    "brandOwner": "P&G Health",
+    "brandOwner": "P&G Health Germany GmbH",
     "name": "Femibion 1 Frühschwangerschaft",
     "ean": null,
     "category": "Schwangerschaft/Folat",
@@ -5205,21 +5204,15 @@
   },
   {
     "brand": "Femibion",
-    "brandOwner": "P&G Health",
-    "name": "Femibion 1 Frühschwangerschaft Ohne Jod",
+    "brandOwner": "P&G Health Germany GmbH",
+    "name": "Femibion 1 Kinderwunsch + Frühschwangerschaft Ohne Jod",
     "ean": null,
     "category": "Schwangerschaft/Folat",
     "keyIngredients": [
       {
         "name": "Folsäure Plus (Folsäure + L-Methylfolat)",
-        "form": "400 µg Folsäure + 416 µg L-Methylfolat",
         "amount": "800",
         "unit": "µg"
-      },
-      {
-        "name": "Cholin",
-        "amount": "130",
-        "unit": "mg"
       }
     ],
     "off": false,
@@ -5230,7 +5223,7 @@
   },
   {
     "brand": "Femibion",
-    "brandOwner": "P&G Health",
+    "brandOwner": "P&G Health Germany GmbH",
     "name": "Femibion 2 Schwangerschaft",
     "ean": null,
     "category": "Schwangerschaft/Folat",
@@ -5265,7 +5258,7 @@
   },
   {
     "brand": "Femibion",
-    "brandOwner": "P&G Health",
+    "brandOwner": "P&G Health Germany GmbH",
     "name": "Femibion 3 Stillzeit",
     "ean": null,
     "category": "Schwangerschaft/Folat",
@@ -5767,7 +5760,7 @@
     "brand": "Life Extension",
     "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
     "name": "Magnesium Caps",
-    "ean": null,
+    "ean": "737870145912",
     "category": "Magnesium",
     "keyIngredients": [
       {
@@ -5781,13 +5774,13 @@
     "source": "https://www.lifeextension.com/vitamins-supplements/item01459/magnesium-caps",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Life Extension",
     "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
     "name": "BioActive Complete B-Complex",
-    "ean": null,
+    "ean": "737870194569",
     "category": "Vitamin B-Komplex",
     "keyIngredients": [
       {
@@ -5830,13 +5823,13 @@
     "source": "https://www.lifeextension.com/vitamins-supplements/item01945/bioactive-complete-b-complex",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Life Extension",
     "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
-    "name": "Two-Per-Day Multivitamin (Capsules)",
-    "ean": null,
+    "name": "Two-Per-Day Multivitamin",
+    "ean": "737870231417",
     "category": "Multivitamin",
     "keyIngredients": [
       {
@@ -5859,7 +5852,7 @@
       },
       {
         "name": "Selenium",
-        "form": "Sodium selenite, SelenoExcell, Se-Methyl L-Selenocystein",
+        "form": "Sodium selenite, SelenoExcell (high selenium yeast), Se-Methyl L-Selenocystein",
         "amount": "200",
         "unit": "mcg"
       },
@@ -5880,13 +5873,13 @@
     "source": "https://www.lifeextension.com/vitamins-supplements/item02314/two-per-day-capsules",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Life Extension",
     "brandOwner": "Life Extension Foundation Buyers Club, Inc.",
     "name": "Super Omega-3 EPA/DHA Fish Oil, Sesame Lignans & Olive Extract",
-    "ean": null,
+    "ean": "737870198215",
     "category": "Omega-3",
     "keyIngredients": [
       {
@@ -5915,7 +5908,7 @@
     "source": "https://www.lifeextension.com/vitamins-supplements/item01982/super-omega-3-epa-dha-fish-oil-sesame-lignans-olive-extract",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Nordic Naturals",
@@ -7318,7 +7311,7 @@
   },
   {
     "brand": "Femibion",
-    "brandOwner": "WICK Pharma - Zweigniederlassung der Procter & Gamble GmbH",
+    "brandOwner": "P&G Health Germany GmbH",
     "name": "Femibion Für Sie & Ihn",
     "ean": null,
     "pzn": null,
