@@ -8290,21 +8290,6 @@
   {
     "brand": "Bach RESCURA",
     "brandOwner": "Nelsons GmbH",
-    "name": "Bach RESCURA® Night Spray Mit Alkohol",
-    "ean": null,
-    "pzn": null,
-    "category": "Bachblüten",
-    "doseForm": "Spray",
-    "keyIngredients": [],
-    "off": false,
-    "source": "https://www.nelsons.com/de-de/products/bach-rescura-r-night-spray-mit-alkohol-20ml",
-    "country": "DE",
-    "channel": "apotheke",
-    "productClass": "bachblueten"
-  },
-  {
-    "brand": "Bach RESCURA",
-    "brandOwner": "Nelsons GmbH",
     "name": "Bach RESCURA® Spray Alkohol",
     "ean": null,
     "pzn": null,
@@ -8620,7 +8605,7 @@
   {
     "brand": "Murnauers Bachblüten",
     "brandOwner": "Maria Clementine Martin Klosterfrau Vertriebsgesellschaft mbH",
-    "name": "Murnauers Bachblüten KLEINES TRÄUMERLE Globulini Junior",
+    "name": "Murnauers Bachblüten KLEINES TRÄUMERLE Globulini",
     "ean": null,
     "pzn": "01605900",
     "category": "Bachblüten",
