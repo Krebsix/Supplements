@@ -426,6 +426,27 @@ Deno.serve(async (req) => {
 
     const result = JSON.parse(textBlock.text);
 
+    // Freitext-Listen gegen durchgesickerte Modell-/Tokenizer-Artefakte
+    // absichern (beobachtet 2026-08-10: "Ġ"-Tokens, JSON-Fragmente und
+    // Steuer-Saetze im certifications-Array). Nur plausibler Text bleibt:
+    // mindestens ein Buchstabe, keine Sonder-Tokens, keine reine
+    // Interpunktion. Lieber ein echtes Siegel verlieren als Muell in die
+    // Pruef-Schleuse und die App zu geben.
+    const cleanStringList = (value: unknown): string[] =>
+      Array.isArray(value)
+        ? value.filter(
+            (item): item is string =>
+              typeof item === "string" &&
+              item.trim().length >= 3 &&
+              item.length <= 200 &&
+              /\p{L}/u.test(item) &&
+              !/[Ā-ſ{}\[\]\\]/u.test(item)
+          )
+        : [];
+    result.certifications = cleanStringList(result.certifications);
+    result.warnings = cleanStringList(result.warnings);
+    result.uncertainties = cleanStringList(result.uncertainties);
+
     // Erfolgreiche Analyse mit bekanntem Barcode in die PRUEF-SCHLEUSE
     // legen (verified=false): reine Produktdaten, keine Fotos, keine
     // Nutzerdaten. Erst nach redaktioneller Pruefung wird der Eintrag
