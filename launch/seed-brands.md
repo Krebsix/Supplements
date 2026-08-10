@@ -90,6 +90,23 @@ NEM — bestehende Eintraege beim Konsolidieren pruefen). Die App behandelt
 alle Klassen als dokumentierbare Einnahmen, kennzeichnet aber die Klasse;
 Arzneimittel-Hinweise bleiben Sache von Arzt/Apotheke.
 
+## Naechstes Arbeitspaket: Lebensphasen-Hinweise fuer die Kraeuter
+Befund (2026-08-10, Nadines Stillzeit-Frage): lifeStageAdvisories.js
+deckt erst 7 Substanzen aktiv ab; die 27 Kraeuter tragen ihre
+Schwangerschafts-/Stillzeit-/Kinder-Saetze nur im cautionNote der Karte.
+Umsetzung: je Kraut Advisory-Eintraege ableiten (Muster ashwagandha):
+- "nicht anwenden" in der Quelle → CONTRAINDICATED (z. B. Salbei
+  Stillzeit [reduziert Milchbildung], Wermut, Mutterkraut, Suessholz
+  Schwangerschaft, Baerentraube, Weidenrinde letztes Trimenon + Kinder
+  mit fieberhaften Infekten)
+- "Daten fehlen" → MEDICAL mit ehrlichem Text ("keine ausreichenden
+  Daten, uebliche aerztliche Abklaerung")
+- Arnika NICHT (nur aeusserlich, eigener Warnhinweis reicht)
+Plus EN-Overlay (data/en/lifeStageAdvisories.js) und bestehende
+data-en-Tests. KEINE neuen Behauptungen: nur was die cautionNotes/
+EMA-Monographien bereits hergeben. Pfefferminz-Stillzeit NUR aufnehmen,
+wenn eine Quelle es traegt (aktuell nicht belegt).
+
 ## Erkrankungs-Warnschicht: UMGESETZT 2026-08-09 (spaetabends)
 data/healthConditions.js (8 Erkrankungen, 26 belegte Bezuege,
 Zitate programmatisch extrahiert), ProfileCheck-Verdrahtung,
