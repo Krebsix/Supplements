@@ -16,6 +16,18 @@ Katalog UND product_cache. Tranche 1 (Wellen 8-10, 129 Produkte) laeuft;
 Altbestand Wellen 1-7 in 10 Chargen a ~30 Produkte
 (verify-legacy-01..10) rollierend danach.
 
+### VOLLPRUEFUNG ABGESCHLOSSEN 2026-08-10 (alle 411 Produkte)
+Bilanz: 411/411 einzeln gegen die Quelle geprueft, ~128 Korrekturen,
+12 als unverifiable markiert (siehe Liste unten). Fehlerklassen:
+unbelegte/falsche Schluessel (EAN/PZN entfernt oder belegt nachgetragen),
+Rechtsklassen (Medizinprodukt/FSMP/Arznei statt NEM), Bezugsgroessen
+(pro Kapsel vs. Tagesdosis), Verbindungs- vs. Elementmenge, praezise
+Rechtstraeger. Redaktionelle Linie: DEUTSCHER VERTRIEB IST NICHT
+MARKENINHABER (Solgar/pro medico, Vital Proteins/Nestle-Widerspruch →
+brandOwner leer statt falsch). US-Seiten ohne DE-Lokalisierung tragen
+keine NEM-Klasse (productClass null: Optimum Nutrition, Juice Plus+,
+Nordic Naturals, K-Concept, Sponser u. a.).
+
 ### Offene Pruefpunkte (nicht klaerbar ohne Etikett/Drittzugang)
 - MyProtein Vitamin D3 Softgels: Herstellerseite widerspricht sich
   (Tabelle 63 µg, Text 25 µg) — Menge geleert, per Etikett klaeren.
@@ -28,6 +40,20 @@ Altbestand Wellen 1-7 in 10 Chargen a ~30 Produkte
   NOW Foods (Site blockt) — Felder unveraendert, markiert.
 - Body Attack Whey Vanilla: NEM-Kennzeichnung nicht woertlich belegbar
   (Klasse vorerst belassen, manuell pruefen).
+- RINGANA (4 Produkte): ringana.com blockt jeden Zugriff (CloudFront),
+  auch Wayback — bei Gelegenheit erneut pruefen.
+- altapharma (Rossmann-SPA/Bot-Schutz): D3+K2 Tropfen und
+  Magnesium-Citrat+L-Carnitin Sticks nicht pruefbar; Brausetabletten-
+  Mengen (Zink+C, Eisen+Vitamine, B12) nicht bestaetigbar, B12 fehlt in
+  der OFF-Zutatenliste des Multivitamin+Mineral → per Etikett-Scan
+  klaeren. Quelle blockiert ist KEIN Gegenbeweis, Mengen bleiben
+  markiert stehen.
+- Eunova (3 Produkte): brandOwner-Rechtstraeger bei STADA nicht
+  eindeutig (Impressum 404 bzw. widerspruechlich).
+- Vital Proteins: Herstellerseite nennt zwei Rechtstraeger (LLC vs.
+  Nestle dba) → brandOwner bewusst leer.
+- GloryFeel Zinkbisglycinat: Quell-URL soft-404, Produkt nicht mehr
+  auffindbar (evtl. Sortimentswechsel) → beobachten oder streichen.
 
 ## Datenmodell-Grundsatz
 **Marke ≠ Markeninhaber ≠ Lohnhersteller.** Im Seed werden Marke und
