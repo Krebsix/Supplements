@@ -582,7 +582,7 @@
     "brand": "GloryFeel",
     "brandOwner": null,
     "name": "Magnesium Citrat Kapseln",
-    "ean": null,
+    "ean": "4260619420002",
     "category": "Magnesium",
     "keyIngredients": [
       {
@@ -600,8 +600,8 @@
   {
     "brand": "GloryFeel",
     "brandOwner": null,
-    "name": "Vitamin C 1.000 mg + Zink 20 mg",
-    "ean": null,
+    "name": "Vitamin C gepuffert + Zink Kapseln",
+    "ean": "4260619422860",
     "category": "Vitamin C",
     "keyIngredients": [
       {
@@ -1423,12 +1423,12 @@
     "source": "https://world.openfoodfacts.org/api/v2/product/4260426838120.json",
     "country": "DE",
     "channel": "sport",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "IronMaxx",
     "brandOwner": "IronMaxx Nutrition GmbH & Co. KG",
-    "name": "Creatine Powder Monohydrate Neutral 300g",
+    "name": "Creatine Powder Monohydrat (300g)",
     "ean": "4260426830124",
     "category": "Kreatin",
     "keyIngredients": [],
@@ -2180,7 +2180,7 @@
     "source": "https://www.kwizda-pharma.at/de/produkte/rezeptfreie-produkte/vitamine/d3-kwizda.html",
     "country": "AT",
     "channel": "apotheke",
-    "productClass": "nem"
+    "productClass": "fsmp"
   },
   {
     "brand": "Kwizda",
@@ -2771,12 +2771,12 @@
     "source": "https://de.juiceplus.com/collections/capsules/products/fruit-and-vegetable-capsules",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Juice Plus+",
     "brandOwner": "The Juice Plus+ Company LLC",
-    "name": "Fruit, Vegetable, Berry & Omega Blend Capsules (Essentials)",
+    "name": "Fruit, Vegetable, Berry & Vegan Omega Blend Capsules",
     "ean": null,
     "category": "Multinährstoff-Kapseln (Obst/Gemüse/Beeren/Omega) – Kombipaket",
     "keyIngredients": [],
@@ -2784,7 +2784,7 @@
     "source": "https://de.juiceplus.com/collections/capsules/products/essentials-capsules",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Juice Plus+",
@@ -2797,7 +2797,7 @@
     "source": "https://de.juiceplus.com/collections/capsules/products/berry-capsules",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Juice Plus+",
@@ -2816,7 +2816,7 @@
     "source": "https://de.juiceplus.com/collections/capsules/products/omega-capsules",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "Juice Plus+",
@@ -2840,7 +2840,7 @@
     "source": "https://de.juiceplus.com/collections/capsules/products/super-biome-probiotic-prebiotic",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "LR Health & Beauty",
@@ -5080,19 +5080,12 @@
     "name": "Kijimea Reizdarm PRO",
     "ean": "4260344391301",
     "category": "Probiotikum",
-    "keyIngredients": [
-      {
-        "name": "Bifidobacterium bifidum",
-        "form": "Bifidobacterium bifidum HI-MIMBb75 (hitzeinaktiviert)",
-        "amount": "1x10^9",
-        "unit": "Bakterien (Tagesdosis, 2 Kapseln)"
-      }
-    ],
+    "keyIngredients": [],
     "off": true,
     "source": "https://www.kijimea.de/products/kijimea-reizdarm-pro",
     "country": "DE",
     "channel": "apotheke",
-    "productClass": "nem"
+    "productClass": "medizinprodukt"
   },
   {
     "brand": "Kijimea",
@@ -5118,7 +5111,7 @@
     "brand": "Kijimea",
     "brandOwner": "Synformulas GmbH",
     "name": "Kijimea FloraCare",
-    "ean": null,
+    "ean": "4260344391578",
     "category": "Probiotikum (Vaginalflora)",
     "keyIngredients": [
       {
@@ -5138,7 +5131,7 @@
     "brand": "Kijimea",
     "brandOwner": "Synformulas GmbH",
     "name": "Kijimea Complete",
-    "ean": null,
+    "ean": "4260344391660",
     "category": "Probiotikum",
     "keyIngredients": [],
     "off": false,
@@ -5293,7 +5286,7 @@
   {
     "brand": "K-Concept+ Vital",
     "brandOwner": "Kaufland",
-    "name": "K-Concept+ Vital Vitamin A-Z Komplett ab 50",
+    "name": "K-CONCEPT+ VITAL Vitamin A - Z Komplett (ab 50, 100 Stück)",
     "ean": null,
     "category": "Multivitamin",
     "keyIngredients": [],
@@ -5301,12 +5294,12 @@
     "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
     "country": "DE",
     "channel": "discounter",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "K-Concept+ Vital",
     "brandOwner": "Kaufland",
-    "name": "K-Concept+ Vital Darm Plus",
+    "name": "K-CONCEPT+ VITAL Darm Plus, 30 Kapseln",
     "ean": null,
     "category": "Probiotikum",
     "keyIngredients": [],
@@ -5314,12 +5307,12 @@
     "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
     "country": "DE",
     "channel": "discounter",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "K-Concept+ Vital",
     "brandOwner": "Kaufland",
-    "name": "K-Concept+ Vital Magnesium + Kalium Direkt-Sticks",
+    "name": "K-CONCEPT+ VITAL Magnesium + Kalium Direkt-Sticks, 30 Stück",
     "ean": null,
     "category": "Mineralstoffe",
     "keyIngredients": [],
@@ -5327,12 +5320,12 @@
     "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
     "country": "DE",
     "channel": "discounter",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "K-Concept+ Vital",
     "brandOwner": "Kaufland",
-    "name": "K-Concept+ Vital Multivitamine für Kinder",
+    "name": "K-CONCEPT+ VITAL Multivitamine für Kinder, 60 Kautabletten",
     "ean": null,
     "category": "Multivitamin",
     "keyIngredients": [],
@@ -5340,12 +5333,12 @@
     "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
     "country": "DE",
     "channel": "discounter",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "K-Concept+ Vital",
     "brandOwner": "Kaufland",
-    "name": "K-Concept+ Vital Vitamin C Pulver",
+    "name": "K-CONCEPT+ VITAL Vitamin C Pulver, 100 g",
     "ean": null,
     "category": "Vitamin C",
     "keyIngredients": [],
@@ -5353,12 +5346,12 @@
     "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
     "country": "DE",
     "channel": "discounter",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "K-Concept+ Vital",
     "brandOwner": "Kaufland",
-    "name": "K-Concept+ Vital Elektrolyt-Refill Brausetabletten",
+    "name": "K-CONCEPT+ VITAL Elektrolyt-Refill Brausetabletten, 20 Stück",
     "ean": null,
     "category": "Elektrolyte",
     "keyIngredients": [],
@@ -5366,7 +5359,7 @@
     "source": "https://filiale.kaufland.de/sortiment/eigenmarken/k-concept-plus-vital.html",
     "country": "DE",
     "channel": "discounter",
-    "productClass": "nem"
+    "productClass": null
   },
   {
     "brand": "MyProtein",
