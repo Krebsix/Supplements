@@ -7421,7 +7421,7 @@
     "brand": "Bears with Benefits",
     "brandOwner": "Beautybears GmbH",
     "name": "Ah-mazing Hair* Vitamin mit Biotin",
-    "ean": "0710535656794",
+    "ean": null,
     "category": "Haare/Haut/Nägel",
     "doseForm": "Weichgummi",
     "keyIngredients": [
@@ -7466,7 +7466,7 @@
     "brand": "Bears with Benefits",
     "brandOwner": "Beautybears GmbH",
     "name": "One Bear a Day Immune* Vitamin",
-    "ean": "0745760685165",
+    "ean": null,
     "category": "Immunsystem",
     "doseForm": "Weichgummi",
     "keyIngredients": [
@@ -7632,7 +7632,7 @@
     "brand": "Bears with Benefits",
     "brandOwner": "Beautybears GmbH",
     "name": "Queen of Iron Power* Complex",
-    "ean": "4260717770535",
+    "ean": null,
     "category": "Eisen+C",
     "doseForm": "Weichgummi",
     "keyIngredients": [
@@ -7916,7 +7916,53 @@
     "ean": "4066447832846",
     "category": "Multivitamin",
     "doseForm": "Weichgummi",
-    "keyIngredients": [],
+    "keyIngredients": [
+      {
+        "name": "Niacin",
+        "amount": "6",
+        "unit": "mg"
+      },
+      {
+        "name": "Biotin",
+        "amount": "9.4",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B2",
+        "amount": "0.5",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B1",
+        "amount": "0.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin B12",
+        "amount": "1",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin B6",
+        "amount": "0.4",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin C",
+        "amount": "30",
+        "unit": "mg"
+      },
+      {
+        "name": "Vitamin D",
+        "amount": "2.5",
+        "unit": "µg"
+      },
+      {
+        "name": "Vitamin E",
+        "amount": "4.5",
+        "unit": "mg"
+      }
+    ],
     "off": false,
     "source": "https://www.dm.de/p/d/3104247/mivolis-multivitamin-baerchen-fuer-kinder-60-st",
     "country": "DE",
@@ -7927,7 +7973,7 @@
     "brand": "altapharma",
     "brandOwner": "Dirk Rossmann GmbH",
     "name": "altapharma Multivitamin Gummies für Kinder",
-    "ean": "4068134149404",
+    "ean": null,
     "category": "Multivitamin",
     "doseForm": "Weichgummi",
     "keyIngredients": [],
