@@ -110,7 +110,10 @@ function mapResultToDraft(result, analysisMode, barcode) {
     ],
     uncertaintyNote: tr('analyzer.uncertaintyNote'),
     analysisMode,
-    barcode: cleanText(barcode) || null,
+    // Schluessel-Prioritaet: vorab gescannter Code, sonst die von der
+    // Vision-Auswertung vom Etikett ABGELESENE Ziffernfolge (validiert
+    // serverseitig, nie rekonstruiert).
+    barcode: cleanText(barcode) || cleanText(result.barcode) || null,
     analyzedAt: new Date().toISOString(),
   };
 }

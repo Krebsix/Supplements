@@ -53,6 +53,7 @@ const RESULT_SCHEMA = {
   required: [
     "productName",
     "brand",
+    "barcode",
     "confidence",
     "ingredients",
     "dosage",
@@ -65,6 +66,11 @@ const RESULT_SCHEMA = {
     productName: {
       anyOf: [{ type: "string" }, { type: "null" }],
       description: "Produktname exakt wie auf der Verpackung, sonst null",
+    },
+    barcode: {
+      anyOf: [{ type: "string" }, { type: "null" }],
+      description:
+        "Die Ziffernfolge unter dem Strichcode (EAN, 8-14 Ziffern) oder die PZN, NUR wenn sie auf einem der Fotos klar lesbar ist. Nur Ziffern, keine Bindestriche. Sonst null.",
     },
     brand: {
       anyOf: [{ type: "string" }, { type: "null" }],
@@ -151,7 +157,8 @@ Regeln:
 - Nicht lesbare oder fehlende Angaben sind null bzw. bleiben weg. Lieber null als geraten.
 - Unterscheide die chemische Form (z. B. Magnesiumbisglycinat vs. -citrat vs. -oxid), wenn sie auf dem Etikett steht.
 - Gib keine gesundheitlichen Empfehlungen ab. "warnings" enthaelt nur Hinweise, die auf dem Etikett stehen.
-- productName und brand bleiben unveraendert wie aufgedruckt (Eigennamen werden nicht uebersetzt).`;
+- productName und brand bleiben unveraendert wie aufgedruckt (Eigennamen werden nicht uebersetzt).
+- Ist auf einem Foto ein Strichcode mit lesbarer Ziffernfolge (EAN) oder eine PZN abgedruckt, trage die Ziffern in "barcode" ein. Nur ablesen, niemals rekonstruieren oder raten.`;
 
 // Die Ausgabesprache folgt der App-Einstellung, nicht der Etikettensprache:
 // Wer die App auf Englisch bedient, soll ein englisches Etikett nicht
@@ -425,11 +432,19 @@ Deno.serve(async (req) => {
     // fuer andere sichtbar; bestehende (insbesondere kuratierte)
     // Eintraege werden NIE ueberschrieben. Best effort — ein
     // Cache-Fehler kostet kein Ergebnis.
-    if (barcode) {
+    // Schluessel fuer die Pruef-Schleuse: der vorab gescannte Code oder,
+    // als Rueckfall, die von der Vision-Auswertung ABGELESENE Ziffernfolge
+    // vom Etikett (validiert, nie rekonstruiert).
+    const visionBarcode =
+      typeof result?.barcode === "string" && /^[0-9]{6,14}$/.test(result.barcode)
+        ? result.barcode
+        : null;
+    const cacheKey = barcode ?? visionBarcode;
+    if (cacheKey) {
       const { error: cacheError } = await supabaseAdmin
         .from("product_cache")
         .insert({
-          barcode,
+          barcode: cacheKey,
           language,
           result,
           model: response.model,
