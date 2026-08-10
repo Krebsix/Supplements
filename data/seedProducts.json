@@ -7367,5 +7367,26 @@
     "country": "DE",
     "channel": "apotheke",
     "productClass": "nem"
+  },
+  {
+    "brand": "Vigantolvit",
+    "brandOwner": "WICK Pharma – Ndl. der Procter & Gamble GmbH",
+    "name": "Vigantolvit 2000 I.E. Weichgummis mit Zitronengeschmack",
+    "ean": null,
+    "pzn": "18199060",
+    "category": "Vitamin D",
+    "keyIngredients": [
+      {
+        "name": "Vitamin D3",
+        "form": "Cholecalciferol",
+        "amount": "50",
+        "unit": "µg"
+      }
+    ],
+    "off": false,
+    "source": "Etikett-Scan, redaktionell geprüft 2026-08-10 (PZN-Aufdruck auf der Packung)",
+    "country": "DE",
+    "channel": "apotheke",
+    "productClass": "nem"
   }
 ]
