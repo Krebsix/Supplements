@@ -13,15 +13,15 @@ messbare "100-Prozent"-Fertig-Kriterium (definiert Nadine).
 
 | # | Punkt | Wer | Status |
 |---|---|---|---|
-| 1 | App-Name: MySuplea (entschieden 2026-08-09, Store/Web-Kollisions-Check ohne Treffer). Offen: formale Markenrecherche DPMA/EUIPO | Nadine + Claude | entschieden |
-| 2 | Impressum vervollständigen: Kontakt-E-Mail, Vertretungsberechtigte | Nadine | offen |
+| 1 | App-Name: MySuplea (entschieden 2026-08-09). Kollisions-Check am 2026-08-11 wiederholt: kein Treffer bei Apple App Store, Google Play und allgemeiner Websuche; mysuplea.com und mysuplea.de laut Whois frei. Bleibt offen: das ist Indiz, keine formale Markenrecherche DPMA/EUIPO | Nadine + Claude | entschieden, Domain-Kauf offen |
+| 2 | Impressum vervollständigen: Kontakt-E-Mail (info@indoohome.com, 2026-08-11 eingetragen). Offen: Vertretungsberechtigte Person | Nadine | E-Mail erledigt, Name offen |
 | 3 | EU-Vertreter nach Art. 27 DSGVO beauftragen und eintragen | Nadine | offen |
-| 4 | AVV mit Supabase und Anthropic dokumentieren | Nadine | offen |
+| 4 | AVV mit Supabase und Anthropic dokumentieren | Claude | erledigt, siehe launch/avv-dokumentation.md |
 | 5 | Preismodell entschieden (2026-08-09): Freemium, Pro-Abo 29,99/Jahr bzw. 4,99/Monat, Scan-Credit-Pakete. In der App verdrahtet: Scan-Gate, 5-Präparate-Grenze, Pro-Gates (Wirkungskontrolle, Kostenanalyse, Laborwerte, Kur-Zyklen), Kontingent-Anzeige in den Einstellungen; alles hinter PAYWALL_ENFORCED=false. Noch zu bauen: IAP-Integration + Paywall-Kaufscreen (braucht Developer-Account, Punkt 9). Scan-Modell auf Haiku 4.5 nach Qualitätstest | Claude + Nadine | teils |
-| 6 | App-Icon (1024x1024) und Splash | Claude baut Entwurf, Nadine entscheidet | offen |
-| 7 | Datenschutz-URL: statische Webseite mit der Erklärung. Gebaut (web/, generiert aus data/legalContent.js via `npm run build:legal`, Drift-Test). Offen: Hosting/Domain nach Namensentscheidung, Platzhalter aus Punkt 2 und 3 | Claude | gebaut, Veröffentlichung offen |
+| 6 | App-Icon (1024x1024) und Splash | Claude | erledigt (2026-08-11): assets/icon.png, adaptive-icon.png, splash.png, favicon.png aus Nadines Entwurf, Tagline "Supplement Intelligence Platform" entfernt (Positionierungs-Widerspruch), in app.json verdrahtet |
+| 7 | Datenschutz-URL: statische Webseite mit der Erklärung. Gebaut (web/, generiert aus data/legalContent.js via `npm run build:legal`, Drift-Test), E-Mail-Platzhalter gefüllt. Offen: Hosting/Domain-Kauf, Vertretungsberechtigte + EU-Vertreter aus Punkt 2/3 | Claude / Nadine | gebaut, Veröffentlichung offen |
 | 8 | Gerätetest: Onboarding, Scan-Einwilligung, Erinnerungen, Backup | Nadine | offen |
-| 9 | Apple Developer Account auf indoo home LLC + Store-Listing anlegen | Nadine | offen |
+| 9 | Apple Developer Account auf indoo home LLC + Store-Listing anlegen | Nadine | offen, nach Nadines Ansage: kommt "wenn alles fertig ist" |
 
 ## Reihenfolge und Gates (Council-Verdikt 2026-08-09, Konfidenz 80 %)
 
