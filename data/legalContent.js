@@ -13,20 +13,19 @@
  * Datenfluss aendert, aendert diesen Text mit.
  */
 
-export const PRIVACY_VERSION = '2026-08-09';
+export const PRIVACY_VERSION = '2026-08-11';
 
 // Betreiberin laut Nadine (2026-08-09): die bestehende LLC.
 // OFFEN vor Veroeffentlichung:
-//   1. Kontakt-E-Mail einsetzen (Pflichtangabe § 5 DDG).
-//   2. Vertretungsberechtigte Person ergaenzen.
-//   3. Art. 27 DSGVO: Ein Verantwortlicher OHNE Niederlassung in der EU,
+//   1. Vertretungsberechtigte Person ergaenzen.
+//   2. Art. 27 DSGVO: Ein Verantwortlicher OHNE Niederlassung in der EU,
 //      der Gesundheitsdaten von EU-Nutzerinnen verarbeitet, braucht einen
 //      benannten EU-Vertreter. Der muss hier und in der
 //      Datenschutzerklaerung namentlich stehen.
 export const OPERATOR_PLACEHOLDER = {
   name: 'indoo home LLC',
   address: '30 N Gould St Ste N\nSheridan, WY 82801\nUSA',
-  email: '[Kontakt-E-Mail einsetzen]',
+  email: 'info@indoohome.com',
   representative: '[Vertretungsberechtigte Person einsetzen]',
   euRepresentative: '[EU-Vertreter nach Art. 27 DSGVO einsetzen]',
 };
