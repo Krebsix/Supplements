@@ -480,7 +480,32 @@ Deno.serve(async (req) => {
       typeof result?.barcode === "string" && /^[0-9]{6,14}$/.test(result.barcode)
         ? result.barcode
         : null;
-    const cacheKey = barcode ?? visionBarcode;
+    // Fallback fuer Produkte ohne ermittelbaren Barcode (Entscheidung
+    // 2026-08-11): Ohne diesen Zweig verpuffte jede erfolgreiche Analyse
+    // spurlos im lokalen, unsynchronisierten Bestand der scannenden
+    // Person — beobachtet an 11 von 12 Scans einer Sitzung, bei kleinen
+    // Marken ohne (lesbaren) Strichcode auf dem Etikett. Der Fallback
+    // ersetzt den Barcode NICHT als bevorzugte Kennung, er verhindert nur
+    // den Totalverlust: die Redaktion (Vollpruefung) kann den Eintrag in
+    // der Pruef-Schleuse sehen und spaeter auf einen echten Barcode
+    // migrieren, sobald einer bekannt wird. "text-" schliesst jede
+    // Kollision mit echten Barcodes (nur Ziffern) aus.
+    const normalizeForKey = (value: string): string =>
+      value
+        .normalize("NFKD")
+        .replace(/[̀-ͯ]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 80);
+    const textFallbackKey =
+      typeof result?.brand === "string" &&
+      typeof result?.productName === "string" &&
+      normalizeForKey(result.brand).length >= 2 &&
+      normalizeForKey(result.productName).length >= 2
+        ? `text-${normalizeForKey(result.brand)}__${normalizeForKey(result.productName)}`
+        : null;
+    const cacheKey = barcode ?? visionBarcode ?? textFallbackKey;
     if (cacheKey) {
       const { error: cacheError } = await supabaseAdmin
         .from("product_cache")
