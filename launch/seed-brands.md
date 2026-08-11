@@ -203,13 +203,20 @@ Nahrungsergaenzungsmitteln.
   launch/apple-review-leitfaden.md (kein Wirkversprechen, kein
   Dosier-Imperativ, Packungsbeilagen-Verweis).
 
-## Ausbau Pruef-Schleuse: schluessellose Scans (Backlog)
-Produkte ohne EAN/PZN (Kleinsthersteller, Eigenimporte) funktionieren
-fuer die Nutzerin voll lokal, erreichen die Schleuse aber nicht (PK ist
-der Barcode). Ausbau: product_cache auf UUID-PK + nullable barcode,
-schluessellose verified-Eintraege dienen der redaktionellen
-KATALOG-Aufnahme (Namenssuche), nie der Barcode-Aufloesung. Kein Name
-als Produktschluessel (Ontologie: Produkt ≠ Name, Varianten kollidieren).
+## Pruef-Schleuse fuer schluessellose Scans: INTERIM UMGESETZT 2026-08-11
+Barcode-lose Analysen landen jetzt unter einem Text-Fallback-Schluessel
+("text-<marke>__<produkt>") in der Schleuse statt zu verpuffen
+(Migration 20260811030000, Edge Function). Sicherheitsmodell: Der
+Client fragt nur Ziffernfolgen an, Text-Schluessel sind ueber den
+Barcode-Lookup NIE erreichbar — reines Auffangbecken fuer die Redaktion.
+REDAKTIONS-REGEL: Ein text-Eintrag wird NIE direkt verified=true
+geschaltet; erst echten Barcode/PZN belegen, Eintrag auf den echten
+Schluessel umziehen, dann freigeben. Bekannte Grenze (Ontologie:
+Produkt ≠ Name): Varianten mit gleichem Namen kollidieren im
+Text-Schluessel — der Erste gewinnt, die Redaktion loest per Umzug auf.
+Der urspruengliche Plan (UUID-PK + nullable barcode) bleibt der saubere
+Endzustand, wenn die Schleuse dauerhaft viele schluessellose Eintraege
+sieht.
 
 ## Naechstes Arbeitspaket: Lebensphasen-Hinweise fuer die Kraeuter
 Befund (2026-08-10, Nadines Stillzeit-Frage): lifeStageAdvisories.js
