@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!--
+    App-Icon MySuplea.
+
+    WARUM SO:
+    Eine Kapsel, zweifarbig, sonst nichts. Kein Schriftzug (bei 60 pt auf dem
+    Home-Screen unlesbar, und Apple raet davon ab), kein Blatt (die App macht
+    bewusst KEINE Natur- oder Wellness-Suggestion, sie ordnet ein und zitiert
+    Quellen), kein Balkendiagramm.
+
+    Die Farben sind die Marke selbst: colors.accent (#1c4f5c) als Grund,
+    colors.canvas (#f6f3ed) als Kapsel — dieselbe "Papier und Tinte"-Palette
+    wie die Oberflaeche (theme.js).
+
+    Petrol als Grund statt Papier, weil ein helles Icon auf einem hellen
+    Wallpaper seine Silhouette verliert. Getestet bei 120 px und 40 px.
+
+    Die zweite Kapselhaelfte bleibt offen: Dort scheint der Grund durch, wie
+    bei einer durchsichtigen Kapselhaelfte. Das haelt die Form bei kleinen
+    Groessen ruhig und braucht keinen dritten Farbton.
+
+    Randlos und ohne eigene Rundung: iOS legt seine eigene Maske darueber,
+    ein mitgezeichneter Rahmen ergaebe die Doppel-Rundung des Vorgaengers.
+  -->
+  <defs>
+    <clipPath id="capsule">
+      <rect x="122" y="352" width="780" height="320" rx="160"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1024" height="1024" fill="#1c4f5c"/>
+
+  <g transform="rotate(-38 512 512)">
+    <g clip-path="url(#capsule)">
+      <rect x="122" y="352" width="390" height="320" fill="#f6f3ed"/>
+    </g>
+    <rect x="122" y="352" width="780" height="320" rx="160"
+          fill="none" stroke="#f6f3ed" stroke-width="30"/>
+  </g>
+</svg>

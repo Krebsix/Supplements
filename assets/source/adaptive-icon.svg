@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!--
+    Android Adaptive Icon, Vordergrundebene.
+
+    Der Grund fehlt hier absichtlich: Android legt die backgroundColor aus
+    app.json darunter (#1c4f5c). Dadurch scheint sie durch die offene
+    Kapselhaelfte, und das Ergebnis sieht aus wie assets/icon.png.
+
+    WICHTIG — Safe Zone: Android maskiert die Vordergrundebene je nach
+    Hersteller als Kreis, Squircle oder Rechteck. Sicher sichtbar sind nur
+    die mittleren 66 Prozent, also ein Kreis mit 676 px Durchmesser. Die
+    Kapsel ist deshalb auf 620 px Laenge verkleinert (nicht 780 wie beim
+    iOS-Icon) und liegt vollstaendig in diesem Kreis. Der Vorgaenger-Entwurf
+    verstiess dagegen: Sein Schriftzug lag im Beschnitt.
+  -->
+  <defs>
+    <clipPath id="capsule">
+      <rect x="202" y="385" width="620" height="254" rx="127"/>
+    </clipPath>
+  </defs>
+
+  <g transform="rotate(-38 512 512)">
+    <g clip-path="url(#capsule)">
+      <rect x="202" y="385" width="310" height="254" fill="#f6f3ed"/>
+    </g>
+    <rect x="202" y="385" width="620" height="254" rx="127"
+          fill="none" stroke="#f6f3ed" stroke-width="24"/>
+  </g>
+</svg>

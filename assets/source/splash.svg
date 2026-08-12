@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1284" height="1284" viewBox="0 0 1284 1284">
+  <!--
+    Startbildschirm.
+
+    Der Petrol-Grund ist hier vollflaechig mitgezeichnet, obwohl app.json
+    dieselbe backgroundColor setzt: Bei resizeMode "contain" bleibt links
+    und rechts (oder oben und unten) die backgroundColor stehen. Weil beide
+    denselben Wert haben, ist der Uebergang unsichtbar — egal in welchem
+    Seitenverhaeltnis das Geraet steht.
+
+    Die Kapsel ist kleiner als im Icon (500 statt 780 px bei groesserer
+    Leinwand): Ein Startbildschirm zeigt eine Marke, kein formatfuellendes
+    Motiv.
+  -->
+  <defs>
+    <clipPath id="capsule">
+      <rect x="392" y="540" width="500" height="205" rx="102"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1284" height="1284" fill="#1c4f5c"/>
+
+  <g transform="rotate(-38 642 642)">
+    <g clip-path="url(#capsule)">
+      <rect x="392" y="540" width="250" height="205" fill="#f6f3ed"/>
+    </g>
+    <rect x="392" y="540" width="500" height="205" rx="102"
+          fill="none" stroke="#f6f3ed" stroke-width="19"/>
+  </g>
+</svg>
