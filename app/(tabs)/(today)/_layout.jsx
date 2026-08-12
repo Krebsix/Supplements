@@ -10,6 +10,7 @@ export default function TodayLayout() {
   return (
     <Stack screenOptions={stackScreenOptions(t)} initialRouteName="Dashboard">
       <Stack.Screen name="Dashboard" options={{ title: t('nav.dashboard') }} />
+      <Stack.Screen name="inventory" options={{ title: t('nav.inventory') }} />
       <Stack.Screen name="history" options={{ title: t('nav.history') }} />
     </Stack>
   );

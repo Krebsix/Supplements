@@ -19,6 +19,9 @@ export default {
   'home.trust.advice.text':
     'Die App organisiert und dokumentiert. Sie ersetzt keine medizinische Beratung.',
   'home.section.workflow': 'Workflow',
+  'home.nav.inventory.title': 'Mein Bestand',
+  'home.nav.inventory.subtitle':
+    'Alle angelegten Präparate auf einen Blick, auch die ohne Einnahmezeitpunkt.',
   'home.nav.add.title': 'Neues Supplement',
   'home.nav.add.subtitle':
     'Manuellen Eintrag mit Dosierung, Timing und Zweck sauber in die aktive Routine aufnehmen.',

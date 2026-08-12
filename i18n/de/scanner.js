@@ -5,18 +5,13 @@
 
 export default {
   'scanner.kicker': 'Geführter Produktscan',
-  'scanner.title': 'Vier Fotos. Ein klares Ergebnis.',
+  'scanner.title': 'So viele Fotos wie nötig.',
   'scanner.subtitle':
-    'Die App führt dich Schritt für Schritt durch alle relevanten Produktseiten. So können Angaben später vollständig und nachvollziehbar geprüft werden.',
-
-  'scanner.progress.label': 'Scan-Fortschritt',
-  'scanner.progress.count': '{completed} von {total} Aufnahmen',
-  'scanner.progress.complete': 'Vollständig',
-  'scanner.progress.remaining': '{count} offen',
+    'Die Schritte sind ein Vorschlag, keine Bedingung. Fotografiere so viel, wie das Etikett hergibt: Ausgewertet wird, sobald das erste Foto steht.',
 
   'scanner.barcode.detected': 'Barcode erkannt',
   'scanner.barcode.text':
-    'Der Code kann direkt in der offenen Produktdatenbank nachgeschlagen werden. Die vier Fotos bleiben der genauere Weg, weil sie Dosierung und Wirkstoffformen vom Etikett erfassen.',
+    'Der Code kann direkt in der offenen Produktdatenbank nachgeschlagen werden. Die Fotos bleiben der genauere Weg, weil sie Dosierung und Wirkstoffformen vom Etikett erfassen.',
   'scanner.barcode.searching': 'Produkt wird gesucht…',
   'scanner.barcode.search': 'Produkt per Barcode suchen',
   'scanner.barcode.discard': 'Barcode verwerfen',
@@ -31,7 +26,7 @@ export default {
   'scanner.camera.enableInSettings':
     'Aktiviere die Kamera für Expo Go in den iPhone-Einstellungen.',
   'scanner.camera.purpose':
-    'Die Kamera wird ausschließlich für die vier Produktaufnahmen verwendet.',
+    'Die Kamera wird ausschließlich für die Produktaufnahmen verwendet.',
 
   'scanner.frame.saved': 'Echte Aufnahme für diesen Schritt gespeichert',
   'scanner.frame.positionProduct':
@@ -50,8 +45,6 @@ export default {
   'scanner.primaryButton.preparing': 'Kamera wird vorbereitet',
   'scanner.primaryButton.capture': 'Foto aufnehmen',
 
-  'scanner.inline.removeCapture': 'Gespeicherte Aufnahme entfernen',
-
   'scanner.section.title': 'Benötigte Aufnahmen',
   'scanner.section.hint': 'Tippe auf einen Schritt, um ihn zu öffnen.',
 
@@ -60,14 +53,16 @@ export default {
   'scanner.step.stateOpen': 'Offen',
 
   'scanner.analysis.readyKicker': 'Bereit zur Prüfung',
-  'scanner.analysis.pendingKicker': 'Aufnahmen vervollständigen',
-  'scanner.analysis.readyTitle': 'Alle Produktseiten sind erfasst.',
-  'scanner.analysis.remaining_one': '{count} Aufnahme fehlt noch.',
-  'scanner.analysis.remaining_other': '{count} Aufnahmen fehlen noch.',
-  'scanner.analysis.readyText':
+  'scanner.analysis.pendingKicker': 'Noch kein Foto',
+  'scanner.analysis.noneTitle': 'Nimm zuerst ein Foto auf.',
+  'scanner.analysis.count_one': 'Ein Foto liegt bereit.',
+  'scanner.analysis.count_other': '{count} Fotos liegen bereit.',
+  'scanner.analysis.allText':
     'Im nächsten Schritt werden die erkannten Produktdaten angezeigt und können vor dem Speichern kontrolliert werden.',
+  'scanner.analysis.enoughText':
+    'Das reicht, wenn Wirkstoffe und Menge auf den Fotos lesbar sind. Noch offen wären: {missing}. Was am Ende fehlt, weist das Ergebnis aus.',
   'scanner.analysis.pendingText':
-    'Die Analyse startet erst, wenn alle erforderlichen Produktbereiche aufgenommen wurden.',
+    'Für die Auswertung genügt ein Foto, auf dem Wirkstoffe und Menge lesbar sind.',
   'scanner.analysis.running': 'Analyse läuft…',
   'scanner.analysis.start': 'Analyse starten',
   'scanner.analysis.startTest': 'Test-Analyse starten',
@@ -90,10 +85,10 @@ export default {
   'scanner.error.cameraMountFailed':
     'Die Kamera konnte nicht gestartet werden. Bitte öffne den Scanner erneut.',
   'scanner.error.barcodeNotFound':
-    'Barcode {code} wurde in der Produktdatenbank nicht gefunden. Bitte die vier Fotos aufnehmen.',
+    'Barcode {code} wurde in der Produktdatenbank nicht gefunden. Nimm das Etikett per Foto auf.',
   'scanner.error.barcodeLookupFailed': 'Die Barcode-Suche ist fehlgeschlagen.',
   'scanner.error.codeNotProduct':
-    'Dieser Code enthält keine Produktnummer (EAN/GTIN). Bitte für die Analyse die vier Fotos aufnehmen.',
+    'Dieser Code enthält keine Produktnummer (EAN/GTIN). Für die Auswertung das Etikett fotografieren.',
   'scanner.liveHint.ready':
     'Barcode oder QR-Code ins Bild halten, die Suche startet automatisch',
   'scanner.liveHint.searching': 'Code erkannt, Produkt wird gesucht …',
@@ -106,7 +101,7 @@ export default {
   'scanner.nameSearch.button': 'Produkt suchen',
   'scanner.nameSearch.searching': 'Suche läuft …',
   'scanner.nameSearch.empty':
-    'Kein Treffer in der Datenbank. Dann helfen die vier Fotos weiter.',
+    'Kein Treffer in der Datenbank. Dann hilft das Foto vom Etikett weiter.',
   'scanner.nameSearch.failed': 'Die Produktsuche ist fehlgeschlagen.',
   'scanner.nameSearch.seedOrigin': 'DACH-Katalog',
   'scanner.inline.resetScan': 'Scan verwerfen und neu starten',

@@ -110,7 +110,11 @@ export default function ScannerScreen() {
   const completedCount = capturedIds.length;
   const remainingCount = CAPTURE_STEPS.length - completedCount;
   const allCaptured = remainingCount === 0;
-  const progress = `${(completedCount / CAPTURE_STEPS.length) * 100}%`;
+  // Die vier Schritte sind ein Vorschlag, keine Bedingung: Ausgewertet wird,
+  // sobald ein Foto vorliegt. Welche Angaben am Ende fehlen, entscheidet die
+  // Auswertung — nicht die Anzahl der Aufnahmen.
+  const canAnalyze = completedCount > 0;
+  const missingSteps = CAPTURE_STEPS.filter((step) => !captures[step.id]);
   const cameraPermissionBlocked =
     permission && !permission.granted && permission.canAskAgain === false;
 
@@ -333,7 +337,7 @@ export default function ScannerScreen() {
   }
 
   async function handleStartAnalysis() {
-    if (!allCaptured) {
+    if (!canAnalyze) {
       handleNextOpenStep();
       return;
     }
@@ -488,45 +492,14 @@ export default function ScannerScreen() {
     >
       <Text style={styles.kicker}>{t('scanner.kicker')}</Text>
       <Text style={styles.title}>{t('scanner.title')}</Text>
-      <Text style={styles.subtitle}>{t('scanner.subtitle')}</Text>
-
-      <View style={styles.progressCard}>
-        <View style={styles.progressHeader}>
-          <View>
-            <Text style={styles.progressLabel}>
-              {t('scanner.progress.label')}
-            </Text>
-            <Text style={styles.progressValue}>
-              {t('scanner.progress.count', {
-                completed: completedCount,
-                total: CAPTURE_STEPS.length,
-              })}
-            </Text>
-          </View>
-
-          <View
-            style={[
-              styles.progressBadge,
-              allCaptured && styles.progressBadgeComplete,
-            ]}
-          >
-            <Text
-              style={[
-                styles.progressBadgeText,
-                allCaptured && styles.progressBadgeTextComplete,
-              ]}
-            >
-              {allCaptured
-                ? t('scanner.progress.complete')
-                : t('scanner.progress.remaining', { count: remainingCount })}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.progressTrack}>
-          <View style={[styles.progressFill, { width: progress }]} />
-        </View>
-      </View>
+      {/* Der Untertitel erklaert den Ablauf und wird nach dem ersten Foto
+          ueberfluessig. Er verschwindet dann, damit die Kamera ohne
+          Scrollen sichtbar bleibt — zusammen mit der frueheren
+          Fortschrittskarte, deren Aufgabe der Vorschaustreifen unter der
+          Kamera bereits erfuellt. */}
+      {completedCount === 0 ? (
+        <Text style={styles.subtitle}>{t('scanner.subtitle')}</Text>
+      ) : null}
 
       {scannedBarcode ? (
         <View style={styles.barcodeCard}>
@@ -709,9 +682,62 @@ export default function ScannerScreen() {
         </View>
 
 
-        {/* Alle vier Schritte auf einen Blick: Mini-Vorschau statt
-            gestapelter Karten — kein Scrollen, automatisches
-            Weiterschalten nach jedem Foto. */}
+        {/* Fehler direkt an der Kamera, nicht am Seitenende: Wer gleich
+            noch einmal ausloest, soll vorher sehen, was schiefging. */}
+        {captureError ? (
+          <View style={styles.captureErrorBox}>
+            <Text style={styles.captureErrorText}>{captureError}</Text>
+          </View>
+        ) : null}
+
+        {/* Der Ausloeser sitzt unmittelbar unter der Vorschau. Vorher stand
+            er hinter Vorschaustreifen, Hinweiskasten und Fehlerbox und lag
+            damit auf dem Telefon unterhalb des sichtbaren Bereichs: Man
+            musste zwischen Bild und Knopf hin und her scrollen. */}
+        <TouchableOpacity
+          style={[
+            styles.shutterButton,
+            (isCapturing ||
+              (permission?.granted &&
+                !activeCaptured &&
+                !isCameraReady)) &&
+              styles.primaryButtonDisabled,
+          ]}
+          onPress={
+            activeCaptured
+              ? handleRemoveCapture
+              : permission?.granted
+                ? handleCapture
+                : handlePermissionAction
+          }
+          disabled={
+            isCapturing ||
+            Boolean(
+              permission?.granted &&
+                !activeCaptured &&
+                !isCameraReady
+            )
+          }
+          activeOpacity={0.85}
+          accessibilityRole="button"
+        >
+          <Text style={styles.primaryButtonText}>
+            {activeCaptured
+              ? t('scanner.primaryButton.retake')
+              : isCapturing
+                ? t('scanner.primaryButton.saving')
+                : !permission?.granted
+                  ? cameraPermissionBlocked
+                    ? t('scanner.primaryButton.openSettings')
+                    : t('scanner.primaryButton.allowAccess')
+                  : !isCameraReady
+                    ? t('scanner.primaryButton.preparing')
+                    : t('scanner.primaryButton.capture')}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Alle Schritte auf einen Blick: Mini-Vorschau statt gestapelter
+            Karten, automatisches Weiterschalten nach jedem Foto. */}
         <View style={styles.stepStrip}>
           {CAPTURE_STEPS.map((step, index) => {
             const capture = captures[step.id];
@@ -752,6 +778,15 @@ export default function ScannerScreen() {
           })}
         </View>
 
+        <View style={styles.guidanceBox}>
+          <Text style={styles.guidanceLabel}>
+            {t('scanner.guidance.label')}
+          </Text>
+          <Text style={styles.guidanceText}>
+            {t(activeStep.requirementKey)}
+          </Text>
+        </View>
+
         {completedCount > 0 || scannedBarcode || captureError ? (
           <TouchableOpacity
             style={styles.inlineButton}
@@ -764,131 +799,73 @@ export default function ScannerScreen() {
             </Text>
           </TouchableOpacity>
         ) : null}
-
-        {captureError ? (
-          <View style={styles.captureErrorBox}>
-            <Text style={styles.captureErrorText}>{captureError}</Text>
-          </View>
-        ) : null}
-
-        <View style={styles.guidanceBox}>
-          <Text style={styles.guidanceLabel}>
-            {t('scanner.guidance.label')}
-          </Text>
-          <Text style={styles.guidanceText}>
-            {t(activeStep.requirementKey)}
-          </Text>
-        </View>
-
-        <TouchableOpacity
-          style={[
-            styles.primaryButton,
-            (isCapturing ||
-              (permission?.granted &&
-                !activeCaptured &&
-                !isCameraReady)) &&
-              styles.primaryButtonDisabled,
-          ]}
-          onPress={
-            activeCaptured
-              ? handleRemoveCapture
-              : permission?.granted
-                ? handleCapture
-                : handlePermissionAction
-          }
-          disabled={
-            isCapturing ||
-            Boolean(
-              permission?.granted &&
-                !activeCaptured &&
-                !isCameraReady
-            )
-          }
-          activeOpacity={0.85}
-          accessibilityRole="button"
-        >
-          <Text style={styles.primaryButtonText}>
-            {activeCaptured
-              ? t('scanner.primaryButton.retake')
-              : isCapturing
-                ? t('scanner.primaryButton.saving')
-                : !permission?.granted
-                  ? cameraPermissionBlocked
-                    ? t('scanner.primaryButton.openSettings')
-                    : t('scanner.primaryButton.allowAccess')
-                  : !isCameraReady
-                    ? t('scanner.primaryButton.preparing')
-                    : t('scanner.primaryButton.capture')}
-          </Text>
-        </TouchableOpacity>
-
-        {activeCaptured && (
-          <TouchableOpacity
-            style={styles.inlineButton}
-            onPress={handleRemoveCapture}
-            activeOpacity={0.75}
-            accessibilityRole="button"
-          >
-            <Text style={styles.inlineButtonText}>
-              {t('scanner.inline.removeCapture')}
-            </Text>
-          </TouchableOpacity>
-        )}
       </View>
 
+      {/* Auswerten, sobald ein Foto da ist — nicht erst nach vier.
+          Bei vielen Praeparaten stehen Wirkstoffe und Menge auf derselben
+          Flaeche; dann sind weitere Aufnahmen nur Arbeit ohne Ertrag. Was
+          am Ende wirklich fehlt, sagt die Auswertung selbst: Das Ergebnis
+          weist offene Punkte aus, statt Luecken zu fuellen, die es nicht
+          belegen kann. */}
       <View
         style={[
           styles.analysisCard,
-          allCaptured && styles.analysisCardReady,
+          canAnalyze && styles.analysisCardReady,
         ]}
       >
         <Text
           style={[
             styles.analysisKicker,
-            allCaptured && styles.analysisKickerReady,
+            canAnalyze && styles.analysisKickerReady,
           ]}
         >
-          {allCaptured
+          {canAnalyze
             ? t('scanner.analysis.readyKicker')
             : t('scanner.analysis.pendingKicker')}
         </Text>
 
         <Text style={styles.analysisTitle}>
-          {allCaptured
-            ? t('scanner.analysis.readyTitle')
-            : t(
-                remainingCount === 1
-                  ? 'scanner.analysis.remaining_one'
-                  : 'scanner.analysis.remaining_other',
-                { count: remainingCount }
-              )}
+          {canAnalyze
+            ? t(
+                completedCount === 1
+                  ? 'scanner.analysis.count_one'
+                  : 'scanner.analysis.count_other',
+                { count: completedCount }
+              )
+            : t('scanner.analysis.noneTitle')}
         </Text>
 
         <Text style={styles.analysisText}>
-          {allCaptured
-            ? t('scanner.analysis.readyText')
-            : t('scanner.analysis.pendingText')}
+          {!canAnalyze
+            ? t('scanner.analysis.pendingText')
+            : missingSteps.length === 0
+              ? t('scanner.analysis.allText')
+              : t('scanner.analysis.enoughText', {
+                  missing: missingSteps
+                    .map((step) => t(step.shortLabelKey))
+                    .join(', '),
+                })}
         </Text>
 
         <TouchableOpacity
           style={[
             styles.analysisButton,
-            allCaptured && styles.analysisButtonReady,
+            canAnalyze && styles.analysisButtonReady,
           ]}
           onPress={handleStartAnalysis}
-          disabled={isAnalyzing}
+          disabled={isAnalyzing || !canAnalyze}
           activeOpacity={0.85}
           accessibilityRole="button"
         >
           <Text
             style={[
               styles.analysisButtonText,
-              allCaptured && styles.analysisButtonTextReady,
+              canAnalyze && styles.analysisButtonTextReady,
             ]}
           >
             {isAnalyzing
               ? t('scanner.analysis.running')
-              : allCaptured
+              : canAnalyze
                 ? analyzerReady
                   ? t('scanner.analysis.start')
                   : t('scanner.analysis.startTest')
@@ -1456,6 +1433,15 @@ const styles = StyleSheet.create({
     minHeight: 50,
     paddingHorizontal: space.lg + 2,
     marginBottom: 0,
+  },
+  // Ausloeser: hoeher als ein normaler Knopf, weil er im Stehen mit dem
+  // Daumen getroffen werden muss, waehrend die andere Hand die Dose haelt.
+  shutterButton: {
+    ...surfaces.buttonPrimary,
+    minHeight: 58,
+    paddingHorizontal: space.lg + 2,
+    marginTop: space.md,
+    marginBottom: space.sm,
   },
   primaryButtonDisabled: {
     backgroundColor: colors.inkFaint,

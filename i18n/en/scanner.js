@@ -5,18 +5,13 @@
 
 export default {
   'scanner.kicker': 'Guided product scan',
-  'scanner.title': 'Four photos. One clear result.',
+  'scanner.title': 'As many photos as it takes.',
   'scanner.subtitle':
-    'The app guides you step by step through all relevant product sides, so details can later be checked completely and traceably.',
-
-  'scanner.progress.label': 'Scan progress',
-  'scanner.progress.count': '{completed} of {total} photos',
-  'scanner.progress.complete': 'Complete',
-  'scanner.progress.remaining': '{count} open',
+    'The steps are a suggestion, not a requirement. Photograph as much as the label offers: the analysis runs as soon as the first photo is there.',
 
   'scanner.barcode.detected': 'Barcode detected',
   'scanner.barcode.text':
-    'The code can be looked up directly in the open product database. The four photos remain the more precise route, since they capture dosage and substance forms from the label.',
+    'The code can be looked up directly in the open product database. The photos remain the more precise route, since they capture dosage and substance forms from the label.',
   'scanner.barcode.searching': 'Looking up product…',
   'scanner.barcode.search': 'Look up product by barcode',
   'scanner.barcode.discard': 'Discard barcode',
@@ -31,7 +26,7 @@ export default {
   'scanner.camera.enableInSettings':
     'Enable the camera for Expo Go in the iPhone settings.',
   'scanner.camera.purpose':
-    'The camera is used exclusively for the four product photos.',
+    'The camera is used exclusively for the product photos.',
 
   'scanner.frame.saved': 'Real photo saved for this step',
   'scanner.frame.positionProduct':
@@ -50,8 +45,6 @@ export default {
   'scanner.primaryButton.preparing': 'Preparing camera',
   'scanner.primaryButton.capture': 'Take photo',
 
-  'scanner.inline.removeCapture': 'Remove saved photo',
-
   'scanner.section.title': 'Required photos',
   'scanner.section.hint': 'Tap a step to open it.',
 
@@ -60,14 +53,16 @@ export default {
   'scanner.step.stateOpen': 'Open',
 
   'scanner.analysis.readyKicker': 'Ready to check',
-  'scanner.analysis.pendingKicker': 'Complete the photos',
-  'scanner.analysis.readyTitle': 'All product sides are captured.',
-  'scanner.analysis.remaining_one': '{count} photo still missing.',
-  'scanner.analysis.remaining_other': '{count} photos still missing.',
-  'scanner.analysis.readyText':
+  'scanner.analysis.pendingKicker': 'No photo yet',
+  'scanner.analysis.noneTitle': 'Take a photo first.',
+  'scanner.analysis.count_one': 'One photo is ready.',
+  'scanner.analysis.count_other': '{count} photos are ready.',
+  'scanner.analysis.allText':
     'The next step shows the detected product data, which can be checked before saving.',
+  'scanner.analysis.enoughText':
+    'That is enough if the ingredients and amount are legible on the photos. Still open: {missing}. Whatever turns out to be missing is listed in the result.',
   'scanner.analysis.pendingText':
-    'The analysis only starts once all required product areas have been photographed.',
+    'One photo with legible ingredients and amount is enough for the analysis.',
   'scanner.analysis.running': 'Analysis running…',
   'scanner.analysis.start': 'Start analysis',
   'scanner.analysis.startTest': 'Start test analysis',
@@ -90,10 +85,10 @@ export default {
   'scanner.error.cameraMountFailed':
     'The camera could not be started. Please open the scanner again.',
   'scanner.error.barcodeNotFound':
-    'Barcode {code} was not found in the product database. Please take the four photos.',
+    'Barcode {code} was not found in the product database. Capture the label by photo instead.',
   'scanner.error.barcodeLookupFailed': 'The barcode lookup failed.',
   'scanner.error.codeNotProduct':
-    'This code does not contain a product number (EAN/GTIN). Please take the four photos for the analysis.',
+    'This code does not contain a product number (EAN/GTIN). Photograph the label for the analysis.',
   'scanner.liveHint.ready':
     'Hold a barcode or QR code in view, the search starts automatically',
   'scanner.liveHint.searching': 'Code detected, looking up the product …',
@@ -106,7 +101,7 @@ export default {
   'scanner.nameSearch.button': 'Search product',
   'scanner.nameSearch.searching': 'Searching …',
   'scanner.nameSearch.empty':
-    'No match in the database. The four photos will help instead.',
+    'No match in the database. A photo of the label helps instead.',
   'scanner.nameSearch.failed': 'The product search failed.',
   'scanner.nameSearch.seedOrigin': 'DACH catalogue',
   'scanner.inline.resetScan': 'Discard scan and start over',

@@ -20,6 +20,7 @@ export default {
   'nav.lab': 'Lab values',
   'nav.export': 'Report',
   'nav.settings': 'Settings',
+  'nav.inventory': 'My inventory',
   'nav.history': 'History',
   'nav.search': 'Search',
   'nav.brands': 'Brands',

@@ -256,6 +256,27 @@ export default function Dashboard() {
         </View>
       ) : null}
 
+      {/* Zugang zum vollstaendigen Bestand, direkt unter der Tagesuebersicht.
+          Der Tagesplan zeigt nur, was heute ansteht — wer ein Praeparat
+          ohne Einnahmezeitpunkt angelegt hat, fand es vorher gar nicht
+          wieder. */}
+      <TouchableOpacity
+        style={styles.inventoryCard}
+        onPress={() => router.push('/inventory')}
+        activeOpacity={0.8}
+        accessibilityRole="link"
+      >
+        <View style={styles.inventoryTextWrap}>
+          <Text style={styles.inventoryLabel}>{t('dashboard.inventoryLabel')}</Text>
+          <Text style={styles.inventoryValue}>
+            {fullInventoryCount === 1
+              ? t('dashboard.inventoryCount_one')
+              : t('dashboard.inventoryCount_other', { count: fullInventoryCount })}
+          </Text>
+        </View>
+        <Text style={styles.inventoryChevron}>›</Text>
+      </TouchableOpacity>
+
       <View style={styles.metricGrid}>
         <MetricCard label={t('dashboard.metricActiveRoutine')} value={String(fullInventoryCount)} />
         <MetricCard label={t('dashboard.metricScheduledToday')} value={String(scheduledToday)} />
@@ -361,7 +382,16 @@ export default function Dashboard() {
               const supplementTiming = (
                 routineSupplement.timingRaw || supplement.timingRaw || ''
               ).trim();
-              const notesExpanded = expandedNoteIds.has(supplement.id);
+              const detailsExpanded = expandedNoteIds.has(supplement.id);
+              // In der taeglichen Routine zaehlt die Liste, nicht der
+              // Steckbrief: Dosierung und Anwendungsgebiet stehen
+              // eingeklappt auf einer Zeile. Aufgeklappt wird, wer es
+              // wissen will. Der Schalter erscheint nur, wenn es etwas zu
+              // sehen gibt — eine Notiz oder eine Zeile, die abgeschnitten
+              // waere.
+              const hasTruncatedMeta = supplementMeta.length > 42;
+              const canExpandDetails =
+                Boolean(supplementNotes) || hasTruncatedMeta;
 
               return (
                 <View key={supplement.id} style={styles.supplementCard}>
@@ -378,7 +408,12 @@ export default function Dashboard() {
                       </Text>
                     </View>
                     {supplementMeta ? (
-                      <Text style={styles.supplementMeta}>{supplementMeta}</Text>
+                      <Text
+                        style={styles.supplementMeta}
+                        numberOfLines={detailsExpanded ? undefined : 1}
+                      >
+                        {supplementMeta}
+                      </Text>
                     ) : null}
 
                     {stock?.currentUnits !== undefined ? (
@@ -398,20 +433,20 @@ export default function Dashboard() {
                       </View>
                     ) : null}
 
-                    {supplementNotes ? (
+                    {canExpandDetails ? (
                       <TouchableOpacity
                         onPress={() => toggleNoteExpanded(supplement.id)}
                         activeOpacity={0.7}
                         accessibilityRole="button"
                         accessibilityLabel={
-                          notesExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')
+                          detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')
                         }
                       >
-                        {notesExpanded ? (
+                        {detailsExpanded && supplementNotes ? (
                           <Text style={styles.noteText}>{supplementNotes}</Text>
                         ) : null}
                         <Text style={styles.noteToggle}>
-                          {notesExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')}
+                          {detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')}
                         </Text>
                       </TouchableOpacity>
                     ) : null}
@@ -628,6 +663,31 @@ const styles = StyleSheet.create({
     marginTop: space.sm,
     ...type.body,
     color: toneFor('notice').ink,
+  },
+  inventoryCard: {
+    ...surfaces.card,
+    marginTop: space.md,
+    marginBottom: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.rule,
+  },
+  inventoryTextWrap: { flex: 1 },
+  inventoryLabel: {
+    ...type.label,
+    color: colors.accent,
+  },
+  inventoryValue: {
+    ...type.subheading,
+    marginTop: 2,
+  },
+  inventoryChevron: {
+    ...type.display,
+    fontSize: 26,
+    color: colors.accent,
+    marginLeft: space.md,
   },
   metricGrid: {
     marginTop: space.lg,

@@ -46,55 +46,62 @@ export default function Home() {
 
       <NavCard
         index="01"
+        title={t('home.nav.inventory.title')}
+        subtitle={t('home.nav.inventory.subtitle')}
+        onPress={() => router.push('/inventory')}
+      />
+
+      <NavCard
+        index="02"
         title={t('home.nav.add.title')}
         subtitle={t('home.nav.add.subtitle')}
         onPress={() => router.push('/AddSupplement')}
       />
 
       <NavCard
-        index="02"
+        index="03"
         title={t('home.nav.history.title')}
         subtitle={t('home.nav.history.subtitle')}
         onPress={() => router.push('/history')}
       />
 
       <NavCard
-        index="03"
+        index="04"
         title={t('home.nav.outcome.title')}
         subtitle={t('home.nav.outcome.subtitle')}
         onPress={() => router.push('/outcome')}
       />
 
       <NavCard
-        index="04"
+        index="05"
         title={t('home.nav.profile.title')}
         subtitle={t('home.nav.profile.subtitle')}
         onPress={() => router.push('/profile')}
       />
 
       <NavCard
-        index="05"
+        index="06"
         title={t('home.nav.lab.title')}
         subtitle={t('home.nav.lab.subtitle')}
         onPress={() => router.push('/lab')}
       />
 
       <NavCard
-        index="06"
+        index="07"
         title={t('home.nav.export.title')}
         subtitle={t('home.nav.export.subtitle')}
         onPress={() => router.push('/export')}
       />
 
       <NavCard
-        index="07"
+        index="08"
         title={t('nav.notifications')}
         subtitle={t('notifications.subtitle')}
         onPress={() => router.push('/notifications')}
       />
 
       <NavCard
-        index="08"
+        index="09"
         title={t('home.nav.settings.title')}
         subtitle={t('home.nav.settings.subtitle')}
         onPress={() => router.push('/settings')}

@@ -19,6 +19,7 @@ import complaint from './complaint';
 import components from './components';
 import dashboard from './dashboard';
 import history from './history';
+import inventory from './inventory';
 import home from './home';
 import lab from './lab';
 import logic from './logic';
@@ -46,6 +47,7 @@ export default {
   ...reference,
   ...home,
   ...dashboard,
+  ...inventory,
   ...addSupplement,
   ...profile,
   ...outcome,

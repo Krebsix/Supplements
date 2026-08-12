@@ -59,6 +59,15 @@ export default {
   'addSupplement.unitHelper': 'e.g. mg, IU, capsule, drops or serving.',
   'addSupplement.unitPlaceholder': 'mg',
 
+  'addSupplement.packageUnitsLabel': 'Units per pack',
+  'addSupplement.packageUnitsHelper':
+    'How many capsules, tablets or servings are in the container?',
+  'addSupplement.packageUnitsPlaceholder': '120',
+  'addSupplement.priceLabel': 'Purchase price in euros',
+  'addSupplement.priceHelper':
+    'What you last paid. The cost analysis derives the daily price from it.',
+  'addSupplement.pricePlaceholder': '19.90',
+
   'addSupplement.routineSectionTitle': 'Daily routine',
   'addSupplement.routineSectionSubtitle':
     'Choose the time of day this entry should appear in. Multiple slots are possible.',

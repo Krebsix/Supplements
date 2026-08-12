@@ -31,6 +31,8 @@ export default function AddSupplement() {
   const userSupplements = useStore((state) => state.userSupplements);
   const entitlement = useStore((state) => state.entitlement);
   const inventory = useStore((state) => state.librarySupplements);
+  const setStock = useStore((state) => state.setStock);
+  const getStock = useStore((state) => state.getStock);
 
   const [name, setName] = useState('');
   const [purpose, setPurpose] = useState('');
@@ -47,6 +49,12 @@ export default function AddSupplement() {
   const [cureEnabled, setCureEnabled] = useState(false);
   const [cureOnDays, setCureOnDays] = useState('');
   const [cureOffDays, setCureOffDays] = useState('');
+  // Kaufpreis und Packungsinhalt. Beides lag bisher nur im Analyse-Tab und
+  // damit hinter der Auswertung, die es voraussetzt: Die Kostenrechnung
+  // (CostAnalyzer.js) braucht genau diese zwei Zahlen. Erfasst wird es
+  // jetzt dort, wo die Packung ohnehin in der Hand liegt.
+  const [purchasePrice, setPurchasePrice] = useState('');
+  const [packageUnits, setPackageUnits] = useState('');
 
   const editIdParam = Array.isArray(params.editId) ? params.editId[0] : params.editId;
   const fromScanParam = Array.isArray(params.fromScan) ? params.fromScan[0] : params.fromScan;
@@ -78,7 +86,21 @@ export default function AddSupplement() {
       setCureOnDays('');
       setCureOffDays('');
     }
-  }, [existingSupplement]);
+
+    // Preisangaben liegen nicht am Supplement, sondern im Bestand
+    // (stockBySupplementId) — dort rechnet die Kostenanalyse damit.
+    const stock = getStock(existingSupplement.id);
+    setPurchasePrice(
+      Number.isFinite(Number(stock?.purchasePrice)) && Number(stock.purchasePrice) > 0
+        ? String(stock.purchasePrice)
+        : ''
+    );
+    setPackageUnits(
+      Number.isFinite(Number(stock?.packageUnits)) && Number(stock.packageUnits) > 0
+        ? String(stock.packageUnits)
+        : ''
+    );
+  }, [existingSupplement, getStock]);
 
   useEffect(() => {
     if (!fromScan) return;
@@ -218,6 +240,41 @@ export default function AddSupplement() {
   // nicht hinter dem Gate verschwinden.
   const cureLocked = !canUseProFeature(entitlement).allowed && !cureEnabled;
 
+  /**
+   * Schreibt Kaufpreis und Packungsinhalt in den Bestand.
+   * Leere Felder loeschen den jeweiligen Wert, statt ihn stehen zu lassen —
+   * ein Preis, den niemand mehr bestaetigt, waere sonst dauerhaft
+   * Grundlage der Kostenrechnung. Andere Bestandsfelder (etwa der
+   * Fuellstand) bleiben unangetastet.
+   */
+  function persistPurchaseInfo(supplementId) {
+    if (!supplementId) return;
+
+    const priceText = purchasePrice.trim().replace(',', '.');
+    const unitsText = packageUnits.trim();
+    const price = Number(priceText);
+    const units = Number.parseInt(unitsText, 10);
+
+    const current = getStock(supplementId) ?? {};
+    const next = { ...current };
+
+    if (priceText && Number.isFinite(price) && price > 0) {
+      next.purchasePrice = price;
+      next.currency = current.currency || 'EUR';
+    } else {
+      delete next.purchasePrice;
+    }
+
+    if (unitsText && Number.isInteger(units) && units > 0) {
+      next.packageUnits = units;
+    } else {
+      delete next.packageUnits;
+    }
+
+    if (Object.keys(next).length === 0 && Object.keys(current).length === 0) return;
+    setStock(supplementId, next);
+  }
+
   function handleSave() {
     // 5-Praeparate-Grenze des Free-Tarifs (Entitlements.js). Gilt nur fuer
     // NEUE Eintraege — Bearbeiten bleibt immer moeglich, sonst kaeme
@@ -314,6 +371,7 @@ export default function AddSupplement() {
       }
 
       updateUserSupplement(editId, payload);
+      persistPurchaseInfo(editId);
 
       Alert.alert(
         t('addSupplement.alert.updatedTitle'),
@@ -323,11 +381,12 @@ export default function AddSupplement() {
       return;
     }
 
-    if (fromScan) {
-      addSupplementFromPendingScan(payload);
-    } else {
-      addUserSupplement({ ...payload, source: 'manual' });
-    }
+    // Die Bestands-ID entsteht erst beim Anlegen, deshalb wandert der
+    // Preis erst danach in den Bestand.
+    const created = fromScan
+      ? addSupplementFromPendingScan(payload)
+      : addUserSupplement({ ...payload, source: 'manual' });
+    persistPurchaseInfo(created?.id);
 
     Alert.alert(
       t('addSupplement.alert.savedTitle'),
@@ -339,6 +398,7 @@ export default function AddSupplement() {
   }
 
   return (
+    <View style={styles.screenWrap}>
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.heroCard}>
         <View style={styles.heroHeader}>
@@ -405,6 +465,35 @@ export default function AddSupplement() {
             value={unit}
             onChangeText={setUnit}
             placeholder={t('addSupplement.unitPlaceholder')}
+          />
+        </View>
+      </View>
+
+      {/* Packung und Preis: beides steht auf der Dose, die beim Erfassen
+          ohnehin in der Hand liegt. Aus den zwei Zahlen errechnet die
+          Kostenanalyse spaeter, was das Praeparat pro Tag kostet. Ohne
+          sie bleibt das Produkt dort schlicht ungerechnet — geschaetzt
+          wird nichts. */}
+      <View style={styles.row}>
+        <View style={styles.rowField}>
+          <FormField
+            label={t('addSupplement.packageUnitsLabel')}
+            helper={t('addSupplement.packageUnitsHelper')}
+            value={packageUnits}
+            onChangeText={setPackageUnits}
+            placeholder={t('addSupplement.packageUnitsPlaceholder')}
+            keyboardType="number-pad"
+          />
+        </View>
+        <View style={styles.rowSpacer} />
+        <View style={styles.rowField}>
+          <FormField
+            label={t('addSupplement.priceLabel')}
+            helper={t('addSupplement.priceHelper')}
+            value={purchasePrice}
+            onChangeText={setPurchasePrice}
+            placeholder={t('addSupplement.pricePlaceholder')}
+            keyboardType="decimal-pad"
           />
         </View>
       </View>
@@ -522,26 +611,33 @@ export default function AddSupplement() {
         multiline
       />
 
-      <TouchableOpacity
-        style={styles.primaryButton}
-        onPress={handleSave}
-        accessibilityRole="button"
-        accessibilityLabel={primaryButtonLabel}
-      >
-        <Text style={styles.primaryButtonText}>{primaryButtonLabel}</Text>
-      </TouchableOpacity>
-
-      {/* Das Modal war bisher nur per Geste verlassbar: ein expliziter
-          Abbrechen-Weg gehoert zu jedem Formular. */}
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => router.back()}
-        accessibilityRole="button"
-        accessibilityLabel={t('common.cancel')}
-      >
-        <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
-      </TouchableOpacity>
     </ScrollView>
+
+      {/* Bestaetigen liegt fest am unteren Rand statt hinter elf Feldern:
+          Nach dem Scan kontrolliert man oben ein, zwei Angaben und ist
+          fertig — dafuer soll man nicht erst ans Formularende scrollen.
+          Abbrechen steht daneben, weil ein Modal einen sichtbaren Ausgang
+          braucht. */}
+      <View style={styles.footerBar}>
+        <TouchableOpacity
+          style={styles.footerCancel}
+          onPress={() => router.back()}
+          accessibilityRole="button"
+          accessibilityLabel={t('common.cancel')}
+        >
+          <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.footerConfirm}
+          onPress={handleSave}
+          accessibilityRole="button"
+          accessibilityLabel={primaryButtonLabel}
+        >
+          <Text style={styles.primaryButtonText}>{primaryButtonLabel}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
@@ -564,6 +660,7 @@ function FormField({ label, helper, multiline = false, ...props }) {
 }
 
 const styles = StyleSheet.create({
+  screenWrap: surfaces.screen,
   screen: surfaces.screen,
   content: surfaces.content,
   heroCard: {
@@ -749,5 +846,29 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     ...surfaces.buttonQuietText,
+  },
+  // Fest stehende Leiste unter dem Formular. Sie liegt ausserhalb der
+  // ScrollView, deshalb bleibt Bestaetigen auch bei langen Formularen
+  // erreichbar.
+  footerBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm + 2,
+    paddingHorizontal: space.xl,
+    paddingTop: space.md,
+    paddingBottom: space.xl + 6,
+    backgroundColor: colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: colors.rule,
+  },
+  footerCancel: {
+    ...surfaces.buttonQuiet,
+    flex: 1,
+    paddingHorizontal: space.md,
+  },
+  footerConfirm: {
+    ...surfaces.buttonPrimary,
+    flex: 2,
+    paddingHorizontal: space.md,
   },
 });

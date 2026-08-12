@@ -59,6 +59,15 @@ export default {
   'addSupplement.unitHelper': 'z. B. mg, IE, Kapsel, Tropfen oder Portion.',
   'addSupplement.unitPlaceholder': 'mg',
 
+  'addSupplement.packageUnitsLabel': 'Inhalt der Packung',
+  'addSupplement.packageUnitsHelper':
+    'Wie viele Kapseln, Tabletten oder Portionen sind in der Dose?',
+  'addSupplement.packageUnitsPlaceholder': '120',
+  'addSupplement.priceLabel': 'Kaufpreis in Euro',
+  'addSupplement.priceHelper':
+    'Was du zuletzt bezahlt hast. Daraus errechnet die Kostenanalyse den Tagespreis.',
+  'addSupplement.pricePlaceholder': '19,90',
+
   'addSupplement.routineSectionTitle': 'Tagesroutine',
   'addSupplement.routineSectionSubtitle':
     'Wähle die Tageszeit, in der dieser Eintrag sichtbar sein soll. Mehrere Slots sind möglich.',

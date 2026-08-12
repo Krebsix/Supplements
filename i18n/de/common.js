@@ -20,6 +20,7 @@ export default {
   'nav.lab': 'Laborwerte',
   'nav.export': 'Bericht',
   'nav.settings': 'Einstellungen',
+  'nav.inventory': 'Mein Bestand',
   'nav.history': 'Verlauf',
   'nav.search': 'Suche',
   'nav.brands': 'Marken',

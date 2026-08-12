@@ -19,6 +19,9 @@ export default {
   'home.trust.advice.text':
     'The app organises and documents. It does not replace medical advice.',
   'home.section.workflow': 'Workflow',
+  'home.nav.inventory.title': 'My inventory',
+  'home.nav.inventory.subtitle':
+    'Every product you added at a glance, including those without an intake time.',
   'home.nav.add.title': 'New supplement',
   'home.nav.add.subtitle':
     'Add a manual entry with dosage, timing and purpose to your active routine.',
