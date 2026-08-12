@@ -90,8 +90,14 @@ Eintraege zu erzeugen.
 Eingabe: Rohtext. Ausgabe: Liste von Kandidaten der Form
 
 ```
-{ markerId | null, rawName, value, unit, referenceRange | null, confidence }
+{ markerId | null, rawName, value, unit, referenceRange | null }
 ```
+
+Bewusst ohne Konfidenzwert: Eine Zahl wie "0.82" waere eine Genauigkeit, die
+der Parser nicht hat, und sie wuerde die Nutzerin zu der Annahme verleiten,
+hohe Werte muesse man nicht mehr pruefen. Stattdessen gilt binaer: Ein
+Kandidat ist entweder zugeordnet (`markerId` gesetzt) oder offen
+(`markerId: null`). Beide werden angeboten, offene zuerst.
 
 Regeln:
 
@@ -131,6 +137,10 @@ Text ohne jeden Wert.
 
 ## Reihenfolge
 
+Schritte 1 bis 4 bilden den ersten Umsetzungsplan und ergeben ein
+benutzbares Feature. Schritt 5 ist ein eigenes Vorhaben mit eigenem Plan —
+er braucht ein natives Modul und damit den Development Build.
+
 1. **Machbarkeitstest PDF-Text.** Klaert, ob sich PDF-Text in React Native
    ohne natives Modul auslesen laesst. Entscheidet, ob das Feature in Expo
    Go testbar ist oder auf den Development Build wartet. Zuerst, weil es
@@ -139,7 +149,7 @@ Text ohne jeden Wert.
 2. Parser samt Tests
 3. Bestaetigungs-Screen und Verdrahtung
 4. Satz in `data/legalContent.js`
-5. Foto-Weg auf demselben Parser
+5. Foto-Weg auf demselben Parser (eigener Plan)
 
 ## Offenes Risiko
 
