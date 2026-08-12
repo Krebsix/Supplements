@@ -17,7 +17,7 @@ messbare "100-Prozent"-Fertig-Kriterium (definiert Nadine).
 | 2 | Impressum vervollständigen: Kontakt-E-Mail (info@indoohome.com, 2026-08-11 eingetragen). Offen: Vertretungsberechtigte Person | Nadine | E-Mail erledigt, Name offen |
 | 3 | EU-Vertreter nach Art. 27 DSGVO beauftragen und eintragen | Nadine | offen |
 | 4 | AVV mit Supabase und Anthropic dokumentieren | Claude | erledigt, siehe launch/avv-dokumentation.md |
-| 5 | Preismodell entschieden (2026-08-09): Freemium, Pro-Abo 29,99/Jahr bzw. 4,99/Monat, Scan-Credit-Pakete. In der App verdrahtet: Scan-Gate, 5-Präparate-Grenze, Pro-Gates (Wirkungskontrolle, Kostenanalyse, Laborwerte, Kur-Zyklen), Kontingent-Anzeige in den Einstellungen; alles hinter PAYWALL_ENFORCED=false. Noch zu bauen: IAP-Integration + Paywall-Kaufscreen (braucht Developer-Account, Punkt 9). Scan-Modell auf Haiku 4.5 nach Qualitätstest | Claude + Nadine | teils |
+| 5 | Preismodell entschieden (2026-08-09): Freemium, Pro-Abo 29,99/Jahr bzw. 4,99/Monat, Scan-Credit-Pakete. In der App verdrahtet: Scan-Gate, 5-Präparate-Grenze, Pro-Gates (Wirkungskontrolle, Kostenanalyse, Laborwerte, Kur-Zyklen), Kontingent-Anzeige in den Einstellungen; alles hinter PAYWALL_ENFORCED=false. Noch zu bauen: IAP-Integration + Paywall-Kaufscreen (braucht Developer-Account, Punkt 9). Scan-Modell: OPUS — Haiku-Test 2026-08-10 durchgefallen (Kill-Kriterium ausgeloest, Beleg launch/scan-quality-report-2026-08-10.md); Fair-Use-Limit/Credits-Preis vor Paywall-Launch mit Opus-Kosten (~25 ct/Scan) nachrechnen | Claude + Nadine | teils |
 | 6 | App-Icon (1024x1024) und Splash | Claude | ENTWURF verdrahtet (2026-08-11): assets/* aus Nadines Entwurf, Tagline entfernt. Fuer die Store-Version NICHT final: Schriftzug im Icon (bei Home-Screen-Groesse unlesbar) und eigener Rahmen im Motiv (Doppel-Rundung durch iOS-Maske). Finale Version: textfrei, Motiv randlos auf die volle Flaeche |
 | 7 | Datenschutz-URL: statische Webseite mit der Erklärung. Gebaut (web/, generiert aus data/legalContent.js via `npm run build:legal`, Drift-Test), E-Mail-Platzhalter gefüllt. Auf Vercel deployed (Projekt mysuplea-legal, live unter mysuplea-legal.vercel.app), Subdomain mysuplea.indoohome.com am Projekt registriert. Offen: EIN DNS-Eintrag bei united-domains (`A mysuplea 76.76.21.21`), danach Vertretungsberechtigte + EU-Vertreter aus Punkt 2/3 im Text nachtragen | Claude / Nadine | deployed, DNS-Eintrag offen |
 | 8 | Gerätetest: Onboarding, Scan-Einwilligung, Erinnerungen, Backup | Nadine | offen |
@@ -30,11 +30,13 @@ und die Konkurrenz (Scores, Mangel-Quizze, Biomarker-Deutung) kann sie nicht
 kopieren, ohne ihr Geschäftsmodell aufzugeben. Stattdessen drei Gates in
 fester Reihenfolge:
 
-1. **Haiku-Test zuerst** (in-house, keine Beta nötig): 10 Etikettenfotos
-   durch `node scripts/scan-quality-test.mjs <ordner>` — vergleicht
-   Produktiv-Modell und Haiku am selben Foto. Kill bis 16.08.: unter 50 %
-   korrekte Substanz+Dosis bei Haiku → Umstellung tot, Scan-Kosten und
-   Fair-Use-Limit neu rechnen.
+1. **Haiku-Test: ABGESCHLOSSEN 2026-08-10, Kill-Kriterium ausgeloest.**
+   Haiku unter 50 % korrekte Substanz+Dosis (~4/9 vs. ~8/9 bei Opus),
+   verstuemmelte Substanznamen bei hoeherer Konfidenz. Umstellung tot,
+   ANALYZE_MODEL bleibt Opus. Beleg: launch/scan-quality-report-2026-08-10.md,
+   Brain: decisions/2026-08-10-supplements-haiku-umstellung-verworfen.md.
+   Folgeaufgabe: Fair-Use-Limit und Credits-Preis mit Opus-Kosten
+   nachrechnen (vor Paywall-Aktivierung).
 2. **Beta ohne Paywall**: Apple-Account → TestFlight, PAYWALL_ENFORCED
    bleibt false, dort zahlt niemand. Schwellen vorab: mindestens 50 %
    korrekte Scans, mindestens 30 % der Testerinnen schöpfen die 3
