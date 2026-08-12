@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 
@@ -14,8 +14,21 @@ export default function Home() {
   return (
     <View style={styles.screenWrap}>
       <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.kicker}>{t('home.kicker')}</Text>
-      <Text style={styles.title}>{t('home.title')}</Text>
+      {/* Kleines Markenzeichen neben der Ueberschrift. Das Hauptmenue ist
+          der einzige Screen ohne eigene Aufgabe, hier stoert es nicht. */}
+      <View style={styles.brandRow}>
+        <Image
+          source={require('../../../assets/logo.png')}
+          style={styles.brandLogo}
+          accessibilityRole="image"
+          accessibilityLabel={t('onboarding.logoAlt')}
+        />
+        <View style={styles.brandTextWrap}>
+          <Text style={styles.kicker}>{t('home.kicker')}</Text>
+          <Text style={styles.title}>{t('home.title')}</Text>
+        </View>
+      </View>
+
       <Text style={styles.subtitle}>{t('home.subtitle')}</Text>
 
       {/* Sprachumschaltung im Hauptmenue, nicht nur in den Einstellungen:
@@ -163,6 +176,17 @@ const styles = StyleSheet.create({
   // Baustein aus dem Theme statt eigener Zahlen — deckt sich fast exakt
   // mit den vorherigen Werten (20/28/44 -> 22/30/48).
   content: { ...surfaces.content },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  brandLogo: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.lg,
+    marginRight: space.md,
+  },
+  brandTextWrap: { flex: 1 },
   kicker: {
     ...type.eyebrow,
     marginBottom: space.sm,

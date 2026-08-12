@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -45,6 +46,16 @@ export default function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      {/* Die Marke steht genau einmal gross da: beim allerersten Start.
+          Danach traegt sie das App-Icon auf dem Home-Screen, und die
+          Oberflaeche gehoert dem Inhalt. */}
+      <Image
+        source={require('../assets/logo.png')}
+        style={styles.logo}
+        accessibilityRole="image"
+        accessibilityLabel={t('onboarding.logoAlt')}
+      />
+
       <Text style={styles.eyebrow}>{t('onboarding.eyebrow')}</Text>
       <Text style={styles.title}>{t('onboarding.title')}</Text>
       <Text style={styles.intro}>{t('onboarding.intro')}</Text>
@@ -98,7 +109,13 @@ export default function OnboardingScreen() {
 
 const styles = StyleSheet.create({
   screen: surfaces.screen,
-  content: { ...surfaces.content, paddingTop: 72 },
+  content: { ...surfaces.content, paddingTop: 64 },
+  logo: {
+    width: 72,
+    height: 72,
+    borderRadius: radius.lg + 6,
+    marginBottom: space.lg,
+  },
   eyebrow: { ...type.eyebrow, marginBottom: space.sm },
   title: { ...type.display, marginBottom: space.md },
   intro: { ...type.body, marginBottom: space.xl },

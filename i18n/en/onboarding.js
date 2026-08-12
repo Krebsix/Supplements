@@ -4,6 +4,7 @@
  */
 
 export default {
+  'onboarding.logoAlt': 'MySuplea',
   'onboarding.eyebrow': 'Welcome',
   'onboarding.title': 'Before you start',
   'onboarding.intro':

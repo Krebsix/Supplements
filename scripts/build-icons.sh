@@ -46,10 +46,15 @@ render_opaque "$SRC/icon.svg"   1024 "$OUT/icon.png"
 render_opaque "$SRC/icon.svg"    196 "$OUT/favicon.png"
 render_opaque "$SRC/splash.svg" 1284 "$OUT/splash.png"
 
+# Marke innerhalb der App (Onboarding, Hauptmenue). Bewusst eine eigene,
+# kleine Datei statt des 1024er-Icons: Das Bild wird dort mit 44 bis 72 px
+# dargestellt, und ein Bildschirm soll nicht ein Megapixel dafuer laden.
+render_opaque "$SRC/icon.svg"    256 "$OUT/logo.png"
+
 rsvg-convert -w 1024 -h 1024 "$SRC/adaptive-icon.svg" -o "$OUT/adaptive-icon.png"
 
 echo "Gebaut:"
-for f in "$OUT/icon.png" "$OUT/favicon.png" "$OUT/splash.png" "$OUT/adaptive-icon.png"; do
+for f in "$OUT/icon.png" "$OUT/favicon.png" "$OUT/splash.png" "$OUT/adaptive-icon.png" "$OUT/logo.png"; do
   printf '  %-28s %s  alpha=%s\n' "$f" \
     "$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixel/{printf "%s ", $2}')" \
     "$(sips -g hasAlpha "$f" | awk '/hasAlpha/{print $2}')"
