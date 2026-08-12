@@ -1,29 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1024" height="1024" viewBox="0 0 1024 1024">
   <!--
     Android Adaptive Icon, Vordergrundebene.
 
-    Der Grund fehlt hier absichtlich: Android legt die backgroundColor aus
-    app.json darunter (#1c4f5c). Dadurch scheint sie durch die offene
-    Kapselhaelfte, und das Ergebnis sieht aus wie assets/icon.png.
+    SAFE ZONE: Android maskiert je nach Hersteller als Kreis, Squircle oder
+    Rechteck. Sicher sichtbar ist nur die Mitte. Das Motiv ist deshalb
+    deutlich kleiner als im iOS-Icon: Die Kapsel — das bedeutungstragende
+    Element — liegt vollstaendig im geschuetzten Bereich; von den Scan-Ecken
+    kann eine sehr enge Kreismaske die Spitzen anschneiden, sie sind rein
+    dekorativ. Der Vorgaenger-Entwurf verstiess klar dagegen: Sein
+    Schriftzug lag im Beschnitt.
 
-    WICHTIG — Safe Zone: Android maskiert die Vordergrundebene je nach
-    Hersteller als Kreis, Squircle oder Rechteck. Sicher sichtbar sind nur
-    die mittleren 66 Prozent, also ein Kreis mit 676 px Durchmesser. Die
-    Kapsel ist deshalb auf 620 px Laenge verkleinert (nicht 780 wie beim
-    iOS-Icon) und liegt vollstaendig in diesem Kreis. Der Vorgaenger-Entwurf
-    verstiess dagegen: Sein Schriftzug lag im Beschnitt.
+    Der Verlauf laeuft bis zum Rand durch, die Ebene ist also deckend. Das
+    ist fuer Verlaufsmotive zulaessig und macht die backgroundColor aus
+    app.json zur reinen Rueckfallebene.
   -->
   <defs>
-    <clipPath id="capsule">
-      <rect x="202" y="385" width="620" height="254" rx="127"/>
-    </clipPath>
+    <linearGradient id="bg" x1="0.35" y1="0" x2="0.65" y2="1">
+      <stop offset="0"    stop-color="#06264f"/>
+      <stop offset="0.45" stop-color="#021c3d"/>
+      <stop offset="1"    stop-color="#001129"/>
+    </linearGradient>
+
+    <linearGradient id="fadeY" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"     stop-color="#000"/>
+      <stop offset="0.035" stop-color="#fff"/>
+      <stop offset="0.965" stop-color="#fff"/>
+      <stop offset="1"     stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="fadeX" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"     stop-color="#000"/>
+      <stop offset="0.03"  stop-color="#fff"/>
+      <stop offset="0.97"  stop-color="#fff"/>
+      <stop offset="1"     stop-color="#000"/>
+    </linearGradient>
+    <mask id="feather">
+      <rect x="188" y="230" width="649" height="564" fill="url(#fadeY)"/>
+      <rect x="188" y="230" width="649" height="564" fill="url(#fadeX)"
+            style="mix-blend-mode:multiply"/>
+    </mask>
   </defs>
 
-  <g transform="rotate(-38 512 512)">
-    <g clip-path="url(#capsule)">
-      <rect x="202" y="385" width="310" height="254" fill="#f6f3ed"/>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <g mask="url(#feather)">
+    <g transform="translate(5.3, 76.3) scale(0.8107)">
+      <image x="0" y="0" width="1254" height="1254" xlink:href="motiv-original.png"/>
     </g>
-    <rect x="202" y="385" width="620" height="254" rx="127"
-          fill="none" stroke="#f6f3ed" stroke-width="24"/>
   </g>
 </svg>

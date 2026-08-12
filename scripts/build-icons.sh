@@ -15,8 +15,9 @@
 # channel"). rsvg-convert schreibt aber immer RGBA. Der Umweg ueber BMP
 # entfernt den Kanal verlustfrei — BMP speichert 24 Bit RGB ohne Kompression,
 # PNG danach wieder verlustfrei.
-# Das Android-Vordergrundbild ist die Ausnahme: Es MUSS transparent bleiben,
-# damit die backgroundColor aus app.json durchscheint.
+# Das Android-Vordergrundbild braucht diesen Schritt nicht: Sein Verlauf
+# laeuft bis zum Rand durch, es ist also ohnehin deckend, und Android stoert
+# ein Alpha-Kanal nicht.
 #
 # Voraussetzung: rsvg-convert (brew install librsvg)
 
@@ -45,7 +46,6 @@ render_opaque "$SRC/icon.svg"   1024 "$OUT/icon.png"
 render_opaque "$SRC/icon.svg"    196 "$OUT/favicon.png"
 render_opaque "$SRC/splash.svg" 1284 "$OUT/splash.png"
 
-# Android-Vordergrund: Transparenz bleibt erhalten
 rsvg-convert -w 1024 -h 1024 "$SRC/adaptive-icon.svg" -o "$OUT/adaptive-icon.png"
 
 echo "Gebaut:"

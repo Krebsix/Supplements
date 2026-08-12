@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1c4f5c"
+      "backgroundColor": "#011a39"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -36,7 +36,7 @@
       "package": "com.indoohome.mysuplea",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1c4f5c"
+        "backgroundColor": "#011a39"
       },
       "permissions": [
         "android.permission.CAMERA",

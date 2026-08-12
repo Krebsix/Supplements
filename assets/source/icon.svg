@@ -1,40 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1024" height="1024" viewBox="0 0 1024 1024">
   <!--
     App-Icon MySuplea.
 
-    WARUM SO:
-    Eine Kapsel, zweifarbig, sonst nichts. Kein Schriftzug (bei 60 pt auf dem
-    Home-Screen unlesbar, und Apple raet davon ab), kein Blatt (die App macht
-    bewusst KEINE Natur- oder Wellness-Suggestion, sie ordnet ein und zitiert
-    Quellen), kein Balkendiagramm.
+    Motiv: Nadines Entwurf (assets/source/motiv-original.png), hier auf das
+    zugeschnitten, was ein App-Icon tragen kann.
 
-    Die Farben sind die Marke selbst: colors.accent (#1c4f5c) als Grund,
-    colors.canvas (#f6f3ed) als Kapsel — dieselbe "Papier und Tinte"-Palette
-    wie die Oberflaeche (theme.js).
+    WAS GEGENUEBER DEM ENTWURF FEHLT UND WARUM:
+    - Der Schriftzug "MySuplea" samt Tagline ist weg. Bei 60 pt auf dem
+      Home-Screen (120 px) ist die Tagline nur noch ein grauer Strich, bei
+      40 px ist der ganze Text Matsch. Apple raet in den Human Interface
+      Guidelines ohnehin von Text im Icon ab. Die Wortmarke lebt dort
+      weiter, wo sie lesbar ist: Landingpage, Store-Listing, Splash.
+    - Der eigene gerundete Rahmen ist weg. iOS legt seine Maske darueber;
+      ein mitgezeichneter Rahmen ergaebe zwei sichtbare Rundungen
+      ineinander.
 
-    Petrol als Grund statt Papier, weil ein helles Icon auf einem hellen
-    Wallpaper seine Silhouette verliert. Getestet bei 120 px und 40 px.
-
-    Die zweite Kapselhaelfte bleibt offen: Dort scheint der Grund durch, wie
-    bei einer durchsichtigen Kapselhaelfte. Das haelt die Form bei kleinen
-    Groessen ruhig und braucht keinen dritten Farbton.
-
-    Randlos und ohne eigene Rundung: iOS legt seine eigene Maske darueber,
-    ein mitgezeichneter Rahmen ergaebe die Doppel-Rundung des Vorgaengers.
+    Der Ausschnitt liegt innerhalb der Scan-Ecken. Weil dabei ein Streifen
+    Hintergrund fehlt, liegt darunter ein Verlauf, dessen Farben aus dem
+    Originalbild ausgemessen sind (oben #06264f, unten #001129) — und der
+    Bildausschnitt laeuft an den Kanten weich aus, damit keine Naht bleibt.
   -->
   <defs>
-    <clipPath id="capsule">
-      <rect x="122" y="352" width="780" height="320" rx="160"/>
-    </clipPath>
+    <linearGradient id="bg" x1="0.35" y1="0" x2="0.65" y2="1">
+      <stop offset="0"    stop-color="#06264f"/>
+      <stop offset="0.45" stop-color="#021c3d"/>
+      <stop offset="1"    stop-color="#001129"/>
+    </linearGradient>
+
+    <linearGradient id="fadeY" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"     stop-color="#000"/>
+      <stop offset="0.025" stop-color="#fff"/>
+      <stop offset="0.975" stop-color="#fff"/>
+      <stop offset="1"     stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="fadeX" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"     stop-color="#000"/>
+      <stop offset="0.022" stop-color="#fff"/>
+      <stop offset="0.978" stop-color="#fff"/>
+      <stop offset="1"     stop-color="#000"/>
+    </linearGradient>
+    <mask id="feather">
+      <rect x="61" y="120" width="902" height="783" fill="url(#fadeY)"/>
+      <rect x="61" y="120" width="902" height="783" fill="url(#fadeX)"
+            style="mix-blend-mode:multiply"/>
+    </mask>
   </defs>
 
-  <rect width="1024" height="1024" fill="#1c4f5c"/>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
 
-  <g transform="rotate(-38 512 512)">
-    <g clip-path="url(#capsule)">
-      <rect x="122" y="352" width="390" height="320" fill="#f6f3ed"/>
+  <g mask="url(#feather)">
+    <g transform="translate(-191.9, -93.2) scale(1.126)">
+      <image x="0" y="0" width="1254" height="1254" xlink:href="motiv-original.png"/>
     </g>
-    <rect x="122" y="352" width="780" height="320" rx="160"
-          fill="none" stroke="#f6f3ed" stroke-width="30"/>
   </g>
 </svg>
