@@ -18,7 +18,9 @@ export default {
   'home.trust.advice.title': 'General information',
   'home.trust.advice.text':
     'The app organises and documents. It does not replace medical advice.',
-  'home.section.workflow': 'Workflow',
+  'home.section.workflow': 'Inventory',
+  'home.section.insight': 'Review',
+  'home.section.app': 'App',
   'home.nav.inventory.title': 'My inventory',
   'home.nav.inventory.subtitle':
     'Every product you added at a glance, including those without an intake time.',

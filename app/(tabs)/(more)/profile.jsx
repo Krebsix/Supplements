@@ -242,8 +242,6 @@ const styles = StyleSheet.create({
   subtitle: { ...type.body, marginTop: space.md, marginBottom: space.lg },
   privacyCard: {
     backgroundColor: colors.accentSoft,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     padding: space.md,
     marginBottom: space.lg,

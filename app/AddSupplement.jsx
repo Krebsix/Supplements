@@ -705,8 +705,6 @@ const styles = StyleSheet.create({
   title: {
     marginTop: space.md,
     ...type.display,
-    fontSize: 28,
-    lineHeight: 34,
   },
   subtitle: {
     marginTop: space.sm + 2,

@@ -28,7 +28,7 @@ import { analyzeCaptures, isAnalyzerConfigured, lookupProductCache } from '../..
 import mockScanResult from '../../../data/mockScanResult';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
-import { colors, fonts, radius, space, surfaces, toneFor, type } from '../../../theme';
+import { colors, radius, space, surfaces, toneFor, type, weight } from '../../../theme';
 
 const affirmTone = toneFor('affirm');
 const cautionTone = toneFor('caution');
@@ -985,8 +985,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...type.display,
-    fontSize: 30,
-    lineHeight: 36,
     letterSpacing: -0.5,
   },
   subtitle: {
@@ -1342,7 +1340,7 @@ const styles = StyleSheet.create({
   },
   stepChipLabelActive: {
     color: colors.accent,
-    fontFamily: fonts.sansBold,
+    fontWeight: weight.semibold,
   },
   scanHint: {
     position: 'absolute',
@@ -1480,8 +1478,6 @@ const styles = StyleSheet.create({
     minHeight: 72,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.rule,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: space.md + 2,
@@ -1540,8 +1536,6 @@ const styles = StyleSheet.create({
   analysisCard: {
     borderRadius: radius.lg,
     backgroundColor: colors.surfaceSunken,
-    borderWidth: 1,
-    borderColor: colors.rule,
     padding: space.lg + 2,
     marginBottom: space.md,
   },
@@ -1572,8 +1566,6 @@ const styles = StyleSheet.create({
   analysisButton: {
     minHeight: 48,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.rule,
     backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',

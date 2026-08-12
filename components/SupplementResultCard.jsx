@@ -339,8 +339,6 @@ const styles = StyleSheet.create({
   },
   confidenceCard: {
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     padding: space.lg - 1,
     marginTop: space.lg + 2,
@@ -396,8 +394,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     padding: space.md + 1,
     marginBottom: space.sm + 1,
@@ -485,8 +481,6 @@ const styles = StyleSheet.create({
   },
   emptyBox: {
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg - 2,
     padding: space.md + 1,
     marginTop: space.sm + 1,
@@ -496,8 +490,6 @@ const styles = StyleSheet.create({
   },
   timingCard: {
     backgroundColor: colors.accentSoft,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     padding: space.lg - 1,
     marginTop: space.xl + 2,

@@ -1,28 +1,29 @@
 /**
  * navigationTheme.js
  * Header- und Tab-Optionen fuer die Router-Navigation, gespeist aus den
- * Design-Tokens. Vorher lief der native Header auf den Tailwind-Werten
- * f8fafc/0f172a — also genau dem Standardlook, den theme.js bewusst
- * verlassen hat. Der Header ist auf jedem Screen sichtbar, deshalb gehoert
- * er als erstes auf die Palette "Papier und Tinte".
+ * Design-Tokens.
+ *
+ * Der Header ist auf jedem Screen sichtbar und faellt deshalb sofort auf,
+ * wenn er nicht zur Plattform passt. Er laeuft jetzt auf der Systemschrift
+ * und den Systemgrautoenen — also auf dem, was iOS ueberall sonst auch
+ * zeigt (siehe theme.js).
  *
  * Liegt in components/, nicht in app/: expo-router wuerde jede Datei in
  * app/ als Route interpretieren.
  */
 
-import { colors, fonts } from '../theme';
+import { colors, weight } from '../theme';
 
 export function stackScreenOptions(t) {
   return {
     headerStyle: { backgroundColor: colors.canvas },
-    headerTintColor: colors.ink,
+    headerTintColor: colors.accent,
     headerShadowVisible: false,
     headerTitleAlign: 'center',
     headerTitleStyle: {
       color: colors.ink,
-      // Serife wie die Screen-Ueberschriften: der Header gehoert zum
-      // redaktionellen Erscheinungsbild, nicht zum Framework.
-      fontFamily: fonts.display,
+      // Keine fontFamily: das ist die Systemschrift, also SF Pro auf iOS.
+      fontWeight: weight.semibold,
       fontSize: 17,
     },
     headerBackTitle: t('common.back'),
@@ -36,11 +37,11 @@ export const tabBarOptions = {
   tabBarStyle: {
     backgroundColor: colors.surface,
     borderTopColor: colors.rule,
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
   },
   tabBarLabelStyle: {
-    fontFamily: fonts.sansBold,
-    fontSize: 10,
+    fontWeight: weight.medium,
+    fontSize: 11,
   },
   headerShown: false,
 };

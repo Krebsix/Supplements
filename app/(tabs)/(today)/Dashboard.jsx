@@ -621,8 +621,6 @@ const styles = StyleSheet.create({
     marginTop: space.lg,
     borderRadius: radius.lg,
     backgroundColor: colors.surfaceSunken,
-    borderWidth: 1,
-    borderColor: colors.rule,
     padding: space.md,
   },
   summaryInsightPill: {
@@ -672,7 +670,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: colors.accentSoft,
-    borderColor: colors.rule,
   },
   inventoryTextWrap: { flex: 1 },
   inventoryLabel: {
@@ -685,7 +682,6 @@ const styles = StyleSheet.create({
   },
   inventoryChevron: {
     ...type.display,
-    fontSize: 26,
     color: colors.accent,
     marginLeft: space.md,
   },
@@ -911,7 +907,6 @@ const styles = StyleSheet.create({
     minWidth: 116,
     borderRadius: radius.md,
     backgroundColor: colors.surface,
-    borderWidth: 1,
     borderColor: colors.ruleStrong,
     paddingHorizontal: space.md,
     paddingVertical: space.sm,
@@ -999,8 +994,6 @@ const styles = StyleSheet.create({
     marginTop: space.xs,
     borderRadius: radius.md,
     backgroundColor: colors.surfaceSunken,
-    borderWidth: 1,
-    borderColor: colors.rule,
     padding: space.md,
   },
   disclaimerText: {

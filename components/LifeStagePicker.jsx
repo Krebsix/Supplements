@@ -57,8 +57,6 @@ export default function LifeStagePicker({ value, onChange }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     paddingVertical: space.md + 1,
     marginBottom: space.lg - 2,

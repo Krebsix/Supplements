@@ -492,8 +492,6 @@ const styles = StyleSheet.create({
   scaleButton: {
     flex: 1,
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.md,
     paddingVertical: 11,
     alignItems: 'center',
@@ -512,8 +510,7 @@ const styles = StyleSheet.create({
   },
   resultText: { color: colors.inkMuted, fontSize: 13, lineHeight: 20 },
   confounderBlock: {
-    marginTop: space.lg - 2, backgroundColor: colors.surfaceSunken, borderColor: colors.rule,
-    borderWidth: 1, borderRadius: radius.lg, padding: space.md,
+    marginTop: space.lg - 2, backgroundColor: colors.surfaceSunken, borderColor: colors.rule, borderRadius: radius.lg, padding: space.md,
   },
   confounderIntro: { ...type.small, lineHeight: 18, marginBottom: space.sm - 2 },
   confounderText: { ...type.small, lineHeight: 18 },

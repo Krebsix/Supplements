@@ -308,8 +308,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...type.display,
-    fontSize: 29,
-    lineHeight: 35,
     marginTop: space.md + 1,
   },
   subtitle: {

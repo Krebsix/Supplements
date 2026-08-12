@@ -470,8 +470,6 @@ const styles = StyleSheet.create({
   },
   totalRow: {
     backgroundColor: colors.surface,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     paddingHorizontal: space.lg,
     paddingVertical: space.md,

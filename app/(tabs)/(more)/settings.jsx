@@ -577,8 +577,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...type.display,
-    fontSize: 30,
-    lineHeight: 36,
   },
   subtitle: {
     ...type.body,
@@ -817,8 +815,6 @@ const styles = StyleSheet.create({
   archiveBadge: {
     alignSelf: 'flex-start',
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.md,
     paddingHorizontal: space.sm + 1,
     paddingVertical: space.xs + 1,
@@ -876,8 +872,6 @@ const styles = StyleSheet.create({
   },
   noticeCard: {
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
     borderRadius: radius.lg,
     padding: space.md + 2,
     marginTop: space.lg,

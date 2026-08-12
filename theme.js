@@ -4,112 +4,147 @@
  * Design-Tokens. Farben und Groessen gehoeren hierher, nicht in die
  * Komponenten.
  *
- * WARUM DIE PALETTE SO AUSSIEHT:
- * Vorher lief alles auf den Tailwind-Standardwerten — slate-900 als Text,
- * slate-500 fuer Sekundaeres, teal-700 als Akzent. Das ist die Palette,
- * die praktisch jedes schnell gebaute Projekt verwendet; man erkennt sie
- * auf einen Blick wieder, und die App sah aus wie tausend andere.
+ * WARUM DIE PALETTE 2026-08-12 GEWECHSELT HAT:
+ * Die Vorgaengerpalette hiess "Papier und Tinte": warmes Off-White
+ * (#f6f3ed), Serifenschrift fuer Titel, gedeckte Erdtoene fuer Warnungen.
+ * Sie war als Gegenentwurf zu den Tailwind-Standardwerten gedacht — und
+ * war das zum Zeitpunkt der Entscheidung auch.
  *
- * Die neue Richtung ist "Papier und Tinte": warmes Off-White statt
- * blaustichigem Grau, ein tiefes Petrol als Akzent statt des ueblichen
- * Teal, gedeckte Erdtoene fuer Warnungen statt der Signalampel. Das passt
- * inhaltlich besser zu einer App, die Quellen zitiert und Zahlen einordnet
- * — sie soll wie ein sorgfaeltig gefuehrtes Nachschlagewerk wirken, nicht
- * wie ein Wellness-Dashboard.
+ * Inzwischen ist genau diese Kombination zum Erkennungsmerkmal maschinell
+ * gebauter Oberflaechen geworden: warmes Creme um #F4F1EA, kontraststarke
+ * Serife, Terrakotta-Akzent. Wer die App heute sieht, ordnet sie diesem
+ * Muster zu, unabhaengig davon, wie sorgfaeltig sie gebaut ist.
  *
- * TYPOGRAFIE:
- * Seit 2026-08-09 eigene Schriften statt Systemschrift (Nadines Vorgabe:
- * Professionalitaet, kein Baukasten-Look): Newsreader als redaktionelle
- * Serife fuer Titel, Zahlen und Zitate; Instrument Sans fuer Fliesstext
- * und Bedienelemente. Geladen per expo-font in app/_layout.jsx, gebuendelt
- * ueber @expo-google-fonts (kein Laufzeit-Download aus dem Netz).
+ * Die Richtung heisst deshalb jetzt: native iOS-Anmutung.
+ *   - Neutrale Systemgrautoene statt warmem Creme
+ *   - Systemschrift (SF Pro auf iOS, Roboto auf Android) statt geladener
+ *     Google-Fonts: nativ, kein Download, kleinere App
+ *   - Apple-Schriftgroessen: Fliesstext 17 statt 14. Das ist der groesste
+ *     einzelne Unterschied zwischen "wirkt gebaut" und "wirkt fertig"
+ *   - Weisse Flaechen auf grauem Grund statt umrandeter Karten. Der
+ *     Rahmen um jede Karte war das zweite Erkennungsmerkmal
  *
- * RADIEN:
- * Die vollrunden Pillen (borderRadius 999) sind raus. Moderate Radien
- * wirken weniger nach Framework-Vorgabe und mehr nach Dokument.
+ * WAS BLEIBT: das tiefe Petrol als Akzent. Es traegt das App-Icon und ist
+ * damit die einzige Farbe, die die Marke wirklich ausmacht.
+ *
+ * WAS INHALTLICH BLEIBT: Warnungen bleiben gedeckt. Eine
+ * Grenzwertueberschreitung ist ein Hinweis, kein Alarm — Signalampel
+ * wuerde die Einordnung uebertoenen. Die Statusfarben sind gegenueber
+ * vorher nur klarer geworden, nicht lauter.
  */
 
 export const colors = {
-  // Flaechen
-  canvas: '#f6f3ed',        // warmes Papier statt blaustichigem Grau
-  surface: '#fffdf9',       // Karten, minimal waermer als Weiss
-  surfaceSunken: '#efeae1', // eingelassene Bereiche, Eingabefelder
+  // Flaechen: Apples Systemgrau-Logik. Der Bildschirmgrund ist grau,
+  // Inhaltsbloecke sind weiss — der Kontrast ersetzt den Rahmen.
+  canvas: '#f2f2f7',        // systemGroupedBackground
+  surface: '#ffffff',       // Karten, Listenzeilen
+  surfaceSunken: '#e9e9ee', // Eingabefelder, eingelassene Bereiche
   overlay: '#ffffff',
 
   // Schrift
-  ink: '#1f1b16',           // fast schwarz, warm
-  inkMuted: '#6b6157',      // Sekundaertext
-  inkFaint: '#9a9085',      // Beschriftungen, Fussnoten
+  ink: '#1c1c1e',           // label
+  inkMuted: '#6c6c70',      // secondaryLabel
+  inkFaint: '#8e8e93',      // tertiaryLabel, systemGray
 
-  // Linien
-  rule: '#ded5c7',
-  ruleStrong: '#c9bda9',
+  // Linien: Trennlinien innerhalb weisser Bloecke, keine Umrandungen
+  rule: '#e5e5ea',          // systemGray5
+  ruleStrong: '#d1d1d6',    // systemGray4
 
-  // Akzent: tiefes Petrol. Seriös ohne Klinik-Kaelte, und nicht das
-  // Teal, das jede zweite App verwendet.
+  // Akzent: das Petrol aus dem App-Icon. Die einzige Markenfarbe.
   accent: '#1c4f5c',
-  accentSoft: '#e3ecee',
-  accentInk: '#0f3742',
+  accentSoft: '#e7eff1',
+  accentInk: '#143c47',
 
-  // Statusfarben bewusst gedeckt: Eine Grenzwertueberschreitung ist ein
-  // Hinweis, kein Alarm. Signalrot wuerde die Einordnung uebertoenen.
-  alert: '#8a3324',         // Ueberschreitung, Kontraindikation
-  alertSoft: '#f7ebe7',
-  caution: '#8a6420',       // Aufmerksamkeit, aerztlich abklaeren
-  cautionSoft: '#f9f1e2',
-  affirm: '#2f5741',        // unauffaellig, im Bereich
-  affirmSoft: '#e8efe9',
+  // Statusfarben: klar genug, um unterscheidbar zu sein, gedaempft genug,
+  // um nicht zu alarmieren.
+  alert: '#b3382c',         // Ueberschreitung, Kontraindikation
+  alertSoft: '#fbebe9',
+  caution: '#96661a',       // Aufmerksamkeit, aerztlich abklaeren
+  cautionSoft: '#fdf3e3',
+  affirm: '#2c6b4f',        // unauffaellig, im Bereich
+  affirmSoft: '#e8f2ec',
 };
 
 /**
- * Schriften: eigene Ladung statt Systemschrift (Entscheidung 2026-08-09).
- * Newsreader traegt die redaktionelle Identitaet (Titel, Zahlen, Zitate),
- * Instrument Sans den Fliesstext und die Bedienelemente. Geladen wird in
- * app/_layout.jsx (useFonts); die Namen hier muessen exakt den Keys dort
- * entsprechen. Bei Font-Dateien mit festem Schnitt KEIN fontWeight
- * daneben setzen — Android rendert sonst einen Faux-Bold darueber.
+ * Schriften: die Systemschrift, bewusst ohne eigene Font-Dateien.
+ *
+ * Auf iOS ist das SF Pro, auf Android Roboto. Beides ist auf dem jeweiligen
+ * Geraet die Schrift, die alle anderen Apps auch verwenden — genau das
+ * laesst eine App dazugehoeren statt gebastelt zu wirken. Nebeneffekt:
+ * kein Font-Download beim Start und eine kleinere App.
+ *
+ * In React Native heisst das: KEINE fontFamily setzen und das Gewicht ueber
+ * fontWeight steuern. Deshalb gibt es hier keine Familiennamen mehr.
  */
-export const fonts = {
-  display: 'Newsreader_600SemiBold',
-  displayMedium: 'Newsreader_500Medium',
-  serifItalic: 'Newsreader_400Regular_Italic',
-  sans: 'InstrumentSans_400Regular',
-  sansMedium: 'InstrumentSans_500Medium',
-  sansSemiBold: 'InstrumentSans_600SemiBold',
-  sansBold: 'InstrumentSans_700Bold',
+export const weight = {
+  regular: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700',
 };
 
+/**
+ * Groessen nach Apples Type Scale. Fliesstext liegt bei 17 Punkt — die
+ * frueheren 14 waren der Hauptgrund, warum die Oberflaeche gedraengt wirkte.
+ */
 export const type = {
-  // Ueberschriften: Serife, das Unterscheidungsmerkmal
-  display: { fontFamily: fonts.display, fontSize: 27, lineHeight: 34, color: colors.ink },
-  heading: { fontFamily: fonts.display, fontSize: 19, lineHeight: 25, color: colors.ink },
-  subheading: { fontFamily: fonts.displayMedium, fontSize: 15, lineHeight: 21, color: colors.ink },
+  // Large Title: steht einmal oben auf dem Screen
+  display: {
+    fontSize: 34,
+    lineHeight: 41,
+    fontWeight: weight.bold,
+    letterSpacing: -0.5,
+    color: colors.ink,
+  },
+  // Title 3
+  heading: {
+    fontSize: 20,
+    lineHeight: 25,
+    fontWeight: weight.semibold,
+    letterSpacing: -0.2,
+    color: colors.ink,
+  },
+  // Headline
+  subheading: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontWeight: weight.semibold,
+    color: colors.ink,
+  },
 
-  // Fliesstext
-  body: { fontFamily: fonts.sans, fontSize: 14, lineHeight: 21, color: colors.inkMuted },
-  bodyStrong: { fontFamily: fonts.sansSemiBold, fontSize: 14, lineHeight: 21, color: colors.ink },
-  small: { fontFamily: fonts.sans, fontSize: 12, lineHeight: 18, color: colors.inkMuted },
-  tiny: { fontFamily: fonts.sans, fontSize: 11, lineHeight: 16, color: colors.inkFaint },
+  // Body
+  body: { fontSize: 17, lineHeight: 24, fontWeight: weight.regular, color: colors.inkMuted },
+  bodyStrong: { fontSize: 17, lineHeight: 24, fontWeight: weight.semibold, color: colors.ink },
+  // Subheadline
+  small: { fontSize: 15, lineHeight: 20, fontWeight: weight.regular, color: colors.inkMuted },
+  // Footnote
+  tiny: { fontSize: 13, lineHeight: 18, fontWeight: weight.regular, color: colors.inkFaint },
 
-  // Bereichsmarke ueber einer Ueberschrift. Gesperrt gesetzt, wie eine
-  // Rubrik im Print.
+  // Abschnittsmarke ueber einer Gruppe, wie die Ueberschrift einer
+  // gruppierten Liste in den iOS-Einstellungen.
   eyebrow: {
-    fontFamily: fonts.sansBold,
-    fontSize: 11,
-    letterSpacing: 1.6,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: weight.regular,
+    letterSpacing: 0.2,
     textTransform: 'uppercase',
-    color: colors.accent,
+    color: colors.inkMuted,
   },
   label: {
-    fontFamily: fonts.sansBold,
-    fontSize: 10,
-    letterSpacing: 0.9,
-    textTransform: 'uppercase',
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: weight.medium,
     color: colors.inkFaint,
   },
-  // Zahlen und Zitate
-  numeral: { fontFamily: fonts.displayMedium, fontSize: 21, color: colors.ink },
-  quote: { fontFamily: fonts.serifItalic, fontSize: 14, lineHeight: 22, color: colors.ink },
+  // Zahlen: tabellarisch, damit Ziffern in Listen untereinander stehen
+  numeral: {
+    fontSize: 22,
+    lineHeight: 28,
+    fontWeight: weight.semibold,
+    color: colors.ink,
+    fontVariant: ['tabular-nums'],
+  },
+  quote: { fontSize: 17, lineHeight: 25, fontStyle: 'italic', color: colors.ink },
 };
 
 export const space = {
@@ -117,11 +152,11 @@ export const space = {
 };
 
 export const radius = {
-  sm: 3,
-  md: 6,
-  lg: 10,
-  // Fuer runde Elemente, die es wirklich sein muessen (Marken, Punkte).
-  // NICHT fuer Schaltflaechen.
+  sm: 6,
+  md: 10,
+  lg: 14,   // Karten und Listengruppen
+  xl: 20,   // Sheets, grosse Flaechen
+  // Nur fuer Elemente, die wirklich rund sein muessen (Punkte, Marken).
   full: 999,
 };
 
@@ -132,63 +167,88 @@ export const border = {
 
 /**
  * Wiederkehrende Bausteine. Screens setzen darauf auf, statt jede Karte
- * neu zu definieren — so bleibt das Erscheinungsbild einheitlich, auch
- * wenn spaeter jemand anderes einen Screen ergaenzt.
+ * neu zu definieren.
+ *
+ * Der wichtigste Unterschied zur Vorgaengerversion: Karten haben keinen
+ * Rahmen mehr. Eine weisse Flaeche auf grauem Grund grenzt sich von selbst
+ * ab; die zusaetzliche Linie liess jede Oberflaeche wie ein Formular
+ * aussehen.
  */
 export const surfaces = {
   screen: { flex: 1, backgroundColor: colors.canvas },
-  content: { paddingHorizontal: space.xl, paddingTop: space.xxl, paddingBottom: 48 },
+  content: { paddingHorizontal: space.lg, paddingTop: space.lg, paddingBottom: 48 },
+
   card: {
     backgroundColor: colors.surface,
-    borderColor: colors.rule,
-    borderWidth: border.hairline,
     borderRadius: radius.lg,
     padding: space.lg,
     marginBottom: space.md,
   },
+
+  // Gruppierte Liste: ein weisser Block, dessen Zeilen durch Haarlinien
+  // getrennt sind. Das Muster der iOS-Einstellungen.
+  listGroup: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+    marginBottom: space.lg,
+  },
+  listRow: {
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md + 2,
+    minHeight: 48,
+    justifyContent: 'center',
+  },
+  // Trennlinie zwischen zwei Zeilen. Sie beginnt eingerueckt, damit die
+  // Gruppe als Block zusammenhaengt.
+  listDivider: {
+    height: border.hairline,
+    backgroundColor: colors.rule,
+    marginLeft: space.lg,
+  },
+
   input: {
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: border.hairline,
     borderRadius: radius.md,
     paddingHorizontal: space.md,
-    paddingVertical: 10,
-    fontSize: 14,
+    paddingVertical: 12,
+    fontSize: 17,
     color: colors.ink,
   },
+
   buttonPrimary: {
     backgroundColor: colors.accent,
     borderRadius: radius.md,
-    paddingVertical: 14,
+    minHeight: 50,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonPrimaryText: { fontFamily: fonts.sansBold, color: colors.surface, fontSize: 15 },
+  buttonPrimaryText: { fontWeight: weight.semibold, color: '#ffffff', fontSize: 17 },
+
   buttonQuiet: {
-    backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: border.hairline,
+    backgroundColor: colors.surface,
     borderRadius: radius.md,
-    paddingVertical: 13,
+    minHeight: 50,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonQuietText: { fontFamily: fonts.sansBold, color: colors.ink, fontSize: 14 },
+  buttonQuietText: { fontWeight: weight.semibold, color: colors.accent, fontSize: 17 },
+
   chip: {
     backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: border.hairline,
     borderRadius: radius.sm,
     paddingHorizontal: space.md,
-    paddingVertical: 7,
+    paddingVertical: 8,
   },
-  chipActive: { backgroundColor: colors.accent, borderColor: colors.accent },
-  chipText: { fontFamily: fonts.sansSemiBold, color: colors.inkMuted, fontSize: 12 },
-  chipTextActive: { color: colors.surface },
+  chipActive: { backgroundColor: colors.accent },
+  chipText: { fontWeight: weight.medium, color: colors.inkMuted, fontSize: 15 },
+  chipTextActive: { color: '#ffffff' },
 };
 
 // Randfarben der Statusflaechen: jeweils der Ton selbst, aufgehellt.
-const alertRule = '#e6cec6';
-const cautionRule = '#e8d9b8';
-const affirmRule = '#cddbd1';
+const alertRule = '#f0cfca';
+const cautionRule = '#eedcb8';
+const affirmRule = '#c9dfd2';
 
 /**
  * Farbpaar fuer eine Statusstufe.

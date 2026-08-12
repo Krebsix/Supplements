@@ -55,70 +55,69 @@ export default function Home() {
         />
       </View>
 
+      {/* Gruppierte Liste statt nummerierter Karten. Die Nummern 01 bis 09
+          suggerierten eine Reihenfolge, die es nie gab: Ein Menue ist eine
+          Liste von Orten, kein Ablauf. Die Gruppierung nach Zweck sagt
+          stattdessen etwas Wahres ueber den Inhalt. */}
       <Text style={styles.sectionTitle}>{t('home.section.workflow')}</Text>
+      <View style={styles.group}>
+        <MenuRow
+          title={t('home.nav.inventory.title')}
+          subtitle={t('home.nav.inventory.subtitle')}
+          onPress={() => router.push('/inventory')}
+        />
+        <MenuRow
+          title={t('home.nav.add.title')}
+          subtitle={t('home.nav.add.subtitle')}
+          onPress={() => router.push('/AddSupplement')}
+        />
+        <MenuRow
+          title={t('home.nav.history.title')}
+          subtitle={t('home.nav.history.subtitle')}
+          onPress={() => router.push('/history')}
+          last
+        />
+      </View>
 
-      <NavCard
-        index="01"
-        title={t('home.nav.inventory.title')}
-        subtitle={t('home.nav.inventory.subtitle')}
-        onPress={() => router.push('/inventory')}
-      />
+      <Text style={styles.sectionTitle}>{t('home.section.insight')}</Text>
+      <View style={styles.group}>
+        <MenuRow
+          title={t('home.nav.outcome.title')}
+          subtitle={t('home.nav.outcome.subtitle')}
+          onPress={() => router.push('/outcome')}
+        />
+        <MenuRow
+          title={t('home.nav.profile.title')}
+          subtitle={t('home.nav.profile.subtitle')}
+          onPress={() => router.push('/profile')}
+        />
+        <MenuRow
+          title={t('home.nav.lab.title')}
+          subtitle={t('home.nav.lab.subtitle')}
+          onPress={() => router.push('/lab')}
+        />
+        <MenuRow
+          title={t('home.nav.export.title')}
+          subtitle={t('home.nav.export.subtitle')}
+          onPress={() => router.push('/export')}
+          last
+        />
+      </View>
 
-      <NavCard
-        index="02"
-        title={t('home.nav.add.title')}
-        subtitle={t('home.nav.add.subtitle')}
-        onPress={() => router.push('/AddSupplement')}
-      />
-
-      <NavCard
-        index="03"
-        title={t('home.nav.history.title')}
-        subtitle={t('home.nav.history.subtitle')}
-        onPress={() => router.push('/history')}
-      />
-
-      <NavCard
-        index="04"
-        title={t('home.nav.outcome.title')}
-        subtitle={t('home.nav.outcome.subtitle')}
-        onPress={() => router.push('/outcome')}
-      />
-
-      <NavCard
-        index="05"
-        title={t('home.nav.profile.title')}
-        subtitle={t('home.nav.profile.subtitle')}
-        onPress={() => router.push('/profile')}
-      />
-
-      <NavCard
-        index="06"
-        title={t('home.nav.lab.title')}
-        subtitle={t('home.nav.lab.subtitle')}
-        onPress={() => router.push('/lab')}
-      />
-
-      <NavCard
-        index="07"
-        title={t('home.nav.export.title')}
-        subtitle={t('home.nav.export.subtitle')}
-        onPress={() => router.push('/export')}
-      />
-
-      <NavCard
-        index="08"
-        title={t('nav.notifications')}
-        subtitle={t('notifications.subtitle')}
-        onPress={() => router.push('/notifications')}
-      />
-
-      <NavCard
-        index="09"
-        title={t('home.nav.settings.title')}
-        subtitle={t('home.nav.settings.subtitle')}
-        onPress={() => router.push('/settings')}
-      />
+      <Text style={styles.sectionTitle}>{t('home.section.app')}</Text>
+      <View style={styles.group}>
+        <MenuRow
+          title={t('nav.notifications')}
+          subtitle={t('notifications.subtitle')}
+          onPress={() => router.push('/notifications')}
+        />
+        <MenuRow
+          title={t('home.nav.settings.title')}
+          subtitle={t('home.nav.settings.subtitle')}
+          onPress={() => router.push('/settings')}
+          last
+        />
+      </View>
 
       {/* Impressum und Datenschutz muessen ohne Umwege erreichbar sein,
           nicht erst hinter den Einstellungen. */}
@@ -151,22 +150,24 @@ function TrustItem({ title, text }) {
   );
 }
 
-function NavCard({ index, title, subtitle, onPress }) {
+function MenuRow({ title, subtitle, onPress, last = false }) {
   return (
-    <TouchableOpacity
-      style={styles.navCard}
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={title}
-    >
-      <View style={styles.navIndexWrap}>
-        <Text style={styles.navIndex}>{index}</Text>
-      </View>
-      <View style={styles.navTextWrap}>
-        <Text style={styles.navTitle}>{title}</Text>
-        <Text style={styles.navSubtitle}>{subtitle}</Text>
-      </View>
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={onPress}
+        activeOpacity={0.6}
+        accessibilityRole="button"
+        accessibilityLabel={title}
+      >
+        <View style={styles.rowTextWrap}>
+          <Text style={styles.rowTitle}>{title}</Text>
+          <Text style={styles.rowSubtitle}>{subtitle}</Text>
+        </View>
+        <Text style={styles.chevron}>›</Text>
+      </TouchableOpacity>
+      {last ? null : <View style={styles.divider} />}
+    </>
   );
 }
 
@@ -193,8 +194,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...type.display,
-    fontSize: 30,
-    lineHeight: 36,
     fontWeight: '800',
   },
   subtitle: {
@@ -231,46 +230,39 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     marginTop: space.xs,
   },
-  // Rubriktitel ueber den NavCards: subheading traegt die Serife, das
-  // Unterscheidungsmerkmal der neuen Richtung.
+  // Gruppenueberschrift wie in den iOS-Einstellungen: klein, gesperrt,
+  // grau, leicht eingerueckt — sie ordnet, ohne sich vorzudraengen.
   sectionTitle: {
-    ...type.subheading,
-    marginBottom: space.md,
+    ...type.eyebrow,
+    marginLeft: space.lg,
+    marginBottom: space.sm,
+    marginTop: space.md,
   },
-  navCard: {
+  group: {
+    ...surfaces.listGroup,
+  },
+  row: {
+    ...surfaces.listRow,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    ...surfaces.card,
-  },
-  // Nummern-Kaestchen der NavCard: Akzentfarbe statt Systemgruen, Radius
-  // aus dem Theme statt eigenem Wert.
-  navIndexWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.lg,
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accentSoft,
-    borderWidth: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: space.md,
   },
-  // Serifenziffer in Akzentfarbe — das gewuenschte Detail der Startseite.
-  navIndex: {
-    ...type.numeral,
-    color: colors.accent,
+  rowTextWrap: { flex: 1 },
+  rowTitle: {
+    fontSize: 17,
+    lineHeight: 22,
+    color: colors.ink,
   },
-  navTextWrap: {
-    flex: 1,
+  rowSubtitle: {
+    ...type.tiny,
+    marginTop: 2,
   },
-  navTitle: {
-    ...type.subheading,
+  chevron: {
+    fontSize: 20,
+    color: colors.inkFaint,
+    marginLeft: space.md,
   },
-  navSubtitle: {
-    ...type.small,
-    fontSize: 13,
-    lineHeight: 19,
-    marginTop: space.xs,
+  divider: {
+    ...surfaces.listDivider,
   },
   legalRow: {
     flexDirection: 'row',
