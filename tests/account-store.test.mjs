@@ -31,12 +31,11 @@ function makeClient() {
       updateUser: async () => ({ data: {}, error: null }),
       resetPasswordForEmail: async (email, opts) => { calls.push(['reset', email, opts]); return { error: null }; },
       setSession: async (args) => { session = { access_token: args.access_token, user: { id: 'u1', email: 'a@b.de' } }; return { data: { session }, error: null }; },
-      // Wie supabase-js: erst SIGNED_IN, bei einem Reset-Link zusaetzlich
-      // PASSWORD_RECOVERY, beides BEVOR das Promise aufloest.
+      // Wie supabase-js: genau EIN Ereignis, PASSWORD_RECOVERY statt
+      // SIGNED_IN bei einem Reset-Link, BEVOR das Promise aufloest.
       exchangeCodeForSession: async (code) => {
         session = { access_token: 'from-code', user: { id: 'u1', email: 'a@b.de' } };
-        listener?.('SIGNED_IN', session);
-        if (code === 'RECOVERY') listener?.('PASSWORD_RECOVERY', session);
+        listener?.(code === 'RECOVERY' ? 'PASSWORD_RECOVERY' : 'SIGNED_IN', session);
         return { data: { session }, error: null };
       },
     },
@@ -82,6 +81,74 @@ console.log('— Signup in zwei Schritten —');
   check('signUp erst bei confirm', client.calls.some(([n]) => n === 'signUp') && result.needsConfirmation === true);
   check('pendingSignUp geleert (Passwort nicht laenger im Speicher)', store.getState().pendingSignUp === null);
   check('Status bleibt anonymous bis zur Bestaetigung', store.getState().status === ACCOUNT_STATUS.ANONYMOUS);
+}
+
+console.log('— Busy bei ueberlappenden Aktionen —');
+{
+  const client = makeClient();
+  const store = createAccountStore(deps(client));
+  await store.getState().initialize();
+
+  // Zaehlt jeden Wechsel von busy mit, statt sich auf eine feste
+  // Fertigstellungs-Reihenfolge der beiden ueberlappenden Aktionen zu
+  // verlassen (echtes scrypt braucht messbar Zeit, die Reihenfolge der
+  // beiden Ableitungen ist aber nicht garantiert).
+  const transitions = [];
+  const unsubscribe = store.subscribe((state, previous) => {
+    if (state.busy !== previous.busy) transitions.push(state.busy);
+  });
+
+  const a = store.getState().prepareSignUp('a@b.de', 'korrekt-pferd-batterie');
+  const b = store.getState().prepareSignUp('c@d.de', 'korrekt-pferd-batterie');
+  check('busy sofort true bei zwei ueberlappenden Aktionen', store.getState().busy === true);
+
+  await Promise.all([a, b]);
+  unsubscribe();
+
+  check('busy erst wieder false, wenn BEIDE Aktionen fertig sind', store.getState().busy === false);
+  check(
+    'genau ein Uebergang zu false (die zuerst fertige Aktion setzt busy nicht vorzeitig zurueck)',
+    transitions.filter((v) => v === false).length === 1,
+    JSON.stringify(transitions)
+  );
+}
+
+console.log('— Signup nach Netzwerkfehler wiederholbar —');
+{
+  const client = makeClient();
+  const originalSignUp = client.auth.signUp;
+  let attempts = 0;
+  client.auth.signUp = async (args) => {
+    attempts += 1;
+    if (attempts === 1) throw new TypeError('Network request failed');
+    return originalSignUp(args);
+  };
+  const store = createAccountStore(deps(client));
+  await store.getState().initialize();
+  const recoveryKeyText = await store.getState().prepareSignUp('a@b.de', 'korrekt-pferd-batterie');
+  const pendingBefore = store.getState().pendingSignUp;
+
+  let firstError = null;
+  try {
+    await store.getState().confirmSignUp();
+  } catch (error) {
+    firstError = error;
+  }
+  check('erster Versuch wirft (Netzwerkfehler)', firstError instanceof TypeError);
+  check(
+    'pendingSignUp bleibt erhalten, derselbe Recovery-Key wie vor dem Fehlschlag',
+    store.getState().pendingSignUp?.email === 'a@b.de' &&
+      store.getState().pendingSignUp?.bundle?.recoveryKeyText === recoveryKeyText
+  );
+
+  const result = await store.getState().confirmSignUp();
+  check('zweiter Versuch gelingt', result.needsConfirmation === true);
+  check('pendingSignUp jetzt geleert', store.getState().pendingSignUp === null);
+  const signUpCall = client.calls.find(([name]) => name === 'signUp');
+  check(
+    'derselbe Schluessel-Umschlag wird gesendet wie im vorbereiteten Bundle (kein neues Bundle beim Retry)',
+    signUpCall[1].options.data.key_record.wrapped_key_pw === pendingBefore.bundle.record.wrapped_key_pw
+  );
 }
 
 console.log('— Login / Logout —');

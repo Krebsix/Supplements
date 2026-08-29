@@ -46,14 +46,25 @@ const ANONYMOUS_STATE = {
 
 export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl, anonKey, fetchImpl }) {
   return create((set, get) => {
+    // Zaehlt laufende Aktionen: zwei ueberlappende Aufrufe (z. B. ein
+    // Doppelklick, der prepareSignUp zweimal ausloest) duerfen busy nicht
+    // vorzeitig auf false setzen, nur weil der schnellere zuerst fertig ist.
+    let busyDepth = 0;
     const withBusy = async (fn) => {
+      busyDepth += 1;
       set({ busy: true });
       try {
         return await fn();
       } finally {
-        set({ busy: false });
+        busyDepth -= 1;
+        set({ busy: busyDepth > 0 });
       }
     };
+
+    // Fast Refresh im Dev-Build ruft initialize() mehrfach auf; ohne diese
+    // Sperre wuerde jeder Aufruf einen weiteren onAuthStateChange-Listener
+    // registrieren, der dieselben Ereignisse mehrfach verarbeitet.
+    let listening = false;
 
     const applySession = (session) => {
       if (session?.user) {
@@ -84,13 +95,19 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       initialize: async () => {
         const session = await restoreSession(client).catch(() => null);
         applySession(session);
+        if (listening) return;
+        listening = true;
         // Token-Refresh gescheitert, Konto anderswo geloescht: Supabase
         // meldet SIGNED_OUT, der Store faellt still zurueck.
         // PASSWORD_RECOVERY kommt beim Code-Tausch eines Reset-Links
-        // (PKCE liefert keinen type in der URL); handleAuthCallback liest
-        // das Flag, account-reset.jsx raeumt es beim Abschluss weg.
+        // (PKCE liefert keinen type in der URL) und traegt bereits die
+        // neue Session; der Store wendet sie direkt an, statt sich auf
+        // den spaeteren applySession-Aufruf in handleAuthCallback zu
+        // verlassen. handleAuthCallback liest nur noch das recoveryPending-
+        // Flag, account-reset.jsx raeumt es beim Abschluss weg.
         client.auth.onAuthStateChange((event, nextSession) => {
           if (event === 'PASSWORD_RECOVERY') {
+            applySession(nextSession);
             set({ recoveryPending: true });
             return;
           }
@@ -109,6 +126,13 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
           return bundle.recoveryKeyText;
         }),
 
+      // Scheitert signUpWithEmail (z. B. Netzwerkfehler), bleibt
+      // pendingSignUp bewusst erhalten statt zu leeren: Der Recovery-Key
+      // wurde bereits angezeigt und von der Nutzerin gesichert, ein
+      // erneutes prepareSignUp wuerde ein NEUES Bundle mit einem ANDEREN
+      // Recovery-Key erzeugen. Ein Retry von confirmSignUp sendet daher
+      // absichtlich dasselbe Bundle. Der einzige Weg, pendingSignUp zu
+      // verwerfen, ist bewusst cancelSignUp.
       confirmSignUp: () =>
         withBusy(async () => {
           const pending = get().pendingSignUp;
