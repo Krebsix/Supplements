@@ -19,6 +19,7 @@ import lab from './lab';
 import logic from './logic';
 import notifications from './notifications';
 import onboarding from './onboarding';
+import purchase from './purchase';
 import reference from './reference';
 import outcome from './outcome';
 import profile from './profile';
@@ -52,4 +53,5 @@ export default {
   ...settings,
   ...stack,
   ...account,
+  ...purchase,
 };

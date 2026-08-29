@@ -124,6 +124,10 @@ export default function Layout() {
           name="AddSupplement"
           options={{ title: t('nav.addSupplement'), presentation: 'modal' }}
         />
+        <Stack.Screen
+          name="paywall"
+          options={{ title: t('paywall.kicker'), presentation: 'modal' }}
+        />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />

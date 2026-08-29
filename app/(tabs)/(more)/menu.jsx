@@ -107,6 +107,11 @@ export default function Home() {
       <Text style={styles.sectionTitle}>{t('home.section.app')}</Text>
       <View style={styles.group}>
         <MenuRow
+          title={t('home.nav.subscription.title')}
+          subtitle={t('home.nav.subscription.subtitle')}
+          onPress={() => router.push('/subscription')}
+        />
+        <MenuRow
           title={t('home.nav.account.title')}
           subtitle={t('home.nav.account.subtitle')}
           onPress={() => router.push('/account')}
