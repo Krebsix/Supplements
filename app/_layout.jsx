@@ -10,6 +10,7 @@ import {
   setupNotifications,
 } from '../NotificationScheduler';
 import { stackScreenOptions } from '../components/navigationTheme';
+import { useAccountStore } from '../useAccountStore';
 
 /**
  * Wurzel-Layout.
@@ -38,6 +39,15 @@ function useStoreHydrated() {
 export default function Layout() {
   const { t } = useTranslation();
   const hydrated = useStoreHydrated();
+
+  // Konto-Session wiederherstellen. Laeuft parallel zum Store-Hydrate und
+  // blockiert nichts: Die App ist ohne Konto voll nutzbar.
+  useEffect(() => {
+    useAccountStore
+      .getState()
+      .initialize()
+      .catch((error) => console.error('[Layout] Konto-Initialisierung fehlgeschlagen', error));
+  }, []);
 
   // Keine eigenen Schriften mehr: Die App laeuft auf der Systemschrift
   // (SF Pro auf iOS, Roboto auf Android). Das spart den Font-Download beim
