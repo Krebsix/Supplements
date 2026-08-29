@@ -234,7 +234,14 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       changeEmail: (newEmail) =>
         withBusy(async () => {
           const result = await changeEmail(client, newEmail);
-          set({ pendingEmail: result.pendingEmail });
+          // Secure email change AUS: Supabase liefert kein new_email, die
+          // Aenderung gilt sofort, result.email traegt die neue Adresse.
+          // Secure email change AN: pendingEmail gesetzt, die aktuelle
+          // E-Mail bleibt bis zur Bestaetigung unveraendert.
+          set({
+            pendingEmail: result.pendingEmail,
+            email: result.pendingEmail ? get().email : (result.email ?? get().email),
+          });
         }),
     };
   });

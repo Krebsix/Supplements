@@ -241,5 +241,26 @@ console.log('— Konto-Einstellungen —');
   check('pendingEmail aus USER_UPDATED', store.getState().pendingEmail === 'neu@b.de');
 }
 
+console.log('— Konto-Einstellungen: E-Mail ohne Bestaetigung —');
+{
+  // Secure email change aus: Supabase liefert kein new_email, die
+  // Aenderung gilt sofort. Der Store darf dann NICHT pendingEmail setzen.
+  const client = makeClient();
+  client.auth.updateUser = async (args) => {
+    if (args.email) return { data: { user: { id: 'u1', email: args.email } }, error: null };
+    return { data: {}, error: null };
+  };
+  const store = createAccountStore(deps(client));
+  await store.getState().initialize();
+  await store.getState().prepareSignUp('a@b.de', 'altes-passwort-123');
+  await store.getState().confirmSignUp();
+  await store.getState().signIn('a@b.de', 'altes-passwort-123');
+  await store.getState().changeEmail('neu@b.de');
+  check(
+    'E-Mail sofort uebernommen, kein pendingEmail',
+    store.getState().email === 'neu@b.de' && store.getState().pendingEmail === null
+  );
+}
+
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle AccountStore-Tests bestanden.');

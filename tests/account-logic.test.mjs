@@ -5,6 +5,7 @@
 import { webcrypto } from 'node:crypto';
 import { createKeyBundle, unlockWithPassword, unlockWithRecoveryKey } from '../AccountCrypto';
 import {
+  KEY_RECORD_SAVE_FAILED,
   PASSWORD_INVALID,
   PROVIDERS,
   RECOVERY_KEY_INVALID,
@@ -184,14 +185,39 @@ console.log('— Passwort aendern —');
   check('altes Passwort scheitert', await throws(() => unlockWithPassword(client.stored, 'altes-passwort-123')));
   check('Recovery-Key bleibt gueltig', same(unlockWithRecoveryKey(client.stored, bundle.recoveryKeyText), bundle.dataKey));
 }
+console.log('— Passwort aendern: Umschlag laesst sich nicht speichern —');
+{
+  // updateUser (neues Passwort) gelingt, saveKeyRecord scheitert (z. B.
+  // RLS). Darf NICHT wie ein generischer Fehler aussehen: Supabase hat das
+  // neue Passwort schon, nur der Umschlag ist veraltet.
+  const bundle = await createKeyBundle('altes-passwort-123', randomBytes);
+  const client = makeClient({ keyRecord: bundle.record });
+  client.from = (table) => ({
+    select: () => ({ maybeSingle: async () => ({ data: bundle.record, error: null }) }),
+    upsert: async (row) => { client.calls.push(['upsert', table, row]); return { error: new Error('rls') }; },
+  });
+  const error = await catchError(() =>
+    changePassword(client, { userId: 'u1', currentPassword: 'altes-passwort-123', newPassword: 'neues-passwort-2026', randomBytes }));
+  check('KEY_RECORD_SAVE_FAILED gemeldet', error?.code === KEY_RECORD_SAVE_FAILED);
+  check('updateUser wurde trotzdem aufgerufen (Reihenfolge bleibt: Passwort zuerst)', client.calls.some(([n]) => n === 'updateUser'));
+}
 console.log('— E-Mail aendern —');
 {
   const client = makeClient();
   client.auth.updateUser = async (args) => { client.calls.push(['updateUser', args]); return { data: { user: { id: 'u1', email: 'a@b.de', new_email: args.email } }, error: null }; };
   const r = await changeEmail(client, ' Neu@B.de ');
   check('updateUser mit getrimmter, kleingeschriebener Adresse', client.calls.some(([n, a]) => n === 'updateUser' && a.email === 'neu@b.de'));
-  check('pendingEmail zurueck', r.pendingEmail === 'neu@b.de');
-  check('ungueltige Adresse wirft ohne Netzaufruf', await throws(() => changeEmail(makeClient(), 'kein-mail')));
+  check('pendingEmail zurueck (Secure email change an)', r.pendingEmail === 'neu@b.de');
+
+  const immediateClient = makeClient();
+  immediateClient.auth.updateUser = async (args) => { immediateClient.calls.push(['updateUser', args]); return { data: { user: { id: 'u1', email: args.email } }, error: null }; };
+  const immediate = await changeEmail(immediateClient, 'neu@b.de');
+  check('Secure email change aus: kein pendingEmail', immediate.pendingEmail === null);
+  check('Secure email change aus: neue Adresse sofort in email', immediate.email === 'neu@b.de');
+
+  const freshClient = makeClient();
+  check('ungueltige Adresse wirft', await throws(() => changeEmail(freshClient, 'kein-mail')));
+  check('ungueltige Adresse: kein Netzaufruf', freshClient.calls.length === 0);
 }
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }

@@ -100,6 +100,7 @@ export default {
   'account.settings.emailField': 'Neue E-Mail-Adresse',
   'account.settings.emailAction': 'Bestätigungslinks senden',
   'account.settings.emailSent': 'Links sind unterwegs an beide Adressen.',
+  'account.settings.emailChanged': 'E-Mail-Adresse geändert.',
   'account.settings.password': 'Passwort ändern',
   'account.settings.passwordText': 'Dein Recovery-Key bleibt gültig. Der Datenschlüssel wird mit dem neuen Passwort neu verschlüsselt.',
   'account.settings.currentPassword': 'Aktuelles Passwort',
@@ -107,4 +108,6 @@ export default {
   'account.settings.passwordAction': 'Passwort ändern',
   'account.settings.passwordDone': 'Passwort geändert',
   'account.error.currentPassword': 'Das aktuelle Passwort passt nicht.',
+  'account.error.keyRecordSaveFailed':
+    'Das Passwort wurde bei der Anmeldung geändert, aber der Datenschlüssel konnte nicht neu gespeichert werden. Melde dich mit dem neuen Passwort an. Entsperrt der Datenschlüssel dann nicht, nutze den Recovery-Key über Passwort vergessen.',
 };

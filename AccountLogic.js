@@ -27,6 +27,12 @@ import {
 // Fehlercode fuer changePassword: NUR ein falsches aktuelles Passwort.
 export const PASSWORD_INVALID = 'PASSWORD_INVALID';
 
+// Fehlercode fuer changePassword: das neue Passwort steht bei Supabase Auth,
+// aber der neu gewickelte Schluessel-Umschlag liess sich nicht speichern.
+// Screen muss das ANDERS behandeln als PASSWORD_INVALID: die Anmeldung mit
+// dem neuen Passwort funktioniert bereits.
+export const KEY_RECORD_SAVE_FAILED = 'KEY_RECORD_SAVE_FAILED';
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const PROVIDERS = [
@@ -175,19 +181,36 @@ export async function changePassword(client, { userId, currentPassword, newPassw
   }
   const next = await rewrapWithPassword(record, dataKey, newPassword, randomBytes);
   unwrap(await client.auth.updateUser({ password: newPassword }));
-  await saveKeyRecord(client, userId, next);
+  // Das neue Passwort steht ab hier bei Supabase Auth. Scheitert das
+  // Speichern des Umschlags (z. B. RLS, Netz), darf das NICHT wie ein
+  // generischer Fehler aussehen: die Anmeldung mit dem neuen Passwort
+  // funktioniert schon, nur der Datenschluessel ist (noch) nicht neu
+  // gewickelt gespeichert.
+  try {
+    await saveKeyRecord(client, userId, next);
+  } catch (cause) {
+    const error = new Error('AccountLogic: Schluessel-Umschlag nicht gespeichert');
+    error.code = KEY_RECORD_SAVE_FAILED;
+    error.cause = cause;
+    throw error;
+  }
   return { dataKey };
 }
 
 /**
- * E-Mail aendern. Supabase (Secure email change) schickt Links an alte und
- * neue Adresse; bis beide bestaetigt sind, steht die neue in user.new_email.
+ * E-Mail aendern. Ist Supabase "Secure email change" aktiv, schickt
+ * Supabase Links an alte und neue Adresse; bis beide bestaetigt sind, steht
+ * die neue in user.new_email (pendingEmail). Ist die Einstellung AUS, gilt
+ * die Aenderung sofort und user.new_email bleibt leer, dann traegt data.user
+ * bereits die neue Adresse. Der Aufrufer darf "wartet auf Bestaetigung"
+ * NIE anzeigen, wenn new_email fehlt, sonst behauptet die App etwas, das
+ * schon erledigt ist.
  */
 export async function changeEmail(client, newEmail) {
   const email = String(newEmail ?? '').trim().toLowerCase();
   if (!EMAIL_PATTERN.test(email)) throw new Error('AccountLogic: ungueltige E-Mail-Adresse');
   const data = unwrap(await client.auth.updateUser({ email }));
-  return { pendingEmail: data.user?.new_email ?? email };
+  return { pendingEmail: data.user?.new_email ?? null, email: data.user?.email ?? null };
 }
 
 // Kein URLSearchParams: React Native implementiert davon nur einen Teil.

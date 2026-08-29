@@ -98,6 +98,7 @@ export default {
   'account.settings.emailField': 'New email address',
   'account.settings.emailAction': 'Send confirmation links',
   'account.settings.emailSent': 'Links are on their way to both addresses.',
+  'account.settings.emailChanged': 'Email address changed.',
   'account.settings.password': 'Change password',
   'account.settings.passwordText': 'Your recovery key stays valid. The data key is re-encrypted with the new password.',
   'account.settings.currentPassword': 'Current password',
@@ -105,4 +106,6 @@ export default {
   'account.settings.passwordAction': 'Change password',
   'account.settings.passwordDone': 'Password changed',
   'account.error.currentPassword': 'The current password does not match.',
+  'account.error.keyRecordSaveFailed':
+    'The password was changed for sign in, but the data key could not be saved again. Sign in with the new password. If the data key does not unlock, use the recovery key via Forgot password.',
 };

@@ -15,7 +15,7 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { ACCOUNT_STATUS } from '../../../AccountStore';
-import { isNetworkError, PASSWORD_INVALID, PROVIDERS } from '../../../AccountLogic';
+import { isNetworkError, KEY_RECORD_SAVE_FAILED, PASSWORD_INVALID, PROVIDERS } from '../../../AccountLogic';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
@@ -341,7 +341,15 @@ function EmailSettingsCard({ t, pendingEmail, busy }) {
     try {
       await changeEmail(newEmail);
       setNewEmail('');
-      Alert.alert(t('account.settings.email'), t('account.settings.emailSent'));
+      // changeEmail() hat pendingEmail bereits im Store gesetzt (oder
+      // geleert, wenn Secure email change aus ist und die Aenderung
+      // sofort galt). Danach lesen statt aus dem Aufruf-Ergebnis raten,
+      // damit Anzeige und Store nie auseinanderlaufen.
+      const stillPending = useAccountStore.getState().pendingEmail;
+      Alert.alert(
+        t('account.settings.email'),
+        t(stillPending ? 'account.settings.emailSent' : 'account.settings.emailChanged')
+      );
     } catch (error) {
       Alert.alert(t('account.error.title'), describeError(t, error));
     }
@@ -406,6 +414,11 @@ function PasswordSettingsCard({ t, busy }) {
     } catch (error) {
       if (error?.code === PASSWORD_INVALID) {
         setFieldError(t('account.error.currentPassword'));
+      } else if (error?.code === KEY_RECORD_SAVE_FAILED) {
+        // Das neue Passwort steht bereits bei Supabase Auth, nur der
+        // Schluessel-Umschlag ist nicht mehr aktuell. Kein generischer
+        // Fehler: die Nutzerin braucht die konkrete Anweisung.
+        Alert.alert(t('account.error.title'), t('account.error.keyRecordSaveFailed'));
       } else {
         Alert.alert(t('account.error.title'), describeError(t, error));
       }
