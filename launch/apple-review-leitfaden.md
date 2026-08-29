@@ -1,7 +1,8 @@
 # Apple-Review-Leitfaden: Formulierungen und Einreichung
 
-Stand: 2026-08-10. Quelle: App Store Review Guidelines
+Stand: 2026-08-29. Quelle: App Store Review Guidelines
 (developer.apple.com/app-store/review/guidelines, abgerufen 2026-08-10).
+Aktualisiert um das optionale Konto (Teilprojekt "Account-Grundlage").
 Verbindlich fuer JEDEN neuen Nutzertext. Wer einen Text schreibt, der eine
 der Regeln hier beruehrt, prueft ihn gegen diese Datei.
 
@@ -54,8 +55,22 @@ App NIE als Dosierrechner erscheinen:
   angeben.
 - Einwilligung vor Datenerhebung (5.1.1(ii)): erfuellt ueber Onboarding-
   Kenntnisnahme und Scan-Einwilligung (consents im Store).
-- Keine Pflicht-Registrierung (5.1.1(v)): erfuellt, die App hat keine
-  Accounts.
+- Keine Pflicht-Registrierung: erfuellt, das Konto ist optional, die App
+  funktioniert ohne Konto genau wie bisher (Onboarding fragt kein Konto
+  ab). Der Demo-Ablauf ohne Account aus der Checkliste unten gilt
+  unveraendert.
+- **5.1.1(v) Konto-Loeschung:** Seit dem Teilprojekt "Account-Grundlage"
+  hat die App Konten. Die Pflicht ist erfuellt: Wer in der App ein Konto
+  anlegt, kann es dort im Konto-Screen (`app/(tabs)/(more)/account.jsx`)
+  auch wieder loeschen, ohne Umweg ueber Support oder Website. Loeschung
+  entfernt den Supabase-Nutzer und den Schluessel-Datensatz serverseitig
+  (Edge Function `delete-account`); lokale Daten bleiben unberuehrt.
+- **4.8 Sign in with Apple:** Nicht erforderlich. Die Richtlinie greift
+  erst, wenn ein Login ueber einen Drittanbieter (Google, Facebook u. a.)
+  angeboten wird. Diese App bietet ausschliesslich E-Mail-Passwort-Login
+  an, kein Drittanbieter-Login, damit besteht keine 4.8-Pflicht. Kommt
+  spaeter ein Drittanbieter-Login dazu, muss Sign in with Apple gleichzeitig
+  ergaenzt werden.
 
 ### 3.1.2 Abos
 - Vor dem Kauf klar sagen, was das Abo enthaelt (Scans, Umfang, Preis,
@@ -92,13 +107,23 @@ App NIE als Dosierrechner erscheinen:
       Definition pruefen (lokal ohne Uebertragung zaehlt nicht als
       "collected"; die Scan-Fotos an Supabase/Anthropic dagegen schon:
       als "Photos, nicht verknuepft, kein Tracking" deklarieren).
+- [ ] App Privacy Labels ergaenzen um das Konto: "Contact Info: Email
+      Address, linked to identity, App Functionality" (E-Mail wird zur
+      Anmeldung gespeichert und ist ueber `user_keys` mit dem Konto
+      verknuepft; keine Weitergabe, kein Tracking).
 - [ ] Review-Notes vorbereiten: Was die App bewusst NICHT tut (keine
       Diagnose, keine Dosierempfehlung, keine Laborwert-Interpretation),
       Datenfluss des Scans (einmalige Uebertragung, keine Speicherung),
-      Demo-Ablauf ohne Account.
+      Demo-Ablauf ohne Account (Konto bleibt optional, alle Kernfunktionen
+      pruefbar ohne Anmeldung).
 - [ ] Paywall-Screen gegen 3.1.2(c) pruefen: Preis, Laufzeit, Leistung,
       Links auf Privacy Policy und Terms (EULA).
 - [ ] Store-Metadaten (Titel, Untertitel, Keywords, Screenshots) gegen
       die Formulierungsregeln oben lesen, DE und EN.
 - [ ] Support-URL und Datenschutz-URL (statische Seite aus
       data/legalContent.js) live schalten.
+- [ ] Terms-of-use-Link (EULA) fuer den App-Store-Metadaten-Eintrag
+      bereithalten: Die Seite existiert bereits generiert unter
+      web/terms.html (aus data/legalContent.js, TERMS_SECTIONS), muss nur
+      noch live geschaltet und im App-Store-Connect-Formular eingetragen
+      werden.

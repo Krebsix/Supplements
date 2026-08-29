@@ -1,6 +1,7 @@
 # AVV-Dokumentation (Auftragsverarbeitungsvertraege)
 
-Stand: 2026-08-11. Blocker 4 aus launch-plan.md.
+Stand: 2026-08-29. Blocker 4 aus launch-plan.md, ergaenzt um Supabase Auth
+(Teilprojekt "Account-Grundlage").
 
 Betrifft nur die beiden Dienste, die im Scan-Pfad echte Verarbeiter im
 Sinne von Art. 28 DSGVO sind: Supabase (Edge Function, Rate-Limit-Tabelle,
@@ -22,6 +23,31 @@ Personenbezug und daher hier nicht relevant.
 - Zu tun: nichts Vertragliches. Empfehlung: die Sub-Prozessoren-Liste
   einmal gegenlesen (Hosting-Region pruefen, Projekt laeuft auf
   eu-west-1) und die Benachrichtigungs-Mails abonnieren.
+
+### Supabase als Auftragsverarbeiter fuer das Konto (seit 2026-08-29)
+
+Mit dem Teilprojekt "Account-Grundlage" verarbeitet Supabase zusaetzlich
+zum bisherigen Scan-Pfad Konto-Daten: E-Mail-Adresse, Passwort-Hash und
+Zeitstempel (`auth.users`) sowie den verschluesselten Schluessel-Datensatz
+in `public.user_keys` (gewickelter Datenschluessel, KDF-Parameter und Salt,
+kein Klartext-Schluessel, kein Klartext-Passwort). Serverstandort per
+`supabase projects list` verifiziert am 2026-08-29: West EU (Ireland).
+
+Gleicher AVV, gleiche Grundlage wie oben (Self-Service-Annahme der
+Supabase-AGB gilt als Annahme des AVV, Standardvertragsklauseln
+eingebunden, Sub-Prozessoren-Liste und Benachrichtigungspflicht wie
+beschrieben). Es ist kein zusaetzlicher Vertrag noetig, weil Supabase Auth
+derselbe Vertragspartner und dieselbe Projektinstanz ist wie der
+bestehende Scan-Pfad.
+
+**Offen: Versand der Konto-Mails.** Bestaetigungs- und
+Passwort-Reset-Mails laufen aktuell ueber Supabases eingebauten Mailer.
+Der ist rate-limitiert (wenige Mails pro Stunde) und ausdruecklich nur
+fuer Entwicklung gedacht, nicht fuer den Store-Launch. Sobald ein
+Versand-Dienst fuer den Launch angebunden wird (z. B. Resend, hat einen
+eigenen AVV), wird der zu einem eigenstaendigen neuen Auftragsverarbeiter
+und muss hier UND in der Datenschutzerklaerung (`data/legalContent.js`,
+Abschnitt "Konto") ergaenzt werden, bevor er scharf geschaltet wird.
 
 ## Anthropic
 
