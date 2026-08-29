@@ -151,6 +151,15 @@ export function canUseProFeature(entitlement) {
   return { allowed: PAYWALL_ENFORCED ? pro : true, isPro: pro };
 }
 
+/**
+ * Spiegelt den Abo-Status aus dem Store (PurchaseLogic.mapCustomerInfo) in
+ * das Tier. Nur tier; die lokalen Zaehler bleiben, RevenueCat zaehlt keine
+ * Scans.
+ */
+export function applyPurchaseStatus(entitlement, mapped) {
+  return setTier(entitlement, mapped?.isPro ? TIERS.PRO : TIERS.FREE);
+}
+
 /** Darf ein weiteres Praeparat angelegt werden? */
 export function canAddSupplement(entitlement, activeCount) {
   const ent = normalize(entitlement);
