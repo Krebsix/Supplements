@@ -135,6 +135,91 @@ export const PRIVACY_SECTIONS = {
   ],
 };
 
+export const TERMS_VERSION = '2026-08-29';
+
+export const TERMS_SECTIONS = {
+  de: [
+    {
+      heading: 'Geltungsbereich',
+      body: `Diese Nutzungsbedingungen gelten zwischen dir und ${OPERATOR_PLACEHOLDER.name}, ${OPERATOR_PLACEHOLDER.address} (Kontakt: ${OPERATOR_PLACEHOLDER.email}), für die Nutzung dieser App und des optionalen Kontos. Mit dem Start der App stimmst du diesen Bedingungen zu.`,
+    },
+    {
+      heading: 'Was die App ist und nicht ist',
+      body:
+        'Die App ordnet deine Einnahmezeitpunkte, vergleicht erfasste Mengen mit veröffentlichten Referenzwerten und zeigt Hinweise mit Quellenangabe. Sie gibt keine Empfehlungen, stellt keine Diagnosen und ersetzt keine ärztliche oder pharmazeutische Beratung. Für Entscheidungen rund um deine Präparate bist du selbst verantwortlich; bei Fragen wende dich an Arztpraxis oder Apotheke.',
+    },
+    {
+      heading: 'Konto (freiwillig)',
+      body:
+        'Die App funktioniert ohne Konto. Legst du eines an, brauchst du eine gültige E-Mail-Adresse und ein Passwort mit mindestens 10 Zeichen; das Mindestalter beträgt 16 Jahre, und ein Konto gehört zu einer Person. Du bist dafür verantwortlich, Passwort und Recovery-Key sicher aufzubewahren: Fehlen beide, lassen sich synchronisierte Daten nicht wiederherstellen, deine lokalen Daten auf dem Gerät sind davon nicht betroffen. Du kannst dein Konto jederzeit in der App löschen. Wir können Konten löschen, die 30 Tage lang unbestätigt bleiben oder missbräuchlich genutzt werden.',
+    },
+    {
+      heading: 'Kostenlose Nutzung und Pro',
+      body:
+        'Die App ist kostenlos nutzbar. Zusätzlich können über den App Store bzw. Google Play ein kostenpflichtiger Pro-Umfang und einzelne Scan-Guthaben angeboten werden. Kauf, Kündigung und Rückerstattung laufen über Apple bzw. Google und deren Bedingungen; Preise werden dir vor dem Kauf im jeweiligen Store angezeigt.',
+    },
+    {
+      heading: 'Inhalte und Quellen',
+      body:
+        'Referenzwerte und Hinweise stammen aus öffentlichen Quellen (u. a. EFSA, BfR, HMPC, NIH, D-A-CH-Referenzwerte). Produktdaten stammen teilweise von Open Food Facts unter der Open Data Commons Open Database License (ODbL). Für Vollständigkeit und Richtigkeit der Inhalte wird keine Gewähr übernommen; Fehler kannst du an die oben genannte Kontaktadresse melden.',
+    },
+    {
+      heading: 'Haftung',
+      body:
+        'Wir haften unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie bei der Verletzung wesentlicher Vertragspflichten, dort begrenzt auf den vorhersehbaren, vertragstypischen Schaden. Für Schäden aus der Verletzung von Leben, Körper oder Gesundheit gilt diese Begrenzung nicht. Gesetzliche Rechte, die dir als Verbraucherin oder Verbraucher zustehen, bleiben unberührt. [PRUEFEN: Haftungsklausel von einer Juristin/einem Juristen gegenlesen lassen, insbesondere im Zusammenspiel mit dem Sitz der Betreiberin in den USA.]',
+    },
+    {
+      heading: 'Änderungen',
+      body:
+        'Wir können diese Nutzungsbedingungen ändern. Wesentliche Änderungen zeigen wir dir vor ihrem Wirksamwerden in der App an; nutzt du die App danach weiter, gilt das als Zustimmung. Version und Datum stehen am Ende dieses Dokuments.',
+    },
+    {
+      heading: 'Anwendbares Recht und Kontakt',
+      body: `Für Verbraucherinnen und Verbraucher mit gewöhnlichem Aufenthalt in der EU gilt deutsches Recht, soweit zwingendes Verbraucherschutzrecht des Aufenthaltsstaats nicht entgegensteht; im Übrigen gilt das Recht am Sitz der Betreiberin. [PRUEFEN: Rechtswahlklausel von einer Juristin/einem Juristen bestätigen lassen.] Kontakt: ${OPERATOR_PLACEHOLDER.email}. Der EU-Vertreter nach Art. 27 DSGVO ist in der Datenschutzerklärung genannt.`,
+    },
+  ],
+  en: [
+    {
+      heading: 'Scope',
+      body: `These terms of use apply between you and ${OPERATOR_PLACEHOLDER.name}, ${OPERATOR_PLACEHOLDER.address} (contact: ${OPERATOR_PLACEHOLDER.email}), for using this app and the optional account. By starting the app, you agree to these terms.`,
+    },
+    {
+      heading: 'What the app is and is not',
+      body:
+        'The app organises your intake timing, compares recorded amounts with published reference values and shows notes with a cited source. It gives no recommendations, makes no diagnosis and does not replace medical or pharmaceutical advice. You remain responsible for your own decisions about your supplements; for questions, contact a doctor or pharmacy.',
+    },
+    {
+      heading: 'Account (optional)',
+      body:
+        'The app works without an account. If you create one, you need a valid email address and a password of at least 10 characters; the minimum age is 16, and one account belongs to one person. You are responsible for keeping your password and recovery key safe: without both, synced data cannot be restored, your local data on the device is not affected. You can delete your account in the app at any time. We may delete accounts that remain unconfirmed for 30 days or that are misused.',
+    },
+    {
+      heading: 'Free use and Pro',
+      body:
+        'The app is free to use. In addition, a paid Pro plan and individual scan credits may be offered through the App Store or Google Play. Purchase, cancellation and refunds are handled by Apple or Google under their respective terms; prices are shown to you in the store before purchase.',
+    },
+    {
+      heading: 'Content and sources',
+      body:
+        'Reference values and notes come from public sources (including EFSA, BfR, HMPC, NIH, D-A-CH reference values). Product data comes in part from Open Food Facts under the Open Data Commons Open Database License (ODbL). No guarantee is given for the completeness or correctness of the content; you can report errors to the contact address above.',
+    },
+    {
+      heading: 'Liability',
+      body:
+        'We are liable without limitation for intent and gross negligence, and for breaches of essential contractual obligations, in the latter case limited to foreseeable, contract-typical damage. This limitation does not apply to damages from injury to life, body or health. Statutory rights you have as a consumer remain unaffected. [PRUEFEN: have the liability clause reviewed by a lawyer, in particular given the operator being based in the USA.]',
+    },
+    {
+      heading: 'Changes',
+      body:
+        'We may change these terms. Material changes are shown to you in the app before they take effect; continued use of the app afterwards counts as acceptance. Version and date are shown at the end of this document.',
+    },
+    {
+      heading: 'Applicable law and contact',
+      body: `For consumers habitually resident in the EU, German law applies to the extent that mandatory consumer protection law of their country of residence does not conflict; otherwise the law at the operator's seat applies. [PRUEFEN: have the governing-law clause confirmed by a lawyer.] Contact: ${OPERATOR_PLACEHOLDER.email}. The EU representative under Art. 27 GDPR is named in the privacy statement.`,
+    },
+  ],
+};
+
 export const IMPRINT_SECTIONS = {
   de: [
     {

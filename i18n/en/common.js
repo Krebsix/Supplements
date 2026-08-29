@@ -28,6 +28,7 @@ export default {
   'nav.notifications': 'Reminders',
   'nav.privacy': 'Privacy',
   'nav.imprint': 'Legal notice',
+  'nav.terms': 'Terms of use',
   'lifeStage.referenceFor': 'Reference values for',
   'legal.version': 'Version',
   'common.back': 'Back',

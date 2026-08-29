@@ -17,6 +17,8 @@ import {
   PRIVACY_VERSION,
   PRIVACY_SECTIONS,
   IMPRINT_SECTIONS,
+  TERMS_VERSION,
+  TERMS_SECTIONS,
 } from '../data/legalContent.js';
 
 /**
@@ -155,6 +157,7 @@ export function renderPrivacyPage() {
     <a href="#de">Deutsch</a>
     <a href="#en">English</a>
     <a href="imprint.html">Impressum</a>
+    <a href="terms.html">Nutzungsbedingungen</a>
   </nav>
   <div lang="de" id="de">
 ${sectionsHtml(PRIVACY_SECTIONS.de)}
@@ -165,7 +168,7 @@ ${sectionsHtml(PRIVACY_SECTIONS.en)}
   </div>
   <footer>
     <p>Stand · Version: ${escapeHtml(PRIVACY_VERSION)}</p>
-    <p><a href="imprint.html">Impressum · Provider information</a></p>
+    <p><a href="imprint.html">Impressum · Provider information</a> · <a href="terms.html">Nutzungsbedingungen · Terms of use</a></p>
   </footer>`;
   return page({
     lang: 'de',
@@ -182,6 +185,7 @@ export function renderImprintPage() {
     <a href="#de">Deutsch</a>
     <a href="#en">English</a>
     <a href="index.html">Datenschutzerklärung</a>
+    <a href="terms.html">Nutzungsbedingungen</a>
   </nav>
   <div lang="de" id="de">
 ${sectionsHtml(IMPRINT_SECTIONS.de)}
@@ -191,11 +195,39 @@ ${sectionsHtml(IMPRINT_SECTIONS.de)}
 ${sectionsHtml(IMPRINT_SECTIONS.en)}
   </div>
   <footer>
-    <p><a href="index.html">Datenschutzerklärung · Privacy Policy</a></p>
+    <p><a href="index.html">Datenschutzerklärung · Privacy Policy</a> · <a href="terms.html">Nutzungsbedingungen · Terms of use</a></p>
   </footer>`;
   return page({
     lang: 'de',
     title: 'Impressum · Provider information',
+    bodyContent,
+  });
+}
+
+export function renderTermsPage() {
+  const bodyContent = `  <p class="eyebrow">Rechtliches · Legal</p>
+  <h1>Nutzungsbedingungen</h1>
+  <p class="lang-note">Terms of use, English version below.</p>
+  <nav>
+    <a href="#de">Deutsch</a>
+    <a href="#en">English</a>
+    <a href="index.html">Datenschutzerklärung</a>
+    <a href="imprint.html">Impressum</a>
+  </nav>
+  <div lang="de" id="de">
+${sectionsHtml(TERMS_SECTIONS.de)}
+  </div>
+  <div lang="en" id="en">
+    <h2>Terms of use (English)</h2>
+${sectionsHtml(TERMS_SECTIONS.en)}
+  </div>
+  <footer>
+    <p>Stand · Version: ${escapeHtml(TERMS_VERSION)}</p>
+    <p><a href="index.html">Datenschutzerklärung · Privacy Policy</a> · <a href="imprint.html">Impressum · Provider information</a></p>
+  </footer>`;
+  return page({
+    lang: 'de',
+    title: 'Nutzungsbedingungen · Terms of use',
     bodyContent,
   });
 }
@@ -206,5 +238,6 @@ export function renderSite() {
   return {
     'index.html': renderPrivacyPage(),
     'imprint.html': renderImprintPage(),
+    'terms.html': renderTermsPage(),
   };
 }

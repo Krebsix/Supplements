@@ -140,6 +140,13 @@ export default function Home() {
         >
           <Text style={styles.legalRowText}>{t('nav.imprint')}</Text>
         </TouchableOpacity>
+        <Text style={styles.legalRowDivider}>·</Text>
+        <TouchableOpacity
+          onPress={() => router.push('/terms')}
+          accessibilityRole="link"
+        >
+          <Text style={styles.legalRowText}>{t('nav.terms')}</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
     </View>

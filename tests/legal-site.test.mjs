@@ -18,6 +18,8 @@ import {
   PRIVACY_VERSION,
   PRIVACY_SECTIONS,
   IMPRINT_SECTIONS,
+  TERMS_VERSION,
+  TERMS_SECTIONS,
 } from '../data/legalContent';
 
 let failures = 0;
@@ -60,13 +62,18 @@ for (const [token, hex] of Object.entries(WEB_TOKENS)) {
 console.log('— Inhaltliche Vollstaendigkeit —');
 const privacy = site['index.html'];
 const imprint = site['imprint.html'];
+const terms = site['terms.html'];
 check('PRIVACY_VERSION erscheint auf der Datenschutz-Seite', privacy.includes(PRIVACY_VERSION));
+check('TERMS_VERSION erscheint auf der Nutzungsbedingungen-Seite', terms.includes(TERMS_VERSION));
 for (const lang of ['de', 'en']) {
   for (const section of PRIVACY_SECTIONS[lang]) {
     check(`Datenschutz ${lang}: "${section.heading}"`, privacy.includes(`<h3>${section.heading}</h3>`));
   }
   for (const section of IMPRINT_SECTIONS[lang]) {
     check(`Impressum ${lang}: "${section.heading}"`, imprint.includes(`<h3>${section.heading}</h3>`));
+  }
+  for (const section of TERMS_SECTIONS[lang]) {
+    check(`Nutzungsbedingungen ${lang}: "${section.heading}"`, terms.includes(`<h3>${section.heading}</h3>`));
   }
 }
 
@@ -82,8 +89,10 @@ check(
   'Seiten sind namensneutral (bewusst: die URL uebersteht jede Umbenennung)',
   !privacy.includes('Supplement OS') &&
     !imprint.includes('Supplement OS') &&
+    !terms.includes('Supplement OS') &&
     !privacy.includes('MySuplea') &&
-    !imprint.includes('MySuplea')
+    !imprint.includes('MySuplea') &&
+    !terms.includes('MySuplea')
 );
 
 if (failures > 0) {
