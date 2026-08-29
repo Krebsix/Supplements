@@ -88,7 +88,7 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `CostAnalyzer.js` | Kosten je Produkt aus TATSAECHLICHEM Verbrauch, plus die Verbindung zur Wirkungskontrolle (was lief nie ueberprueft mit) |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
 | `AccountCrypto.js` | Schluesselableitung (scrypt), Umschlaege (AES-GCM), Recovery-Key. Reine Kryptografie, randomBytes injiziert |
-| `AccountLogic.js` | Konto-Ablaeufe gegen Supabase Auth mit uebergebenem Client: Signup, Login, Reset, Loeschung. Nie Passwort oder Klartext-Schluessel Richtung Netz |
+| `AccountLogic.js` | Konto-Ablaeufe gegen Supabase Auth mit uebergebenem Client: Signup, Login, Reset, Loeschung. Passwort geht nur an Supabase Auth (Hash); abgeleiteter Schluessel, Datenschluessel und Recovery-Key nie Richtung Netz |
 | `AccountStore.js` | zustand-Factory fuer den Kontostand, getrennt vom Haupt-Store; `useAccountStore.js` bindet die echten Abhaengigkeiten |
 
 ### Wirkstoff-Datenbank (`data/`)
@@ -124,9 +124,11 @@ UI-Komponenten!"* Neue Regeln gehoeren in diese Module, nicht in Screens.
 
 ## Branch-Lage
 
-**Der Arbeitsbranch ist `phase-2s-scan-data-integrity-traceability`, nicht `main`.**
+**Der Arbeitsbranch ist `phase-2t-account-grundlage`, nicht `main`.**
 Die Entwicklung laeuft in einer langen Kette von `phase-*`-Branches; `main` liegt
 weit zurueck. Alle 23 Branches sind auf GitHub.
+phase-2t haengt an phase-2s (Kopf e04dc49) und enthaelt die Account-Grundlage
+(Spec und Plan unter docs/superpowers/, Stand 2026-08-29).
 
 Vor dem Anlegen eines neuen Branches pruefen, welcher der aktuelle Kopf ist —
 nicht blind von `main` abzweigen.
