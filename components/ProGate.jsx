@@ -12,19 +12,28 @@
  * Screens (Kostenanalyse, Kur-Zyklen).
  */
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { useTranslation } from '../i18n';
-import { colors, space, surfaces, type } from '../theme';
+import { colors, radius, space, surfaces, type } from '../theme';
 
 export default function ProGate({ screen = false }) {
   const { t } = useTranslation();
+  const router = useRouter();
 
   const card = (
     <View style={styles.card}>
       <Text style={styles.label}>{t('proGate.label')}</Text>
       <Text style={styles.title}>{t('proGate.title')}</Text>
       <Text style={styles.text}>{t('proGate.text')}</Text>
+      <Pressable
+        onPress={() => router.push('/paywall')}
+        style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
+        accessibilityRole="button"
+      >
+        <Text style={styles.buttonText}>{t('proGate.action')}</Text>
+      </Pressable>
     </View>
   );
 
@@ -38,4 +47,14 @@ const styles = StyleSheet.create({
   label: { ...type.eyebrow, marginBottom: space.sm },
   title: { ...type.heading, marginBottom: space.xs },
   text: { ...type.body },
+  button: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.md,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: space.md,
+  },
+  buttonText: { fontWeight: '600', color: colors.surface, fontSize: 15 },
+  buttonPressed: { opacity: 0.72 },
 });

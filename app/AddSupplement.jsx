@@ -288,7 +288,11 @@ export default function AddSupplement() {
       if (!gate.allowed) {
         Alert.alert(
           t('addSupplement.alert.limitTitle'),
-          t('addSupplement.alert.limitMessage', { limit: gate.limit })
+          t('addSupplement.alert.limitMessage', { limit: gate.limit }),
+          [
+            { text: t('common.cancel'), style: 'cancel' },
+            { text: t('addSupplement.alert.limitAction'), onPress: () => router.push('/paywall') },
+          ]
         );
         return;
       }

@@ -359,7 +359,11 @@ export default function ScannerScreen() {
     if (!evaluateVisionScan(entitlement).allowed) {
       Alert.alert(
         t('scanner.limit.title'),
-        t('scanner.limit.message')
+        t('scanner.limit.message'),
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          { text: t('scanner.limit.action'), onPress: () => router.push('/paywall') },
+        ]
       );
       return;
     }

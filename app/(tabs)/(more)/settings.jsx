@@ -306,6 +306,19 @@ export default function SettingsScreen() {
             <Text style={styles.statusLabel}>{t('settings.quotaCreditsLabel')}</Text>
           </View>
         </View>
+
+        <Pressable
+          onPress={() => router.push('/subscription')}
+          accessibilityRole="button"
+          style={({ pressed }) => [
+            styles.backupButtonQuiet,
+            pressed ? styles.legalLinkPressed : null,
+          ]}
+        >
+          <Text style={styles.backupButtonQuietText}>
+            {t('home.nav.subscription.title')}
+          </Text>
+        </Pressable>
       </View>
 
       <View style={styles.card}>
