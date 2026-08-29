@@ -23,6 +23,7 @@ npm start          # Expo Dev-Server
 npm run android    # Android
 npm run ios        # iOS
 npm test           # Logik-Tests (Matching, Referenzwerte, Datenintegritaet)
+npx eas build --profile development --platform ios   # Development Build (Kauf-SDK), braucht eas login
 ```
 
 `npm test` buendelt `tests/substance-logic.test.mjs` mit esbuild und laeuft in
@@ -47,6 +48,7 @@ app/
 ├── imprint.jsx            Impressum (Betreiberdaten: data/legalContent.js)
 ├── AddSupplement.jsx      Anlegen/Bearbeiten (Modal, inkl. Kur-Zyklus)
 ├── auth/callback.jsx      Ziel der Konto-Mails (Deep Link)
+├── paywall.jsx            Kauf-Screen (Abo + Credits), rendert ueber PurchaseLogic
 └── (tabs)/                Fuenf echte Router-Tabs, je eigener Stack:
     ├── (today)/           Dashboard.jsx, history.jsx
     ├── (discover)/        search.jsx
@@ -54,7 +56,8 @@ app/
     ├── (analysis)/        analysis.jsx, outcome.jsx
     └── (more)/            menu.jsx (Hub), profile.jsx, lab.jsx, export.jsx,
                            notifications.jsx, settings.jsx, account.jsx,
-                           account-recovery.jsx, account-reset.jsx
+                           account-recovery.jsx, account-reset.jsx,
+                           subscription.jsx
 
 components/                StatusBadge, SupplementResultCard, LifeStagePicker,
                            LanguagePicker, SubstanceInsightCard, ComplaintCard,
@@ -90,6 +93,9 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `AccountCrypto.js` | Schluesselableitung (scrypt), Umschlaege (AES-GCM), Recovery-Key. Reine Kryptografie, randomBytes injiziert |
 | `AccountLogic.js` | Konto-Ablaeufe gegen Supabase Auth mit uebergebenem Client: Signup, Login, Reset, Loeschung. Passwort geht nur an Supabase Auth (Hash); abgeleiteter Schluessel, Datenschluessel und Recovery-Key nie Richtung Netz |
 | `AccountStore.js` | zustand-Factory fuer den Kontostand, getrennt vom Haupt-Store; `useAccountStore.js` bindet die echten Abhaengigkeiten |
+| `PurchaseLogic.js` | Kaufschicht ohne UI, das SDK wird injiziert (nie direkt importiert). Kauf-Rundtrip, Wiederherstellen, logIn/logOut bei Session-Wechsel, Uebersetzung des RevenueCat-Kundenstatus in einen der sieben App-Status |
+| `PurchaseStore.js` / `usePurchaseStore.js` | zustand-Factory fuer den Kaufstatus, getrennt vom Haupt-Store; spiegelt den Tier-Wechsel per `applyPurchaseStatus` in `Entitlements.js`. `usePurchaseStore.js` bindet die echten Abhaengigkeiten |
+| `purchaseSdk.js` | Laedt `react-native-purchases` optional. In Expo Go fehlt das native Modul, dann liefert es `null` statt abzustuerzen |
 
 ### Wirkstoff-Datenbank (`data/`)
 
@@ -222,6 +228,15 @@ Der Datenschluessel lebt im Arbeitsspeicher des Konto-Stores und ist nach
 einem Neustart weg. Konto-Loeschung ueber die Edge Function
 `delete-account` (Store-Pflicht). Wer den Konto-Datenfluss aendert,
 aendert `data/legalContent.js` mit.
+
+**Kaeufe (seit 2026-08-29):** RevenueCat ist Auftragsverarbeiter fuer den
+Kaufstatus (Abo-Tier, Kaufhistorie), angebunden ueber `react-native-purchases`.
+Keine Preise im Code, die stehen in App Store Connect, Play Console und im
+RevenueCat-Offering (`purchaseConfig.js` traegt nur Public-Keys und Produkt-
+IDs). Expo Go zeigt die Kaufschicht als "nicht verfuegbar" (`purchaseSdk.js`
+liefert dort `null`), fuer echte Kaeufe braucht es einen Development Build
+(siehe `launch/store-setup.md`). `PAYWALL_ENFORCED` in `Entitlements.js`
+bleibt `false`, bis der Sandbox-Test aus `launch/store-setup.md` gruen ist.
 
 ---
 
