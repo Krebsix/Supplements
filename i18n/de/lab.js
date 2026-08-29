@@ -49,6 +49,9 @@ export default {
   'lab.new.save': 'Wert speichern',
   'lab.new.invalid': 'Bitte Ergebnis und Datum angeben.',
 
+  'lab.edit.title': 'Laborwert bearbeiten',
+  'lab.edit.save': 'Änderung speichern',
+
   'lab.list.title': 'Erfasste Werte',
   'lab.list.empty': 'Noch keine Werte eingetragen.',
   'lab.list.referenceGiven': 'Referenz laut Befund: {min} bis {max}',
@@ -56,6 +59,7 @@ export default {
   'lab.list.intakeContext': 'In den 14 Tagen davor dokumentiert: {names}',
   'lab.list.delete': 'Wert löschen',
   'lab.list.deleteConfirm': 'Diesen Wert löschen?',
+  'lab.list.edit': 'Bearbeiten',
 
   'lab.disclaimer':
     'Die App bewertet Laborwerte nicht und leitet daraus keinen Bedarf ab. Sie hält fest, was gemessen wurde und was zu diesem Zeitpunkt eingenommen wurde. Die Beurteilung gehört in ärztliche Hände.',

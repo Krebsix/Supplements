@@ -49,6 +49,9 @@ export default {
   'lab.new.save': 'Save value',
   'lab.new.invalid': 'Please enter a result and a date.',
 
+  'lab.edit.title': 'Edit lab value',
+  'lab.edit.save': 'Save changes',
+
   'lab.list.title': 'Recorded values',
   'lab.list.empty': 'No values entered yet.',
   'lab.list.referenceGiven': 'Reference from the report: {min} to {max}',
@@ -56,6 +59,7 @@ export default {
   'lab.list.intakeContext': 'Recorded in the 14 days before: {names}',
   'lab.list.delete': 'Delete value',
   'lab.list.deleteConfirm': 'Delete this value?',
+  'lab.list.edit': 'Edit',
 
   'lab.disclaimer':
     'The app does not evaluate lab values and derives no need from them. It records what was measured and what was being taken at the time. The assessment belongs with a doctor.',

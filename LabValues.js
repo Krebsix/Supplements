@@ -62,6 +62,23 @@ export function createLabValue(input = {}) {
   };
 }
 
+/**
+ * updateLabValue(labValues, id, input)
+ * Ersetzt einen Eintrag mit neu validierten Feldern. ID und createdAt
+ * bleiben, damit Verlauf und Bericht stabil referenzieren. Ungueltige
+ * Eingabe oder unbekannte ID: die Liste kommt unveraendert zurueck (gleiche
+ * Referenz), der Aufrufer erkennt daran den Fehlschlag.
+ */
+export function updateLabValue(labValues = [], id, input = {}) {
+  const index = labValues.findIndex((entry) => entry?.id === id);
+  if (index < 0) return labValues;
+  const fresh = createLabValue({ ...input, id });
+  if (!fresh) return labValues;
+  const next = labValues.slice();
+  next[index] = { ...fresh, createdAt: labValues[index].createdAt };
+  return next;
+}
+
 function normalizeDateKey(value) {
   if (!value) return new Date().toISOString().slice(0, 10);
   if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;

@@ -17,7 +17,7 @@ import {
   createTrial,
   TRIAL_STATUS,
 } from './OutcomeTracker';
-import { createLabValue } from './LabValues';
+import { createLabValue, updateLabValue } from './LabValues';
 import { buildDailySchedule } from './TimingEngine';
 import { setActiveLanguage } from './i18n/runtime';
 import inventoryData from './inventory.json';
@@ -379,6 +379,13 @@ export const useStore = create(
 
       deleteLabValue: (id) =>
         set((state) => ({ labValues: state.labValues.filter((entry) => entry.id !== id) })),
+
+      updateLabValue: (id, input) => {
+        const next = updateLabValue(get().labValues, id, input);
+        if (next === get().labValues) return null;
+        set({ labValues: next });
+        return next.find((entry) => entry.id === id) ?? null;
+      },
 
       getTrialRatings: (trialId) =>
         get().trialRatings.filter((rating) => rating.trialId === trialId),

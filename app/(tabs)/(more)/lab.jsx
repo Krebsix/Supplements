@@ -32,6 +32,7 @@ export default function LabScreen() {
 
   const labValues = useStore((state) => state.labValues);
   const addLabValue = useStore((state) => state.addLabValue);
+  const updateLabValue = useStore((state) => state.updateLabValue);
   const deleteLabValue = useStore((state) => state.deleteLabValue);
   const intakeLogs = useStore((state) => state.intakeLogs);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
@@ -39,6 +40,7 @@ export default function LabScreen() {
 
   const supplements = getActiveSupplements();
 
+  const [editingId, setEditingId] = useState(null);
   const [markerId, setMarkerId] = useState('ferritin');
   const [customName, setCustomName] = useState('');
   const [value, setValue] = useState('');
@@ -57,22 +59,45 @@ export default function LabScreen() {
     if (suggestion) setUnit(suggestion);
   }
 
+  function startEdit(entry) {
+    setEditingId(entry.id);
+    setMarkerId(entry.markerId);
+    setCustomName(entry.customName ?? '');
+    setValue(String(entry.value));
+    setUnit(entry.unit ?? '');
+    setMeasuredAt(entry.dateKey);
+    setLabName(entry.labName ?? '');
+    setRefMin(entry.referenceMin === null || entry.referenceMin === undefined ? '' : String(entry.referenceMin));
+    setRefMax(entry.referenceMax === null || entry.referenceMax === undefined ? '' : String(entry.referenceMax));
+  }
+
+  function clearForm() {
+    setValue('');
+    setLabName('');
+    setRefMin('');
+    setRefMax('');
+    setCustomName('');
+  }
+
+  function cancelEdit() {
+    clearForm();
+    setEditingId(null);
+  }
+
   function save() {
-    const entry = addLabValue({
+    const input = {
       markerId, customName, value, unit,
       measuredAt, labName, referenceMin: refMin, referenceMax: refMax,
-    });
+    };
+    const entry = editingId ? updateLabValue(editingId, input) : addLabValue(input);
 
     if (!entry) {
       Alert.alert(t('lab.new.invalid'));
       return;
     }
 
-    setValue('');
-    setLabName('');
-    setRefMin('');
-    setRefMax('');
-    setCustomName('');
+    clearForm();
+    setEditingId(null);
   }
 
   function confirmDelete(id) {
@@ -97,7 +122,7 @@ export default function LabScreen() {
       <Text style={styles.subtitle}>{t('lab.subtitle')}</Text>
       <Text style={styles.privacy}>{t('lab.privacy')}</Text>
 
-      <Text style={styles.sectionTitle}>{t('lab.new.title')}</Text>
+      <Text style={styles.sectionTitle}>{t(editingId ? 'lab.edit.title' : 'lab.new.title')}</Text>
 
       <View style={styles.card}>
         <Text style={styles.fieldLabel}>{t('lab.new.marker')}</Text>
@@ -200,8 +225,14 @@ export default function LabScreen() {
         <Text style={styles.fieldHint}>{t('lab.new.referenceHint')}</Text>
 
         <TouchableOpacity style={styles.primaryButton} onPress={save} accessibilityRole="button">
-          <Text style={styles.primaryButtonText}>{t('lab.new.save')}</Text>
+          <Text style={styles.primaryButtonText}>{t(editingId ? 'lab.edit.save' : 'lab.new.save')}</Text>
         </TouchableOpacity>
+
+        {editingId ? (
+          <TouchableOpacity style={styles.cancelButton} onPress={cancelEdit} accessibilityRole="button">
+            <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       <Text style={styles.sectionTitle}>{t('lab.list.title')}</Text>
@@ -252,9 +283,14 @@ export default function LabScreen() {
                         </Text>
                       ) : null}
 
-                      <Text style={styles.deleteLink} onPress={() => confirmDelete(entry.id)}>
-                        {t('lab.list.delete')}
-                      </Text>
+                      <View style={styles.actionRow}>
+                        <Text style={styles.actionLink} onPress={() => startEdit(entry)}>
+                          {t('lab.list.edit')}
+                        </Text>
+                        <Text style={styles.actionLink} onPress={() => confirmDelete(entry.id)}>
+                          {t('lab.list.delete')}
+                        </Text>
+                      </View>
                     </View>
                   );
                 })}
@@ -315,8 +351,11 @@ const styles = StyleSheet.create({
   entryDate: { color: colors.inkMuted, fontSize: 12 },
   entryMeta: { color: colors.inkMuted, fontSize: 12, marginTop: 3 },
   entryContext: { color: colors.inkFaint, fontSize: 11, lineHeight: 16, marginTop: space.xs },
-  deleteLink: { color: colors.alert, fontSize: 11, fontWeight: '700', marginTop: space.sm },
+  actionRow: { flexDirection: 'row', gap: space.md, marginTop: space.sm },
+  actionLink: { color: colors.alert, fontSize: 11, fontWeight: '700' },
   disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg - 2 },
+  cancelButton: { ...surfaces.buttonQuiet, paddingVertical: 13, marginTop: space.sm },
+  cancelButtonText: { ...surfaces.buttonQuietText, fontSize: 14 },
   secondaryButton: {
     backgroundColor: colors.surface, borderColor: colors.accent, borderWidth: 1,
     borderRadius: radius.md, paddingVertical: 13, alignItems: 'center', marginBottom: space.sm + 2,
