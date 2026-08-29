@@ -11,6 +11,7 @@ import {
 } from '../NotificationScheduler';
 import { stackScreenOptions } from '../components/navigationTheme';
 import { useAccountStore } from '../useAccountStore';
+import { usePurchaseStore } from '../usePurchaseStore';
 
 /**
  * Wurzel-Layout.
@@ -41,11 +42,19 @@ export default function Layout() {
   const hydrated = useStoreHydrated();
 
   // Konto-Session wiederherstellen. Laeuft parallel zum Store-Hydrate und
-  // blockiert nichts: Die App ist ohne Konto voll nutzbar.
+  // blockiert nichts: Die App ist ohne Konto voll nutzbar. Die Kaufschicht
+  // startet ERST danach, mit der (moeglicherweise vorhandenen) userId aus
+  // dem Konto-Restore, damit ein bestehendes Abo sofort verknuepft wird.
   useEffect(() => {
     useAccountStore
       .getState()
       .initialize()
+      .then(() =>
+        usePurchaseStore
+          .getState()
+          .initialize(useAccountStore.getState().userId)
+          .catch((error) => console.error('[Layout] Kaufschicht', error))
+      )
       .catch((error) => console.error('[Layout] Konto-Initialisierung fehlgeschlagen', error));
   }, []);
 

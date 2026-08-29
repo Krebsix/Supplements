@@ -6,6 +6,11 @@
  * im Store-Build mysuplea://auth/callback (scheme aus app.json). Beide
  * muessen in Supabase unter Auth > URL Configuration > Redirect URLs
  * stehen (siehe Task 5).
+ *
+ * onSessionChange verknuepft die Kaufschicht mit dem Konto (Task 4):
+ * usePurchaseStore importiert nur useStore, nicht useAccountStore, daher
+ * kein Ringschluss. Ein Fehler beim Verknuepfen/Trennen wird verschluckt,
+ * damit ein Problem der Kaufschicht nie eine Konto-Aktion blockiert.
  */
 
 import * as Crypto from 'expo-crypto';
@@ -14,6 +19,7 @@ import * as Linking from 'expo-linking';
 import { createAccountStore } from './AccountStore';
 import { ACCOUNT_DELETE_URL, SUPABASE_ANON_KEY } from './scanConfig';
 import { supabase } from './supabaseClient';
+import { usePurchaseStore } from './usePurchaseStore';
 
 const randomBytes = async (length) => new Uint8Array(await Crypto.getRandomBytesAsync(length));
 
@@ -23,6 +29,7 @@ export const useAccountStore = createAccountStore({
   redirectTo: Linking.createURL('auth/callback'),
   deleteUrl: ACCOUNT_DELETE_URL,
   anonKey: SUPABASE_ANON_KEY,
+  onSessionChange: (userId) => usePurchaseStore.getState().onSessionChange(userId).catch(() => {}),
 });
 
 export default useAccountStore;

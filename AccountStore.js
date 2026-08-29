@@ -47,7 +47,17 @@ const ANONYMOUS_STATE = {
   pendingEmail: null,
 };
 
-export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl, anonKey, fetchImpl }) {
+export function createAccountStore({
+  client,
+  randomBytes,
+  redirectTo,
+  deleteUrl,
+  anonKey,
+  fetchImpl,
+  // Verknuepft die Kaufschicht mit dem Konto (Task 4). Default no-op,
+  // damit Tests ohne diese Abhaengigkeit weiterlaufen.
+  onSessionChange = () => {},
+}) {
   return create((set, get) => {
     // Zaehlt laufende Aktionen: zwei ueberlappende Aufrufe (z. B. ein
     // Doppelklick, der prepareSignUp zweimal ausloest) duerfen busy nicht
@@ -97,24 +107,33 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
           set({ recoveryPending: true });
           return;
         }
-        if (nextSession?.user) {
-          applySession(nextSession);
-        } else {
-          set({ ...ANONYMOUS_STATE });
-        }
+        // applySession() unterscheidet selbst zwischen Session mit und
+        // ohne user, deckt also auch SIGNED_OUT (nextSession === null) ab.
+        applySession(nextSession);
       });
     };
 
+    // Letzte bekannte userId, um onSessionChange nur bei einem ECHTEN
+    // Wechsel auszuloesen. Ohne diese Sperre wuerde z. B. USER_UPDATED
+    // (nach changeEmail/changePassword) die Kaufschicht bei jeder
+    // Session-Aktualisierung erneut mit demselben Konto verknuepfen.
+    let previousUserId = null;
+
     const applySession = (session) => {
+      const userId = session?.user?.id ?? null;
       if (session?.user) {
         set({
           status: ACCOUNT_STATUS.SIGNED_IN,
           email: session.user.email ?? null,
-          userId: session.user.id ?? null,
+          userId,
           pendingEmail: session.user.new_email ?? null,
         });
       } else {
         set({ ...ANONYMOUS_STATE });
+      }
+      if (userId !== previousUserId) {
+        previousUserId = userId;
+        onSessionChange(userId);
       }
     };
 
@@ -182,7 +201,7 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       signOut: () =>
         withBusy(async () => {
           await signOut(client);
-          set({ ...ANONYMOUS_STATE });
+          applySession(null);
         }),
 
       requestPasswordReset: (email) =>
@@ -222,7 +241,7 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       deleteAccount: () =>
         withBusy(async () => {
           await deleteAccount(client, deleteUrl, anonKey, fetchImpl);
-          set({ ...ANONYMOUS_STATE });
+          applySession(null);
         }),
 
       changePassword: (currentPassword, newPassword) =>

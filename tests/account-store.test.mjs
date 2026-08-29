@@ -262,5 +262,30 @@ console.log('— Konto-Einstellungen: E-Mail ohne Bestaetigung —');
   );
 }
 
+console.log('— onSessionChange bei Session-Wechsel —');
+{
+  // Verknuepft die Kaufschicht mit dem Konto (Task 4): onSessionChange
+  // feuert nur bei einem ECHTEN Wechsel der userId, nicht bei jedem
+  // Session-Ereignis (sonst wuerde z. B. USER_UPDATED die Kaufschicht bei
+  // jeder Einstellungsaenderung erneut mit demselben Konto verknuepfen).
+  const client = makeClient();
+  const calls = [];
+  const store = createAccountStore({ ...deps(client), onSessionChange: (userId) => calls.push(userId) });
+  await store.getState().initialize();
+  check('kein Aufruf beim Start ohne Session', calls.length === 0);
+
+  await store.getState().prepareSignUp('a@b.de', 'korrekt-pferd-batterie');
+  await store.getState().confirmSignUp();
+  await store.getState().signIn('a@b.de', 'korrekt-pferd-batterie');
+  check('onSessionChange bei Login mit userId', calls[calls.length - 1] === 'u1');
+
+  const beforeUpdate = calls.length;
+  client.emit('USER_UPDATED', { access_token: 'at', user: { id: 'u1', email: 'a@b.de' } });
+  check('USER_UPDATED mit gleicher userId feuert nicht erneut', calls.length === beforeUpdate);
+
+  await store.getState().signOut();
+  check('onSessionChange bei Logout mit null', calls[calls.length - 1] === null);
+}
+
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle AccountStore-Tests bestanden.');
