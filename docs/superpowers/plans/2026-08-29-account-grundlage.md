@@ -75,10 +75,13 @@ export const ACCOUNT_DELETE_URL = `${SUPABASE_URL}/functions/v1/delete-account`;
  * verschluesselten Adapter wie der Haupt-Store (secureStorage.js):
  * Tokens sind keine Gesundheitsdaten, aber wer sie hat, ist die Nutzerin.
  *
- * flowType 'implicit': Die Bestaetigungs- und Reset-Links tragen dann
- * access_token, refresh_token und type im URL-Fragment. So erkennt
- * app/auth/callback.jsx einen Passwort-Reset (type=recovery) direkt an
- * der URL. PKCE wuerde nur einen Code liefern und den Typ verschlucken.
+ * flowType 'pkce': Die Bestaetigungs- und Reset-Links liefern nur einen
+ * Einmal-Code (?code=...), der ohne den auf DIESEM Geraet gespeicherten
+ * Verifier wertlos ist. Der Implicit-Flow wuerde Access- und Refresh-Token
+ * in ein URL-Fragment legen; ein Custom-Scheme-Link kann auf Android von
+ * einer fremden App abgefangen werden, dann waeren die Tokens weg.
+ * Den Reset-Fall erkennt der Store am Ereignis PASSWORD_RECOVERY, das
+ * supabase-js beim Code-Tausch feuert (AccountStore.js).
  *
  * detectSessionInUrl false: Das ist ein Browser-Mechanismus; Deep Links
  * werden in app/auth/callback.jsx ausdruecklich verarbeitet.
@@ -96,7 +99,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
-    flowType: 'implicit',
+    flowType: 'pkce',
   },
 });
 
@@ -797,7 +800,7 @@ git commit -m "feat(account): signup, login, reset and delete flows (AccountLogi
 - Consumes: `AccountLogic.js` (Task 3), `AccountCrypto.createKeyBundle`
 - Produces:
   - `ACCOUNT_STATUS = { UNKNOWN: 'unknown', ANONYMOUS: 'anonymous', SIGNED_IN: 'signedIn' }`
-  - `createAccountStore({ client, randomBytes, redirectTo, deleteUrl, anonKey, fetchImpl? })` liefert einen zustand-Hook mit State `{ status, email, userId, dataKey, busy, pendingSignUp, pendingRecoveryKeyText }` und Aktionen `initialize, prepareSignUp(email, password) => recoveryKeyText, confirmSignUp() => { needsConfirmation }, cancelSignUp, signIn(email, password), signOut, requestPasswordReset(email), completePasswordReset(newPassword, recoveryKeyText) => { dataLost, recoveryKeyText }, clearPendingRecoveryKey, handleAuthCallback(url) => type, deleteAccount`
+  - `createAccountStore({ client, randomBytes, redirectTo, deleteUrl, anonKey, fetchImpl? })` liefert einen zustand-Hook mit State `{ status, email, userId, dataKey, busy, recoveryPending, pendingSignUp, pendingRecoveryKeyText }` und Aktionen `initialize, prepareSignUp(email, password) => recoveryKeyText, confirmSignUp() => { needsConfirmation }, cancelSignUp, signIn(email, password), signOut, requestPasswordReset(email), completePasswordReset(newPassword, recoveryKeyText) => { dataLost, recoveryKeyText }, clearPendingRecoveryKey, handleAuthCallback(url) => type, deleteAccount`
   - `useAccountStore` (useAccountStore.js): der gebundene Store fuer Screens
 
 - [ ] **Step 1: Fehlschlagenden Test schreiben**
@@ -838,7 +841,14 @@ function makeClient() {
       updateUser: async () => ({ data: {}, error: null }),
       resetPasswordForEmail: async (email, opts) => { calls.push(['reset', email, opts]); return { error: null }; },
       setSession: async (args) => { session = { access_token: args.access_token, user: { id: 'u1', email: 'a@b.de' } }; return { data: { session }, error: null }; },
-      exchangeCodeForSession: async () => ({ data: { session }, error: null }),
+      // Wie supabase-js: erst SIGNED_IN, bei einem Reset-Link zusaetzlich
+      // PASSWORD_RECOVERY, beides BEVOR das Promise aufloest.
+      exchangeCodeForSession: async (code) => {
+        session = { access_token: 'from-code', user: { id: 'u1', email: 'a@b.de' } };
+        listener?.('SIGNED_IN', session);
+        if (code === 'RECOVERY') listener?.('PASSWORD_RECOVERY', session);
+        return { data: { session }, error: null };
+      },
     },
     from: () => ({
       select: () => ({ maybeSingle: async () => ({ data: stored, error: null }) }),
@@ -917,10 +927,13 @@ console.log('— Callback und Reset —');
   await store.getState().initialize();
   await store.getState().prepareSignUp('a@b.de', 'altes-passwort');
   await store.getState().confirmSignUp();
-  const type = await store.getState().handleAuthCallback('mysuplea://auth/callback#access_token=A&refresh_token=R&type=recovery');
-  check('Callback liefert Typ und meldet an', type === 'recovery' && store.getState().status === ACCOUNT_STATUS.SIGNED_IN);
+  const plain = await store.getState().handleAuthCallback('mysuplea://auth/callback?code=CONFIRM');
+  check('Bestaetigungs-Link: kein Reset, angemeldet', plain === null && store.getState().recoveryPending === false && store.getState().status === ACCOUNT_STATUS.SIGNED_IN);
+  const type = await store.getState().handleAuthCallback('mysuplea://auth/callback?code=RECOVERY');
+  check('Reset-Link: Typ recovery aus dem PASSWORD_RECOVERY-Ereignis', type === 'recovery' && store.getState().recoveryPending === true);
   const r = await store.getState().completePasswordReset('neues-passwort-2026', '');
   check('Reset ohne Key: neuer Recovery-Key steht zur Anzeige bereit', r.dataLost === true && store.getState().pendingRecoveryKeyText === r.recoveryKeyText);
+  check('Reset abgeschlossen: recoveryPending geloescht', store.getState().recoveryPending === false);
   store.getState().clearPendingRecoveryKey();
   check('nach Anzeige geleert', store.getState().pendingRecoveryKeyText === null);
 }
@@ -992,6 +1005,7 @@ const ANONYMOUS_STATE = {
   email: null,
   userId: null,
   dataKey: null,
+  recoveryPending: false,
 };
 
 export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl, anonKey, fetchImpl }) {
@@ -1023,6 +1037,8 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       userId: null,
       dataKey: null,
       busy: false,
+      // Reset-Link wurde eingeloest, neues Passwort steht noch aus.
+      recoveryPending: false,
       // Zwischen Formular und Recovery-Screen: E-Mail, Passwort, Bundle.
       // Wird bei confirm/cancel sofort geleert.
       pendingSignUp: null,
@@ -1034,7 +1050,14 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
         applySession(session);
         // Token-Refresh gescheitert, Konto anderswo geloescht: Supabase
         // meldet SIGNED_OUT, der Store faellt still zurueck.
-        client.auth.onAuthStateChange((_event, nextSession) => {
+        // PASSWORD_RECOVERY kommt beim Code-Tausch eines Reset-Links
+        // (PKCE liefert keinen type in der URL); handleAuthCallback liest
+        // das Flag, account-reset.jsx raeumt es beim Abschluss weg.
+        client.auth.onAuthStateChange((event, nextSession) => {
+          if (event === 'PASSWORD_RECOVERY') {
+            set({ recoveryPending: true });
+            return;
+          }
           if (nextSession?.user) {
             applySession(nextSession);
           } else {
@@ -1092,7 +1115,11 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
             recoveryKeyText,
             randomBytes,
           });
-          set({ dataKey: result.dataKey, pendingRecoveryKeyText: result.recoveryKeyText });
+          set({
+            dataKey: result.dataKey,
+            pendingRecoveryKeyText: result.recoveryKeyText,
+            recoveryPending: false,
+          });
           return result;
         }),
 
@@ -1102,7 +1129,9 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
         withBusy(async () => {
           const result = await applyAuthCallback(client, parseAuthCallback(url));
           applySession(result.session);
-          return result.type;
+          // Bei PKCE steht der Typ nicht in der URL; das Ereignis
+          // PASSWORD_RECOVERY hat waehrend des Code-Tauschs das Flag gesetzt.
+          return result.type ?? (get().recoveryPending ? 'recovery' : null);
         }),
 
       deleteAccount: () =>
