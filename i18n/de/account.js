@@ -1,0 +1,95 @@
+/**
+ * i18n/de/account.js
+ * Konto: Anmelden, Registrieren, Recovery-Key, Passwort-Reset, Loeschen
+ * (app/(tabs)/(more)/account*.jsx, app/auth/callback.jsx).
+ */
+
+export default {
+  'account.kicker': 'Konto',
+  'account.title.anonymous': 'Ohne Konto nutzbar',
+  'account.intro':
+    'Diese App funktioniert vollständig ohne Konto. Ein Konto brauchst du nur, wenn du deine Daten später auf mehreren Geräten nutzen oder automatisch sichern willst. Gesundheitsdaten verlassen dein Gerät dann ausschließlich verschlüsselt: Der Schlüssel entsteht aus deinem Passwort und wird nie übertragen.',
+
+  'account.mode.signIn': 'Anmelden',
+  'account.mode.signUp': 'Konto anlegen',
+
+  'account.field.email': 'E-Mail-Adresse',
+  'account.field.password': 'Passwort',
+  'account.field.passwordRepeat': 'Passwort wiederholen',
+  'account.hint.password':
+    'Mindestens 10 Zeichen. Das Passwort schützt nicht nur den Login, sondern auch deine Daten.',
+
+  'account.action.signIn': 'Anmelden',
+  'account.action.continue': 'Weiter',
+  'account.action.forgot': 'Passwort vergessen?',
+  'account.action.signOut': 'Abmelden',
+
+  'account.busy.deriving': 'Schlüssel wird erzeugt. Das dauert einen Moment.',
+
+  'account.error.title': 'Das hat nicht geklappt',
+  'account.error.emailInvalid': 'Bitte eine gültige E-Mail-Adresse eingeben.',
+  'account.error.passwordShort': 'Das Passwort braucht mindestens 10 Zeichen.',
+  'account.error.passwordMismatch': 'Die Passwörter stimmen nicht überein.',
+  'account.error.offline': 'Keine Verbindung. Prüfe dein Netz und versuche es erneut.',
+  'account.error.credentials': 'Anmeldung nicht möglich. Prüfe E-Mail-Adresse und Passwort.',
+  'account.error.generic': 'Unerwarteter Fehler: {message}',
+
+  'account.confirmMail.title': 'Bestätige deine E-Mail-Adresse',
+  'account.confirmMail.text':
+    'Wir haben einen Link an {email} geschickt. Öffne ihn auf diesem Gerät, dann ist dein Konto aktiv.',
+
+  'account.signedIn.title': 'Angemeldet',
+  'account.signedIn.as': 'Angemeldet als {email}',
+  'account.signedIn.keyReady': 'Datenschlüssel ist für diese Sitzung entsperrt.',
+  'account.signedIn.keyLocked':
+    'Datenschlüssel wird beim nächsten Anmelden mit Passwort entsperrt.',
+  'account.signedIn.recoveryNote':
+    'Dein Recovery-Key wurde beim Anlegen einmalig angezeigt. Ohne Passwort und ohne Recovery-Key sind synchronisierte Daten nicht wiederherstellbar. Daten auf diesem Gerät sind davon nicht betroffen.',
+  'account.signedIn.syncNote':
+    'Sync und Cloud-Backup folgen in einem späteren Update. Bis dahin liegt weiterhin alles nur auf diesem Gerät.',
+
+  'account.delete.title': 'Konto löschen',
+  'account.delete.text':
+    'Löscht dein Konto und den verschlüsselten Schlüssel bei uns. Deine Daten auf diesem Gerät bleiben erhalten. Willst du auch die löschen: Einstellungen, Alle Daten löschen.',
+  'account.delete.confirmTitle': 'Konto wirklich löschen?',
+  'account.delete.confirmText': 'Das lässt sich nicht rückgängig machen. Lokale Daten bleiben.',
+  'account.delete.confirm': 'Löschen',
+  'account.delete.cancel': 'Abbrechen',
+  'account.delete.done': 'Konto gelöscht',
+
+  'account.recovery.kicker': 'Recovery-Key',
+  'account.recovery.title': 'Einmal sichern, dann nie wieder sichtbar',
+  'account.recovery.text':
+    'Dieser Key entsperrt deine synchronisierten Daten, falls du dein Passwort vergisst. Er wird nur jetzt angezeigt und liegt nirgends sonst, auch nicht bei uns. Ohne Passwort und ohne diesen Key sind synchronisierte Daten weg.',
+  'account.recovery.copy': 'Kopieren',
+  'account.recovery.copied': 'In die Zwischenablage kopiert',
+  'account.recovery.checkbox': 'Ich habe den Recovery-Key an einem sicheren Ort gespeichert.',
+  'account.recovery.confirm': 'Konto anlegen',
+  'account.recovery.cancel': 'Abbrechen',
+  'account.recovery.newTitle': 'Dein neuer Recovery-Key',
+  'account.recovery.newText':
+    'Weil der alte Recovery-Key nicht vorlag, wurde ein neuer Schlüssel erzeugt. Bisher synchronisierte Daten sind damit nicht mehr lesbar. Sichere diesen Key jetzt.',
+  'account.recovery.done': 'Fertig',
+
+  'account.forgot.title': 'Passwort zurücksetzen',
+  'account.forgot.text':
+    'Wir schicken dir einen Link. Damit deine synchronisierten Daten lesbar bleiben, brauchst du danach deinen Recovery-Key.',
+  'account.forgot.action': 'Link senden',
+  'account.forgot.sent': 'Wenn zu {email} ein Konto existiert, ist ein Link unterwegs.',
+
+  'account.reset.title': 'Neues Passwort setzen',
+  'account.reset.text':
+    'Mit deinem Recovery-Key bleiben synchronisierte Daten lesbar. Ohne ihn setzen wir einen neuen Schlüssel, und bisher synchronisierte Daten sind nicht mehr lesbar.',
+  'account.reset.field.recoveryKey': 'Recovery-Key (optional)',
+  'account.reset.recoveryPlaceholder': 'ABCD-EFGH-…',
+  'account.reset.action': 'Passwort setzen',
+  'account.reset.withoutKeyTitle': 'Ohne Recovery-Key fortfahren?',
+  'account.reset.withoutKeyText':
+    'Bisher synchronisierte Daten sind danach nicht mehr lesbar. Daten auf diesem Gerät bleiben.',
+  'account.reset.withoutKeyConfirm': 'Fortfahren',
+  'account.reset.wrongKey': 'Der Recovery-Key passt nicht. Prüfe die Eingabe.',
+  'account.reset.done': 'Passwort gesetzt',
+
+  'account.callback.title': 'Link wird geprüft',
+  'account.callback.errorTitle': 'Link ungültig oder abgelaufen',
+};

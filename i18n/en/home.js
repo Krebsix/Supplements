@@ -47,5 +47,7 @@ export default {
     'An overview for your doctor or pharmacist. You decide what goes in.',
   'home.nav.settings.title': 'Settings',
   'home.nav.settings.subtitle':
-    'Manage the archive, local data, system status and future data sources.'
+    'Manage the archive, local data, system status and future data sources.',
+  'home.nav.account.title': 'Account',
+  'home.nav.account.subtitle': 'Optional. Basis for sync and backup across devices.',
 };

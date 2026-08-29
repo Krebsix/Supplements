@@ -47,5 +47,7 @@ export default {
     'Eine Übersicht für Praxis oder Apotheke. Du entscheidest, was hineinkommt.',
   'home.nav.settings.title': 'Einstellungen',
   'home.nav.settings.subtitle':
-    'Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten.'
+    'Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten.',
+  'home.nav.account.title': 'Konto',
+  'home.nav.account.subtitle': 'Optional. Grundlage für Sync und Backup auf mehreren Geräten.',
 };

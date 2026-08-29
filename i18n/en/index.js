@@ -4,6 +4,7 @@
  * Missing keys fall back to German — see i18n/index.js.
  */
 
+import account from './account';
 import addSupplement from './addSupplement';
 import analyzer from './analyzer';
 import analysis from './analysis';
@@ -50,4 +51,5 @@ export default {
   ...history,
   ...settings,
   ...stack,
+  ...account,
 };

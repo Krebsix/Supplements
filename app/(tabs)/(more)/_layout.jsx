@@ -15,6 +15,12 @@ export default function MoreLayout() {
       <Stack.Screen name="export" options={{ title: t('nav.export') }} />
       <Stack.Screen name="notifications" options={{ title: t('nav.notifications') }} />
       <Stack.Screen name="settings" options={{ title: t('nav.settings') }} />
+      <Stack.Screen name="account" options={{ title: t('nav.account') }} />
+      <Stack.Screen
+        name="account-recovery"
+        options={{ title: t('account.recovery.kicker'), headerBackVisible: false, gestureEnabled: false }}
+      />
+      <Stack.Screen name="account-reset" options={{ title: t('account.reset.title') }} />
     </Stack>
   );
 }

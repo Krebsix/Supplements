@@ -11,6 +11,7 @@
  * die englische Fassung darf nachlaufen (siehe i18n/index.js, Fallback).
  */
 
+import account from './account';
 import addSupplement from './addSupplement';
 import analyzer from './analyzer';
 import analysis from './analysis';
@@ -57,4 +58,5 @@ export default {
   ...history,
   ...settings,
   ...stack,
+  ...account,
 };
