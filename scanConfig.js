@@ -21,3 +21,12 @@ export const SCAN_ANALYZE_URL =
 
 export const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZmx5aXZueGJta3lpYWNvZ3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODM5NjcsImV4cCI6MjEwMDg1OTk2N30.1AAlXC9jtVb8NS0aE3QXCq6r6boreX6VkkFS-CcHU9M';
+
+// Basis-URL des Supabase-Projekts. Wird vom Auth-Client (supabaseClient.js)
+// und fuer die Konto-Loeschung gebraucht. Oeffentlicher Wert.
+export const SUPABASE_URL = 'https://zeflyivnxbmkyiacogzu.supabase.co';
+
+// Edge Function, die ein Konto loescht (supabase/functions/delete-account).
+// Der Client darf auth.users nicht selbst loeschen; die Funktion prueft das
+// Token und loescht mit Service-Role.
+export const ACCOUNT_DELETE_URL = `${SUPABASE_URL}/functions/v1/delete-account`;
