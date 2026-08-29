@@ -20,6 +20,8 @@ import { create } from 'zustand';
 import { createKeyBundle } from './AccountCrypto';
 import {
   applyAuthCallback,
+  changeEmail,
+  changePassword,
   completePasswordReset,
   deleteAccount,
   parseAuthCallback,
@@ -42,6 +44,7 @@ const ANONYMOUS_STATE = {
   userId: null,
   dataKey: null,
   recoveryPending: false,
+  pendingEmail: null,
 };
 
 export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl, anonKey, fetchImpl }) {
@@ -85,6 +88,9 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       // den spaeteren applySession-Aufruf in handleAuthCallback zu
       // verlassen. handleAuthCallback liest nur noch das recoveryPending-
       // Flag, account-reset.jsx raeumt es beim Abschluss weg.
+      // USER_UPDATED (z. B. nach changeEmail) traegt ebenfalls eine
+      // Session mit user; braucht keinen eigenen Zweig, faellt in den
+      // bestehenden nextSession?.user-Fall darunter.
       client.auth.onAuthStateChange((event, nextSession) => {
         if (event === 'PASSWORD_RECOVERY') {
           applySession(nextSession);
@@ -105,6 +111,7 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
           status: ACCOUNT_STATUS.SIGNED_IN,
           email: session.user.email ?? null,
           userId: session.user.id ?? null,
+          pendingEmail: session.user.new_email ?? null,
         });
       } else {
         set({ ...ANONYMOUS_STATE });
@@ -119,6 +126,8 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       busy: false,
       // Reset-Link wurde eingeloest, neues Passwort steht noch aus.
       recoveryPending: false,
+      // Secure email change: neue Adresse wartet auf Bestaetigung beider Links.
+      pendingEmail: null,
       // Zwischen Formular und Recovery-Screen: E-Mail, Passwort, Bundle.
       // Wird bei confirm/cancel sofort geleert.
       pendingSignUp: null,
@@ -214,6 +223,18 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
         withBusy(async () => {
           await deleteAccount(client, deleteUrl, anonKey, fetchImpl);
           set({ ...ANONYMOUS_STATE });
+        }),
+
+      changePassword: (currentPassword, newPassword) =>
+        withBusy(async () => {
+          const result = await changePassword(client, { userId: get().userId, currentPassword, newPassword, randomBytes });
+          set({ dataKey: result.dataKey });
+        }),
+
+      changeEmail: (newEmail) =>
+        withBusy(async () => {
+          const result = await changeEmail(client, newEmail);
+          set({ pendingEmail: result.pendingEmail });
         }),
     };
   });

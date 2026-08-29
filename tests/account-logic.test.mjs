@@ -3,11 +3,14 @@
 // Schluessel) und wie Antworten in den App-Zustand uebersetzt werden.
 
 import { webcrypto } from 'node:crypto';
-import { createKeyBundle } from '../AccountCrypto';
+import { createKeyBundle, unlockWithPassword, unlockWithRecoveryKey } from '../AccountCrypto';
 import {
+  PASSWORD_INVALID,
   PROVIDERS,
   RECOVERY_KEY_INVALID,
   applyAuthCallback,
+  changeEmail,
+  changePassword,
   completePasswordReset,
   deleteAccount,
   isNetworkError,
@@ -165,6 +168,31 @@ console.log('— Konto loeschen —');
 console.log('— Netzwerkfehler —');
 check('TypeError "Network request failed" erkannt', isNetworkError(new TypeError('Network request failed')));
 check('AuthError ist kein Netzwerkfehler', !isNetworkError(Object.assign(new Error('Invalid login credentials'), { status: 400 })));
+
+console.log('— Passwort aendern —');
+{
+  const bundle = await createKeyBundle('altes-passwort-123', randomBytes);
+  const client = makeClient({ keyRecord: bundle.record });
+  const wrong = await (async () => { try { await changePassword(client, { userId: 'u1', currentPassword: 'falsch-falsch-1', newPassword: 'neues-passwort-2026', randomBytes }); return null; } catch (e) { return e; } })();
+  check('falsches altes Passwort: PASSWORD_INVALID', wrong?.code === PASSWORD_INVALID);
+  check('falsches altes Passwort: kein Netzaufruf', !client.calls.some(([n]) => n === 'updateUser' || n === 'upsert'));
+  const result = await changePassword(client, { userId: 'u1', currentPassword: 'altes-passwort-123', newPassword: 'neues-passwort-2026', randomBytes });
+  check('Datenschluessel bleibt derselbe', same(result.dataKey, bundle.dataKey));
+  const order = client.calls.map(([n]) => n).filter((n) => n === 'updateUser' || n === 'upsert');
+  check('Passwort zuerst, dann Record', order[0] === 'updateUser' && order[1] === 'upsert');
+  check('neues Passwort entsperrt', same(await unlockWithPassword(client.stored, 'neues-passwort-2026'), bundle.dataKey));
+  check('altes Passwort scheitert', await throws(() => unlockWithPassword(client.stored, 'altes-passwort-123')));
+  check('Recovery-Key bleibt gueltig', same(unlockWithRecoveryKey(client.stored, bundle.recoveryKeyText), bundle.dataKey));
+}
+console.log('— E-Mail aendern —');
+{
+  const client = makeClient();
+  client.auth.updateUser = async (args) => { client.calls.push(['updateUser', args]); return { data: { user: { id: 'u1', email: 'a@b.de', new_email: args.email } }, error: null }; };
+  const r = await changeEmail(client, ' Neu@B.de ');
+  check('updateUser mit getrimmter, kleingeschriebener Adresse', client.calls.some(([n, a]) => n === 'updateUser' && a.email === 'neu@b.de'));
+  check('pendingEmail zurueck', r.pendingEmail === 'neu@b.de');
+  check('ungueltige Adresse wirft ohne Netzaufruf', await throws(() => changeEmail(makeClient(), 'kein-mail')));
+}
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle AccountLogic-Tests bestanden.');

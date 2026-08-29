@@ -12,6 +12,7 @@ function check(name, condition, extra = '') {
 }
 const randomBytes = async (n) => webcrypto.getRandomValues(new Uint8Array(n));
 const same = (a, b) => a && b && a.length === b.length && a.every((v, i) => v === b[i]);
+const listenerOf = (c) => c.getListener();
 
 function makeClient() {
   const calls = [];
@@ -22,6 +23,7 @@ function makeClient() {
     calls,
     emit: (event, s) => { session = s; listener?.(event, s); },
     get stored() { return stored; },
+    getListener: () => listener,
     auth: {
       getSession: async () => ({ data: { session } }),
       onAuthStateChange: (cb) => { listener = cb; return { data: { subscription: { unsubscribe() {} } } }; },
@@ -219,6 +221,24 @@ console.log('— Kaltstart per Recovery-Link ohne vorheriges initialize() —');
   check('Kaltstart-Reset-Link liefert Typ recovery ohne initialize()', type === 'recovery');
   check('recoveryPending gesetzt', store.getState().recoveryPending === true);
   check('Status signedIn', store.getState().status === ACCOUNT_STATUS.SIGNED_IN);
+}
+
+console.log('— Konto-Einstellungen —');
+{
+  const client = makeClient();
+  client.auth.updateUser = async (args) => {
+    if (args.email) { const s = { access_token: 'at', user: { id: 'u1', email: 'a@b.de', new_email: args.email } }; listenerOf(client)?.('USER_UPDATED', s); return { data: { user: s.user }, error: null }; }
+    return { data: {}, error: null };
+  };
+  const store = createAccountStore(deps(client));
+  await store.getState().initialize();
+  await store.getState().prepareSignUp('a@b.de', 'altes-passwort-123');
+  await store.getState().confirmSignUp();
+  await store.getState().signIn('a@b.de', 'altes-passwort-123');
+  await store.getState().changePassword('altes-passwort-123', 'neues-passwort-2026');
+  check('nach Passwortwechsel weiter angemeldet, Schluessel im Speicher', store.getState().status === ACCOUNT_STATUS.SIGNED_IN && store.getState().dataKey !== null);
+  await store.getState().changeEmail('neu@b.de');
+  check('pendingEmail aus USER_UPDATED', store.getState().pendingEmail === 'neu@b.de');
 }
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }

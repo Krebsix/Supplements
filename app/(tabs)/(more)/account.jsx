@@ -11,10 +11,11 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { ACCOUNT_STATUS } from '../../../AccountStore';
-import { isNetworkError, PROVIDERS } from '../../../AccountLogic';
+import { isNetworkError, PASSWORD_INVALID, PROVIDERS } from '../../../AccountLogic';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
@@ -213,9 +214,14 @@ function AuthForm({ t }) {
 function SignedInView({ t }) {
   const email = useAccountStore((state) => state.email);
   const dataKey = useAccountStore((state) => state.dataKey);
+  const pendingEmail = useAccountStore((state) => state.pendingEmail);
   const busy = useAccountStore((state) => state.busy);
   const signOut = useAccountStore((state) => state.signOut);
   const deleteAccount = useAccountStore((state) => state.deleteAccount);
+  const [openSection, setOpenSection] = useState(null);
+
+  const toggleSection = (section) =>
+    setOpenSection((current) => (current === section ? null : section));
 
   const handleSignOut = async () => {
     try {
@@ -266,6 +272,22 @@ function SignedInView({ t }) {
         </Pressable>
       </View>
 
+      <SettingsSection
+        title={t('account.settings.email')}
+        open={openSection === 'email'}
+        onToggle={() => toggleSection('email')}
+      >
+        <EmailSettingsCard t={t} pendingEmail={pendingEmail} busy={busy} />
+      </SettingsSection>
+
+      <SettingsSection
+        title={t('account.settings.password')}
+        open={openSection === 'password'}
+        onToggle={() => toggleSection('password')}
+      >
+        <PasswordSettingsCard t={t} busy={busy} />
+      </SettingsSection>
+
       <View style={styles.card}>
         <Text style={styles.bodyStrong}>{t('account.delete.title')}</Text>
         <Text style={styles.body}>{t('account.delete.text')}</Text>
@@ -279,6 +301,162 @@ function SignedInView({ t }) {
         </Pressable>
       </View>
     </ScrollView>
+  );
+}
+
+// Einklappbare Karte fuer eine Konto-Einstellung. Reine Darstellung, keine
+// Fachlogik: Kopfzeile toggelt, Inhalt kommt von aussen.
+function SettingsSection({ title, open, onToggle, children }) {
+  return (
+    <View style={styles.card}>
+      <Pressable
+        onPress={onToggle}
+        style={styles.sectionHeader}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: open }}
+      >
+        <Text style={styles.bodyStrong}>{title}</Text>
+        <Feather
+          name={open ? 'chevron-down' : 'chevron-right'}
+          size={18}
+          color={colors.inkMuted}
+        />
+      </Pressable>
+      {open ? <View style={styles.sectionBody}>{children}</View> : null}
+    </View>
+  );
+}
+
+function EmailSettingsCard({ t, pendingEmail, busy }) {
+  const changeEmail = useAccountStore((state) => state.changeEmail);
+  const [newEmail, setNewEmail] = useState('');
+  const [fieldError, setFieldError] = useState(null);
+
+  const handleSubmit = async () => {
+    if (!EMAIL_PATTERN.test(newEmail.trim())) {
+      setFieldError(t('account.error.emailInvalid'));
+      return;
+    }
+    setFieldError(null);
+    try {
+      await changeEmail(newEmail);
+      setNewEmail('');
+      Alert.alert(t('account.settings.email'), t('account.settings.emailSent'));
+    } catch (error) {
+      Alert.alert(t('account.error.title'), describeError(t, error));
+    }
+  };
+
+  return (
+    <>
+      <Text style={styles.body}>{t('account.settings.emailText')}</Text>
+      {pendingEmail ? (
+        <Text style={styles.hint}>{t('account.settings.emailPending', { email: pendingEmail })}</Text>
+      ) : null}
+
+      <Text style={styles.label}>{t('account.settings.emailField')}</Text>
+      <TextInput
+        style={styles.input}
+        value={newEmail}
+        onChangeText={setNewEmail}
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="email-address"
+        textContentType="emailAddress"
+        accessibilityLabel={t('account.settings.emailField')}
+      />
+      {fieldError ? <Text style={styles.formError}>{fieldError}</Text> : null}
+
+      <Pressable
+        onPress={handleSubmit}
+        disabled={busy}
+        style={({ pressed }) => [styles.quietButton, pressed || busy ? styles.buttonPressed : null]}
+        accessibilityRole="button"
+      >
+        <Text style={styles.quietButtonText}>{t('account.settings.emailAction')}</Text>
+      </Pressable>
+    </>
+  );
+}
+
+function PasswordSettingsCard({ t, busy }) {
+  const changePassword = useAccountStore((state) => state.changePassword);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
+  const [fieldError, setFieldError] = useState(null);
+
+  const validate = () => {
+    if (newPassword.length < MIN_PASSWORD_LENGTH) return t('account.error.passwordShort');
+    if (newPassword !== newPasswordRepeat) return t('account.error.passwordMismatch');
+    return null;
+  };
+
+  const handleSubmit = async () => {
+    const problem = validate();
+    setFieldError(problem);
+    if (problem) return;
+
+    try {
+      await changePassword(currentPassword, newPassword);
+      setCurrentPassword('');
+      setNewPassword('');
+      setNewPasswordRepeat('');
+      Alert.alert(t('account.settings.password'), t('account.settings.passwordDone'));
+    } catch (error) {
+      if (error?.code === PASSWORD_INVALID) {
+        setFieldError(t('account.error.currentPassword'));
+      } else {
+        Alert.alert(t('account.error.title'), describeError(t, error));
+      }
+    }
+  };
+
+  return (
+    <>
+      <Text style={styles.body}>{t('account.settings.passwordText')}</Text>
+
+      <Text style={styles.label}>{t('account.settings.currentPassword')}</Text>
+      <TextInput
+        style={styles.input}
+        value={currentPassword}
+        onChangeText={setCurrentPassword}
+        secureTextEntry
+        textContentType="password"
+        accessibilityLabel={t('account.settings.currentPassword')}
+      />
+
+      <Text style={styles.label}>{t('account.settings.newPassword')}</Text>
+      <TextInput
+        style={styles.input}
+        value={newPassword}
+        onChangeText={setNewPassword}
+        secureTextEntry
+        textContentType="newPassword"
+        accessibilityLabel={t('account.settings.newPassword')}
+      />
+
+      <Text style={styles.label}>{t('account.field.passwordRepeat')}</Text>
+      <TextInput
+        style={styles.input}
+        value={newPasswordRepeat}
+        onChangeText={setNewPasswordRepeat}
+        secureTextEntry
+        textContentType="newPassword"
+        accessibilityLabel={t('account.field.passwordRepeat')}
+      />
+
+      {fieldError ? <Text style={styles.formError}>{fieldError}</Text> : null}
+
+      <Pressable
+        onPress={handleSubmit}
+        disabled={busy}
+        style={({ pressed }) => [styles.quietButton, pressed || busy ? styles.buttonPressed : null]}
+        accessibilityRole="button"
+      >
+        <Text style={styles.quietButtonText}>{t('account.settings.passwordAction')}</Text>
+      </Pressable>
+    </>
   );
 }
 
@@ -301,6 +479,12 @@ const styles = StyleSheet.create({
   segmentText: { ...type.small, color: colors.inkMuted },
   segmentTextActive: { color: colors.ink, fontWeight: '600' },
   card: { ...surfaces.card, marginBottom: space.lg },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  sectionBody: { marginTop: space.sm },
   label: { ...type.label, marginTop: space.md, marginBottom: space.xs },
   input: { ...surfaces.input },
   hint: { ...type.tiny, marginTop: space.sm },

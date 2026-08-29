@@ -24,6 +24,11 @@ import {
   unlockWithRecoveryKey,
 } from './AccountCrypto';
 
+// Fehlercode fuer changePassword: NUR ein falsches aktuelles Passwort.
+export const PASSWORD_INVALID = 'PASSWORD_INVALID';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const PROVIDERS = [
   { id: 'email', available: true },
   // Nachtrag, sobald der Apple Developer Account steht (Spec, Entscheidung 4).
@@ -149,6 +154,40 @@ export async function completePasswordReset(client, { userId, newPassword, recov
   unwrap(await client.auth.updateUser({ password: newPassword }));
   await saveKeyRecord(client, userId, nextRecord);
   return result;
+}
+
+/**
+ * Passwort aendern im angemeldeten Zustand. Erst lokal pruefen (falsches
+ * altes Passwort verlaesst das Geraet nicht), dann Auth, dann Record; die
+ * Reihenfolge ist dieselbe wie beim Reset, damit ein Abbruch den
+ * Recovery-Key intakt laesst.
+ */
+export async function changePassword(client, { userId, currentPassword, newPassword, randomBytes }) {
+  const record = await fetchKeyRecord(client);
+  if (!record) throw new Error('AccountLogic: kein Schluesseldatensatz');
+  let dataKey;
+  try {
+    dataKey = await unlockWithPassword(record, currentPassword);
+  } catch {
+    const error = new Error('AccountLogic: altes Passwort passt nicht');
+    error.code = PASSWORD_INVALID;
+    throw error;
+  }
+  const next = await rewrapWithPassword(record, dataKey, newPassword, randomBytes);
+  unwrap(await client.auth.updateUser({ password: newPassword }));
+  await saveKeyRecord(client, userId, next);
+  return { dataKey };
+}
+
+/**
+ * E-Mail aendern. Supabase (Secure email change) schickt Links an alte und
+ * neue Adresse; bis beide bestaetigt sind, steht die neue in user.new_email.
+ */
+export async function changeEmail(client, newEmail) {
+  const email = String(newEmail ?? '').trim().toLowerCase();
+  if (!EMAIL_PATTERN.test(email)) throw new Error('AccountLogic: ungueltige E-Mail-Adresse');
+  const data = unwrap(await client.auth.updateUser({ email }));
+  return { pendingEmail: data.user?.new_email ?? email };
 }
 
 // Kein URLSearchParams: React Native implementiert davon nur einen Teil.

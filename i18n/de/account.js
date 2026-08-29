@@ -92,4 +92,19 @@ export default {
 
   'account.callback.title': 'Link wird geprüft',
   'account.callback.errorTitle': 'Link ungültig oder abgelaufen',
+
+  'account.settings.title': 'Konto-Einstellungen',
+  'account.settings.email': 'E-Mail-Adresse ändern',
+  'account.settings.emailText': 'Du bekommst je einen Bestätigungslink an die alte und die neue Adresse. Die Änderung gilt, sobald beide bestätigt sind.',
+  'account.settings.emailPending': 'Wechsel zu {email} wartet auf Bestätigung.',
+  'account.settings.emailField': 'Neue E-Mail-Adresse',
+  'account.settings.emailAction': 'Bestätigungslinks senden',
+  'account.settings.emailSent': 'Links sind unterwegs an beide Adressen.',
+  'account.settings.password': 'Passwort ändern',
+  'account.settings.passwordText': 'Dein Recovery-Key bleibt gültig. Der Datenschlüssel wird mit dem neuen Passwort neu verschlüsselt.',
+  'account.settings.currentPassword': 'Aktuelles Passwort',
+  'account.settings.newPassword': 'Neues Passwort',
+  'account.settings.passwordAction': 'Passwort ändern',
+  'account.settings.passwordDone': 'Passwort geändert',
+  'account.error.currentPassword': 'Das aktuelle Passwort passt nicht.',
 };

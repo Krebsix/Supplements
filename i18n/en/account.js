@@ -90,4 +90,19 @@ export default {
 
   'account.callback.title': 'Checking link',
   'account.callback.errorTitle': 'Link invalid or expired',
+
+  'account.settings.title': 'Account settings',
+  'account.settings.email': 'Change email address',
+  'account.settings.emailText': 'You will receive a confirmation link at both the old and the new address. The change applies once both are confirmed.',
+  'account.settings.emailPending': 'Change to {email} is waiting for confirmation.',
+  'account.settings.emailField': 'New email address',
+  'account.settings.emailAction': 'Send confirmation links',
+  'account.settings.emailSent': 'Links are on their way to both addresses.',
+  'account.settings.password': 'Change password',
+  'account.settings.passwordText': 'Your recovery key stays valid. The data key is re-encrypted with the new password.',
+  'account.settings.currentPassword': 'Current password',
+  'account.settings.newPassword': 'New password',
+  'account.settings.passwordAction': 'Change password',
+  'account.settings.passwordDone': 'Password changed',
+  'account.error.currentPassword': 'The current password does not match.',
 };
