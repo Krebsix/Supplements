@@ -16,7 +16,7 @@ export function createPurchaseStore({ sdk, apiKey, getEntitlement, setEntitlemen
   return create((set, get) => {
     const apply = (customerInfo) => {
       const mapped = mapCustomerInfo(customerInfo);
-      set({ status: mapped.status, expiresAt: mapped.expiresAt, willRenew: mapped.willRenew, platform: mapped.platform });
+      set({ status: mapped.status, expiresAt: mapped.expiresAt, willRenew: mapped.willRenew, platform: mapped.platform, productId: mapped.productId });
       setEntitlement(applyPurchaseStatus(getEntitlement(), mapped));
     };
     // lastError wird hier am Anfang zurueckgesetzt; die Aktion selbst
@@ -25,7 +25,7 @@ export function createPurchaseStore({ sdk, apiKey, getEntitlement, setEntitlemen
 
     return {
       available: Boolean(sdk && apiKey), configured: false, offerings: null, busy: false,
-      status: PURCHASE_STATUS.FREE, expiresAt: null, willRenew: false, platform: 'unknown', lastError: null,
+      status: PURCHASE_STATUS.FREE, expiresAt: null, willRenew: false, platform: 'unknown', productId: null, lastError: null,
 
       initialize: async (userId) => {
         if (!get().available) return;

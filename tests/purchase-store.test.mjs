@@ -81,6 +81,7 @@ console.log('— Mit SDK: initialize —');
   check('configure aufgerufen', sdk.calls.some(([n]) => n === 'configure'));
   check('logIn mit userId aufgerufen', sdk.calls.some(([n, a]) => n === 'logIn' && a === 'u1'));
   check('Status active', store.getState().status === PURCHASE_STATUS.ACTIVE);
+  check('productId gesetzt', store.getState().productId === 'pro_yearly');
   check('configured true', store.getState().configured === true);
 
   const before = sdk.calls.length;

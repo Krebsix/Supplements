@@ -39,6 +39,7 @@ export default {
   'paywall.retry': 'Neu laden',
   'paywall.error.title': 'Kauf nicht abgeschlossen',
   'paywall.success.title': 'Willkommen bei Pro',
+  'paywall.success.creditsTitle': 'Scans gutgeschrieben',
   'paywall.success.credits': '{count} Scans wurden deinem Guthaben gutgeschrieben.',
 
   'subscription.kicker': 'Abo und Käufe',

@@ -12,6 +12,11 @@
  */
 import { CREDIT_AMOUNTS, ENTITLEMENT_ID, PRODUCT_IDS } from './purchaseConfig';
 
+// PENDING ist fuer Android-Belege reserviert, die noch geprueft werden
+// (z. B. Zahlung per Lastschrift oder Verkauf ueber einen Drittanbieter).
+// mapCustomerInfo() liefert diesen Status heute nicht: RevenueCat meldet
+// schwebende Kaeufe ueber Fehler bzw. transaction-Zustaende beim Kauf,
+// nicht ueber die Entitlements im CustomerInfo.
 export const PURCHASE_STATUS = {
   FREE: 'free', TRIAL: 'trial', ACTIVE: 'active', CANCELLED: 'cancelled',
   GRACE: 'grace', EXPIRED: 'expired', PENDING: 'pending',
@@ -62,7 +67,15 @@ export async function purchase(sdk, pkg) {
     const result = await sdk.purchasePackage(pkg);
     return { cancelled: false, customerInfo: result.customerInfo, productId: result.productIdentifier ?? pkg.product?.identifier ?? null };
   } catch (error) {
-    if (error?.userCancelled) return { cancelled: true, customerInfo: null, productId: null };
+    // RevenueCat hat 'error.userCancelled' als veraltet markiert. Zusaetzlich
+    // pruefen wir den Fehlercode gegen sdk.PURCHASES_ERROR_CODE, damit der
+    // Abbruch auch erkannt wird, wenn 'userCancelled' fehlt.
+    const cancelledByCode =
+      sdk?.PURCHASES_ERROR_CODE?.PURCHASE_CANCELLED_ERROR !== undefined &&
+      error?.code === sdk.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
+    if (error?.userCancelled || cancelledByCode) {
+      return { cancelled: true, customerInfo: null, productId: null };
+    }
     throw error;
   }
 }

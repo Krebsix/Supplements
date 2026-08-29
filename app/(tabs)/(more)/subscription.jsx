@@ -29,6 +29,7 @@ export default function SubscriptionScreen() {
   const status = usePurchaseStore((state) => state.status);
   const expiresAt = usePurchaseStore((state) => state.expiresAt);
   const platform = usePurchaseStore((state) => state.platform);
+  const productId = usePurchaseStore((state) => state.productId);
   const busy = usePurchaseStore((state) => state.busy);
   const restore = usePurchaseStore((state) => state.restore);
 
@@ -41,7 +42,16 @@ export default function SubscriptionScreen() {
   const showBuyButton = status === PURCHASE_STATUS.FREE || status === PURCHASE_STATUS.EXPIRED;
 
   const handleManage = () => {
-    Linking.openURL(Platform.OS === 'ios' ? MANAGE_URL_IOS : MANAGE_URL_ANDROID).catch(() =>
+    // Android verlinkt direkt auf das Abo in Play, wenn die productId
+    // bekannt ist (Spec: ?sku={sku}&package={pkg}), sonst auf die
+    // allgemeine Verwaltungsseite.
+    const manageUrl =
+      Platform.OS === 'ios'
+        ? MANAGE_URL_IOS
+        : productId
+        ? `${MANAGE_URL_ANDROID}&sku=${encodeURIComponent(productId)}`
+        : MANAGE_URL_ANDROID;
+    Linking.openURL(manageUrl).catch(() =>
       Alert.alert(t('account.error.title'), t('subscription.openFailed'))
     );
   };

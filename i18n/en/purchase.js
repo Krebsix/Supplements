@@ -34,6 +34,7 @@ export default {
   'paywall.retry': 'Reload',
   'paywall.error.title': 'Purchase not completed',
   'paywall.success.title': 'Welcome to Pro',
+  'paywall.success.creditsTitle': 'Scans added',
   'paywall.success.credits': '{count} scans were added to your balance.',
 
   'subscription.kicker': 'Subscription and purchases',

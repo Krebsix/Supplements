@@ -60,7 +60,7 @@ export default function PaywallScreen() {
       // bei Pro" einen Tarifwechsel, den ein Scan-Paket nicht ausloest.
       if (isCredit) {
         Alert.alert(
-          t('paywall.credits.title'),
+          t('paywall.success.creditsTitle'),
           t('paywall.success.credits', {
             count: creditsForProduct(pkg.product.identifier),
           })

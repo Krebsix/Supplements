@@ -39,8 +39,14 @@ function makeSdk() {
   const pkg = (id) => ({ identifier: id, product: { identifier: id, priceString: '29,99 €' } });
   return {
     calls,
+    PURCHASES_ERROR_CODE: { PURCHASE_CANCELLED_ERROR: 'CANCELLED' },
     getOfferings: async () => ({ current: { availablePackages: [pkg('pro_yearly'), pkg('pro_monthly'), pkg('credits_10'), pkg('credits_50')] } }),
-    purchasePackage: async (p) => { calls.push(['purchase', p.identifier]); if (p.identifier === 'cancel') { const e = new Error('cancelled'); e.userCancelled = true; throw e; } return { customerInfo: info(ent()), productIdentifier: p.identifier }; },
+    purchasePackage: async (p) => {
+      calls.push(['purchase', p.identifier]);
+      if (p.identifier === 'cancel') { const e = new Error('cancelled'); e.userCancelled = true; throw e; }
+      if (p.identifier === 'cancel-code') { throw Object.assign(new Error('cancelled'), { code: 'CANCELLED' }); }
+      return { customerInfo: info(ent()), productIdentifier: p.identifier };
+    },
     restorePurchases: async () => { calls.push(['restore']); return info(ent()); },
     logIn: async (id) => { calls.push(['logIn', id]); return { customerInfo: info(ent()), created: false }; },
     logOut: async () => { calls.push(['logOut']); return info(null); },
@@ -55,6 +61,8 @@ function makeSdk() {
   check('Kauf liefert customerInfo und productId', !bought.cancelled && bought.productId === 'pro_yearly' && bought.customerInfo);
   const cancelled = await purchase(sdk, { identifier: 'cancel', product: { identifier: 'cancel' } });
   check('Abbruch ist kein Fehler', cancelled.cancelled === true && cancelled.customerInfo === null);
+  const cancelledByCode = await purchase(sdk, { identifier: 'cancel-code', product: { identifier: 'cancel-code' } });
+  check('Abbruch ueber Fehlercode (ohne userCancelled) erkannt', cancelledByCode.cancelled === true);
   check('restore ruft SDK', (await restore(sdk)) && sdk.calls.some(([n]) => n === 'restore'));
   await linkAccount(sdk, 'u1'); await unlinkAccount(sdk);
   check('logIn/logOut durchgereicht', sdk.calls.some(([n, a]) => n === 'logIn' && a === 'u1') && sdk.calls.some(([n]) => n === 'logOut'));
