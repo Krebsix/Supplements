@@ -29,6 +29,7 @@ export default function SubscriptionScreen() {
   const status = usePurchaseStore((state) => state.status);
   const expiresAt = usePurchaseStore((state) => state.expiresAt);
   const platform = usePurchaseStore((state) => state.platform);
+  const busy = usePurchaseStore((state) => state.busy);
   const restore = usePurchaseStore((state) => state.restore);
 
   const entitlement = useStore((state) => state.entitlement);
@@ -40,11 +41,15 @@ export default function SubscriptionScreen() {
   const showBuyButton = status === PURCHASE_STATUS.FREE || status === PURCHASE_STATUS.EXPIRED;
 
   const handleManage = () => {
-    Linking.openURL(Platform.OS === 'ios' ? MANAGE_URL_IOS : MANAGE_URL_ANDROID);
+    Linking.openURL(Platform.OS === 'ios' ? MANAGE_URL_IOS : MANAGE_URL_ANDROID).catch(() =>
+      Alert.alert(t('account.error.title'), t('subscription.openFailed'))
+    );
   };
 
   const handleRefund = () => {
-    Linking.openURL(Platform.OS === 'ios' ? REFUND_URL_IOS : REFUND_URL_ANDROID);
+    Linking.openURL(Platform.OS === 'ios' ? REFUND_URL_IOS : REFUND_URL_ANDROID).catch(() =>
+      Alert.alert(t('account.error.title'), t('subscription.openFailed'))
+    );
   };
 
   const handleRestore = async () => {
@@ -117,7 +122,8 @@ export default function SubscriptionScreen() {
         <Text style={styles.cardText}>{t('subscription.manageText')}</Text>
         <Pressable
           onPress={handleManage}
-          style={({ pressed }) => [styles.quietButton, pressed ? styles.pressed : null]}
+          disabled={busy}
+          style={({ pressed }) => [styles.quietButton, pressed || busy ? styles.pressed : null]}
           accessibilityRole="button"
         >
           <Text style={styles.quietButtonText}>{t('subscription.manage')}</Text>
@@ -129,7 +135,8 @@ export default function SubscriptionScreen() {
         <Text style={styles.cardText}>{t('subscription.restoreText')}</Text>
         <Pressable
           onPress={handleRestore}
-          style={({ pressed }) => [styles.quietButton, pressed ? styles.pressed : null]}
+          disabled={busy}
+          style={({ pressed }) => [styles.quietButton, pressed || busy ? styles.pressed : null]}
           accessibilityRole="button"
         >
           <Text style={styles.quietButtonText}>{t('subscription.restore')}</Text>
@@ -141,7 +148,8 @@ export default function SubscriptionScreen() {
         <Text style={styles.cardText}>{t('subscription.refundText')}</Text>
         <Pressable
           onPress={handleRefund}
-          style={({ pressed }) => [styles.quietButton, pressed ? styles.pressed : null]}
+          disabled={busy}
+          style={({ pressed }) => [styles.quietButton, pressed || busy ? styles.pressed : null]}
           accessibilityRole="button"
         >
           <Text style={styles.quietButtonText}>{t('subscription.refund')}</Text>

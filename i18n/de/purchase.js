@@ -66,6 +66,7 @@ export default {
   'subscription.refundText': 'Über Rückerstattungen entscheiden Apple und Google, nicht wir. Der Antrag läuft über den Store.',
   'subscription.buy': 'Pro ansehen',
   'subscription.unavailable': 'Käufe sind in dieser Testversion nicht verfügbar.',
+  'subscription.openFailed': 'Der Link konnte nicht geöffnet werden.',
 
   'proGate.action': 'Pro ansehen',
   'scanner.limit.action': 'Pro ansehen',

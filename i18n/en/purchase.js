@@ -61,6 +61,7 @@ export default {
   'subscription.refundText': 'Apple and Google decide on refunds, not us. The request runs through the store.',
   'subscription.buy': 'View Pro',
   'subscription.unavailable': 'Purchases are not available in this test build.',
+  'subscription.openFailed': 'The link could not be opened.',
 
   'proGate.action': 'View Pro',
   'scanner.limit.action': 'View Pro',

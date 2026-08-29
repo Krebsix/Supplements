@@ -56,14 +56,18 @@ export default function PaywallScreen() {
     try {
       const result = await buy(pkg);
       if (result.cancelled) return;
-      Alert.alert(
-        t('paywall.success.title'),
-        isCredit
-          ? t('paywall.success.credits', {
-              count: creditsForProduct(pkg.product.identifier),
-            })
-          : undefined
-      );
+      // Credits sind kein Abo: eigener Titel, sonst suggeriert "Willkommen
+      // bei Pro" einen Tarifwechsel, den ein Scan-Paket nicht ausloest.
+      if (isCredit) {
+        Alert.alert(
+          t('paywall.credits.title'),
+          t('paywall.success.credits', {
+            count: creditsForProduct(pkg.product.identifier),
+          })
+        );
+      } else {
+        Alert.alert(t('paywall.success.title'));
+      }
       router.back();
     } catch (error) {
       Alert.alert(t('paywall.error.title'), error?.message ?? '');
@@ -171,7 +175,8 @@ export default function PaywallScreen() {
 
       <Pressable
         onPress={handleRestore}
-        style={({ pressed }) => [styles.quietButton, pressed ? styles.pressed : null]}
+        disabled={busy}
+        style={({ pressed }) => [styles.quietButton, pressed || busy ? styles.pressed : null]}
         accessibilityRole="button"
       >
         <Text style={styles.quietButtonText}>{t('paywall.restore')}</Text>
