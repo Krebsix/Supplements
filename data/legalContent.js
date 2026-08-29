@@ -9,11 +9,11 @@
  *
  * Die Aussagen hier muessen mit dem Code uebereinstimmen — sie sind gegen
  * den tatsaechlichen Datenfluss geschrieben (ScanAnalyzer.js,
- * BarcodeLookup.js, NotificationScheduler.js, useStore.js). Wer einen
- * Datenfluss aendert, aendert diesen Text mit.
+ * BarcodeLookup.js, NotificationScheduler.js, useStore.js, AccountLogic.js,
+ * supabaseClient.js). Wer einen Datenfluss aendert, aendert diesen Text mit.
  */
 
-export const PRIVACY_VERSION = '2026-08-11';
+export const PRIVACY_VERSION = '2026-08-29';
 
 // Betreiberin laut Nadine (2026-08-09): die bestehende LLC.
 // OFFEN vor Veroeffentlichung:
@@ -39,7 +39,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Grundprinzip',
       body:
-        'Diese App arbeitet ohne Konto und ohne Server-Datenbank. Alles, was du eingibst, bleibt auf deinem Gerät: deine Präparate, Einnahmen, dein Profil, deine Laborwerte und Beobachtungen. Es gibt keine Analyse- oder Werbedienste und kein Tracking.',
+        'Diese App ist ohne Konto nutzbar. Alles, was du eingibst, bleibt auf deinem Gerät: deine Präparate, Einnahmen, dein Profil, deine Laborwerte und Beobachtungen. Es gibt keine Analyse- oder Werbedienste und kein Tracking. Ein Konto ist freiwillig und Grundlage für spätere Funktionen wie Sync und Cloud-Backup; was dabei übertragen wird, steht im Abschnitt Konto.',
     },
     {
       heading: 'Welche Daten lokal gespeichert werden',
@@ -67,14 +67,19 @@ export const PRIVACY_SECTIONS = {
         'Einnahme-Erinnerungen werden lokal auf deinem Gerät geplant. Es gibt keinen Push-Server; dabei werden keine Daten übertragen.',
     },
     {
+      heading: 'Konto (freiwillig)',
+      body:
+        'Wenn du ein Konto anlegst, werden deine E-Mail-Adresse, ein Passwort-Hash und Zeitstempel bei unserem Auftragsverarbeiter Supabase gespeichert (Serverstandort: EU, Irland). Zusätzlich liegt dort ein Datensatz mit verschlüsselten Schlüsseln: Dein Passwort wird auf dem Gerät in einen Schlüssel umgerechnet, der einen zufälligen Datenschlüssel verschlüsselt; ein zweiter, dir einmalig angezeigter Recovery-Key verschlüsselt denselben Datenschlüssel. Übertragen werden nur diese verschlüsselten Umschläge, nie dein Passwort, nie der Datenschlüssel, nie der Recovery-Key. Weder wir noch Supabase können damit Daten entschlüsseln. In dieser Version werden über das Konto keine Präparate, Laborwerte oder sonstigen Inhalte übertragen; kommt Sync hinzu, wird diese Erklärung vorher aktualisiert. Du kannst das Konto jederzeit in der App löschen; dabei werden Konto und Schlüsseldatensatz entfernt, deine lokalen Daten bleiben. Rechtsgrundlage: Vertrag (Art. 6 Abs. 1 lit. b DSGVO).',
+    },
+    {
       heading: 'Deine Rechte',
       body:
-        'Auskunft und Datenübertragbarkeit: Über den Bericht-Bereich und das Backup kannst du deine Daten jederzeit selbst einsehen und exportieren. Löschung: In den Einstellungen kannst du einzelne Einträge oder mit einem Schritt sämtliche Daten löschen; da die Daten nur auf deinem Gerät liegen, sind sie danach unwiederbringlich entfernt. Widerruf: Die Einwilligung zur Foto-Übertragung kannst du jederzeit in den Einstellungen widerrufen. Beschwerde: Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.',
+        'Auskunft und Datenübertragbarkeit: Über den Bericht-Bereich und das Backup kannst du deine Daten jederzeit selbst einsehen und exportieren. Löschung: In den Einstellungen kannst du einzelne Einträge oder mit einem Schritt sämtliche lokalen Daten löschen; ein Konto löschst du im Bereich Konto. Beides ist danach unwiederbringlich. Widerruf: Die Einwilligung zur Foto-Übertragung kannst du jederzeit in den Einstellungen widerrufen. Beschwerde: Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.',
     },
     {
       heading: 'Was diese App nicht tut',
       body:
-        'Keine Weitergabe an Dritte über die oben beschriebenen Auftragsverarbeiter hinaus, keine Werbung, kein Verkauf von Daten, keine Konten, keine Cloud-Synchronisation. Beachte: Weil es keine Synchronisation gibt, bedeutet ein Gerätewechsel ohne Backup den Verlust deiner Daten.',
+        'Keine Weitergabe an Dritte über die oben beschriebenen Auftragsverarbeiter hinaus, keine Werbung, kein Verkauf von Daten, kein Konto-Zwang, keine Cloud-Synchronisation in dieser Version. Beachte: Weil es noch keine Synchronisation gibt, bedeutet ein Gerätewechsel ohne Backup den Verlust deiner Daten.',
     },
   ],
   en: [
@@ -85,7 +90,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Core principle',
       body:
-        'This app works without an account and without a server database. Everything you enter stays on your device: your products, intakes, profile, lab values and observations. There are no analytics or advertising services and no tracking.',
+        'This app can be used without an account. Everything you enter stays on your device: your products, intakes, profile, lab values and observations. There are no analytics or advertising services and no tracking. An account is optional and the basis for later features such as sync and cloud backup; what is transmitted for it is described in the Account section.',
     },
     {
       heading: 'What is stored locally',
@@ -113,14 +118,19 @@ export const PRIVACY_SECTIONS = {
         'Intake reminders are scheduled locally on your device. There is no push server; no data is transmitted.',
     },
     {
+      heading: 'Account (optional)',
+      body:
+        'If you create an account, your email address, a password hash and timestamps are stored with our processor Supabase (server location: EU, Ireland). In addition, a record with encrypted keys is stored there: your password is converted on the device into a key that encrypts a random data key; a second recovery key, shown to you once, encrypts the same data key. Only these encrypted envelopes are transmitted, never your password, never the data key, never the recovery key. Neither we nor Supabase can decrypt data with them. In this version no products, lab values or other content are transmitted via the account; if sync is added, this statement will be updated beforehand. You can delete the account in the app at any time; account and key record are removed, your local data stays. Legal basis: contract (Art. 6(1)(b) GDPR).',
+    },
+    {
       heading: 'Your rights',
       body:
-        'Access and portability: via the report section and the backup you can view and export your data yourself at any time. Erasure: in the settings you can delete individual entries or all data in one step; since the data only lives on your device, it is irrevocably removed afterwards. Withdrawal: you can withdraw the consent for photo transmission at any time in the settings. Complaint: you have the right to lodge a complaint with a data protection supervisory authority.',
+        'Access and portability: via the report section and the backup you can view and export your data yourself at any time. Erasure: in the settings you can delete individual entries or all local data in one step; an account is deleted in the Account section. Both are irrevocable afterwards. Withdrawal: you can withdraw the consent for photo transmission at any time in the settings. Complaint: you have the right to lodge a complaint with a data protection supervisory authority.',
     },
     {
       heading: 'What this app does not do',
       body:
-        'No sharing with third parties beyond the processors described above, no advertising, no sale of data, no accounts, no cloud sync. Note: because there is no sync, changing devices without a backup means losing your data.',
+        'No sharing with third parties beyond the processors described above, no advertising, no sale of data, no mandatory account, no cloud sync in this version. Note: because there is no sync yet, changing devices without a backup means losing your data.',
     },
   ],
 };

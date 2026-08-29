@@ -26,12 +26,12 @@ import {
  * theme.js steht, damit die Palette nicht still auseinanderlaeuft.
  */
 export const WEB_TOKENS = {
-  canvas: '#f6f3ed',
-  surface: '#fffdf9',
-  ink: '#1f1b16',
-  inkMuted: '#6b6157',
-  inkFaint: '#9a9085',
-  rule: '#ded5c7',
+  canvas: '#f2f2f7',
+  surface: '#ffffff',
+  ink: '#1c1c1e',
+  inkMuted: '#6c6c70',
+  inkFaint: '#8e8e93',
+  rule: '#e5e5ea',
   accent: '#1c4f5c',
 };
 
