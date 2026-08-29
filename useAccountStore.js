@@ -9,8 +9,8 @@
  *
  * onSessionChange verknuepft die Kaufschicht mit dem Konto (Task 4):
  * usePurchaseStore importiert nur useStore, nicht useAccountStore, daher
- * kein Ringschluss. Ein Fehler beim Verknuepfen/Trennen wird verschluckt,
- * damit ein Problem der Kaufschicht nie eine Konto-Aktion blockiert.
+ * kein Ringschluss. Ein Fehler beim Verknuepfen/Trennen blockiert nie die
+ * Konto-Aktion (kein throw), wird aber geloggt statt verschluckt.
  */
 
 import * as Crypto from 'expo-crypto';
@@ -29,7 +29,11 @@ export const useAccountStore = createAccountStore({
   redirectTo: Linking.createURL('auth/callback'),
   deleteUrl: ACCOUNT_DELETE_URL,
   anonKey: SUPABASE_ANON_KEY,
-  onSessionChange: (userId) => usePurchaseStore.getState().onSessionChange(userId).catch(() => {}),
+  onSessionChange: (userId) =>
+    usePurchaseStore
+      .getState()
+      .onSessionChange(userId)
+      .catch((error) => console.error('[Account] Kauf-Verknuepfung fehlgeschlagen', error)),
 });
 
 export default useAccountStore;

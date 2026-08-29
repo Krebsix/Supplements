@@ -41,11 +41,20 @@ export default function Layout() {
   const { t } = useTranslation();
   const hydrated = useStoreHydrated();
 
-  // Konto-Session wiederherstellen. Laeuft parallel zum Store-Hydrate und
-  // blockiert nichts: Die App ist ohne Konto voll nutzbar. Die Kaufschicht
-  // startet ERST danach, mit der (moeglicherweise vorhandenen) userId aus
-  // dem Konto-Restore, damit ein bestehendes Abo sofort verknuepft wird.
+  // Konto-Session wiederherstellen, danach die Kaufschicht mit der
+  // (moeglicherweise vorhandenen) userId initialisieren. Beides wartet auf
+  // "hydrated": Die Kaufschicht schreibt ihren Status ueber apply() ins
+  // Entitlement von useStore (setEntitlement); useStore.persist ueberschreibt
+  // das Entitlement beim Hydrieren mit dem gespeicherten Stand (merge in
+  // useStore.js). Liefe dieser Effekt VOR dem Hydrate, koennte ein von der
+  // Kaufschicht bereits gesetztes tier: 'pro' vom nachkommenden Hydrate
+  // still wieder verworfen werden. useAccountStore.initialize() ist
+  // idempotent (ensureListening-Sperre, restoreSession erneut auszufuehren
+  // ist unschaedlich), ein Aufruf innerhalb dieses gegateten Effekts ist
+  // also unproblematisch.
   useEffect(() => {
+    if (!hydrated) return;
+
     useAccountStore
       .getState()
       .initialize()
@@ -56,7 +65,7 @@ export default function Layout() {
           .catch((error) => console.error('[Layout] Kaufschicht', error))
       )
       .catch((error) => console.error('[Layout] Konto-Initialisierung fehlgeschlagen', error));
-  }, []);
+  }, [hydrated]);
 
   // Keine eigenen Schriften mehr: Die App laeuft auf der Systemschrift
   // (SF Pro auf iOS, Roboto auf Android). Das spart den Font-Download beim
