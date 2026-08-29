@@ -661,12 +661,10 @@ export const usePurchaseStore = createPurchaseStore({
   apiKey: Platform.OS === 'ios' ? REVENUECAT_API_KEY_IOS : REVENUECAT_API_KEY_ANDROID,
   getEntitlement: () => useStore.getState().entitlement,
   setEntitlement: (entitlement) => useStore.setState({ entitlement }),
-  addCredits: (count) => useStore.getState().addScanCredits(count),
+  addCredits: (count) => useStore.getState().grantScanCredits(count),
 });
 export default usePurchaseStore;
 ```
-
-(`addScanCredits`: den tatsaechlichen Namen der Store-Aktion in `useStore.js` Zeile ~290 nachsehen und verwenden.)
 
 - [ ] **Step 4: Konto ↔ Kauf verdrahten**
 
