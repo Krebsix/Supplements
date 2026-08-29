@@ -1,13 +1,15 @@
 # AVV-Dokumentation (Auftragsverarbeitungsvertraege)
 
 Stand: 2026-08-29. Blocker 4 aus launch-plan.md, ergaenzt um Supabase Auth
-(Teilprojekt "Account-Grundlage").
+(Teilprojekt "Account-Grundlage") und RevenueCat (Teilprojekt "Kauf und
+Konto-Einstellungen").
 
-Betrifft nur die beiden Dienste, die im Scan-Pfad echte Verarbeiter im
-Sinne von Art. 28 DSGVO sind: Supabase (Edge Function, Rate-Limit-Tabelle,
-Produkt-Cache) und Anthropic (Claude Vision fuer die Etikettenauswertung).
-Open Food Facts ist ein reiner, unauthentifizierter Lesezugriff ohne
-Personenbezug und daher hier nicht relevant.
+Betrifft die Dienste, die echte Verarbeiter im Sinne von Art. 28 DSGVO
+sind: Supabase (Edge Function, Rate-Limit-Tabelle, Produkt-Cache,
+Konto-Daten), Anthropic (Claude Vision fuer die Etikettenauswertung) und
+RevenueCat (Kaufbeleg-Pruefung, Abo-Status). Open Food Facts ist ein
+reiner, unauthentifizierter Lesezugriff ohne Personenbezug und daher hier
+nicht relevant.
 
 ## Supabase
 
@@ -65,6 +67,26 @@ Abschnitt "Konto") ergaenzt werden, bevor er scharf geschaltet wird.
 - Zu tun: nichts Vertragliches fuer den aktuellen API-Umfang. Falls das
   Volumen spaeter einen Enterprise-Vertrag rechtfertigt, dort einen
   eigenen unterschriebenen AVV nachfordern.
+
+## RevenueCat
+
+Seit dem Teilprojekt "Kauf und Konto-Einstellungen" (2026-08-29) ist
+RevenueCat als Verarbeiter im Kauf-Pfad hinzugekommen: Pruefung der
+Kaufbelege von Apple bzw. Google und Anzeige des Abo-Status
+(`PurchaseLogic.js`, `PurchaseStore.js`).
+
+- AVV: https://www.revenuecat.com/dpa
+- Standardvertragsklauseln fuer Drittlandtransfer sind eingebunden.
+- Sub-Prozessoren: oeffentliche Liste unter
+  https://www.revenuecat.com/subprocessors.
+- Uebertragen werden: eine zufaellige Geraete-Kennung oder, wenn die
+  Nutzerin angemeldet ist, ihre Supabase-Konto-Kennung (eine zufaellige
+  UUID, keine E-Mail-Adresse), die Kaufbelege des Stores, Geraetetyp und
+  Land. Keine Praeparate, keine Laborwerte, keine sonstigen
+  Gesundheitsdaten, keine E-Mail-Adresse.
+- Zu tun: nichts Vertragliches. Empfehlung: die Sub-Prozessoren-Liste
+  einmal gegenlesen und die Benachrichtigungs-Mails abonnieren, analog
+  zu Supabase und Anthropic oben.
 
 ## Was das fuer die Datenschutzerklaerung bedeutet
 
