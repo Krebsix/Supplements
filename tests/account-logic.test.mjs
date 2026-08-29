@@ -11,7 +11,9 @@ import {
   deleteAccount,
   isNetworkError,
   parseAuthCallback,
+  requestPasswordReset,
   signInWithEmail,
+  signOut,
   signUpWithEmail,
 } from '../AccountLogic';
 
@@ -39,6 +41,7 @@ function makeClient({ keyRecord = null, signUpSession = null } = {}) {
       setSession: async (args) => { calls.push(['setSession', args]); return { data: { session: { access_token: args.access_token } }, error: null }; },
       exchangeCodeForSession: async (code) => { calls.push(['exchange', code]); return { data: { session: { access_token: 'from-code' } }, error: null }; },
       signOut: async (args) => { calls.push(['signOut', args]); return { error: null }; },
+      resetPasswordForEmail: async (email, opts) => { calls.push(['reset', email, opts]); return { error: null }; },
     },
     from: (table) => ({
       select: () => ({ maybeSingle: async () => ({ data: stored, error: null }) }),
@@ -73,6 +76,20 @@ console.log('— Login —');
   check('Datenschluessel entsperrt', same(result.dataKey, bundle.dataKey));
   const noRecord = await signInWithEmail(makeClient(), { email: 'a@b.de', password: 'x' });
   check('ohne Record: dataKey null, kein Fehler', noRecord.dataKey === null);
+}
+
+console.log('— Logout und Reset-Anforderung —');
+{
+  const client = makeClient();
+  await signOut(client);
+  check('signOut ruft client.auth.signOut', client.calls.some(([n]) => n === 'signOut'));
+  const failingClient = { auth: { signOut: async () => ({ error: new Error('x') }) } };
+  check('signOut wirft bei Fehler', await throws(() => signOut(failingClient)));
+
+  const resetClient = makeClient();
+  await requestPasswordReset(resetClient, 'a@b.de', 'mysuplea://auth/callback');
+  const [, email, opts] = resetClient.calls.find(([n]) => n === 'reset');
+  check('requestPasswordReset ruft resetPasswordForEmail mit E-Mail und Redirect', email === 'a@b.de' && opts.redirectTo === 'mysuplea://auth/callback');
 }
 
 console.log('— Callback-URL —');
@@ -118,6 +135,12 @@ console.log('— Konto loeschen —');
   check('danach lokaler Logout', client.calls.some(([n, a]) => n === 'signOut' && a?.scope === 'local'));
   const failing = async () => ({ ok: false, status: 500 });
   check('Fehlstatus wirft', await throws(() => deleteAccount(makeClient(), 'https://x', 'anon', failing)));
+
+  const noSessionClient = { auth: { getSession: async () => ({ data: { session: null } }) } };
+  const noSessionRequests = [];
+  const noSessionFetch = async (url, init) => { noSessionRequests.push({ url, init }); return { ok: true, status: 200 }; };
+  check('ohne Session: wirft vor dem Fetch', await throws(() => deleteAccount(noSessionClient, 'https://x', 'anon', noSessionFetch)));
+  check('ohne Session: kein Fetch ausgefuehrt', noSessionRequests.length === 0);
 }
 
 console.log('— Netzwerkfehler —');
