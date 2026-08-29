@@ -67,8 +67,10 @@ $$;
 
 -- Nur der Trigger darf die Funktion ausfuehren, kein Client. Der Insert
 -- in auth.users laeuft unter supabase_auth_admin, deshalb dort explizit
--- erlauben.
+-- erlauben. Schema-Usage dazu, damit der Grant nicht an den
+-- Standardrechten des Projekts haengt.
 revoke execute on function public.handle_new_user_keys() from public, anon, authenticated;
+grant usage on schema public to supabase_auth_admin;
 grant execute on function public.handle_new_user_keys() to supabase_auth_admin;
 
 drop trigger if exists on_auth_user_created_keys on auth.users;
