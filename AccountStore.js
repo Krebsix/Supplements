@@ -66,6 +66,39 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
     // registrieren, der dieselben Ereignisse mehrfach verarbeitet.
     let listening = false;
 
+    // Registriert den Auth-Listener genau einmal. Ausgelagert, weil
+    // initialize() ihn erst NACH restoreSession() registriert hatte: bei
+    // einem Kaltstart ueber einen Recovery-Deep-Link (Linking oeffnet die
+    // App direkt auf auth/callback) gab es keine Garantie, dass der
+    // Listener schon steht, wenn exchangeCodeForSession() das
+    // PASSWORD_RECOVERY-Ereignis feuert, das recoveryPending setzt.
+    // handleAuthCallback ruft ensureListening() deshalb selbst zuerst auf,
+    // synchron und BEVOR applyAuthCallback den Code eintauscht.
+    const ensureListening = () => {
+      if (listening) return;
+      listening = true;
+      // Token-Refresh gescheitert, Konto anderswo geloescht: Supabase
+      // meldet SIGNED_OUT, der Store faellt still zurueck.
+      // PASSWORD_RECOVERY kommt beim Code-Tausch eines Reset-Links
+      // (PKCE liefert keinen type in der URL) und traegt bereits die
+      // neue Session; der Store wendet sie direkt an, statt sich auf
+      // den spaeteren applySession-Aufruf in handleAuthCallback zu
+      // verlassen. handleAuthCallback liest nur noch das recoveryPending-
+      // Flag, account-reset.jsx raeumt es beim Abschluss weg.
+      client.auth.onAuthStateChange((event, nextSession) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          applySession(nextSession);
+          set({ recoveryPending: true });
+          return;
+        }
+        if (nextSession?.user) {
+          applySession(nextSession);
+        } else {
+          set({ ...ANONYMOUS_STATE });
+        }
+      });
+    };
+
     const applySession = (session) => {
       if (session?.user) {
         set({
@@ -95,28 +128,7 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
       initialize: async () => {
         const session = await restoreSession(client).catch(() => null);
         applySession(session);
-        if (listening) return;
-        listening = true;
-        // Token-Refresh gescheitert, Konto anderswo geloescht: Supabase
-        // meldet SIGNED_OUT, der Store faellt still zurueck.
-        // PASSWORD_RECOVERY kommt beim Code-Tausch eines Reset-Links
-        // (PKCE liefert keinen type in der URL) und traegt bereits die
-        // neue Session; der Store wendet sie direkt an, statt sich auf
-        // den spaeteren applySession-Aufruf in handleAuthCallback zu
-        // verlassen. handleAuthCallback liest nur noch das recoveryPending-
-        // Flag, account-reset.jsx raeumt es beim Abschluss weg.
-        client.auth.onAuthStateChange((event, nextSession) => {
-          if (event === 'PASSWORD_RECOVERY') {
-            applySession(nextSession);
-            set({ recoveryPending: true });
-            return;
-          }
-          if (nextSession?.user) {
-            applySession(nextSession);
-          } else {
-            set({ ...ANONYMOUS_STATE });
-          }
-        });
+        ensureListening();
       },
 
       prepareSignUp: (email, password) =>
@@ -187,6 +199,10 @@ export function createAccountStore({ client, randomBytes, redirectTo, deleteUrl,
 
       handleAuthCallback: (url) =>
         withBusy(async () => {
+          // Muss VOR dem Code-Tausch stehen: Kaltstart per Recovery-Link
+          // darf initialize() nicht abwarten, sonst kann das
+          // PASSWORD_RECOVERY-Ereignis verpasst werden (siehe ensureListening).
+          ensureListening();
           const result = await applyAuthCallback(client, parseAuthCallback(url));
           applySession(result.session);
           // Bei PKCE steht der Typ nicht in der URL; das Ereignis

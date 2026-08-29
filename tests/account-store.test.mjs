@@ -207,5 +207,19 @@ console.log('— Konto loeschen —');
   check('nach Loeschung anonymous ohne Schluessel', store.getState().status === ACCOUNT_STATUS.ANONYMOUS && store.getState().dataKey === null);
 }
 
+console.log('— Kaltstart per Recovery-Link ohne vorheriges initialize() —');
+{
+  // Simuliert den Deep-Link-Kaltstart: der Screen ruft handleAuthCallback,
+  // BEVOR (oder ohne dass) initialize() den Auth-Listener registriert hat.
+  // Ohne ensureListening() in handleAuthCallback wuerde das synchron beim
+  // Code-Tausch gefeuerte PASSWORD_RECOVERY-Ereignis ins Leere laufen.
+  const client = makeClient();
+  const store = createAccountStore(deps(client));
+  const type = await store.getState().handleAuthCallback('mysuplea://auth/callback?code=RECOVERY');
+  check('Kaltstart-Reset-Link liefert Typ recovery ohne initialize()', type === 'recovery');
+  check('recoveryPending gesetzt', store.getState().recoveryPending === true);
+  check('Status signedIn', store.getState().status === ACCOUNT_STATUS.SIGNED_IN);
+}
+
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle AccountStore-Tests bestanden.');

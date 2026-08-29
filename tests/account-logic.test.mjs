@@ -6,6 +6,7 @@ import { webcrypto } from 'node:crypto';
 import { createKeyBundle } from '../AccountCrypto';
 import {
   PROVIDERS,
+  RECOVERY_KEY_INVALID,
   applyAuthCallback,
   completePasswordReset,
   deleteAccount,
@@ -23,6 +24,7 @@ function check(name, condition, extra = '') {
   else { failures += 1; console.error(`  FAIL ${name} ${extra}`); }
 }
 async function throws(fn) { try { await fn(); return false; } catch { return true; } }
+async function catchError(fn) { try { await fn(); return null; } catch (error) { return error; } }
 const randomBytes = async (n) => webcrypto.getRandomValues(new Uint8Array(n));
 const same = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 
@@ -115,8 +117,25 @@ console.log('— Passwort-Reset —');
   const order = client.calls.map(([n]) => n).filter((n) => n === 'updateUser' || n === 'upsert');
   check('Passwort zuerst, dann Record', order[0] === 'updateUser' && order[1] === 'upsert');
   check('Record neu gewickelt und gespeichert', client.stored.wrapped_key_pw !== bundle.record.wrapped_key_pw && client.stored.user_id === 'u1');
-  check('falscher Recovery-Key wirft, bevor irgendetwas gespeichert wird', await throws(() =>
-    completePasswordReset(makeClient({ keyRecord: bundle.record }), { userId: 'u1', newPassword: 'n', recoveryKeyText: 'AAAA-AAAA', randomBytes })));
+  const wrongKeyClient = makeClient({ keyRecord: bundle.record });
+  const wrongKeyError = await catchError(() =>
+    completePasswordReset(wrongKeyClient, { userId: 'u1', newPassword: 'n', recoveryKeyText: 'AAAA-AAAA', randomBytes }));
+  check('falscher Recovery-Key wirft, bevor irgendetwas gespeichert wird', wrongKeyError !== null);
+  check('falscher Recovery-Key traegt RECOVERY_KEY_INVALID', wrongKeyError?.code === RECOVERY_KEY_INVALID);
+  check('falscher Recovery-Key: nichts an Supabase geschrieben (kein updateUser/upsert)',
+    !wrongKeyClient.calls.some(([n]) => n === 'updateUser' || n === 'upsert'));
+
+  // Richtiger Key, aber updateUser lehnt das neue Passwort ab (Policy-
+  // Fehler bei Supabase Auth): darf NICHT als falscher Key erscheinen.
+  const policyClient = makeClient({ keyRecord: bundle.record });
+  policyClient.auth.updateUser = async (args) => {
+    policyClient.calls.push(['updateUser', args]);
+    return { data: null, error: new Error('Password should be at least 10 characters') };
+  };
+  const policyError = await catchError(() =>
+    completePasswordReset(policyClient, { userId: 'u1', newPassword: 'n', recoveryKeyText: bundle.recoveryKeyText, randomBytes }));
+  check('Policy-Fehler bei updateUser (richtiger Key) wirft', policyError !== null);
+  check('Policy-Fehler traegt NICHT RECOVERY_KEY_INVALID', policyError?.code !== RECOVERY_KEY_INVALID);
 }
 {
   const bundle = await createKeyBundle('altes-passwort', randomBytes);

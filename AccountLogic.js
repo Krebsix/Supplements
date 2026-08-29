@@ -30,6 +30,12 @@ export const PROVIDERS = [
   { id: 'apple', available: false },
 ];
 
+// Fehlercode fuer completePasswordReset: NUR ein falscher Recovery-Key.
+// Jeder andere Fehler (Passwort-Policy bei updateUser, abgelaufene
+// Recovery-Session, saveKeyRecord) traegt diesen Code NICHT und darf vom
+// Screen nicht als "Key passt nicht" beschriftet werden.
+export const RECOVERY_KEY_INVALID = 'RECOVERY_KEY_INVALID';
+
 const KEY_RECORD_COLUMNS = 'kdf, kdf_salt, wrapped_key_pw, wrapped_key_recovery';
 
 export function isNetworkError(error) {
@@ -120,8 +126,18 @@ export async function completePasswordReset(client, { userId, newPassword, recov
   let nextRecord;
   let result;
   if (record && keyText) {
-    // Wirft bei falschem Key, BEVOR irgendetwas geschrieben wird.
-    const dataKey = unlockWithRecoveryKey(record, keyText);
+    // Wirft bei falschem Key, BEVOR irgendetwas geschrieben wird. Der Fehler
+    // wird hier typisiert (RECOVERY_KEY_INVALID), damit spaetere Fehler in
+    // diesem Ablauf (updateUser-Passwort-Policy, saveKeyRecord) NICHT
+    // faelschlich als falscher Key erscheinen.
+    let dataKey;
+    try {
+      dataKey = unlockWithRecoveryKey(record, keyText);
+    } catch {
+      const error = new Error('AccountLogic: Recovery-Key passt nicht');
+      error.code = RECOVERY_KEY_INVALID;
+      throw error;
+    }
     nextRecord = await rewrapWithPassword(record, dataKey, newPassword, randomBytes);
     result = { dataKey, recoveryKeyText: null, dataLost: false };
   } else {

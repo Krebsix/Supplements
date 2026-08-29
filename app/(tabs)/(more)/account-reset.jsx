@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
-import { isNetworkError } from '../../../AccountLogic';
+import { RECOVERY_KEY_INVALID, isNetworkError } from '../../../AccountLogic';
 import { useTranslation } from '../../../i18n';
 import { colors, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
@@ -50,9 +50,10 @@ export default function AccountResetScreen() {
     } catch (error) {
       if (isNetworkError(error)) {
         Alert.alert(t('account.error.title'), t('account.error.offline'));
-      } else if (keyText) {
-        // Falscher Key wirft in AccountCrypto.unwrapKey, bevor etwas
-        // gespeichert wird. Eingabe pruefen lassen, nicht neu erzeugen.
+      } else if (error?.code === RECOVERY_KEY_INVALID) {
+        // Nur DIESER Code heisst wirklich "Key passt nicht". Ein Fehler
+        // danach (Passwort-Policy bei updateUser, saveKeyRecord) traegt ihn
+        // nicht und darf nicht als falscher Key beschriftet werden.
         setFormError(t('account.reset.wrongKey'));
       } else {
         Alert.alert(t('account.error.title'), t('account.error.generic', { message: error?.message ?? '' }));
