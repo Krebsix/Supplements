@@ -265,13 +265,12 @@ Domain steht; sie sind fuer Store-Freigabe nicht noetig.
 - Rechtsgrundlage: Vertrag (Art. 6 Abs. 1 lit. b), weil das Konto eine
   von der Nutzerin angeforderte Funktion ist.
 - `PRIVACY_VERSION` wird erhoeht.
-- **Offener Punkt:** Die Region des Supabase-Projekts ist nicht
-  verifiziert. Der bestehende Rechtstext sagt fuer die Foto-Analyse
-  "auch ausserhalb der EU (insbesondere USA)". Vor dem Bau ist im
-  Supabase-Dashboard zu pruefen, in welcher Region das Projekt liegt.
-  Liegt es ausserhalb der EU, ist fuer Teilprojekt 2 (Gesundheitsdaten)
-  ein Umzug oder ein zweites EU-Projekt zu klaeren. Fuer dieses
-  Teilprojekt (E-Mail und Chiffretext) reicht die korrekte Nennung.
+- **Region:** Per `supabase projects list` verifiziert am 2026-08-29:
+  West EU (Ireland). Der bestehende Rechtstext sagt fuer die
+  Foto-Analyse "auch ausserhalb der EU (insbesondere USA)"; fuer das
+  Konto (E-Mail und Chiffretext) nennt der Rechtstext die tatsaechliche
+  Region. Damit ist auch die Anforderung von Teilprojekt 2
+  (Gesundheitsdaten brauchen eine EU-Region) erfuellt.
 
 Die Angaben fliessen spaeter in Apples Privacy Nutrition Labels und
 Googles Data-Safety-Formular: "E-Mail-Adresse, verknuepft mit der
@@ -305,3 +304,10 @@ Nicht Teil dieses Teilprojekts:
 - Zwischenspeichern des Datenschluessels in der Keychain ueber einen
   App-Neustart hinweg (Teilprojekt 2 entscheidet)
 - Mehrfaktor-Authentifizierung
+
+## Umsetzungsnotizen
+
+- Auth-Flow ist PKCE statt implicit (Sicherheitsbefund: Tokens im URL-Fragment eines Custom-Scheme-Links abfangbar). Reset-Erkennung ueber das Ereignis PASSWORD_RECOVERY.
+- Recovery-Screen liegt VOR signUp(); Abbruch hinterlaesst nichts auf dem Server. user_keys wird per Trigger aus den Signup-Metadaten gefuellt.
+- Ein fehlgeschlagener signUp() (z. B. offline) behaelt das vorbereitete Bundle im Speicher, damit der Retry denselben Recovery-Key nutzt.
+- Offen fuer Teilprojekt 2: Das Klartext-Passwort geht zur Anmeldung an Supabase Auth. Haertung nach Bitwarden-Muster (separat abgeleitetes Auth-Passwort, damit der Server das Master-Passwort nie sieht) ist als Spec-Entscheidung zu treffen.

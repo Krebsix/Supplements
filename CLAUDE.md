@@ -46,13 +46,15 @@ app/
 ├── privacy.jsx            Datenschutzerklaerung (ausserhalb des Gates lesbar)
 ├── imprint.jsx            Impressum (Betreiberdaten: data/legalContent.js)
 ├── AddSupplement.jsx      Anlegen/Bearbeiten (Modal, inkl. Kur-Zyklus)
+├── auth/callback.jsx      Ziel der Konto-Mails (Deep Link)
 └── (tabs)/                Fuenf echte Router-Tabs, je eigener Stack:
     ├── (today)/           Dashboard.jsx, history.jsx
     ├── (discover)/        search.jsx
     ├── (scan)/            scanner.jsx, results.jsx
     ├── (analysis)/        analysis.jsx, outcome.jsx
     └── (more)/            menu.jsx (Hub), profile.jsx, lab.jsx, export.jsx,
-                           notifications.jsx, settings.jsx
+                           notifications.jsx, settings.jsx, account.jsx,
+                           account-recovery.jsx, account-reset.jsx
 
 components/                StatusBadge, SupplementResultCard, LifeStagePicker,
                            LanguagePicker, SubstanceInsightCard, ComplaintCard,
@@ -85,6 +87,9 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `ExportBuilder.js` | Bericht fuer Praxis/Apotheke als Markdown. Abschnitte waehlbar (Datensparsamkeit) |
 | `CostAnalyzer.js` | Kosten je Produkt aus TATSAECHLICHEM Verbrauch, plus die Verbindung zur Wirkungskontrolle (was lief nie ueberprueft mit) |
 | `NotificationScheduler.js` | Planung der Push-Erinnerungen |
+| `AccountCrypto.js` | Schluesselableitung (scrypt), Umschlaege (AES-GCM), Recovery-Key. Reine Kryptografie, randomBytes injiziert |
+| `AccountLogic.js` | Konto-Ablaeufe gegen Supabase Auth mit uebergebenem Client: Signup, Login, Reset, Loeschung. Nie Passwort oder Klartext-Schluessel Richtung Netz |
+| `AccountStore.js` | zustand-Factory fuer den Kontostand, getrennt vom Haupt-Store; `useAccountStore.js` bindet die echten Abhaengigkeiten |
 
 ### Wirkstoff-Datenbank (`data/`)
 
@@ -205,6 +210,16 @@ zurueck. Wer ein neues Nutzerdaten-Feld ergaenzt, ergaenzt es in
 (BackupManager.js).
 
 `inventory.json` und `data/mockScanResult.js` sind statische Beispieldaten.
+
+**Konto (optional, seit 2026-08-29):** Supabase Auth ueber `supabaseClient.js`.
+Die Session liegt ueber `secureStorage` verschluesselt im AsyncStorage. Beim
+Signup entsteht auf dem Geraet ein Datenschluessel, der mit dem
+Passwort-Schluessel und mit einem Recovery-Key umwickelt wird; nur die
+Umschlaege gehen in `public.user_keys` (Trigger aus den Signup-Metadaten).
+Der Datenschluessel lebt im Arbeitsspeicher des Konto-Stores und ist nach
+einem Neustart weg. Konto-Loeschung ueber die Edge Function
+`delete-account` (Store-Pflicht). Wer den Konto-Datenfluss aendert,
+aendert `data/legalContent.js` mit.
 
 ---
 
