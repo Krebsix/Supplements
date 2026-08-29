@@ -114,6 +114,10 @@ export default function Layout() {
           erklaerung muss lesbar sein, BEVOR jemand im Onboarding zustimmt. */}
       <Stack.Screen name="privacy" options={{ title: t('nav.privacy') }} />
       <Stack.Screen name="imprint" options={{ title: t('nav.imprint') }} />
+      {/* Ziel der Konto-Mails (Bestaetigung, Passwort-Reset). Ausserhalb
+          der Gates, damit ein Link die App auch dann oeffnet, wenn der
+          Store noch entscheidet. */}
+      <Stack.Screen name="auth/callback" options={{ headerShown: false }} />
     </Stack>
   );
 }
