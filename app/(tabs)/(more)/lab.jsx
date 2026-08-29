@@ -15,6 +15,8 @@ import { LAB_MARKERS, getLabMarker } from '../../../data/labMarkers';
 import { canUseProFeature } from '../../../Entitlements';
 import ProGate from '../../../components/ProGate';
 import { useTranslation } from '../../../i18n';
+import * as DocumentPicker from 'expo-document-picker';
+import { extractPdfText } from '../../../SpikePdfImport';
 import useStore from '../../../useStore';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 
@@ -96,6 +98,34 @@ export default function LabScreen() {
       <Text style={styles.title}>{t('lab.title')}</Text>
       <Text style={styles.subtitle}>{t('lab.subtitle')}</Text>
       <Text style={styles.privacy}>{t('lab.privacy')}</Text>
+
+      {/* TEMPORAER: Machbarkeitstest PDF-Textextraktion (Task 1).
+          Wird nach dem Test wieder entfernt. */}
+      <TouchableOpacity
+        style={styles.card}
+        onPress={async () => {
+          try {
+            const picked = await DocumentPicker.getDocumentAsync({
+              type: 'application/pdf',
+              copyToCacheDirectory: true,
+            });
+            if (picked.canceled || !picked.assets?.[0]?.uri) return;
+            const text = await extractPdfText(picked.assets[0].uri);
+            console.log('[SPIKE] Zeichen:', text.length);
+            console.log('[SPIKE] Text:\n' + text.slice(0, 600));
+            Alert.alert(
+              'Spike: gelesen',
+              text.slice(0, 400) || '(leer)'
+            );
+          } catch (error) {
+            console.log('[SPIKE] Fehler:', error?.message, error?.stack?.slice(0, 300));
+            Alert.alert('Spike: gescheitert', String(error?.message).slice(0, 300));
+          }
+        }}
+        accessibilityRole="button"
+      >
+        <Text style={styles.fieldLabel}>SPIKE: PDF einlesen (temporär)</Text>
+      </TouchableOpacity>
 
       <Text style={styles.sectionTitle}>{t('lab.new.title')}</Text>
 
