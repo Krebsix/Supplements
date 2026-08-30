@@ -129,4 +129,15 @@ export default {
   'addSupplement.alert.limitTitle': 'Grenze im Free-Tarif erreicht',
   'addSupplement.alert.limitMessage':
     'Im Free-Tarif lassen sich bis zu {limit} Präparate gleichzeitig führen. Mit dem Pro-Abo entfällt diese Grenze.',
+
+  // Neuer Screen "Aufnehmen" (Spec 2026-08-30-praeparat-aufnehmen)
+  'addSupplement.scanHint': 'Aus dem Etikett erkannt, bitte prüfen.',
+  'addSupplement.product.change': 'Ändern',
+  'addSupplement.product.noDetails': 'Inhaltsstoffe noch nicht erfasst.',
+  'addSupplement.frequency.title': 'Wie oft am Tag?',
+  'addSupplement.frequency.times': '{count}×',
+  'addSupplement.slot.title': 'Wann?',
+  'addSupplement.slot.default': 'Standard: morgens. Jederzeit änderbar.',
+  'addSupplement.slot.suggestion': 'Vorschlag: {text} ({source})',
+  'addSupplement.slot.none': 'Bitte mindestens eine Einnahmezeit wählen.',
 };

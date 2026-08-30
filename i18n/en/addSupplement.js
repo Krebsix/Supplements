@@ -126,4 +126,14 @@ export default {
   'addSupplement.alert.limitTitle': 'Free tier limit reached',
   'addSupplement.alert.limitMessage':
     'The free tier holds up to {limit} products at a time. The Pro subscription removes this limit.',
+
+  'addSupplement.scanHint': 'Read from the label, please check.',
+  'addSupplement.product.change': 'Change',
+  'addSupplement.product.noDetails': 'Ingredients not captured yet.',
+  'addSupplement.frequency.title': 'How often per day?',
+  'addSupplement.frequency.times': '{count}×',
+  'addSupplement.slot.title': 'When?',
+  'addSupplement.slot.default': 'Default: morning. Can be changed any time.',
+  'addSupplement.slot.suggestion': 'Suggestion: {text} ({source})',
+  'addSupplement.slot.none': 'Please select at least one intake time.',
 };

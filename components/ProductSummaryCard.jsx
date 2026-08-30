@@ -1,0 +1,69 @@
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+
+import { useTranslation } from '../i18n';
+import { colors, space, surfaces, type } from '../theme';
+
+/**
+ * Produktkarte oben auf dem Screen "Aufnehmen": zeigt, was die App schon
+ * weiss (Name, Marke, Inhaltsstoffe je Portion). "Aendern" klappt im
+ * Screen die Felder auf. Beim Foto-Scan steht eine Pruefzeile darueber.
+ */
+export default function ProductSummaryCard({
+  name,
+  brand,
+  ingredientDetails = [],
+  dosage,
+  scanned = false,
+  onEdit,
+}) {
+  const { t } = useTranslation();
+  const details = Array.isArray(ingredientDetails)
+    ? ingredientDetails.filter((detail) => detail?.name).slice(0, 4)
+    : [];
+  const detailLine = details
+    .map((detail) => {
+      const amount = [detail.amount, detail.unit].filter(Boolean).join(' ');
+      const form = detail.form ? ` (${detail.form})` : '';
+      return amount ? `${amount} ${detail.name}${form}` : `${detail.name}${form}`;
+    })
+    .join(' · ');
+  const dosageLine =
+    dosage?.amount && dosage?.unit ? `${dosage.amount} ${dosage.unit}` : null;
+
+  return (
+    <View>
+      {scanned ? <Text style={styles.scanHint}>{t('addSupplement.scanHint')}</Text> : null}
+      <View style={styles.card}>
+        <View style={styles.header}>
+          <View style={styles.titles}>
+            <Text style={styles.name}>{name}</Text>
+            {brand ? <Text style={styles.brand}>{brand}</Text> : null}
+          </View>
+          {onEdit ? (
+            <Pressable onPress={onEdit} style={styles.edit} accessibilityRole="button" hitSlop={8}>
+              <Text style={styles.editText}>{t('addSupplement.product.change')}</Text>
+              <Feather name="edit-2" size={14} color={colors.accent} />
+            </Pressable>
+          ) : null}
+        </View>
+        <Text style={styles.details}>
+          {detailLine || dosageLine || t('addSupplement.product.noDetails')}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  scanHint: { ...type.small, marginBottom: space.sm },
+  card: { ...surfaces.card, padding: space.lg },
+  header: { flexDirection: 'row', alignItems: 'flex-start' },
+  titles: { flex: 1, paddingRight: space.md },
+  name: { ...type.subheading },
+  brand: { ...type.small, marginTop: 2 },
+  edit: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
+  editText: { ...type.small, color: colors.accent },
+  details: { ...type.body, marginTop: space.sm },
+});
