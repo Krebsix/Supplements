@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import { useTranslation } from '../i18n';
 import { colors, space, toneFor, type } from '../theme';
 
 // Kuerzt eine Regel- oder Hinweis-Formulierung auf den ersten Satz: Der
-// vollstaendige Text samt Quelle steht im Wirkstoff-Profil (Tipp fuehrt
-// dorthin), hier reicht die Kernaussage.
+// vollstaendige Text samt Quelle steht im Wirkstoff-Profil bzw. im
+// Zitat-Dialog (siehe openQuote unten), hier reicht die Kernaussage.
 function firstSentence(text = '') {
   const cut = text.indexOf('. ');
   return cut === -1 ? text : text.slice(0, cut + 1);
@@ -25,20 +25,44 @@ function sourceLabel(sources) {
 /**
  * SlotReason
  * ─────────────────────────────────────────────────────────────
- * Zeigt zu einem Tagesplan-Eintrag, warum ein Einnahme-Hinweis oder ein
- * Konflikt mit einem anderen Praeparat hinterlegt ist. Kommt ausschliesslich
- * aus belegten Regeln (ScheduleGuidance.buildEntryGuidance) -- kein
- * generierter Text. Rendert nichts, wenn beide Listen leer sind.
+ * Zeigt zu einem Tagesplan-Eintrag, warum ein Einnahme-Hinweis, ein
+ * Konflikt oder eine foerderliche Kombination (Synergie) mit einem
+ * anderen Praeparat hinterlegt ist. Kommt ausschliesslich aus belegten
+ * Regeln (ScheduleGuidance.buildEntryGuidance) -- kein generierter Text.
+ * Rendert nichts, wenn alle drei Listen leer sind.
  *
- * Tippen auf eine Zeile oeffnet den betroffenen Wirkstoff in der Suche
- * (siehe onOpenSubstance), wo der vollstaendige Text samt Quelle steht.
+ * Tippen auf eine Notiz-Zeile oeffnet den betroffenen Wirkstoff in der
+ * Suche (onOpenSubstance). Tippen auf eine Konflikt- oder Synergie-Zeile
+ * oeffnet stattdessen einen Dialog mit dem vollstaendigen Regeltext und
+ * der Quellenangabe -- der gekuerzte Zeilentext nennt nur den ersten
+ * Satz, das vollstaendige Zitat gehoert an diese Stelle, nicht in die
+ * Wirkstoffsuche (die kennt Paar-Regeln zwischen zwei Praeparaten nicht).
  */
 export default function SlotReason({ guidance, onOpenSubstance }) {
   const { t } = useTranslation();
   const notes = guidance?.notes ?? [];
   const conflicts = guidance?.conflicts ?? [];
+  const synergies = guidance?.synergies ?? [];
 
-  if (notes.length === 0 && conflicts.length === 0) return null;
+  if (notes.length === 0 && conflicts.length === 0 && synergies.length === 0) return null;
+
+  function openQuote(entry) {
+    const fullSourceLabel = entry.sources?.[0]?.label ?? '';
+    const url = entry.sources?.[0]?.url ?? null;
+    const message = fullSourceLabel ? `${entry.text}\n\n${fullSourceLabel}` : entry.text;
+
+    const buttons = [{ text: t('common.cancel'), style: 'cancel' }];
+    if (url) {
+      buttons.push({
+        text: t('dashboard.reason.openSource'),
+        onPress: () => {
+          Linking.openURL(url).catch(() => {});
+        },
+      });
+    }
+
+    Alert.alert(entry.partnerSupplementName, message, buttons);
+  }
 
   return (
     <View style={styles.wrap}>
@@ -68,7 +92,7 @@ export default function SlotReason({ guidance, onOpenSubstance }) {
           <TouchableOpacity
             key={`${conflict.substanceId}-${conflict.partnerSubstanceId}`}
             style={styles.row}
-            onPress={() => onOpenSubstance?.(conflict.substanceId)}
+            onPress={() => openQuote(conflict)}
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityHint={t('dashboard.reason.sourceHint')}
@@ -77,6 +101,27 @@ export default function SlotReason({ guidance, onOpenSubstance }) {
             <Text style={[styles.text, { color: tone.ink }]}>
               {t('dashboard.reason.conflict', { partner: conflict.partnerSupplementName })}{' '}
               {firstSentence(conflict.text)}
+              {source ? <Text style={styles.source}> · {source}</Text> : null}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+
+      {synergies.map((synergy) => {
+        const source = sourceLabel(synergy.sources);
+        return (
+          <TouchableOpacity
+            key={`${synergy.substanceId}-${synergy.partnerSubstanceId}`}
+            style={styles.row}
+            onPress={() => openQuote(synergy)}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityHint={t('dashboard.reason.sourceHint')}
+          >
+            <Feather name="plus-circle" size={13} color={colors.affirm} style={styles.icon} />
+            <Text style={[styles.text, { color: colors.affirm }]}>
+              {t('dashboard.reason.synergy', { partner: synergy.partnerSupplementName })}{' '}
+              {firstSentence(synergy.text)}
               {source ? <Text style={styles.source}> · {source}</Text> : null}
             </Text>
           </TouchableOpacity>

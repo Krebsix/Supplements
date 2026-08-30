@@ -179,7 +179,11 @@ export default function Dashboard() {
   // berechnet statt in der Zeilen-Schleife, sonst wuerde ein Hook in
   // einer .map()-Schleife stehen (Rules of Hooks). buildEntryGuidance ist
   // reine Fachlogik aus ScheduleGuidance.js, ausschliesslich belegte
-  // Regeln (Einnahme-Hinweise, Paar-Konflikte).
+  // Regeln (Einnahme-Hinweise, Paar-Konflikte, Synergien). Die Map wird
+  // bei der ueblichen Bestandsgroesse (einstellig bis niedrig
+  // zweistellig) bei jedem Render neu berechnet, weil activeSupplements
+  // selbst jedes Mal ein neues Array ist -- bei dieser Groessenordnung
+  // unproblematisch.
   const guidanceBySupplementId = React.useMemo(() => {
     const map = new Map();
     for (const supplement of activeSupplements) {
@@ -448,7 +452,11 @@ export default function Dashboard() {
 
                     <SlotReason
                       guidance={
-                        guidanceBySupplementId.get(supplement.id) ?? { notes: [], conflicts: [] }
+                        guidanceBySupplementId.get(supplement.id) ?? {
+                          notes: [],
+                          conflicts: [],
+                          synergies: [],
+                        }
                       }
                       onOpenSubstance={(substanceId) =>
                         router.push(`/search?substance=${substanceId}`)

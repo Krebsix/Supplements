@@ -91,8 +91,10 @@ export default {
   'dashboard.profileChild': 'Kind',
   'dashboard.profileDefault': 'Standard',
   'dashboard.curePausedTitle': 'Heute Kur-Pause',
-  // Erklaerung je Eintrag (SlotReason.jsx): Einnahme-Hinweise und
-  // Konflikte aus belegten Regeln (ScheduleGuidance.js).
+  // Erklaerung je Eintrag (SlotReason.jsx): Einnahme-Hinweise, Konflikte
+  // und Synergien aus belegten Regeln (ScheduleGuidance.js).
   'dashboard.reason.conflict': 'Getrennt von {partner}:',
+  'dashboard.reason.synergy': 'Zusammen mit {partner}:',
   'dashboard.reason.sourceHint': 'Quelle antippen für das vollständige Zitat',
+  'dashboard.reason.openSource': 'Quelle öffnen',
 };

@@ -92,8 +92,10 @@ export default {
   'dashboard.profileChild': 'Child',
   'dashboard.profileDefault': 'Default',
   'dashboard.curePausedTitle': 'Cycle break today',
-  // Per-entry explanation (SlotReason.jsx): intake notes and conflicts
-  // from documented rules (ScheduleGuidance.js).
+  // Per-entry explanation (SlotReason.jsx): intake notes, conflicts and
+  // synergies from documented rules (ScheduleGuidance.js).
   'dashboard.reason.conflict': 'Apart from {partner}:',
+  'dashboard.reason.synergy': 'Together with {partner}:',
   'dashboard.reason.sourceHint': 'Tap the source for the full quote',
+  'dashboard.reason.openSource': 'Open source',
 };

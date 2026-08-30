@@ -39,7 +39,12 @@ export function buildEntryGuidance(supplement, activeSupplements = []) {
     }
   }
 
+  // Foerderliche Kombinationen (severity 'synergy', z. B. Eisen + Vitamin C)
+  // sind das Gegenteil eines Konflikts -- sie gehoeren in eine eigene
+  // Liste, sonst rendert die Oberflaeche "Getrennt von ..." fuer eine
+  // Regel, die genau das Gegenteil sagt.
   const conflicts = [];
+  const synergies = [];
   const seen = new Set();
   for (const other of activeSupplements) {
     if (!other || other.id === supplement.id) continue;
@@ -59,16 +64,19 @@ export function buildEntryGuidance(supplement, activeSupplements = []) {
       if (seen.has(key)) continue;
       seen.add(key);
 
-      conflicts.push({
+      const entry = {
         substanceId: mine,
         partnerSubstanceId: theirs,
         partnerSupplementName: other.name ?? '',
         severity: rule.severity,
         text: rule.note,
         sources: rule.sources,
-      });
+      };
+
+      if (rule.severity === 'synergy') synergies.push(entry);
+      else conflicts.push(entry);
     }
   }
 
-  return { notes, conflicts };
+  return { notes, conflicts, synergies };
 }

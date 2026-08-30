@@ -41,7 +41,40 @@ const g3 = buildEntryGuidance(aN, [aN, bN]);
 check('Paar-Regel zwischen zwei Praeparaten wird gefunden', g3.conflicts.some((c) => c.partnerSupplementName === 'B' && c.severity === rule.severity && c.sources.length > 0));
 check('kein Konflikt mit sich selbst', buildEntryGuidance(aN, [aN]).conflicts.length === 0);
 check('archivierte Praeparate zaehlen nicht', buildEntryGuidance(aN, [aN, { ...bN, status: 'archived' }]).conflicts.length === 0);
-check('leeres Praeparat: leere Struktur', (() => { const g = buildEntryGuidance({ id: 'x', name: 'x', ingredientDetails: [] }, []); return g.notes.length === 0 && g.conflicts.length === 0; })());
+check(
+  'leeres Praeparat: leere Struktur',
+  (() => {
+    const g = buildEntryGuidance({ id: 'x', name: 'x', ingredientDetails: [] }, []);
+    return g.notes.length === 0 && g.conflicts.length === 0 && g.synergies.length === 0;
+  })()
+);
+
+console.log('— Synergien —');
+// Eisen + Vitamin C ist im Datenbestand als severity 'synergy' hinterlegt
+// (data/interactions.js: { a: 'iron', b: 'vitamin-c', severity: 'synergy' }).
+// Eine foerderliche Kombination ist das Gegenteil eines Konflikts und darf
+// nicht als "Getrennt von ..." erscheinen.
+const synergyRule = PAIR_RULES.find(
+  (r) => r.severity === 'synergy' && ((r.a === 'iron' && r.b === 'vitamin-c') || (r.a === 'vitamin-c' && r.b === 'iron'))
+);
+check('Testvoraussetzung: Eisen/Vitamin-C-Synergie existiert im Datenbestand', Boolean(synergyRule));
+
+const ironSup = sup('Eisen Kapseln', [[getSubstance('iron').name, '14', 'mg']]);
+const vitCSup = sup('Vitamin C Kapseln', [[getSubstance('vitamin-c').name, '200', 'mg']]);
+const g4 = buildEntryGuidance(ironSup, [ironSup, vitCSup]);
+check(
+  'Eisen/Vitamin-C-Paar erscheint in synergies',
+  g4.synergies.some(
+    (s) =>
+      s.partnerSupplementName === 'Vitamin C Kapseln' &&
+      s.severity === 'synergy' &&
+      s.sources.length > 0
+  )
+);
+check(
+  'Eisen/Vitamin-C-Paar erscheint NICHT in conflicts',
+  !g4.conflicts.some((c) => c.partnerSupplementName === 'Vitamin C Kapseln')
+);
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle ScheduleGuidance-Tests bestanden.');
