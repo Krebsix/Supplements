@@ -48,8 +48,6 @@ export default {
   'home.nav.settings.title': 'Settings',
   'home.nav.settings.subtitle':
     'Manage the archive, local data, system status and future data sources.',
-  'home.nav.account.title': 'Account',
-  'home.nav.account.subtitle': 'Optional. Basis for sync and backup across devices.',
 
   // Header card in the main menu (menu.jsx), above the brand.
   'home.account.cta': 'Create account or sign in',

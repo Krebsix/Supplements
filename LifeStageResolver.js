@@ -80,3 +80,19 @@ export function resolveLifeStage({ gender, birthYear, extra, referenceOverride }
   }
   return { ...result, needsExtra: 'reference' };
 }
+
+/**
+ * extraQuestionFor
+ * ─────────────────────────────────────────────────────────────
+ * Sagt, welche Zusatzfrage fuer diese Person grundsaetzlich gilt,
+ * unabhaengig davon, ob sie schon beantwortet ist. `resolveLifeStage`
+ * meldet in `needsExtra` nur "noch unbeantwortet": Sobald `extra` oder
+ * `referenceOverride` gesetzt ist, wird `needsExtra` null, auch wenn die
+ * Frage fachlich weiter zutrifft. Fuer eine stabile Schrittliste
+ * (OnboardingSteps.js) braucht es die Praesenz-Semantik getrennt vom
+ * Beantwortet-Status: deshalb hier derselbe Aufruf ohne extra/override,
+ * damit beide Werte konsistent bleiben.
+ */
+export function extraQuestionFor({ gender, birthYear } = {}, today = new Date()) {
+  return resolveLifeStage({ gender, birthYear }, today).needsExtra;
+}

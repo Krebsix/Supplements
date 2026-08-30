@@ -14,6 +14,7 @@ import StepRoutineFirst from '../components/onboarding/StepRoutineFirst';
 import StepAccount from '../components/onboarding/StepAccount';
 import StepDone from '../components/onboarding/StepDone';
 import { resolveLifeStage } from '../LifeStageResolver';
+import { buildSteps, canAdvance } from '../OnboardingSteps';
 import useNotificationStore from '../useNotificationStore';
 import { useStore } from '../useStore';
 import { PRIVACY_VERSION, TERMS_VERSION } from '../data/legalContent';
@@ -21,32 +22,6 @@ import { useTranslation } from '../i18n';
 import { space, surfaces } from '../theme';
 
 const DEFAULT_BIRTH_YEAR = 1990;
-
-/**
- * buildSteps
- * ─────────────────────────────────────────────────────────────
- * Leitet die tatsaechlich zu zeigende Schrittfolge aus dem aufgeloesten
- * Lebensphasen-Ergebnis ab (LifeStageResolver.js). Die Zusatzfrage
- * erscheint nur, wenn `needsExtra` gesetzt ist (z. B. Frau 15 bis 50 ohne
- * beantwortete Schwangerschaftsfrage), der Konto-Schritt entfaellt unter
- * 16 (Nutzungsbedingungen setzen ein Mindestalter). Aendert eine
- * vorherige Antwort das Ergebnis (Geschlechtswechsel, anderes
- * Geburtsjahr), passt sich die Liste im naechsten Render an.
- */
-function buildSteps(resolved) {
-  return [
-    'welcome',
-    'legal',
-    'name',
-    'gender',
-    'birthYear',
-    ...(resolved.needsExtra ? ['extra'] : []),
-    'routineTimes',
-    'routineFirst',
-    ...(resolved.underage ? [] : ['account']),
-    'done',
-  ];
-}
 
 function PrimaryButton({ label, onPress, disabled }) {
   return (
@@ -126,9 +101,15 @@ export default function OnboardingScreen() {
     [answers.gender, answers.birthYear, answers.extra, answers.referenceOverride]
   );
 
+  // Die Schrittliste haengt bewusst NICHT an `resolved.needsExtra`: Das
+  // wird null, sobald die Zusatzfrage beantwortet ist, und wuerde den
+  // gerade beantworteten Schritt im selben Render aus der Liste werfen.
+  // buildSteps() (OnboardingSteps.js) fragt stattdessen ueber
+  // extraQuestionFor(), ob die Frage fuer diese Person grundsaetzlich
+  // gilt, unabhaengig vom Beantwortet-Status.
   const steps = useMemo(
-    () => buildSteps(resolved),
-    [resolved.needsExtra, resolved.underage]
+    () => buildSteps({ gender: answers.gender, birthYear: answers.birthYear }),
+    [answers.gender, answers.birthYear]
   );
   // Die Liste kann kuerzer werden als der zuletzt gesetzte Index (z. B.
   // Zusatzfrage faellt weg, weil die Nutzerin eine Etage weiter oben das
@@ -173,7 +154,11 @@ export default function OnboardingScreen() {
         : answers.firstAction === 'search'
         ? '/search'
         : '/Dashboard';
-    router.replace(target);
+    // Der zustand-Set oben ist synchron, aber die (tabs)-Screens hinter
+    // dem Stack.Protected-Gate (app/_layout.jsx) sind erst nach dem
+    // naechsten Render gemountet. Direktes replace() faende sie noch
+    // nicht, ein Tick Verzoegerung reicht.
+    setTimeout(() => router.replace(target), 0);
   };
 
   const goNext = async () => {
@@ -294,38 +279,15 @@ export default function OnboardingScreen() {
           </View>
         );
       case 'gender':
-        return (
-          <PrimaryButton
-            label={t('onboarding.next')}
-            onPress={goNext}
-            disabled={!answers.gender}
-          />
-        );
       case 'birthYear':
-        return (
-          <PrimaryButton
-            label={t('onboarding.next')}
-            onPress={goNext}
-            disabled={resolved.tooYoung}
-          />
-        );
-      case 'extra': {
-        const extraReady =
-          resolved.needsExtra === 'pregnancy'
-            ? Boolean(answers.extra)
-            : Boolean(answers.referenceOverride);
-        return (
-          <PrimaryButton label={t('onboarding.next')} onPress={goNext} disabled={!extraReady} />
-        );
-      }
+      case 'extra':
       case 'routineTimes':
-        return <PrimaryButton label={t('onboarding.next')} onPress={goNext} />;
       case 'routineFirst':
         return (
           <PrimaryButton
             label={t('onboarding.next')}
             onPress={goNext}
-            disabled={!answers.firstAction}
+            disabled={!canAdvance(stepId, answers, resolved)}
           />
         );
       case 'account':

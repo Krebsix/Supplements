@@ -31,6 +31,13 @@ function dateToTimeString(date) {
  * eigene Einstellungen, keine Onboarding-Antworten. `value` traegt hier
  * nur das lokale `permissionDenied`-Flag aus app/onboarding.jsx (gesetzt,
  * wenn die Systemerlaubnis beim Weiter-Tippen verweigert wurde).
+ *
+ * Die Slot-Zeiten und der Erinnerungs-Schalter schreiben direkt in den
+ * geteilten Benachrichtigungs-Store (useNotificationStore), nicht in den
+ * lokalen `answers`-State des Onboardings. Das ist Absicht: Es ist ein
+ * Einstellungen-Store, der Bruch mitten im Onboarding uebersteht daher
+ * bewusst (siehe Kommentar in app/onboarding.jsx zu "Antworten leben
+ * bewusst NICHT im Store").
  */
 export default function StepRoutineTimes({ t, value: permissionDenied }) {
   const slotTimes = useNotificationStore((state) => state.slotTimes);

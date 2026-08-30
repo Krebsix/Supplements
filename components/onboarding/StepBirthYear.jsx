@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
@@ -17,20 +17,12 @@ const YEARS = Array.from(
 /**
  * StepBirthYear
  * ─────────────────────────────────────────────────────────────
- * Rad-Picker fuer das Geburtsjahr, vorgewaehlt 1990. Ruft `onChange(1990)`
- * beim ersten Rendern auf, wenn noch kein Wert vorliegt, damit
- * `app/onboarding.jsx` von Anfang an einen Wert zum Aufloesen der
- * Referenzgruppe hat (siehe LifeStageResolver.js).
+ * Rad-Picker fuer das Geburtsjahr, vorgewaehlt 1990. Den Startwert setzt
+ * app/onboarding.jsx bereits im initialen `answers`-State (DEFAULT_BIRTH_YEAR),
+ * `value` ist hier also nie null; `selectedValue={value ?? DEFAULT_YEAR}`
+ * bleibt als Absicherung stehen, falls das je nicht mehr gilt.
  */
 export default function StepBirthYear({ t, value, onChange, resolved }) {
-  useEffect(() => {
-    if (value === null || value === undefined) {
-      onChange(DEFAULT_YEAR);
-    }
-    // Nur beim ersten Rendern des Schritts pruefen.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t('onboarding.birthYear.title')}</Text>
