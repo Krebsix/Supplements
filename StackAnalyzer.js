@@ -62,7 +62,7 @@ export function parseAmountRange(raw) {
  * Ein gescanntes Produkt kann mehrere enthalten (Multivitamin), ein
  * manuell angelegtes traegt in der Regel genau einen.
  */
-function extractPositions(supplement) {
+export function extractPositions(supplement) {
   const details = Array.isArray(supplement?.ingredientDetails)
     ? supplement.ingredientDetails
     : null;
