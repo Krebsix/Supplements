@@ -32,7 +32,7 @@ const exampleState = {
   pendingScanResult: null,
   activeProfileId: 'adult',
   activeLifeStageId: 'adult-man',
-  profile: { medicationClasses: ['anticoagulants'] },
+  profile: { medicationClasses: ['anticoagulants'], displayName: 'Nadine', gender: 'female', birthYear: 1990 },
   trials: [],
   trialRatings: [],
   labValues: [{ id: 'lab-1', marker: 'ferritin' }],
@@ -53,6 +53,7 @@ check('exportedAt als ISO-String', payload.exportedAt === '2026-08-09T04:00:00.0
 check('alle Backup-Felder vorhanden', BACKUP_DATA_FIELDS.every((field) => field in payload.data));
 check('Laborwerte enthalten', payload.data.labValues[0].marker === 'ferritin');
 check('Profil enthalten', payload.data.profile.medicationClasses[0] === 'anticoagulants');
+check('Profil traegt displayName/gender/birthYear', payload.data.profile.displayName === 'Nadine' && payload.data.profile.gender === 'female' && payload.data.profile.birthYear === 1990);
 check('Katalogdaten NICHT im Backup', !('librarySupplements' in payload.data));
 check('Funktionen NICHT im Backup', !('someFunction' in payload.data));
 check('fehlende Felder werden null, nicht undefined', buildBackupPayload({}).data.labValues === null);

@@ -6,7 +6,6 @@ import { secureStorage } from './secureStorage';
 import { shouldTriggerBlock } from './AbsorptionBlocker';
 import { getCureStatusLabel, isDueToday } from './CureManager';
 import {
-  EMPTY_ENTITLEMENT,
   addCredits,
   applyVisionScan,
   setTier,
@@ -21,6 +20,16 @@ import { createLabValue, updateLabValue } from './LabValues';
 import { buildDailySchedule } from './TimingEngine';
 import { setActiveLanguage } from './i18n/runtime';
 import inventoryData from './inventory.json';
+import {
+  applyOnboardingCompletion,
+  EMPTY_PROFILE,
+  INITIAL_USER_STATE,
+  normalizeProfile,
+} from './storeLogic';
+
+// Re-export: bestehende Importe aus './useStore' bleiben gueltig. Die
+// eigentlichen Definitionen liegen in storeLogic.js (rein, Node-testbar).
+export { EMPTY_PROFILE, INITIAL_USER_STATE };
 
 function createId(prefix = 'id') {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -36,27 +45,6 @@ function normalizeOptionalText(value) {
   if (value === null || value === undefined) return '';
   return String(value).trim();
 }
-
-/**
- * Persoenliches Profil. Bewusst grobkoernig: Es werden Medikamenten-
- * GRUPPEN erfasst, keine Praeparatenamen — die App vergleicht ohnehin nur
- * gegen belegte Hinweise auf Gruppenebene (siehe data/medicationClasses.js),
- * und je weniger Gesundheitsdaten auf dem Geraet liegen, desto besser.
- */
-function normalizeProfile(profile = {}) {
-  const list = (value) =>
-    Array.isArray(value) ? value.filter((item) => typeof item === 'string' && item) : [];
-
-  return {
-    medicationClasses: list(profile?.medicationClasses),
-    conditions: list(profile?.conditions),
-    allergies: list(profile?.allergies),
-    dietaryPattern: typeof profile?.dietaryPattern === 'string' ? profile.dietaryPattern : '',
-    goals: list(profile?.goals),
-  };
-}
-
-export const EMPTY_PROFILE = normalizeProfile({});
 
 function normalizeDosage(dosage = {}) {
   return {
@@ -202,52 +190,15 @@ function migratePersistedState(persistedState = {}) {
     consents: {
       scanUpload: state.consents?.scanUpload || null,
       privacyVersion: state.consents?.privacyVersion || null,
+      termsVersion: state.consents?.termsVersion || null,
     },
-    entitlement: { ...EMPTY_ENTITLEMENT, ...(state.entitlement || {}) },
+    // Bestandsdaten kennen keine Onboarding-Flags: Default aus dem
+    // Ausgangszustand, ueberschrieben von dem, was tatsaechlich persistiert
+    // wurde (falls vorhanden).
+    onboarding: { ...INITIAL_USER_STATE.onboarding, ...(state.onboarding || {}) },
+    entitlement: { ...INITIAL_USER_STATE.entitlement, ...(state.entitlement || {}) },
   };
 }
-
-/**
- * Ausgangszustand aller Nutzerdaten. Einmal definiert, zweimal verwendet:
- * als Startwert beim ersten Oeffnen und als Ziel von resetAllData() —
- * so kann der Loeschweg (Art. 17 DSGVO) kein Feld vergessen, das spaeter
- * dazukommt.
- */
-export const INITIAL_USER_STATE = {
-  userSupplements: [],
-  intakeLogs: [],
-  stockBySupplementId: {},
-  scanResults: [],
-  pendingScanResult: null,
-  activeProfileId: 'adult',
-  // Lebensphase fuer den Referenzwert-Abgleich (siehe data/referenceValues.js).
-  // Der Wert ist nur ein technischer Platzhalter: Bis zum Abschluss des
-  // Onboardings ist die App gate't (app/_layout.jsx), es gibt also keine
-  // Referenzwert-Aussage ohne aktive Wahl.
-  activeLifeStageId: 'adult-woman',
-  // Persoenliches Profil (Medikamentengruppen, Erkrankungen, Ziele).
-  // Bleibt wie alles andere lokal auf dem Geraet.
-  profile: EMPTY_PROFILE,
-  // Wirkungskontrolle: laufende und abgeschlossene Beobachtungen samt
-  // der einzelnen Bewertungen (siehe OutcomeTracker.js).
-  trials: [],
-  trialRatings: [],
-  // Laborwerte: bleiben wie alles andere lokal. Die App bewertet sie
-  // nicht, sie dokumentiert und stellt den Verlauf dar.
-  labValues: [],
-  absorptionBlockedAt: null,
-  settings: {},
-  // Erststart und Einwilligungen. scanUpload haelt den Zeitpunkt der
-  // Einwilligung zur Foto-Uebertragung an die KI-Auswertung fest,
-  // privacyVersion den Stand der zur Kenntnis genommenen
-  // Datenschutzerklaerung.
-  onboardingCompletedAt: null,
-  consents: { scanUpload: null, privacyVersion: null },
-  // Tier, Scan-Kontingente und Credits (Entitlements.js). Wird von
-  // resetAllData mit zurueckgesetzt; gekaufte Rechte kommen nach einer
-  // Loeschung ueber den Store-Restore (IAP) zurueck, nicht aus dem Backup.
-  entitlement: EMPTY_ENTITLEMENT,
-};
 
 export const useStore = create(
   persist(
@@ -260,12 +211,10 @@ export const useStore = create(
       // kein Nutzerdatum, und ueberlebt deshalb resetAllData().
       language: 'de',
 
-      completeOnboarding: ({ lifeStageId, privacyVersion } = {}) =>
-        set((state) => ({
-          activeLifeStageId: lifeStageId || state.activeLifeStageId,
-          onboardingCompletedAt: new Date().toISOString(),
-          consents: { ...state.consents, privacyVersion: privacyVersion || null },
-        })),
+      // Abschluss des Onboardings. Die eigentliche Zustands-Ueberfuehrung
+      // steckt in applyOnboardingCompletion (storeLogic.js, rein und
+      // getestet); der Store ruft sie nur noch auf.
+      completeOnboarding: (input) => set((state) => applyOnboardingCompletion(state, input)),
 
       giveScanConsent: () =>
         set((state) => ({
@@ -568,6 +517,7 @@ export const useStore = create(
         settings: state.settings,
         onboardingCompletedAt: state.onboardingCompletedAt,
         consents: state.consents,
+        onboarding: state.onboarding,
         entitlement: state.entitlement,
       }),
       version: 1,
