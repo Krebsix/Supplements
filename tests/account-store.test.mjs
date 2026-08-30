@@ -354,6 +354,33 @@ console.log('— keyStore: Datenschluessel im Schluesselbund —');
   const store5 = createAccountStore(deps(client5));
   await store5.getState().initialize();
   check('ohne keyStore kein Fehler', store5.getState().status === ACCOUNT_STATUS.ANONYMOUS);
+
+  // Wettlauf: SIGNED_OUT (Token-Refresh gescheitert) kommt, WAEHREND
+  // keyStore.load() noch laeuft. Der nachgelieferte alte Schluessel darf
+  // nicht mehr in den inzwischen abgemeldeten Store geschrieben werden.
+  let resolveLoad;
+  const slowLoad = new Promise((resolve) => { resolveLoad = resolve; });
+  const raceLog = [];
+  const raceKeyStore = {
+    save: async () => {},
+    load: () => { raceLog.push('load'); return slowLoad; },
+    clear: async () => { raceLog.push('clear'); },
+  };
+  const client6 = makeClient();
+  client6.emit('SIGNED_IN', { access_token: 'at', user: { id: 'u1', email: 'a@b.de' } });
+  const store6 = createAccountStore({ ...deps(client6), keyStore: raceKeyStore });
+  const initPromise = store6.getState().initialize();
+  // Alle bereits aufgeloesten Promises abarbeiten, ohne auf slowLoad zu warten:
+  // initialize() haengt danach am (noch offenen) keyStore.load().
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check('load() wurde aufgerufen, bevor die Session verschwindet', raceLog.includes('load'));
+  client6.emit('SIGNED_OUT', null);
+  resolveLoad('ab'.repeat(32));
+  await initPromise;
+  check(
+    'veralteter Schluessel aus load() wird nicht mehr gesetzt, Session ist inzwischen weg',
+    store6.getState().dataKey === null && store6.getState().status === ACCOUNT_STATUS.ANONYMOUS
+  );
 }
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }

@@ -179,7 +179,18 @@ export function createAccountStore({
         ensureListening();
         if (session?.user) {
           const hex = await keyStore.load().catch(() => null);
-          if (typeof hex === 'string' && /^[0-9a-f]{64}$/.test(hex)) set({ dataKey: hexToBytes(hex) });
+          // Waehrend load() laeuft, kann ein Auth-Ereignis ohne Session
+          // (z. B. SIGNED_OUT nach gescheitertem Token-Refresh) applySession(null)
+          // ausloesen und den Store auf ANONYMOUS_STATE zuruecksetzen. Ohne
+          // diesen Vergleich wuerde der noch nachgelieferte alte Schluessel
+          // ueber die inzwischen abgemeldete Session gesetzt.
+          if (
+            typeof hex === 'string' &&
+            /^[0-9a-f]{64}$/.test(hex) &&
+            get().userId === session.user.id
+          ) {
+            set({ dataKey: hexToBytes(hex) });
+          }
         }
       },
 
