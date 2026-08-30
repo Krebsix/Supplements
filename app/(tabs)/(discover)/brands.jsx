@@ -30,13 +30,13 @@ export default function BrandsScreen() {
     [activeBrand]
   );
 
-  // Katalog-Eintrag als Scan-Entwurf uebernehmen: derselbe Pfad wie die
-  // Namenssuche im Scanner, inklusive Herkunfts-Kennzeichnung und
-  // Klassen-Hinweisen (seedEntryToScanDraft).
+  // Katalog-Eintrag als Scan-Entwurf uebernehmen: inklusive Herkunfts-
+  // Kennzeichnung und Klassen-Hinweisen (seedEntryToScanDraft).
+  // Direkt auf "Aufnehmen", der Katalogeintrag ist bereits geprueft.
   function handlePickProduct(entry) {
     const storedScan = saveScanResult(seedEntryToScanDraft(entry));
     setPendingScanResult(storedScan);
-    router.push('/results');
+    router.push('/AddSupplement?fromScan=1');
   }
 
   function countLabel(count) {

@@ -323,6 +323,9 @@ bleibt `false`, bis der Sandbox-Test aus `launch/store-setup.md` gruen ist.
   `'seed-catalog'` fuer Treffer aus dem gebuendelten DACH-Katalog
   `data/seedProducts.json`/`SeedCatalog.js`)
   und eine `captureSummary`, damit nachvollziehbar ist, woher ein Eintrag stammt.
+  Katalog-Treffer (Suche, Markenregister) springen direkt auf den Screen
+  "Aufnehmen" (`/AddSupplement?fromScan=1`); `results.jsx` bleibt der
+  Pruef-Screen fuer Foto- und Barcode-Scans.
 - Echte Scan-Analyse: `ScanAnalyzer.js` (App) → Supabase Edge Function
   `supabase/functions/analyze-supplement` (Claude Vision, Structured Output).
   Der `ANTHROPIC_API_KEY` liegt NUR als Supabase-Secret, nie in der App.

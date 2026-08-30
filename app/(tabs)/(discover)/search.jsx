@@ -147,12 +147,13 @@ export default function SearchScreen() {
     setProductSort('brand');
   }, [resolvedSubstanceId]);
 
-  // Katalog-Eintrag als Scan-Entwurf uebernehmen: derselbe Pfad wie im
-  // Marken-Register (brands.jsx) und in der Namenssuche des Scanners.
+  // Katalog-Eintrag als Entwurf uebernehmen und direkt auf "Aufnehmen":
+  // Die Wirkstoff-Uebersicht (results.jsx) ist die Kontrolle fuer
+  // Foto-Scans; ein Katalogprodukt ist bereits geprueft.
   function handlePickCatalogProduct(entry) {
     const storedScan = saveScanResult(seedEntryToScanDraft(entry));
     setPendingScanResult(storedScan);
-    router.push('/results');
+    router.push('/AddSupplement?fromScan=1');
   }
 
   // Beschwerdebilder zuerst: Wer einen ganzen Satz eingibt, meint eine
