@@ -23,6 +23,12 @@ export default {
   'notifications.saved.message': "Today's reminders were rescheduled.",
   'notifications.resetButton': 'Restore default times',
 
+  'notifications.refillTitle': 'Refill',
+  'notifications.refillText':
+    'A reminder when a supplement lasts only a few days. No purchase link, just the note.',
+  'notifications.refillOff': 'Off',
+  'notifications.refillDays': '{days} days',
+
   'logic.notifications.channelName': 'Intake reminders',
   'logic.notifications.actionTaken': 'Taken',
   'logic.notifications.actionSnooze': 'Remind me in 15 minutes',

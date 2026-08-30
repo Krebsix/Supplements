@@ -34,4 +34,6 @@ export default {
   'inventory.archiveMessage':
     '{name} disappears from the daily plan and the inventory. Logged intakes stay in the history, and you can restore the entry at any time.',
   'inventory.archiveConfirm': 'Archive',
+
+  'inventory.refillIn': 'Lasts about {days} more days',
 };

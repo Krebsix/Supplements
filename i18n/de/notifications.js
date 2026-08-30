@@ -23,6 +23,12 @@ export default {
   'notifications.saved.message': 'Die heutigen Erinnerungen wurden neu geplant.',
   'notifications.resetButton': 'Standardzeiten wiederherstellen',
 
+  'notifications.refillTitle': 'Nachfüllen',
+  'notifications.refillText':
+    'Erinnerung, wenn ein Präparat nur noch wenige Tage reicht. Kein Kauf-Link, nur der Hinweis.',
+  'notifications.refillOff': 'Aus',
+  'notifications.refillDays': '{days} Tage',
+
   'logic.notifications.channelName': 'Einnahme-Erinnerungen',
   'logic.notifications.actionTaken': 'Eingenommen',
   'logic.notifications.actionSnooze': 'In 15 Minuten erinnern',

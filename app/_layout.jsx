@@ -101,7 +101,8 @@ export default function Layout() {
       if (
         state.intakeLogs !== previous.intakeLogs ||
         state.userSupplements !== previous.userSupplements ||
-        state.absorptionBlockedAt !== previous.absorptionBlockedAt
+        state.absorptionBlockedAt !== previous.absorptionBlockedAt ||
+        state.stockBySupplementId !== previous.stockBySupplementId
       ) {
         refreshNotificationSchedule().catch(() => {});
       }

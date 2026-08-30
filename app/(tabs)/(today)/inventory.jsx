@@ -13,7 +13,9 @@ import { useRouter } from 'expo-router';
 import AddSupplementChooser from '../../../components/AddSupplementChooser';
 import AddSupplementSheet from '../../../components/AddSupplementSheet';
 import { SLOTS } from '../../../TimingEngine';
+import { refillState } from '../../../StockForecast';
 import useStore from '../../../useStore';
+import useNotificationStore from '../../../useNotificationStore';
 import {
   formatSupplementDosage,
   formatSupplementName,
@@ -61,6 +63,8 @@ export default function InventoryScreen() {
   const userSupplements = useStore((state) => state.userSupplements);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
   const updateUserSupplement = useStore((state) => state.updateUserSupplement);
+  const stockBySupplementId = useStore((state) => state.stockBySupplementId);
+  const refillThresholdDays = useNotificationStore((state) => state.refillThresholdDays);
 
   const needle = query.trim().toLowerCase();
 
@@ -161,6 +165,10 @@ export default function InventoryScreen() {
             .join(' · ');
           const dosage = formatSupplementDosage(supplement, '');
           const paused = supplement.status === 'paused';
+          const stock = stockBySupplementId?.[supplement.id];
+          const forecast = stock
+            ? refillState(stock, supplement, refillThresholdDays)
+            : null;
 
           return (
             <View key={supplement.id} style={styles.card}>
@@ -178,6 +186,17 @@ export default function InventoryScreen() {
               ) : (
                 <Text style={styles.cardMissing}>{t('inventory.noSlotBadge')}</Text>
               )}
+
+              {forecast && forecast.daysLeft !== null ? (
+                <Text
+                  style={[
+                    styles.cardRefill,
+                    forecast.due && styles.cardRefillDue,
+                  ]}
+                >
+                  {t('inventory.refillIn', { days: forecast.daysLeft })}
+                </Text>
+              ) : null}
 
               <View style={styles.cardActions}>
                 <TouchableOpacity
@@ -311,6 +330,14 @@ const styles = StyleSheet.create({
     ...type.small,
     color: cautionTone.ink,
     marginTop: space.xs,
+  },
+  cardRefill: {
+    ...type.tiny,
+    color: colors.inkMuted,
+    marginTop: space.xs,
+  },
+  cardRefillDue: {
+    color: colors.caution,
   },
   cardActions: {
     flexDirection: 'row',

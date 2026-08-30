@@ -34,4 +34,6 @@ export default {
   'inventory.archiveMessage':
     '{name} verschwindet aus Tagesplan und Bestand. Die Einnahmen bleiben in der Historie erhalten, und du kannst den Eintrag jederzeit zurückholen.',
   'inventory.archiveConfirm': 'Ins Archiv',
+
+  'inventory.refillIn': 'Reicht noch etwa {days} Tage',
 };

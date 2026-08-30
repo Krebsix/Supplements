@@ -468,6 +468,22 @@ export const useStore = create(
       }),
       getStock: (userSupplementId) => get().stockBySupplementId[userSupplementId] || null,
 
+      // Markiert, dass die Nachfuell-Erinnerung fuer diesen Bestand bereits
+      // ausgeloest wurde (iso) bzw. setzt sie zurueck (null), wenn der
+      // Bestand nicht mehr faellig ist -- siehe StockForecast.refillState.
+      // No-op ohne vorhandenen Bestandseintrag: ein Praeparat ohne Bestand
+      // hat auch keine Erinnerung, die zurueckgesetzt werden muesste.
+      markRefillNotified: (userSupplementId, iso) => set((state) => {
+        const stock = state.stockBySupplementId[userSupplementId];
+        if (!stock) return state;
+        return {
+          stockBySupplementId: {
+            ...state.stockBySupplementId,
+            [userSupplementId]: { ...stock, refillNotifiedAt: iso },
+          },
+        };
+      }),
+
       // Backward-compatible aliases for older screens/services.
       inventory: inventoryData,
       getFullInventory: () => [...get().librarySupplements, ...get().userSupplements],

@@ -64,4 +64,8 @@ export default {
   'logic.cure.phase.on': 'Intake phase',
   'logic.cure.phase.off': 'Break',
   'logic.cure.stepped': 'Week {week}: {drops} drops',
+
+  // Refill reminder (StockForecast)
+  'logic.notifications.refillTitle': 'Refill',
+  'logic.notifications.refill': '{name} lasts about {days} more days.',
 };

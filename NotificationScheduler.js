@@ -20,6 +20,7 @@ import { Platform }        from 'react-native';
 
 import { SLOTS, SLOT_ORDER } from './TimingEngine';
 import { BLOCK_DURATION_MS } from './AbsorptionBlocker';
+import { refillState } from './StockForecast';
 import { tr } from './i18n/runtime';
 import { colors } from './theme';
 
@@ -124,7 +125,13 @@ export async function scheduleAllNotificationsForToday(
   await Notifications.cancelAllScheduledNotificationsAsync();
 
   const now             = Date.now();
-  const { loggedToday = [], absorptionBlockedAt = null } = state;
+  const {
+    loggedToday = [],
+    absorptionBlockedAt = null,
+    stocks = {},
+    refillThresholdDays = 0,
+    onRefillNotified = () => {},
+  } = state;
 
   // Flohsamen-Sperre: falls aktiv, alle pending Slots shiften
   const absorptionEnd = absorptionBlockedAt
@@ -173,7 +180,88 @@ export async function scheduleAllNotificationsForToday(
     }
   }
 
+  // Nachfuell-Erinnerung: separat von den Slot-Alarmen, deshalb ein
+  // eigener Durchlauf am Ende statt eine Verzweigung je Slot.
+  await scheduleRefillReminders({
+    supplements,
+    stocks,
+    thresholdDays: refillThresholdDays,
+    onNotified: onRefillNotified,
+    now: new Date(now),
+  });
+
   return scheduledIds;
+}
+
+// ─────────────────────────────────────────────────────────────
+// NACHFUELL-ERINNERUNG
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * scheduleRefillReminders({ supplements, stocks, thresholdDays, onNotified, now })
+ *
+ * Plant je Praeparat mit Bestandseintrag hoechstens eine Nachfuell-
+ * Erinnerung, wenn StockForecast.refillState das als faellig und noch
+ * nicht gemeldet einstuft (fuer heute 09:00, oder in einer Minute, wenn
+ * 09:00 bereits vorbei ist), und meldet das ueber onNotified zurueck.
+ * Ist ein Praeparat nicht mehr faellig, aber vorher gemeldet, wird
+ * refillNotifiedAt ueber denselben Callback zurueckgesetzt (Reset-Regel) --
+ * sonst wuerde eine neue Knappheit nach dem Auffuellen nie wieder gemeldet.
+ *
+ * Reine Iteration + Planung: die Entscheidung selbst liegt in
+ * StockForecast.refillState (Node-testbar), hier steht nur noch, WIE eine
+ * faellige Erinnerung geplant wird. Kein Zugriff auf useStore -- Bestand
+ * und Rueckmelde-Funktion kommen als Argumente vom Aufrufer.
+ */
+export async function scheduleRefillReminders({
+  supplements = [],
+  stocks = {},
+  thresholdDays = 0,
+  onNotified = () => {},
+  now = new Date(),
+}) {
+  for (const supplement of supplements) {
+    const stock = stocks[supplement.id];
+    if (!stock) continue;
+
+    const forecast = refillState(stock, supplement, thresholdDays, now);
+
+    if (forecast.notify) {
+      const triggerDate = new Date(now);
+      triggerDate.setHours(9, 0, 0, 0);
+      if (triggerDate.getTime() <= now.getTime()) {
+        triggerDate.setTime(now.getTime() + 60 * 1000);
+      }
+
+      try {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: tr('logic.notifications.refillTitle'),
+            body: tr('logic.notifications.refill', {
+              name: supplement.name,
+              days: forecast.daysLeft,
+            }),
+            data: {
+              supplementId: supplement.id,
+              action: 'refill',
+            },
+          },
+          trigger: {
+            date: triggerDate,
+            channelId: CHANNEL_ID,
+          },
+        });
+        onNotified(supplement.id, now.toISOString());
+      } catch (err) {
+        console.error(
+          `[NotificationScheduler] Nachfuell-Erinnerung fuer ${supplement.name} fehlgeschlagen:`,
+          err
+        );
+      }
+    } else if (!forecast.due && stock.refillNotifiedAt) {
+      onNotified(supplement.id, null);
+    }
+  }
 }
 
 // ─────────────────────────────────────────────────────────────

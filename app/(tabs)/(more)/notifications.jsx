@@ -22,6 +22,9 @@ const cautionTone = toneFor('caution');
 // Gueltige Uhrzeit im 24-Stunden-Format, z. B. 7:30 oder 21:05.
 const TIME_PATTERN = /^([01]?\d|2[0-3]):[0-5]\d$/;
 
+// Auswahl fuer die Nachfuell-Schwelle: 0 schaltet die Erinnerung aus.
+const REFILL_THRESHOLD_OPTIONS = [3, 5, 7, 0];
+
 export default function NotificationsScreen() {
   const { t } = useTranslation();
   const slotTimes = useNotificationStore((state) => state.slotTimes);
@@ -38,6 +41,10 @@ export default function NotificationsScreen() {
   const resetSlotTimes = useNotificationStore((state) => state.resetSlotTimes);
   const checkAndRequestPermission = useNotificationStore(
     (state) => state.checkAndRequestPermission
+  );
+  const refillThresholdDays = useNotificationStore((state) => state.refillThresholdDays);
+  const setRefillThresholdDays = useNotificationStore(
+    (state) => state.setRefillThresholdDays
   );
 
   const [draftTimes, setDraftTimes] = useState({ ...slotTimes });
@@ -77,6 +84,11 @@ export default function NotificationsScreen() {
     resetSlotTimes();
     const next = useNotificationStore.getState().slotTimes;
     setDraftTimes({ ...next });
+    await refreshNotificationSchedule();
+  };
+
+  const handleRefillThreshold = async (days) => {
+    setRefillThresholdDays(days);
     await refreshNotificationSchedule();
   };
 
@@ -149,6 +161,35 @@ export default function NotificationsScreen() {
           <Text style={styles.resetButtonText}>{t('notifications.resetButton')}</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>{t('notifications.refillTitle')}</Text>
+        <Text style={styles.cardText}>{t('notifications.refillText')}</Text>
+
+        <View style={styles.chipWrap}>
+          {REFILL_THRESHOLD_OPTIONS.map((days) => (
+            <TouchableOpacity
+              key={days}
+              style={[styles.chip, refillThresholdDays === days && styles.chipActive]}
+              onPress={() => handleRefillThreshold(days)}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityState={{ selected: refillThresholdDays === days }}
+            >
+              <Text
+                style={[
+                  styles.chipText,
+                  refillThresholdDays === days && styles.chipTextActive,
+                ]}
+              >
+                {days === 0
+                  ? t('notifications.refillOff')
+                  : t('notifications.refillDays', { days })}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
     </ScrollView>
   );
 }
@@ -202,4 +243,9 @@ const styles = StyleSheet.create({
   saveButtonText: surfaces.buttonPrimaryText,
   resetButton: { ...surfaces.buttonQuiet, marginTop: space.sm + 2 },
   resetButtonText: surfaces.buttonQuietText,
+  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm - 2 },
+  chip: { ...surfaces.chip, paddingHorizontal: 11, paddingVertical: space.sm - 2 },
+  chipActive: { ...surfaces.chipActive },
+  chipText: { color: colors.inkMuted, fontSize: 11, fontWeight: '700' },
+  chipTextActive: { ...surfaces.chipTextActive },
 });

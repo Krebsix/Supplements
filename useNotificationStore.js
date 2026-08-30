@@ -40,6 +40,12 @@ const useNotificationStore = create(
       /** Notifications global ein/ausschalten */
       notificationsEnabled: true,
 
+      /**
+       * Ab wie vielen verbleibenden Tagen eine Nachfuell-Erinnerung kommt.
+       * 0 schaltet die Erinnerung aus. Erlaubte Werte: 0 | 3 | 5 | 7.
+       */
+      refillThresholdDays: 5,
+
       /** Erlaubnis-Status */
       permissionGranted:   false,
 
@@ -57,6 +63,9 @@ const useNotificationStore = create(
 
       setNotificationsEnabled: (val) =>
         set({ notificationsEnabled: val }),
+
+      setRefillThresholdDays: (days) =>
+        set({ refillThresholdDays: days }),
 
       // ── Permission ───────────────────────────────────────
       checkAndRequestPermission: async () => {
@@ -79,8 +88,10 @@ const useNotificationStore = create(
         absorptionBlockedAt = null,
         profile = 'adult',
         supplements = [],
+        stocks = {},
+        onRefillNotified = () => {},
       } = {}) => {
-        const { notificationsEnabled, permissionGranted, slotTimes } = get();
+        const { notificationsEnabled, permissionGranted, slotTimes, refillThresholdDays } = get();
         if (!notificationsEnabled || !permissionGranted) {
           // Abgeschaltet heisst abgeschaltet: bestehende Alarme raeumen,
           // sonst feuern Erinnerungen aus der Zeit davor weiter.
@@ -92,7 +103,13 @@ const useNotificationStore = create(
         const scheduled = await scheduleAllNotificationsForToday(
           slotTimes,
           profile,
-          { loggedToday, absorptionBlockedAt },
+          {
+            loggedToday,
+            absorptionBlockedAt,
+            stocks,
+            refillThresholdDays,
+            onRefillNotified,
+          },
           supplements
         );
 
@@ -146,6 +163,7 @@ const useNotificationStore = create(
         slotTimes:            state.slotTimes,
         notificationsEnabled: state.notificationsEnabled,
         permissionGranted:    state.permissionGranted,
+        refillThresholdDays:  state.refillThresholdDays,
       }),
     }
   )
@@ -180,5 +198,7 @@ export async function refreshNotificationSchedule() {
     absorptionBlockedAt: main.absorptionBlockedAt,
     profile: main.activeProfileId,
     supplements,
+    stocks: main.stockBySupplementId,
+    onRefillNotified: main.markRefillNotified,
   });
 }

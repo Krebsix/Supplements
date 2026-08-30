@@ -70,4 +70,8 @@ export default {
   'logic.cure.phase.on': 'Einnahmephase',
   'logic.cure.phase.off': 'Pause',
   'logic.cure.stepped': 'Woche {week}: {drops} Tropfen',
+
+  // ── Nachfuell-Erinnerung (StockForecast) ────────────────────
+  'logic.notifications.refillTitle': 'Nachfüllen',
+  'logic.notifications.refill': '{name} reicht noch etwa {days} Tage.',
 };
