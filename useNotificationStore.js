@@ -15,7 +15,6 @@ import * as Notifications from 'expo-notifications';
 import {
   DEFAULT_SLOT_TIMES,
   scheduleAllNotificationsForToday,
-  rescheduleAfterAbsorptionBlock,
   snoozeNotification,
   requestPermissions,
 } from './NotificationScheduler';
@@ -110,30 +109,6 @@ const useNotificationStore = create(
             refillThresholdDays,
             onRefillNotified,
           },
-          supplements
-        );
-
-        set({ scheduledToday: scheduled });
-        return scheduled;
-      },
-
-      // ── Flohsamen-Block auslösen ──────────────────────────
-      /**
-       * triggerAbsorptionReschedule({ loggedToday, profile })
-       * Direkt nach Loggen von ID 43 aufrufen.
-       */
-      triggerAbsorptionReschedule: async ({
-        loggedToday = [],
-        profile = 'adult',
-        supplements = [],
-      } = {}) => {
-        const { notificationsEnabled, permissionGranted, slotTimes } = get();
-        if (!notificationsEnabled || !permissionGranted) return;
-
-        const scheduled = await rescheduleAfterAbsorptionBlock(
-          slotTimes,
-          profile,
-          { loggedToday, absorptionBlockedAt: new Date().toISOString() },
           supplements
         );
 

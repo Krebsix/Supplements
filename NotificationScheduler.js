@@ -355,33 +355,6 @@ async function _scheduleOne(supplement, slotId, triggerTimestamp) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// FLOHSAMEN-BLOCK: alle heutigen Pending-Notifs verschieben
-// ─────────────────────────────────────────────────────────────
-
-/**
- * rescheduleAfterAbsorptionBlock(userSlotTimes, profile, state, supplements)
- *
- * Wird direkt nach dem Loggen von Flohsamenschalen (ID 43) aufgerufen.
- * Verschiebt alle noch nicht getriggerten Notifications um BLOCK_DURATION_MS.
- */
-export async function rescheduleAfterAbsorptionBlock(
-  userSlotTimes,
-  profile,
-  state,
-  supplements = []
-) {
-  return scheduleAllNotificationsForToday(
-    userSlotTimes,
-    profile,
-    {
-      ...state,
-      absorptionBlockedAt: new Date().toISOString(),
-    },
-    supplements
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
 // SNOOZE
 // ─────────────────────────────────────────────────────────────
 
