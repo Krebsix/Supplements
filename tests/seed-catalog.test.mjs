@@ -2,7 +2,13 @@
 // Datenintegritaet des Katalogs (Quelle je Eintrag, gueltige EANs) und
 // Verhalten von Suche und Draft-Erzeugung.
 
-import { normalizeCatalogText, searchSeedCatalog, seedEntryToScanDraft } from '../SeedCatalog';
+import {
+  findProductsBySubstance,
+  normalizeCatalogText,
+  searchSeedCatalog,
+  seedEntryToScanDraft,
+  sortProducts,
+} from '../SeedCatalog';
 import seedProducts from '../data/seedProducts.json';
 
 let failures = 0;
@@ -51,6 +57,20 @@ check('Keine erfundene Dosierung', draft.dosage.amount === '' && draft.dosage.un
 
 const empty = seedEntryToScanDraft({ brand: 'X', name: 'Y', ean: null, keyIngredients: [] });
 check('Eintrag ohne Mengen → leere Wirkstofflisten, kein Erfinden', empty.detectedIngredients.length === 0 && empty.barcode === null);
+
+console.log('— Produkte je Wirkstoff —');
+const mg = findProductsBySubstance('magnesium');
+// Realer Wert per Sondierung ermittelt (SubstanceMatcher matcht alle
+// magnesiumhaltigen keyIngredients-Zeilen des Katalogs, dedupliziert je
+// Eintrag): 66 Treffer. Schwelle 60 haelt damit sicher.
+check('Magnesium liefert Produkte', mg.length >= 60, String(mg.length));
+check('jeder Treffer hat Marke und Namen', mg.every((p) => p.brand && p.name));
+check('Menge ist Zahl oder null', mg.every((p) => p.amount === null || Number.isFinite(p.amount)));
+check('Standard nach Marke sortiert', mg.every((p, i) => i === 0 || mg[i - 1].brand.localeCompare(p.brand, 'de') <= 0));
+const byAmount = sortProducts(mg, 'amount');
+check('Sortierung nach Menge absteigend', byAmount.every((p, i) => i === 0 || (byAmount[i - 1].amount ?? -1) >= (p.amount ?? -1)));
+check('unbekannte Substanz: leer', findProductsBySubstance('gibt-es-nicht').length === 0);
+check('Synonym trifft (Magnesiumcitrat-Produkte enthalten)', mg.some((p) => /citrat/i.test(p.form ?? '') || /citrat/i.test(p.name)));
 
 if (failures > 0) {
   console.error(`\n${failures} Fehlschlaege`);

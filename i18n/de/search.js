@@ -25,6 +25,11 @@ export default {
   'search.brandsLinkTitle': 'Marken-Register',
   'search.brandsLinkText': '{brands} Marken mit {products} Produkten im kuratierten Katalog',
 
+  'search.products.title': '{count} Produkte mit {substance}',
+  'search.products.sortBrand': 'Marke',
+  'search.products.sortAmount': 'Menge',
+  'search.products.sortForm': 'Form',
+
   'brands.kicker': 'Katalog',
   'brands.title': 'Marken im System',
   'brands.subtitle':

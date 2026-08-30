@@ -11,7 +11,13 @@
  */
 
 import seedProducts from './data/seedProducts.json';
+import { matchIngredient } from './SubstanceMatcher';
 import { tr } from './i18n/runtime';
+
+// Einzige Katalogquelle des Moduls: Task 6 haengt hier eine zweite Datei
+// an (z. B. per Zusammenfuehrung), ohne dass die uebrigen Funktionen
+// angefasst werden muessen.
+const CATALOG = seedProducts;
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -45,7 +51,7 @@ export function searchSeedCatalog(query, limit = 5) {
   if (tokens.length === 0) return [];
 
   const hits = [];
-  for (const entry of seedProducts) {
+  for (const entry of CATALOG) {
     const haystack = normalizeCatalogText(`${entry.brand ?? ''} ${entry.name ?? ''}`);
     if (!tokens.every((token) => haystack.includes(token))) continue;
     hits.push({ entry, score: haystack.length });
@@ -83,7 +89,7 @@ const EXTRA_CLASSES = new Set(['homoeopathikum', 'bachblueten']);
  */
 export function listCatalogBrandSections() {
   const brands = new Map();
-  for (const entry of seedProducts) {
+  for (const entry of CATALOG) {
     const name = clean(entry.brand);
     if (!name) continue;
     let bucket = brands.get(name);
@@ -136,7 +142,7 @@ export function listCatalogBrandSections() {
 export function productsForBrand(brand) {
   const needle = clean(brand);
   if (!needle) return [];
-  return seedProducts
+  return CATALOG
     .filter((entry) => clean(entry.brand) === needle)
     .sort((a, b) => clean(a.name).localeCompare(clean(b.name), 'de'));
 }
@@ -193,4 +199,82 @@ export function seedEntryToScanDraft(entry) {
     barcode: clean(entry.ean) || null,
     analyzedAt: new Date().toISOString(),
   };
+}
+
+// Index Substanz → Katalog-Treffer. Einmalig (lazy) aufgebaut: 411
+// Eintraege mit je bis zu mehreren keyIngredients waeren bei jeder
+// Suche neu durchlaufen sonst spuerbar. Kein Modul-Top-Level-Aufbau,
+// damit ein Test, der nur searchSeedCatalog braucht, matchIngredient
+// gar nicht erst antriggert.
+let substanceIndex = null;
+
+function getSubstanceIndex() {
+  if (substanceIndex) return substanceIndex;
+
+  const index = new Map();
+  for (const entry of CATALOG) {
+    // Je Eintrag zaehlt nur der erste passende Wirkstoff-Treffer pro
+    // Substanz: ein Produkt mit "Magnesium (Bisglycinat/Citrat)" soll in
+    // der Magnesium-Liste einmal erscheinen, nicht zweimal.
+    const seenSubstances = new Set();
+    for (const item of entry.keyIngredients ?? []) {
+      const match = matchIngredient(item.name);
+      if (!match?.matched) continue;
+      if (seenSubstances.has(match.substanceId)) continue;
+      seenSubstances.add(match.substanceId);
+
+      const hit = {
+        entry,
+        amount: item.amount === null || item.amount === undefined ? null : Number(item.amount),
+        unit: item.unit ?? '',
+        form: match.form?.name ?? null,
+        brand: entry.brand,
+        name: entry.name,
+        country: entry.country ?? '',
+      };
+      if (!index.has(match.substanceId)) index.set(match.substanceId, []);
+      index.get(match.substanceId).push(hit);
+    }
+  }
+
+  substanceIndex = index;
+  return substanceIndex;
+}
+
+/**
+ * sortProducts(list, sortBy)
+ * 'brand' (Standard): alphabetisch nach Marke, deutsche Sortierordnung.
+ * 'amount': absteigend, Eintraege ohne Menge zuletzt.
+ * 'form': alphabetisch nach chemischer Form, Eintraege ohne Form zuletzt.
+ */
+export function sortProducts(list, sortBy = 'brand') {
+  const copy = [...list];
+  if (sortBy === 'amount') {
+    return copy.sort((a, b) => {
+      if (a.amount === null && b.amount === null) return 0;
+      if (a.amount === null) return 1;
+      if (b.amount === null) return -1;
+      return b.amount - a.amount;
+    });
+  }
+  if (sortBy === 'form') {
+    return copy.sort((a, b) => {
+      if (!a.form && !b.form) return 0;
+      if (!a.form) return 1;
+      if (!b.form) return -1;
+      return a.form.localeCompare(b.form, 'de');
+    });
+  }
+  return copy.sort((a, b) => a.brand.localeCompare(b.brand, 'de'));
+}
+
+/**
+ * findProductsBySubstance(substanceId)
+ * Alle Katalog-Produkte, die ueber SubstanceMatcher auf diese Substanz
+ * treffen, Standardsortierung nach Marke. Unbekannte Substanz-ID liefert
+ * eine leere Liste, kein Fehler.
+ */
+export function findProductsBySubstance(substanceId) {
+  const hits = getSubstanceIndex().get(substanceId) ?? [];
+  return sortProducts(hits, 'brand');
 }

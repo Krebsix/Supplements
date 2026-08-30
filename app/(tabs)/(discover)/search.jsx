@@ -11,7 +11,12 @@ import { matchIngredient } from '../../../SubstanceMatcher';
 import { buildComplaintView, findComplaints } from '../../../ComplaintSearch';
 import ComplaintCard from '../../../components/ComplaintCard';
 import { getSubstance, substances } from '../../../data/substances';
-import { listCatalogBrandSections } from '../../../SeedCatalog';
+import {
+  findProductsBySubstance,
+  listCatalogBrandSections,
+  seedEntryToScanDraft,
+  sortProducts,
+} from '../../../SeedCatalog';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
@@ -50,6 +55,9 @@ export default function SearchScreen() {
   // In der Kategorie-Ansicht ist immer nur ein Eintrag aufgeklappt:
   // kompakte Zeilen halten die Uebersicht, die Vollkarte kommt auf Tipp.
   const [expandedSubstanceId, setExpandedSubstanceId] = useState(null);
+  // Sortierung der Katalog-Produkte je Wirkstoff. 'brand' ist der
+  // Standard (bindende Regel), lokal am Screen, keine Fachlogik.
+  const [productSort, setProductSort] = useState('brand');
 
   // Tipp auf einen Hinweis oder Konflikt im Tagesplan (SlotReason.jsx)
   // fuehrt hierher mit ?substance=<id>. Der Parameter fuellt die
@@ -68,6 +76,8 @@ export default function SearchScreen() {
   const activeLifeStageId = useStore((state) => state.activeLifeStageId);
   const setActiveLifeStage = useStore((state) => state.setActiveLifeStage);
   const activeSupplements = useStore((state) => state.getActiveSupplements());
+  const saveScanResult = useStore((state) => state.saveScanResult);
+  const setPendingScanResult = useStore((state) => state.setPendingScanResult);
 
   const results = useMemo(() => searchSubstances(query), [query]);
 
@@ -117,6 +127,33 @@ export default function SearchScreen() {
         .map((match) => buildSubstanceProfile(match, activeLifeStageId)),
     [profileSource, activeLifeStageId]
   );
+
+  // Ein Wirkstoff gilt als "aufgeloest", wenn die Freitextsuche genau
+  // eine Substanz trifft (z. B. ueber ?substance= oder einen exakten
+  // Namen) -- erst dann ist eindeutig, fuer welche Substanz Katalog-
+  // Produkte gezeigt werden sollen.
+  const resolvedSubstanceId = hasQuery && profiles.length === 1 ? profiles[0].substanceId : null;
+  const catalogProducts = useMemo(
+    () => (resolvedSubstanceId ? findProductsBySubstance(resolvedSubstanceId) : []),
+    [resolvedSubstanceId]
+  );
+  const sortedCatalogProducts = useMemo(
+    () => sortProducts(catalogProducts, productSort),
+    [catalogProducts, productSort]
+  );
+
+  // Sortierwahl ist pro Wirkstoff gedacht, nicht ueber Suchen hinweg.
+  useEffect(() => {
+    setProductSort('brand');
+  }, [resolvedSubstanceId]);
+
+  // Katalog-Eintrag als Scan-Entwurf uebernehmen: derselbe Pfad wie im
+  // Marken-Register (brands.jsx) und in der Namenssuche des Scanners.
+  function handlePickCatalogProduct(entry) {
+    const storedScan = saveScanResult(seedEntryToScanDraft(entry));
+    setPendingScanResult(storedScan);
+    router.push('/results');
+  }
 
   // Beschwerdebilder zuerst: Wer einen ganzen Satz eingibt, meint eine
   // Beschwerde und keinen Wirkstoffnamen.
@@ -326,6 +363,85 @@ export default function SearchScreen() {
               {profiles.map((profile) => (
                 <SubstanceInsightCard key={profile.substanceId} profile={profile} />
               ))}
+
+              {sortedCatalogProducts.length > 0 ? (
+                <View style={styles.productsSection}>
+                  <Text style={styles.sectionLabel}>
+                    {t('search.products.title', {
+                      count: sortedCatalogProducts.length,
+                      substance: profiles[0].name,
+                    })}
+                  </Text>
+
+                  <View style={styles.chips}>
+                    {[
+                      { id: 'brand', label: t('search.products.sortBrand') },
+                      { id: 'amount', label: t('search.products.sortAmount') },
+                      { id: 'form', label: t('search.products.sortForm') },
+                    ].map((option) => (
+                      <TouchableOpacity
+                        key={option.id}
+                        style={[
+                          styles.chip,
+                          productSort === option.id && styles.chipActive,
+                        ]}
+                        onPress={() => setProductSort(option.id)}
+                        activeOpacity={0.8}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: productSort === option.id }}
+                      >
+                        <Text
+                          style={[
+                            styles.chipText,
+                            productSort === option.id && styles.chipTextActive,
+                          ]}
+                        >
+                          {option.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <View style={styles.registerCard}>
+                    {sortedCatalogProducts.map((product, index) => {
+                      const meta = [
+                        product.amount !== null ? `${product.amount} ${product.unit}`.trim() : null,
+                        product.form,
+                        product.country,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ');
+                      return (
+                        <TouchableOpacity
+                          key={`${product.brand}-${product.name}-${index}`}
+                          style={[
+                            styles.registerRow,
+                            index === 0 && styles.registerRowFirst,
+                          ]}
+                          onPress={() => handlePickCatalogProduct(product.entry)}
+                          activeOpacity={0.7}
+                          accessibilityRole="button"
+                        >
+                          <View style={styles.entryTextWrap}>
+                            <Text style={styles.productBrand}>{product.brand}</Text>
+                            <Text style={styles.registerName}>{product.name}</Text>
+                            {meta ? (
+                              <Text style={styles.entrySummary} numberOfLines={1}>
+                                {meta}
+                              </Text>
+                            ) : null}
+                          </View>
+                          <Feather
+                            name="chevron-right"
+                            size={16}
+                            color={colors.inkFaint}
+                          />
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                </View>
+              ) : null}
             </>
           ) : null}
         </>
@@ -395,6 +511,16 @@ const styles = StyleSheet.create({
     color: colors.ink,
     fontSize: 13,
     fontWeight: '800',
+  },
+  chipActive: surfaces.chipActive,
+  chipTextActive: surfaces.chipTextActive,
+  productsSection: {
+    marginTop: space.md,
+  },
+  productBrand: {
+    ...type.label,
+    color: colors.accentInk,
+    marginBottom: 2,
   },
   registerCard: {
     ...surfaces.card,

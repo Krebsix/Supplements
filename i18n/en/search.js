@@ -27,6 +27,11 @@ export default {
   'search.brandsLinkTitle': 'Brand register',
   'search.brandsLinkText': '{brands} brands with {products} products in the curated catalogue',
 
+  'search.products.title': '{count} products with {substance}',
+  'search.products.sortBrand': 'Brand',
+  'search.products.sortAmount': 'Amount',
+  'search.products.sortForm': 'Form',
+
   'brands.kicker': 'Catalogue',
   'brands.title': 'Brands in the system',
   'brands.subtitle':
