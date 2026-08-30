@@ -62,6 +62,8 @@ app/
 components/                StatusBadge, SupplementResultCard, LifeStagePicker,
                            LanguagePicker, SubstanceInsightCard, ComplaintCard,
                            CertificationPanel, LegalSections, navigationTheme
+components/onboarding/     OnboardingShell (Fortschritt, animierte Schritte),
+                           ChoiceCard, Step*
 
 useStore.js                Hauptzustand (zustand, verschluesselt via secureStorage.js)
 useNotificationStore.js    Erinnerungs-Zustand + refreshNotificationSchedule()
@@ -96,6 +98,8 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `PurchaseLogic.js` | Kaufschicht ohne UI, das SDK wird injiziert (nie direkt importiert). Kauf-Rundtrip, Wiederherstellen, logIn/logOut bei Session-Wechsel, Uebersetzung des RevenueCat-Kundenstatus in einen der sieben App-Status |
 | `PurchaseStore.js` / `usePurchaseStore.js` | zustand-Factory fuer den Kaufstatus, getrennt vom Haupt-Store; spiegelt den Tier-Wechsel per `applyPurchaseStatus` in `Entitlements.js`. `usePurchaseStore.js` bindet die echten Abhaengigkeiten |
 | `purchaseSdk.js` | Laedt `react-native-purchases` optional. In Expo Go fehlt das native Modul, dann liefert es `null` statt abzustuerzen |
+| `LifeStageResolver.js` | Leitet aus Geschlecht, Geburtsjahr und Zusatzangabe die Referenzgruppe ab; Grenzfaelle getestet |
+| `storeLogic.js` | Reine Store-Helfer (normalizeProfile, INITIAL_USER_STATE, applyOnboardingCompletion), in Node testbar; useStore.js re-exportiert |
 
 ### Wirkstoff-Datenbank (`data/`)
 
@@ -133,8 +137,9 @@ UI-Komponenten!"* Neue Regeln gehoeren in diese Module, nicht in Screens.
 **Der Arbeitsbranch ist `phase-2t-account-grundlage`, nicht `main`.**
 Die Entwicklung laeuft in einer langen Kette von `phase-*`-Branches; `main` liegt
 weit zurueck. Alle 23 Branches sind auf GitHub.
-phase-2t haengt an phase-2s (Kopf e04dc49) und enthaelt die Account-Grundlage
-(Spec und Plan unter docs/superpowers/, Stand 2026-08-29).
+phase-2t haengt an phase-2s (Kopf e04dc49) und enthaelt die Account-Grundlage,
+die Kaufschicht und das gefuehrte Onboarding (Spec und Plan unter
+docs/superpowers/, Stand 2026-08-30).
 
 Vor dem Anlegen eines neuen Branches pruefen, welcher der aktuelle Kopf ist —
 nicht blind von `main` abzweigen.
@@ -193,6 +198,10 @@ Signalampel.
   auf denselben Tokens (Serifen-Titel, canvas-Hintergrund).
 - Statusfarben ueber `toneFor(level)`. Eine Grenzwertueberschreitung ist ein
   Hinweis, kein Alarm — deshalb gedeckt.
+- Gefuehrtes Onboarding (`components/onboarding/`): 24 pt seitliches Gleiten
+  mit Blenden zwischen Schritten, Feder-Fortschritt in der Kopfleiste,
+  0.97-Skalierung mit Haptik auf Auswahl, bei Reduce Motion nur Blenden;
+  kein Konfetti, kein Bounce.
 - **Keine Gedankenstriche in Nutzertexten.** Doppelpunkt, Komma oder Punkt
   statt "—". Der Gedankenstrich ist ein verlaessliches Erkennungsmerkmal
   maschinell erzeugter Texte; in Kommentaren im Code ist er unproblematisch.
@@ -218,6 +227,13 @@ zurueck. Wer ein neues Nutzerdaten-Feld ergaenzt, ergaenzt es in
 (BackupManager.js).
 
 `inventory.json` und `data/mockScanResult.js` sind statische Beispieldaten.
+
+**Profil aus dem gefuehrten Onboarding:** `profile.displayName`,
+`profile.gender` und `profile.birthYear` liegen lokal, verschluesselt wie
+der uebrige Store, und im Backup; sie gehen nie an einen Server.
+`onboarding`-Flags (`accountOffered`, `firstAction`) sind Geraetezustand
+und bewusst NICHT im Backup: Sie steuern nur, was ein bestimmtes Geraet
+dem Onboarding-Flow schon gezeigt hat.
 
 **Konto (optional, seit 2026-08-29):** Supabase Auth ueber `supabaseClient.js`.
 Die Session liegt ueber `secureStorage` verschluesselt im AsyncStorage. Beim

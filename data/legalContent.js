@@ -14,7 +14,7 @@
  * Datenfluss aendert, aendert diesen Text mit.
  */
 
-export const PRIVACY_VERSION = '2026-08-30';
+export const PRIVACY_VERSION = '2026-08-31';
 
 // Betreiberin laut Nadine (2026-08-09): die bestehende LLC.
 // OFFEN vor Veroeffentlichung:
@@ -45,7 +45,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Welche Daten lokal gespeichert werden',
       body:
-        'Auf dem Gerät liegen: erfasste Präparate mit Dosierung und Einnahmezeiten, Einnahme-Verlauf, Lagerbestand, Scan-Ergebnisse, dein persönliches Profil (Medikamentengruppen, Erkrankungen, Allergien, Ernährungsweise, Ziele), Laborwerte, Beobachtungen der Wirkungskontrolle, die gewählte Lebensphase und App-Einstellungen. Diese Daten verlassen das Gerät nicht, außer du stößt eine der unten beschriebenen Funktionen selbst an.',
+        'Auf dem Gerät liegen: erfasste Präparate mit Dosierung und Einnahmezeiten, Einnahme-Verlauf, Lagerbestand, Scan-Ergebnisse, dein persönliches Profil (Vorname, Geschlecht, Geburtsjahr, Medikamentengruppen, Erkrankungen, Allergien, Ernährungsweise, Ziele), Laborwerte, Beobachtungen der Wirkungskontrolle, die gewählte Lebensphase und App-Einstellungen. Diese Daten verlassen das Gerät nicht, außer du stößt eine der unten beschriebenen Funktionen selbst an.',
     },
     {
       heading: 'Foto-Scan (nur mit deiner Einwilligung)',
@@ -101,7 +101,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'What is stored locally',
       body:
-        'Stored on the device: recorded products with dosage and intake times, intake history, stock levels, scan results, your personal profile (medication groups, conditions, allergies, dietary pattern, goals), lab values, observation records, the selected life stage and app settings. This data does not leave the device unless you actively trigger one of the functions described below.',
+        'Stored on the device: recorded products with dosage and intake times, intake history, stock levels, scan results, your personal profile (first name, gender, year of birth, medication groups, conditions, allergies, dietary pattern, goals), lab values, observation records, the selected life stage and app settings. This data does not leave the device unless you actively trigger one of the functions described below.',
     },
     {
       heading: 'Photo scan (only with your consent)',
