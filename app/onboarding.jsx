@@ -13,7 +13,7 @@ import StepRoutineTimes from '../components/onboarding/StepRoutineTimes';
 import StepRoutineFirst from '../components/onboarding/StepRoutineFirst';
 import StepAccount from '../components/onboarding/StepAccount';
 import StepDone from '../components/onboarding/StepDone';
-import { resolveLifeStage } from '../LifeStageResolver';
+import { extraQuestionFor, resolveLifeStage } from '../LifeStageResolver';
 import { buildSteps, canAdvance } from '../OnboardingSteps';
 import useNotificationStore from '../useNotificationStore';
 import { useStore } from '../useStore';
@@ -109,6 +109,14 @@ export default function OnboardingScreen() {
   // gilt, unabhaengig vom Beantwortet-Status.
   const steps = useMemo(
     () => buildSteps({ gender: answers.gender, birthYear: answers.birthYear }),
+    [answers.gender, answers.birthYear]
+  );
+  // Dieselbe Ueberlegung gilt fuer den Inhalt des Extra-Schritts selbst
+  // (StepExtra.jsx): Auch dessen "welche Frage zeige ich" darf nicht an
+  // resolved.needsExtra haengen, sonst zeigt der Schritt seinen leeren
+  // Fallback, sobald eine Auswahl getroffen wird.
+  const extraQuestionKind = useMemo(
+    () => extraQuestionFor({ gender: answers.gender, birthYear: answers.birthYear }),
     [answers.gender, answers.birthYear]
   );
   // Die Liste kann kuerzer werden als der zuletzt gesetzte Index (z. B.
@@ -243,7 +251,7 @@ export default function OnboardingScreen() {
             t={t}
             value={{ extra: answers.extra, referenceOverride: answers.referenceOverride }}
             onChange={(patch) => patchAnswers(patch)}
-            resolved={resolved}
+            questionKind={extraQuestionKind}
           />
         );
       case 'routineTimes':

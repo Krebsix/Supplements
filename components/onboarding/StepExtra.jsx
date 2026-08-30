@@ -15,16 +15,22 @@ const PREGNANCY_OPTIONS = [
 /**
  * StepExtra
  * ─────────────────────────────────────────────────────────────
- * Zusatzfrage, deren Inhalt von `resolved.needsExtra` abhaengt
- * (LifeStageResolver.js): 'pregnancy' bei Frauen zwischen 15 und 50,
- * 'reference' bei Divers/keine Angabe ab 18. `value` traegt beide
- * moeglichen Antworten gleichzeitig ({ extra, referenceOverride }),
- * `onChange` bekommt jeweils nur das geaenderte Feld als Patch.
+ * Zusatzfrage, deren Inhalt von `questionKind` abhaengt: 'pregnancy' bei
+ * Frauen zwischen 15 und 50, 'reference' bei Divers/keine Angabe ab 18.
+ * `value` traegt beide moeglichen Antworten gleichzeitig ({ extra,
+ * referenceOverride }), `onChange` bekommt jeweils nur das geaenderte Feld
+ * als Patch.
+ *
+ * `questionKind` kommt aus `extraQuestionFor()` (LifeStageResolver.js),
+ * NICHT aus `resolved.needsExtra`: `needsExtra` meldet nur "noch
+ * unbeantwortet" und wird null, sobald `value.extra` bzw.
+ * `value.referenceOverride` gesetzt ist. Wuerde dieser Schritt daran
+ * haengen, verschwaende sein Inhalt in dem Moment, in dem eine Auswahl
+ * getroffen wird, und der leere Fallback unten wuerde bis zum naechsten
+ * Tipp auf "Weiter" angezeigt.
  */
-export default function StepExtra({ t, value, onChange, resolved }) {
-  const needsExtra = resolved?.needsExtra ?? null;
-
-  if (needsExtra === 'pregnancy') {
+export default function StepExtra({ t, value, onChange, questionKind }) {
+  if (questionKind === 'pregnancy') {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{t('onboarding.extra.pregnancy.title')}</Text>
@@ -42,7 +48,7 @@ export default function StepExtra({ t, value, onChange, resolved }) {
     );
   }
 
-  if (needsExtra === 'reference') {
+  if (questionKind === 'reference') {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{t('onboarding.extra.reference.title')}</Text>
