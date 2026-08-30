@@ -8,6 +8,7 @@ import { routeAfterAccount } from '../../../FirstSteps';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
+import useCloudBackupStore from '../../../useCloudBackupStore';
 import useStore from '../../../useStore';
 
 /**
@@ -73,6 +74,10 @@ export default function AccountRecoveryScreen() {
       setAccountEmailPending(result.needsConfirmation ? email : null);
       if (result.needsConfirmation) {
         Alert.alert(t('account.confirmMail.title'), t('account.confirmMail.text', { email }));
+      } else {
+        // Erst jetzt besteht eine Session: Abgleich mit dem Server-Stand
+        // (kann Praeparate holen), dann die Weiche.
+        await useCloudBackupStore.getState().checkOnLogin().catch(() => 'none');
       }
       router.replace(
         routeAfterAccount({ supplementCount: useStore.getState().getActiveSupplements().length })

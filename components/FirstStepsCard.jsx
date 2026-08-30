@@ -8,6 +8,7 @@ import { buildFirstSteps, FIRST_STEP_IDS, STEP_STATE } from '../FirstSteps';
 import { useTranslation } from '../i18n';
 import { colors, radius, space, surfaces, type } from '../theme';
 import useAccountStore from '../useAccountStore';
+import useCloudBackupStore from '../useCloudBackupStore';
 import useNotificationStore from '../useNotificationStore';
 import useStore from '../useStore';
 import AddSupplementChooser from './AddSupplementChooser';
@@ -28,6 +29,7 @@ export default function FirstStepsCard() {
   const accountStatus = useAccountStore((state) => state.status);
   const notificationsEnabled = useNotificationStore((state) => state.notificationsEnabled);
   const permissionGranted = useNotificationStore((state) => state.permissionGranted);
+  const autoBackup = useCloudBackupStore((state) => state.autoBackup);
 
   const steps = buildFirstSteps({
     profileComplete: Boolean(onboardingCompletedAt),
@@ -51,16 +53,17 @@ export default function FirstStepsCard() {
           isLast={index === steps.length - 1}
           t={t}
           router={router}
+          autoBackup={autoBackup}
         />
       ))}
     </View>
   );
 }
 
-function StepRow({ index, step, isLast, t, router }) {
+function StepRow({ index, step, isLast, t, router, autoBackup }) {
   const done = step.state === STEP_STATE.DONE;
   const current = step.state === STEP_STATE.CURRENT;
-  const detail = detailFor(step, t);
+  const detail = detailFor(step, t, autoBackup);
 
   return (
     <View style={[styles.row, isLast && styles.rowLast, current && styles.rowCurrent]}>
@@ -108,14 +111,16 @@ function StepRow({ index, step, isLast, t, router }) {
   );
 }
 
-function detailFor(step, t) {
+function detailFor(step, t, autoBackup) {
   switch (step.id) {
     case FIRST_STEP_IDS.PROFILE:
       return t(step.state === STEP_STATE.DONE ? 'dashboard.firstSteps.profile.done' : 'dashboard.firstSteps.profile.open');
     case FIRST_STEP_IDS.ACCOUNT:
-      if (step.state === STEP_STATE.DONE) return t('dashboard.firstSteps.account.done');
+      if (step.state === STEP_STATE.DONE) {
+        return `${t('dashboard.firstSteps.account.done')} ${t(autoBackup ? 'dashboard.firstSteps.account.doneCloudOn' : 'dashboard.firstSteps.account.doneCloudOff')}`;
+      }
       if (step.state === STEP_STATE.PENDING) return t('dashboard.firstSteps.account.pending', { email: step.email });
-      return t('dashboard.firstSteps.account.skipped');
+      return `${t('dashboard.firstSteps.account.skipped')} ${t('dashboard.firstSteps.account.skippedCloud')}`;
     case FIRST_STEP_IDS.SUPPLEMENT:
       return t(step.state === STEP_STATE.CURRENT ? 'dashboard.firstSteps.supplement.current' : 'dashboard.firstSteps.supplement.open');
     case FIRST_STEP_IDS.REMINDERS:

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Alert, AppState } from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from '../i18n';
 import { useStore } from '../useStore';
@@ -10,8 +11,12 @@ import {
   setupNotifications,
 } from '../NotificationScheduler';
 import { stackScreenOptions } from '../components/navigationTheme';
+import { ACCOUNT_STATUS } from '../AccountStore';
 import { useAccountStore } from '../useAccountStore';
 import { usePurchaseStore } from '../usePurchaseStore';
+import { BACKUP_DATA_FIELDS } from '../BackupManager';
+import { formatBackupTime } from '../CloudBackup';
+import { useCloudBackupStore } from '../useCloudBackupStore';
 
 /**
  * Wurzel-Layout.
@@ -108,11 +113,67 @@ export default function Layout() {
       }
     });
 
+    // Cloud-Backup: jede Aenderung an Backup-Feldern plant einen Upload
+    // (gebuendelt im Store). importBackup ist im Store stummgeschaltet.
+    const unsubscribeBackup = useStore.subscribe((state, previous) => {
+      if (BACKUP_DATA_FIELDS.some((field) => state[field] !== previous[field])) {
+        useCloudBackupStore.getState().scheduleUpload();
+      }
+    });
+    // Beim Zurueckkehren in den Vordergrund offene Aenderungen nachholen.
+    const appState = AppState.addEventListener('change', (next) => {
+      if (next === 'active' && useCloudBackupStore.getState().dirty) {
+        useCloudBackupStore.getState().scheduleUpload();
+      }
+    });
+
     return () => {
       responseListener?.remove();
       unsubscribe();
+      unsubscribeBackup();
+      appState.remove();
     };
   }, [hydrated, onboarded]);
+
+  // Start mit Session und Schluessel: pruefen, ob ein anderes Geraet
+  // geschrieben hat (Dialog) oder unser Stand hochgeladen werden muss.
+  // Wartet zusaetzlich auf das Rehydrieren des Cloud-Backup-Stores: ohne
+  // das saehe hasLocalData() im Store einen leeren Zustand und 'restore'
+  // wuerde lokale Daten ueberschreiben, bzw. lastUploadedAt waere noch
+  // null und loeste einen unnoetigen Dialog aus.
+  const accountStatus = useAccountStore((state) => state.status);
+  const accountDataKey = useAccountStore((state) => state.dataKey);
+  useEffect(() => {
+    if (!hydrated || !onboarded) return;
+    if (accountStatus !== ACCOUNT_STATUS.SIGNED_IN || !accountDataKey) return;
+    (async () => {
+      await useCloudBackupStore.persist.rehydrate();
+      await useCloudBackupStore.getState().checkOnLogin();
+    })().catch((error) => console.error('[Layout] Cloud-Backup-Abgleich', error));
+  }, [hydrated, onboarded, accountStatus, accountDataKey]);
+
+  // Dialog: Server-Stand und lokaler Stand passen nicht zusammen, die
+  // Nutzerin muss waehlen.
+  const pendingDecision = useCloudBackupStore((state) => state.pendingDecision);
+  const language = useStore((state) => state.language);
+  useEffect(() => {
+    if (!pendingDecision) return;
+    const { remote, counts } = pendingDecision;
+    Alert.alert(
+      t('account.cloud.decisionTitle'),
+      t('account.cloud.decisionText', {
+        time: formatBackupTime(remote.exported_at, language),
+        device: remote.device_label || '',
+        supplements: counts.supplements,
+        labValues: counts.labValues,
+      }),
+      [
+        { text: t('account.cloud.decisionUpload'), onPress: () => useCloudBackupStore.getState().resolveDecision('upload') },
+        { text: t('account.cloud.decisionRestore'), onPress: () => useCloudBackupStore.getState().resolveDecision('restore') },
+      ],
+      { cancelable: false }
+    );
+  }, [pendingDecision, language, t]);
 
   if (!hydrated) return null;
 

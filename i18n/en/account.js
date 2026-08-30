@@ -44,8 +44,30 @@ export default {
     'The data key is not stored on this device. Sign out and back in once, then cloud backup is available.',
   'account.signedIn.recoveryNote':
     'Your recovery key was shown once when the account was created. Without password and without recovery key, synced data cannot be restored. Data on this device is not affected.',
-  'account.signedIn.syncNote':
-    'Sync and cloud backup follow in a later update. Until then everything still lives on this device only.',
+
+  'account.cloud.title': 'Cloud backup',
+  'account.cloud.intro': 'Your data is stored end-to-end encrypted on our server. Neither we nor the provider can read it. Without your password or recovery key it cannot be restored.',
+  'account.cloud.lastUpload': 'Last backup {time} from {device}',
+  'account.cloud.none': 'No backup on the server yet.',
+  'account.cloud.uploading': 'Backing up.',
+  'account.cloud.restoring': 'Restoring.',
+  'account.cloud.offline': 'Offline. Will catch up next time the app opens.',
+  'account.cloud.error': 'Backup failed. It will be retried next time the app opens.',
+  'account.cloud.wrongKey': 'The backup on the server was encrypted with an earlier key and cannot be read. It will be replaced with the next backup.',
+  'account.cloud.auto': 'Back up automatically',
+  'account.cloud.autoSub': 'After every change, batched, only with internet.',
+  'account.cloud.now': 'Back up now',
+  'account.cloud.device': 'Device name',
+  'account.cloud.deviceSub': 'Shown on other devices as the origin of the backup.',
+  'account.cloud.delete': 'Delete backup on the server',
+  'account.cloud.deleteConfirmTitle': 'Delete backup?',
+  'account.cloud.deleteConfirmText': 'The encrypted backup is removed from the server. Your data on this device stays. Automatic backup is switched off.',
+  'account.cloud.deleteConfirm': 'Delete',
+  'account.cloud.keyMissing': 'Cloud backup is not available on this device because the data key is missing. Sign out and back in once.',
+  'account.cloud.decisionTitle': 'Newer backup on the server',
+  'account.cloud.decisionText': 'Your account holds a backup from {time} from {device} ({supplements} supplements, {labValues} lab values). Use that backup or upload the data on this device?',
+  'account.cloud.decisionRestore': 'Use server backup',
+  'account.cloud.decisionUpload': 'Upload this device',
 
   'account.delete.title': 'Delete account',
   'account.delete.text':

@@ -60,6 +60,9 @@ export default {
   'dashboard.firstSteps.account.done': 'Signed in. Your data stays encrypted on this device.',
   'dashboard.firstSteps.account.pending': 'Confirmation link sent to {email}. Open it on this device to activate your account. You can continue right away.',
   'dashboard.firstSteps.account.skipped': 'Optional, available any time under More.',
+  'dashboard.firstSteps.account.skippedCloud': 'Your data survives a phone change.',
+  'dashboard.firstSteps.account.doneCloudOn': 'Cloud backup on.',
+  'dashboard.firstSteps.account.doneCloudOff': 'Cloud backup off.',
   'dashboard.firstSteps.account.action': 'Create account',
   'dashboard.firstSteps.supplement.title': 'Add your first supplement',
   'dashboard.firstSteps.supplement.current': 'Scan the label, search the catalog or enter it by hand. The app then assigns an intake time and explains why.',
@@ -115,4 +118,8 @@ export default {
   'dashboard.reason.synergy': 'Together with {partner}:',
   'dashboard.reason.sourceHint': 'Tap the source for the full quote',
   'dashboard.reason.openSource': 'Open source',
+  // Notice after a cloud restore at startup.
+  'dashboard.restored.title': 'Backup restored',
+  'dashboard.restored.text': 'Backup from {time} from {device}: {supplements} supplements, {labValues} lab values.',
+  'dashboard.restored.dismiss': 'Got it',
 };

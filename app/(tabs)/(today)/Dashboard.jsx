@@ -7,10 +7,12 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
+import { formatBackupTime } from '../../../CloudBackup';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
 import FirstStepsCard from '../../../components/FirstStepsCard';
 import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
+import useCloudBackupStore from '../../../useCloudBackupStore';
 import useStore from '../../../useStore';
 import {
   formatSupplementDosage,
@@ -147,6 +149,8 @@ export default function Dashboard() {
   const undoIntakeToday = useStore((state) => state.undoIntakeToday);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
   const getStock = useStore((state) => state.getStock);
+  const lastRestore = useCloudBackupStore((state) => state.lastRestore);
+  const dismissRestoreNotice = useCloudBackupStore((state) => state.dismissRestoreNotice);
 
   // Subscribe to changing store slices so the dashboard re-renders after intake/stock/user-supplement updates.
   const intakeLogs = useStore((state) => state.intakeLogs);
@@ -338,6 +342,23 @@ export default function Dashboard() {
             accessibilityRole="button"
           >
             <Text style={styles.cleanupButtonText}>{t('dashboard.cleanupButton')}</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+
+      {lastRestore ? (
+        <View style={styles.restoredCard}>
+          <Text style={styles.restoredTitle}>{t('dashboard.restored.title')}</Text>
+          <Text style={styles.restoredText}>
+            {t('dashboard.restored.text', {
+              time: formatBackupTime(lastRestore.exportedAt, language),
+              device: lastRestore.deviceLabel,
+              supplements: lastRestore.counts.supplements,
+              labValues: lastRestore.counts.labValues,
+            })}
+          </Text>
+          <TouchableOpacity onPress={dismissRestoreNotice} accessibilityRole="button" style={styles.restoredButton}>
+            <Text style={styles.restoredButtonText}>{t('dashboard.restored.dismiss')}</Text>
           </TouchableOpacity>
         </View>
       ) : null}
@@ -774,6 +795,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
   },
+  restoredCard: { ...surfaces.card, backgroundColor: colors.affirmSoft, padding: space.lg, marginBottom: space.lg },
+  restoredTitle: { ...type.bodyStrong, color: colors.affirm },
+  restoredText: { ...type.small, marginTop: space.xs },
+  restoredButton: { alignSelf: 'flex-start', marginTop: space.sm },
+  restoredButtonText: { ...type.small, color: colors.accent },
   sectionHeader: {
     marginTop: space.md,
     marginBottom: space.md,

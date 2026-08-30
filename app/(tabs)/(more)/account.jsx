@@ -7,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   View,
@@ -16,10 +17,12 @@ import { useRouter } from 'expo-router';
 
 import { ACCOUNT_STATUS } from '../../../AccountStore';
 import { isNetworkError, KEY_RECORD_SAVE_FAILED, PASSWORD_INVALID, PROVIDERS } from '../../../AccountLogic';
+import { formatBackupTime } from '../../../CloudBackup';
 import { routeAfterAccount } from '../../../FirstSteps';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
+import useCloudBackupStore from '../../../useCloudBackupStore';
 import useStore from '../../../useStore';
 
 const MIN_PASSWORD_LENGTH = 10;
@@ -91,6 +94,10 @@ function AuthForm({ t }) {
       } else {
         await signIn(email, password);
         setPassword('');
+        // Erst der Abgleich mit dem Server-Stand (kann Praeparate holen),
+        // dann die Weiche: mit Bestand landet die Nutzerin auf dem Tagesplan
+        // statt in Schritt 3 der Ersteinrichtung.
+        await useCloudBackupStore.getState().checkOnLogin().catch(() => 'none');
         // Ohne Praeparat weiter in die Ersteinrichtung (Tagesplan); mit
         // Bestand bleibt die Nutzerin hier, sie kam dann aus "Mehr".
         const target = routeAfterAccount({
@@ -219,6 +226,87 @@ function AuthForm({ t }) {
   );
 }
 
+// Abschnitt Cloud-Backup: Status, Automatik, Geraetename, manueller Upload
+// und Loeschen. Keine Fachlogik hier, alles kommt aus useCloudBackupStore.
+function CloudBackupCard({ t, dataKey, language }) {
+  const {
+    autoBackup, deviceLabel, lastUploadedAt, remoteExportedAt, remoteDeviceLabel,
+    status, lastError, setAutoBackup, setDeviceLabel, uploadNow, deleteRemote,
+  } = useCloudBackupStore();
+
+  if (!dataKey) {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.bodyStrong}>{t('account.cloud.title')}</Text>
+        <Text style={styles.body}>{t('account.cloud.keyMissing')}</Text>
+      </View>
+    );
+  }
+
+  const statusLine = (() => {
+    if (status === 'uploading') return t('account.cloud.uploading');
+    if (status === 'restoring') return t('account.cloud.restoring');
+    if (status === 'offline') return t('account.cloud.offline');
+    if (status === 'error' && lastError === 'wrongKey') return t('account.cloud.wrongKey');
+    if (status === 'error') return t('account.cloud.error');
+    const stamp = remoteExportedAt ?? lastUploadedAt;
+    return stamp
+      ? t('account.cloud.lastUpload', { time: formatBackupTime(stamp, language), device: remoteDeviceLabel || deviceLabel })
+      : t('account.cloud.none');
+  })();
+
+  const handleDelete = () =>
+    Alert.alert(t('account.cloud.deleteConfirmTitle'), t('account.cloud.deleteConfirmText'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('account.cloud.deleteConfirm'), style: 'destructive', onPress: async () => { setAutoBackup(false); await deleteRemote(); } },
+    ]);
+
+  return (
+    <View style={styles.card}>
+      <Text style={styles.bodyStrong}>{t('account.cloud.title')}</Text>
+      <Text style={styles.body}>{t('account.cloud.intro')}</Text>
+      <Text style={styles.hint}>{statusLine}</Text>
+      <View style={styles.switchRow}>
+        <View style={styles.switchText}>
+          <Text style={styles.bodyStrong}>{t('account.cloud.auto')}</Text>
+          <Text style={styles.hint}>{t('account.cloud.autoSub')}</Text>
+        </View>
+        <Switch
+          value={autoBackup}
+          onValueChange={setAutoBackup}
+          trackColor={{ false: colors.rule, true: colors.accent }}
+          thumbColor={autoBackup ? colors.surface : colors.canvas}
+          accessibilityLabel={t('account.cloud.auto')}
+        />
+      </View>
+      <Text style={styles.label}>{t('account.cloud.device')}</Text>
+      <TextInput
+        style={styles.input}
+        value={deviceLabel}
+        onChangeText={setDeviceLabel}
+        maxLength={60}
+        accessibilityLabel={t('account.cloud.device')}
+      />
+      <Text style={styles.hint}>{t('account.cloud.deviceSub')}</Text>
+      <Pressable
+        onPress={uploadNow}
+        disabled={status === 'uploading'}
+        style={({ pressed }) => [styles.quietButton, pressed ? styles.buttonPressed : null]}
+        accessibilityRole="button"
+      >
+        <Text style={styles.quietButtonText}>{t('account.cloud.now')}</Text>
+      </Pressable>
+      <Pressable
+        onPress={handleDelete}
+        style={({ pressed }) => [styles.quietButton, pressed ? styles.buttonPressed : null]}
+        accessibilityRole="button"
+      >
+        <Text style={styles.dangerButtonText}>{t('account.cloud.delete')}</Text>
+      </Pressable>
+    </View>
+  );
+}
+
 function SignedInView({ t }) {
   const email = useAccountStore((state) => state.email);
   const dataKey = useAccountStore((state) => state.dataKey);
@@ -226,6 +314,7 @@ function SignedInView({ t }) {
   const busy = useAccountStore((state) => state.busy);
   const signOut = useAccountStore((state) => state.signOut);
   const deleteAccount = useAccountStore((state) => state.deleteAccount);
+  const language = useStore((state) => state.language);
   const [openSection, setOpenSection] = useState(null);
 
   const toggleSection = (section) =>
@@ -268,7 +357,6 @@ function SignedInView({ t }) {
           {t(dataKey ? 'account.signedIn.keyReady' : 'account.signedIn.keyLocked')}
         </Text>
         <Text style={styles.hint}>{t('account.signedIn.recoveryNote')}</Text>
-        <Text style={styles.hint}>{t('account.signedIn.syncNote')}</Text>
 
         <Pressable
           onPress={handleSignOut}
@@ -279,6 +367,8 @@ function SignedInView({ t }) {
           <Text style={styles.quietButtonText}>{t('account.action.signOut')}</Text>
         </Pressable>
       </View>
+
+      <CloudBackupCard t={t} dataKey={dataKey} language={language} />
 
       <SettingsSection
         title={t('account.settings.email')}
@@ -506,6 +596,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   sectionBody: { marginTop: space.sm },
+  switchRow: { flexDirection: 'row', alignItems: 'center', marginTop: space.md },
+  switchText: { flex: 1, paddingRight: space.md },
   label: { ...type.label, marginTop: space.md, marginBottom: space.xs },
   input: { ...surfaces.input },
   hint: { ...type.tiny, marginTop: space.sm },

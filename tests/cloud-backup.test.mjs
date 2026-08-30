@@ -5,6 +5,7 @@ import {
   decideOnLogin,
   decryptBackup,
   encryptBackup,
+  formatBackupTime,
   hasLocalData,
   REMOTE_COLUMNS,
 } from '../CloudBackup';
@@ -67,6 +68,12 @@ check('nur remote → restore', decideOnLogin({ remote, localHasData: false, las
 check('beides, remote von uns → upload', decideOnLogin({ remote, localHasData: true, lastUploadedAt: '2026-08-30T12:00:00.000Z' }) === 'upload');
 check('beides, remote fremd → ask', decideOnLogin({ remote, localHasData: true, lastUploadedAt: '2026-08-29T08:00:00.000Z' }) === 'ask');
 check('beides, nie hochgeladen → ask', decideOnLogin({ remote, localHasData: true, lastUploadedAt: null }) === 'ask');
+
+console.log('— formatBackupTime —');
+check(
+  'DE: enthaelt Tag.Monat.',
+  formatBackupTime('2026-08-30T12:00:00.000Z', 'de').includes('30.08.')
+);
 
 if (failures > 0) { console.error(`\n${failures} Test(s) fehlgeschlagen`); process.exit(1); }
 console.log('\nCloudBackup: alle Tests bestanden');

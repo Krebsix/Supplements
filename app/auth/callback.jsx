@@ -7,6 +7,7 @@ import { routeAfterAccount } from '../../FirstSteps';
 import { useTranslation } from '../../i18n';
 import { colors, space, surfaces, type } from '../../theme';
 import useAccountStore from '../../useAccountStore';
+import useCloudBackupStore from '../../useCloudBackupStore';
 import useStore from '../../useStore';
 
 /**
@@ -31,13 +32,16 @@ export default function AuthCallbackScreen() {
     handled.current = true;
 
     handleAuthCallback(url)
-      .then((type) => {
+      .then(async (type) => {
         if (type === 'recovery') {
           router.replace('/account-reset');
           return;
         }
-        // Bestaetigungslink: Konto ist jetzt aktiv. Ohne Praeparat geht es
-        // in die Ersteinrichtung (Tagesplan, Schritt "erstes Praeparat").
+        // Bestaetigungslink: Konto ist jetzt aktiv. Erst der Abgleich mit
+        // dem Server-Stand (kann Praeparate holen), dann die Weiche: ohne
+        // Praeparat geht es in die Ersteinrichtung (Tagesplan, Schritt
+        // "erstes Praeparat").
+        await useCloudBackupStore.getState().checkOnLogin().catch(() => 'none');
         const main = useStore.getState();
         main.setAccountEmailPending(null);
         router.replace(

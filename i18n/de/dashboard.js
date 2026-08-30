@@ -60,6 +60,9 @@ export default {
   'dashboard.firstSteps.account.done': 'Angemeldet. Deine Daten bleiben auf dem Gerät verschlüsselt.',
   'dashboard.firstSteps.account.pending': 'Bestätigungslink an {email} geschickt. Öffne ihn auf diesem Gerät, dann ist dein Konto aktiv. Weitermachen kannst du jetzt schon.',
   'dashboard.firstSteps.account.skipped': 'Freiwillig, jederzeit unter Mehr nachholbar.',
+  'dashboard.firstSteps.account.skippedCloud': 'Deine Daten überleben den Handywechsel.',
+  'dashboard.firstSteps.account.doneCloudOn': 'Cloud-Backup aktiv.',
+  'dashboard.firstSteps.account.doneCloudOff': 'Cloud-Backup aus.',
   'dashboard.firstSteps.account.action': 'Konto anlegen',
   'dashboard.firstSteps.supplement.title': 'Erstes Präparat hinzufügen',
   'dashboard.firstSteps.supplement.current': 'Scanne das Etikett, suche im Katalog oder trage es von Hand ein. Die App ordnet es dann einer Einnahmezeit zu und erklärt, warum.',
@@ -115,4 +118,8 @@ export default {
   'dashboard.reason.synergy': 'Zusammen mit {partner}:',
   'dashboard.reason.sourceHint': 'Quelle antippen für das vollständige Zitat',
   'dashboard.reason.openSource': 'Quelle öffnen',
+  // Hinweis nach einer Cloud-Wiederherstellung beim Start.
+  'dashboard.restored.title': 'Stand übernommen',
+  'dashboard.restored.text': 'Stand vom {time} von {device}: {supplements} Präparate, {labValues} Laborwerte.',
+  'dashboard.restored.dismiss': 'Verstanden',
 };

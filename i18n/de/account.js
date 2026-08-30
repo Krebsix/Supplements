@@ -45,8 +45,30 @@ export default {
     'Datenschlüssel ist auf diesem Gerät nicht hinterlegt. Melde dich einmal ab und wieder an, dann ist das Cloud-Backup verfügbar.',
   'account.signedIn.recoveryNote':
     'Dein Recovery-Key wurde beim Anlegen einmalig angezeigt. Ohne Passwort und ohne Recovery-Key sind synchronisierte Daten nicht wiederherstellbar. Daten auf diesem Gerät sind davon nicht betroffen.',
-  'account.signedIn.syncNote':
-    'Sync und Cloud-Backup folgen in einem späteren Update. Bis dahin liegt weiterhin alles nur auf diesem Gerät.',
+
+  'account.cloud.title': 'Cloud-Backup',
+  'account.cloud.intro': 'Dein Stand liegt Ende-zu-Ende verschlüsselt auf unserem Server. Weder wir noch der Anbieter können ihn lesen. Ohne dein Passwort oder deinen Recovery-Key ist er nicht wiederherstellbar.',
+  'account.cloud.lastUpload': 'Letzter Stand {time} von {device}',
+  'account.cloud.none': 'Noch kein Stand auf dem Server.',
+  'account.cloud.uploading': 'Wird gesichert.',
+  'account.cloud.restoring': 'Wird wiederhergestellt.',
+  'account.cloud.offline': 'Offline. Wird beim nächsten Öffnen nachgeholt.',
+  'account.cloud.error': 'Sichern fehlgeschlagen. Beim nächsten Öffnen wird es erneut versucht.',
+  'account.cloud.wrongKey': 'Der Stand auf dem Server wurde mit einem früheren Schlüssel verschlüsselt und kann nicht gelesen werden. Beim nächsten Sichern wird er ersetzt.',
+  'account.cloud.auto': 'Automatisch sichern',
+  'account.cloud.autoSub': 'Nach jeder Änderung, gebündelt, nur mit Internet.',
+  'account.cloud.now': 'Jetzt sichern',
+  'account.cloud.device': 'Gerätename',
+  'account.cloud.deviceSub': 'Erscheint auf anderen Geräten als Herkunft des Standes.',
+  'account.cloud.delete': 'Stand auf dem Server löschen',
+  'account.cloud.deleteConfirmTitle': 'Stand löschen?',
+  'account.cloud.deleteConfirmText': 'Der verschlüsselte Stand wird vom Server entfernt. Deine Daten auf diesem Gerät bleiben. Automatisches Sichern wird ausgeschaltet.',
+  'account.cloud.deleteConfirm': 'Löschen',
+  'account.cloud.keyMissing': 'Cloud-Backup ist auf diesem Gerät nicht verfügbar, weil der Datenschlüssel fehlt. Einmal ab- und wieder anmelden.',
+  'account.cloud.decisionTitle': 'Neuerer Stand auf dem Server',
+  'account.cloud.decisionText': 'Auf deinem Konto liegt ein Stand vom {time} von {device} ({supplements} Präparate, {labValues} Laborwerte). Diesen Stand übernehmen oder den Stand dieses Geräts hochladen?',
+  'account.cloud.decisionRestore': 'Server-Stand übernehmen',
+  'account.cloud.decisionUpload': 'Diesen Stand hochladen',
 
   'account.delete.title': 'Konto löschen',
   'account.delete.text':

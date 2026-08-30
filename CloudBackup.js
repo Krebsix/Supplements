@@ -76,3 +76,13 @@ export function decideOnLogin({ remote, localHasData, lastUploadedAt }) {
   if (lastUploadedAt && remote.exported_at === lastUploadedAt) return 'upload';
   return 'ask';
 }
+
+/** Anzeigeformat fuer einen Zeitstempel im Konto- und Wiederherstellungs-Hinweis. */
+export function formatBackupTime(iso, language) {
+  return new Date(iso).toLocaleString(language === 'en' ? 'en-GB' : 'de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
