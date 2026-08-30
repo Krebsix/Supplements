@@ -1,6 +1,8 @@
 /**
  * scripts/build-legal-site.mjs
- * Generiert die statischen Rechtsseiten (web/) aus data/legalContent.js.
+ * Generiert die statischen Rechtsseiten (web/public/) aus data/legalContent.js.
+ * Die Astro-Landingpage in web/ liefert sie unter /datenschutz/, /impressum/
+ * und /nutzung/ mit aus.
  *
  * Aufruf: npm run build:legal
  *
@@ -19,7 +21,7 @@ const esbuild = require('esbuild');
 
 const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const templatePath = path.join(repoRoot, 'scripts', 'legalSiteTemplate.mjs');
-const outDir = path.join(repoRoot, 'web');
+const outDir = path.join(repoRoot, 'web', 'public');
 
 const bundled = esbuild.buildSync({
   entryPoints: [templatePath],
@@ -36,8 +38,10 @@ mkdirSync(outDir, { recursive: true });
 
 const site = renderSite();
 for (const [fileName, html] of Object.entries(site)) {
-  writeFileSync(path.join(outDir, fileName), html);
-  console.log(`web/${fileName} geschrieben (${html.length} Zeichen)`);
+  const target = path.join(outDir, fileName);
+  mkdirSync(path.dirname(target), { recursive: true });
+  writeFileSync(target, html);
+  console.log(`web/public/${fileName} geschrieben (${html.length} Zeichen)`);
 }
 
 // Offene Platzhalter sichtbar machen: Die Seite darf so gebaut, aber

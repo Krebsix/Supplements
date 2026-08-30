@@ -8,9 +8,14 @@
  * ihn dort und fuehrt `npm run build:legal` aus; tests/legal-site.test.mjs
  * schlaegt fehl, wenn die committeten Seiten hinter der Quelle zurueckbleiben.
  *
- * Bewusst namensneutral: Der App-Name ist noch nicht entschieden
- * (appInfo.js). Die Seiten nennen nur die Betreiberin, damit die URL
- * eine Umbenennung unveraendert uebersteht.
+ * Bewusst namensneutral: Die Seiten nennen nur die Betreiberin, damit die
+ * URL eine Umbenennung unveraendert uebersteht (Name seit 2026-08-09
+ * MySuplea, appInfo.js).
+ *
+ * Seit 2026-08-30 liegen die Seiten unter web/public/<pfad>/index.html und
+ * werden von der Astro-Landingpage (web/) mit ausgeliefert:
+ * /datenschutz/, /impressum/, /nutzung/. Die Palette kommt aus
+ * web/src/styles/tokens.css, die der Test gegen theme.js prueft.
  */
 
 import {
@@ -22,10 +27,10 @@ import {
 } from '../data/legalContent.js';
 
 /**
- * Spiegel der Design-Tokens aus theme.js ("Papier und Tinte").
- * theme.js selbst importiert react-native und laeuft deshalb nicht in
- * Node; der Test prueft stattdessen, dass jeder Wert hier woertlich in
- * theme.js steht, damit die Palette nicht still auseinanderlaeuft.
+ * Spiegel der Design-Tokens aus theme.js (native iOS-Anmutung seit
+ * 2026-08-12). theme.js selbst importiert react-native und laeuft deshalb
+ * nicht in Node; der Test prueft stattdessen, dass jeder Wert hier und in
+ * web/src/styles/tokens.css woertlich in theme.js steht.
  */
 export const WEB_TOKENS = {
   canvas: '#f2f2f7',
@@ -92,8 +97,9 @@ function page({ lang, title, eyebrow, bodyContent }) {
     background: var(--canvas);
     color: var(--ink-muted);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 15px;
-    line-height: 1.55;
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
   main {
     max-width: 640px;
@@ -101,21 +107,21 @@ function page({ lang, title, eyebrow, bodyContent }) {
     padding: 40px 22px 64px;
   }
   .eyebrow {
-    font-size: 11px;
-    letter-spacing: 1.6px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--accent);
-    font-weight: 700;
-    margin: 0 0 10px;
+    font-weight: 600;
+    margin: 0 0 12px;
   }
   h1, h2, h3 {
-    font-family: Georgia, "Times New Roman", serif;
     color: var(--ink);
     font-weight: 600;
+    letter-spacing: -0.015em;
   }
-  h1 { font-size: 27px; line-height: 1.25; margin: 0 0 6px; }
-  h2 { font-size: 19px; margin: 40px 0 4px; }
-  h3 { font-size: 15px; margin: 22px 0 4px; }
+  h1 { font-size: 32px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.025em; font-weight: 700; }
+  h2 { font-size: 22px; margin: 44px 0 6px; }
+  h3 { font-size: 17px; margin: 24px 0 4px; }
   p { margin: 0 0 10px; }
   a { color: var(--accent); }
   nav {
@@ -123,11 +129,11 @@ function page({ lang, title, eyebrow, bodyContent }) {
     padding: 10px 0;
     border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
-    font-size: 13px;
+    font-size: 15px;
   }
-  nav a { margin-right: 14px; }
+  nav a { margin-right: 16px; font-weight: 500; }
   .lang-note {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--ink-faint);
     margin: 2px 0 0;
   }
@@ -135,7 +141,7 @@ function page({ lang, title, eyebrow, bodyContent }) {
     margin-top: 44px;
     padding-top: 14px;
     border-top: 1px solid var(--rule);
-    font-size: 12px;
+    font-size: 14px;
     color: var(--ink-faint);
   }
 </style>
@@ -154,10 +160,11 @@ export function renderPrivacyPage() {
   <h1>Datenschutzerklärung</h1>
   <p class="lang-note">Privacy Policy, English version below.</p>
   <nav>
+    <a href="/">Startseite · Home</a>
     <a href="#de">Deutsch</a>
     <a href="#en">English</a>
-    <a href="imprint.html">Impressum</a>
-    <a href="terms.html">Nutzungsbedingungen</a>
+    <a href="/impressum/">Impressum</a>
+    <a href="/nutzung/">Nutzungsbedingungen</a>
   </nav>
   <div lang="de" id="de">
 ${sectionsHtml(PRIVACY_SECTIONS.de)}
@@ -168,7 +175,7 @@ ${sectionsHtml(PRIVACY_SECTIONS.en)}
   </div>
   <footer>
     <p>Stand · Version: ${escapeHtml(PRIVACY_VERSION)}</p>
-    <p><a href="imprint.html">Impressum · Provider information</a> · <a href="terms.html">Nutzungsbedingungen · Terms of use</a></p>
+    <p><a href="/impressum/">Impressum · Provider information</a> · <a href="/nutzung/">Nutzungsbedingungen · Terms of use</a></p>
   </footer>`;
   return page({
     lang: 'de',
@@ -182,10 +189,11 @@ export function renderImprintPage() {
   <h1>Impressum</h1>
   <p class="lang-note">Provider information, English version below.</p>
   <nav>
+    <a href="/">Startseite · Home</a>
     <a href="#de">Deutsch</a>
     <a href="#en">English</a>
-    <a href="index.html">Datenschutzerklärung</a>
-    <a href="terms.html">Nutzungsbedingungen</a>
+    <a href="/datenschutz/">Datenschutzerklärung</a>
+    <a href="/nutzung/">Nutzungsbedingungen</a>
   </nav>
   <div lang="de" id="de">
 ${sectionsHtml(IMPRINT_SECTIONS.de)}
@@ -195,7 +203,7 @@ ${sectionsHtml(IMPRINT_SECTIONS.de)}
 ${sectionsHtml(IMPRINT_SECTIONS.en)}
   </div>
   <footer>
-    <p><a href="index.html">Datenschutzerklärung · Privacy Policy</a> · <a href="terms.html">Nutzungsbedingungen · Terms of use</a></p>
+    <p><a href="/datenschutz/">Datenschutzerklärung · Privacy Policy</a> · <a href="/nutzung/">Nutzungsbedingungen · Terms of use</a></p>
   </footer>`;
   return page({
     lang: 'de',
@@ -209,10 +217,11 @@ export function renderTermsPage() {
   <h1>Nutzungsbedingungen</h1>
   <p class="lang-note">Terms of use, English version below.</p>
   <nav>
+    <a href="/">Startseite · Home</a>
     <a href="#de">Deutsch</a>
     <a href="#en">English</a>
-    <a href="index.html">Datenschutzerklärung</a>
-    <a href="imprint.html">Impressum</a>
+    <a href="/datenschutz/">Datenschutzerklärung</a>
+    <a href="/impressum/">Impressum</a>
   </nav>
   <div lang="de" id="de">
 ${sectionsHtml(TERMS_SECTIONS.de)}
@@ -223,7 +232,7 @@ ${sectionsHtml(TERMS_SECTIONS.en)}
   </div>
   <footer>
     <p>Stand · Version: ${escapeHtml(TERMS_VERSION)}</p>
-    <p><a href="index.html">Datenschutzerklärung · Privacy Policy</a> · <a href="imprint.html">Impressum · Provider information</a></p>
+    <p><a href="/datenschutz/">Datenschutzerklärung · Privacy Policy</a> · <a href="/impressum/">Impressum · Provider information</a></p>
   </footer>`;
   return page({
     lang: 'de',
@@ -232,12 +241,12 @@ ${sectionsHtml(TERMS_SECTIONS.en)}
   });
 }
 
-/** Dateiname → Inhalt. Die Datenschutzerklaerung liegt auf index.html,
- *  damit die Wurzel-URL selbst als Store-Datenschutz-URL taugt. */
+/** Pfad (relativ zu web/public) → Inhalt. Store-Datenschutz-URL ist
+ *  https://mysuplea.com/datenschutz/ . */
 export function renderSite() {
   return {
-    'index.html': renderPrivacyPage(),
-    'imprint.html': renderImprintPage(),
-    'terms.html': renderTermsPage(),
+    'datenschutz/index.html': renderPrivacyPage(),
+    'impressum/index.html': renderImprintPage(),
+    'nutzung/index.html': renderTermsPage(),
   };
 }

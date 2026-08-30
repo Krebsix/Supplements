@@ -1,13 +1,14 @@
 // Tests fuer die statischen Rechtsseiten (scripts/legalSiteTemplate.mjs).
 //
 // Drift-Schutz in drei Richtungen:
-//   1. Die committeten Dateien in web/ muessen exakt dem entsprechen, was
+//   1. Die committeten Dateien in web/public/ muessen exakt dem entsprechen, was
 //      der aktuelle Stand von data/legalContent.js rendert. Wer den
 //      Rechtstext aendert, ohne `npm run build:legal` auszufuehren,
 //      veroeffentlicht sonst still einen veralteten Stand.
-//   2. Die Web-Farbwerte muessen woertlich in theme.js stehen, damit die
-//      Seite nicht optisch von der App wegdriftet (theme.js selbst ist
-//      wegen des react-native-Imports in Node nicht ladbar).
+//   2. Die Web-Farbwerte (Template UND web/src/styles/tokens.css der
+//      Landingpage) muessen woertlich in theme.js stehen, damit die Seiten
+//      nicht optisch von der App wegdriften (theme.js selbst ist wegen des
+//      react-native-Imports in Node nicht ladbar).
 //   3. Inhaltliche Vollstaendigkeit: jede Ueberschrift aus beiden Sprachen
 //      und die PRIVACY_VERSION erscheinen auf der Seite.
 
@@ -42,14 +43,14 @@ console.log('— Committete Seiten aktuell —');
 for (const [fileName, expected] of Object.entries(site)) {
   let onDisk = null;
   try {
-    onDisk = readFileSync(path.join(repoRoot, 'web', fileName), 'utf8');
+    onDisk = readFileSync(path.join(repoRoot, 'web', 'public', fileName), 'utf8');
   } catch {
     onDisk = null;
   }
   check(
-    `web/${fileName} entspricht data/legalContent.js`,
+    `web/public/${fileName} entspricht data/legalContent.js`,
     onDisk === expected,
-    '(npm run build:legal ausfuehren und web/ mitcommitten)'
+    '(npm run build:legal ausfuehren und web/public/ mitcommitten)'
   );
 }
 
@@ -58,11 +59,19 @@ const themeSource = readFileSync(path.join(repoRoot, 'theme.js'), 'utf8');
 for (const [token, hex] of Object.entries(WEB_TOKENS)) {
   check(`Token ${token} (${hex}) steht woertlich in theme.js`, themeSource.includes(hex));
 }
+// Die Landingpage (web/) hat ihre eigene Token-Datei; jeder Hex-Wert darin
+// muss ebenfalls aus theme.js stammen.
+const tokensCss = readFileSync(path.join(repoRoot, 'web', 'src', 'styles', 'tokens.css'), 'utf8');
+const cssHexes = [...new Set(tokensCss.match(/#[0-9a-f]{6}\b/gi) ?? [])];
+check('web/src/styles/tokens.css enthaelt Farbwerte', cssHexes.length > 0);
+for (const hex of cssHexes) {
+  check(`tokens.css ${hex} steht woertlich in theme.js`, themeSource.includes(hex));
+}
 
 console.log('— Inhaltliche Vollstaendigkeit —');
-const privacy = site['index.html'];
-const imprint = site['imprint.html'];
-const terms = site['terms.html'];
+const privacy = site['datenschutz/index.html'];
+const imprint = site['impressum/index.html'];
+const terms = site['nutzung/index.html'];
 check('PRIVACY_VERSION erscheint auf der Datenschutz-Seite', privacy.includes(PRIVACY_VERSION));
 check('TERMS_VERSION erscheint auf der Nutzungsbedingungen-Seite', terms.includes(TERMS_VERSION));
 for (const lang of ['de', 'en']) {
