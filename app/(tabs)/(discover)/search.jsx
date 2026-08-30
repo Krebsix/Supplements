@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 
 import LifeStagePicker from '../../../components/LifeStagePicker';
@@ -10,7 +10,7 @@ import { buildSubstanceProfile } from '../../../ReferenceCheck';
 import { matchIngredient } from '../../../SubstanceMatcher';
 import { buildComplaintView, findComplaints } from '../../../ComplaintSearch';
 import ComplaintCard from '../../../components/ComplaintCard';
-import { substances } from '../../../data/substances';
+import { getSubstance, substances } from '../../../data/substances';
 import { listCatalogBrandSections } from '../../../SeedCatalog';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
@@ -43,12 +43,27 @@ function searchSubstances(query) {
 
 export default function SearchScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState(null);
   // In der Kategorie-Ansicht ist immer nur ein Eintrag aufgeklappt:
   // kompakte Zeilen halten die Uebersicht, die Vollkarte kommt auf Tipp.
   const [expandedSubstanceId, setExpandedSubstanceId] = useState(null);
+
+  // Tipp auf einen Hinweis oder Konflikt im Tagesplan (SlotReason.jsx)
+  // fuehrt hierher mit ?substance=<id>. Der Parameter fuellt die
+  // Freitextsuche mit dem Klarnamen -- so oeffnet sich das
+  // Wirkstoff-Profil ueber denselben Weg wie eine normale Suche, statt
+  // einen zweiten Anzeigepfad zu pflegen.
+  const substanceParam = Array.isArray(params.substance) ? params.substance[0] : params.substance;
+  useEffect(() => {
+    if (!substanceParam) return;
+    const substance = getSubstance(substanceParam);
+    if (!substance?.name) return;
+    setQuery(substance.name);
+    setActiveCategory(null);
+  }, [substanceParam]);
 
   const activeLifeStageId = useStore((state) => state.activeLifeStageId);
   const setActiveLifeStage = useStore((state) => state.setActiveLifeStage);

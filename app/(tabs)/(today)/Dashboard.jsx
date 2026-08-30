@@ -7,6 +7,8 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
+import { buildEntryGuidance } from '../../../ScheduleGuidance';
+import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
 import {
@@ -173,6 +175,18 @@ export default function Dashboard() {
       return messages.length ? { slot: item.slot, messages } : null;
     })
     .filter(Boolean);
+  // Erklaerung je Eintrag (SlotReason): einmal je aktivem Praeparat
+  // berechnet statt in der Zeilen-Schleife, sonst wuerde ein Hook in
+  // einer .map()-Schleife stehen (Rules of Hooks). buildEntryGuidance ist
+  // reine Fachlogik aus ScheduleGuidance.js, ausschliesslich belegte
+  // Regeln (Einnahme-Hinweise, Paar-Konflikte).
+  const guidanceBySupplementId = React.useMemo(() => {
+    const map = new Map();
+    for (const supplement of activeSupplements) {
+      map.set(supplement.id, buildEntryGuidance(supplement, activeSupplements));
+    }
+    return map;
+  }, [activeSupplements]);
   const duplicateGroups = getDuplicateGroups(activeSupplements, t);
   const duplicateSupplementsToArchive = duplicateGroups.reduce(
     (items, group) => [...items, ...group.duplicates],
@@ -431,6 +445,15 @@ export default function Dashboard() {
                         {supplementMeta}
                       </Text>
                     ) : null}
+
+                    <SlotReason
+                      guidance={
+                        guidanceBySupplementId.get(supplement.id) ?? { notes: [], conflicts: [] }
+                      }
+                      onOpenSubstance={(substanceId) =>
+                        router.push(`/search?substance=${substanceId}`)
+                      }
+                    />
 
                     {stock?.currentUnits !== undefined ? (
                       <Text style={styles.noteText}>
