@@ -1,6 +1,7 @@
 // Tests fuer SlotSuggestion.js: Vorschlag des Einnahmezeitpunkts aus
 // belegten Regeln und Ableitung der Slots aus der Haeufigkeit.
 import {
+  adjustSlots,
   DEFAULT_SLOT,
   expandSlots,
   SLOT_BY_GUIDANCE,
@@ -71,6 +72,34 @@ check('3x fasted → fasted+midday+evening', JSON.stringify(expandSlots('fasted'
 check('0 wird 1', expandSlots('morning', 0).length === 1);
 check('7 wird 3', expandSlots('morning', 7).length === 3);
 check('Reihenfolge folgt SLOT_ORDER', JSON.stringify(expandSlots('evening', 3)) === '["morning","midday","evening"]');
+
+console.log('— adjustSlots —');
+check(
+  'abgewaehlter Slot kommt nicht zurueck, Luecke wird in SLOT_ORDER aufgefuellt',
+  JSON.stringify(adjustSlots(['evening'], 'fasted', 2)) === '["morning","evening"]',
+);
+check(
+  '2 Luecken werden aufgefuellt',
+  JSON.stringify(adjustSlots(['evening'], 'fasted', 3)) === '["morning","midday","evening"]',
+);
+check(
+  'Ueberschuss: nur die ersten timesPerDay in SLOT_ORDER-Reihenfolge',
+  JSON.stringify(adjustSlots(['morning', 'midday', 'evening'], 'morning', 1)) === '["morning"]',
+);
+check(
+  'ungewoehnlicher Slot bleibt erhalten, Luecke wird ergaenzt',
+  JSON.stringify(adjustSlots(['pre_sport'], 'morning', 2)) === '["morning","pre_sport"]',
+);
+check(
+  'Ueberschuss mit ungewoehnlichen Slots: erste zwei in SLOT_ORDER-Reihenfolge',
+  JSON.stringify(adjustSlots(['pre_sport', 'post_sport', 'evening'], 'morning', 2)) === '["pre_sport","post_sport"]',
+);
+check(
+  'leere Auswahl entspricht expandSlots',
+  JSON.stringify(adjustSlots([], 'fasted', 2)) === JSON.stringify(expandSlots('fasted', 2)),
+);
+check('Klemmen nach unten: 0 wird 1', JSON.stringify(adjustSlots(['morning'], 'morning', 0)) === '["morning"]');
+check('Klemmen nach oben: 9 wird 3', adjustSlots(['morning'], 'morning', 9).length === 3);
 
 console.log('— substanceIdsFromDetails —');
 const ids = substanceIdsFromDetails([

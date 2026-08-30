@@ -114,6 +114,34 @@ export function expandSlots(primarySlot, timesPerDay = 1) {
   return SLOT_ORDER.filter((id) => slots.includes(id));
 }
 
+/**
+ * adjustSlots(selected, primarySlot, timesPerDay) => string[]
+ * Passt eine bestehende Auswahl an eine neue Haeufigkeit an, ohne
+ * bewusst gewaehlte Slots zu verwerfen: Fehlen Slots, werden Kandidaten
+ * aus ['morning', 'midday', 'evening'] ergaenzt, die noch nicht gewaehlt
+ * sind (in SLOT_ORDER-Reihenfolge); sind zu viele gewaehlt, bleiben die
+ * ersten timesPerDay in SLOT_ORDER-Reihenfolge.
+ * Ergebnis immer in SLOT_ORDER-Reihenfolge, Laenge = geklemmte Haeufigkeit,
+ * sofern genug Kandidaten existieren (sonst kuerzer).
+ * Ist `selected` leer, entspricht das Ergebnis expandSlots(primarySlot, timesPerDay).
+ */
+export function adjustSlots(selected = [], primarySlot = DEFAULT_SLOT, timesPerDay = 1) {
+  const times = Math.min(3, Math.max(1, Number.parseInt(timesPerDay, 10) || 1));
+  const current = Array.isArray(selected) ? selected : [];
+
+  if (current.length === 0) return expandSlots(primarySlot, times);
+
+  let pool = current;
+  if (pool.length < times) {
+    // primarySlot bleibt hier bewusst aussen vor: Er darf nur bei leerer
+    // Auswahl den ersten Kandidaten stellen (siehe expandSlots oben).
+    const candidates = ['morning', 'midday', 'evening'].filter((slot) => !pool.includes(slot));
+    pool = pool.concat(candidates.slice(0, times - pool.length));
+  }
+
+  return SLOT_ORDER.filter((id) => pool.includes(id)).slice(0, times);
+}
+
 /** suggestSlots({ substanceIds, timesPerDay }) => { slots, reason } */
 export function suggestSlots({ substanceIds = [], timesPerDay = 1 } = {}) {
   const { slot, reason } = suggestPrimarySlot(substanceIds);

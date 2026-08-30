@@ -12,11 +12,12 @@ import {
   View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { canAddSupplement, canUseProFeature } from '../Entitlements';
 import { SLOT_ORDER } from '../TimingEngine';
-import { DEFAULT_SLOT, expandSlots, substanceIdsFromDetails, suggestPrimarySlot } from '../SlotSuggestion';
+import { adjustSlots, DEFAULT_SLOT, expandSlots, substanceIdsFromDetails, suggestPrimarySlot } from '../SlotSuggestion';
 import FrequencyChips from '../components/FrequencyChips';
 import ProductSummaryCard from '../components/ProductSummaryCard';
 import ProGate from '../components/ProGate';
@@ -51,6 +52,9 @@ export default function AddSupplement() {
   const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams();
+  // Hoehe des nativen Modal-Headers, damit KeyboardAvoidingView auf iOS
+  // die Tastatur nicht ueber den Header hinaus einblendet.
+  const headerHeight = useHeaderHeight();
 
   const addUserSupplement = useStore((state) => state.addUserSupplement);
   const updateUserSupplement = useStore((state) => state.updateUserSupplement);
@@ -201,7 +205,10 @@ export default function AddSupplement() {
 
   function handleTimesPerDay(count) {
     setTimesPerDay(count);
-    setSelectedSlots(expandSlots(primarySlot, count));
+    // Frequenzwechsel respektiert eine manuelle Auswahl: Wurde schon
+    // manuell an den Slots gedreht, passt adjustSlots die Auswahl an,
+    // statt sie komplett neu aus dem Vorschlag zu bauen.
+    setSelectedSlots((current) => (slotsTouched ? adjustSlots(current, primarySlot, count) : expandSlots(primarySlot, count)));
   }
 
   function toggleSlot(slotId) {
@@ -337,7 +344,11 @@ export default function AddSupplement() {
   const brand = fromScan && pendingScanResult?.brand && pendingScanResult.brand !== 'Demo Brand' ? pendingScanResult.brand : null;
 
   return (
-    <KeyboardAvoidingView style={styles.screenWrap} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView
+      style={styles.screenWrap}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}
+    >
       <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Text style={styles.title}>{t(editId ? 'addSupplement.title.edit' : 'addSupplement.title.new')}</Text>
 
@@ -455,6 +466,7 @@ function Field({ label, multiline = false, ...props }) {
         style={[styles.input, multiline && styles.inputMultiline]}
         placeholderTextColor={colors.inkFaint}
         multiline={multiline}
+        accessibilityLabel={label}
         {...props}
       />
     </View>
