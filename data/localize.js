@@ -35,6 +35,7 @@ import {
   CONDITION_QUOTES_EN,
   HEALTH_CONDITIONS_EN,
 } from './en/healthConditions';
+import { PAIR_NOTES_EN, INTAKE_NOTES_EN } from './en/interactions';
 
 const isEnglish = () => getActiveLanguage() === 'en';
 
@@ -146,6 +147,20 @@ export function localizeHealthCondition(condition) {
 export function localizeConditionQuote(conditionId, substanceId, germanQuote) {
   if (!isEnglish()) return germanQuote;
   return CONDITION_QUOTES_EN[conditionId]?.[substanceId] ?? germanQuote;
+}
+
+/** Paar-Regel-Hinweis (data/interactions.js PAIR_RULES) in der aktiven
+ *  Sprache. Schluessel ist `${a}|${b}` in genau der Reihenfolge der Regel. */
+export function localizePairNote(a, b, germanNote) {
+  if (!isEnglish()) return germanNote;
+  return PAIR_NOTES_EN[`${a}|${b}`] ?? germanNote;
+}
+
+/** Einnahme-Hinweis (data/interactions.js INTAKE_GUIDANCE) in der aktiven
+ *  Sprache. */
+export function localizeIntakeNote(substanceId, germanNote) {
+  if (!isEnglish()) return germanNote;
+  return INTAKE_NOTES_EN[substanceId] ?? germanNote;
 }
 
 /**

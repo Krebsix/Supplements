@@ -13,6 +13,7 @@
  */
 import { extractPositions } from './StackAnalyzer';
 import { findPairInteractions, getIntakeGuidance } from './InteractionCheck';
+import { localizePairNote, localizeIntakeNote } from './data/localize';
 
 const MAX_NOTES = 2;
 
@@ -35,7 +36,11 @@ export function buildEntryGuidance(supplement, activeSupplements = []) {
     if (notes.length >= MAX_NOTES) break;
     const guidance = getIntakeGuidance(substanceId);
     if (guidance?.note && Array.isArray(guidance.sources) && guidance.sources.length > 0) {
-      notes.push({ substanceId, text: guidance.note, sources: guidance.sources });
+      notes.push({
+        substanceId,
+        text: localizeIntakeNote(substanceId, guidance.note),
+        sources: guidance.sources,
+      });
     }
   }
 
@@ -69,7 +74,7 @@ export function buildEntryGuidance(supplement, activeSupplements = []) {
         partnerSubstanceId: theirs,
         partnerSupplementName: other.name ?? '',
         severity: rule.severity,
-        text: rule.note,
+        text: localizePairNote(rule.a, rule.b, rule.note),
         sources: rule.sources,
       };
 

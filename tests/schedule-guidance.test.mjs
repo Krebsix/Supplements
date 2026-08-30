@@ -2,7 +2,9 @@
 // belegten Regeln. Kein Satz ohne Regel, keine Regel ohne Quelle.
 import { buildEntryGuidance } from '../ScheduleGuidance';
 import { INTAKE_GUIDANCE, PAIR_RULES } from '../data/interactions';
+import { INTAKE_NOTES_EN, PAIR_NOTES_EN } from '../data/en/interactions';
 import { getSubstance } from '../data/substances';
+import { setActiveLanguage } from '../i18n/runtime';
 
 let failures = 0;
 function check(name, condition, extra = '') {
@@ -75,6 +77,17 @@ check(
   'Eisen/Vitamin-C-Paar erscheint NICHT in conflicts',
   !g4.conflicts.some((c) => c.partnerSupplementName === 'Vitamin C Kapseln')
 );
+
+console.log('— EN-Overlay —');
+setActiveLanguage('en');
+const g5 = buildEntryGuidance(iron, [iron]);
+check('EN: Einnahme-Hinweis kommt aus dem Overlay', g5.notes[0]?.text === INTAKE_NOTES_EN.iron);
+const g6 = buildEntryGuidance(aN, [aN, bN]);
+check(
+  'EN: Paar-Regel-Hinweis kommt aus dem Overlay',
+  g6.conflicts.some((c) => c.text === PAIR_NOTES_EN[`${rule.a}|${rule.b}`])
+);
+setActiveLanguage('de');
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle ScheduleGuidance-Tests bestanden.');

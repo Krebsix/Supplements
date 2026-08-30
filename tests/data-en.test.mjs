@@ -32,6 +32,9 @@ import { LAB_MARKERS_EN } from '../data/en/labMarkers.js';
 import { OUTCOME_METRICS } from '../data/outcomeMetrics.js';
 import { OUTCOME_METRICS_EN } from '../data/en/outcomeMetrics.js';
 
+import { PAIR_RULES, INTAKE_GUIDANCE } from '../data/interactions.js';
+import { PAIR_NOTES_EN, INTAKE_NOTES_EN } from '../data/en/interactions.js';
+
 let failures = 0;
 
 function check(name, condition) {
@@ -245,6 +248,31 @@ for (const metric of OUTCOME_METRICS) {
   );
 }
 check('outcomeMetrics overlay: intentionally empty', Object.keys(OUTCOME_METRICS_EN).length === 0);
+
+// ── 7. data/en/interactions.js ──────────────────────────────────────
+
+console.log('— data-en: interactions —');
+
+for (const rule of PAIR_RULES) {
+  const key = `${rule.a}|${rule.b}`;
+  const text = PAIR_NOTES_EN[key];
+  check(`interactions.PAIR_RULES["${key}"]: overlay exists`, typeof text === 'string' && text.length > 0);
+  scanCompliance(`interactions.PAIR_RULES["${key}"]`, text);
+}
+check(
+  'interactions.PAIR_NOTES_EN: no orphaned overlay without DE original',
+  Object.keys(PAIR_NOTES_EN).every((key) => PAIR_RULES.some((rule) => `${rule.a}|${rule.b}` === key))
+);
+
+for (const [substanceId, entry] of Object.entries(INTAKE_GUIDANCE)) {
+  const text = INTAKE_NOTES_EN[substanceId];
+  check(`interactions.INTAKE_GUIDANCE.${substanceId}: overlay exists`, typeof text === 'string' && text.length > 0);
+  scanCompliance(`interactions.INTAKE_GUIDANCE.${substanceId}`, text);
+}
+check(
+  'interactions.INTAKE_NOTES_EN: no orphaned overlay without DE original',
+  Object.keys(INTAKE_NOTES_EN).every((substanceId) => Boolean(INTAKE_GUIDANCE[substanceId]))
+);
 
 if (failures > 0) {
   console.error(`\n${failures} TEST(S) FEHLGESCHLAGEN`);
