@@ -186,6 +186,11 @@ export const useStore = create(
       // getestet); der Store ruft sie nur noch auf.
       completeOnboarding: (input) => set((state) => applyOnboardingCompletion(state, input)),
 
+      // Registrierung abgeschickt, Bestaetigungslink steht aus (null = keiner).
+      // Geraetezustand fuer die Ersteinrichtung (FirstSteps.js), nicht im Backup.
+      setAccountEmailPending: (email) =>
+        set((state) => ({ onboarding: { ...state.onboarding, accountEmailPending: email || null } })),
+
       giveScanConsent: () =>
         set((state) => ({
           consents: { ...state.consents, scanUpload: new Date().toISOString() },

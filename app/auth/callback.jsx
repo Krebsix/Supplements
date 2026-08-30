@@ -3,9 +3,11 @@ import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 
+import { routeAfterAccount } from '../../FirstSteps';
 import { useTranslation } from '../../i18n';
 import { colors, space, surfaces, type } from '../../theme';
 import useAccountStore from '../../useAccountStore';
+import useStore from '../../useStore';
 
 /**
  * Ziel der Bestaetigungs- und Reset-Links. Liest Tokens aus der URL,
@@ -29,7 +31,19 @@ export default function AuthCallbackScreen() {
     handled.current = true;
 
     handleAuthCallback(url)
-      .then((type) => router.replace(type === 'recovery' ? '/account-reset' : '/account'))
+      .then((type) => {
+        if (type === 'recovery') {
+          router.replace('/account-reset');
+          return;
+        }
+        // Bestaetigungslink: Konto ist jetzt aktiv. Ohne Praeparat geht es
+        // in die Ersteinrichtung (Tagesplan, Schritt "erstes Praeparat").
+        const main = useStore.getState();
+        main.setAccountEmailPending(null);
+        router.replace(
+          routeAfterAccount({ supplementCount: main.getActiveSupplements().length })
+        );
+      })
       .catch((error) => {
         Alert.alert(t('account.callback.errorTitle'), error?.message ?? '');
         router.replace('/account');

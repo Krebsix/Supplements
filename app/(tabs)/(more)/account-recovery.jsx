@@ -4,9 +4,11 @@ import * as Clipboard from 'expo-clipboard';
 import { useRouter } from 'expo-router';
 
 import { isNetworkError } from '../../../AccountLogic';
+import { routeAfterAccount } from '../../../FirstSteps';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
+import useStore from '../../../useStore';
 
 /**
  * Einmalige Anzeige des Recovery-Keys.
@@ -30,6 +32,7 @@ export default function AccountRecoveryScreen() {
   const confirmSignUp = useAccountStore((state) => state.confirmSignUp);
   const cancelSignUp = useAccountStore((state) => state.cancelSignUp);
   const clearPendingRecoveryKey = useAccountStore((state) => state.clearPendingRecoveryKey);
+  const setAccountEmailPending = useStore((state) => state.setAccountEmailPending);
 
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -65,10 +68,15 @@ export default function AccountRecoveryScreen() {
     try {
       const email = pendingSignUp.email;
       const result = await confirmSignUp();
+      // Bestaetigung ausstehend: merken, die Ersteinrichtung zeigt den
+      // Stand am Konto-Schritt an. Weiter geht es trotzdem sofort.
+      setAccountEmailPending(result.needsConfirmation ? email : null);
       if (result.needsConfirmation) {
         Alert.alert(t('account.confirmMail.title'), t('account.confirmMail.text', { email }));
       }
-      router.replace('/account');
+      router.replace(
+        routeAfterAccount({ supplementCount: useStore.getState().getActiveSupplements().length })
+      );
     } catch (error) {
       Alert.alert(
         t('account.error.title'),

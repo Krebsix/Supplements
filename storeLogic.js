@@ -150,7 +150,9 @@ export const INITIAL_USER_STATE = {
   // accountOffered haelt fest, ob der Konto-Schritt ueberhaupt angezeigt
   // wurde (unter 16 sieht ihn nicht), firstAction, wofuer sich die
   // Nutzerin im Abschluss-Schritt entschieden hat.
-  onboarding: { accountOffered: false, firstAction: null },
+  // accountEmailPending: E-Mail einer Registrierung, deren Bestaetigungs-
+  // link noch aussteht (Ersteinrichtung, FirstSteps.js).
+  onboarding: { accountOffered: false, firstAction: null, accountEmailPending: null },
   // Tier, Scan-Kontingente und Credits (Entitlements.js). Wird von
   // resetAllData mit zurueckgesetzt; gekaufte Rechte kommen nach einer
   // Loeschung ueber den Store-Restore (IAP) zurueck, nicht aus dem Backup.
@@ -176,6 +178,10 @@ export function applyOnboardingCompletion(state, input = {}, now = new Date()) {
       termsVersion: input.termsVersion || null,
     },
     profile: input.profile ? normalizeProfile({ ...state.profile, ...input.profile }) : state.profile,
-    onboarding: { accountOffered: Boolean(input.accountOffered), firstAction },
+    onboarding: {
+      accountOffered: Boolean(input.accountOffered),
+      firstAction,
+      accountEmailPending: state.onboarding?.accountEmailPending ?? null,
+    },
   };
 }

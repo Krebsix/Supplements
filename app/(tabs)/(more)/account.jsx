@@ -16,9 +16,11 @@ import { useRouter } from 'expo-router';
 
 import { ACCOUNT_STATUS } from '../../../AccountStore';
 import { isNetworkError, KEY_RECORD_SAVE_FAILED, PASSWORD_INVALID, PROVIDERS } from '../../../AccountLogic';
+import { routeAfterAccount } from '../../../FirstSteps';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 import useAccountStore from '../../../useAccountStore';
+import useStore from '../../../useStore';
 
 const MIN_PASSWORD_LENGTH = 10;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -89,6 +91,12 @@ function AuthForm({ t }) {
       } else {
         await signIn(email, password);
         setPassword('');
+        // Ohne Praeparat weiter in die Ersteinrichtung (Tagesplan); mit
+        // Bestand bleibt die Nutzerin hier, sie kam dann aus "Mehr".
+        const target = routeAfterAccount({
+          supplementCount: useStore.getState().getActiveSupplements().length,
+        });
+        if (target !== '/account') router.replace(target);
       }
     } catch (error) {
       Alert.alert(t('account.error.title'), describeError(t, error, { credentials: mode === 'signIn' }));

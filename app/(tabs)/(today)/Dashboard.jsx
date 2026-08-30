@@ -8,7 +8,7 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
-import AddSupplementChooser from '../../../components/AddSupplementChooser';
+import FirstStepsCard from '../../../components/FirstStepsCard';
 import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
@@ -347,17 +347,7 @@ export default function Dashboard() {
         subtitle={t('dashboard.sectionRoutineSubtitle')}
       />
 
-      {fullInventoryCount === 0 ? (
-        <View style={styles.emptyRoutineCard}>
-          <Text style={styles.emptyRoutineTitle}>{t('dashboard.emptyRoutineTitle')}</Text>
-          <Text style={styles.emptyRoutineText}>{t('dashboard.emptyRoutineText')}</Text>
-          <AddSupplementChooser
-            onScan={() => router.push('/scanner')}
-            onSearch={() => router.push('/search')}
-            onManual={() => router.push('/AddSupplement')}
-          />
-        </View>
-      ) : null}
+      {fullInventoryCount === 0 ? <FirstStepsCard /> : null}
 
       {fullInventoryCount > 0 && visibleSchedule.length === 0 ? (
         <View style={styles.emptyRoutineCard}>
