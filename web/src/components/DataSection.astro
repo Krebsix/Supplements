@@ -1,0 +1,81 @@
+---
+/**
+ * Deine Daten: Text links, rechts eine Karte mit den drei nachpruefbaren
+ * Fakten. Der Konto-Absatz bleibt bei "spaeter", bis Sync gebaut ist.
+ */
+import Icon from './Icon.astro';
+import Section from './Section.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="data" eyebrow={t.data.eyebrow} title={t.data.title}>
+  <div class="data">
+    <div class="data__text">
+      {t.data.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+    <aside class="card data__facts">
+      <span class="icon-tile">
+        <Icon name="lock" />
+      </span>
+      <ul>
+        {t.data.facts.map((fact) => (
+          <li>
+            <Icon name="check" size={18} />
+            <span>{fact}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .data {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+  .data__text {
+    max-width: 62ch;
+  }
+  .data__text p + p {
+    margin-top: 16px;
+  }
+  .data__facts {
+    padding: 28px;
+  }
+  .data__facts ul {
+    margin-top: 18px;
+    display: grid;
+    gap: 12px;
+  }
+  .data__facts li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-weight: 500;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .data__facts li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .data__facts li .icon {
+    color: var(--affirm);
+  }
+  @media (min-width: 900px) {
+    .data {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+</style>

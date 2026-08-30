@@ -1,0 +1,61 @@
+---
+/**
+ * Der Gegner der Story: drei Mechanismen des Marktes, danach der Satz,
+ * dass MySuplea keinen davon spielt.
+ */
+import Icon from './Icon.astro';
+import Section from './Section.astro';
+import type { IconName } from '../i18n/types.ts';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const ICONS: readonly [IconName, IconName, IconName] = ['tag', 'activity', 'database'];
+---
+
+<Section id="market" eyebrow={t.tricks.eyebrow} title={t.tricks.title}>
+  <div class="tricks">
+    {t.tricks.items.map((item, index) => (
+      <article class="card trick">
+        <span class="icon-tile trick__icon">
+          <Icon name={ICONS[index] ?? 'tag'} />
+        </span>
+        <h3>{item.title}</h3>
+        <p>{item.body}</p>
+      </article>
+    ))}
+  </div>
+  <p class="tricks__closing">{t.tricks.closing}</p>
+</Section>
+
+<style>
+  .tricks {
+    display: grid;
+    gap: 14px;
+  }
+  .trick h3 {
+    margin: 18px 0 8px;
+  }
+  .trick__icon {
+    background: var(--surface-sunken);
+    color: var(--ink-muted);
+  }
+  .tricks__closing {
+    margin-top: 28px;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.35;
+    font-weight: 600;
+    color: var(--ink);
+    max-width: 30ch;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 720px) {
+    .tricks {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

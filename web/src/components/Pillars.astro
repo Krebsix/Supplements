@@ -1,0 +1,50 @@
+---
+/**
+ * Vier Karten: Haltung plus Beleg im Produkt. Nicht mehr als vier, das
+ * ist Absicht (launch/landingpage.md).
+ */
+import Icon from './Icon.astro';
+import Section from './Section.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="stance" eyebrow={t.pillars.eyebrow} title={t.pillars.title}>
+  <div class="pillars">
+    {t.pillars.items.map((item) => (
+      <article class="card pillar">
+        <span class="icon-tile">
+          <Icon name={item.icon} />
+        </span>
+        <h3>{item.title}</h3>
+        <p>{item.body}</p>
+      </article>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .pillars {
+    display: grid;
+    gap: 14px;
+  }
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    padding: 28px;
+  }
+  .pillar h3 {
+    margin: 18px 0 8px;
+  }
+  @media (min-width: 720px) {
+    .pillars {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

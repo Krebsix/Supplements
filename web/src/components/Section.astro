@@ -1,0 +1,36 @@
+---
+/**
+ * Abschnitt mit Eyebrow und H2. Der Inhalt kommt per Slot. Die id dient
+ * den Sprungmarken der Kopfzeile.
+ */
+interface Props {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  /** Ueberschrift zentrieren (fuer Abschnitte mit Karten-Raster). */
+  centered?: boolean;
+}
+
+const { id, eyebrow, title, centered = false } = Astro.props;
+---
+
+<section class="section" id={id}>
+  <div class="container">
+    <div class:list={['section__head', { 'section__head--centered': centered }]}>
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{title}</h2>
+    </div>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section__head {
+    max-width: 640px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+  .section__head--centered {
+    margin-inline: auto;
+    text-align: center;
+  }
+</style>

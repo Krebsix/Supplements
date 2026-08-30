@@ -1,0 +1,100 @@
+---
+/**
+ * Kopfzeile: Wortmarke (Icon plus Name, weil das Icon textfrei ist),
+ * Sprungmarken zu den Abschnitten und der Sprachwechsel als Link auf die
+ * Gegenseite. Kein Menue-Skript: auf kleinen Bildschirmen bleiben nur
+ * Wortmarke und Sprachwechsel sichtbar.
+ */
+import Icon from './Icon.astro';
+import { SITE_NAME } from '../config.ts';
+import { getDictionary, localePath, otherLocale, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const other = otherLocale(locale);
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="brand" href={localePath(locale)} aria-label={SITE_NAME}>
+      <img class="brand__icon" src="/brand-icon.png" width="32" height="32" alt="" />
+      <span class="brand__name">{SITE_NAME}</span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#data">{t.header.nav.data}</a>
+      <a href="#pricing">{t.header.nav.pricing}</a>
+      <a href="#faq">{t.header.nav.faq}</a>
+      <a href="#beta">{t.header.nav.beta}</a>
+    </nav>
+    <a class="lang" href={localePath(other)} hreflang={other} lang={other} aria-label={t.header.switchAria}>
+      <Icon name="globe" size={18} />
+      <span>{t.header.switchLabel}</span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .header {
+    padding-block: 18px;
+  }
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .brand__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: block;
+  }
+  .nav {
+    display: none;
+    gap: 26px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .nav a {
+    color: var(--ink-muted);
+  }
+  .nav a:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+  .lang:hover {
+    text-decoration: none;
+    background: var(--accent-soft);
+  }
+  @media (min-width: 900px) {
+    .nav {
+      display: flex;
+    }
+  }
+</style>

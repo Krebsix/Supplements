@@ -1,0 +1,98 @@
+---
+/**
+ * Die Landingpage. Beide Sprachseiten rendern diese Komponente mit ihrem
+ * locale; alles Sichtbare kommt aus dem Woerterbuch.
+ *
+ * Reihenfolge ist Argumentation: erst der Gegner, dann die Haltung, dann
+ * der Beleg, dann die Daten, dann die Aktion (launch/landingpage.md).
+ */
+import Base from '../layouts/Base.astro';
+import BetaForm from './BetaForm.astro';
+import DataSection from './DataSection.astro';
+import Faq from './Faq.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import NotList from './NotList.astro';
+import Pillars from './Pillars.astro';
+import Pricing from './Pricing.astro';
+import Report from './Report.astro';
+import Tricks from './Tricks.astro';
+import { OPERATOR_NAME, SITE_NAME, SITE_URL } from '../config.ts';
+import { LOCALE_TAGS, getDictionary, localePath, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const ogImage = `/og/${locale}.png`;
+
+const organization = {
+  '@type': 'Organization',
+  name: OPERATOR_NAME,
+  url: SITE_URL,
+};
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: SITE_NAME,
+    url: new URL(localePath(locale), SITE_URL).href,
+    inLanguage: LOCALE_TAGS[locale],
+    description: t.meta.description,
+    applicationCategory: 'HealthApplication',
+    operatingSystem: 'iOS, Android',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+    publisher: organization,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: LOCALE_TAGS[locale],
+    mainEntity: t.faq.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+];
+---
+
+<Base
+  locale={locale}
+  title={t.meta.title}
+  description={t.meta.description}
+  ogImage={ogImage}
+  ogAlt={t.meta.ogAlt}
+  jsonLd={jsonLd}
+>
+  <Header locale={locale} />
+  <main id="main">
+    <Hero locale={locale} />
+    <Tricks locale={locale} />
+    <Pillars locale={locale} />
+    <DataSection locale={locale} />
+    <Report locale={locale} />
+    <NotList locale={locale} />
+    <Pricing locale={locale} />
+    <Faq locale={locale} />
+    <section class="section" id="beta">
+      <div class="container">
+        <div class="card card--xl beta">
+          <span class="eyebrow">{t.form.eyebrow}</span>
+          <BetaForm locale={locale} id="beta" />
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Base>
+
+<style>
+  .beta {
+    max-width: 720px;
+  }
+</style>

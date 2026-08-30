@@ -1,0 +1,96 @@
+---
+/**
+ * Preis ohne Zahlen (Entscheidung 2026-08-30: erst nach den Apple-
+ * Preisstufen). Zwei Karten, dazu die Begruendung, warum ueberhaupt Geld.
+ */
+import Icon from './Icon.astro';
+import Section from './Section.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="pricing" eyebrow={t.pricing.eyebrow} title={t.pricing.title}>
+  <div class="pricing">
+    <article class="card plan">
+      <h3>{t.pricing.free.title}</h3>
+      <ul>
+        {t.pricing.free.items.map((item) => (
+          <li>
+            <Icon name="check" size={18} />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+    <article class="card plan plan--pro">
+      <h3>{t.pricing.pro.title}</h3>
+      <ul>
+        {t.pricing.pro.items.map((item) => (
+          <li>
+            <Icon name="check" size={18} />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+    <aside class="pricing__why">
+      <h3>{t.pricing.why.title}</h3>
+      <p>{t.pricing.why.body}</p>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .pricing {
+    display: grid;
+    gap: 14px;
+  }
+  .plan {
+    padding: 28px;
+  }
+  .plan h3 {
+    margin-bottom: 16px;
+  }
+  .plan ul {
+    display: grid;
+    gap: 10px;
+  }
+  .plan li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+  }
+  .plan li .icon {
+    color: var(--affirm);
+  }
+  .plan--pro {
+    border-top: 4px solid var(--accent);
+  }
+  .plan--pro li .icon {
+    color: var(--accent);
+  }
+  .pricing__why {
+    padding: 8px 4px 0;
+    max-width: 64ch;
+  }
+  .pricing__why h3 {
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+  @media (min-width: 720px) {
+    .pricing {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .pricing__why {
+      grid-column: 1 / -1;
+      padding-top: 16px;
+    }
+  }
+</style>

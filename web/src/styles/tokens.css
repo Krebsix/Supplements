@@ -1,0 +1,43 @@
+/*
+ * Design-Tokens der Website. Jeder Farbwert steht woertlich in ../../theme.js
+ * (der Test tests/legal-site.test.mjs im Repo-Root erzwingt das). Wer die
+ * Palette der App aendert, aendert sie hier mit.
+ */
+:root {
+  color-scheme: light;
+
+  /* Flaechen: grauer Grund, weisse Bloecke ohne Rahmen */
+  --canvas: #f2f2f7;
+  --surface: #ffffff;
+  --surface-sunken: #e9e9ee;
+
+  /* Schrift */
+  --ink: #1c1c1e;
+  --ink-muted: #6c6c70;
+  --ink-faint: #8e8e93;
+
+  /* Linien */
+  --rule: #e5e5ea;
+  --rule-strong: #d1d1d6;
+
+  /* Akzent: das Petrol aus dem App-Icon, die einzige Markenfarbe */
+  --accent: #1c4f5c;
+  --accent-soft: #e7eff1;
+  --accent-ink: #143c47;
+
+  /* Statusfarben: unterscheidbar, aber gedaempft. Ein Hinweis, kein Alarm. */
+  --alert: #b3382c;
+  --alert-soft: #fbebe9;
+  --caution: #96661a;
+  --caution-soft: #fdf3e3;
+  --affirm: #2c6b4f;
+  --affirm-soft: #e8f2ec;
+
+  /* Radien wie theme.js: Knoepfe 10, Karten 14, grosse Flaechen 20 */
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Systemschrift, bewusst ohne Font-Download */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", sans-serif;
+}

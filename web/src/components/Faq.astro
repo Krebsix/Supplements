@@ -1,0 +1,75 @@
+---
+/**
+ * Fuenf Fragen als <details>: ohne Skript auf- und zuklappbar, von
+ * Suchmaschinen lesbar. Das FAQPage-JSON-LD baut Landing.astro aus
+ * denselben Daten.
+ */
+import Section from './Section.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="faq" eyebrow={t.faq.eyebrow} title={t.faq.title}>
+  <div class="card faq">
+    {t.faq.items.map((item, index) => (
+      <details class="faq__item" open={index === 0}>
+        <summary>
+          <span>{item.q}</span>
+          <span class="faq__chevron" aria-hidden="true"></span>
+        </summary>
+        <p>{item.a}</p>
+      </details>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .faq {
+    padding: 8px 28px;
+    max-width: 760px;
+  }
+  .faq__item {
+    border-top: 1px solid var(--rule);
+  }
+  .faq__item:first-child {
+    border-top: 0;
+  }
+  .faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    cursor: pointer;
+    list-style: none;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__chevron {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--ink-faint);
+    border-bottom: 2px solid var(--ink-faint);
+    transform: rotate(45deg);
+    transition: transform 160ms ease;
+    margin-right: 4px;
+  }
+  .faq__item[open] .faq__chevron {
+    transform: rotate(-135deg);
+  }
+  .faq__item p {
+    padding: 0 0 20px;
+    max-width: 60ch;
+  }
+</style>

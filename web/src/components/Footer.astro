@@ -1,0 +1,52 @@
+---
+/**
+ * Fusszeile mit Betreiberin, Pflichtlinks und ODbL-Attribution fuer die
+ * Produktdaten aus Open Food Facts. Die Rechtsseiten sind zweisprachig auf
+ * einer Seite; der Anker springt zur passenden Sprache.
+ */
+import { CONTACT_EMAIL } from '../config.ts';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const anchor = `#${locale}`;
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p class="footer__by">{t.footer.madeBy}</p>
+    <nav class="footer__links" aria-label="Legal">
+      <a href={`/datenschutz/${anchor}`}>{t.footer.privacy}</a>
+      <a href={`/impressum/${anchor}`}>{t.footer.imprint}</a>
+      <a href={`/nutzung/${anchor}`}>{t.footer.terms}</a>
+      <a href={`mailto:${CONTACT_EMAIL}`}>{t.footer.contact}</a>
+    </nav>
+    <p class="footer__odbl">{t.footer.odbl}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 40px 48px;
+    border-top: 1px solid var(--rule-strong);
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+  .footer__inner {
+    display: grid;
+    gap: 12px;
+  }
+  .footer__by {
+    color: var(--ink-muted);
+  }
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-weight: 500;
+  }
+</style>

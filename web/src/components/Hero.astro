@@ -1,0 +1,92 @@
+---
+/**
+ * Hero: Headline, Subline, kompaktes Beta-Formular, daneben das Geraet.
+ * Ab 900px zweispaltig, darunter gestapelt mit dem Geraet unter dem
+ * Formular.
+ */
+import BetaForm from './BetaForm.astro';
+import PhoneMockup from './PhoneMockup.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<section class="hero">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <span class="eyebrow">{t.hero.eyebrow}</span>
+      <h1>{t.hero.headline}</h1>
+      <p class="lead">{t.hero.subline}</p>
+      <div class="hero__form">
+        <BetaForm locale={locale} id="hero" compact />
+      </div>
+      <p class="hero__note">{t.hero.note}</p>
+    </div>
+    <div class="hero__device">
+      <div class="hero__backdrop" aria-hidden="true"></div>
+      <PhoneMockup locale={locale} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(32px, 6vw, 72px) clamp(16px, 3vw, 32px);
+  }
+  .hero__grid {
+    display: grid;
+    gap: 48px;
+    align-items: center;
+  }
+  .hero__copy h1 {
+    margin-bottom: 20px;
+    max-width: 22ch;
+    /* Kein balance: Der Ausgleich brach "Supplement-App" am Bindestrich. */
+    text-wrap: pretty;
+  }
+  .hero__copy .lead {
+    margin-bottom: 28px;
+  }
+  .hero__form {
+    max-width: 520px;
+  }
+  .hero__note {
+    margin-top: 14px;
+    font-size: 15px;
+    color: var(--ink-faint);
+  }
+  .hero__device {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-block: 24px;
+  }
+  .hero__backdrop {
+    position: absolute;
+    inset: 0 8% 0 8%;
+    background: var(--accent-soft);
+    border-radius: var(--radius-xl);
+    z-index: 0;
+  }
+  .hero__device :global(.phone) {
+    position: relative;
+    z-index: 1;
+  }
+  @media (min-width: 900px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 440px);
+      gap: 56px;
+    }
+    .hero__device {
+      padding-block: 40px;
+    }
+    .hero__backdrop {
+      inset: 0;
+    }
+  }
+</style>

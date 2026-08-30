@@ -1,0 +1,82 @@
+---
+/**
+ * Seitengeruest: Meta, hreflang, Open Graph, JSON-LD, Skip-Link.
+ * Keine externen Ressourcen, keine Cookies. Die Seite laedt nichts nach,
+ * sonst widerspraeche sie ihrem eigenen Inhalt.
+ */
+import '../styles/global.css';
+import { SITE_NAME, SITE_URL } from '../config.ts';
+import {
+  DEFAULT_LOCALE,
+  LOCALES,
+  LOCALE_TAGS,
+  OG_LOCALES,
+  getDictionary,
+  localePath,
+  type Locale,
+} from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  ogImage: string;
+  ogAlt: string;
+  /** Pfad der aktuellen Seite ohne Sprachpraefix, z. B. "/" */
+  path?: string;
+  jsonLd?: readonly Record<string, unknown>[];
+}
+
+const { locale, title, description, ogImage, ogAlt, path = '/', jsonLd = [] } = Astro.props;
+const t = getDictionary(locale);
+const canonical = new URL(localePath(locale, path), SITE_URL).href;
+const ogImageUrl = new URL(ogImage, SITE_URL).href;
+---
+
+<!doctype html>
+<html lang={LOCALE_TAGS[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#f2f2f7" />
+    <meta name="color-scheme" content="light" />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={LOCALE_TAGS[l]} href={new URL(localePath(l, path), SITE_URL).href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(DEFAULT_LOCALE, path), SITE_URL).href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content={OG_LOCALES[locale]} />
+    {LOCALES.filter((l) => l !== locale).map((l) => (
+      <meta property="og:locale:alternate" content={OG_LOCALES[l]} />
+    ))}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {jsonLd.map((entry) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.header.skipLink}</a>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,313 @@
+---
+/**
+ * iPhone-Mockup in HTML/CSS. Es gibt noch keine Screenshots, und ein
+ * codiertes Geraet altert nicht: Aendert sich die App-Palette, aendert sich
+ * das Mockup ueber dieselben Tokens mit.
+ *
+ * Gezeigt wird der Kern der Positionierung: die Tagessummen-Karte mit einer
+ * Ueberschreitung im Caution-Ton (Hinweis, kein Alarm) und ein Tagesplan-
+ * Slot. Zahlen sind Beispielwerte aus dem Woerterbuch.
+ */
+import Icon from './Icon.astro';
+import type { IconName } from '../i18n/types.ts';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+
+// Fuellstand des Balkens: Menge geteilt durch Obergrenze, gedeckelt bei 100 %.
+function ratio(amount: string, limit: string): number {
+  const a = Number.parseFloat(amount.replace(',', '.'));
+  const l = Number.parseFloat(limit.replace(',', '.'));
+  if (!Number.isFinite(a) || !Number.isFinite(l) || l <= 0) return 0;
+  return Math.min(a / l, 1);
+}
+
+const TAB_ICONS: readonly IconName[] = ['sun', 'search', 'camera', 'menu'];
+---
+
+<figure class="phone" role="img" aria-label={t.mockup.aria}>
+  <div class="phone__frame">
+    <div class="phone__screen">
+      <div class="phone__statusbar" aria-hidden="true">
+        <span>9:41</span>
+        <span class="phone__signal"><i></i><i></i><i></i></span>
+      </div>
+
+      <div class="phone__content">
+        <div class="screen__head">
+          <span class="screen__date">{t.mockup.screenDate}</span>
+          <span class="screen__title">{t.mockup.screenTitle}</span>
+        </div>
+
+        <div class="card sums">
+          <div class="sums__head">
+            <span class="sums__title">{t.mockup.sumsTitle}</span>
+            <span class="sums__sub">{t.mockup.sumsSub}</span>
+          </div>
+          {t.mockup.rows.map((row) => (
+            <div class:list={['sums__row', `sums__row--${row.tone}`]}>
+              <div class="sums__line">
+                <span class="sums__name">{row.name}</span>
+                <span class="sums__amount">{row.amount}</span>
+              </div>
+              <div class="sums__bar" aria-hidden="true">
+                <i style={`width:${Math.round(ratio(row.amount, row.limit) * 100)}%`}></i>
+              </div>
+              <span class="sums__limit">
+                {t.mockup.limitLabel} {row.limit}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div class="card slot">
+          <div class="slot__head">
+            <span class="slot__title">
+              <Icon name="sun" size={16} />
+              {t.mockup.slotTitle}
+            </span>
+            <span class="slot__time">{t.mockup.slotTime}</span>
+          </div>
+          {t.mockup.slotItems.map((item) => (
+            <div class="slot__row">
+              <div class="slot__text">
+                <span class="slot__name">{item.name}</span>
+                <span class="slot__dose">{item.dose}</span>
+              </div>
+              <span class:list={['slot__pill', item.done ? 'slot__pill--done' : 'slot__pill--open']}>
+                {item.done ? t.mockup.doneLabel : t.mockup.openLabel}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="phone__tabs" aria-hidden="true">
+        {t.mockup.tabs.map((label, index) => (
+          <span class:list={['phone__tab', { 'phone__tab--active': index === 0 }]}>
+            <Icon name={TAB_ICONS[index] ?? 'sun'} size={20} strokeWidth={1.8} />
+            <span>{label}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .phone {
+    margin: 0;
+    width: 300px;
+    max-width: 100%;
+  }
+  .phone__frame {
+    background: var(--ink);
+    border-radius: 44px;
+    padding: 10px;
+    box-shadow: 0 30px 60px -30px rgba(28, 28, 30, 0.45);
+  }
+  .phone__screen {
+    background: var(--canvas);
+    border-radius: 36px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+  }
+  .phone__statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .phone__signal {
+    display: inline-flex;
+    gap: 2px;
+    align-items: flex-end;
+  }
+  .phone__signal i {
+    display: block;
+    width: 3px;
+    background: var(--ink);
+    border-radius: 1px;
+  }
+  .phone__signal i:nth-child(1) {
+    height: 5px;
+  }
+  .phone__signal i:nth-child(2) {
+    height: 8px;
+  }
+  .phone__signal i:nth-child(3) {
+    height: 11px;
+  }
+  .phone__content {
+    flex: 1;
+    padding: 6px 14px 14px;
+  }
+  .screen__head {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 4px 12px;
+  }
+  .screen__date {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .screen__title {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .phone .card {
+    padding: 14px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 12px;
+  }
+  .sums__head {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+  .sums__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .sums__sub {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .sums__row {
+    padding: 8px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .sums__line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .sums__name {
+    font-weight: 500;
+  }
+  .sums__amount {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .sums__bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface-sunken);
+    margin: 6px 0 4px;
+    overflow: hidden;
+  }
+  .sums__bar i {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+  }
+  .sums__limit {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .sums__row--caution .sums__bar i {
+    background: var(--caution);
+  }
+  .sums__row--caution .sums__limit,
+  .sums__row--caution .sums__amount {
+    color: var(--caution);
+  }
+  .sums__row--affirm .sums__bar i {
+    background: var(--affirm);
+  }
+  .sums__row--affirm .sums__limit {
+    color: var(--affirm);
+  }
+  .slot__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .slot__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .slot__time {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .slot__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .slot__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .slot__name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .slot__dose {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .slot__pill {
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .slot__pill--done {
+    background: var(--affirm-soft);
+    color: var(--affirm);
+  }
+  .slot__pill--open {
+    background: var(--surface-sunken);
+    color: var(--ink-muted);
+  }
+  .phone__tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 8px 6px 18px;
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+  }
+  .phone__tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-faint);
+  }
+  .phone__tab--active {
+    color: var(--accent);
+  }
+</style>

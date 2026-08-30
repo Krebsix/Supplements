@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!--
+    App-Icon MySuplea.
+
+    Motiv: Nadines Entwurf (assets/source/motiv-original.png), hier auf das
+    zugeschnitten, was ein App-Icon tragen kann.
+
+    WAS GEGENUEBER DEM ENTWURF FEHLT UND WARUM:
+    - Der Schriftzug "MySuplea" samt Tagline ist weg. Bei 60 pt auf dem
+      Home-Screen (120 px) ist die Tagline nur noch ein grauer Strich, bei
+      40 px ist der ganze Text Matsch. Apple raet in den Human Interface
+      Guidelines ohnehin von Text im Icon ab. Die Wortmarke lebt dort
+      weiter, wo sie lesbar ist: Landingpage, Store-Listing, Splash.
+    - Der eigene gerundete Rahmen ist weg. iOS legt seine Maske darueber;
+      ein mitgezeichneter Rahmen ergaebe zwei sichtbare Rundungen
+      ineinander.
+
+    Der Ausschnitt liegt innerhalb der Scan-Ecken. Weil dabei ein Streifen
+    Hintergrund fehlt, liegt darunter ein Verlauf, dessen Farben aus dem
+    Originalbild ausgemessen sind (oben #06264f, unten #001129) — und der
+    Bildausschnitt laeuft an den Kanten weich aus, damit keine Naht bleibt.
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0.35" y1="0" x2="0.65" y2="1">
+      <stop offset="0"    stop-color="#06264f"/>
+      <stop offset="0.45" stop-color="#021c3d"/>
+      <stop offset="1"    stop-color="#001129"/>
+    </linearGradient>
+
+    <linearGradient id="fadeY" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"     stop-color="#000"/>
+      <stop offset="0.025" stop-color="#fff"/>
+      <stop offset="0.975" stop-color="#fff"/>
+      <stop offset="1"     stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="fadeX" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"     stop-color="#000"/>
+      <stop offset="0.022" stop-color="#fff"/>
+      <stop offset="0.978" stop-color="#fff"/>
+      <stop offset="1"     stop-color="#000"/>
+    </linearGradient>
+    <mask id="feather">
+      <rect x="61" y="120" width="902" height="783" fill="url(#fadeY)"/>
+      <rect x="61" y="120" width="902" height="783" fill="url(#fadeX)"
+            style="mix-blend-mode:multiply"/>
+    </mask>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <g mask="url(#feather)">
+    <g transform="translate(-191.9, -93.2) scale(1.126)">
+      <image x="0" y="0" width="1254" height="1254" xlink:href="motiv-original.png"/>
+    </g>
+  </g>
+</svg>
