@@ -1,0 +1,51 @@
+---
+/**
+ * Quellen-Ticker: Navy-Band, Endlos-Marquee (30s). Die Liste wird
+ * verdoppelt, damit der Loop nahtlos wirkt; bei Reduced Motion steht die
+ * Animation still (globale Regel), die Liste bleibt dann einmal lesbar
+ * durch overflow, nicht abgeschnitten dank flex-wrap im Notfall.
+ */
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const items = [...t.ticker, ...t.ticker];
+---
+
+<div class="ticker">
+  <div class="ticker__track">
+    {items.map((source) => (
+      <span class="ticker__item">
+        {source} <span class="ticker__slash">/</span>
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ticker {
+    background: var(--navy);
+    color: #ffffff;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker__track {
+    display: inline-flex;
+    animation: ticker 30s linear infinite;
+    padding: 13px 0;
+  }
+  .ticker__item {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding-right: 18px;
+  }
+  .ticker__slash {
+    color: var(--azur-onnavy);
+    padding-left: 18px;
+  }
+</style>

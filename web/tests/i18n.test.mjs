@@ -33,6 +33,8 @@ const FORBIDDEN = {
     /\bempfohlen\b/i,
     /\bkein Konto\b/i,
     /\bohne Konto\b(?! nutzbar)/i,
+    /\bmedikament/i,
+    /keine Werbung.{0,20}kein Shop/i,
   ],
   en: [
     /\bcures?\b/i,
@@ -42,6 +44,7 @@ const FORBIDDEN = {
     /\brecommended\b/i,
     /\byou should\b/i,
     /\bno account\b/i,
+    /\bmedication\b/i,
   ],
 };
 
@@ -79,8 +82,12 @@ test('de: echte Umlaute statt ae/oe/ue', () => {
 
 test('Listen fester Laenge sind gleich lang', () => {
   assert.equal(de.tricks.items.length, en.tricks.items.length);
-  assert.equal(de.pillars.items.length, en.pillars.items.length);
+  assert.equal(de.stance.items.length, en.stance.items.length);
   assert.equal(de.faq.items.length, en.faq.items.length);
-  assert.equal(de.pricing.free.items.length, en.pricing.free.items.length);
-  assert.equal(de.pricing.pro.items.length, en.pricing.pro.items.length);
+  assert.equal(de.data.facts.length, en.data.facts.length);
+  assert.equal(de.data.reportItems.length, en.data.reportItems.length);
+  assert.equal(de.data.limitsItems.length, en.data.limitsItems.length);
+  assert.equal(de.pricing.freeItems.length, en.pricing.freeItems.length);
+  assert.equal(de.pricing.proItems.length, en.pricing.proItems.length);
+  assert.equal(de.ticker.length, en.ticker.length);
 });

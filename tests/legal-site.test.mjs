@@ -59,14 +59,11 @@ const themeSource = readFileSync(path.join(repoRoot, 'theme.js'), 'utf8');
 for (const [token, hex] of Object.entries(WEB_TOKENS)) {
   check(`Token ${token} (${hex}) steht woertlich in theme.js`, themeSource.includes(hex));
 }
-// Die Landingpage (web/) hat ihre eigene Token-Datei; jeder Hex-Wert darin
-// muss ebenfalls aus theme.js stammen.
-const tokensCss = readFileSync(path.join(repoRoot, 'web', 'src', 'styles', 'tokens.css'), 'utf8');
-const cssHexes = [...new Set(tokensCss.match(/#[0-9a-f]{6}\b/gi) ?? [])];
-check('web/src/styles/tokens.css enthaelt Farbwerte', cssHexes.length > 0);
-for (const hex of cssHexes) {
-  check(`tokens.css ${hex} steht woertlich in theme.js`, themeSource.includes(hex));
-}
+// Die Landingpage (web/) hat seit dem Redesign 2026-08-30 eine eigene
+// Bildsprache ("Evidenz-Dossier", design_handoff_mysuplea_landing/) und
+// ist bewusst NICHT mehr an theme.js gekoppelt. web/src/styles/tokens.css
+// hat deshalb keine eigene Pruefung gegen theme.js mehr; die Rechtsseiten
+// oben bleiben unveraendert bei ihren WEB_TOKENS.
 
 console.log('— Inhaltliche Vollstaendigkeit —');
 const privacy = site['datenschutz/index.html'];

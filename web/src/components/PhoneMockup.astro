@@ -1,48 +1,30 @@
 ---
 /**
- * iPhone-Mockup in HTML/CSS. Es gibt noch keine Screenshots, und ein
- * codiertes Geraet altert nicht: Aendert sich die App-Palette, aendert sich
- * das Mockup ueber dieselben Tokens mit.
- *
- * Gezeigt wird der Kern der Positionierung: die Tagessummen-Karte mit einer
- * Ueberschreitung im Caution-Ton (Hinweis, kein Alarm) und ein Tagesplan-
- * Slot. Zahlen sind Beispielwerte aus dem Woerterbuch.
+ * iPhone-Mockup: Tagessummen-Karte mit Obergrenzen-Balken plus zwei
+ * Slot-Eintraege. Label-Text geprueft gegen die echte App
+ * (i18n/de/dashboard.js: "Dokumentiert" / "Offen", siehe
+ * launch/landing-page-claims-verification.md, Claim 8).
  */
-import Icon from './Icon.astro';
-import type { IconName } from '../i18n/types.ts';
 import { getDictionary, type Locale } from '../i18n/index.ts';
 
 interface Props {
   locale: Locale;
 }
-
 const { locale } = Astro.props;
 const t = getDictionary(locale);
-
-// Fuellstand des Balkens: Menge geteilt durch Obergrenze, gedeckelt bei 100 %.
-function ratio(amount: string, limit: string): number {
-  const a = Number.parseFloat(amount.replace(',', '.'));
-  const l = Number.parseFloat(limit.replace(',', '.'));
-  if (!Number.isFinite(a) || !Number.isFinite(l) || l <= 0) return 0;
-  return Math.min(a / l, 1);
-}
-
-const TAB_ICONS: readonly IconName[] = ['sun', 'search', 'camera', 'menu'];
 ---
 
-<figure class="phone" role="img" aria-label={t.mockup.aria}>
+<div class="phone" role="img" aria-label={t.mockup.aria}>
   <div class="phone__frame">
     <div class="phone__screen">
       <div class="phone__statusbar" aria-hidden="true">
         <span>9:41</span>
-        <span class="phone__signal"><i></i><i></i><i></i></span>
+        <span class="phone__notch"></span>
+        <span class="phone__signal">▂▄▆</span>
       </div>
-
       <div class="phone__content">
-        <div class="screen__head">
-          <span class="screen__date">{t.mockup.screenDate}</span>
-          <span class="screen__title">{t.mockup.screenTitle}</span>
-        </div>
+        <div class="phone__date">{t.mockup.date}</div>
+        <div class="phone__title">{t.mockup.title}</div>
 
         <div class="card sums">
           <div class="sums__head">
@@ -50,264 +32,197 @@ const TAB_ICONS: readonly IconName[] = ['sun', 'search', 'camera', 'menu'];
             <span class="sums__sub">{t.mockup.sumsSub}</span>
           </div>
           {t.mockup.rows.map((row) => (
-            <div class:list={['sums__row', `sums__row--${row.tone}`]}>
+            <div class="sums__row">
               <div class="sums__line">
                 <span class="sums__name">{row.name}</span>
-                <span class="sums__amount">{row.amount}</span>
+                <span class:list={['sums__amount', `sums__amount--${row.tone}`]}>{row.amount}</span>
               </div>
-              <div class="sums__bar" aria-hidden="true">
-                <i style={`width:${Math.round(ratio(row.amount, row.limit) * 100)}%`}></i>
+              <div class="sums__bar">
+                <div class:list={[`sums__bar-fill`, `sums__bar-fill--${row.tone}`]} style={`width:${row.pct}%`}></div>
               </div>
-              <span class="sums__limit">
+              <div class="sums__limit">
                 {t.mockup.limitLabel} {row.limit}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div class="card slot">
-          <div class="slot__head">
-            <span class="slot__title">
-              <Icon name="sun" size={16} />
-              {t.mockup.slotTitle}
-            </span>
-            <span class="slot__time">{t.mockup.slotTime}</span>
-          </div>
-          {t.mockup.slotItems.map((item) => (
-            <div class="slot__row">
-              <div class="slot__text">
-                <span class="slot__name">{item.name}</span>
-                <span class="slot__dose">{item.dose}</span>
               </div>
-              <span class:list={['slot__pill', item.done ? 'slot__pill--done' : 'slot__pill--open']}>
-                {item.done ? t.mockup.doneLabel : t.mockup.openLabel}
-              </span>
             </div>
           ))}
         </div>
-      </div>
 
-      <div class="phone__tabs" aria-hidden="true">
-        {t.mockup.tabs.map((label, index) => (
-          <span class:list={['phone__tab', { 'phone__tab--active': index === 0 }]}>
-            <Icon name={TAB_ICONS[index] ?? 'sun'} size={20} strokeWidth={1.8} />
-            <span>{label}</span>
-          </span>
-        ))}
+        <div class="card slots">
+          <div class="slots__row slots__row--border">
+            <div>
+              <div class="slots__name">{t.mockup.item1Name}</div>
+              <div class="slots__dose">{t.mockup.item1Dose}</div>
+            </div>
+            <span class="slots__pill slots__pill--done">{t.mockup.item1State}</span>
+          </div>
+          <div class="slots__row">
+            <div>
+              <div class="slots__name">{t.mockup.item2Name}</div>
+              <div class="slots__dose">{t.mockup.item2Dose}</div>
+            </div>
+            <span class="slots__pill slots__pill--open">{t.mockup.item2State}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</figure>
+</div>
 
 <style>
   .phone {
-    margin: 0;
-    width: 300px;
+    width: 320px;
     max-width: 100%;
+    margin: 0 auto;
   }
   .phone__frame {
-    background: var(--ink);
-    border-radius: 44px;
-    padding: 10px;
-    box-shadow: 0 30px 60px -30px rgba(28, 28, 30, 0.45);
+    background: var(--navy);
+    border-radius: 44px 44px 0 0;
+    padding: 9px 9px 0;
+    box-shadow: 0 -20px 80px -30px rgba(11, 34, 57, 0.4);
   }
   .phone__screen {
-    background: var(--canvas);
-    border-radius: 36px;
+    background: #f2f2f7;
+    border-radius: 36px 36px 0 0;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    min-height: 600px;
   }
   .phone__statusbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 24px 4px;
-    font-size: 13px;
+    padding: 13px 24px 5px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--ink);
   }
+  .phone__notch {
+    width: 74px;
+    height: 20px;
+    background: var(--navy);
+    border-radius: var(--radius-pill);
+  }
   .phone__signal {
-    display: inline-flex;
-    gap: 2px;
-    align-items: flex-end;
-  }
-  .phone__signal i {
-    display: block;
-    width: 3px;
-    background: var(--ink);
-    border-radius: 1px;
-  }
-  .phone__signal i:nth-child(1) {
-    height: 5px;
-  }
-  .phone__signal i:nth-child(2) {
-    height: 8px;
-  }
-  .phone__signal i:nth-child(3) {
-    height: 11px;
+    letter-spacing: 1px;
   }
   .phone__content {
-    flex: 1;
-    padding: 6px 14px 14px;
+    padding: 12px 16px 16px;
   }
-  .screen__head {
-    display: flex;
-    flex-direction: column;
-    padding: 6px 4px 12px;
+  .phone__date {
+    font-size: 11px;
+    color: var(--ink-faintest);
+    font-weight: 500;
   }
-  .screen__date {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-  .screen__title {
-    font-size: 30px;
+  .phone__title {
+    font-family: var(--font-display);
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--ink);
-    line-height: 1.15;
+    margin-top: 1px;
   }
   .phone .card {
-    padding: 14px;
-    border-radius: var(--radius-lg);
-    margin-bottom: 12px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    box-shadow: 0 4px 16px -8px rgba(11, 34, 57, 0.12);
   }
   .sums__head {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 8px;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
   }
   .sums__title {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--ink);
   }
   .sums__sub {
-    font-size: 12px;
-    color: var(--ink-faint);
+    font-size: 10px;
+    color: var(--ink-faintest);
   }
   .sums__row {
-    padding: 8px 0;
-    border-top: 1px solid var(--rule);
+    margin-bottom: 10px;
+  }
+  .sums__row:last-child {
+    margin-bottom: 0;
   }
   .sums__line {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    color: var(--ink);
-  }
-  .sums__name {
-    font-weight: 500;
-  }
-  .sums__amount {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-  }
-  .sums__bar {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--surface-sunken);
-    margin: 6px 0 4px;
-    overflow: hidden;
-  }
-  .sums__bar i {
-    display: block;
-    height: 100%;
-    border-radius: 3px;
-  }
-  .sums__limit {
-    font-size: 11px;
-    font-variant-numeric: tabular-nums;
-  }
-  .sums__row--caution .sums__bar i {
-    background: var(--caution);
-  }
-  .sums__row--caution .sums__limit,
-  .sums__row--caution .sums__amount {
-    color: var(--caution);
-  }
-  .sums__row--affirm .sums__bar i {
-    background: var(--affirm);
-  }
-  .sums__row--affirm .sums__limit {
-    color: var(--affirm);
-  }
-  .slot__head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    font-size: 12px;
     margin-bottom: 4px;
   }
-  .slot__title {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
+  .sums__name {
     font-weight: 600;
     color: var(--ink);
   }
-  .slot__time {
-    font-size: 12px;
-    color: var(--ink-faint);
+  .sums__amount {
+    font-weight: 700;
+    font-family: var(--font-mono);
   }
-  .slot__row {
+  .sums__amount--caution {
+    color: var(--status-caution);
+  }
+  .sums__amount--affirm {
+    color: var(--status-affirm);
+  }
+  .sums__bar {
+    height: 5px;
+    background: #e8ecf2;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+  .sums__bar-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+  }
+  .sums__bar-fill--caution {
+    background: var(--status-caution);
+  }
+  .sums__bar-fill--affirm {
+    background: var(--status-affirm);
+  }
+  .sums__limit {
+    font-size: 10px;
+    color: var(--ink-faintest);
+    margin-top: 3px;
+    font-family: var(--font-mono);
+  }
+  .slots {
+    margin-top: 10px;
+  }
+  .slots__row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
     padding: 8px 0;
-    border-top: 1px solid var(--rule);
   }
-  .slot__text {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+  .slots__row--border {
+    border-bottom: 1px solid #f0f2f6;
+    padding-top: 0;
   }
-  .slot__name {
-    font-size: 14px;
-    font-weight: 500;
+  .slots__name {
+    font-size: 12px;
+    font-weight: 600;
     color: var(--ink);
   }
-  .slot__dose {
-    font-size: 12px;
-    color: var(--ink-faint);
-  }
-  .slot__pill {
-    flex: 0 0 auto;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 6px;
-  }
-  .slot__pill--done {
-    background: var(--affirm-soft);
-    color: var(--affirm);
-  }
-  .slot__pill--open {
-    background: var(--surface-sunken);
-    color: var(--ink-muted);
-  }
-  .phone__tabs {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 8px 6px 18px;
-    background: var(--surface);
-    border-top: 1px solid var(--rule);
-  }
-  .phone__tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
+  .slots__dose {
     font-size: 10px;
-    font-weight: 500;
-    color: var(--ink-faint);
+    color: var(--ink-faintest);
   }
-  .phone__tab--active {
-    color: var(--accent);
+  .slots__pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+  }
+  .slots__pill--done {
+    color: var(--status-affirm);
+    background: rgba(30, 142, 90, 0.1);
+  }
+  .slots__pill--open {
+    color: #4c6076;
+    background: rgba(11, 34, 57, 0.06);
   }
 </style>

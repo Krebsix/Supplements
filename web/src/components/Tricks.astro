@@ -1,60 +1,131 @@
 ---
 /**
- * Der Gegner der Story: drei Mechanismen des Marktes, danach der Satz,
- * dass MySuplea keinen davon spielt.
+ * Befund 01: Hairline-Tabelle aus drei Karten, je zweigeteilt: oben
+ * "Andere Apps" (der Trick), unten blau getoent "Deshalb MySuplea" (die
+ * Antwort). Schluss-Satz mit Azur-Highlight.
  */
-import Icon from './Icon.astro';
 import Section from './Section.astro';
-import type { IconName } from '../i18n/types.ts';
 import { getDictionary, type Locale } from '../i18n/index.ts';
 
 interface Props {
   locale: Locale;
 }
-
 const { locale } = Astro.props;
 const t = getDictionary(locale);
-const ICONS: readonly [IconName, IconName, IconName] = ['tag', 'activity', 'database'];
 ---
 
-<Section id="market" eyebrow={t.tricks.eyebrow} title={t.tricks.title}>
-  <div class="tricks">
-    {t.tricks.items.map((item, index) => (
-      <article class="card trick">
-        <span class="icon-tile trick__icon">
-          <Icon name={ICONS[index] ?? 'tag'} />
-        </span>
-        <h3>{item.title}</h3>
-        <p>{item.body}</p>
+<Section id="market" tag={t.tricks.tag} context={t.tricks.context} title={t.tricks.title}>
+  <div class="grid" data-reveal="1">
+    {t.tricks.items.map((item) => (
+      <article class="trick">
+        <div class="trick__top">
+          <div class="trick__head">
+            <span class="trick__label">{t.tricks.otherAppsLabel}</span>
+            <span class="trick__num">{item.number}</span>
+          </div>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </div>
+        <div class="trick__bottom">
+          <div class="trick__counter-label">{t.tricks.counterLabel}</div>
+          <p>{item.counter}</p>
+        </div>
       </article>
     ))}
   </div>
-  <p class="tricks__closing">{t.tricks.closing}</p>
+  <p class="closing" data-reveal="1">
+    {t.tricks.closingPlain} <span class="closing__highlight">{t.tricks.closingHighlight}</span>
+  </p>
 </Section>
 
 <style>
-  .tricks {
+  .grid {
     display: grid;
-    gap: 14px;
+    grid-template-columns: 1fr;
+    border: 1.5px solid var(--navy);
+    background: var(--navy);
+    gap: 1.5px;
+  }
+  .trick {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.2s ease;
+  }
+  .trick:hover {
+    background: var(--surface-hover);
+  }
+  .trick__top {
+    padding: 36px 36px 28px;
+    flex: 1;
+  }
+  .trick__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .trick__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .trick__num {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: rgba(11, 34, 57, 0.15);
+    line-height: 1;
   }
   .trick h3 {
-    margin: 18px 0 8px;
+    margin: 0 0 10px;
+    font-size: 23px;
+    letter-spacing: -0.015em;
   }
-  .trick__icon {
-    background: var(--surface-sunken);
+  .trick__top p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
     color: var(--ink-muted);
+    text-wrap: pretty;
   }
-  .tricks__closing {
-    margin-top: 28px;
-    font-size: clamp(19px, 2vw, 24px);
-    line-height: 1.35;
+  .trick__bottom {
+    border-top: 1.5px solid var(--navy);
+    background: var(--azur-tint-soft);
+    padding: 24px 36px 30px;
+  }
+  .trick__counter-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--azur);
+    margin-bottom: 10px;
+  }
+  .trick__bottom p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
     font-weight: 600;
     color: var(--ink);
-    max-width: 30ch;
-    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+  .closing {
+    margin: 40px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+    max-width: 680px;
+    text-wrap: pretty;
+  }
+  .closing__highlight {
+    background: var(--azur-tint);
+    box-shadow: 0 0 0 4px var(--azur-tint);
   }
   @media (min-width: 720px) {
-    .tricks {
+    .grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }

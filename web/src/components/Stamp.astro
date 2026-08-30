@@ -1,0 +1,50 @@
+---
+/**
+ * Rotierender Stempel im Hero: Kreis in Azur mit Umlauftext (SVG textPath)
+ * und "AES-256" im Zentrum. 26s Rotation, respektiert Reduced Motion ueber
+ * die globale Regel in global.css.
+ */
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<div class="stamp" aria-hidden="true">
+  <svg viewBox="0 0 128 128" width="126" height="126">
+    <defs><path id={`circ-${locale}`} d="M 64,64 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0"></path></defs>
+    <circle cx="64" cy="64" r="63" fill="var(--azur)"></circle>
+    <circle cx="64" cy="64" r="40" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7"></circle>
+    <text class="stamp__ring">
+      <textPath href={`#circ-${locale}`}>{t.stamp.ring}</textPath>
+    </text>
+    <text x="64" y="70" text-anchor="middle" class="stamp__center">{t.stamp.center}</text>
+  </svg>
+</div>
+
+<style>
+  .stamp {
+    position: absolute;
+    top: -40px;
+    right: -8px;
+    z-index: 2;
+    width: 126px;
+    height: 126px;
+    animation: spin 26s linear infinite;
+  }
+  .stamp__ring {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 2.6px;
+    fill: #ffffff;
+  }
+  .stamp__center {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    fill: #ffffff;
+  }
+</style>

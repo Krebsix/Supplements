@@ -1,8 +1,7 @@
 ---
 /**
- * Fusszeile mit Betreiberin, Pflichtlinks und ODbL-Attribution fuer die
- * Produktdaten aus Open Food Facts. Die Rechtsseiten sind zweisprachig auf
- * einer Seite; der Anker springt zur passenden Sprache.
+ * Fusszeile: Navy, Mono-Schrift, Betreiberin, Pflichtlinks (Rechtsseiten
+ * zweisprachig, Anker springt zur passenden Sprache), ODbL-Hinweis.
  */
 import { CONTACT_EMAIL } from '../config.ts';
 import { getDictionary, type Locale } from '../i18n/index.ts';
@@ -10,7 +9,6 @@ import { getDictionary, type Locale } from '../i18n/index.ts';
 interface Props {
   locale: Locale;
 }
-
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 const anchor = `#${locale}`;
@@ -18,35 +16,43 @@ const anchor = `#${locale}`;
 
 <footer class="footer">
   <div class="container footer__inner">
-    <p class="footer__by">{t.footer.madeBy}</p>
+    <span>{t.footer.madeBy}</span>
     <nav class="footer__links" aria-label="Legal">
       <a href={`/datenschutz/${anchor}`}>{t.footer.privacy}</a>
       <a href={`/impressum/${anchor}`}>{t.footer.imprint}</a>
       <a href={`/nutzung/${anchor}`}>{t.footer.terms}</a>
       <a href={`mailto:${CONTACT_EMAIL}`}>{t.footer.contact}</a>
     </nav>
-    <p class="footer__odbl">{t.footer.odbl}</p>
+    <span>{t.footer.odbl}</span>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: 40px 48px;
-    border-top: 1px solid var(--rule-strong);
-    font-size: 14px;
-    color: var(--ink-faint);
+    background: var(--navy);
+    color: var(--onnavy-faintest);
+    padding: 0 0 48px;
   }
   .footer__inner {
-    display: grid;
-    gap: 12px;
-  }
-  .footer__by {
-    color: var(--ink-muted);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
   }
   .footer__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
-    font-weight: 500;
+    gap: 24px;
+  }
+  .footer__links a {
+    color: var(--onnavy-faint);
+  }
+  .footer__links a:hover {
+    color: #ffffff;
   }
 </style>

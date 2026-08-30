@@ -1,0 +1,53 @@
+---
+/**
+ * Zentrierte Navy-CTA am Fussende: Icon, Titel, Text, Formular mit
+ * Azur-Offset-Schatten (helle Variante der BetaForm).
+ */
+import BetaForm from './BetaForm.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<section id="beta" class="beta-cta">
+  <div class="container beta-cta__inner" data-reveal="1">
+    <img class="beta-cta__icon" src="/brand-icon.png" width="76" height="76" alt="" />
+    <h2>{t.beta.title}</h2>
+    <p>{t.beta.body}</p>
+    <BetaForm locale={locale} id="beta" onNavy />
+  </div>
+</section>
+
+<style>
+  .beta-cta {
+    background: var(--navy);
+    color: #ffffff;
+    text-align: center;
+    padding: 120px 0;
+  }
+  .beta-cta__inner {
+    max-width: 640px;
+  }
+  .beta-cta__icon {
+    border-radius: 18px;
+    box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.5);
+  }
+  .beta-cta h2 {
+    margin: 28px 0 16px;
+    font-size: clamp(32px, 4.6vw, 56px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+  }
+  .beta-cta p {
+    margin: 0 0 34px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--onnavy-faint);
+    text-wrap: pretty;
+  }
+</style>

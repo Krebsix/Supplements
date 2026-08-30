@@ -1,10 +1,17 @@
 # Landingpage MySuplea: Inhalte, Copy, Pflichtelemente
 
-Stand: 2026-08-30. GEBAUT: Astro-Projekt in `web/` (DE unter `/`, EN unter
-`/en/`, Rechtsseiten unter `/datenschutz/`, `/impressum/`, `/nutzung/`).
-Spec: docs/superpowers/specs/2026-08-30-website-design.md. Der Text unten
-ist die Copy-Quelle; die gebaute Fassung liegt in `web/src/i18n/de.ts` und
-`en.ts` (dort mit echten Umlauten, Test erzwingt die Compliance-Regeln).
+Stand: 2026-08-30 (Redesign "Evidenz-Dossier"). GEBAUT: Astro-Projekt in
+`web/` (DE unter `/`, EN unter `/en/`, Rechtsseiten unter `/datenschutz/`,
+`/impressum/`, `/nutzung/`). Spec: docs/superpowers/specs/2026-08-30-website-design.md.
+
+**Der Text unten ist der Stand VOR dem Redesign** (erste Fassung, iOS-nahe
+Optik). Die aktuelle Struktur und Copy folgt `launch/design-handoff/` und
+liegt in `web/src/i18n/de.ts`/`en.ts`. Beide Fassungen sind inhaltlich
+kompatibel (gleiche Fakten, gleiche Compliance-Regeln), nur Gliederung und
+Formulierung unterscheiden sich (Befund 01 / Prinzip 02 / Protokoll 03 /
+Modell 04 / Anhang 05 statt der urspruenglichen Abschnittsnamen). Bei
+inhaltlichen Aenderungen ist `web/src/i18n/*.ts` die Wahrheit, nicht dieser
+Text.
 
 ## Runbook bis live (Nadines Schritte)
 

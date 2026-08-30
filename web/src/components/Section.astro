@@ -1,36 +1,28 @@
 ---
 /**
- * Abschnitt mit Eyebrow und H2. Der Inhalt kommt per Slot. Die id dient
- * den Sprungmarken der Kopfzeile.
+ * Sektions-Header: Mono-Label links, gestrichelte Linie, Kontext-Label
+ * rechts, darunter die Ueberschrift. `onNavy` schaltet die Farben fuer
+ * dunkle Sektionen um.
  */
 interface Props {
   id?: string;
-  eyebrow: string;
+  tag: string;
+  context: string;
   title: string;
-  /** Ueberschrift zentrieren (fuer Abschnitte mit Karten-Raster). */
-  centered?: boolean;
+  onNavy?: boolean;
+  class?: string;
 }
-
-const { id, eyebrow, title, centered = false } = Astro.props;
+const { id, tag, context, title, onNavy = false, class: className } = Astro.props;
 ---
 
-<section class="section" id={id}>
+<section class:list={['section', className]} id={id} style={onNavy ? 'background:var(--navy);color:#fff' : undefined}>
   <div class="container">
-    <div class:list={['section__head', { 'section__head--centered': centered }]}>
-      <span class="eyebrow">{eyebrow}</span>
-      <h2>{title}</h2>
+    <div class:list={['section-head', { 'section-head--onnavy': onNavy }]} data-reveal="1">
+      <span class="eyebrow">{tag}</span>
+      <span class="section-head__rule"></span>
+      <span class="section-head__context">{context}</span>
     </div>
+    <h2 class="section-title" data-reveal="1">{title}</h2>
     <slot />
   </div>
 </section>
-
-<style>
-  .section__head {
-    max-width: 640px;
-    margin-bottom: clamp(28px, 4vw, 44px);
-  }
-  .section__head--centered {
-    margin-inline: auto;
-    text-align: center;
-  }
-</style>

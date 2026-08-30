@@ -23,10 +23,11 @@ const outDir = path.join(here, '..', 'public', 'og');
 
 // Palette wie tokens.css (der Test im Repo-Root prueft tokens.css gegen
 // theme.js; hier stehen dieselben Werte).
-const CANVAS = '#f2f2f7';
-const INK = '#1c1c1e';
-const ACCENT = '#1c4f5c';
-const INK_MUTED = '#6c6c70';
+// Palette wie web/src/styles/tokens.css (Redesign "Evidenz-Dossier", 2026-08-30).
+const CANVAS = '#ffffff';
+const INK = '#0b2239';
+const ACCENT = '#1e6fd9';
+const INK_MUTED = '#8a99a9';
 
 const WIDTH = 1200;
 const HEIGHT = 630;

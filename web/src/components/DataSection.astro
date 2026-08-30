@@ -1,81 +1,174 @@
 ---
 /**
- * Deine Daten: Text links, rechts eine Karte mit den drei nachpruefbaren
- * Fakten. Der Konto-Absatz bleibt bei "spaeter", bis Sync gebaut ist.
+ * Protokoll 03: Navy-Sektion. Links Fliesstext plus Fakten-Tabelle,
+ * rechts die weisse Bericht-Karte (Offset-Schatten) und die gestrichelte
+ * "Klare Grenzen"-Karte.
  */
-import Icon from './Icon.astro';
 import Section from './Section.astro';
 import { getDictionary, type Locale } from '../i18n/index.ts';
 
 interface Props {
   locale: Locale;
 }
-
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 ---
 
-<Section id="data" eyebrow={t.data.eyebrow} title={t.data.title}>
-  <div class="data">
-    <div class="data__text">
+<Section id="data" tag={t.data.tag} context={t.data.context} title={t.data.title} onNavy>
+  <div class="grid" data-reveal="1">
+    <div class="text">
       {t.data.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-    </div>
-    <aside class="card data__facts">
-      <span class="icon-tile">
-        <Icon name="lock" />
-      </span>
-      <ul>
+      <div class="facts">
         {t.data.facts.map((fact) => (
-          <li>
-            <Icon name="check" size={18} />
-            <span>{fact}</span>
-          </li>
+          <div class="facts__row">
+            <span class="facts__key">{fact.key}</span>
+            <span class="facts__value">{fact.value}</span>
+          </div>
         ))}
-      </ul>
-    </aside>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="report-card">
+        <div class="report-card__tag">{t.data.reportTag}</div>
+        <h3>{t.data.reportTitle}</h3>
+        <p>{t.data.reportBody}</p>
+        <ul>
+          {t.data.reportItems.map((item) => (
+            <li><span class="report-card__check">✓</span> {item}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="limits-card">
+        <div class="limits-card__tag">{t.data.limitsTag}</div>
+        <h3>{t.data.limitsTitle}</h3>
+        <ul>
+          {t.data.limitsItems.map((item) => (
+            <li><span class="limits-card__cross">✕</span> {item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
   </div>
 </Section>
 
 <style>
-  .data {
+  .grid {
     display: grid;
-    gap: 24px;
+    gap: 56px;
     align-items: start;
   }
-  .data__text {
-    max-width: 62ch;
+  .text p {
+    margin: 0 0 16px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--onnavy-muted);
+    text-wrap: pretty;
   }
-  .data__text p + p {
-    margin-top: 16px;
+  .facts {
+    margin-top: 32px;
+    border: 1px solid var(--rule-onnavy);
   }
-  .data__facts {
-    padding: 28px;
-  }
-  .data__facts ul {
-    margin-top: 18px;
-    display: grid;
-    gap: 12px;
-  }
-  .data__facts li {
+  .facts__row {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--rule-onnavy-soft);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .facts__row:last-child {
+    border-bottom: none;
+  }
+  .facts__key {
+    color: var(--onnavy-faintest);
+  }
+  .facts__value {
+    color: #ffffff;
+    font-weight: 600;
+    text-align: right;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .report-card,
+  .limits-card {
+    padding: 36px;
+  }
+  .report-card {
+    background: #ffffff;
     color: var(--ink);
-    font-weight: 500;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--rule);
+    box-shadow: 6px 6px 0 var(--azur);
   }
-  .data__facts li:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
+  .report-card__tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--azur);
+    margin-bottom: 14px;
   }
-  .data__facts li .icon {
-    color: var(--affirm);
+  .report-card h3 {
+    margin: 0 0 12px;
+    font-size: 25px;
+    letter-spacing: -0.015em;
+  }
+  .report-card p {
+    margin: 0 0 18px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    text-wrap: pretty;
+  }
+  .report-card ul,
+  .limits-card ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .report-card li {
+    display: flex;
+    gap: 10px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .report-card__check {
+    color: var(--azur);
+    font-family: var(--font-mono);
+  }
+  .limits-card {
+    border: 1px dashed rgba(255, 255, 255, 0.4);
+  }
+  .limits-card__tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--azur-onnavy);
+    margin-bottom: 14px;
+  }
+  .limits-card h3 {
+    margin: 0 0 16px;
+    font-size: 25px;
+    letter-spacing: -0.015em;
+    color: #ffffff;
+  }
+  .limits-card li {
+    display: flex;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--onnavy-muted);
+  }
+  .limits-card__cross {
+    color: var(--azur-onnavy);
+    font-family: var(--font-mono);
   }
   @media (min-width: 900px) {
-    .data {
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 48px;
+    .grid {
+      grid-template-columns: 1.15fr 1fr;
     }
   }
 </style>

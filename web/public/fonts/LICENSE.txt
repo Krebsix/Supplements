@@ -1,0 +1,4 @@
+Space Grotesk, IBM Plex Sans, IBM Plex Mono: SIL Open Font License 1.1.
+Bezogen von fonts.google.com / fonts.gstatic.com am 2026-08-30, hier
+selbst gehostet (kein Laufzeit-Request an Google), damit die Website
+weiterhin ohne externe Ressourcen auskommt.

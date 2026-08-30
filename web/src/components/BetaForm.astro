@@ -1,28 +1,29 @@
 ---
 /**
- * Beta-Anmeldung: POST als JSON an die Supabase Edge Function beta-signup
- * (supabase/functions/beta-signup), Antwort { ok: true }.
+ * Beta-Anmeldung: Border-Box mit Offset-Schatten, POST als JSON an die
+ * Supabase Edge Function beta-signup (supabase/functions/beta-signup).
  *
- * Zustaende ueber data-state: idle, sending, success, error. Die Texte
- * kommen aus dem Woerterbuch und liegen als data-Attribute am Formular,
- * damit das Skript sprachunabhaengig bleibt. Ohne URL (Env leer) rendert
- * das Formular deaktiviert mit Hinweis, nie ein toter Knopf.
+ * Zwei Varianten ueber `onNavy`: hell (Hero, Rahmen Navy, Schatten
+ * Navy-Sekundaer) und dunkel (Beta-CTA-Sektion, Rahmen Weiss, Schatten
+ * Azur). Auf Erfolg bleibt das Feld sichtbar (deaktiviert), nur der
+ * Knopf-Text wechselt zu "Eingetragen ✓" (Design-Vorgabe), plus eine
+ * kleine Statuszeile fuer Screenreader.
  *
- * Honeypot: das Feld "company" ist fuer Menschen unsichtbar. Ist es
- * gefuellt, tut das Skript so, als haette es gesendet, und sendet nichts.
+ * Ohne Endpoint (Env leer) rendert das Formular deaktiviert mit Hinweis
+ * statt eines toten Knopfs. Honeypot-Feld "company" ist fuer Menschen
+ * unsichtbar; ist es gefuellt, tut das Skript so, als waere gesendet
+ * worden, ohne etwas zu senden.
  */
 import { BETA_SIGNUP_URL, CONTACT_EMAIL } from '../config.ts';
 import { getDictionary, type Locale } from '../i18n/index.ts';
 
 interface Props {
   locale: Locale;
-  /** Eindeutiges Praefix fuer ids, weil das Formular zweimal auf der Seite steht. */
   id: string;
-  /** Kompakt: nur Feld und Knopf (Hero). Sonst mit Titel und Text. */
-  compact?: boolean;
+  onNavy?: boolean;
 }
 
-const { locale, id, compact = false } = Astro.props;
+const { locale, id, onNavy = false } = Astro.props;
 const t = getDictionary(locale);
 const enabled = BETA_SIGNUP_URL !== '';
 const emailId = `${id}-email`;
@@ -30,24 +31,17 @@ const statusId = `${id}-status`;
 ---
 
 <form
-  class:list={['beta-form', { 'beta-form--compact': compact }]}
+  class:list={['beta-form', { 'beta-form--onnavy': onNavy }]}
   data-beta-form
   data-endpoint={BETA_SIGNUP_URL}
   data-locale={locale}
   data-source={`website-${locale}`}
-  data-sending={t.form.sending}
-  data-success={t.form.success}
+  data-cta={t.form.cta}
+  data-cta-done={t.form.ctaDone}
   data-error={t.form.error}
   data-state="idle"
-  method="post"
   novalidate
 >
-  {!compact && (
-    <div class="beta-form__intro">
-      <h3>{t.form.title}</h3>
-      <p>{t.form.body}</p>
-    </div>
-  )}
   <div class="beta-form__row">
     <label class="visually-hidden" for={emailId}>{t.form.label}</label>
     <input
@@ -65,37 +59,73 @@ const statusId = `${id}-status`;
       <label for={`${id}-company`}>Company</label>
       <input id={`${id}-company`} type="text" name="company" tabindex="-1" autocomplete="off" />
     </div>
-    <button class="button button--primary" type="submit" disabled={!enabled}>
-      <span data-cta>{t.form.cta}</span>
+    <button class="mono-button beta-form__submit" type="submit" disabled={!enabled} data-cta-label>
+      {t.form.cta}
     </button>
   </div>
   <p class="beta-form__status" id={statusId} role="status" aria-live="polite" data-status></p>
   {enabled ? (
-    <p class="beta-form__consent">{t.form.consent}</p>
+    <p class="beta-form__consent">
+      {t.form.consentPrefix} → <a href="/datenschutz/#de">{t.form.consentLink}</a>
+    </p>
   ) : (
     <p class="beta-form__consent">
       {t.form.pending} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
     </p>
   )}
-  <noscript>
-    <p class="beta-form__consent">
-      {t.form.noscript} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-    </p>
-  </noscript>
 </form>
 
 <style>
-  .beta-form__intro {
-    margin-bottom: 20px;
-  }
-  .beta-form__intro h3 {
-    font-size: clamp(22px, 2.4vw, 28px);
-    margin-bottom: 8px;
+  .beta-form {
+    max-width: 540px;
   }
   .beta-form__row {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    border: 1.5px solid var(--navy);
+    background: #ffffff;
+    box-shadow: 5px 5px 0 var(--navy-soft);
+  }
+  .beta-form--onnavy .beta-form__row {
+    border-color: #ffffff;
+    background: var(--navy);
+    box-shadow: 5px 5px 0 var(--azur);
+  }
+  .beta-form--onnavy .input {
+    color: #ffffff;
+  }
+  .beta-form__submit {
+    border-left: 1.5px solid var(--navy);
+    background: var(--navy-soft);
+    color: #ffffff;
+    padding: 17px 26px;
+  }
+  .beta-form__submit:hover:not(:disabled) {
+    background: var(--azur);
+  }
+  .beta-form__submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .beta-form--onnavy .beta-form__submit {
+    border-left-color: #ffffff;
+    background: var(--azur);
+  }
+  .beta-form--onnavy .beta-form__submit:hover:not(:disabled) {
+    background: var(--azur-hover);
+  }
+  .beta-form__status {
+    margin: 10px 0 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .beta-form__status:empty {
+    display: none;
+  }
+  .beta-form[data-state='error'] .beta-form__status {
+    color: var(--status-caution);
+  }
+  .beta-form--onnavy[data-state='error'] .beta-form__status {
+    color: #ffb4a0;
   }
   .beta-form__trap {
     position: absolute;
@@ -104,48 +134,38 @@ const statusId = `${id}-status`;
     height: 1px;
     overflow: hidden;
   }
-  .beta-form__status {
-    min-height: 0;
-    margin-top: 10px;
-    font-size: 15px;
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .beta-form__status:empty {
-    display: none;
-  }
-  .beta-form[data-state='error'] .beta-form__status {
-    color: var(--alert);
-  }
-  .beta-form[data-state='success'] .beta-form__status {
-    color: var(--affirm);
-  }
-  .beta-form[data-state='success'] .beta-form__row,
-  .beta-form[data-state='success'] .beta-form__consent {
-    display: none;
-  }
   .beta-form__consent {
-    margin-top: 12px;
-    font-size: 13px;
-    line-height: 18px;
+    margin: 16px 0 0;
+    max-width: 520px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.6;
     color: var(--ink-faint);
   }
-  @media (min-width: 520px) {
-    .beta-form__row {
-      flex-direction: row;
-    }
-    .beta-form__row .input {
-      flex: 1 1 auto;
-    }
-    .beta-form__row .button {
-      flex: 0 0 auto;
-    }
+  .beta-form--onnavy .beta-form__consent {
+    color: var(--onnavy-faintest);
+    max-width: 480px;
+    margin-inline: auto;
+  }
+  .beta-form__consent a {
+    color: var(--ink-muted);
+    text-decoration: underline;
+  }
+  .beta-form--onnavy .beta-form__consent a {
+    color: var(--onnavy-faint);
+  }
+  .beta-form__consent a:hover {
+    color: var(--azur);
+  }
+  .beta-form--onnavy .beta-form__consent a:hover {
+    color: #ffffff;
   }
 </style>
 
 <script>
   // Sendet die Anmeldung per fetch an die Edge Function und zeigt die
-  // Rueckmeldung inline. Laeuft fuer jedes Formular mit data-beta-form.
+  // Rueckmeldung im Knopf-Text ("Eingetragen ✓") statt das Feld zu
+  // verstecken, wie in der Design-Vorlage.
   const forms = document.querySelectorAll<HTMLFormElement>('form[data-beta-form]');
 
   forms.forEach((form) => {
@@ -153,19 +173,20 @@ const statusId = `${id}-status`;
     if (!endpoint) return;
 
     const status = form.querySelector<HTMLElement>('[data-status]');
-    const cta = form.querySelector<HTMLElement>('[data-cta]');
+    const ctaLabel = form.querySelector<HTMLElement>('[data-cta-label]');
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     const email = form.querySelector<HTMLInputElement>('input[name="email"]');
     const trap = form.querySelector<HTMLInputElement>('input[name="company"]');
-    if (!status || !cta || !button || !email) return;
+    if (!status || !ctaLabel || !button || !email) return;
 
-    const ctaLabel = cta.textContent ?? '';
+    const ctaIdle = form.dataset.cta ?? '';
+    const ctaDone = form.dataset.ctaDone ?? '';
 
     const setState = (state: 'idle' | 'sending' | 'success' | 'error', message = '') => {
       form.dataset.state = state;
       status.textContent = message;
-      button.disabled = state === 'sending';
-      cta.textContent = state === 'sending' ? (form.dataset.sending ?? ctaLabel) : ctaLabel;
+      button.disabled = state === 'sending' || state === 'success';
+      ctaLabel.textContent = state === 'success' ? ctaDone : ctaIdle;
     };
 
     form.addEventListener('submit', async (event) => {
@@ -174,9 +195,11 @@ const statusId = `${id}-status`;
         email.reportValidity();
         return;
       }
-      // Honeypot gefuellt: Bot. Still "Erfolg" zeigen, nichts senden.
+      // Honeypot gefuellt: Bot. Still Erfolg zeigen, nichts senden.
       if (trap && trap.value !== '') {
-        setState('success', form.dataset.success ?? '');
+        email.value = '';
+        email.disabled = true;
+        setState('success');
         return;
       }
 
@@ -196,7 +219,8 @@ const statusId = `${id}-status`;
         });
         const data = (await response.json().catch(() => ({}))) as { ok?: boolean };
         if (response.ok && data.ok) {
-          setState('success', form.dataset.success ?? '');
+          email.disabled = true;
+          setState('success');
         } else {
           setState('error', form.dataset.error ?? '');
         }

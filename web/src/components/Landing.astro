@@ -1,22 +1,24 @@
 ---
 /**
- * Die Landingpage. Beide Sprachseiten rendern diese Komponente mit ihrem
+ * Die Landingpage, Redesign "Evidenz-Dossier" (design_handoff_mysuplea_landing/,
+ * 2026-08-30). Beide Sprachseiten rendern diese Komponente mit ihrem
  * locale; alles Sichtbare kommt aus dem Woerterbuch.
  *
- * Reihenfolge ist Argumentation: erst der Gegner, dann die Haltung, dann
- * der Beleg, dann die Daten, dann die Aktion (launch/landingpage.md).
+ * Reihenfolge: Header, Hero, Quellen-Ticker, Befund 01 (Markt), Prinzip 02
+ * (Haltung), Protokoll 03 (Daten, Navy), Modell 04 (Preis), Anhang 05
+ * (Fragen), Beta-CTA (Navy), Footer.
  */
 import Base from '../layouts/Base.astro';
-import BetaForm from './BetaForm.astro';
+import BetaCta from './BetaCta.astro';
 import DataSection from './DataSection.astro';
 import Faq from './Faq.astro';
 import Footer from './Footer.astro';
 import Header from './Header.astro';
 import Hero from './Hero.astro';
-import NotList from './NotList.astro';
-import Pillars from './Pillars.astro';
 import Pricing from './Pricing.astro';
-import Report from './Report.astro';
+import Reveal from './Reveal.astro';
+import Stance from './Stance.astro';
+import Ticker from './Ticker.astro';
 import Tricks from './Tricks.astro';
 import { OPERATOR_NAME, SITE_NAME, SITE_URL } from '../config.ts';
 import { LOCALE_TAGS, getDictionary, localePath, type Locale } from '../i18n/index.ts';
@@ -71,28 +73,16 @@ const jsonLd = [
 >
   <Header locale={locale} />
   <main id="main">
+    <span id="top" aria-hidden="true"></span>
     <Hero locale={locale} />
+    <Ticker locale={locale} />
     <Tricks locale={locale} />
-    <Pillars locale={locale} />
+    <Stance locale={locale} />
     <DataSection locale={locale} />
-    <Report locale={locale} />
-    <NotList locale={locale} />
     <Pricing locale={locale} />
     <Faq locale={locale} />
-    <section class="section" id="beta">
-      <div class="container">
-        <div class="card card--xl beta">
-          <span class="eyebrow">{t.form.eyebrow}</span>
-          <BetaForm locale={locale} id="beta" />
-        </div>
-      </div>
-    </section>
+    <BetaCta locale={locale} />
   </main>
   <Footer locale={locale} />
+  <Reveal />
 </Base>
-
-<style>
-  .beta {
-    max-width: 720px;
-  }
-</style>

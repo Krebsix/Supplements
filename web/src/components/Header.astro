@@ -1,11 +1,8 @@
 ---
 /**
- * Kopfzeile: Wortmarke (Icon plus Name, weil das Icon textfrei ist),
- * Sprungmarken zu den Abschnitten und der Sprachwechsel als Link auf die
- * Gegenseite. Kein Menue-Skript: auf kleinen Bildschirmen bleiben nur
- * Wortmarke und Sprachwechsel sichtbar.
+ * Kopfzeile: fixiert, Blur-Hintergrund, Wortmarke, Mono-Tagline (ab 1000px),
+ * Sprungmarken-Nav, Sprachwechsel-Link, Beta-Knopf.
  */
-import Icon from './Icon.astro';
 import { SITE_NAME } from '../config.ts';
 import { getDictionary, localePath, otherLocale, type Locale } from '../i18n/index.ts';
 
@@ -20,81 +17,123 @@ const other = otherLocale(locale);
 
 <header class="header">
   <div class="container header__inner">
-    <a class="brand" href={localePath(locale)} aria-label={SITE_NAME}>
-      <img class="brand__icon" src="/brand-icon.png" width="32" height="32" alt="" />
-      <span class="brand__name">{SITE_NAME}</span>
+    <a class="brand" href={`${localePath(locale)}#top`} aria-label={SITE_NAME}>
+      <img class="brand__icon" src="/brand-icon.png" width="30" height="30" alt="" />
+      {SITE_NAME}
     </a>
+    <div class="header__tagline">{t.header.tagline}</div>
     <nav class="nav" aria-label="Sections">
-      <a href="#data">{t.header.nav.data}</a>
-      <a href="#pricing">{t.header.nav.pricing}</a>
-      <a href="#faq">{t.header.nav.faq}</a>
-      <a href="#beta">{t.header.nav.beta}</a>
+      <a class="nav__section" href="#data">{t.header.nav.data}</a>
+      <a class="nav__section" href="#pricing">{t.header.nav.pricing}</a>
+      <a class="nav__section" href="#faq">{t.header.nav.faq}</a>
+      <a class="nav__lang" href={localePath(other)} hreflang={other} lang={other} aria-label={t.header.switchAria}>
+        {t.header.switchLabel}
+      </a>
+      <a class="nav__beta" href="#beta">{t.header.nav.beta}</a>
     </nav>
-    <a class="lang" href={localePath(other)} hreflang={other} lang={other} aria-label={t.header.switchAria}>
-      <Icon name="globe" size={18} />
-      <span>{t.header.switchLabel}</span>
-    </a>
   </div>
 </header>
 
 <style>
   .header {
-    padding-block: 18px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1.5px solid var(--navy);
   }
   .header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
+    width: 100%;
   }
   .brand {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--ink);
+    font-family: var(--font-display);
     font-weight: 700;
-    font-size: 19px;
+    font-size: 18px;
     letter-spacing: -0.01em;
+    color: var(--ink);
   }
   .brand:hover {
-    text-decoration: none;
+    color: var(--ink);
   }
   .brand__icon {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 8px;
     display: block;
   }
-  .nav {
+  .header__tagline {
     display: none;
-    gap: 26px;
-    font-size: 15px;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
   .nav a {
     color: var(--ink-muted);
   }
   .nav a:hover {
     color: var(--ink);
-    text-decoration: none;
   }
-  .lang {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 8px 12px;
-    border-radius: var(--radius-md);
-    background: var(--surface);
+  /* Auf schmalen Bildschirmen ist der Header fixiert: ueberlaufende Links
+     wuerden unsichtbar rechts abgeschnitten, ohne dass die Seite scrollt
+     (fixed-Elemente zaehlen nicht zur Dokumentbreite). Deshalb bleiben
+     hier nur Sprachwechsel und Beta-Knopf, die Sprungmarken kommen ab
+     680px zurueck. */
+  .nav__section {
+    display: none;
   }
-  .lang:hover {
-    text-decoration: none;
-    background: var(--accent-soft);
+  .nav__lang {
+    color: var(--ink-muted);
   }
-  @media (min-width: 900px) {
+  .nav__beta {
+    background: var(--navy-soft);
+    color: var(--onnavy) !important;
+    padding: 9px 14px;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+  }
+  .nav__beta:hover {
+    background: var(--azur);
+  }
+  @media (min-width: 680px) {
     .nav {
-      display: flex;
+      gap: 26px;
+    }
+    .nav__section {
+      display: inline;
+    }
+    .nav__beta {
+      padding: 9px 18px;
+    }
+  }
+  @media (min-width: 1000px) {
+    .header__tagline {
+      display: block;
     }
   }
 </style>

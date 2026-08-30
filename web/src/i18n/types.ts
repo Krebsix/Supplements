@@ -2,19 +2,25 @@
  * Struktur eines Woerterbuchs. Jede Sprache liefert genau diese Form
  * (`satisfies Dictionary`). Listen sind Tupel fester Laenge, damit eine
  * Sprache nicht still einen Punkt weniger hat als die andere.
+ *
+ * Struktur folgt dem Redesign "Evidenz-Dossier" (design_handoff_mysuplea_landing/,
+ * 2026-08-30): Sektionen heissen Befund 01 / Prinzip 02 / Protokoll 03 /
+ * Modell 04 / Anhang 05.
  */
 
 export type Tone = 'caution' | 'affirm';
 
 export interface Trick {
+  readonly number: string;
   readonly title: string;
-  readonly body: string;
+  readonly text: string;
+  readonly counter: string;
 }
 
-export interface Pillar {
-  readonly icon: IconName;
+export interface Stance {
+  readonly tag: string;
   readonly title: string;
-  readonly body: string;
+  readonly text: string;
 }
 
 export interface FaqItem {
@@ -22,36 +28,18 @@ export interface FaqItem {
   readonly a: string;
 }
 
+export interface Fact {
+  readonly key: string;
+  readonly value: string;
+}
+
 export interface MockupRow {
   readonly name: string;
   readonly amount: string;
   readonly limit: string;
+  readonly pct: number;
   readonly tone: Tone;
 }
-
-export interface MockupSlotItem {
-  readonly name: string;
-  readonly dose: string;
-  readonly done: boolean;
-}
-
-export type IconName =
-  | 'bar-chart'
-  | 'layers'
-  | 'book-open'
-  | 'search'
-  | 'lock'
-  | 'file-text'
-  | 'tag'
-  | 'activity'
-  | 'database'
-  | 'slash'
-  | 'globe'
-  | 'check'
-  | 'arrow-right'
-  | 'sun'
-  | 'camera'
-  | 'menu';
 
 export interface Dictionary {
   readonly meta: {
@@ -61,9 +49,10 @@ export interface Dictionary {
     readonly ogAlt: string;
   };
   readonly header: {
+    readonly tagline: string;
+    readonly skipLink: string;
     readonly switchLabel: string;
     readonly switchAria: string;
-    readonly skipLink: string;
     readonly nav: {
       readonly data: string;
       readonly pricing: string;
@@ -72,79 +61,99 @@ export interface Dictionary {
     };
   };
   readonly hero: {
-    readonly eyebrow: string;
-    readonly headline: string;
+    readonly badge: string;
+    readonly headlinePlain: string;
+    readonly headlineHighlight: string;
     readonly subline: string;
-    readonly note: string;
+    readonly storeSoon: string;
+    readonly storeApple: string;
+    readonly storeGoogle: string;
   };
   readonly mockup: {
     readonly aria: string;
-    readonly screenTitle: string;
-    readonly screenDate: string;
+    readonly date: string;
+    readonly title: string;
     readonly sumsTitle: string;
     readonly sumsSub: string;
     readonly limitLabel: string;
     readonly rows: readonly [MockupRow, MockupRow, MockupRow];
-    readonly slotTitle: string;
-    readonly slotTime: string;
-    readonly slotItems: readonly [MockupSlotItem, MockupSlotItem];
-    readonly doneLabel: string;
-    readonly openLabel: string;
-    readonly tabs: readonly [string, string, string, string];
+    readonly item1Name: string;
+    readonly item1Dose: string;
+    readonly item1State: string;
+    readonly item2Name: string;
+    readonly item2Dose: string;
+    readonly item2State: string;
   };
+  readonly stamp: {
+    readonly ring: string;
+    readonly center: string;
+  };
+  readonly ticker: readonly string[];
   readonly tricks: {
-    readonly eyebrow: string;
+    tag: string;
+    context: string;
     readonly title: string;
+    readonly otherAppsLabel: string;
+    readonly counterLabel: string;
     readonly items: readonly [Trick, Trick, Trick];
-    readonly closing: string;
+    readonly closingPlain: string;
+    readonly closingHighlight: string;
   };
-  readonly pillars: {
-    readonly eyebrow: string;
+  readonly stance: {
+    tag: string;
+    context: string;
     readonly title: string;
-    readonly items: readonly [Pillar, Pillar, Pillar, Pillar];
+    readonly items: readonly [Stance, Stance, Stance, Stance];
+    readonly quote: string;
+    readonly quoteCaption: string;
   };
   readonly data: {
-    readonly eyebrow: string;
+    tag: string;
+    context: string;
     readonly title: string;
     readonly paragraphs: readonly [string, string, string];
-    readonly facts: readonly [string, string, string];
-  };
-  readonly report: {
-    readonly eyebrow: string;
-    readonly title: string;
-    readonly body: string;
-    readonly sections: readonly [string, string, string, string];
-  };
-  readonly notList: {
-    readonly eyebrow: string;
-    readonly title: string;
-    readonly items: readonly [string, string, string, string];
+    readonly facts: readonly [Fact, Fact, Fact, Fact];
+    readonly reportTag: string;
+    readonly reportTitle: string;
+    readonly reportBody: string;
+    readonly reportItems: readonly [string, string, string, string];
+    readonly limitsTag: string;
+    readonly limitsTitle: string;
+    readonly limitsItems: readonly [string, string, string];
   };
   readonly pricing: {
-    readonly eyebrow: string;
+    tag: string;
+    context: string;
     readonly title: string;
-    readonly free: { readonly title: string; readonly items: readonly string[] };
-    readonly pro: { readonly title: string; readonly items: readonly string[] };
-    readonly why: { readonly title: string; readonly body: string };
+    readonly freeTag: string;
+    readonly freeTitle: string;
+    readonly freeItems: readonly string[];
+    readonly proTag: string;
+    readonly proTitle: string;
+    readonly proItems: readonly string[];
+    readonly whyTag: string;
+    readonly whyTitle: string;
+    readonly whyBody: string;
   };
   readonly faq: {
-    readonly eyebrow: string;
+    tag: string;
+    context: string;
     readonly title: string;
     readonly items: readonly [FaqItem, FaqItem, FaqItem, FaqItem, FaqItem];
   };
   readonly form: {
-    readonly eyebrow: string;
-    readonly title: string;
-    readonly body: string;
     readonly label: string;
     readonly placeholder: string;
     readonly cta: string;
-    readonly consent: string;
+    readonly ctaDone: string;
+    readonly consentPrefix: string;
+    readonly consentLink: string;
     readonly pending: string;
-    readonly sending: string;
-    readonly success: string;
     readonly error: string;
-    readonly noscript: string;
+  };
+  readonly beta: {
+    readonly title: string;
+    readonly body: string;
   };
   readonly footer: {
     readonly madeBy: string;

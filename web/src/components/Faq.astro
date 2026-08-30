@@ -1,8 +1,8 @@
 ---
 /**
- * Fuenf Fragen als <details>: ohne Skript auf- und zuklappbar, von
- * Suchmaschinen lesbar. Das FAQPage-JSON-LD baut Landing.astro aus
- * denselben Daten.
+ * Anhang 05: Akkordeon, 1.5px-Zeilen, +/- Mono-Marker, eine Frage offen
+ * zugleich. <details>/<summary> fuer Funktion ohne JavaScript; ein
+ * kleines Skript erzwingt "nur eine offen" und tauscht das Marker-Zeichen.
  */
 import Section from './Section.astro';
 import { getDictionary, type Locale } from '../i18n/index.ts';
@@ -10,18 +10,17 @@ import { getDictionary, type Locale } from '../i18n/index.ts';
 interface Props {
   locale: Locale;
 }
-
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 ---
 
-<Section id="faq" eyebrow={t.faq.eyebrow} title={t.faq.title}>
-  <div class="card faq">
+<Section id="faq" tag={t.faq.tag} context={t.faq.context} title={t.faq.title} class="faq-section">
+  <div class="faq" data-reveal="1" data-faq-group>
     {t.faq.items.map((item, index) => (
       <details class="faq__item" open={index === 0}>
         <summary>
           <span>{item.q}</span>
-          <span class="faq__chevron" aria-hidden="true"></span>
+          <span class="faq__mark" aria-hidden="true">{index === 0 ? '−' : '+'}</span>
         </summary>
         <p>{item.a}</p>
       </details>
@@ -30,46 +29,72 @@ const t = getDictionary(locale);
 </Section>
 
 <style>
+  .faq-section :global(.container) {
+    max-width: 900px;
+  }
   .faq {
-    padding: 8px 28px;
-    max-width: 760px;
+    border-top: 1.5px solid var(--navy);
   }
   .faq__item {
-    border-top: 1px solid var(--rule);
-  }
-  .faq__item:first-child {
-    border-top: 0;
+    border-bottom: 1.5px solid var(--navy);
   }
   .faq__item summary {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    padding: 18px 0;
-    cursor: pointer;
+    align-items: center;
+    gap: 20px;
     list-style: none;
-    color: var(--ink);
-    font-weight: 600;
+    cursor: pointer;
+    padding: 26px 8px;
     font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
   }
   .faq__item summary::-webkit-details-marker {
     display: none;
   }
-  .faq__chevron {
-    flex: 0 0 auto;
-    width: 10px;
-    height: 10px;
-    border-right: 2px solid var(--ink-faint);
-    border-bottom: 2px solid var(--ink-faint);
-    transform: rotate(45deg);
-    transition: transform 160ms ease;
-    margin-right: 4px;
+  .faq__item summary:hover {
+    color: var(--azur);
   }
-  .faq__item[open] .faq__chevron {
-    transform: rotate(-135deg);
+  .faq__mark {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    color: var(--azur);
+    flex-shrink: 0;
   }
   .faq__item p {
-    padding: 0 0 20px;
-    max-width: 60ch;
+    margin: 0;
+    padding: 0 8px 26px;
+    max-width: 700px;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--ink-muted);
+    text-wrap: pretty;
   }
 </style>
+
+<script>
+  // Eine Frage offen zugleich, Marker +/- spiegelt den Zustand.
+  document.querySelectorAll<HTMLElement>('[data-faq-group]').forEach((group) => {
+    const items = Array.from(group.querySelectorAll<HTMLDetailsElement>('.faq__item'));
+    items.forEach((item) => {
+      const mark = item.querySelector<HTMLElement>('.faq__mark');
+      const sync = () => {
+        if (mark) mark.textContent = item.open ? '−' : '+';
+      };
+      item.addEventListener('toggle', () => {
+        sync();
+        if (item.open) {
+          items.forEach((other) => {
+            if (other !== item) other.open = false;
+          });
+          items.forEach((other) => {
+            const otherMark = other.querySelector<HTMLElement>('.faq__mark');
+            if (otherMark) otherMark.textContent = other.open ? '−' : '+';
+          });
+        }
+      });
+      sync();
+    });
+  });
+</script>

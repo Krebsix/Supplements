@@ -176,6 +176,17 @@ unter `/`, EN unter `/en/`; Rechtsseiten werden weiter aus
 nach `web/public/datenschutz|impressum|nutzung/index.html`, nie von Hand
 editieren). Hosting: Vercel-Projekt `mysuplea-legal`, Root Directory `web/`.
 
+**Design seit 2026-08-30: "Evidenz-Dossier"** (`launch/design-handoff/`,
+verbindliche Referenz `MySuplea Landing v2.dc.html`). Eigenstaendige
+Bildsprache der Landingpage, bewusst NICHT an `theme.js` gekoppelt: Weiss
+plus Logo-Navy (`#0B2239`) und Azur (`#1E6FD9`), harte 1.5px-Linien statt
+Schatten, Space Grotesk (Headlines) + IBM Plex Sans (Fliesstext) + IBM Plex
+Mono (Labels), lokal gehostet unter `web/public/fonts/` (kein Google-Fonts-
+Request zur Laufzeit). Tokens in `web/src/styles/tokens.css`, keine eigene
+Pruefung mehr gegen `theme.js` (siehe `tests/legal-site.test.mjs`). Jede
+Aussage der Landingpage ist gegen den App-Code verifiziert:
+`launch/landing-page-claims-verification.md`.
+
 ```bash
 cd web
 npm run dev        # lokal

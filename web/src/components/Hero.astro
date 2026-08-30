@@ -1,37 +1,53 @@
 ---
 /**
- * Hero: Headline, Subline, kompaktes Beta-Formular, daneben das Geraet.
- * Ab 900px zweispaltig, darunter gestapelt mit dem Geraet unter dem
- * Formular.
+ * Hero: Badge, H1 mit Azur-Highlight, Beschreibung, Beta-Formular
+ * (Border-Box mit Offset-Schatten), Store-Badges, rechts iPhone-Mockup
+ * plus rotierender Stempel. Schwebende Kapsel-Deko im Hintergrund.
  */
 import BetaForm from './BetaForm.astro';
 import PhoneMockup from './PhoneMockup.astro';
+import Stamp from './Stamp.astro';
 import { getDictionary, type Locale } from '../i18n/index.ts';
 
 interface Props {
   locale: Locale;
 }
-
 const { locale } = Astro.props;
 const t = getDictionary(locale);
-// Bindestriche in der Headline (Supplement-App) sollen nicht umbrechen:
-// geschuetzter Bindestrich nur in der Anzeige, Meta und Title bleiben ASCII.
-const headline = t.hero.headline.replace(/-/g, '\u2011');
 ---
 
 <section class="hero">
+  <div class="hero__deco" aria-hidden="true">
+    <div class="capsule capsule--split"></div>
+    <div class="capsule capsule--outline"></div>
+    <div class="capsule capsule--ghost"></div>
+    <div class="dot dot--fill"></div>
+    <div class="dot dot--ring"></div>
+  </div>
   <div class="container hero__grid">
     <div class="hero__copy">
-      <span class="eyebrow">{t.hero.eyebrow}</span>
-      <h1>{headline}</h1>
-      <p class="lead">{t.hero.subline}</p>
-      <div class="hero__form">
-        <BetaForm locale={locale} id="hero" compact />
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        {t.hero.badge}
       </div>
-      <p class="hero__note">{t.hero.note}</p>
+      <h1 class="hero__headline">
+        {t.hero.headlinePlain} <span class="hero__highlight">{t.hero.headlineHighlight}</span>
+      </h1>
+      <p class="hero__subline">{t.hero.subline}</p>
+      <BetaForm locale={locale} id="hero" />
+      <div class="hero__stores">
+        <span class="store-badge store-badge--solid">
+          <span class="store-badge__eyebrow">{t.hero.storeSoon}</span>
+          <span class="store-badge__name">{t.hero.storeApple}</span>
+        </span>
+        <span class="store-badge store-badge--outline">
+          <span class="store-badge__eyebrow">{t.hero.storeSoon}</span>
+          <span class="store-badge__name">{t.hero.storeGoogle}</span>
+        </span>
+      </div>
     </div>
     <div class="hero__device">
-      <div class="hero__backdrop" aria-hidden="true"></div>
+      <Stamp locale={locale} />
       <PhoneMockup locale={locale} />
     </div>
   </div>
@@ -39,55 +55,170 @@ const headline = t.hero.headline.replace(/-/g, '\u2011');
 
 <style>
   .hero {
-    padding-block: clamp(32px, 6vw, 72px) clamp(16px, 3vw, 32px);
+    position: relative;
+    overflow: hidden;
+    padding: 150px 0 0;
+    background: radial-gradient(900px 500px at 85% 0%, var(--azur-tint-soft), transparent 60%), var(--canvas);
   }
+  .hero__deco {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .capsule {
+    position: absolute;
+    border-radius: var(--radius-pill);
+    animation: drift 9s ease-in-out infinite;
+  }
+  .capsule--split {
+    top: 120px;
+    right: 44%;
+    width: 130px;
+    height: 52px;
+    background: linear-gradient(90deg, var(--navy-soft) 50%, var(--azur) 50%);
+    opacity: 0.9;
+    --rot: -24deg;
+    transform: rotate(-24deg);
+  }
+  .capsule--outline {
+    top: 300px;
+    left: -34px;
+    width: 150px;
+    height: 60px;
+    border: 1.5px solid var(--navy);
+    --rot: 18deg;
+    transform: rotate(18deg);
+    animation-duration: 11s;
+    animation-delay: 1s;
+  }
+  .capsule--ghost {
+    bottom: 130px;
+    left: 44%;
+    width: 84px;
+    height: 34px;
+    background: linear-gradient(90deg, var(--azur-tint) 50%, rgba(11, 46, 79, 0.16) 50%);
+    --rot: -36deg;
+    transform: rotate(-36deg);
+    animation-duration: 13s;
+    animation-delay: 0.5s;
+  }
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .dot--fill {
+    top: 96px;
+    left: 30%;
+    width: 26px;
+    height: 26px;
+    background: var(--azur);
+    opacity: 0.25;
+  }
+  .dot--ring {
+    bottom: 220px;
+    right: 38%;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--navy);
+    opacity: 0.5;
+  }
+  @media (max-width: 720px) {
+    .hero__deco {
+      display: none;
+    }
+  }
+
   .hero__grid {
+    position: relative;
     display: grid;
-    gap: 48px;
+    gap: 64px;
+    align-items: end;
+  }
+  .hero__copy {
+    padding-bottom: 80px;
+  }
+  .hero__badge {
+    display: flex;
     align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--azur);
+    animation: fadeUp 0.7s ease-out both;
   }
-  .hero__copy h1 {
-    margin-bottom: 20px;
-    max-width: 22ch;
+  .hero__badge-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--azur);
+    animation: pulse 2.4s ease-in-out infinite;
   }
-  .hero__copy .lead {
-    margin-bottom: 28px;
+  .hero__headline {
+    margin: 26px 0 0;
+    font-size: clamp(42px, 6vw, 86px);
+    line-height: 0.99;
+    letter-spacing: -0.035em;
+    animation: fadeUp 0.8s ease-out 0.12s both;
+    text-wrap: balance;
   }
-  .hero__form {
+  .hero__highlight {
+    color: var(--azur);
+    box-shadow: inset 0 -0.22em 0 var(--azur-tint);
+  }
+  .hero__subline {
+    margin: 30px 0 36px;
     max-width: 520px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    animation: fadeUp 0.8s ease-out 0.24s both;
+    text-wrap: pretty;
   }
-  .hero__note {
-    margin-top: 14px;
+  .hero__stores {
+    display: flex;
+    gap: 12px;
+    margin-top: 26px;
+    animation: fadeUp 0.8s ease-out 0.34s both;
+  }
+  .store-badge {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1.5px solid var(--navy);
+    padding: 8px 18px;
+    border-radius: var(--radius-md);
+    line-height: 1.15;
+  }
+  .store-badge--solid {
+    background: var(--navy);
+    color: #ffffff;
+  }
+  .store-badge--outline {
+    background: #ffffff;
+    color: var(--navy);
+  }
+  .store-badge__eyebrow {
+    font-size: 9.5px;
+    opacity: 0.75;
+    letter-spacing: 0.04em;
+  }
+  .store-badge__name {
+    font-family: var(--font-display);
     font-size: 15px;
-    color: var(--ink-faint);
+    font-weight: 700;
   }
+
   .hero__device {
     position: relative;
-    display: flex;
-    justify-content: center;
-    padding-block: 24px;
+    align-self: end;
+    animation: fadeUp 1s ease-out 0.3s both;
   }
-  .hero__backdrop {
-    position: absolute;
-    inset: 0 8% 0 8%;
-    background: var(--accent-soft);
-    border-radius: var(--radius-xl);
-    z-index: 0;
-  }
-  .hero__device :global(.phone) {
-    position: relative;
-    z-index: 1;
-  }
+
   @media (min-width: 900px) {
     .hero__grid {
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 440px);
-      gap: 56px;
-    }
-    .hero__device {
-      padding-block: 40px;
-    }
-    .hero__backdrop {
-      inset: 0;
+      grid-template-columns: 1.3fr 1fr;
     }
   }
 </style>

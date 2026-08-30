@@ -1,0 +1,111 @@
+---
+/**
+ * Prinzip 02: vier Tabellenzeilen (Tag / Titel / Text), darunter ein
+ * grosses Zitat mit Anfuehrungszeichen-Glyphe in Space Grotesk.
+ */
+import Section from './Section.astro';
+import { getDictionary, type Locale } from '../i18n/index.ts';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="stance" tag={t.stance.tag} context={t.stance.context} title={t.stance.title}>
+  <div class="rows" data-reveal="1">
+    {t.stance.items.map((item) => (
+      <div class="row">
+        <div class="row__tag">{item.tag}</div>
+        <h3>{item.title}</h3>
+        <p>{item.text}</p>
+      </div>
+    ))}
+  </div>
+  <div class="quote" data-reveal="1">
+    <div class="quote__mark" aria-hidden="true">&bdquo;</div>
+    <div>
+      <p class="quote__text">{t.stance.quote}</p>
+      <div class="quote__caption">{t.stance.quoteCaption}</div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .rows {
+    border-top: 1.5px solid var(--navy);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px 32px;
+    align-items: start;
+    padding: 32px 8px;
+    border-bottom: 1.5px solid var(--navy);
+    transition: background-color 0.2s ease;
+  }
+  .row:hover {
+    background: var(--surface-hover);
+  }
+  .row__tag {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--azur);
+    padding-top: 6px;
+  }
+  .row h3 {
+    grid-column: 2;
+    font-size: clamp(22px, 2.4vw, 30px);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .row p {
+    grid-column: 2;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-muted);
+    text-wrap: pretty;
+  }
+  .quote {
+    margin-top: 72px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    max-width: 900px;
+  }
+  .quote__mark {
+    font-family: var(--font-display);
+    font-size: 100px;
+    line-height: 0.7;
+    color: var(--azur);
+  }
+  .quote__text {
+    margin: 0 0 18px;
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.35;
+    font-weight: 500;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .quote__caption {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  @media (min-width: 640px) {
+    .row {
+      grid-template-columns: 110px 1fr 1.2fr;
+    }
+    .row h3 {
+      grid-column: 2;
+    }
+    .row p {
+      grid-column: 3;
+    }
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+/**
+ * Scroll-Reveal: IntersectionObserver, threshold 0.12, einmalig. Ohne
+ * JavaScript oder bei Reduced Motion bleiben [data-reveal]-Elemente ueber
+ * die CSS-Regel .no-js [data-reveal] bzw. die Media-Query sofort sichtbar
+ * (siehe global.css).
+ */
+---
+
+<script>
+  // Ohne JavaScript oder bei Reduced Motion bleibt alles sichtbar: Die
+  // "is-hidden"-Klasse wird nur hier gesetzt, nie statisch in CSS.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('is-hidden');
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('[data-reveal]').forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top > window.innerHeight * 0.9) {
+        el.classList.add('is-hidden');
+        io.observe(el);
+      }
+    });
+  }
+</script>
