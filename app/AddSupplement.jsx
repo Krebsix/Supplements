@@ -1,28 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Switch,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import { SLOTS, SLOT_ORDER } from '../TimingEngine';
 import { canAddSupplement, canUseProFeature } from '../Entitlements';
+import { SLOT_ORDER } from '../TimingEngine';
+import { DEFAULT_SLOT, expandSlots, substanceIdsFromDetails, suggestPrimarySlot } from '../SlotSuggestion';
+import FrequencyChips from '../components/FrequencyChips';
+import ProductSummaryCard from '../components/ProductSummaryCard';
 import ProGate from '../components/ProGate';
-import useStore from '../useStore';
-import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
+import SlotChips from '../components/SlotChips';
 import { useTranslation } from '../i18n';
 import { colors, radius, space, surfaces, type } from '../theme';
+import useStore from '../useStore';
+import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
 
+// Einheiten-Chips fuer die manuelle Eingabe. Der gespeicherte Wert ist der
+// deutsche Fachbegriff bzw. das Kuerzel, wie er bisher frei eingetippt
+// wurde; nur das Label laeuft ueber i18n.
+const UNIT_OPTIONS = [
+  { value: 'Kapsel', key: 'capsule' },
+  { value: 'Tablette', key: 'tablet' },
+  { value: 'mg', key: 'mg' },
+  { value: 'Tropfen', key: 'drops' },
+  { value: 'ml', key: 'ml' },
+  { value: 'Portion', key: 'portion' },
+];
+
+/**
+ * Screen "Aufnehmen": Produktkarte (oder Felder bei manueller Eingabe),
+ * zwei Fragen (wie oft, wann), eingeklappt "Mehr Angaben", ein Knopf.
+ * Vier Einstiege ueber Parameter: ?fromScan=1 (Katalog, Barcode, Foto),
+ * ?editId=<id> (Bearbeiten), ohne Parameter manuell.
+ *
+ * Keine Fachlogik hier: Vorschlag und Slot-Ableitung kommen aus
+ * SlotSuggestion.js, die Free-Grenze aus Entitlements.js.
+ */
 export default function AddSupplement() {
   const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams();
+
   const addUserSupplement = useStore((state) => state.addUserSupplement);
   const updateUserSupplement = useStore((state) => state.updateUserSupplement);
   const addSupplementFromPendingScan = useStore((state) => state.addSupplementFromPendingScan);
@@ -30,31 +59,8 @@ export default function AddSupplement() {
   const pendingScanResult = useStore((state) => state.pendingScanResult);
   const userSupplements = useStore((state) => state.userSupplements);
   const entitlement = useStore((state) => state.entitlement);
-  const inventory = useStore((state) => state.librarySupplements);
   const setStock = useStore((state) => state.setStock);
   const getStock = useStore((state) => state.getStock);
-
-  const [name, setName] = useState('');
-  const [purpose, setPurpose] = useState('');
-  const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState('');
-  const [unit, setUnit] = useState('');
-  const [timingRaw, setTimingRaw] = useState('');
-  const [notes, setNotes] = useState('');
-  const [childSafe, setChildSafe] = useState(false);
-  const [selectedSlots, setSelectedSlots] = useState([]);
-  // Kur-Zyklus (CureManager.js): Die Oberflaeche bietet den ON/OFF-Typ an.
-  // Der Stufen-Typ ('stepped') bleibt Fachlogik ohne Formular; er war
-  // bisher nirgends erzeugbar, es gibt also keine Bestandsdaten.
-  const [cureEnabled, setCureEnabled] = useState(false);
-  const [cureOnDays, setCureOnDays] = useState('');
-  const [cureOffDays, setCureOffDays] = useState('');
-  // Kaufpreis und Packungsinhalt. Beides lag bisher nur im Analyse-Tab und
-  // damit hinter der Auswertung, die es voraussetzt: Die Kostenrechnung
-  // (CostAnalyzer.js) braucht genau diese zwei Zahlen. Erfasst wird es
-  // jetzt dort, wo die Packung ohnehin in der Hand liegt.
-  const [purchasePrice, setPurchasePrice] = useState('');
-  const [packageUnits, setPackageUnits] = useState('');
 
   const editIdParam = Array.isArray(params.editId) ? params.editId[0] : params.editId;
   const fromScanParam = Array.isArray(params.fromScan) ? params.fromScan[0] : params.fromScan;
@@ -62,21 +68,61 @@ export default function AddSupplement() {
   const existingSupplement = editId
     ? userSupplements.find((supplement) => supplement.id === editId)
     : null;
-  const fromScan = !editId && fromScanParam === '1' && pendingScanResult;
+  const fromScan = !editId && fromScanParam === '1' && Boolean(pendingScanResult);
+  const isManual = !editId && !fromScan;
 
+  // Produkt
+  const [name, setName] = useState('');
+  const [amount, setAmount] = useState('');
+  const [unit, setUnit] = useState('');
+  const [unitOther, setUnitOther] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(false);
+
+  // Zwei Fragen
+  const [timesPerDay, setTimesPerDay] = useState(1);
+  const [selectedSlots, setSelectedSlots] = useState([DEFAULT_SLOT]);
+  const [primarySlot, setPrimarySlot] = useState(DEFAULT_SLOT);
+  const [reason, setReason] = useState(null);
+
+  // Mehr Angaben
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [purchasePrice, setPurchasePrice] = useState('');
+  const [packageUnits, setPackageUnits] = useState('');
+  const [cureEnabled, setCureEnabled] = useState(false);
+  const [cureOnDays, setCureOnDays] = useState('');
+  const [cureOffDays, setCureOffDays] = useState('');
+  const [notes, setNotes] = useState('');
+
+  // Zutatenliste: beim Entwurf aus dem Scan/Katalog, beim Bearbeiten aus
+  // dem Datensatz, bei manueller Eingabe aus Name/Menge/Einheit abgeleitet,
+  // damit Matcher und Vorschlag den Namen versuchen koennen.
+  const ingredientDetails = useMemo(() => {
+    if (editId) {
+      return Array.isArray(existingSupplement?.ingredientDetails) ? existingSupplement.ingredientDetails : [];
+    }
+    if (fromScan && Array.isArray(pendingScanResult?.ingredientDetails) && pendingScanResult.ingredientDetails.length > 0) {
+      return pendingScanResult.ingredientDetails;
+    }
+    const trimmed = name.trim();
+    return trimmed ? [{ name: trimmed, amount: amount.trim(), unit: unit.trim(), form: null }] : [];
+  }, [editId, existingSupplement, fromScan, pendingScanResult, name, amount, unit]);
+
+  // Bearbeiten: alles vorbelegen, kein Vorschlag, die gespeicherten Slots gelten.
   useEffect(() => {
     if (!existingSupplement) return;
-
     setName(existingSupplement.name || '');
-    setPurpose(existingSupplement.purpose || '');
-    setCategory(existingSupplement.category || '');
     setAmount(getDosageAmount(existingSupplement, ''));
-    setUnit(getDosageUnit(existingSupplement, ''));
-    setTimingRaw(existingSupplement.timingRaw || '');
+    const existingUnit = getDosageUnit(existingSupplement, '');
+    setUnit(existingUnit);
+    setUnitOther(Boolean(existingUnit) && !UNIT_OPTIONS.some((option) => option.value === existingUnit));
+    const slots = Array.isArray(existingSupplement.timingSlots) && existingSupplement.timingSlots.length > 0
+      ? existingSupplement.timingSlots
+      : [DEFAULT_SLOT];
+    setSelectedSlots(slots);
+    setPrimarySlot(slots[0]);
+    setTimesPerDay(Math.min(3, Math.max(1, slots.length)));
+    setReason(null);
     setNotes(existingSupplement.notes || '');
-    setChildSafe(Boolean(existingSupplement.childSafe));
-    setSelectedSlots(Array.isArray(existingSupplement.timingSlots) ? existingSupplement.timingSlots : []);
-
     if (existingSupplement.cureConfig?.type === 'cycle') {
       setCureEnabled(true);
       setCureOnDays(String(existingSupplement.cureConfig.onDays ?? ''));
@@ -86,204 +132,112 @@ export default function AddSupplement() {
       setCureOnDays('');
       setCureOffDays('');
     }
-
-    // Preisangaben liegen nicht am Supplement, sondern im Bestand
-    // (stockBySupplementId) — dort rechnet die Kostenanalyse damit.
     const stock = getStock(existingSupplement.id);
-    setPurchasePrice(
-      Number.isFinite(Number(stock?.purchasePrice)) && Number(stock.purchasePrice) > 0
-        ? String(stock.purchasePrice)
-        : ''
-    );
-    setPackageUnits(
-      Number.isFinite(Number(stock?.packageUnits)) && Number(stock.packageUnits) > 0
-        ? String(stock.packageUnits)
-        : ''
+    const price = Number(stock?.purchasePrice);
+    const units = Number(stock?.packageUnits);
+    setPurchasePrice(Number.isFinite(price) && price > 0 ? String(price) : '');
+    setPackageUnits(Number.isFinite(units) && units > 0 ? String(units) : '');
+    setMoreOpen(
+      Boolean(existingSupplement.notes) ||
+        existingSupplement.cureConfig?.type === 'cycle' ||
+        (Number.isFinite(price) && price > 0) ||
+        (Number.isFinite(units) && units > 0)
     );
   }, [existingSupplement, getStock]);
 
+  // Entwurf aus Scan/Katalog: Name, Menge, Einheit uebernehmen; Warnhinweise
+  // des Scans in die Notiz, damit sie nicht verloren gehen.
   useEffect(() => {
     if (!fromScan) return;
-
-    const scannedAmount =
-      pendingScanResult?.dosage?.amount ??
-      pendingScanResult?.dosageAmount ??
-      pendingScanResult?.amount ??
-      '';
-
-    const scannedUnit =
-      pendingScanResult?.dosage?.unit ??
-      pendingScanResult?.dosageUnit ??
-      pendingScanResult?.unit ??
-      '';
-
-    const recognizedBrand =
-      pendingScanResult.brand &&
-      pendingScanResult.brand !== 'Demo Brand'
-        ? pendingScanResult.brand
-        : null;
-
-    const recognizedIngredients =
-      Array.isArray(pendingScanResult.detectedIngredients) &&
-      pendingScanResult.detectedIngredients.length > 0
-        ? pendingScanResult.detectedIngredients
-        : [];
-
-    const scanWarnings = Array.isArray(pendingScanResult.warnings)
-      ? pendingScanResult.warnings
-      : [];
-
-    setName(
-      pendingScanResult.productName ||
-        pendingScanResult.name ||
-        ''
-    );
-    setPurpose(t('addSupplement.scan.purpose'));
-    setCategory(t('addSupplement.scan.category'));
-    setAmount(
-      scannedAmount === null || scannedAmount === undefined
-        ? ''
-        : String(scannedAmount)
-    );
-    setUnit(
-      scannedUnit === null || scannedUnit === undefined
-        ? ''
-        : String(scannedUnit)
-    );
-    setTimingRaw('');
+    setName(pendingScanResult.productName || pendingScanResult.name || '');
+    const scannedAmount = pendingScanResult?.dosage?.amount ?? pendingScanResult?.dosageAmount ?? pendingScanResult?.amount ?? '';
+    const scannedUnit = pendingScanResult?.dosage?.unit ?? pendingScanResult?.dosageUnit ?? pendingScanResult?.unit ?? '';
+    setAmount(scannedAmount === null || scannedAmount === undefined ? '' : String(scannedAmount));
+    setUnit(scannedUnit === null || scannedUnit === undefined ? '' : String(scannedUnit));
+    const warnings = Array.isArray(pendingScanResult.warnings) ? pendingScanResult.warnings : [];
     setNotes(
       [
-        recognizedBrand ? t('addSupplement.scan.brandNote', { brand: recognizedBrand }) : null,
-        recognizedIngredients.length > 0
-          ? t('addSupplement.scan.ingredientsNote', {
-              ingredients: recognizedIngredients.join(', '),
-            })
-          : null,
-        pendingScanResult.timingSuggestion
-          ? t('addSupplement.scan.timingNote', { timing: pendingScanResult.timingSuggestion })
-          : null,
-        scanWarnings.length > 0
-          ? t('addSupplement.scan.warningsNote', { warnings: scanWarnings.join('\n- ') })
-          : null,
+        warnings.length > 0 ? t('addSupplement.scan.warningsNote', { warnings: warnings.join('\n- ') }) : null,
         pendingScanResult.uncertaintyNote || null,
       ]
         .filter(Boolean)
         .join('\n\n')
     );
-    setSelectedSlots([]);
-  }, [fromScan, pendingScanResult]);
+  }, [fromScan, pendingScanResult, t]);
 
+  // Vorschlag: sobald sich die erkannten Substanzen aendern (Entwurf geladen
+  // oder manueller Name getippt). Nicht beim Bearbeiten.
+  const substanceKey = useMemo(() => substanceIdsFromDetails(ingredientDetails).join('|'), [ingredientDetails]);
   useEffect(() => {
-    if (!fromScan && !editId && pendingScanResult) {
-      clearPendingScanResult();
-    }
+    if (editId) return;
+    const suggestion = suggestPrimarySlot(substanceKey ? substanceKey.split('|') : []);
+    setPrimarySlot(suggestion.slot);
+    setReason(suggestion.reason);
+    setSelectedSlots(expandSlots(suggestion.slot, timesPerDay));
+    // timesPerDay absichtlich nicht in den Abhaengigkeiten: Die Haeufigkeit
+    // hat ihren eigenen Handler, sonst wuerde jede Chip-Wahl den Vorschlag
+    // neu setzen und eine manuelle Slot-Auswahl ueberschreiben.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId, substanceKey]);
+
+  // Ein verwaister Entwurf (Screen ohne fromScan geoeffnet) wird geraeumt.
+  useEffect(() => {
+    if (!fromScan && !editId && pendingScanResult) clearPendingScanResult();
   }, [clearPendingScanResult, editId, fromScan, pendingScanResult]);
 
-  const categoryExamples = Array.from(
-    new Set(inventory.map((supplement) => supplement.category).filter(Boolean))
-  ).slice(0, 6);
+  function handleTimesPerDay(count) {
+    setTimesPerDay(count);
+    setSelectedSlots(expandSlots(primarySlot, count));
+  }
 
   function toggleSlot(slotId) {
     setSelectedSlots((current) => {
-      const next = current.includes(slotId)
-        ? current.filter((id) => id !== slotId)
-        : [...current, slotId];
-
+      const next = current.includes(slotId) ? current.filter((id) => id !== slotId) : [...current, slotId];
       return SLOT_ORDER.filter((id) => next.includes(id));
     });
   }
 
-  const screenTitle = editId
-    ? t('addSupplement.screenTitle.edit')
-    : fromScan
-      ? t('addSupplement.screenTitle.scan')
-      : t('addSupplement.screenTitle.manual');
-
-  const screenSubtitle = editId
-    ? t('addSupplement.screenSubtitle.edit')
-    : fromScan
-      ? t('addSupplement.screenSubtitle.scan')
-      : t('addSupplement.screenSubtitle.manual');
-
-  const primaryButtonLabel = editId
-    ? t('addSupplement.primaryButton.edit')
-    : fromScan
-      ? t('addSupplement.primaryButton.scan')
-      : t('addSupplement.primaryButton.manual');
-
-  const modeLabel = editId
-    ? t('addSupplement.modeLabel.edit')
-    : fromScan
-      ? t('addSupplement.modeLabel.scan')
-      : t('addSupplement.modeLabel.manual');
-
-  const modePillLabel = editId
-    ? t('addSupplement.modePill.edit')
-    : fromScan
-      ? t('addSupplement.modePill.scan')
-      : t('addSupplement.modePill.manual');
-
-  const trustCopy = fromScan
-    ? t('addSupplement.trustCopy.scan')
-    : editId
-      ? t('addSupplement.trustCopy.edit')
-      : t('addSupplement.trustCopy.manual');
-
-  const selectedSlotLabels = selectedSlots
-    .map((slotId) => SLOTS[slotId]?.label)
-    .filter(Boolean)
-    .join(' · ');
-
-  // Kur-Zyklen sind Pro (Entitlements.js). Gesperrt wird nur der
-  // Einstieg: Ein bestehender Zyklus (cureEnabled aus den geladenen
-  // Daten) bleibt sichtbar und bearbeitbar, damit gespeicherte Daten
-  // nicht hinter dem Gate verschwinden.
-  const cureLocked = !canUseProFeature(entitlement).allowed && !cureEnabled;
+  function pickUnit(option) {
+    if (option === 'other') {
+      setUnitOther(true);
+      setUnit('');
+      return;
+    }
+    setUnitOther(false);
+    setUnit(option.value);
+  }
 
   /**
-   * Schreibt Kaufpreis und Packungsinhalt in den Bestand.
-   * Leere Felder loeschen den jeweiligen Wert, statt ihn stehen zu lassen —
-   * ein Preis, den niemand mehr bestaetigt, waere sonst dauerhaft
-   * Grundlage der Kostenrechnung. Andere Bestandsfelder (etwa der
-   * Fuellstand) bleiben unangetastet.
+   * Kaufpreis und Packungsinhalt liegen im Bestand (stockBySupplementId),
+   * dort rechnet die Kostenanalyse. Leere Felder loeschen den Wert, statt
+   * einen alten Preis stehen zu lassen.
    */
   function persistPurchaseInfo(supplementId) {
     if (!supplementId) return;
-
     const priceText = purchasePrice.trim().replace(',', '.');
     const unitsText = packageUnits.trim();
     const price = Number(priceText);
     const units = Number.parseInt(unitsText, 10);
-
     const current = getStock(supplementId) ?? {};
     const next = { ...current };
-
     if (priceText && Number.isFinite(price) && price > 0) {
       next.purchasePrice = price;
       next.currency = current.currency || 'EUR';
     } else {
       delete next.purchasePrice;
     }
-
     if (unitsText && Number.isInteger(units) && units > 0) {
       next.packageUnits = units;
     } else {
       delete next.packageUnits;
     }
-
     if (Object.keys(next).length === 0 && Object.keys(current).length === 0) return;
     setStock(supplementId, next);
   }
 
   function handleSave() {
-    // 5-Praeparate-Grenze des Free-Tarifs (Entitlements.js). Gilt nur fuer
-    // NEUE Eintraege — Bearbeiten bleibt immer moeglich, sonst kaeme
-    // niemand mehr an seine bestehenden Daten. Solange PAYWALL_ENFORCED
-    // aus ist, blockiert das nie.
     if (!editId) {
-      const activeCount = userSupplements.filter(
-        (supplement) => supplement.status !== 'archived'
-      ).length;
+      const activeCount = userSupplements.filter((supplement) => supplement.status !== 'archived').length;
       const gate = canAddSupplement(entitlement, activeCount);
       if (!gate.allowed) {
         Alert.alert(
@@ -299,82 +253,41 @@ export default function AddSupplement() {
     }
 
     const trimmedName = name.trim();
-
     if (!trimmedName) {
-      Alert.alert(
-        t('addSupplement.alert.nameMissingTitle'),
-        t('addSupplement.alert.nameMissingMessage')
-      );
+      Alert.alert(t('addSupplement.alert.nameMissingTitle'), t('addSupplement.alert.nameMissingMessage'));
       return;
     }
-
     if (selectedSlots.length === 0) {
-      Alert.alert(
-        t('addSupplement.alert.slotMissingTitle'),
-        t('addSupplement.alert.slotMissingMessage')
-      );
+      Alert.alert(t('addSupplement.alert.slotMissingTitle'), t('addSupplement.alert.slotMissingMessage'));
       return;
     }
 
     let cureConfig = null;
     let cureStartDate = existingSupplement?.cureStartDate || null;
-
     if (cureEnabled) {
       const onDays = Number.parseInt(cureOnDays, 10);
       const offDays = Number.parseInt(cureOffDays, 10);
-
       if (!Number.isInteger(onDays) || onDays < 1 || !Number.isInteger(offDays) || offDays < 1) {
-        Alert.alert(
-          t('addSupplement.alert.cureInvalidTitle'),
-          t('addSupplement.alert.cureInvalidMessage')
-        );
+        Alert.alert(t('addSupplement.alert.cureInvalidTitle'), t('addSupplement.alert.cureInvalidMessage'));
         return;
       }
-
       cureConfig = { type: 'cycle', onDays, offDays };
-      // Startdatum bleibt beim Bearbeiten erhalten, sonst beginnt der
-      // Zyklus mit dem Speichern.
       if (!cureStartDate) cureStartDate = new Date().toISOString();
     } else {
       cureStartDate = null;
     }
 
-    const derivedTimingRaw =
-      timingRaw.trim() ||
-      selectedSlots
-        .map((slotId) => SLOTS[slotId]?.label ?? slotId)
-        .join(' / ');
-
-    // Strukturierte Zutatenliste fuer StackAnalyzer.extractPositions und
-    // ScheduleGuidance.buildEntryGuidance: Ohne sie sehen Wechselwirkungs-
-    // pruefung und Einnahme-Hinweise nur eine geratene Position aus dem
-    // Produktnamen. Beim Bearbeiten bleibt die bestehende Liste erhalten
-    // (sie kommt nicht ueber dieses Formular zustande), beim Scan-/
-    // Katalog-Entwurf wird sie uebernommen, bei manueller Eingabe wird sie
-    // aus Name/Dosierung abgeleitet, damit der Matcher wenigstens den
-    // Namen versuchen kann.
-    const ingredientDetails = editId
-      ? Array.isArray(existingSupplement?.ingredientDetails)
-        ? existingSupplement.ingredientDetails
-        : []
-      : fromScan
-        ? pendingScanResult?.ingredientDetails ?? []
-        : trimmedName
-          ? [{ name: trimmedName, amount: amount.trim(), unit: unit.trim() }]
-          : [];
-
+    // Felder, die der Screen nicht mehr zeigt, bleiben beim Bearbeiten
+    // erhalten und bekommen beim Anlegen die bisherigen Standardwerte.
     const payload = {
       name: trimmedName,
-      purpose: purpose.trim() || t('addSupplement.defaultPurpose'),
-      category: category.trim() || t('addSupplement.defaultCategory'),
+      purpose: existingSupplement?.purpose || t('addSupplement.defaultPurpose'),
+      category: existingSupplement?.category || t('addSupplement.defaultCategory'),
       timingSlots: selectedSlots,
-      timingRaw: derivedTimingRaw,
-      dosage: {
-        amount: amount.trim(),
-        unit: unit.trim(),
-      },
+      timingRaw: existingSupplement?.timingRaw || '',
+      dosage: { amount: amount.trim(), unit: unit.trim() },
       ingredientDetails,
-      childSafe,
+      childSafe: Boolean(existingSupplement?.childSafe),
       conflictIds: [],
       conflictTags: [],
       synergyIds: [],
@@ -386,510 +299,187 @@ export default function AddSupplement() {
 
     if (editId) {
       if (!existingSupplement) {
-        Alert.alert(
-          t('addSupplement.alert.notFoundTitle'),
-          t('addSupplement.alert.notFoundMessage')
-        );
+        Alert.alert(t('addSupplement.alert.notFoundTitle'), t('addSupplement.alert.notFoundMessage'));
         return;
       }
-
       updateUserSupplement(editId, payload);
       persistPurchaseInfo(editId);
-
-      Alert.alert(
-        t('addSupplement.alert.updatedTitle'),
-        t('addSupplement.alert.updatedMessage'),
-        [{ text: t('addSupplement.alert.goToDashboard'), onPress: () => router.replace('/Dashboard') }]
-      );
+      router.back();
       return;
     }
 
-    // Die Bestands-ID entsteht erst beim Anlegen, deshalb wandert der
-    // Preis erst danach in den Bestand.
     const created = fromScan
       ? addSupplementFromPendingScan(payload)
       : addUserSupplement({ ...payload, source: 'manual' });
     persistPurchaseInfo(created?.id);
-
-    Alert.alert(
-      t('addSupplement.alert.savedTitle'),
-      fromScan
-        ? t('addSupplement.alert.savedScanMessage')
-        : t('addSupplement.alert.savedManualMessage'),
-      [{ text: t('addSupplement.alert.goToDashboard'), onPress: () => router.replace('/Dashboard') }]
-    );
+    // Keine Bestaetigung per Alert: Der neue Eintrag im Tagesplan ist die
+    // Bestaetigung.
+    router.replace('/Dashboard');
   }
 
+  const cureLocked = !canUseProFeature(entitlement).allowed && !cureEnabled;
+  const showProductFields = isManual || editingProduct;
+  const brand = fromScan && pendingScanResult?.brand && pendingScanResult.brand !== 'Demo Brand' ? pendingScanResult.brand : null;
+
   return (
-    <View style={styles.screenWrap}>
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <View style={styles.heroCard}>
-        <View style={styles.heroHeader}>
-          <Text style={styles.kicker}>{modeLabel}</Text>
-          <View style={styles.modePill}>
-            <Text style={styles.modePillText}>{modePillLabel}</Text>
-          </View>
-        </View>
-        <Text style={styles.title}>{screenTitle}</Text>
-        <Text style={styles.subtitle}>{screenSubtitle}</Text>
-      </View>
+    <KeyboardAvoidingView style={styles.screenWrap} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <Text style={styles.title}>{t(editId ? 'addSupplement.title.edit' : 'addSupplement.title.new')}</Text>
 
-      <View style={styles.trustCard}>
-        <Text style={styles.trustTitle}>{t('addSupplement.trustTitle')}</Text>
-        <Text style={styles.trustText}>{trustCopy}</Text>
-      </View>
-
-      <FormField
-        label={t('addSupplement.nameLabel')}
-        helper={t('addSupplement.nameHelper')}
-        value={name}
-        onChangeText={setName}
-        placeholder={t('addSupplement.namePlaceholder')}
-      />
-
-      <FormField
-        label={t('addSupplement.purposeLabel')}
-        helper={t('addSupplement.purposeHelper')}
-        value={purpose}
-        onChangeText={setPurpose}
-        placeholder={t('addSupplement.purposePlaceholder')}
-      />
-
-      <FormField
-        label={t('addSupplement.categoryLabel')}
-        helper={t('addSupplement.categoryHelper')}
-        value={category}
-        onChangeText={setCategory}
-        placeholder={t('addSupplement.categoryPlaceholder')}
-      />
-
-      {categoryExamples.length > 0 ? (
-        <Text style={styles.helperText}>
-          {t('addSupplement.categoryExamples', { examples: categoryExamples.join(', ') })}
-        </Text>
-      ) : null}
-
-      <View style={styles.row}>
-        <View style={styles.rowField}>
-          <FormField
-            label={t('addSupplement.amountLabel')}
-            helper={t('addSupplement.amountHelper')}
-            value={amount}
-            onChangeText={setAmount}
-            placeholder={t('addSupplement.amountPlaceholder')}
-            keyboardType="decimal-pad"
-          />
-        </View>
-        <View style={styles.rowSpacer} />
-        <View style={styles.rowField}>
-          <FormField
-            label={t('addSupplement.unitLabel')}
-            helper={t('addSupplement.unitHelper')}
-            value={unit}
-            onChangeText={setUnit}
-            placeholder={t('addSupplement.unitPlaceholder')}
-          />
-        </View>
-      </View>
-
-      {/* Packung und Preis: beides steht auf der Dose, die beim Erfassen
-          ohnehin in der Hand liegt. Aus den zwei Zahlen errechnet die
-          Kostenanalyse spaeter, was das Praeparat pro Tag kostet. Ohne
-          sie bleibt das Produkt dort schlicht ungerechnet — geschaetzt
-          wird nichts. */}
-      <View style={styles.row}>
-        <View style={styles.rowField}>
-          <FormField
-            label={t('addSupplement.packageUnitsLabel')}
-            helper={t('addSupplement.packageUnitsHelper')}
-            value={packageUnits}
-            onChangeText={setPackageUnits}
-            placeholder={t('addSupplement.packageUnitsPlaceholder')}
-            keyboardType="number-pad"
-          />
-        </View>
-        <View style={styles.rowSpacer} />
-        <View style={styles.rowField}>
-          <FormField
-            label={t('addSupplement.priceLabel')}
-            helper={t('addSupplement.priceHelper')}
-            value={purchasePrice}
-            onChangeText={setPurchasePrice}
-            placeholder={t('addSupplement.pricePlaceholder')}
-            keyboardType="decimal-pad"
-          />
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('addSupplement.routineSectionTitle')}</Text>
-        <Text style={styles.sectionSubtitle}>
-          {t('addSupplement.routineSectionSubtitle')}
-        </Text>
-        <View style={styles.slotWrap}>
-          {SLOT_ORDER.map((slotId) => {
-            const selected = selectedSlots.includes(slotId);
-            const slot = SLOTS[slotId];
-
-            return (
-              <TouchableOpacity
-                key={slotId}
-                onPress={() => toggleSlot(slotId)}
-                style={[styles.slotChip, selected ? styles.slotChipSelected : styles.slotChipIdle]}
-              >
-                <Text style={[styles.slotChipText, selected ? styles.slotChipTextSelected : null]}>
-                  {slot.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        {selectedSlotLabels ? (
-          <View style={styles.selectedSlotSummary}>
-            <Text style={styles.selectedSlotSummaryText}>
-              {t('addSupplement.selectedSlots', { slots: selectedSlotLabels })}
-            </Text>
+        {showProductFields ? (
+          <View style={styles.productFields}>
+            <Field label={t('addSupplement.name.label')} value={name} onChangeText={setName} placeholder={t('addSupplement.name.placeholder')} autoFocus={isManual} />
+            <View style={styles.row}>
+              <View style={styles.rowField}>
+                <Field label={t('addSupplement.amount.label')} value={amount} onChangeText={setAmount} placeholder={t('addSupplement.amount.placeholder')} keyboardType="decimal-pad" />
+              </View>
+            </View>
+            <Text style={styles.label}>{t('addSupplement.unit.label')}</Text>
+            <View style={styles.unitWrap}>
+              {UNIT_OPTIONS.map((option) => {
+                const active = !unitOther && unit === option.value;
+                return (
+                  <Pressable key={option.key} onPress={() => pickUnit(option)} style={[styles.unitChip, active && surfaces.chipActive]} accessibilityRole="button" accessibilityState={{ selected: active }}>
+                    <Text style={[surfaces.chipText, active && surfaces.chipTextActive]}>{t(`addSupplement.unit.${option.key}`)}</Text>
+                  </Pressable>
+                );
+              })}
+              <Pressable onPress={() => pickUnit('other')} style={[styles.unitChip, unitOther && surfaces.chipActive]} accessibilityRole="button" accessibilityState={{ selected: unitOther }}>
+                <Text style={[surfaces.chipText, unitOther && surfaces.chipTextActive]}>{t('addSupplement.unit.other')}</Text>
+              </Pressable>
+            </View>
+            {unitOther ? (
+              <TextInput style={styles.input} value={unit} onChangeText={setUnit} placeholder={t('addSupplement.unit.otherPlaceholder')} placeholderTextColor={colors.inkFaint} />
+            ) : null}
           </View>
         ) : (
-          <Text style={styles.sectionHint}>{t('addSupplement.noSlotSelected')}</Text>
-        )}
-      </View>
-
-      <FormField
-        label={t('addSupplement.timingLabel')}
-        helper={t('addSupplement.timingHelper')}
-        value={timingRaw}
-        onChangeText={setTimingRaw}
-        placeholder={t('addSupplement.timingPlaceholder')}
-      />
-
-      <View style={styles.switchCard}>
-        <View style={styles.switchTextWrap}>
-          <Text style={styles.switchTitle}>{t('addSupplement.childSafeTitle')}</Text>
-          <Text style={styles.switchSubtitle}>
-            {t('addSupplement.childSafeSubtitle')}
-          </Text>
-        </View>
-        <Switch
-          value={childSafe}
-          onValueChange={setChildSafe}
-          trackColor={{ false: colors.rule, true: colors.accent }}
-          thumbColor={childSafe ? colors.surface : colors.canvas}
-        />
-      </View>
-
-      {cureLocked ? (
-        <ProGate />
-      ) : (
-        <View style={styles.switchCard}>
-          <View style={styles.switchTextWrap}>
-            <Text style={styles.switchTitle}>{t('addSupplement.cureTitle')}</Text>
-            <Text style={styles.switchSubtitle}>
-              {t('addSupplement.cureSubtitle')}
-            </Text>
-          </View>
-          <Switch
-            value={cureEnabled}
-            onValueChange={setCureEnabled}
-            trackColor={{ false: colors.rule, true: colors.accent }}
-            thumbColor={cureEnabled ? colors.surface : colors.canvas}
-            accessibilityLabel={t('addSupplement.cureTitle')}
+          <ProductSummaryCard
+            name={name}
+            brand={brand}
+            ingredientDetails={ingredientDetails}
+            dosage={{ amount, unit }}
+            scanned={fromScan && pendingScanResult?.analysisMode === 'vision'}
+            onEdit={() => setEditingProduct(true)}
           />
-        </View>
-      )}
+        )}
 
-      {cureEnabled ? (
-        <View style={styles.row}>
-          <View style={styles.rowField}>
-            <FormField
-              label={t('addSupplement.cureOnLabel')}
-              helper={t('addSupplement.cureOnHelper')}
-              value={cureOnDays}
-              onChangeText={setCureOnDays}
-              placeholder="21"
-              keyboardType="number-pad"
-            />
+        <FrequencyChips value={timesPerDay} onChange={handleTimesPerDay} />
+        <SlotChips selected={selectedSlots} onToggle={toggleSlot} reason={reason} showSuggestion={!editId} />
+
+        <Pressable onPress={() => setMoreOpen((open) => !open)} style={styles.moreHeader} accessibilityRole="button" accessibilityState={{ expanded: moreOpen }}>
+          <View style={styles.moreTitles}>
+            <Text style={styles.moreTitle}>{t('addSupplement.more.title')}</Text>
+            <Text style={styles.moreSubtitle}>{t('addSupplement.more.subtitle')}</Text>
           </View>
-          <View style={styles.rowSpacer} />
-          <View style={styles.rowField}>
-            <FormField
-              label={t('addSupplement.cureOffLabel')}
-              helper={t('addSupplement.cureOffHelper')}
-              value={cureOffDays}
-              onChangeText={setCureOffDays}
-              placeholder="7"
-              keyboardType="number-pad"
-            />
+          <Feather name={moreOpen ? 'chevron-up' : 'chevron-down'} size={18} color={colors.inkMuted} />
+        </Pressable>
+
+        {moreOpen ? (
+          <View style={styles.moreBody}>
+            <View style={styles.row}>
+              <View style={styles.rowField}>
+                <Field label={t('addSupplement.more.packageUnits')} value={packageUnits} onChangeText={setPackageUnits} placeholder={t('addSupplement.more.packageUnitsPlaceholder')} keyboardType="number-pad" />
+              </View>
+              <View style={styles.rowSpacer} />
+              <View style={styles.rowField}>
+                <Field label={t('addSupplement.more.price')} value={purchasePrice} onChangeText={setPurchasePrice} placeholder={t('addSupplement.more.pricePlaceholder')} keyboardType="decimal-pad" />
+              </View>
+            </View>
+
+            {cureLocked ? (
+              <ProGate />
+            ) : (
+              <View style={styles.switchRow}>
+                <View style={styles.switchText}>
+                  <Text style={styles.switchTitle}>{t('addSupplement.more.cure')}</Text>
+                  <Text style={styles.switchSubtitle}>{t('addSupplement.more.cureSubtitle')}</Text>
+                </View>
+                <Switch
+                  value={cureEnabled}
+                  onValueChange={setCureEnabled}
+                  trackColor={{ false: colors.rule, true: colors.accent }}
+                  thumbColor={cureEnabled ? colors.surface : colors.canvas}
+                  accessibilityLabel={t('addSupplement.more.cure')}
+                />
+              </View>
+            )}
+            {cureEnabled ? (
+              <View style={styles.row}>
+                <View style={styles.rowField}>
+                  <Field label={t('addSupplement.more.cureOn')} value={cureOnDays} onChangeText={setCureOnDays} placeholder="21" keyboardType="number-pad" />
+                </View>
+                <View style={styles.rowSpacer} />
+                <View style={styles.rowField}>
+                  <Field label={t('addSupplement.more.cureOff')} value={cureOffDays} onChangeText={setCureOffDays} placeholder="7" keyboardType="number-pad" />
+                </View>
+              </View>
+            ) : null}
+
+            <Field label={t('addSupplement.more.notes')} value={notes} onChangeText={setNotes} placeholder={t('addSupplement.more.notesPlaceholder')} multiline />
           </View>
-        </View>
-      ) : null}
+        ) : null}
+      </ScrollView>
 
-      <FormField
-        label={t('addSupplement.notesLabel')}
-        helper={t('addSupplement.notesHelper')}
-        value={notes}
-        onChangeText={setNotes}
-        placeholder={t('addSupplement.notesPlaceholder')}
-        multiline
-      />
-
-    </ScrollView>
-
-      {/* Bestaetigen liegt fest am unteren Rand statt hinter elf Feldern:
-          Nach dem Scan kontrolliert man oben ein, zwei Angaben und ist
-          fertig — dafuer soll man nicht erst ans Formularende scrollen.
-          Abbrechen steht daneben, weil ein Modal einen sichtbaren Ausgang
-          braucht. */}
       <View style={styles.footerBar}>
-        <TouchableOpacity
-          style={styles.footerCancel}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          accessibilityLabel={t('common.cancel')}
-        >
-          <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.footerConfirm}
-          onPress={handleSave}
-          accessibilityRole="button"
-          accessibilityLabel={primaryButtonLabel}
-        >
-          <Text style={styles.primaryButtonText}>{primaryButtonLabel}</Text>
-        </TouchableOpacity>
+        <Pressable style={styles.footerCancel} onPress={() => router.back()} accessibilityRole="button" accessibilityLabel={t('common.cancel')}>
+          <Text style={surfaces.buttonQuietText}>{t('common.cancel')}</Text>
+        </Pressable>
+        <Pressable style={styles.footerConfirm} onPress={handleSave} accessibilityRole="button">
+          <Text style={surfaces.buttonPrimaryText}>{t(editId ? 'addSupplement.save.edit' : 'addSupplement.save.new')}</Text>
+        </Pressable>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
-function FormField({ label, helper, multiline = false, ...props }) {
+function Field({ label, multiline = false, ...props }) {
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
-        {...props}
-        multiline={multiline}
+        style={[styles.input, multiline && styles.inputMultiline]}
         placeholderTextColor={colors.inkFaint}
-        style={[styles.input, multiline ? styles.inputMultiline : null]}
-        // Ohne Label liest der Screenreader nur den eingetragenen Wert vor.
-        accessibilityLabel={label}
-        accessibilityHint={helper || undefined}
+        multiline={multiline}
+        {...props}
       />
-      {helper ? <Text style={styles.inputHelper}>{helper}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screenWrap: surfaces.screen,
-  screen: surfaces.screen,
-  content: surfaces.content,
-  heroCard: {
-    ...surfaces.card,
-    marginBottom: 0,
-  },
-  heroHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  kicker: {
-    ...type.eyebrow,
-  },
-  modePill: {
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.md,
-    paddingHorizontal: space.sm + 1,
-    paddingVertical: space.xs + 1,
-  },
-  modePillText: {
-    color: colors.accent,
-    fontSize: 11,
-    fontWeight: '900',
-  },
-  trustCard: {
-    marginTop: space.md + 2,
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.lg,
-    padding: space.lg - 3,
-  },
-  trustTitle: {
-    ...type.bodyStrong,
-    fontSize: 14,
-  },
-  trustText: {
-    marginTop: space.xs + 1,
-    color: colors.accentInk,
-    fontSize: 13,
-    lineHeight: 19,
-  },
-  title: {
-    marginTop: space.md,
-    ...type.display,
-  },
-  subtitle: {
-    marginTop: space.sm + 2,
-    ...type.body,
-    fontSize: 15,
-    lineHeight: 23,
-  },
-  helperText: {
-    marginTop: space.xs,
-    marginBottom: space.sm,
-    ...type.small,
-  },
-  field: {
-    marginTop: space.lg,
-  },
-  label: {
-    marginBottom: space.sm,
-    color: colors.ink,
-    fontSize: 14,
-    fontWeight: '800',
-  },
-  input: {
-    ...surfaces.input,
-    paddingVertical: space.md,
-    fontSize: 15,
-  },
-  inputHelper: {
-    marginTop: space.xs + 2,
-    ...type.small,
-  },
-  inputMultiline: {
-    minHeight: 110,
-    textAlignVertical: 'top',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  rowField: {
-    flex: 1,
-  },
-  rowSpacer: {
-    width: space.md,
-  },
-  section: {
-    marginTop: space.xl - 2,
-    ...surfaces.card,
-    marginBottom: 0,
-  },
-  sectionTitle: {
-    ...type.heading,
-    fontSize: 16,
-  },
-  sectionSubtitle: {
-    marginTop: space.sm - 2,
-    ...type.body,
-    fontSize: 13,
-  },
-  slotWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: space.md,
-    gap: space.sm,
-  },
-  slotChip: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: space.sm + 5,
-    paddingVertical: space.sm + 1,
-  },
-  slotChipIdle: {
-    backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-  },
-  slotChipSelected: {
-    backgroundColor: colors.accent,
-    borderColor: colors.accent,
-  },
-  slotChipText: {
-    color: colors.inkMuted,
-    fontSize: 13,
-    fontWeight: '800',
-  },
-  slotChipTextSelected: {
-    color: colors.surface,
-  },
-  selectedSlotSummary: {
-    marginTop: space.md,
-    backgroundColor: colors.surfaceSunken,
-    borderColor: colors.rule,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm + 2,
-  },
-  selectedSlotSummaryText: {
-    color: colors.inkMuted,
-    fontSize: 13,
-    fontWeight: '800',
-  },
-  sectionHint: {
-    marginTop: space.md,
-    ...type.body,
-    fontSize: 13,
-  },
-  switchCard: {
-    marginTop: space.lg + 2,
-    ...surfaces.card,
-    marginBottom: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  switchTextWrap: {
-    flex: 1,
-    paddingRight: space.md + 2,
-  },
-  switchTitle: {
-    ...type.bodyStrong,
-    fontSize: 15,
-  },
-  switchSubtitle: {
-    marginTop: space.xs,
-    ...type.body,
-    fontSize: 13,
-  },
-  primaryButton: {
-    ...surfaces.buttonPrimary,
-    marginTop: space.xl,
-  },
-  primaryButtonText: {
-    ...surfaces.buttonPrimaryText,
-  },
-  cancelButton: {
-    ...surfaces.buttonQuiet,
-    marginTop: space.sm + 2,
-  },
-  cancelButtonText: {
-    ...surfaces.buttonQuietText,
-  },
-  // Fest stehende Leiste unter dem Formular. Sie liegt ausserhalb der
-  // ScrollView, deshalb bleibt Bestaetigen auch bei langen Formularen
-  // erreichbar.
+  screenWrap: { flex: 1, backgroundColor: colors.canvas },
+  screen: { flex: 1 },
+  content: { ...surfaces.content, paddingBottom: 120 },
+  title: { ...type.heading, marginBottom: space.lg },
+  productFields: { ...surfaces.card, padding: space.lg },
+  field: { marginBottom: space.md },
+  label: { ...type.label, marginBottom: space.xs },
+  input: { ...surfaces.input },
+  inputMultiline: { minHeight: 88, textAlignVertical: 'top' },
+  row: { flexDirection: 'row' },
+  rowField: { flex: 1 },
+  rowSpacer: { width: space.md },
+  unitWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginBottom: space.md },
+  unitChip: { ...surfaces.chip },
+  moreHeader: { flexDirection: 'row', alignItems: 'center', marginTop: space.xl, paddingVertical: space.md, borderTopWidth: 1, borderTopColor: colors.rule },
+  moreTitles: { flex: 1 },
+  moreTitle: { ...type.bodyStrong },
+  moreSubtitle: { ...type.small, marginTop: 2 },
+  moreBody: { marginTop: space.sm },
+  switchRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: space.md },
+  switchText: { flex: 1, paddingRight: space.md },
+  switchTitle: { ...type.bodyStrong },
+  switchSubtitle: { ...type.small, marginTop: 2 },
   footerBar: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm + 2,
-    paddingHorizontal: space.xl,
+    gap: space.md,
+    paddingHorizontal: space.lg,
     paddingTop: space.md,
-    paddingBottom: space.xl + 6,
+    paddingBottom: space.xl,
     backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.rule,
   },
-  footerCancel: {
-    ...surfaces.buttonQuiet,
-    flex: 1,
-    paddingHorizontal: space.md,
-  },
-  footerConfirm: {
-    ...surfaces.buttonPrimary,
-    flex: 2,
-    paddingHorizontal: space.md,
-  },
+  footerCancel: { ...surfaces.buttonQuiet, flex: 1, alignItems: 'center' },
+  footerConfirm: { ...surfaces.buttonPrimary, flex: 2, alignItems: 'center', borderRadius: radius.md },
 });
