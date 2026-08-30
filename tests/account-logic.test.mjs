@@ -3,7 +3,7 @@
 // Schluessel) und wie Antworten in den App-Zustand uebersetzt werden.
 
 import { webcrypto } from 'node:crypto';
-import { createKeyBundle, unlockWithPassword, unlockWithRecoveryKey } from '../AccountCrypto';
+import { createKeyBundle, deriveAuthPassword, unlockWithPassword, unlockWithRecoveryKey } from '../AccountCrypto';
 import {
   KEY_RECORD_SAVE_FAILED,
   PASSWORD_INVALID,
@@ -218,6 +218,38 @@ console.log('— E-Mail aendern —');
   const freshClient = makeClient();
   check('ungueltige Adresse wirft', await throws(() => changeEmail(freshClient, 'kein-mail')));
   check('ungueltige Adresse: kein Netzaufruf', freshClient.calls.length === 0);
+}
+
+console.log('— Haertung: Klartext-Passwort verlaesst das Geraet nie —');
+{
+  const password = 'korrektes-pferd-batterie';
+  const expected = await deriveAuthPassword(password);
+  const bundle = await createKeyBundle(password, randomBytes);
+
+  const c1 = makeClient();
+  await signUpWithEmail(c1, { email: 'a@b.de', password, record: bundle.record }, 'mysuplea://auth/callback');
+  const signUpArgs = c1.calls.find(([n]) => n === 'signUp')[1];
+  check('signUp: abgeleitetes Passwort', signUpArgs.password === expected);
+  check('signUp: Klartext nirgends', JSON.stringify(c1.calls).includes(password) === false);
+  check('signUp: Record traegt kdf.auth', signUpArgs.options.data.key_record.kdf.auth === 'scrypt-v1');
+
+  const c2 = makeClient({ keyRecord: bundle.record });
+  const signedIn = await signInWithEmail(c2, { email: 'a@b.de', password });
+  const signInArgs = c2.calls.find(([n]) => n === 'signIn')[1];
+  check('signIn: abgeleitetes Passwort', signInArgs.password === expected);
+  check('signIn: Datenschluessel trotzdem entsperrt', signedIn.dataKey && signedIn.dataKey.length === 32);
+
+  const c3 = makeClient({ keyRecord: bundle.record });
+  await changePassword(c3, { userId: 'u1', currentPassword: password, newPassword: 'neues-passwort-1234', randomBytes });
+  const upd = c3.calls.find(([n]) => n === 'updateUser')[1];
+  check('changePassword: abgeleitetes neues Passwort', upd.password === await deriveAuthPassword('neues-passwort-1234'));
+  check('changePassword: Klartext nirgends', !JSON.stringify(c3.calls).includes('neues-passwort-1234'));
+
+  const c4 = makeClient({ keyRecord: bundle.record });
+  await completePasswordReset(c4, { userId: 'u1', newPassword: 'reset-passwort-1234', recoveryKeyText: bundle.recoveryKeyText, randomBytes });
+  const upd4 = c4.calls.find(([n]) => n === 'updateUser')[1];
+  check('reset: abgeleitetes neues Passwort', upd4.password === await deriveAuthPassword('reset-passwort-1234'));
+  check('reset: Klartext nirgends', !JSON.stringify(c4.calls).includes('reset-passwort-1234'));
 }
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }

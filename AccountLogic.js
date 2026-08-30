@@ -19,6 +19,7 @@
 
 import {
   createKeyBundle,
+  deriveAuthPassword,
   rewrapWithPassword,
   unlockWithPassword,
   unlockWithRecoveryKey,
@@ -61,10 +62,12 @@ function unwrap({ data, error }) {
 }
 
 export async function signUpWithEmail(client, { email, password, record }, redirectTo) {
+  // Haertung (Spec 5): Supabase Auth bekommt nur den abgeleiteten Wert.
+  const authPassword = await deriveAuthPassword(password);
   const data = unwrap(
     await client.auth.signUp({
       email,
-      password,
+      password: authPassword,
       options: {
         emailRedirectTo: redirectTo,
         // Der Trigger handle_new_user_keys kopiert das nach public.user_keys
@@ -95,7 +98,10 @@ export async function saveKeyRecord(client, userId, record) {
 }
 
 export async function signInWithEmail(client, { email, password }) {
-  const data = unwrap(await client.auth.signInWithPassword({ email, password }));
+  // Haertung (Spec 5): Supabase Auth bekommt nur den abgeleiteten Wert;
+  // der Umschlag-Schluessel wird weiterhin mit dem Klartext entsperrt.
+  const authPassword = await deriveAuthPassword(password);
+  const data = unwrap(await client.auth.signInWithPassword({ email, password: authPassword }));
   const record = await fetchKeyRecord(client);
   // Kein Record (Konto aus einer Zeit vor dem Trigger, oder Trigger-
   // Fehler): Login klappt, Datenschluessel bleibt null. Teilprojekt 2
@@ -157,7 +163,8 @@ export async function completePasswordReset(client, { userId, newPassword, recov
     result = { dataKey: bundle.dataKey, recoveryKeyText: bundle.recoveryKeyText, dataLost: Boolean(record) };
   }
 
-  unwrap(await client.auth.updateUser({ password: newPassword }));
+  // Haertung (Spec 5): Supabase Auth bekommt nur den abgeleiteten Wert.
+  unwrap(await client.auth.updateUser({ password: await deriveAuthPassword(newPassword) }));
   await saveKeyRecord(client, userId, nextRecord);
   return result;
 }
@@ -180,7 +187,8 @@ export async function changePassword(client, { userId, currentPassword, newPassw
     throw error;
   }
   const next = await rewrapWithPassword(record, dataKey, newPassword, randomBytes);
-  unwrap(await client.auth.updateUser({ password: newPassword }));
+  // Haertung (Spec 5): Supabase Auth bekommt nur den abgeleiteten Wert.
+  unwrap(await client.auth.updateUser({ password: await deriveAuthPassword(newPassword) }));
   // Das neue Passwort steht ab hier bei Supabase Auth. Scheitert das
   // Speichern des Umschlags (z. B. RLS, Netz), darf das NICHT wie ein
   // generischer Fehler aussehen: die Anmeldung mit dem neuen Passwort
