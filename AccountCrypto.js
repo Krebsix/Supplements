@@ -28,7 +28,30 @@ import { gcm } from '@noble/ciphers/aes.js';
 import { scryptAsync } from '@noble/hashes/scrypt.js';
 import { bytesToHex, hexToBytes, utf8ToBytes } from '@noble/hashes/utils.js';
 
+// bytesToUtf8 fehlt in der installierten @noble/hashes-Version (Stand
+// 2026-08-30), deshalb Standard-Web-API als Ersatz.
+function bytesToUtf8(bytes) {
+  return new TextDecoder().decode(bytes);
+}
+
 export const KDF_PARAMS = { name: 'scrypt', N: 32768, r: 8, p: 1, dkLen: 32 };
+
+/**
+ * Anmelde-Ableitung (Bitwarden-Muster, Spec Entscheidung 5): Supabase Auth
+ * bekommt nie das Klartext-Passwort, sondern scrypt(passwort, AUTH_SALT)
+ * als Hex. Das Salz ist app-weit fest und NICHT aus der E-Mail abgeleitet:
+ * Ein E-Mail-Salz wuerde beim E-Mail-Wechsel ein Passwort-Update vor der
+ * Bestaetigung erzwingen (Supabase "secure email change").
+ * Der Umschlag-Schluessel (deriveKeyFromPassword mit kdf_salt) bleibt
+ * davon getrennt; beide Werte sind aus dem jeweils anderen nicht ableitbar.
+ */
+export const AUTH_SALT = utf8ToBytes('mysuplea-auth-v1');
+export const AUTH_SCHEME = 'scrypt-v1';
+
+export async function deriveAuthPassword(password) {
+  const key = await deriveKeyFromPassword(password, AUTH_SALT);
+  return bytesToHex(key);
+}
 
 const SALT_LENGTH = 16;
 const NONCE_LENGTH = 12;
@@ -67,6 +90,24 @@ export function unwrapKey(wrapped, wrappingKey) {
   if (!nonceHex || !sealedHex) throw new Error('AccountCrypto: unlesbares Format');
   // decrypt wirft, wenn Tag oder Schluessel nicht passen.
   return gcm(wrappingKey, hexToBytes(nonceHex)).decrypt(hexToBytes(sealedHex));
+}
+
+/**
+ * AES-256-GCM ueber beliebigen Text (Cloud-Backup). Gleiches Format wie
+ * die Umschlaege: nonce:ciphertext, beides hex, neuer Nonce je Aufruf.
+ */
+export async function encryptText(text, key, randomBytes) {
+  const nonce = await randomBytes(NONCE_LENGTH);
+  const sealed = gcm(key, nonce).encrypt(utf8ToBytes(String(text ?? '')));
+  return `${bytesToHex(nonce)}:${bytesToHex(sealed)}`;
+}
+
+export function decryptText(sealedText, key) {
+  const [nonceHex, sealedHex] = String(sealedText ?? '').split(':');
+  if (!nonceHex || !sealedHex) throw new Error('AccountCrypto: unlesbares Format');
+  // decrypt wirft, wenn Tag oder Schluessel nicht passen.
+  const plain = gcm(key, hexToBytes(nonceHex)).decrypt(hexToBytes(sealedHex));
+  return bytesToUtf8(plain);
 }
 
 export function formatRecoveryKey(bytes) {
@@ -113,7 +154,7 @@ export async function createKeyBundle(password, randomBytes) {
   const passwordKey = await deriveKeyFromPassword(password, salt);
 
   const record = {
-    kdf: { ...KDF_PARAMS },
+    kdf: { ...KDF_PARAMS, auth: AUTH_SCHEME },
     kdf_salt: bytesToHex(salt),
     wrapped_key_pw: await wrapKey(dataKey, passwordKey, randomBytes),
     wrapped_key_recovery: await wrapKey(dataKey, recoveryKey, randomBytes),
@@ -136,7 +177,7 @@ export async function rewrapWithPassword(record, dataKey, newPassword, randomByt
   const key = await deriveKeyFromPassword(newPassword, salt);
   return {
     ...record,
-    kdf: { ...KDF_PARAMS },
+    kdf: { ...KDF_PARAMS, auth: AUTH_SCHEME },
     kdf_salt: bytesToHex(salt),
     wrapped_key_pw: await wrapKey(dataKey, key, randomBytes),
   };

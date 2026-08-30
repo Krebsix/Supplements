@@ -3,10 +3,16 @@
 // pruefbar. randomBytes wird injiziert (in der App: expo-crypto).
 
 import { webcrypto } from 'node:crypto';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js';
 import {
+  AUTH_SALT,
+  AUTH_SCHEME,
   KDF_PARAMS,
   createKeyBundle,
+  decryptText,
+  deriveAuthPassword,
   deriveKeyFromPassword,
+  encryptText,
   formatRecoveryKey,
   parseRecoveryKey,
   rewrapWithPassword,
@@ -80,6 +86,48 @@ check('neues Passwort entsperrt', same(await unlockWithPassword(rewrapped, 'neue
 check('altes Passwort scheitert', await throws(() => unlockWithPassword(rewrapped, 'korrekt-pferd-batterie')));
 check('Recovery-Key bleibt gueltig', same(unlockWithRecoveryKey(rewrapped, bundle.recoveryKeyText), bundle.dataKey));
 check('Salt wurde erneuert', rewrapped.kdf_salt !== bundle.record.kdf_salt);
+
+console.log('— deriveAuthPassword —');
+{
+  const a = await deriveAuthPassword('korrektes-pferd-batterie');
+  const b = await deriveAuthPassword('korrektes-pferd-batterie');
+  const c = await deriveAuthPassword('korrektes-pferd-batterie!');
+  check('deterministisch', a === b);
+  check('64 Hex-Zeichen', /^[0-9a-f]{64}$/.test(a));
+  check('anderes Passwort, anderer Wert', a !== c);
+  check('enthaelt das Passwort nicht', !a.includes('pferd'));
+  check('AUTH_SALT hat 16 Bytes', AUTH_SALT instanceof Uint8Array && AUTH_SALT.length === 16);
+  // Umschlag-Schluessel und Anmelde-Schluessel muessen verschieden sein,
+  // sonst koennte Supabase mit dem Anmelde-Wert den Umschlag oeffnen.
+  const bundle = await createKeyBundle('korrektes-pferd-batterie', randomBytes);
+  const wrapKeyHex = bytesToHex(await deriveKeyFromPassword('korrektes-pferd-batterie', hexToBytes(bundle.record.kdf_salt)));
+  check('Anmelde-Schluessel ungleich Umschlag-Schluessel', a !== wrapKeyHex);
+  check('createKeyBundle markiert kdf.auth', bundle.record.kdf.auth === AUTH_SCHEME);
+  const rewrapped = await rewrapWithPassword(bundle.record, bundle.dataKey, 'neues-passwort-1234', randomBytes);
+  check('rewrapWithPassword markiert kdf.auth', rewrapped.kdf.auth === AUTH_SCHEME);
+  let threw = false;
+  try { await deriveAuthPassword(''); } catch { threw = true; }
+  check('leeres Passwort wirft', threw);
+}
+
+console.log('— encryptText / decryptText —');
+{
+  const key = await randomBytes(32);
+  const text = '{"schema":"supplement-os-backup","version":1,"data":{"labValues":[{"v":"ü"}]}}';
+  const sealed = await encryptText(text, key, randomBytes);
+  check('Format nonce:ciphertext hex', /^[0-9a-f]{24}:[0-9a-f]+$/.test(sealed));
+  check('Rundtrip inkl. Umlaut', decryptText(sealed, key) === text);
+  const sealed2 = await encryptText(text, key, randomBytes);
+  check('neuer Nonce je Aufruf', sealed !== sealed2);
+  const other = await randomBytes(32);
+  let wrongKeyThrew = false;
+  try { decryptText(sealed, other); } catch { wrongKeyThrew = true; }
+  check('falscher Schluessel wirft', wrongKeyThrew);
+  let badFormatThrew = false;
+  try { decryptText('kein-doppelpunkt', key); } catch { badFormatThrew = true; }
+  check('kaputtes Format wirft', badFormatThrew);
+  check('leerer Text geht', decryptText(await encryptText('', key, randomBytes), key) === '');
+}
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle AccountCrypto-Tests bestanden.');
