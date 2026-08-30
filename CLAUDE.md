@@ -193,8 +193,10 @@ npm run og         # OG-Bilder aus Icon + Headline (committen)
   nutzbar" statt "kein Konto".
 - Farben nur ueber `web/src/styles/tokens.css`; der Root-Test prueft jeden
   Wert gegen `theme.js`. Keine externen Skripte, Fonts oder Analytics.
-- Beta-Formular postet an Loops; Form-ID aus `PUBLIC_LOOPS_FORM_ID`.
-  Runbook bis live: `launch/landingpage.md`.
+- Beta-Formular postet JSON an die Edge Function `beta-signup`
+  (`supabase/functions/beta-signup`, Tabelle `public.beta_signups`,
+  IP-Rate-Limit ueber `check_scan_rate_limit` mit Praefix `beta:`). Kein
+  Mailversand: TestFlight laedt ein. Runbook: `launch/landingpage.md`.
 
 ---
 

@@ -8,18 +8,19 @@ ist die Copy-Quelle; die gebaute Fassung liegt in `web/src/i18n/de.ts` und
 
 ## Runbook bis live (Nadines Schritte)
 
-1. Loops: Account, Formular anlegen, Double-Opt-In aktivieren, Form-ID
-   kopieren. Vercel-Projekt `mysuplea-legal`: Env `PUBLIC_LOOPS_FORM_ID`
-   setzen (Encrypted, nicht Sensitive). Ohne die ID zeigt die Seite das
-   Formular deaktiviert mit Kontakt-Mail.
+1. Beta-Anmeldung laeuft ueber Supabase (Migration `beta_signups`, Edge
+   Function `beta-signup`, beides deployt). Adressen abrufen: Supabase
+   Dashboard → Table Editor → beta_signups, oder
+   `select email, locale, created_at from public.beta_signups order by created_at`.
+   Zum Beta-Start die Adressen in App Store Connect → TestFlight als
+   externe Tester eintragen; Apple verschickt die Einladung.
 2. Vercel: Root Directory des Projekts auf `web/` pruefen (Astro wird
    erkannt), Build `npm run build`, Output `dist`.
 3. Domain mysuplea.com kaufen und dem Vercel-Projekt zuweisen. Alte
    URLs (`/imprint.html`, `/terms.html`, `/index.html`) leiten per
    `web/vercel.json` auf die neuen Pfade um.
-4. Datenschutzerklaerung: Website-Abschnitt in `data/legalContent.js`
-   nachziehen (Vercel-Logs, Beta-Anmeldung ueber Loops mit DPA), dann
-   `npm run build:legal` und `web/public/` mitcommitten.
+4. Datenschutzerklaerung: Website-Abschnitt (Vercel-Logs, Beta-Anmeldung
+   bei Supabase) ist in `data/legalContent.js` eingetragen und generiert.
 5. Kontakt-Mail `hello@mysuplea.com` (web/src/config.ts) einrichten oder
    auf die indoohome-Adresse aendern.
 6. Impressum-Platzhalter (Vertretung, EU-Vertreter) fuellen.
@@ -273,10 +274,9 @@ Die Website braucht einen eigenen Abschnitt, bevor sie live geht:
 1. **Hosting Vercel:** Server-Logs (IP, Zeit, User-Agent), Vercel Inc.,
    USA, Standardvertragsklauseln. Rechtsgrundlage berechtigtes Interesse
    (Art. 6 Abs. 1 lit. f).
-2. **Beta-Anmeldung:** E-Mail-Adresse, Zeitpunkt, Double-Opt-In-Nachweis.
-   Zweck: einmalige Einladung zur Beta. Rechtsgrundlage Einwilligung,
-   jederzeit widerrufbar. Anbieter nennen (siehe Entscheidung unten), AVV
-   mit dem Anbieter in launch/avv-dokumentation.md aufnehmen.
+2. **Beta-Anmeldung:** E-Mail-Adresse, Zeitpunkt, Sprache, bei Supabase
+   (EU). Zweck: einmalige Einladung zur Beta ueber TestFlight.
+   Rechtsgrundlage Einwilligung, jederzeit widerrufbar. Eingetragen.
 3. **Keine Cookies, kein Tracking.** Dann ist kein Consent-Banner noetig.
    Wenn Analytics gewuenscht: nur ein Tool ohne Cookies und ohne
    Personenbezug (Plausible, EU-Hosting). Auch dann in die Erklaerung.
@@ -333,8 +333,9 @@ Datenschutz.
 ## 8. Entscheidungen (getroffen 2026-08-30)
 
 1. **Domain:** mysuplea.com, Kauf steht noch aus (Runbook oben).
-2. **Beta-Anmeldung:** Loops (Nadine, 2026-08-30). Formular gebaut,
-   Form-ID kommt als Vercel-Env.
+2. **Beta-Anmeldung:** Supabase statt Loops (Nadine, 2026-08-30, "nicht
+   komplizierter als noetig"). Tabelle `beta_signups` plus Edge Function
+   `beta-signup`, kein Mailversand, Einladung kommt von TestFlight.
 3. **Analytics:** keine. Seite ist bannerfrei, laedt nichts nach.
 4. **Englische Version:** sofort mit gebaut (Nadine, 2026-08-30),
    Woerterbuch-Architektur erlaubt weitere Sprachen mit einer Datei.

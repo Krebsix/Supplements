@@ -1,16 +1,17 @@
 ---
 /**
- * Beta-Anmeldung ueber Loops (POST an newsletter-form/<id>, Antwort JSON).
+ * Beta-Anmeldung: POST als JSON an die Supabase Edge Function beta-signup
+ * (supabase/functions/beta-signup), Antwort { ok: true }.
  *
  * Zustaende ueber data-state: idle, sending, success, error. Die Texte
  * kommen aus dem Woerterbuch und liegen als data-Attribute am Formular,
- * damit das Skript sprachunabhaengig bleibt. Ohne Form-ID (Env leer)
- * rendert das Formular deaktiviert mit Hinweis, nie ein toter Knopf.
+ * damit das Skript sprachunabhaengig bleibt. Ohne URL (Env leer) rendert
+ * das Formular deaktiviert mit Hinweis, nie ein toter Knopf.
  *
  * Honeypot: das Feld "company" ist fuer Menschen unsichtbar. Ist es
  * gefuellt, tut das Skript so, als haette es gesendet, und sendet nichts.
  */
-import { CONTACT_EMAIL, LOOPS_ENDPOINT } from '../config.ts';
+import { BETA_SIGNUP_URL, CONTACT_EMAIL } from '../config.ts';
 import { getDictionary, type Locale } from '../i18n/index.ts';
 
 interface Props {
@@ -23,7 +24,7 @@ interface Props {
 
 const { locale, id, compact = false } = Astro.props;
 const t = getDictionary(locale);
-const enabled = LOOPS_ENDPOINT !== '';
+const enabled = BETA_SIGNUP_URL !== '';
 const emailId = `${id}-email`;
 const statusId = `${id}-status`;
 ---
@@ -31,14 +32,14 @@ const statusId = `${id}-status`;
 <form
   class:list={['beta-form', { 'beta-form--compact': compact }]}
   data-beta-form
-  data-endpoint={LOOPS_ENDPOINT}
+  data-endpoint={BETA_SIGNUP_URL}
+  data-locale={locale}
   data-source={`website-${locale}`}
   data-sending={t.form.sending}
   data-success={t.form.success}
   data-error={t.form.error}
   data-state="idle"
   method="post"
-  action={LOOPS_ENDPOINT || undefined}
   novalidate
 >
   {!compact && (
@@ -143,8 +144,8 @@ const statusId = `${id}-status`;
 </style>
 
 <script>
-  // Sendet die Anmeldung per fetch an Loops und zeigt die Rueckmeldung
-  // inline. Laeuft fuer jedes Formular mit data-beta-form auf der Seite.
+  // Sendet die Anmeldung per fetch an die Edge Function und zeigt die
+  // Rueckmeldung inline. Laeuft fuer jedes Formular mit data-beta-form.
   const forms = document.querySelectorAll<HTMLFormElement>('form[data-beta-form]');
 
   forms.forEach((form) => {
@@ -180,20 +181,21 @@ const statusId = `${id}-status`;
       }
 
       setState('sending');
-      const body = new URLSearchParams({
+      const body = JSON.stringify({
         email: email.value.trim(),
-        userGroup: 'beta',
+        locale: form.dataset.locale ?? 'de',
         source: form.dataset.source ?? 'website',
+        company: trap?.value ?? '',
       });
 
       try {
         const response = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: { 'Content-Type': 'application/json' },
           body,
         });
-        const data = (await response.json().catch(() => ({}))) as { success?: boolean };
-        if (response.ok && data.success) {
+        const data = (await response.json().catch(() => ({}))) as { ok?: boolean };
+        if (response.ok && data.ok) {
           setState('success', form.dataset.success ?? '');
         } else {
           setState('error', form.dataset.error ?? '');

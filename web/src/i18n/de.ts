@@ -185,15 +185,15 @@ export const de = {
   form: {
     eyebrow: 'Beta',
     title: 'Die Beta startet auf iPhone.',
-    body: 'Trag dich ein, wir schicken dir den TestFlight-Link, wenn es losgeht. Eine Mail, keine Serie.',
+    body: 'Trag dich ein. Sobald es losgeht, kommt die TestFlight-Einladung per Mail. Eine Mail, keine Serie.',
     label: 'E-Mail-Adresse',
     placeholder: 'du@beispiel.de',
     cta: 'Für die Beta eintragen',
     consent:
-      'Du bekommst eine Bestätigungsmail. Erst nach dem Klick darin bist du eingetragen. Abmelden jederzeit mit einem Klick. Details in der Datenschutzerklärung.',
+      'Wir nutzen die Adresse nur für die Einladung zur Beta, gespeichert in der EU. Austragen jederzeit per Mail an uns. Details in der Datenschutzerklärung.',
     pending: 'Die Anmeldung öffnet in Kürze. Bis dahin erreichst du uns per Mail.',
     sending: 'Wird gesendet',
-    success: 'Fast geschafft. Bitte bestätige den Link in der Mail, die gerade unterwegs ist.',
+    success: 'Eingetragen. Die Einladung kommt per Mail, sobald die Beta startet.',
     error: 'Das hat nicht geklappt. Bitte versuch es gleich noch einmal oder schreib uns eine Mail.',
     noscript: 'Für die Anmeldung braucht das Formular JavaScript. Schreib uns stattdessen eine Mail.',
   },

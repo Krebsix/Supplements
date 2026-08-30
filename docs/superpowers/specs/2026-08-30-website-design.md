@@ -117,7 +117,18 @@ Reduced Motion wird respektiert; das Mockup bewegt sich nicht.
   Akzentfarbe, Kontraste mindestens 4.5:1 (inkMuted `#6c6c70` auf Canvas
   erfüllt das), Formularfeld mit Label, Fehlermeldung per `aria-live`.
 
-## 7. Beta-Anmeldung (Loops)
+## 7. Beta-Anmeldung
+
+**Geändert 2026-08-30, 10:25 (Nadine):** Supabase statt Loops, „nicht
+komplizierter als nötig“. Tabelle `public.beta_signups` (Migration
+`20260830100000_beta_signups.sql`), Edge Function `beta-signup` (JSON-POST,
+Honeypot, IP-Rate-Limit über `check_scan_rate_limit` mit Präfix `beta:`,
+Duplikate still ignoriert, CORS nur eigene Origins). Kein Mailversand und
+kein Double-Opt-In, weil Apple die TestFlight-Einladung selbst verschickt.
+URL fest in `web/src/config.ts`, Override `PUBLIC_BETA_SIGNUP_URL`.
+Der Loops-Absatz unten bleibt als Historie.
+
+### Ursprünglich: Loops
 
 - Endpoint aus `PUBLIC_LOOPS_FORM_ID` (Umgebungsvariable, Vercel) in
   `web/src/config.ts`. Ist die ID leer, rendert das Formular deaktiviert mit

@@ -182,15 +182,15 @@ export const en = {
   form: {
     eyebrow: 'Beta',
     title: 'The beta starts on iPhone.',
-    body: 'Sign up and we will send you the TestFlight link when it begins. One email, not a series.',
+    body: 'Sign up. As soon as it begins, the TestFlight invitation arrives by email. One email, not a series.',
     label: 'Email address',
     placeholder: 'you@example.com',
     cta: 'Join the beta',
     consent:
-      'You will receive a confirmation email. You are only signed up after clicking the link in it. Unsubscribe any time with one click. Details in the privacy policy.',
+      'We use the address only for the beta invitation, stored in the EU. Remove yourself any time by emailing us. Details in the privacy policy.',
     pending: 'Sign-up opens shortly. Until then you can reach us by email.',
     sending: 'Sending',
-    success: 'Almost there. Please confirm the link in the email that is on its way.',
+    success: 'Signed up. The invitation arrives by email as soon as the beta starts.',
     error: 'That did not work. Please try again in a moment or send us an email.',
     noscript: 'The form needs JavaScript to sign you up. Send us an email instead.',
   },
