@@ -45,13 +45,31 @@ export function daysLeft(stock, supplement) {
 }
 
 /**
- * refillState(stock, supplement, thresholdDays, now) => { daysLeft, due, notify }
+ * refillState(stock, supplement, thresholdDays, now) => { daysLeft, due, notify, plannedAt }
  *
  * due: Bestand ist erfasst, verbraucht sich taeglich und reicht nur noch
  * fuer hoechstens thresholdDays Tage. thresholdDays <= 0 schaltet die
  * Erinnerung aus (nie faellig).
  *
- * notify: faellig UND noch nicht gemeldet (stock.refillNotifiedAt leer).
+ * refillNotifiedAt ist die GEPLANTE Ausloesezeit der Erinnerung (ISO), kein
+ * "wurde gesendet"-Flag. Grund: NotificationScheduler.scheduleAllNotifications-
+ * ForToday cancelt am Anfang ALLE geplanten Notifications, auch bei jedem
+ * erneuten Durchlauf (z. B. ausgeloest durch eine andere Aenderung). Waere
+ * refillNotifiedAt ein reines Sende-Flag, wuerde ein solcher erneuter
+ * Durchlauf die gerade erst geplante, aber noch nicht ausgeloeste
+ * Erinnerung wegcancein und NIE neu planen, weil das Flag ja schon gesetzt
+ * war -- die Erinnerung verschwindet dann kommentarlos. Mit dem geplanten
+ * Zeitpunkt als Wert kann der Aufrufer stattdessen erkennen: liegt der
+ * geplante Zeitpunkt noch in der Zukunft, MUSS nach einem Cancel-all neu
+ * geplant werden (moeglichst mit demselben Zeitpunkt, siehe
+ * NotificationScheduler.scheduleRefillReminders).
+ *
+ * notify: faellig UND (noch nichts geplant ODER der geplante Zeitpunkt
+ * liegt noch in der Zukunft). Liegt der geplante Zeitpunkt in der
+ * Vergangenheit, ist die Erinnerung bereits ausgeloest worden -- kein
+ * erneutes Planen noetig, bis sie durch die Reset-Regel wieder freigegeben
+ * wird.
+ *
  * Reset-Regel liegt bewusst NICHT hier: der Aufrufer prueft
  * `!due && stock.refillNotifiedAt` und setzt refillNotifiedAt selbst
  * zurueck -- refillState bleibt eine reine Leseabfrage ohne Zustand.
@@ -66,7 +84,9 @@ export function refillState(stock, supplement, thresholdDays, now = new Date()) 
     remaining !== null &&
     remaining <= threshold;
 
-  const notify = due && !stock?.refillNotifiedAt;
+  const plannedAt = stock?.refillNotifiedAt ?? null;
+  const notify =
+    due && (!plannedAt || new Date(plannedAt).getTime() > now.getTime());
 
-  return { daysLeft: remaining, due, notify };
+  return { daysLeft: remaining, due, notify, plannedAt };
 }

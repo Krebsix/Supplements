@@ -20,11 +20,21 @@ check('0 Einheiten: 0 Tage', daysLeft({ currentUnits: 0 }, sup(['morning'])) ===
 
 console.log('\n— refillState —');
 const s4 = { currentUnits: 4, decrementPerIntake: 1 };
-check('unter Schwelle, noch nicht gemeldet: notify', refillState(s4, sup(['morning']), 5).notify === true);
-check('unter Schwelle, schon gemeldet: kein notify', refillState({ ...s4, refillNotifiedAt: '2026-08-29' }, sup(['morning']), 5).notify === false);
-check('ueber Schwelle: nicht faellig', refillState({ currentUnits: 40 }, sup(['morning']), 5).due === false);
-check('Schwelle 0 = aus', refillState(s4, sup(['morning']), 0).due === false);
-check('ohne Bestand: nicht faellig', refillState({}, sup(['morning']), 5).due === false);
+// Fixer Referenzzeitpunkt statt new Date(): sonst haengt "Vergangenheit"
+// vs. "Zukunft" vom Testlaufzeitpunkt ab.
+const NOW = new Date('2026-08-30T12:00:00.000Z');
+
+check('unter Schwelle, noch nichts geplant: notify', refillState(s4, sup(['morning']), 5, NOW).notify === true);
+check('geplant in der Vergangenheit: kein notify (bereits ausgeloest)',
+  refillState({ ...s4, refillNotifiedAt: '2026-08-29T09:00:00.000Z' }, sup(['morning']), 5, NOW).notify === false);
+check('geplant in der Zukunft: notify (nach cancelAll neu planen)',
+  refillState({ ...s4, refillNotifiedAt: '2026-08-30T18:00:00.000Z' }, sup(['morning']), 5, NOW).notify === true);
+check('plannedAt spiegelt refillNotifiedAt',
+  refillState({ ...s4, refillNotifiedAt: '2026-08-30T18:00:00.000Z' }, sup(['morning']), 5, NOW).plannedAt === '2026-08-30T18:00:00.000Z');
+check('plannedAt ist null ohne Eintrag', refillState(s4, sup(['morning']), 5, NOW).plannedAt === null);
+check('ueber Schwelle: nicht faellig', refillState({ currentUnits: 40 }, sup(['morning']), 5, NOW).due === false);
+check('Schwelle 0 = aus', refillState(s4, sup(['morning']), 0, NOW).due === false);
+check('ohne Bestand: nicht faellig', refillState({}, sup(['morning']), 5, NOW).due === false);
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

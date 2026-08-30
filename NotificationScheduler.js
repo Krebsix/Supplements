@@ -181,14 +181,18 @@ export async function scheduleAllNotificationsForToday(
   }
 
   // Nachfuell-Erinnerung: separat von den Slot-Alarmen, deshalb ein
-  // eigener Durchlauf am Ende statt eine Verzweigung je Slot.
-  await scheduleRefillReminders({
+  // eigener Durchlauf am Ende statt eine Verzweigung je Slot. Die IDs
+  // laufen in dieselbe Buchhaltung wie die Slot-Alarme, sonst wuerden sie
+  // beim naechsten cancelAllScheduledNotificationsAsync() nicht mehr als
+  // "von uns geplant" auffindbar sein.
+  const refillIds = await scheduleRefillReminders({
     supplements,
     stocks,
     thresholdDays: refillThresholdDays,
     onNotified: onRefillNotified,
     now: new Date(now),
   });
+  scheduledIds.push(...refillIds);
 
   return scheduledIds;
 }
@@ -199,11 +203,23 @@ export async function scheduleAllNotificationsForToday(
 
 /**
  * scheduleRefillReminders({ supplements, stocks, thresholdDays, onNotified, now })
+ * => Array<{ notifId, supplementId, slotId: 'refill' }>
  *
  * Plant je Praeparat mit Bestandseintrag hoechstens eine Nachfuell-
  * Erinnerung, wenn StockForecast.refillState das als faellig und noch
- * nicht gemeldet einstuft (fuer heute 09:00, oder in einer Minute, wenn
- * 09:00 bereits vorbei ist), und meldet das ueber onNotified zurueck.
+ * nicht (oder nicht mehr rechtzeitig) geplant einstuft. Ist bereits ein
+ * Zeitpunkt in der Zukunft geplant (forecast.plannedAt), wird GENAU DIESER
+ * wiederverwendet -- so verschiebt sich die Erinnerung nicht bei jedem
+ * erneuten Durchlauf, nur weil scheduleAllNotificationsForToday am Anfang
+ * alle Notifications cancelt und sie hier neu angemeldet werden muss.
+ * Ohne geplanten Zeitpunkt gilt wie bisher: heute 09:00, oder in einer
+ * Minute, wenn 09:00 bereits vorbei ist.
+ *
+ * onNotified wird nur aufgerufen, wenn sich der geplante Zeitpunkt
+ * tatsaechlich AENDERT (neu geplant oder Reset) -- ein unveraenderter
+ * erneuter Durchlauf loest also keinen Store-Write und damit keinen
+ * weiteren Subscriber-Zyklus aus.
+ *
  * Ist ein Praeparat nicht mehr faellig, aber vorher gemeldet, wird
  * refillNotifiedAt ueber denselben Callback zurueckgesetzt (Reset-Regel) --
  * sonst wuerde eine neue Knappheit nach dem Auffuellen nie wieder gemeldet.
@@ -220,6 +236,8 @@ export async function scheduleRefillReminders({
   onNotified = () => {},
   now = new Date(),
 }) {
+  const scheduledIds = [];
+
   for (const supplement of supplements) {
     const stock = stocks[supplement.id];
     if (!stock) continue;
@@ -227,14 +245,22 @@ export async function scheduleRefillReminders({
     const forecast = refillState(stock, supplement, thresholdDays, now);
 
     if (forecast.notify) {
-      const triggerDate = new Date(now);
-      triggerDate.setHours(9, 0, 0, 0);
-      if (triggerDate.getTime() <= now.getTime()) {
-        triggerDate.setTime(now.getTime() + 60 * 1000);
+      // forecast.notify ist nur wahr, wenn plannedAt entweder leer ist ODER
+      // in der Zukunft liegt (siehe StockForecast.refillState) -- ein
+      // Zeitpunkt in der Vergangenheit ist also hier ausgeschlossen.
+      let triggerDate;
+      if (forecast.plannedAt) {
+        triggerDate = new Date(forecast.plannedAt);
+      } else {
+        triggerDate = new Date(now);
+        triggerDate.setHours(9, 0, 0, 0);
+        if (triggerDate.getTime() <= now.getTime()) {
+          triggerDate.setTime(now.getTime() + 60 * 1000);
+        }
       }
 
       try {
-        await Notifications.scheduleNotificationAsync({
+        const notifId = await Notifications.scheduleNotificationAsync({
           content: {
             title: tr('logic.notifications.refillTitle'),
             body: tr('logic.notifications.refill', {
@@ -251,7 +277,15 @@ export async function scheduleRefillReminders({
             channelId: CHANNEL_ID,
           },
         });
-        onNotified(supplement.id, now.toISOString());
+
+        if (notifId) {
+          scheduledIds.push({ notifId, supplementId: supplement.id, slotId: 'refill' });
+        }
+
+        const nextPlannedAt = triggerDate.toISOString();
+        if (nextPlannedAt !== stock.refillNotifiedAt) {
+          onNotified(supplement.id, nextPlannedAt);
+        }
       } catch (err) {
         console.error(
           `[NotificationScheduler] Nachfuell-Erinnerung fuer ${supplement.name} fehlgeschlagen:`,
@@ -262,6 +296,8 @@ export async function scheduleRefillReminders({
       onNotified(supplement.id, null);
     }
   }
+
+  return scheduledIds;
 }
 
 // ─────────────────────────────────────────────────────────────

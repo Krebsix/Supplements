@@ -181,8 +181,9 @@ export default useNotificationStore;
 
 import useStore from './useStore';
 import { isDueToday } from './CureManager';
+import { createCoalescedRunner } from './runCoalesced';
 
-export async function refreshNotificationSchedule() {
+async function runRefreshScheduleOnce() {
   const main = useStore.getState();
   const loggedToday = main
     .getLoggedToday()
@@ -202,3 +203,19 @@ export async function refreshNotificationSchedule() {
     onRefillNotified: main.markRefillNotified,
   });
 }
+
+/**
+ * refreshNotificationSchedule()
+ *
+ * Einziger Trichter, ueber den app/_layout.jsx UND die Einstellungs-Screens
+ * den Tagesplan neu planen -- deshalb hier mit createCoalescedRunner
+ * gebuendelt (siehe runCoalesced.js fuer den konkreten Re-Entrancy-Fall):
+ * scheduleAllNotificationsForToday cancelt am Anfang ALLE geplanten
+ * Notifications. Setzt eine Nachfuell-Erinnerung waehrend eines laufenden
+ * Durchlaufs synchron einen neuen Zeitpunkt (markRefillNotified -> set()),
+ * loest das in app/_layout.jsx denselben Subscriber erneut aus. Ohne
+ * Buendelung wuerde dessen verschachtelter Durchlauf per Cancel-all die
+ * gerade erst vom aeusseren Durchlauf geplanten Notifications wieder
+ * loeschen, noch bevor dieser fertig ist.
+ */
+export const refreshNotificationSchedule = createCoalescedRunner(runRefreshScheduleOnce);
