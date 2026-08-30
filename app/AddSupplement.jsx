@@ -388,6 +388,7 @@ export default function AddSupplement() {
             ingredientDetails={ingredientDetails}
             dosage={{ amount, unit }}
             scanned={fromScan && pendingScanResult?.analysisMode === 'vision'}
+            certifications={fromScan ? pendingScanResult?.certifications ?? [] : []}
             onEdit={() => setEditingProduct(true)}
           />
         )}

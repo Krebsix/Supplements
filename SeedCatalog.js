@@ -216,6 +216,10 @@ export function seedEntryToScanDraft(entry) {
     warnings: [...classWarnings, tr('seedCatalog.warning.catalog')],
     uncertaintyNote: tr('seedCatalog.uncertaintyNote'),
     analysisMode: 'seed-catalog',
+    // Belegte Siegel-Referenzen des Katalogeintrags (id, level, sourceUrl,
+    // checkedAt) — wandern in den Entwurf, damit Aufnehmen-Screen und
+    // Suche sie zeigen koennen. Keine Eigenaussagen ohne Quelle.
+    certifications: Array.isArray(entry.certifications) ? entry.certifications : [],
     productClass: productClass || null,
     barcode: clean(entry.ean) || null,
     analyzedAt: new Date().toISOString(),

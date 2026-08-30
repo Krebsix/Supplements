@@ -141,6 +141,15 @@ const certIndex = certifications.flatMap((cert) =>
  *         erkannt hat. Unbekannte Siegel bleiben unbekannt — es wird
  *         nichts geraten.
  */
+/**
+ * certificationById(id)
+ * Siegel-Eintrag zu einer Katalog-Referenz (data/seedProducts.json,
+ * Feld certifications). Unbekannte IDs liefern null statt zu raten.
+ */
+export function certificationById(id) {
+  return certifications.find((cert) => cert.id === id) ?? null;
+}
+
 export function matchCertifications(labels = []) {
   if (!Array.isArray(labels)) return [];
 

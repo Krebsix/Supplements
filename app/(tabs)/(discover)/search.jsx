@@ -18,6 +18,7 @@ import {
   sortProducts,
 } from '../../../SeedCatalog';
 import useStore from '../../../useStore';
+import { certificationById } from '../../../data/certifications';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 
@@ -426,6 +427,21 @@ export default function SearchScreen() {
                           <View style={styles.entryTextWrap}>
                             <View style={styles.productBrandRow}>
                               <Text style={styles.productBrand}>{product.brand}</Text>
+                              {/* Belegte Siegel des Eintrags, neutral wie das
+                                  OFF-Badge dargestellt (kein Ranking). */}
+                              {(product.entry?.certifications ?? []).map((cert) => {
+                                const meta = certificationById(cert.id);
+                                if (!meta) return null;
+                                return (
+                                  <View
+                                    key={cert.id}
+                                    style={styles.offBadge}
+                                    accessibilityLabel={meta.name}
+                                  >
+                                    <Text style={styles.offBadgeText}>{meta.name}</Text>
+                                  </View>
+                                );
+                              })}
                               {product.entry?.license === 'ODbL' ? (
                                 <View
                                   style={styles.offBadge}

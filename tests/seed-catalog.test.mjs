@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 // Tests fuer SeedCatalog.js und data/seedProducts.json:
 // Datenintegritaet des Katalogs (Quelle je Eintrag, gueltige EANs) und
 // Verhalten von Suche und Draft-Erzeugung.
@@ -120,6 +121,23 @@ for (const substanceId of ['vitamin-d3', 'vitamin-b12', 'thiamin', 'magnesium'])
     hits.every((p) => p.amount === null || Number.isFinite(p.amount)),
     String(hits.filter((p) => !(p.amount === null || Number.isFinite(p.amount))).length)
   );
+}
+
+console.log('— Siegel-Referenzen im Katalog —');
+{
+  const { certificationById } = await import('../data/certifications.js');
+  const raw = JSON.parse(readFileSync(new URL('../data/seedProducts.json', import.meta.url), 'utf8'));
+  let certCount = 0;
+  for (const entry of raw) {
+    for (const cert of entry.certifications ?? []) {
+      certCount += 1;
+      check(`${entry.brand} ${entry.name}: Siegel-ID bekannt (${cert.id})`, certificationById(cert.id) !== null);
+      check(`${entry.brand} ${entry.name}: level product|brand`, cert.level === 'product' || cert.level === 'brand');
+      check(`${entry.brand} ${entry.name}: Quelle ist URL`, /^https:\/\//.test(cert.sourceUrl ?? ''));
+      check(`${entry.brand} ${entry.name}: checkedAt gesetzt`, /^\d{4}-\d{2}-\d{2}$/.test(cert.checkedAt ?? ''));
+    }
+  }
+  check('mindestens ein Siegel-Eintrag vorhanden', certCount >= 1);
 }
 
 if (failures > 0) {

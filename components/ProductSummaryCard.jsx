@@ -1,7 +1,8 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
+import { certificationById } from '../data/certifications';
 import { useTranslation } from '../i18n';
 import { colors, space, surfaces, type } from '../theme';
 
@@ -17,6 +18,7 @@ export default function ProductSummaryCard({
   dosage,
   scanned = false,
   onEdit,
+  certifications = [],
 }) {
   const { t } = useTranslation();
   const details = Array.isArray(ingredientDetails)
@@ -51,6 +53,28 @@ export default function ProductSummaryCard({
         <Text style={styles.details}>
           {detailLine || dosageLine || t('addSupplement.product.noDetails')}
         </Text>
+        {/* Belegte Siegel-Referenzen (data/seedProducts.json): nur mit
+            Quelle erfasst, deskriptiv formuliert, Antippen oeffnet sie. */}
+        {(Array.isArray(certifications) ? certifications : [])
+          .map((cert) => ({ cert, meta: certificationById(cert.id) }))
+          .filter((item) => item.meta)
+          .map(({ cert, meta }) => (
+            <Pressable
+              key={`${cert.id}-${cert.level}`}
+              onPress={() => cert.sourceUrl && Linking.openURL(cert.sourceUrl)}
+              accessibilityRole={cert.sourceUrl ? 'link' : undefined}
+              hitSlop={6}
+            >
+              <Text style={styles.certLine}>
+                {t(
+                  cert.level === 'brand'
+                    ? 'addSupplement.product.cert.brand'
+                    : 'addSupplement.product.cert.product',
+                  { name: meta.name, date: String(cert.checkedAt ?? '').slice(0, 7) }
+                )}
+              </Text>
+            </Pressable>
+          ))}
       </View>
     </View>
   );
@@ -66,4 +90,5 @@ const styles = StyleSheet.create({
   edit: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
   editText: { ...type.small, color: colors.accent },
   details: { ...type.body, marginTop: space.sm },
+  certLine: { ...type.small, color: colors.accent, marginTop: space.sm },
 });

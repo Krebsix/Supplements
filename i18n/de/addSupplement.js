@@ -60,6 +60,8 @@ export default {
   'addSupplement.scanHint': 'Aus dem Etikett erkannt, bitte prüfen.',
   'addSupplement.product.change': 'Ändern',
   'addSupplement.product.noDetails': 'Inhaltsstoffe noch nicht erfasst.',
+  'addSupplement.product.cert.product': '{name}: Produkt gelistet (Stand {date}). Quelle öffnen',
+  'addSupplement.product.cert.brand': '{name}: Hersteller zertifiziert (Stand {date}). Quelle öffnen',
   'addSupplement.frequency.title': 'Wie oft am Tag?',
   'addSupplement.frequency.times': '{count}×',
   'addSupplement.slot.title': 'Wann?',

@@ -3051,7 +3051,15 @@
     "source": "https://ww1.lifeplus.com/de/de/web-page/products",
     "country": "DE",
     "channel": "direct",
-    "productClass": null
+    "productClass": null,
+    "certifications": [
+      {
+        "id": "koelner-liste",
+        "level": "product",
+        "sourceUrl": "https://www.koelnerliste.com/produkt/bodysmart-solutions-triple-protein-shake-vanille",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Zinzino",
@@ -3979,7 +3987,15 @@
     "source": "https://www.centrum-online.de/produkte/centrum-von-a-bis-zink/",
     "country": "DE",
     "channel": "drogerie",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "koelner-liste",
+        "level": "product",
+        "sourceUrl": "https://www.koelnerliste.com/news/artikel/neuer-partner-haleon",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Centrum",

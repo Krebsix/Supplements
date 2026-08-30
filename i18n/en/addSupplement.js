@@ -60,6 +60,8 @@ export default {
   'addSupplement.scanHint': 'Read from the label, please check.',
   'addSupplement.product.change': 'Change',
   'addSupplement.product.noDetails': 'Ingredients not captured yet.',
+  'addSupplement.product.cert.product': '{name}: product listed (as of {date}). Open source',
+  'addSupplement.product.cert.brand': '{name}: manufacturer certified (as of {date}). Open source',
   'addSupplement.frequency.title': 'How often per day?',
   'addSupplement.frequency.times': '{count}×',
   'addSupplement.slot.title': 'When?',
