@@ -1,4 +1,7 @@
 {
+  "framework": "astro",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "redirects": [
     { "source": "/index.html", "destination": "/datenschutz/", "permanent": true },
     { "source": "/imprint.html", "destination": "/impressum/", "permanent": true },

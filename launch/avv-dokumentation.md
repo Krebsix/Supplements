@@ -88,6 +88,29 @@ Kaufbelege von Apple bzw. Google und Anzeige des Abo-Status
   einmal gegenlesen und die Benachrichtigungs-Mails abonnieren, analog
   zu Supabase und Anthropic oben.
 
+## Vercel (Website-Hosting, seit 2026-08-30)
+
+- AVV: https://vercel.com/legal/dpa (Self-Service, Teil der AGB,
+  Standardvertragsklauseln eingebunden).
+- Verarbeitet: Server-Logs der Website (IP, Zeit, Pfad, User-Agent),
+  kurzlebig. Keine Cookies, keine Nutzerinhalte, kein Formularinhalt (das
+  Beta-Formular postet direkt vom Browser an Loops, nicht ueber Vercel).
+- Sub-Prozessoren: https://vercel.com/legal/subprocessors
+- In der Datenschutzerklaerung: Abschnitt "Website (mysuplea.com)".
+
+## Loops (Beta-Anmeldung, seit 2026-08-30)
+
+- Betreiberin: Astrodon Corporation, USA (Privacy Policy loops.so/privacy).
+- AVV: https://loops.so/dpa (Self-Service). Drittlandtransfer ueber
+  Standardvertragsklauseln; Astrodon ist nach dem EU-US Data Privacy
+  Framework zertifiziert (laut Privacy Policy, vor Live-Gang auf
+  dataprivacyframework.gov gegenpruefen).
+- Verarbeitet: E-Mail-Adresse, Zeitpunkt, userGroup "beta", source
+  "website-de|en", Double-Opt-In-Nachweis. Keine Gesundheitsdaten.
+- Zu tun (Nadine): Double-Opt-In im Loops-Formular aktivieren, DPA im
+  Loops-Dashboard akzeptieren, Liste nach Beta-Ende loeschen.
+- In der Datenschutzerklaerung: Abschnitt "Website (mysuplea.com)".
+
 ## Was das fuer die Datenschutzerklaerung bedeutet
 
 `data/legalContent.js` kann bei den Abschnitten zu Supabase/Anthropic auf
