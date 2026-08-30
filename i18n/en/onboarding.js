@@ -13,7 +13,7 @@ export default {
 
   'onboarding.welcome.eyebrow': 'Welcome',
   'onboarding.welcome.title': 'MySuplea organises what you take.',
-  'onboarding.welcome.text': 'No recommendations, no advertising. Your data stays on your device.',
+  'onboarding.welcome.text': 'No recommendations, no advertising, your data stays with you.',
   'onboarding.welcome.start': 'Let\'s go',
 
   'onboarding.legal.title': 'Before you start',

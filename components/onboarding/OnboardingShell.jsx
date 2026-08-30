@@ -3,11 +3,11 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
+  FadeInLeft,
+  FadeInRight,
   FadeOut,
   FadeOutLeft,
   FadeOutRight,
-  SlideInLeft,
-  SlideInRight,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -55,16 +55,26 @@ export default function OnboardingShell({
     width: `${Math.max(0, Math.min(1, progress.value)) * 100}%`,
   }));
 
+  // 24 pt statt der vollen Bildschirmbreite: SlideInRight/SlideInLeft faehrt
+  // vom Fensterrand rein, das ist keine "subtile" Bewegung mehr. FadeInRight/
+  // FadeInLeft animieren (anders als das nackte FadeIn) sowohl transform als
+  // auch opacity, deshalb reicht hier ein ueberschriebener Startwert
+  // (withInitialValues) statt eines manuellen Shared-Value-Worklets.
+  const STEP_OFFSET = 24;
   let entering;
   let exiting;
   if (reducedMotion) {
     entering = FadeIn.duration(150);
     exiting = FadeOut.duration(120);
   } else if (direction === 'back') {
-    entering = SlideInLeft.duration(220).easing(Easing.out(Easing.cubic));
+    entering = FadeInLeft.duration(220)
+      .easing(Easing.out(Easing.cubic))
+      .withInitialValues({ transform: [{ translateX: -STEP_OFFSET }] });
     exiting = FadeOutRight.duration(180);
   } else {
-    entering = SlideInRight.duration(220).easing(Easing.out(Easing.cubic));
+    entering = FadeInRight.duration(220)
+      .easing(Easing.out(Easing.cubic))
+      .withInitialValues({ transform: [{ translateX: STEP_OFFSET }] });
     exiting = FadeOutLeft.duration(180);
   }
 

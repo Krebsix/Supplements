@@ -15,7 +15,7 @@ export default {
 
   'onboarding.welcome.eyebrow': 'Willkommen',
   'onboarding.welcome.title': 'MySuplea ordnet, was du nimmst.',
-  'onboarding.welcome.text': 'Keine Empfehlungen, keine Werbung. Deine Daten bleiben auf deinem Gerät.',
+  'onboarding.welcome.text': 'Keine Empfehlungen, keine Werbung, deine Daten bleiben bei dir.',
   'onboarding.welcome.start': 'Los geht\'s',
 
   'onboarding.legal.title': 'Bevor es losgeht',

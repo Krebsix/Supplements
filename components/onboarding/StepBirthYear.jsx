@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-import { colors, space, surfaces, type } from '../../theme';
+import { colors, space, type } from '../../theme';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MIN_YEAR = CURRENT_YEAR - 100;
@@ -60,7 +60,10 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center' },
   title: { ...type.heading, marginBottom: space.sm },
   why: { ...type.small, marginBottom: space.md },
-  picker: { ...surfaces.input, height: 180 },
+  // Kein Eingabefeld-Look: das native Rad ignoriert Rahmen und Polsterung
+  // von surfaces.input ohnehin, ein schlichter Container sitzt in der
+  // Karte wie das System-Rad.
+  picker: { height: 180, paddingVertical: space.sm },
   tooYoungHint: { ...type.small, color: colors.alert, marginTop: space.md },
   underageHint: { ...type.small, color: colors.caution, marginTop: space.md },
 });
