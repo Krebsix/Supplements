@@ -1,136 +1,362 @@
-import React, { useState } from 'react';
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
-import LifeStagePicker from '../components/LifeStagePicker';
-import { PRIVACY_VERSION } from '../data/legalContent';
-import { useTranslation } from '../i18n';
+import OnboardingShell from '../components/onboarding/OnboardingShell';
+import StepWelcome from '../components/onboarding/StepWelcome';
+import StepLegal from '../components/onboarding/StepLegal';
+import StepName from '../components/onboarding/StepName';
+import StepGender from '../components/onboarding/StepGender';
+import StepBirthYear from '../components/onboarding/StepBirthYear';
+import StepExtra from '../components/onboarding/StepExtra';
+import StepRoutineTimes from '../components/onboarding/StepRoutineTimes';
+import StepRoutineFirst from '../components/onboarding/StepRoutineFirst';
+import StepAccount from '../components/onboarding/StepAccount';
+import StepDone from '../components/onboarding/StepDone';
+import { resolveLifeStage } from '../LifeStageResolver';
+import useNotificationStore from '../useNotificationStore';
 import { useStore } from '../useStore';
-import { colors, radius, space, surfaces, type } from '../theme';
+import { PRIVACY_VERSION, TERMS_VERSION } from '../data/legalContent';
+import { useTranslation } from '../i18n';
+import { space, surfaces } from '../theme';
+
+const DEFAULT_BIRTH_YEAR = 1990;
 
 /**
- * Erster Start.
+ * buildSteps
+ * ─────────────────────────────────────────────────────────────
+ * Leitet die tatsaechlich zu zeigende Schrittfolge aus dem aufgeloesten
+ * Lebensphasen-Ergebnis ab (LifeStageResolver.js). Die Zusatzfrage
+ * erscheint nur, wenn `needsExtra` gesetzt ist (z. B. Frau 15 bis 50 ohne
+ * beantwortete Schwangerschaftsfrage), der Konto-Schritt entfaellt unter
+ * 16 (Nutzungsbedingungen setzen ein Mindestalter). Aendert eine
+ * vorherige Antwort das Ergebnis (Geschlechtswechsel, anderes
+ * Geburtsjahr), passt sich die Liste im naechsten Render an.
+ */
+function buildSteps(resolved) {
+  return [
+    'welcome',
+    'legal',
+    'name',
+    'gender',
+    'birthYear',
+    ...(resolved.needsExtra ? ['extra'] : []),
+    'routineTimes',
+    'routineFirst',
+    ...(resolved.underage ? [] : ['account']),
+    'done',
+  ];
+}
+
+function PrimaryButton({ label, onPress, disabled }) {
+  return (
+    <TouchableOpacity
+      style={[styles.primaryButton, disabled && styles.buttonDisabled]}
+      onPress={disabled ? undefined : onPress}
+      activeOpacity={0.8}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!disabled }}
+      accessibilityLabel={label}
+    >
+      <Text style={surfaces.buttonPrimaryText}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
+function QuietButton({ label, onPress }) {
+  return (
+    <TouchableOpacity
+      style={styles.quietButton}
+      onPress={onPress}
+      activeOpacity={0.8}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+    >
+      <Text style={surfaces.buttonQuietText}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
+/**
+ * OnboardingScreen
+ * ─────────────────────────────────────────────────────────────
+ * Neun bis zehn Schritte vom Logo zum ersten Tagesplan (siehe
+ * docs/superpowers/specs/2026-08-30-onboarding-gefuehrt-design.md,
+ * Abschnitt "Ablauf"). Traegt selbst keine Fachlogik: Die Referenzgruppe
+ * kommt aus LifeStageResolver.js, das Speichern aus completeOnboarding()
+ * (useStore.js). Dieser Screen verwaltet nur die Antworten im
+ * Screen-Zustand und die Schrittfolge, die daraus abgeleitete Liste
+ * entscheidet, was als Naechstes kommt.
  *
- * Zwei Dinge passieren hier, beide bewusst VOR der ersten Nutzung:
- *
- * 1. Die Lebensphase wird aktiv gewaehlt — ohne Vorauswahl. Frueher
- *    startete die App still als "erwachsene Frau"; fuer alle anderen
- *    Nutzergruppen waren die Referenzwerte damit vom ersten Tag an falsch.
- * 2. Die Datenschutzerklaerung wird zur Kenntnis genommen. Die Einwilligung
- *    zur Foto-Uebertragung ist hier ausdruecklich NICHT dabei — sie wird
- *    erst vor dem ersten Scan eingeholt, dort, wo sie verstaendlich ist.
+ * Antworten leben bewusst NICHT im Store: Bricht die Nutzerin das
+ * Onboarding mitten drin ab, beginnt es beim naechsten Start von vorn,
+ * es gibt keinen Teilzustand, der widerspruechlich mit einem spaeter
+ * doch abgeschlossenen Onboarding kollidieren koennte.
  */
 export default function OnboardingScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const completeOnboarding = useStore((state) => state.completeOnboarding);
+  const setNotificationsEnabled = useNotificationStore((state) => state.setNotificationsEnabled);
+  const checkAndRequestPermission = useNotificationStore(
+    (state) => state.checkAndRequestPermission
+  );
 
-  const [lifeStageId, setLifeStageId] = useState(null);
-  const [showRequiredHint, setShowRequiredHint] = useState(false);
+  const [answers, setAnswers] = useState({
+    displayName: '',
+    gender: null,
+    birthYear: DEFAULT_BIRTH_YEAR,
+    extra: null,
+    referenceOverride: null,
+    firstAction: null,
+    accountChoice: null,
+  });
+  const [stepIndex, setStepIndex] = useState(0);
+  const [direction, setDirection] = useState('forward');
+  const [permissionDenied, setPermissionDenied] = useState(false);
 
-  const handleStart = () => {
-    if (!lifeStageId) {
-      setShowRequiredHint(true);
+  const resolved = useMemo(
+    () =>
+      resolveLifeStage({
+        gender: answers.gender,
+        birthYear: answers.birthYear,
+        extra: answers.extra,
+        referenceOverride: answers.referenceOverride,
+      }),
+    [answers.gender, answers.birthYear, answers.extra, answers.referenceOverride]
+  );
+
+  const steps = useMemo(
+    () => buildSteps(resolved),
+    [resolved.needsExtra, resolved.underage]
+  );
+  // Die Liste kann kuerzer werden als der zuletzt gesetzte Index (z. B.
+  // Zusatzfrage faellt weg, weil die Nutzerin eine Etage weiter oben das
+  // Geschlecht gewechselt hat): nie ausserhalb der aktuellen Liste zeigen.
+  const safeStepIndex = Math.min(stepIndex, steps.length - 1);
+  const stepId = steps[safeStepIndex];
+
+  const patchAnswers = (patch) => setAnswers((current) => ({ ...current, ...patch }));
+
+  const goTo = (nextIndex, dir) => {
+    setDirection(dir);
+    setStepIndex(nextIndex);
+  };
+
+  // Schritt 1 (Willkommen) und Schritt 2 (Rechtliches) haben keinen
+  // Zurueck-Pfeil: Rechtliches laesst sich nicht ueberspringen, Willkommen
+  // ist der Einstieg selbst.
+  const canGoBack = safeStepIndex >= 2;
+  const goBack = () => {
+    if (!canGoBack) return;
+    goTo(safeStepIndex - 1, 'back');
+  };
+
+  const finish = () => {
+    completeOnboarding({
+      lifeStageId: resolved.lifeStageId,
+      privacyVersion: PRIVACY_VERSION,
+      termsVersion: TERMS_VERSION,
+      profile: {
+        displayName: answers.displayName,
+        gender: answers.gender,
+        birthYear: answers.birthYear,
+      },
+      firstAction: answers.firstAction,
+      accountOffered: !resolved.underage,
+    });
+    const target =
+      answers.accountChoice === 'create'
+        ? '/account'
+        : answers.firstAction === 'scan'
+        ? '/scanner'
+        : answers.firstAction === 'search'
+        ? '/search'
+        : '/Dashboard';
+    router.replace(target);
+  };
+
+  const goNext = async () => {
+    if (stepId === 'routineTimes' && useNotificationStore.getState().notificationsEnabled) {
+      // Die Systemerlaubnis wird bewusst erst hier abgefragt, nicht schon
+      // beim Umlegen des Schalters: Der Weiter-Tipp ist der Moment, in dem
+      // die Nutzerin die Wahl bestaetigt.
+      const granted = await checkAndRequestPermission();
+      if (!granted) {
+        setNotificationsEnabled(false);
+        setPermissionDenied(true);
+      }
+    }
+
+    if (stepId === 'done') {
+      finish();
       return;
     }
-    completeOnboarding({ lifeStageId, privacyVersion: PRIVACY_VERSION });
-    router.replace('/Dashboard');
+
+    goTo(safeStepIndex + 1, 'forward');
+  };
+
+  const handleSkipName = () => {
+    patchAnswers({ displayName: '' });
+    goTo(safeStepIndex + 1, 'forward');
+  };
+
+  const handleAccountChoice = (choice) => {
+    patchAnswers({ accountChoice: choice });
+    goTo(safeStepIndex + 1, 'forward');
+  };
+
+  const renderStep = () => {
+    switch (stepId) {
+      case 'welcome':
+        return <StepWelcome t={t} />;
+      case 'legal':
+        return (
+          <StepLegal
+            t={t}
+            onOpenTerms={() => router.push('/terms')}
+            onOpenPrivacy={() => router.push('/privacy')}
+          />
+        );
+      case 'name':
+        return (
+          <StepName
+            t={t}
+            value={answers.displayName}
+            onChange={(displayName) => patchAnswers({ displayName })}
+          />
+        );
+      case 'gender':
+        return (
+          <StepGender
+            t={t}
+            value={answers.gender}
+            onChange={(gender) => patchAnswers({ gender })}
+          />
+        );
+      case 'birthYear':
+        return (
+          <StepBirthYear
+            t={t}
+            value={answers.birthYear}
+            onChange={(birthYear) => patchAnswers({ birthYear })}
+            resolved={resolved}
+          />
+        );
+      case 'extra':
+        return (
+          <StepExtra
+            t={t}
+            value={{ extra: answers.extra, referenceOverride: answers.referenceOverride }}
+            onChange={(patch) => patchAnswers(patch)}
+            resolved={resolved}
+          />
+        );
+      case 'routineTimes':
+        return <StepRoutineTimes t={t} value={permissionDenied} />;
+      case 'routineFirst':
+        return (
+          <StepRoutineFirst
+            t={t}
+            value={answers.firstAction}
+            onChange={(firstAction) => patchAnswers({ firstAction })}
+          />
+        );
+      case 'account':
+        return <StepAccount t={t} />;
+      case 'done':
+        return <StepDone t={t} value={answers.displayName} />;
+      default:
+        return null;
+    }
+  };
+
+  const renderFooter = () => {
+    switch (stepId) {
+      case 'welcome':
+        return <PrimaryButton label={t('onboarding.welcome.start')} onPress={goNext} />;
+      case 'legal':
+        return <PrimaryButton label={t('onboarding.legal.accept')} onPress={goNext} />;
+      case 'name':
+        return (
+          <View>
+            <PrimaryButton label={t('onboarding.next')} onPress={goNext} />
+            <QuietButton label={t('onboarding.skip')} onPress={handleSkipName} />
+          </View>
+        );
+      case 'gender':
+        return (
+          <PrimaryButton
+            label={t('onboarding.next')}
+            onPress={goNext}
+            disabled={!answers.gender}
+          />
+        );
+      case 'birthYear':
+        return (
+          <PrimaryButton
+            label={t('onboarding.next')}
+            onPress={goNext}
+            disabled={resolved.tooYoung}
+          />
+        );
+      case 'extra': {
+        const extraReady =
+          resolved.needsExtra === 'pregnancy'
+            ? Boolean(answers.extra)
+            : Boolean(answers.referenceOverride);
+        return (
+          <PrimaryButton label={t('onboarding.next')} onPress={goNext} disabled={!extraReady} />
+        );
+      }
+      case 'routineTimes':
+        return <PrimaryButton label={t('onboarding.next')} onPress={goNext} />;
+      case 'routineFirst':
+        return (
+          <PrimaryButton
+            label={t('onboarding.next')}
+            onPress={goNext}
+            disabled={!answers.firstAction}
+          />
+        );
+      case 'account':
+        // "Spaeter ohne Konto" ist der Primaerknopf: Die App verlangt kein
+        // Konto, ein Konto ist ein Angebot, keine Voraussetzung.
+        return (
+          <View>
+            <PrimaryButton
+              label={t('onboarding.account.later')}
+              onPress={() => handleAccountChoice('later')}
+            />
+            <QuietButton
+              label={t('onboarding.account.create')}
+              onPress={() => handleAccountChoice('create')}
+            />
+          </View>
+        );
+      case 'done':
+        return <PrimaryButton label={t('onboarding.done.go')} onPress={goNext} />;
+      default:
+        return null;
+    }
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      {/* Die Marke steht genau einmal gross da: beim allerersten Start.
-          Danach traegt sie das App-Icon auf dem Home-Screen, und die
-          Oberflaeche gehoert dem Inhalt. */}
-      <Image
-        source={require('../assets/logo.png')}
-        style={styles.logo}
-        accessibilityRole="image"
-        accessibilityLabel={t('onboarding.logoAlt')}
-      />
-
-      <Text style={styles.eyebrow}>{t('onboarding.eyebrow')}</Text>
-      <Text style={styles.title}>{t('onboarding.title')}</Text>
-      <Text style={styles.intro}>{t('onboarding.intro')}</Text>
-
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>{t('onboarding.lifeStage.title')}</Text>
-        <Text style={styles.cardBody}>{t('onboarding.lifeStage.why')}</Text>
-        <LifeStagePicker value={lifeStageId} onChange={(id) => {
-          setLifeStageId(id);
-          setShowRequiredHint(false);
-        }} />
-        {showRequiredHint ? (
-          <Text style={styles.requiredHint}>{t('onboarding.lifeStage.required')}</Text>
-        ) : null}
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>{t('onboarding.privacy.title')}</Text>
-        <Text style={styles.cardBody}>{t('onboarding.privacy.summary')}</Text>
-        <TouchableOpacity
-          onPress={() => router.push('/privacy')}
-          accessibilityRole="link"
-          accessibilityLabel={t('onboarding.privacy.link')}
-        >
-          <Text style={styles.link}>{t('onboarding.privacy.link')}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => router.push('/imprint')}
-          accessibilityRole="link"
-          accessibilityLabel={t('onboarding.imprint.link')}
-        >
-          <Text style={styles.link}>{t('onboarding.imprint.link')}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.confirmNote}>{t('onboarding.confirm')}</Text>
-
-      <TouchableOpacity
-        style={[styles.startButton, !lifeStageId && styles.startButtonDisabled]}
-        onPress={handleStart}
-        activeOpacity={0.8}
-        accessibilityRole="button"
-        accessibilityState={{ disabled: !lifeStageId }}
-        accessibilityLabel={t('onboarding.start')}
-      >
-        <Text style={styles.startButtonText}>{t('onboarding.start')}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <OnboardingShell
+      step={safeStepIndex + 1}
+      total={steps.length}
+      direction={direction}
+      canGoBack={canGoBack}
+      onBack={goBack}
+      footer={renderFooter()}
+    >
+      {renderStep()}
+    </OnboardingShell>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: surfaces.screen,
-  content: { ...surfaces.content, paddingTop: 64 },
-  logo: {
-    width: 72,
-    height: 72,
-    borderRadius: radius.lg + 6,
-    marginBottom: space.lg,
-  },
-  eyebrow: { ...type.eyebrow, marginBottom: space.sm },
-  title: { ...type.display, marginBottom: space.md },
-  intro: { ...type.body, marginBottom: space.xl },
-  card: surfaces.card,
-  cardTitle: { ...type.heading, marginBottom: space.sm },
-  cardBody: { ...type.body, marginBottom: space.md },
-  requiredHint: { ...type.small, color: colors.caution, marginTop: space.sm },
-  link: {
-    ...type.bodyStrong,
-    color: colors.accent,
-    paddingVertical: space.sm,
-    textDecorationLine: 'underline',
-  },
-  confirmNote: { ...type.small, marginTop: space.sm, marginBottom: space.md },
-  startButton: { ...surfaces.buttonPrimary, marginTop: space.sm },
-  startButtonDisabled: { opacity: 0.5, borderRadius: radius.md },
-  startButtonText: surfaces.buttonPrimaryText,
+  primaryButton: { ...surfaces.buttonPrimary },
+  quietButton: { ...surfaces.buttonQuiet, marginTop: space.sm },
+  buttonDisabled: { opacity: 0.5 },
 });
