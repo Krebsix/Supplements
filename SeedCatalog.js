@@ -11,13 +11,34 @@
  */
 
 import seedProducts from './data/seedProducts.json';
+import offProducts from './data/offProducts.json';
 import { matchIngredient } from './SubstanceMatcher';
 import { tr } from './i18n/runtime';
 
-// Einzige Katalogquelle des Moduls: Task 6 haengt hier eine zweite Datei
-// an (z. B. per Zusammenfuehrung), ohne dass die uebrigen Funktionen
-// angefasst werden muessen.
-const CATALOG = seedProducts;
+// Einzige Katalogquelle des Moduls: redaktionell gepflegter Herstellerkatalog
+// (seedProducts.json) plus die Open-Food-Facts-Eintraege (offProducts.json,
+// getrennt gefuehrt wegen ODbL, siehe scripts/split-off-products.mjs). Jeder
+// OFF-Eintrag traegt `license: 'ODbL'`, damit Suche und Markenliste ihn
+// kennzeichnen koennen -- die uebrigen Funktionen dieses Moduls kennen nur
+// CATALOG und muessen die Herkunft nicht unterscheiden.
+const CATALOG = [
+  ...seedProducts,
+  ...offProducts.products.map((entry) => ({ ...entry, license: 'ODbL' })),
+];
+
+/**
+ * catalogCounts()
+ * Zaehlt den Katalog nach Herkunft: redaktionell gepflegte Eintraege
+ * (Herstellerkatalog), Open-Food-Facts-Eintraege (ODbL) und die Summe.
+ * Fuer Tests und die Datenintegritaets-Pruefung des Splits (Task 6).
+ */
+export function catalogCounts() {
+  return {
+    manufacturer: seedProducts.length,
+    off: offProducts.products.length,
+    total: CATALOG.length,
+  };
+}
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';

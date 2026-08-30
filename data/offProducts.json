@@ -1,0 +1,878 @@
+{
+  "license": "ODbL-1.0",
+  "attribution": "Open Food Facts, world.openfoodfacts.org, Open Database License (ODbL)",
+  "generatedAt": "2026-08-30T04:17:08.204Z",
+  "products": [
+    {
+      "brand": "Doppelherz",
+      "brandOwner": "Queisser Pharma GmbH & Co. KG",
+      "name": "Magnesium",
+      "ean": "4009932132557",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009932132557.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Doppelherz",
+      "brandOwner": "Queisser Pharma GmbH & Co. KG",
+      "name": "Magnesium + Calcium + D3",
+      "ean": "4009932133561",
+      "category": "Calcium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009932133561.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Doppelherz",
+      "brandOwner": "Queisser Pharma GmbH & Co. KG",
+      "name": "A-Z Depot Langzeit-Vitamine",
+      "ean": "4009932004533",
+      "category": "Multivitamin/A-Z",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009932004533.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Doppelherz",
+      "brandOwner": "Queisser Pharma GmbH & Co. KG",
+      "name": "Omega-3 1000 vegan",
+      "ean": "4009932132786",
+      "category": "Omega-3",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009932132786.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Mivolis",
+      "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+      "name": "Calcium + D3",
+      "ean": "4010355570338",
+      "category": "Calcium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4010355570338.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Mivolis",
+      "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+      "name": "Multivitamine für Kinder",
+      "ean": "4058172309496",
+      "category": "Multivitamin/A-Z",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4058172309496.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "altapharma",
+      "brandOwner": "Dirk Rossmann GmbH",
+      "name": "Magnesium 400",
+      "ean": "4305615615905",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4305615615905.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Abtei",
+      "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+      "name": "Zink Plus",
+      "ean": "4009241573003",
+      "category": "Zink",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009241573003.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Abtei",
+      "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+      "name": "Magnesium 500",
+      "ean": "4250752202344",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4250752202344.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Abtei",
+      "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+      "name": "Magnesium + Calcium",
+      "ean": "7640113892043",
+      "category": "Calcium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/7640113892043.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Abtei",
+      "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+      "name": "B-Komplex Forte",
+      "ean": "4026600383004",
+      "category": "B12/B-Komplex",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4026600383004.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Abtei",
+      "brandOwner": "Perrigo Deutschland GmbH (Omega Pharma)",
+      "name": "Omega 3-6-9",
+      "ean": "7640115484406",
+      "category": "Omega-3",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/7640115484406.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "taxofit",
+      "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+      "name": "Magnesium 400",
+      "ean": "4008617008767",
+      "category": "Magnesium",
+      "keyIngredients": [
+        {
+          "name": "Magnesium",
+          "amount": "400",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B1",
+          "amount": "2.2",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B6",
+          "amount": "6.0",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B12",
+          "amount": "6.0",
+          "unit": "µg"
+        },
+        {
+          "name": "Folsäure",
+          "amount": "800",
+          "unit": "µg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4008617008767.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "taxofit",
+      "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+      "name": "Vitamin B12 Plus + B5 + Folsäure",
+      "ean": "4008617041849",
+      "category": "B12/B-Komplex",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4008617041849.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "taxofit",
+      "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+      "name": "B-Komplex",
+      "ean": "4008617042587",
+      "category": "B12/B-Komplex",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4008617042587.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "taxofit",
+      "brandOwner": "MCM Klosterfrau Vertriebsgesellschaft mbH",
+      "name": "Vitamin C 1000",
+      "ean": "4008617044529",
+      "category": "Vitamin C",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4008617044529.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": null
+    },
+    {
+      "brand": "tetesept",
+      "brandOwner": "Merz Consumer Care GmbH",
+      "name": "Magnesium",
+      "ean": "7611618002053",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/7611618002053.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": null
+    },
+    {
+      "brand": "tetesept",
+      "brandOwner": "Merz Consumer Care GmbH",
+      "name": "Vitamin D3",
+      "ean": "4008491277297",
+      "category": "Vitamin D3",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4008491277297.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Dr. Wolz",
+      "brandOwner": "Dr. Wolz Zell GmbH",
+      "name": "Vitalkomplex",
+      "ean": "4021901640122",
+      "category": "Multivitamin/A-Z",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4021901640122.json",
+      "country": "DE",
+      "channel": "apotheke",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Sunday Natural",
+      "brandOwner": "Sunday Natural Products GmbH",
+      "name": "Magnesium Komplex 9 Ultra",
+      "ean": "4260677587396",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4260677587396.json",
+      "country": "DE",
+      "channel": "online",
+      "productClass": null
+    },
+    {
+      "brand": "effective nature",
+      "brandOwner": null,
+      "name": "Vitamin D3 1000 IE",
+      "ean": "7640152280245",
+      "category": "Vitamin D3",
+      "keyIngredients": [
+        {
+          "name": "Vitamin D3",
+          "amount": "1000",
+          "unit": "IE"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/7640152280245.json",
+      "country": "DE",
+      "channel": "online",
+      "productClass": "nem"
+    },
+    {
+      "brand": "ESN",
+      "brandOwner": "The Quality Group GmbH",
+      "name": "Omega-3 Vegan",
+      "ean": "4250519603124",
+      "category": "Omega-3",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4250519603124.json",
+      "country": "DE",
+      "channel": "sport",
+      "productClass": "nem"
+    },
+    {
+      "brand": "ESN",
+      "brandOwner": "The Quality Group GmbH",
+      "name": "Vitamin D3K2",
+      "ean": "4250519604633",
+      "category": "Vitamin D3+K2",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4250519604633.json",
+      "country": "DE",
+      "channel": "sport",
+      "productClass": "nem"
+    },
+    {
+      "brand": "ESN",
+      "brandOwner": "The Quality Group GmbH",
+      "name": "Isoclear - Wild Berry",
+      "ean": "4250519666662",
+      "category": "Whey/Protein",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4250519666662.json",
+      "country": "DE",
+      "channel": "sport",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Foodspring",
+      "brandOwner": null,
+      "name": "Whey Protein Schokolade",
+      "ean": "4260363480680",
+      "category": "Whey/Protein",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4260363480680.json",
+      "country": "DE",
+      "channel": null,
+      "productClass": "nem"
+    },
+    {
+      "brand": "Body Attack",
+      "brandOwner": "Body Attack Sports Nutrition GmbH & Co. KG",
+      "name": "Multivitamin Body Attack",
+      "ean": "4250350514955",
+      "category": "Multivitamin/A-Z",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4250350514955.json",
+      "country": "DE",
+      "channel": "sport",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Body Attack",
+      "brandOwner": "Body Attack Sports Nutrition GmbH & Co. KG",
+      "name": "100% Whey Protein Vanilla Cream",
+      "ean": "4250350518403",
+      "category": "Whey/Protein",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4250350518403.json",
+      "country": "DE",
+      "channel": "sport",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Doppelherz",
+      "brandOwner": "Queisser Pharma GmbH & Co. KG",
+      "name": "Vitamin C 1000 DEPOT",
+      "ean": "4009932135565",
+      "category": "Vitamin C",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009932135565.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Doppelherz",
+      "brandOwner": "Queisser Pharma GmbH & Co. KG",
+      "name": "Jod + Folsäure + Eisen + B12",
+      "ean": "4009932131253",
+      "category": "Folsäure",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4009932131253.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "altapharma",
+      "brandOwner": "Dirk Rossmann GmbH",
+      "name": "Vitamin D3 Perlen",
+      "ean": "4305615617145",
+      "category": "Vitamin D3",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4305615617145.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Mivolis",
+      "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+      "name": "Magnesium 400 Tabletten",
+      "ean": "4058172922114",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4058172922114.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Mivolis",
+      "brandOwner": "dm-drogerie markt GmbH + Co. KG",
+      "name": "Vitamin C 1000 + D3 + Selen Depot",
+      "ean": "4058172921919",
+      "category": "Vitamin C",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4058172921919.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "IronMaxx",
+      "brandOwner": "IronMaxx Nutrition GmbH & Co. KG",
+      "name": "Whey Zero Banana-Yoghurt",
+      "ean": "4260426838120",
+      "category": "Whey/Protein",
+      "keyIngredients": [
+        {
+          "name": "Eiweiß",
+          "amount": "40.5",
+          "unit": "g pro Portion (50g)"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4260426838120.json",
+      "country": "DE",
+      "channel": "sport",
+      "productClass": null
+    },
+    {
+      "brand": "Burgerstein",
+      "brandOwner": "Antistress AG",
+      "name": "Burgerstein Vitamin C retard",
+      "ean": "7680442590029",
+      "category": "Vitamin C",
+      "keyIngredients": [
+        {
+          "name": "Vitamin C",
+          "amount": "500",
+          "unit": "mg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/7680442590029.json",
+      "country": "CH",
+      "channel": "apotheke",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Burgerstein",
+      "brandOwner": "Antistress AG",
+      "name": "Burgerstein Zink",
+      "ean": "7640121571480",
+      "category": "Zink",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/7640121571480.json",
+      "country": "CH",
+      "channel": "apotheke",
+      "productClass": "nem"
+    },
+    {
+      "brand": "altapharma",
+      "brandOwner": "Dirk Rossmann GmbH",
+      "name": "Brausetabletten Zink + Vitamin C",
+      "ean": "4305615614458",
+      "category": "Zink",
+      "keyIngredients": [
+        {
+          "name": "Zink",
+          "form": "Zinksulfat",
+          "amount": "5",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin C",
+          "form": "L-Ascorbinsäure",
+          "amount": "300",
+          "unit": "mg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4305615614458.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "altapharma",
+      "brandOwner": "Dirk Rossmann GmbH",
+      "name": "Brausetabletten Eisen + Vitamine",
+      "ean": "4305615614359",
+      "category": "Eisen+C",
+      "keyIngredients": [
+        {
+          "name": "Eisen",
+          "form": "Eisengluconat",
+          "amount": "14",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin C",
+          "amount": "80",
+          "unit": "mg"
+        },
+        {
+          "name": "Folsäure",
+          "amount": "200",
+          "unit": "µg"
+        },
+        {
+          "name": "Vitamin B12",
+          "amount": "2.5",
+          "unit": "µg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4305615614359.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "altapharma",
+      "brandOwner": "Dirk Rossmann GmbH",
+      "name": "Brausetablette Vitamin B12 hochdosiert",
+      "ean": "4305615614410",
+      "category": "B12",
+      "keyIngredients": [
+        {
+          "name": "Vitamin B12",
+          "amount": "30",
+          "unit": "µg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4305615614410.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "altapharma",
+      "brandOwner": "Dirk Rossmann GmbH",
+      "name": "Brausetabletten Multivitamin + Mineral",
+      "ean": "4305615614397",
+      "category": "Multivitamin",
+      "keyIngredients": [
+        {
+          "name": "Calcium",
+          "form": "Calciumcarbonat",
+          "amount": "200",
+          "unit": "mg"
+        },
+        {
+          "name": "Phosphor",
+          "amount": "120",
+          "unit": "mg"
+        },
+        {
+          "name": "Magnesium",
+          "form": "Magnesiumcarbonat",
+          "amount": "56.25",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin E",
+          "form": "DL-alpha-Tocopherylacetat",
+          "amount": "12",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin C",
+          "form": "L-Ascorbinsäure",
+          "amount": "80",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B1",
+          "form": "Thiaminhydrochlorid",
+          "amount": "1.1",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B2",
+          "form": "Riboflavin-5'-phosphat-Natrium",
+          "amount": "1.4",
+          "unit": "mg"
+        },
+        {
+          "name": "Niacin",
+          "form": "Nicotinamid",
+          "amount": "16",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B6",
+          "form": "Pyridoxinhydrochlorid",
+          "amount": "1.4",
+          "unit": "mg"
+        },
+        {
+          "name": "Folsäure",
+          "form": "Pteroylmonoglutaminsäure",
+          "amount": "200",
+          "unit": "µg"
+        },
+        {
+          "name": "Vitamin B12",
+          "form": "Cyanocobalamin",
+          "amount": "2.5",
+          "unit": "µg"
+        },
+        {
+          "name": "Biotin",
+          "form": "D-Biotin",
+          "amount": "50",
+          "unit": "µg"
+        },
+        {
+          "name": "Pantothensäure",
+          "form": "Calcium-D-Pantothenat",
+          "amount": "6",
+          "unit": "mg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4305615614397.json",
+      "country": "DE",
+      "channel": "drogerie",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Multinorm",
+      "brandOwner": "ALDI (Aldi Nord / Aldi Süd)",
+      "name": "Brausetabletten Multivitamin",
+      "ean": "4099200024448",
+      "category": "Multivitamin",
+      "keyIngredients": [
+        {
+          "name": "Calcium",
+          "amount": "120",
+          "unit": "mg"
+        },
+        {
+          "name": "Magnesium",
+          "amount": "56.25",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin E",
+          "amount": "12",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin C",
+          "amount": "80",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B1",
+          "amount": "1.1",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B2",
+          "amount": "1.4",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin B6",
+          "amount": "1.4",
+          "unit": "mg"
+        },
+        {
+          "name": "Folsäure",
+          "amount": "200",
+          "unit": "µg"
+        },
+        {
+          "name": "Vitamin B12",
+          "amount": "2.5",
+          "unit": "µg"
+        },
+        {
+          "name": "Pantothensäure",
+          "amount": "6",
+          "unit": "mg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4099200024448.json",
+      "country": "DE",
+      "channel": "discounter",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Multinorm",
+      "brandOwner": "ALDI (Aldi Nord / Aldi Süd)",
+      "name": "Kieselerde + Zink + Biotin",
+      "ean": "23301405",
+      "category": "Zink",
+      "keyIngredients": [
+        {
+          "name": "Biotin",
+          "amount": "75",
+          "unit": "µg"
+        },
+        {
+          "name": "Silicium",
+          "amount": "525",
+          "unit": "mg"
+        },
+        {
+          "name": "Zink",
+          "amount": "7.5",
+          "unit": "mg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/23301405.json",
+      "country": "DE",
+      "channel": "discounter",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Multinorm",
+      "brandOwner": "ALDI (Aldi Nord / Aldi Süd)",
+      "name": "Calcium 500 mg + Vit. D3 + Vit. C",
+      "ean": "4061458007351",
+      "category": "Calcium",
+      "keyIngredients": [
+        {
+          "name": "Calcium",
+          "form": "Calciumcarbonat",
+          "amount": "500",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin C",
+          "amount": "80",
+          "unit": "mg"
+        },
+        {
+          "name": "Vitamin D3",
+          "amount": "5",
+          "unit": "µg"
+        }
+      ],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4061458007351.json",
+      "country": "DE",
+      "channel": "discounter",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Multinorm",
+      "brandOwner": "ALDI (Aldi Nord / Aldi Süd)",
+      "name": "Elektrolyte",
+      "ean": "4061459797817",
+      "category": "Elektrolyte",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4061459797817.json",
+      "country": "DE",
+      "channel": "discounter",
+      "productClass": "nem"
+    },
+    {
+      "brand": "Supradyn",
+      "brandOwner": "Bayer Vital GmbH",
+      "name": "Supradyn Energy",
+      "ean": "4057599000450",
+      "category": "Multivitamin",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/api/v2/product/4057599000450.json",
+      "country": "DE",
+      "channel": "apotheke",
+      "productClass": null
+    },
+    {
+      "brand": "NOW Foods",
+      "brandOwner": "NOW Health Group, Inc.",
+      "name": "Ultra Omega-3",
+      "ean": "0733739016621",
+      "category": "Omega-3",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/product/0733739016621",
+      "country": "DE",
+      "channel": "online",
+      "productClass": "nem"
+    },
+    {
+      "brand": "NOW Foods",
+      "brandOwner": "NOW Health Group, Inc.",
+      "name": "Magnesium Citrate Pure Powder",
+      "ean": "0733739012951",
+      "category": "Magnesium",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/product/0733739012951",
+      "country": "DE",
+      "channel": "online",
+      "productClass": "nem"
+    },
+    {
+      "brand": "NOW Foods",
+      "brandOwner": "NOW Health Group, Inc.",
+      "name": "Vitamin D-3 Structural Support Softgels 5000 IU",
+      "ean": "0733739003737",
+      "category": "Vitamin D",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/product/0733739003737",
+      "country": "DE",
+      "channel": "online",
+      "productClass": "nem"
+    },
+    {
+      "brand": "NOW Foods",
+      "brandOwner": "NOW Health Group, Inc.",
+      "name": "C-1000",
+      "ean": "0733739006905",
+      "category": "Vitamin C",
+      "keyIngredients": [],
+      "off": true,
+      "source": "https://world.openfoodfacts.org/product/0733739006905",
+      "country": "DE",
+      "channel": "online",
+      "productClass": "nem"
+    }
+  ]
+}

@@ -423,7 +423,20 @@ export default function SearchScreen() {
                           accessibilityRole="button"
                         >
                           <View style={styles.entryTextWrap}>
-                            <Text style={styles.productBrand}>{product.brand}</Text>
+                            <View style={styles.productBrandRow}>
+                              <Text style={styles.productBrand}>{product.brand}</Text>
+                              {product.entry?.license === 'ODbL' ? (
+                                <View
+                                  style={styles.offBadge}
+                                  accessibilityLabel={t('search.products.offSource')}
+                                  accessibilityHint={t('search.products.offSource')}
+                                >
+                                  <Text style={styles.offBadgeText}>
+                                    {t('search.products.offBadge')}
+                                  </Text>
+                                </View>
+                              ) : null}
+                            </View>
                             <Text style={styles.registerName}>{product.name}</Text>
                             {meta ? (
                               <Text style={styles.entrySummary} numberOfLines={1}>
@@ -521,7 +534,27 @@ const styles = StyleSheet.create({
   // hervorgehoben (Projektregel: keine Qualitaets-/Marken-Rankings).
   productBrand: {
     ...type.label,
+  },
+  productBrandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 2,
+  },
+  // Kuerzel fuer Produkte aus Open Food Facts (ODbL): zeigt die andere
+  // Herkunft, ohne sie hervorzuheben -- gleiche gedeckte Optik wie jede
+  // andere Metazeile, kein Warn- oder Werbeton.
+  offBadge: {
+    borderWidth: 1,
+    borderColor: colors.rule,
+    borderRadius: radius.sm,
+    paddingHorizontal: space.xs,
+    paddingVertical: 1,
+    marginLeft: space.xs,
+  },
+  offBadgeText: {
+    ...type.tiny,
+    fontSize: 10,
+    lineHeight: 12,
   },
   registerCard: {
     ...surfaces.card,

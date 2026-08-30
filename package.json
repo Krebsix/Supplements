@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "test": "node tests/run.mjs",
     "build:legal": "node scripts/build-legal-site.mjs",
-    "build:icons": "bash scripts/build-icons.sh"
+    "build:icons": "bash scripts/build-icons.sh",
+    "split:off": "node scripts/split-off-products.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.4.0",

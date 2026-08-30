@@ -117,6 +117,7 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `data/healthConditions.js` | Erkrankungen (Bluthochdruck, Nieren-/Leber-/Gallen-/Herzerkrankung, Salicylat-Unvertraeglichkeit u. a.) nach demselben Muster: jede Zeile zitiert WOERTLICH aus dem cautionNote der Substanz, Zitate programmatisch extrahiert, Substring-Test erzwingt Integritaet. EN-Overlay noch offen (DE-Fallback) |
 | `data/interactions.js` | Substanz-Paar-Regeln (Aufnahme-Hemmung/-Foerderung) und Einnahme-Hinweise, jede Zeile mit Quelle (NIH ODS, EFSA). Deskriptiv formuliert, Tests erzwingen Quelle je Regel |
 | `data/legalContent.js` | Datenschutzerklaerung und Impressum als strukturierter Inhalt mit `PRIVACY_VERSION`. Die Aussagen sind gegen den tatsaechlichen Datenfluss geschrieben: Wer einen Datenfluss aendert, aendert diesen Text mit |
+| `data/offProducts.json` | Open-Food-Facts-Eintraege, getrennt vom redaktionell gepflegten Herstellerkatalog (`data/seedProducts.json`) gefuehrt: OFF-Daten stehen unter der Open Database License (ODbL), Attribution ist Pflicht. Traegt `license`, `attribution` und `generatedAt` im Dateikopf. Erzeugt und aktualisiert ueber `npm run split:off` (`scripts/split-off-products.mjs`); `SeedCatalog.js` fuehrt beide Dateien zu einem Katalog zusammen und kennzeichnet jeden OFF-Eintrag mit `license: 'ODbL'` |
 | `data/en/*` | Englische Text-Overlays je Datendatei, keyed nach stabilen IDs. Deutsch bleibt kanonisch |
 | `data/localize.js` | Sprach-Bruecke: blendet EN-Overlays ein, wenn die aktive Sprache Englisch ist. Einzige Stelle, die beide Sprachwelten kennt |
 
@@ -308,6 +309,13 @@ bleibt `false`, bis der Sandbox-Test aus `launch/store-setup.md` gruen ist.
 - **Ein Treffer ist keine Bewertung der Person.** Die App kennt weder Praeparat
   noch Dosis noch Befund. Formulierung deshalb immer "dazu ist ein Hinweis
   hinterlegt", nie "das ist fuer dich gefaehrlich".
+- **OFF-Daten nie in seedProducts.json mischen.** `data/seedProducts.json` ist
+  der redaktionell gepflegte Herstellerkatalog, `data/offProducts.json` traegt
+  die Open-Food-Facts-Eintraege unter der Open Database License (ODbL) mit
+  eigener Attribution. Neue OFF-Daten (z. B. aus einem Massenimport) gehoeren
+  ausschliesslich in `data/offProducts.json`; `npm run split:off`
+  (`scripts/split-off-products.mjs`) haelt die Trennung nach jeder Aenderung
+  an `seedProducts.json` wieder her.
 - Scan-Ergebnisse tragen `analysisMode` (`'mock'`, `'demo-fallback'`, `'vision'`
   fuer die Claude-Vision-Auswertung, `'barcode-off'` fuer Open-Food-Facts-Treffer,
   `'community-cache'` fuer Treffer aus dem geteilten Produkt-Cache,

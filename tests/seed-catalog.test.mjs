@@ -3,14 +3,17 @@
 // Verhalten von Suche und Draft-Erzeugung.
 
 import {
+  catalogCounts,
   findProductsBySubstance,
   normalizeCatalogText,
   parseCatalogAmount,
+  productsForBrand,
   searchSeedCatalog,
   seedEntryToScanDraft,
   sortProducts,
 } from '../SeedCatalog';
 import seedProducts from '../data/seedProducts.json';
+import offProducts from '../data/offProducts.json';
 
 let failures = 0;
 
@@ -31,6 +34,32 @@ check('Country ist DE, AT oder CH', seedProducts.every((p) => ['DE', 'AT', 'CH']
 check(
   'keyIngredients tragen nie erfundene Einheiten (Menge ohne Einheit erlaubt, Einheit ohne Menge nicht)',
   seedProducts.every((p) => (p.keyIngredients ?? []).every((i) => !i.unit || i.amount !== null && i.amount !== undefined))
+);
+
+console.log('— ODbL-Split (Task 6) —');
+// seedProducts.json enthaelt nach dem Split keine Open-Food-Facts-Quellen
+// mehr; offProducts.json traegt sie samt Attribution im Dateikopf.
+check(
+  'seedProducts.json enthaelt keine world.openfoodfacts.org-Quellen mehr',
+  seedProducts.every((p) => !String(p.source ?? '').includes('world.openfoodfacts.org'))
+);
+check('offProducts.json traegt license ODbL-1.0 im Kopf', offProducts.license === 'ODbL-1.0');
+check('offProducts.json traegt eine Attribution', typeof offProducts.attribution === 'string' && offProducts.attribution.length > 0);
+const counts = catalogCounts();
+check('catalogCounts: 363 Herstellerkatalog-Eintraege', counts.manufacturer === 363, String(counts.manufacturer));
+check('catalogCounts: 48 OFF-Eintraege', counts.off === 48, String(counts.off));
+check('catalogCounts: 411 Eintraege gesamt', counts.total === 411, String(counts.total));
+// productsForBrand liest CATALOG (Herstellerkatalog + OFF zusammengefuehrt):
+// jedes OFF-Produkt muss dort unter seiner EAN mit license 'ODbL' auftauchen.
+const offBrands = [...new Set(offProducts.products.map((p) => p.brand))];
+const catalogEntriesByEan = new Map();
+for (const brand of offBrands) {
+  for (const entry of productsForBrand(brand)) catalogEntriesByEan.set(entry.ean, entry);
+}
+check(
+  'jedes OFF-Produkt hat im Katalog license ODbL',
+  offProducts.products.every((p) => catalogEntriesByEan.get(p.ean)?.license === 'ODbL'),
+  String(offProducts.products.filter((p) => catalogEntriesByEan.get(p.ean)?.license !== 'ODbL').length)
 );
 
 console.log('— Suche —');

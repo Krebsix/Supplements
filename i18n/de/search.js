@@ -29,6 +29,8 @@ export default {
   'search.products.sortBrand': 'Marke',
   'search.products.sortAmount': 'Menge',
   'search.products.sortForm': 'Form',
+  'search.products.offBadge': 'OFF',
+  'search.products.offSource': 'Daten aus Open Food Facts, ODbL',
 
   'brands.kicker': 'Katalog',
   'brands.title': 'Marken im System',

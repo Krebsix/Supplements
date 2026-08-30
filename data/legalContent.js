@@ -258,6 +258,11 @@ export const IMPRINT_SECTIONS = {
       body:
         'Diese App ordnet Einnahmezeitpunkte, dokumentiert und zeigt Referenzwerte sowie hinterlegte Hinweise aus den zitierten Quellen. Sie stellt keine Diagnosen, gibt keine Dosierungs- oder Therapieempfehlungen und ersetzt keine ärztliche oder pharmazeutische Beratung.',
     },
+    {
+      heading: 'Datenquellen',
+      body:
+        'Produktdaten stammen teilweise aus Open Food Facts (world.openfoodfacts.org), lizenziert unter der Open Database License (ODbL). Diese Einträge sind in der App gekennzeichnet und werden getrennt vom redaktionell gepflegten Katalog geführt.',
+    },
   ],
   en: [
     {
@@ -276,6 +281,11 @@ export const IMPRINT_SECTIONS = {
       heading: 'Scope of the content',
       body:
         'This app organises intake timing, documents your entries and shows reference values and recorded notes from the cited sources. It does not diagnose, does not give dosage or therapy recommendations and does not replace medical or pharmaceutical advice.',
+    },
+    {
+      heading: 'Data sources',
+      body:
+        'Product data comes in part from Open Food Facts (world.openfoodfacts.org), licensed under the Open Database License (ODbL). These entries are marked in the app and are kept separate from the editorially maintained catalogue.',
     },
   ],
 };

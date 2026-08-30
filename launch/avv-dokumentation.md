@@ -11,6 +11,16 @@ RevenueCat (Kaufbeleg-Pruefung, Abo-Status). Open Food Facts ist ein
 reiner, unauthentifizierter Lesezugriff ohne Personenbezug und daher hier
 nicht relevant.
 
+Bei Open Food Facts als Produktdatenquelle (nicht der Barcode-Abfrage zur
+Laufzeit, sondern die im Katalog gebuendelten Eintraege in
+`data/offProducts.json`, Task 6) stellt sich keine AVV-Frage, sondern eine
+Lizenzfrage: Die Daten stehen unter der Open Database License (ODbL) und
+werden deshalb getrennt vom redaktionell gepflegten Herstellerkatalog
+gefuehrt und mit Quellenangabe attribuiert (`data/legalContent.js`,
+Abschnitt "Datenquellen"). Open Food Facts wird dadurch nicht zum
+Auftragsverarbeiter, es liegt keine Verarbeitung personenbezogener Daten
+in ihrem Auftrag vor.
+
 ## Supabase
 
 - AVV: https://supabase.com/legal/dpa

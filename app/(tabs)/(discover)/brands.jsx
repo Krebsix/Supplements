@@ -10,7 +10,7 @@ import {
 } from '../../../SeedCatalog';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
-import { colors, space, surfaces, type } from '../../../theme';
+import { colors, radius, space, surfaces, type } from '../../../theme';
 
 // Marken-Register: zeigt, welche Marken der kuratierte Katalog bereits
 // kennt — als Verzeichnis eines Nachschlagewerks, nach Vertriebsweg
@@ -130,7 +130,20 @@ export default function BrandsScreen() {
                   accessibilityRole="button"
                 >
                   <View style={styles.entryTextWrap}>
-                    <Text style={styles.registerName}>{entry.name}</Text>
+                    <View style={styles.productNameRow}>
+                      <Text style={styles.registerName}>{entry.name}</Text>
+                      {entry.license === 'ODbL' ? (
+                        <View
+                          style={styles.offBadge}
+                          accessibilityLabel={t('search.products.offSource')}
+                          accessibilityHint={t('search.products.offSource')}
+                        >
+                          <Text style={styles.offBadgeText}>
+                            {t('search.products.offBadge')}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
                     {meta ? (
                       <Text style={styles.entrySummary} numberOfLines={1}>
                         {meta}
@@ -250,6 +263,26 @@ const styles = StyleSheet.create({
   entryTextWrap: {
     flex: 1,
     marginRight: space.sm,
+  },
+  productNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  // Kuerzel fuer Produkte aus Open Food Facts (ODbL): zeigt die andere
+  // Herkunft, ohne sie hervorzuheben -- gleiche gedeckte Optik wie jede
+  // andere Metazeile, kein Warn- oder Werbeton.
+  offBadge: {
+    borderWidth: 1,
+    borderColor: colors.rule,
+    borderRadius: radius.sm,
+    paddingHorizontal: space.xs,
+    paddingVertical: 1,
+    marginLeft: space.xs,
+  },
+  offBadgeText: {
+    ...type.tiny,
+    fontSize: 10,
+    lineHeight: 12,
   },
   entrySummary: {
     ...type.small,

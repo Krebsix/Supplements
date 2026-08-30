@@ -31,6 +31,8 @@ export default {
   'search.products.sortBrand': 'Brand',
   'search.products.sortAmount': 'Amount',
   'search.products.sortForm': 'Form',
+  'search.products.offBadge': 'OFF',
+  'search.products.offSource': 'Data from Open Food Facts, ODbL',
 
   'brands.kicker': 'Catalogue',
   'brands.title': 'Brands in the system',
