@@ -111,6 +111,19 @@ export default function StepRoutineTimes({ t, value: permissionDenied }) {
                 display="spinner"
                 onChange={handleChange}
               />
+              {/* Ausdruecklicher Schliess-Knopf zusaetzlich zum
+                  Backdrop-Tipp: nicht jede Nutzerin versucht, neben das
+                  Sheet zu tippen. Kein eigener i18n-Schluessel dafuer, "Fertig"
+                  faellt hier mit derselben Bedeutung wie ueberall sonst
+                  ("Weiter") zusammen. */}
+              <Pressable
+                style={styles.pickerDone}
+                onPress={() => setEditingSlot(null)}
+                accessibilityRole="button"
+                accessibilityLabel={t('onboarding.next')}
+              >
+                <Text style={styles.pickerDoneText}>{t('onboarding.next')}</Text>
+              </Pressable>
             </Pressable>
           </Pressable>
         </Modal>
@@ -184,4 +197,9 @@ const styles = StyleSheet.create({
     paddingBottom: space.xl,
     alignItems: 'center',
   },
+  pickerDone: {
+    paddingVertical: space.sm,
+    paddingHorizontal: space.xl,
+  },
+  pickerDoneText: { ...type.bodyStrong, color: colors.accent },
 });

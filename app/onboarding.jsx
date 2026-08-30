@@ -180,8 +180,17 @@ export default function OnboardingScreen() {
     if (stepId === 'routineTimes' && useNotificationStore.getState().notificationsEnabled) {
       // Die Systemerlaubnis wird bewusst erst hier abgefragt, nicht schon
       // beim Umlegen des Schalters: Der Weiter-Tipp ist der Moment, in dem
-      // die Nutzerin die Wahl bestaetigt.
-      const granted = await checkAndRequestPermission();
+      // die Nutzerin die Wahl bestaetigt. Ein abgelehntes Promise (native
+      // Anfrage schlaegt fehl) darf "Weiter" nicht stumm blockieren, deshalb
+      // wird wie eine verweigerte Erlaubnis behandelt und trotzdem
+      // weitergegangen.
+      let granted = false;
+      try {
+        granted = await checkAndRequestPermission();
+      } catch (error) {
+        console.error('[Onboarding] Push-Erlaubnis', error);
+        granted = false;
+      }
       if (!granted) {
         setNotificationsEnabled(false);
         setPermissionDenied(true);
