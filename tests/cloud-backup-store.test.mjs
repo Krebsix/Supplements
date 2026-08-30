@@ -157,6 +157,24 @@ console.log('— checkOnLogin: ask, dann Entscheidung —');
   check('restore: importiert', imported.length === 1);
 }
 
+console.log('— checkOnLogin: ask cancelt einen bereits laufenden Timer (kein Upload waehrend der Dialog offen ist) —');
+{
+  const key = await randomBytes(32);
+  const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }, { id: 'b', status: 'active' }], labValues: [], intakeLogs: [] }, key, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
+  const row = { ciphertext: sealed.ciphertext, payload_version: 1, device_label: 'Anderes Geraet', exported_at: sealed.exportedAt, updated_at: sealed.exportedAt };
+  const { store, client, timer } = await setup({ row, account: { signedIn: true, userId: 'u1', dataKey: key } });
+  // Lokale Aenderung passiert VOR dem Login-Abgleich: Timer laeuft schon.
+  store.getState().scheduleUpload();
+  check('Timer laeuft vor checkOnLogin', timer.size === 1);
+  const decision = await store.getState().checkOnLogin();
+  check('Entscheidung ask', decision === 'ask');
+  check('Timer aus scheduleUpload wurde gecancelt', timer.size === 0);
+  await timer.flush();
+  check('kein Upload waehrend der Dialog offen ist', client.calls.filter(([n]) => n === 'upsert').length === 0);
+  await store.getState().resolveDecision('upload');
+  check('nach resolveDecision genau ein Upload', client.calls.filter(([n]) => n === 'upsert').length === 1);
+}
+
 console.log('— checkOnLogin: unser eigener Stand → upload; falscher Schluessel → wrongKey + upload —');
 {
   const key = await randomBytes(32);

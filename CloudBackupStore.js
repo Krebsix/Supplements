@@ -10,6 +10,12 @@
  * - scheduleUpload buendelt: ein Timer, der letzte Aufruf gewinnt; der
  *   Upload selbst laeuft ueber createCoalescedRunner, damit ein Upload
  *   waehrend eines laufenden Uploads nachgeholt statt verdoppelt wird.
+ * - "ask" (Dialog offen) und "restoring" (Import laeuft) blockieren jeden
+ *   Upload: ein zum Zeitpunkt des Dialogs bereits laufender Timer aus
+ *   scheduleUpload() wird gecancelt, sobald pendingDecision gesetzt wird
+ *   (wie restoreFrom es fuer den Restore-Fall schon tut); zusaetzlich
+ *   prueft doUpload() beide Zustaende selbst noch einmal, falls der
+ *   Coalesced-Runner schon laeuft.
  * - importBackup loest keinen Upload aus: waehrend des Imports ist
  *   suppress gesetzt, danach ist dirty false und lastUploadedAt der
  *   Server-Stand. Der EINE scheduleUpload()-Aufruf, der typischerweise
@@ -88,6 +94,13 @@ export function createCloudBackupStore(deps, { storage } = {}) {
 
         const doUpload = async () => {
           if (!ready()) return;
+          // Waehrend ein Dialog offen ist (pendingDecision) darf kein Upload
+          // laufen: die Entscheidung koennte "restore" sein, ein Upload
+          // wuerde den fremden Stand ueberschreiben, bevor die Nutzerin
+          // gewaehlt hat. Ebenso waehrend restoreFrom laeuft (status
+          // 'restoring'): sonst liefe ein Upload parallel zum Import und
+          // koennte lastUploadedAt/remoteExportedAt verfaelschen.
+          if (get().pendingDecision || get().status === 'restoring') return;
           const { userId, dataKey } = getAccount();
           set({ status: 'uploading', lastError: null });
           try {
@@ -202,6 +215,11 @@ export function createCloudBackupStore(deps, { storage } = {}) {
             if (decision === 'ask') {
               try {
                 const opened = decryptBackup(remote.ciphertext, getAccount().dataKey);
+                // Ein aus scheduleUpload() noch offener Timer darf jetzt
+                // nicht mehr feuern: "ask" blockiert Uploads bis zur
+                // Entscheidung (wie restoreFrom es fuer den Restore-Fall
+                // schon tut).
+                if (timerId) { cancel(timerId); timerId = null; }
                 set({ pendingDecision: { remote, counts: countsOf(opened.data) } });
                 return 'ask';
               } catch (error) {
