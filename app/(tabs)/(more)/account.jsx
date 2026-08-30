@@ -213,7 +213,8 @@ function AuthForm({ t }) {
               </Text>
             )}
           </Pressable>
-          {busy && mode === 'signUp' ? <Text style={styles.hint}>{t('account.busy.deriving')}</Text> : null}
+          {/* Auch beim Anmelden: zwei scrypt-Ableitungen brauchen sichtbar Zeit. */}
+          {busy ? <Text style={styles.hint}>{t('account.busy.deriving')}</Text> : null}
 
           {mode === 'signIn' ? (
             <Pressable onPress={handleForgot} style={styles.quietButton} accessibilityRole="button">

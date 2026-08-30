@@ -53,8 +53,8 @@ export default {
   // Ersteinrichtung (FirstSteps.js): Schritt fuer Schritt bis zum ersten Praeparat.
   'dashboard.firstSteps.title': 'Ersteinrichtung',
   'dashboard.firstSteps.intro': 'Noch zwei Schritte, dann ist dein Tagesplan bereit.',
-  'dashboard.firstSteps.profile.title': 'Profil angelegt',
-  'dashboard.firstSteps.profile.done': 'Deine Lebensphase bestimmt die Referenzwerte. Anpassen unter Mehr, Gesundheitsprofil.',
+  'dashboard.firstSteps.profile.title': 'Lebensphase festgelegt',
+  'dashboard.firstSteps.profile.done': 'Aus deinen Angaben im Onboarding (Geschlecht, Geburtsjahr). Medikamente, Erkrankungen und mehr kannst du unter Mehr, Gesundheitsprofil ergänzen.',
   'dashboard.firstSteps.profile.open': 'Lebensphase festlegen, damit Referenzwerte passen.',
   'dashboard.firstSteps.account.title': 'Konto',
   'dashboard.firstSteps.account.done': 'Angemeldet. Deine Daten bleiben auf dem Gerät verschlüsselt.',
