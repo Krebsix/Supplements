@@ -405,7 +405,7 @@ export default function SearchScreen() {
                   <View style={styles.registerCard}>
                     {sortedCatalogProducts.map((product, index) => {
                       const meta = [
-                        product.amount !== null ? `${product.amount} ${product.unit}`.trim() : null,
+                        Number.isFinite(product.amount) ? `${product.amount} ${product.unit}`.trim() : null,
                         product.form,
                         product.country,
                       ]
@@ -517,9 +517,10 @@ const styles = StyleSheet.create({
   productsSection: {
     marginTop: space.md,
   },
+  // Neutral wie jede andere Metazeile: keine Marke wird optisch
+  // hervorgehoben (Projektregel: keine Qualitaets-/Marken-Rankings).
   productBrand: {
     ...type.label,
-    color: colors.accentInk,
     marginBottom: 2,
   },
   registerCard: {

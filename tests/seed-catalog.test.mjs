@@ -5,6 +5,7 @@
 import {
   findProductsBySubstance,
   normalizeCatalogText,
+  parseCatalogAmount,
   searchSeedCatalog,
   seedEntryToScanDraft,
   sortProducts,
@@ -71,6 +72,26 @@ const byAmount = sortProducts(mg, 'amount');
 check('Sortierung nach Menge absteigend', byAmount.every((p, i) => i === 0 || (byAmount[i - 1].amount ?? -1) >= (p.amount ?? -1)));
 check('unbekannte Substanz: leer', findProductsBySubstance('gibt-es-nicht').length === 0);
 check('Synonym trifft (Magnesiumcitrat-Produkte enthalten)', mg.some((p) => /citrat/i.test(p.form ?? '') || /citrat/i.test(p.name)));
+
+console.log('— parseCatalogAmount —');
+check('leerer String → null (keine erfundene 0)', parseCatalogAmount('') === null);
+check('Dezimalkomma → Punkt (1,1 → 1.1)', parseCatalogAmount('1,1') === 1.1);
+check('reine Ziffernfolge (400) → 400', parseCatalogAmount('400') === 400);
+check('Spanne (250-500) → null, keine geratene Zahl', parseCatalogAmount('250-500') === null);
+check('undefined → null', parseCatalogAmount(undefined) === null);
+
+console.log('— Index-Invariante: Menge ist nie eine erfundene Zahl —');
+// Ueber mehrere Substanzen hinweg (nicht nur Magnesium): jeder Treffer im
+// Index hat entweder null oder eine echte, endliche Zahl -- nie NaN und
+// nie eine 0, die aus einem leeren Wert entstanden waere.
+for (const substanceId of ['vitamin-d3', 'vitamin-b12', 'thiamin', 'magnesium']) {
+  const hits = findProductsBySubstance(substanceId);
+  check(
+    `${substanceId}: amount ist null oder endliche Zahl bei jedem Treffer`,
+    hits.every((p) => p.amount === null || Number.isFinite(p.amount)),
+    String(hits.filter((p) => !(p.amount === null || Number.isFinite(p.amount))).length)
+  );
+}
 
 if (failures > 0) {
   console.error(`\n${failures} Fehlschlaege`);

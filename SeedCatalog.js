@@ -201,6 +201,23 @@ export function seedEntryToScanDraft(entry) {
   };
 }
 
+/**
+ * parseCatalogAmount(raw)
+ * Katalog-Mengenangabe (Zahl oder String, teils leer) in eine Zahl oder
+ * null. Leer bleibt null statt einer erfundenen 0 (Regel „Keine
+ * erfundenen Werte“, siehe CLAUDE.md) -- `Number('')` waere sonst 0 und
+ * saehe wie eine erkannte Menge aus. Ein einzelnes Dezimalkomma wird zu
+ * einem Punkt ("1,1" -> 1.1); alles, was danach nicht eindeutig eine Zahl
+ * ist (Spannen wie "250-500", Text), liefert ebenfalls null statt zu
+ * raten.
+ */
+export function parseCatalogAmount(raw) {
+  const text = String(raw ?? '').trim();
+  if (!text) return null;
+  const value = Number(text.replace(',', '.'));
+  return Number.isFinite(value) ? value : null;
+}
+
 // Index Substanz → Katalog-Treffer. Einmalig (lazy) aufgebaut: 411
 // Eintraege mit je bis zu mehreren keyIngredients waeren bei jeder
 // Suche neu durchlaufen sonst spuerbar. Kein Modul-Top-Level-Aufbau,
@@ -225,7 +242,7 @@ function getSubstanceIndex() {
 
       const hit = {
         entry,
-        amount: item.amount === null || item.amount === undefined ? null : Number(item.amount),
+        amount: parseCatalogAmount(item.amount),
         unit: item.unit ?? '',
         form: match.form?.name ?? null,
         brand: entry.brand,
