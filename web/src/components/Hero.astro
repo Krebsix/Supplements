@@ -14,13 +14,16 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = getDictionary(locale);
+// Bindestriche in der Headline (Supplement-App) sollen nicht umbrechen:
+// geschuetzter Bindestrich nur in der Anzeige, Meta und Title bleiben ASCII.
+const headline = t.hero.headline.replace(/-/g, '\u2011');
 ---
 
 <section class="hero">
   <div class="container hero__grid">
     <div class="hero__copy">
       <span class="eyebrow">{t.hero.eyebrow}</span>
-      <h1>{t.hero.headline}</h1>
+      <h1>{headline}</h1>
       <p class="lead">{t.hero.subline}</p>
       <div class="hero__form">
         <BetaForm locale={locale} id="hero" compact />
@@ -46,8 +49,6 @@ const t = getDictionary(locale);
   .hero__copy h1 {
     margin-bottom: 20px;
     max-width: 22ch;
-    /* Kein balance: Der Ausgleich brach "Supplement-App" am Bindestrich. */
-    text-wrap: pretty;
   }
   .hero__copy .lead {
     margin-bottom: 28px;
