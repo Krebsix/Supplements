@@ -122,7 +122,20 @@ Lizenztester (Android):
   nur, blockiert aber nicht (siehe Kommentar in `Entitlements.js`).
 - Store-Listing-Texte (Titel, Untertitel, Kurzbeschreibung, Keyword-Feld,
   Lang-Beschreibung, DE und EN) aus `launch/aso.md` uebernehmen.
+
+## 8. Privacy Labels / Data Safety
+
 - Privacy Nutrition Labels (App Store Connect) und Data Safety (Play
   Console) ausfuellen, jeweils inklusive der Kategorien "Purchases" (Kauf-
   historie ueber RevenueCat) und "Identifiers" (RevenueCat-App-User-ID,
   Store-Transaktions-ID).
+- Seit dem Cloud-Backup (Teilprojekt "Cloud-Backup mit Abgleich",
+  2026-09-01) kommt die Kategorie Gesundheitsdaten dazu, weil der
+  verschluesselte Stand in `public.user_backups` Laborwerte und
+  Medikamentengruppen im Klartext des Standes enthaelt (auf dem Server
+  nur als Ciphertext).
+  - Apple Privacy Nutrition Labels: Kategorie "Health & Fitness" →
+    "Health", "Linked to Your Identity" (ueber die Konto-Kennung),
+    "Data Not Used to Track You".
+  - Google Data Safety: Kategorie "Health info", "Data is encrypted in
+    transit", "User can request that data be deleted".

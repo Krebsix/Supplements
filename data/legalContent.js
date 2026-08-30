@@ -14,7 +14,7 @@
  * Datenfluss aendert, aendert diesen Text mit.
  */
 
-export const PRIVACY_VERSION = '2026-08-31';
+export const PRIVACY_VERSION = '2026-09-01';
 
 // Betreiberin laut Nadine (2026-08-09): die bestehende LLC.
 // OFFEN vor Veroeffentlichung:
@@ -70,7 +70,12 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Konto (freiwillig)',
       body:
-        'Wenn du ein Konto anlegst, werden deine E-Mail-Adresse, ein Passwort-Hash und Zeitstempel bei unserem Auftragsverarbeiter Supabase gespeichert (Serverstandort: EU, Irland). Zusätzlich liegt dort ein Datensatz mit verschlüsselten Schlüsseln: Dein Passwort wird auf dem Gerät in einen Schlüssel umgerechnet, der einen zufälligen Datenschlüssel verschlüsselt; ein zweiter, dir einmalig angezeigter Recovery-Key verschlüsselt denselben Datenschlüssel. Zur Anmeldung wird dein Passwort über eine verschlüsselte Verbindung an Supabase übertragen und dort nur als Hash gespeichert. Der daraus auf dem Gerät abgeleitete Schlüssel, der Datenschlüssel und der Recovery-Key werden nie übertragen. Aus den gespeicherten Daten allein lassen sich keine Inhalte entschlüsseln, weder durch uns noch durch Supabase. In dieser Version werden über das Konto keine Präparate, Laborwerte oder sonstigen Inhalte übertragen; kommt Sync hinzu, wird diese Erklärung vorher aktualisiert. Du kannst das Konto jederzeit in der App löschen; dabei werden Konto und Schlüsseldatensatz entfernt, deine lokalen Daten bleiben. Rechtsgrundlage: Vertrag (Art. 6 Abs. 1 lit. b DSGVO).',
+        'Wenn du ein Konto anlegst, werden deine E-Mail-Adresse, ein Passwort-Hash und Zeitstempel bei unserem Auftragsverarbeiter Supabase gespeichert (Serverstandort: EU, Irland). Zusätzlich liegt dort ein Datensatz mit verschlüsselten Schlüsseln: Dein Passwort wird auf dem Gerät in einen Schlüssel umgerechnet, der einen zufälligen Datenschlüssel verschlüsselt; ein zweiter, dir einmalig angezeigter Recovery-Key verschlüsselt denselben Datenschlüssel. Zur Anmeldung wird nicht dein Passwort übertragen, sondern ein daraus auf dem Gerät abgeleiteter Anmeldeschlüssel; Supabase speichert davon nur einen Hash. Der Datenschlüssel und der Recovery-Key werden nie übertragen. Aus den gespeicherten Daten allein lassen sich keine Inhalte entschlüsseln, weder durch uns noch durch Supabase. Inhalte (Präparate, Laborwerte, Profil) werden nur über das Cloud-Backup übertragen, das im nächsten Abschnitt beschrieben ist. Du kannst das Konto jederzeit in der App löschen; dabei werden Konto und Schlüsseldatensatz entfernt, deine lokalen Daten bleiben. Rechtsgrundlage: Vertrag (Art. 6 Abs. 1 lit. b DSGVO).',
+    },
+    {
+      heading: 'Cloud-Backup (nur mit Konto)',
+      body:
+        'Mit Konto sichert die App deinen Stand auf unserem Server bei Supabase (EU, Irland): Präparate, Einnahme-Verlauf, Lagerbestand, Scan-Ergebnisse, Profil, Laborwerte, Beobachtungen, Einstellungen. Dieser Stand wird auf deinem Gerät mit deinem Datenschlüssel verschlüsselt (AES-256-GCM), bevor er übertragen wird. Auf dem Server liegen nur der verschlüsselte Stand, ein von dir gewählter Gerätename und Zeitstempel. Weder wir noch Supabase können den Inhalt lesen; er lässt sich nur mit deinem Passwort oder deinem Recovery-Key wiederherstellen. Die Sicherung läuft automatisch nach Änderungen, sobald eine Internetverbindung besteht; du kannst sie im Konto ausschalten und den Stand auf dem Server jederzeit löschen. Beim Löschen des Kontos wird der Stand mit gelöscht. Deine lokalen Daten bleiben davon unberührt. Rechtsgrundlage: deine Einwilligung durch das Anlegen des Kontos und das Einschalten der Sicherung (Art. 6 Abs. 1 lit. a und Art. 9 Abs. 2 lit. a DSGVO), jederzeit widerrufbar durch Ausschalten oder Löschen.',
     },
     {
       heading: 'Käufe (Pro-Abo und Scan-Pakete)',
@@ -126,7 +131,12 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Account (optional)',
       body:
-        'If you create an account, your email address, a password hash and timestamps are stored with our processor Supabase (server location: EU, Ireland). In addition, a record with encrypted keys is stored there: your password is converted on the device into a key that encrypts a random data key; a second recovery key, shown to you once, encrypts the same data key. To sign in, your password is transmitted to Supabase over an encrypted connection and stored there only as a hash. The key derived from it on the device, the data key and the recovery key are never transmitted. From the stored data alone, no content can be decrypted, neither by us nor by Supabase. In this version no products, lab values or other content are transmitted via the account; if sync is added, this statement will be updated beforehand. You can delete the account in the app at any time; account and key record are removed, your local data stays. Legal basis: contract (Art. 6(1)(b) GDPR).',
+        'If you create an account, your email address, a password hash and timestamps are stored with our processor Supabase (server location: EU, Ireland). In addition, a record with encrypted keys is stored there: your password is converted on the device into a key that encrypts a random data key; a second recovery key, shown to you once, encrypts the same data key. To sign in, your password is not transmitted; instead, a sign-in key derived from it on the device is transmitted, and Supabase stores only a hash of it. The data key and the recovery key are never transmitted. From the stored data alone, no content can be decrypted, neither by us nor by Supabase. Content (products, lab values, profile) is transmitted only via the cloud backup described in the next section. You can delete the account in the app at any time; account and key record are removed, your local data stays. Legal basis: contract (Art. 6(1)(b) GDPR).',
+    },
+    {
+      heading: 'Cloud backup (account only)',
+      body:
+        'With an account, the app backs up your data to our server at Supabase (EU, Ireland): supplements, intake history, stock, scan results, profile, lab values, observations, settings. This data is encrypted on your device with your data key (AES-256-GCM) before it is transferred. The server holds only the encrypted data, a device name you choose and timestamps. Neither we nor Supabase can read the content; it can only be restored with your password or your recovery key. Backup runs automatically after changes whenever an internet connection is available; you can switch it off in your account and delete the backup on the server at any time. Deleting the account deletes the backup as well. Your local data is not affected. Legal basis: your consent by creating the account and enabling backup (Art. 6(1)(a) and Art. 9(2)(a) GDPR), revocable at any time by switching off or deleting.',
     },
     {
       heading: 'Purchases (Pro subscription and scan packs)',

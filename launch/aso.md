@@ -54,6 +54,7 @@ WAS DIE APP MACHT
 · Wirkungskontrolle: dein Verlauf, ehrlich dargestellt, samt Störfaktoren
 · Laborwerte: dokumentieren und im Verlauf ansehen, ohne Bewertung
 · Bericht: eine Übersicht für Praxis oder Apotheke, Abschnitte wählbar
+· Cloud-Backup mit Konto: Ende-zu-Ende verschlüsselt, Handywechsel ohne Verlust
 
 WAS DIE APP NICHT MACHT
 · Sie empfiehlt keine Produkte und keine Dosierungen
@@ -88,6 +89,7 @@ WHAT THE APP DOES
   confounding factors
 · Lab values: document and view over time, without judgement
 · Report: an overview for your doctor or pharmacist, sections selectable
+· Cloud backup with account: end-to-end encrypted, switch phones without losing data
 
 WHAT THE APP DOES NOT DO
 · It does not suggest products or dosages

@@ -61,6 +61,20 @@ eigenen AVV), wird der zu einem eigenstaendigen neuen Auftragsverarbeiter
 und muss hier UND in der Datenschutzerklaerung (`data/legalContent.js`,
 Abschnitt "Konto") ergaenzt werden, bevor er scharf geschaltet wird.
 
+### Supabase als Auftragsverarbeiter fuer das Cloud-Backup (seit 2026-09-01)
+
+- Tabelle `public.user_backups`: je Nutzerin ein AES-256-GCM-verschluesselter
+  Stand der App-Daten (Gesundheitsdaten nach Art. 9 DSGVO im Klartext des
+  Standes), Geraetename, Zeitstempel. Der Schluessel verlaesst das Geraet
+  nie; Supabase verarbeitet ausschliesslich Ciphertext.
+- Region West EU (Ireland), RLS auf `auth.uid()`, Loeschung per Cascade bei
+  Konto-Loeschung und per Client (Widerruf).
+- Rechtsgrundlage der Verarbeitung: Einwilligung (Art. 9 Abs. 2 lit. a).
+  Supabase-AVV (DPA) deckt die Verarbeitung als Auftragsverarbeiter ab; die
+  Anmelde-Ableitung sorgt dafuer, dass Supabase Auth kein Klartext-Passwort
+  erhaelt.
+- DSFA: launch/dsfa.md.
+
 ## Anthropic
 
 - AVV: https://www.anthropic.com/legal/data-processing-addendum

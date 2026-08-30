@@ -96,6 +96,8 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | `AccountCrypto.js` | Schluesselableitung (scrypt), Umschlaege (AES-GCM), Recovery-Key. Reine Kryptografie, randomBytes injiziert |
 | `AccountLogic.js` | Konto-Ablaeufe gegen Supabase Auth mit uebergebenem Client: Signup, Login, Reset, Loeschung. Passwort geht nur an Supabase Auth (Hash); abgeleiteter Schluessel, Datenschluessel und Recovery-Key nie Richtung Netz |
 | `AccountStore.js` | zustand-Factory fuer den Kontostand, getrennt vom Haupt-Store; `useAccountStore.js` bindet die echten Abhaengigkeiten |
+| `CloudBackup.js` | Verschluesselter Stand je Konto: Rundtrip zwischen Haupt-Store-Zustand und Ciphertext (AES-256-GCM ueber `AccountCrypto.js`), Login-Entscheidung (`decideOnLogin`: none/upload/restore/ask) und Zeitformat fuer die Oberflaeche. Rein, ohne Store und Netz |
+| `CloudBackupStore.js` / `useCloudBackupStore.js` | zustand-Factory fuer das Cloud-Backup, getrennt vom Haupt-Store: buendelt Aenderungen zu einem verzoegerten, gebuendelten Upload (`createCoalescedRunner`), fuehrt den Login-Check aus und haelt den Dialog fuer widerspruechliche Staende (`pendingDecision`); `useCloudBackupStore.js` bindet die echten Abhaengigkeiten |
 | `PurchaseLogic.js` | Kaufschicht ohne UI, das SDK wird injiziert (nie direkt importiert). Kauf-Rundtrip, Wiederherstellen, logIn/logOut bei Session-Wechsel, Uebersetzung des RevenueCat-Kundenstatus in einen der sieben App-Status |
 | `PurchaseStore.js` / `usePurchaseStore.js` | zustand-Factory fuer den Kaufstatus, getrennt vom Haupt-Store; spiegelt den Tier-Wechsel per `applyPurchaseStatus` in `Entitlements.js`. `usePurchaseStore.js` bindet die echten Abhaengigkeiten |
 | `purchaseSdk.js` | Laedt `react-native-purchases` optional. In Expo Go fehlt das native Modul, dann liefert es `null` statt abzustuerzen |
@@ -246,6 +248,17 @@ Der Datenschluessel lebt im Arbeitsspeicher des Konto-Stores und ist nach
 einem Neustart weg. Konto-Loeschung ueber die Edge Function
 `delete-account` (Store-Pflicht). Wer den Konto-Datenfluss aendert,
 aendert `data/legalContent.js` mit.
+
+**Cloud-Backup (seit 2026-09-01):** Mit Konto liegt je Nutzerin ein
+verschluesselter Stand in `public.user_backups` (Supabase, EU/Irland):
+Praeparate, Einnahme-Verlauf, Lagerbestand, Scan-Ergebnisse, Profil,
+Laborwerte, Beobachtungen, Einstellungen, auf dem Geraet mit dem
+Datenschluessel verschluesselt (AES-256-GCM), bevor sie uebertragen
+werden. Der Server sieht nur Ciphertext, einen frei gewaehlten
+Geraetenamen und Zeitstempel. Das Anmelde-Passwort ist eine Ableitung
+(siehe Konto-Absatz), der Datenschluessel bleibt im Geraete-
+Schluesselbund und verlaesst das Geraet nie. Wer den Cloud-Backup-
+Datenfluss aendert, aendert `data/legalContent.js` mit.
 
 **Kaeufe (seit 2026-08-29):** RevenueCat ist Auftragsverarbeiter fuer den
 Kaufstatus (Abo-Tier, Kaufhistorie), angebunden ueber `react-native-purchases`.
