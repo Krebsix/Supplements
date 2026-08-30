@@ -1,0 +1,93 @@
+---
+import type { DeletionContent } from '../i18n/infoPages.ts';
+
+interface Props {
+  content: DeletionContent;
+}
+const { content } = Astro.props;
+const blocks = [content.withoutAccount, content.withAccount];
+---
+
+<div class="deletion">
+  {blocks.map((block, index) => (
+    <article class="block">
+      <div class="block__tag">{String(index + 1).padStart(2, '0')}</div>
+      <h2>{block.title}</h2>
+      <p class="block__body">{block.body}</p>
+      <ol class="block__steps">
+        {block.steps.map((step) => <li>{step}</li>)}
+      </ol>
+      <p class="block__effect">{block.effect}</p>
+    </article>
+  ))}
+  <div class="fallback">
+    <h3>{content.noAppAccess.title}</h3>
+    <p>{content.noAppAccess.body}</p>
+  </div>
+</div>
+
+<style>
+  .deletion {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    border: 1.5px solid var(--navy);
+    background: var(--navy);
+  }
+  .block {
+    background: #ffffff;
+    padding: 36px;
+  }
+  .block__tag {
+    font-family: var(--font-mono);
+    font-size: 40px;
+    font-weight: 700;
+    color: rgba(11, 34, 57, 0.15);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .block h2 {
+    font-size: 24px;
+    letter-spacing: -0.015em;
+    margin-bottom: 12px;
+  }
+  .block__body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    margin-bottom: 20px;
+  }
+  .block__steps {
+    margin: 0 0 20px;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .block__effect {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+  }
+  .fallback {
+    background: var(--navy);
+    color: #ffffff;
+    padding: 32px 36px;
+  }
+  .fallback h3 {
+    font-size: 19px;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+  .fallback p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--onnavy-muted);
+    margin: 0;
+  }
+</style>

@@ -4,7 +4,7 @@
  * zweisprachig, Anker springt zur passenden Sprache), ODbL-Hinweis.
  */
 import { CONTACT_EMAIL } from '../config.ts';
-import { getDictionary, type Locale } from '../i18n/index.ts';
+import { getDictionary, localePath, type Locale } from '../i18n/index.ts';
 
 interface Props {
   locale: Locale;
@@ -21,6 +21,8 @@ const anchor = `#${locale}`;
       <a href={`/datenschutz/${anchor}`}>{t.footer.privacy}</a>
       <a href={`/impressum/${anchor}`}>{t.footer.imprint}</a>
       <a href={`/nutzung/${anchor}`}>{t.footer.terms}</a>
+      <a href={localePath(locale, '/support/')}>{t.footer.support}</a>
+      <a href={localePath(locale, '/konto-loeschen/')}>{t.footer.deletion}</a>
       <a href={`mailto:${CONTACT_EMAIL}`}>{t.footer.contact}</a>
     </nav>
     <span>{t.footer.odbl}</span>

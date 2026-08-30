@@ -1,0 +1,60 @@
+---
+import { CONTACT_EMAIL } from '../config.ts';
+import type { SupportContent } from '../i18n/infoPages.ts';
+
+interface Props {
+  content: SupportContent;
+}
+const { content } = Astro.props;
+---
+
+<div class="support">
+  <div class="support__row">
+    <span class="support__label">{content.emailLabel}</span>
+    <a class="support__value" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+    <span class="support__note">{content.emailNote}</span>
+  </div>
+  <div class="support__row">
+    <span class="support__label">{content.faqLabel}</span>
+    <a class="support__value" href="/#faq">{content.faqLinkText} →</a>
+  </div>
+  <div class="support__row">
+    <span class="support__label">{content.privacyLabel}</span>
+    <a class="support__value" href="/datenschutz/">{content.privacyLinkText} →</a>
+  </div>
+</div>
+
+<style>
+  .support {
+    margin-top: 40px;
+    border-top: 1.5px solid var(--navy);
+  }
+  .support__row {
+    padding: 24px 0;
+    border-bottom: 1.5px solid var(--navy);
+  }
+  .support__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .support__value {
+    display: block;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .support__value:hover {
+    color: var(--azur);
+  }
+  .support__note {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+</style>

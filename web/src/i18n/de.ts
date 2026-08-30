@@ -235,6 +235,8 @@ export const de = {
     privacy: 'Datenschutz',
     imprint: 'Impressum',
     terms: 'Nutzungsbedingungen',
+    support: 'Support',
+    deletion: 'Konto löschen',
     contact: 'Kontakt',
     odbl: 'Produktdaten teilweise aus Open Food Facts, ODbL.',
   },

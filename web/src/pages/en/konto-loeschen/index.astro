@@ -1,0 +1,17 @@
+---
+/**
+ * Bewusst derselbe Slug wie die deutsche Route (/konto-loeschen/), nicht
+ * "/account-deletion/": Der Sprachwechsel im Header (Header.astro) haengt
+ * nur die Sprache vor denselben Pfad (localePath). Ein abweichender
+ * EN-Slug wuerde beim Umschalten auf einen 404 fuehren.
+ */
+import DeletionBody from '../../../components/DeletionBody.astro';
+import InfoPage from '../../../components/InfoPage.astro';
+import { deletion } from '../../../i18n/infoPages.ts';
+
+const content = deletion.en;
+---
+
+<InfoPage locale="en" content={content} path="/konto-loeschen/">
+  <DeletionBody content={content} />
+</InfoPage>

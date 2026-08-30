@@ -1,0 +1,11 @@
+---
+import DeletionBody from '../../components/DeletionBody.astro';
+import InfoPage from '../../components/InfoPage.astro';
+import { deletion } from '../../i18n/infoPages.ts';
+
+const content = deletion.de;
+---
+
+<InfoPage locale="de" content={content} path="/konto-loeschen/">
+  <DeletionBody content={content} />
+</InfoPage>

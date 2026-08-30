@@ -1,0 +1,11 @@
+---
+import InfoPage from '../../components/InfoPage.astro';
+import SupportBody from '../../components/SupportBody.astro';
+import { support } from '../../i18n/infoPages.ts';
+
+const content = support.de;
+---
+
+<InfoPage locale="de" content={content} path="/support/">
+  <SupportBody content={content} />
+</InfoPage>

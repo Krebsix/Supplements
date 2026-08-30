@@ -13,8 +13,9 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const LANDING = ['dist/index.html', 'dist/en/index.html'];
 const LEGAL = ['dist/datenschutz/index.html', 'dist/impressum/index.html', 'dist/nutzung/index.html'];
+const INFO = ['dist/support/index.html', 'dist/en/support/index.html', 'dist/konto-loeschen/index.html', 'dist/en/konto-loeschen/index.html'];
 
-for (const page of [...LANDING, ...LEGAL]) {
+for (const page of [...LANDING, ...LEGAL, ...INFO]) {
   test(`${page}: vorhanden, eine H1, nichts Externes`, () => {
     assert.ok(existsSync(page), `${page} fehlt, erst npm run build`);
     const html = readFileSync(page, 'utf8');

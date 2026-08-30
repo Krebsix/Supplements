@@ -226,6 +226,8 @@ export const en = {
     privacy: 'Privacy',
     imprint: 'Imprint',
     terms: 'Terms of use',
+    support: 'Support',
+    deletion: 'Delete account',
     contact: 'Contact',
     odbl: 'Some product data from Open Food Facts, ODbL.',
   },

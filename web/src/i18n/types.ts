@@ -160,6 +160,8 @@ export interface Dictionary {
     readonly privacy: string;
     readonly imprint: string;
     readonly terms: string;
+    readonly support: string;
+    readonly deletion: string;
     readonly contact: string;
     readonly odbl: string;
   };

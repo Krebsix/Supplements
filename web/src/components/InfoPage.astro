@@ -1,0 +1,71 @@
+---
+/**
+ * Schlichtes Seitengeruest fuer Support und Konto-Loeschung: Header,
+ * ein Inhaltsblock im Stil des Redesigns (Mono-Eyebrow, Space-Grotesk-
+ * Titel), Footer. Kein Hero, keine Scroll-Reveal-Animation, diese
+ * Seiten sind Store-Pflichtseiten, keine Marketing-Flaeche.
+ */
+import Base from '../layouts/Base.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import { localePath, type Locale } from '../i18n/index.ts';
+import type { InfoPageContent } from '../i18n/infoPages.ts';
+
+interface Props {
+  locale: Locale;
+  content: InfoPageContent;
+  path: string;
+}
+
+const { locale, content, path } = Astro.props;
+---
+
+<Base locale={locale} title={content.meta.title} description={content.meta.description} ogImage={`/og/${locale}.png`} ogAlt={content.title} path={path}>
+  <Header locale={locale} />
+  <main id="main">
+    <section class="info">
+      <div class="container info__inner">
+        <a class="info__back" href={localePath(locale)}>← {content.backLink}</a>
+        <span class="eyebrow">{content.eyebrow}</span>
+        <h1>{content.title}</h1>
+        <p class="info__intro">{content.intro}</p>
+        <slot />
+      </div>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Base>
+
+<style>
+  .info {
+    padding: 150px 0 110px;
+  }
+  .info__inner {
+    max-width: 720px;
+  }
+  .info__back {
+    display: block;
+    margin-bottom: 24px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .info .eyebrow {
+    display: block;
+  }
+  .info__back:hover {
+    color: var(--azur);
+  }
+  .info h1 {
+    margin: 12px 0 20px;
+    font-size: clamp(32px, 4.6vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .info__intro {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    max-width: 60ch;
+  }
+</style>
