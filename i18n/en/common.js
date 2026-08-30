@@ -44,4 +44,11 @@ export default {
   'proGate.title': 'Part of the Pro subscription',
   'proGate.text':
     'This area belongs to the Pro subscription. The subscription funds the AI analysis and the ongoing upkeep of the reference data.',
+  'add.title': 'Add supplement',
+  'add.scan': 'Scan',
+  'add.scanSub': 'Barcode or label photo',
+  'add.search': 'Search',
+  'add.searchSub': 'Substance or product in the catalog',
+  'add.manual': 'Enter manually',
+  'add.manualSub': 'Enter name, dose and times yourself',
 };

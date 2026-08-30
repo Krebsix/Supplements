@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import AddSupplementChooser from '../../../components/AddSupplementChooser';
+import AddSupplementSheet from '../../../components/AddSupplementSheet';
 import { SLOTS } from '../../../TimingEngine';
 import useStore from '../../../useStore';
 import {
@@ -54,6 +56,7 @@ export default function InventoryScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
+  const [sheetVisible, setSheetVisible] = useState(false);
 
   const userSupplements = useStore((state) => state.userSupplements);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
@@ -143,13 +146,11 @@ export default function InventoryScreen() {
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>{t('inventory.emptyTitle')}</Text>
             <Text style={styles.emptyText}>{t('inventory.emptyText')}</Text>
-            <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={() => router.push('/AddSupplement')}
-              accessibilityRole="link"
-            >
-              <Text style={styles.primaryButtonText}>{t('inventory.emptyButton')}</Text>
-            </TouchableOpacity>
+            <AddSupplementChooser
+              onScan={() => router.push('/scanner')}
+              onSearch={() => router.push('/search')}
+              onManual={() => router.push('/AddSupplement')}
+            />
           </View>
         ) : null}
 
@@ -243,13 +244,15 @@ export default function InventoryScreen() {
         {totalCount > 0 ? (
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() => router.push('/AddSupplement')}
-            accessibilityRole="link"
+            onPress={() => setSheetVisible(true)}
+            accessibilityRole="button"
           >
             <Text style={styles.addButtonText}>{t('inventory.addButton')}</Text>
           </TouchableOpacity>
         ) : null}
       </ScrollView>
+
+      <AddSupplementSheet visible={sheetVisible} onClose={() => setSheetVisible(false)} />
     </View>
   );
 }

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 
+import AddSupplementSheet from '../../../components/AddSupplementSheet';
 import LanguagePicker from '../../../components/LanguagePicker';
 import { ACCOUNT_STATUS } from '../../../AccountStore';
 import { useTranslation } from '../../../i18n';
@@ -14,6 +15,7 @@ import { colors, radius, space, surfaces, type } from '../../../theme';
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
+  const [sheetVisible, setSheetVisible] = useState(false);
 
   const accountStatus = useAccountStore((state) => state.status);
   const accountEmail = useAccountStore((state) => state.email);
@@ -114,7 +116,7 @@ export default function Home() {
         <MenuRow
           title={t('home.nav.add.title')}
           subtitle={t('home.nav.add.subtitle')}
-          onPress={() => router.push('/AddSupplement')}
+          onPress={() => setSheetVisible(true)}
         />
         <MenuRow
           title={t('home.nav.history.title')}
@@ -194,6 +196,8 @@ export default function Home() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+
+      <AddSupplementSheet visible={sheetVisible} onClose={() => setSheetVisible(false)} />
     </View>
   );
 }

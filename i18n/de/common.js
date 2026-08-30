@@ -43,4 +43,11 @@ export default {
   'proGate.title': 'Teil des Pro-Abos',
   'proGate.text':
     'Dieser Bereich gehört zum Pro-Abo. Das Abo finanziert die KI-Auswertung und die laufende Pflege der Referenzdaten.',
+  'add.title': 'Präparat hinzufügen',
+  'add.scan': 'Scannen',
+  'add.scanSub': 'Barcode oder Etikettenfoto',
+  'add.search': 'Suchen',
+  'add.searchSub': 'Wirkstoff oder Produkt im Katalog',
+  'add.manual': 'Manuell eingeben',
+  'add.manualSub': 'Name, Dosis, Zeiten selbst eintragen',
 };

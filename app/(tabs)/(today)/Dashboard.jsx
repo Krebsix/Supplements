@@ -8,6 +8,7 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
+import AddSupplementChooser from '../../../components/AddSupplementChooser';
 import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
@@ -350,13 +351,11 @@ export default function Dashboard() {
         <View style={styles.emptyRoutineCard}>
           <Text style={styles.emptyRoutineTitle}>{t('dashboard.emptyRoutineTitle')}</Text>
           <Text style={styles.emptyRoutineText}>{t('dashboard.emptyRoutineText')}</Text>
-          <TouchableOpacity
-            style={styles.emptyRoutineButton}
-            onPress={() => router.push('/AddSupplement')}
-            accessibilityRole="link"
-          >
-            <Text style={styles.emptyRoutineButtonText}>{t('dashboard.emptyRoutineButton')}</Text>
-          </TouchableOpacity>
+          <AddSupplementChooser
+            onScan={() => router.push('/scanner')}
+            onSearch={() => router.push('/search')}
+            onManual={() => router.push('/AddSupplement')}
+          />
         </View>
       ) : null}
 
