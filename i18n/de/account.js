@@ -54,7 +54,7 @@ export default {
   'account.cloud.restoring': 'Wird wiederhergestellt.',
   'account.cloud.offline': 'Offline. Wird beim nächsten Öffnen nachgeholt.',
   'account.cloud.error': 'Sichern fehlgeschlagen. Beim nächsten Öffnen wird es erneut versucht.',
-  'account.cloud.wrongKey': 'Der Stand auf dem Server wurde mit einem früheren Schlüssel verschlüsselt und kann nicht gelesen werden. Beim nächsten Sichern wird er ersetzt.',
+  'account.cloud.wrongKey': 'Der Stand auf dem Server wurde mit einem früheren Schlüssel verschlüsselt und lässt sich nicht lesen. Automatisches Sichern ist aus, bis du ihn ersetzt oder dein Passwort mit dem Recovery-Key neu setzt.',
   'account.cloud.auto': 'Automatisch sichern',
   'account.cloud.autoSub': 'Nach jeder Änderung, gebündelt, nur mit Internet.',
   'account.cloud.now': 'Jetzt sichern',
@@ -69,6 +69,10 @@ export default {
   'account.cloud.decisionText': 'Auf deinem Konto liegt ein Stand vom {time} von {device} ({supplements} Präparate, {labValues} Laborwerte). Diesen Stand übernehmen oder den Stand dieses Geräts hochladen?',
   'account.cloud.decisionRestore': 'Server-Stand übernehmen',
   'account.cloud.decisionUpload': 'Diesen Stand hochladen',
+  'account.cloud.unreadableTitle': 'Server-Stand nicht lesbar',
+  'account.cloud.unreadableText': 'Auf deinem Konto liegt ein Stand vom {time} von {device}, der mit einem früheren Schlüssel verschlüsselt ist. Mit deinem aktuellen Passwort lässt er sich nicht öffnen. Hast du deinen Recovery-Key? Dann setze dein Passwort damit neu, und der Stand bleibt lesbar. Ersetzen löscht ihn dauerhaft.',
+  'account.cloud.unreadableKeep': 'Behalten, später mit Recovery-Key',
+  'account.cloud.unreadableReplace': 'Dauerhaft ersetzen',
 
   'account.delete.title': 'Konto löschen',
   'account.delete.text':

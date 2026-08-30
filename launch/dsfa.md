@@ -50,7 +50,7 @@ Zwei Kriterien erfuellt: DSFA wird vorsorglich durchgefuehrt.
 | Server-Kompromittierung (Datenbank-Abzug) | gering | hoch | Ciphertext ohne Schluessel; scrypt gegen Woerterbuchangriffe auf den Passwort-Umschlag; Mindestlaenge 10 | gering: Angreifer muss Passwort erraten, scrypt verlangsamt |
 | Geraeteverlust | mittel | hoch | Datenschluessel im Keychain/Keystore (Geraetesperre); lokaler Speicher AES-256; Abmelden aus der Ferne nicht moeglich (Restrisiko) | gering bis mittel; Empfehlung: Geraetesperre, Passwort aendern nach Verlust (neuer Umschlag) |
 | Schluesselverlust (Passwort und Recovery-Key vergessen) | mittel | mittel | Recovery-Key einmalig angezeigt, Kopierfunktion, Hinweis; lokale Daten bleiben | mittel, bewusst akzeptiert (E2E) |
-| Falscher Stand ueberschreibt Daten (zwei Geraete) | gering | mittel | Dialog bei fremdem Server-Stand, kein stilles Ueberschreiben | gering |
+| Falscher Stand ueberschreibt Daten (zwei Geraete) | gering | mittel | Dialog bei fremdem Server-Stand, kein stilles Ueberschreiben, auch bei unlesbarem Server-Stand Dialog statt stillem Ersetzen | gering |
 | Metadaten-Leck (Geraetename, Zeitstempel, Groesse) | gering | gering | keine Zaehler; Geraetename frei waehlbar | gering |
 | Anbieterzugriff (Supabase-Personal) | gering | hoch | Ciphertext; AVV; Region EU | gering |
 | Schwaeche der Kryptografie | sehr gering | hoch | Standardverfahren (scrypt, AES-256-GCM, @noble), Parameter dokumentiert, Tests | sehr gering |

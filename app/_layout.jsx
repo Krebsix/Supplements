@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, AppState } from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from '../i18n';
@@ -153,12 +153,43 @@ export default function Layout() {
   }, [hydrated, onboarded, accountStatus, accountDataKey]);
 
   // Dialog: Server-Stand und lokaler Stand passen nicht zusammen, die
-  // Nutzerin muss waehlen.
+  // Nutzerin muss waehlen. Zwei Ausgangslagen (pendingDecision.kind):
+  // 'newer' (Server-Stand lesbar, aber fremd) wie bisher, 'unreadable'
+  // (Server-Stand mit frueherem Schluessel verschluesselt) neu (CRITICAL-Fix:
+  // vorher wurde ein unlesbarer Server-Stand still ersetzt).
   const pendingDecision = useCloudBackupStore((state) => state.pendingDecision);
   const language = useStore((state) => state.language);
+  // Dedup: derselbe pendingDecision-Fall (kind + exported_at) darf nur
+  // EINMAL einen Alert oeffnen, auch wenn der Effekt aus anderen Gruenden
+  // erneut laeuft (z. B. Sprachwechsel), solange die Nutzerin noch nicht
+  // entschieden hat.
+  const shownDecisionRef = useRef(null);
   useEffect(() => {
-    if (!pendingDecision) return;
-    const { remote, counts } = pendingDecision;
+    if (!pendingDecision) {
+      shownDecisionRef.current = null;
+      return;
+    }
+    const { kind, remote, counts } = pendingDecision;
+    const key = `${kind}:${remote?.exported_at}`;
+    if (shownDecisionRef.current === key) return;
+    shownDecisionRef.current = key;
+
+    if (kind === 'unreadable') {
+      Alert.alert(
+        t('account.cloud.unreadableTitle'),
+        t('account.cloud.unreadableText', {
+          time: formatBackupTime(remote.exported_at, language),
+          device: remote.device_label || '',
+        }),
+        [
+          { text: t('account.cloud.unreadableKeep'), style: 'cancel', onPress: () => useCloudBackupStore.getState().resolveDecision('keep') },
+          { text: t('account.cloud.unreadableReplace'), style: 'destructive', onPress: () => useCloudBackupStore.getState().resolveDecision('replace') },
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
+
     Alert.alert(
       t('account.cloud.decisionTitle'),
       t('account.cloud.decisionText', {

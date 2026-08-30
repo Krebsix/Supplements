@@ -53,7 +53,7 @@ export default {
   'account.cloud.restoring': 'Restoring.',
   'account.cloud.offline': 'Offline. Will catch up next time the app opens.',
   'account.cloud.error': 'Backup failed. It will be retried next time the app opens.',
-  'account.cloud.wrongKey': 'The backup on the server was encrypted with an earlier key and cannot be read. It will be replaced with the next backup.',
+  'account.cloud.wrongKey': 'The backup on the server was encrypted with an earlier key and cannot be read. Automatic backup is off until you replace it or reset your password with your recovery key.',
   'account.cloud.auto': 'Back up automatically',
   'account.cloud.autoSub': 'After every change, batched, only with internet.',
   'account.cloud.now': 'Back up now',
@@ -68,6 +68,10 @@ export default {
   'account.cloud.decisionText': 'Your account holds a backup from {time} from {device} ({supplements} supplements, {labValues} lab values). Use that backup or upload the data on this device?',
   'account.cloud.decisionRestore': 'Use server backup',
   'account.cloud.decisionUpload': 'Upload this device',
+  'account.cloud.unreadableTitle': 'Server backup not readable',
+  'account.cloud.unreadableText': 'Your account holds a backup from {time} from {device} that was encrypted with an earlier key. It cannot be opened with your current password. Do you have your recovery key? Reset your password with it and the backup stays readable. Replacing deletes it permanently.',
+  'account.cloud.unreadableKeep': 'Keep, use recovery key later',
+  'account.cloud.unreadableReplace': 'Replace permanently',
 
   'account.delete.title': 'Delete account',
   'account.delete.text':
