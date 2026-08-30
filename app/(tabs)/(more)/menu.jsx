@@ -6,7 +6,6 @@ import { useRouter } from 'expo-router';
 
 import LanguagePicker from '../../../components/LanguagePicker';
 import { ACCOUNT_STATUS } from '../../../AccountStore';
-import { PURCHASE_STATUS } from '../../../PurchaseLogic';
 import { useTranslation } from '../../../i18n';
 import useAccountStore from '../../../useAccountStore';
 import usePurchaseStore from '../../../usePurchaseStore';
@@ -22,15 +21,11 @@ export default function Home() {
   const purchaseExpiresAt = usePurchaseStore((state) => state.expiresAt);
   const signedIn = accountStatus === ACCOUNT_STATUS.SIGNED_IN;
 
-  // Statuszeile der Kopfkarte: bewusst nur Free/Pro, nicht alle Stufen aus
-  // subscription.jsx (Testphase, gekuendigt, Zahlungsproblem) — das gehoert
-  // in den vollen Abo-Screen, hier reicht der grobe Stand.
-  const purchaseStatusLine =
-    purchaseStatus === PURCHASE_STATUS.FREE
-      ? t('subscription.status.free')
-      : purchaseExpiresAt
-        ? t('subscription.status.active', { date: new Date(purchaseExpiresAt).toLocaleDateString() })
-        : t('paywall.kicker');
+  // Dieselben Statustexte wie subscription.jsx (alle sieben
+  // subscription.status.*-Stufen), damit Kopfkarte und Abo-Screen nie
+  // auseinanderlaufen. 'free' und 'pending' ignorieren den Platzhalter.
+  const purchaseStatusDate = purchaseExpiresAt ? new Date(purchaseExpiresAt).toLocaleDateString() : '';
+  const purchaseStatusLine = t(`subscription.status.${purchaseStatus}`, { date: purchaseStatusDate });
 
   return (
     <View style={styles.screenWrap}>
