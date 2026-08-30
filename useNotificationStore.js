@@ -87,6 +87,7 @@ const useNotificationStore = create(
         absorptionBlockedAt = null,
         profile = 'adult',
         supplements = [],
+        refillSupplements = supplements,
         stocks = {},
         onRefillNotified = () => {},
       } = {}) => {
@@ -109,7 +110,8 @@ const useNotificationStore = create(
             refillThresholdDays,
             onRefillNotified,
           },
-          supplements
+          supplements,
+          refillSupplements
         );
 
         set({ scheduledToday: scheduled });
@@ -163,17 +165,22 @@ async function runRefreshScheduleOnce() {
   const loggedToday = main
     .getLoggedToday()
     .map((log) => log.userSupplementId);
-  const supplements = main
-    .getActiveSupplements()
-    .filter((supplement) =>
-      isDueToday(supplement.cureConfig, supplement.cureStartDate)
-    );
+  const allActive = main.getActiveSupplements();
+  // dueSupplements fuer die Slot-Planung: waehrend der Kur-Pause bekommt ein
+  // Praeparat keine Einnahme-Erinnerung. allActive (ungefiltert) fuer die
+  // Nachfuell-Planung: der Bestand sinkt auch in der Pause nicht wieder auf
+  // ueber die Schwelle, also braucht ein knappes Praeparat die Nachfuell-
+  // Pruefung unabhaengig vom Kur-Status (siehe scheduleAllNotificationsForToday).
+  const dueSupplements = allActive.filter((supplement) =>
+    isDueToday(supplement.cureConfig, supplement.cureStartDate)
+  );
 
   return useNotificationStore.getState().refreshSchedule({
     loggedToday,
     absorptionBlockedAt: main.absorptionBlockedAt,
     profile: main.activeProfileId,
-    supplements,
+    supplements: dueSupplements,
+    refillSupplements: allActive,
     stocks: main.stockBySupplementId,
     onRefillNotified: main.markRefillNotified,
   });

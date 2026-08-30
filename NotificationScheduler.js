@@ -101,13 +101,24 @@ export async function requestPermissions() {
 // ─────────────────────────────────────────────────────────────
 
 /**
- * scheduleAllNotificationsForToday(userSlotTimes, profile, state, supplements)
+ * scheduleAllNotificationsForToday(userSlotTimes, profile, state, supplements, refillSupplements)
  *
  * @param {Object} userSlotTimes  – { fasted: '06:30', morning: '07:00', ... }
  * @param {string} profile        – 'adult' | 'child'
  * @param {Object} state          – { loggedToday: string[], absorptionBlockedAt: string|null }
- * @param {Array}  supplements    – die zu erinnernden Praeparate (aktiver
- *                                  Nutzerbestand, Kur-Pausen bereits gefiltert)
+ * @param {Array}  supplements    – die zu erinnernden Praeparate fuer die
+ *                                  Slot-Alarme (aktiver Nutzerbestand,
+ *                                  Kur-Pausen bereits gefiltert)
+ * @param {Array}  [refillSupplements] – die Praeparate fuer die Nachfuell-
+ *                                  Pruefung. Default = supplements, damit
+ *                                  bestehende Aufrufer und Tests unveraendert
+ *                                  laufen. Ein Praeparat unter der
+ *                                  Bestandsschwelle braucht die Nachfuell-
+ *                                  Pruefung auch waehrend seine Kur pausiert
+ *                                  -- die Kur-Filterung gehoert deshalb NICHT
+ *                                  in diese Liste (siehe useNotificationStore.js
+ *                                  runRefreshScheduleOnce: dueSupplements vs.
+ *                                  allActive).
  *
  * Cancelt alle bestehenden Alarme und plant die heutigen neu.
  *
@@ -119,7 +130,8 @@ export async function scheduleAllNotificationsForToday(
   userSlotTimes,
   profile = 'adult',
   state   = {},
-  supplements = []
+  supplements = [],
+  refillSupplements = supplements
 ) {
   // Alle alten Alarme löschen
   await Notifications.cancelAllScheduledNotificationsAsync();
@@ -186,7 +198,7 @@ export async function scheduleAllNotificationsForToday(
   // beim naechsten cancelAllScheduledNotificationsAsync() nicht mehr als
   // "von uns geplant" auffindbar sein.
   const refillIds = await scheduleRefillReminders({
-    supplements,
+    supplements: refillSupplements,
     stocks,
     thresholdDays: refillThresholdDays,
     onNotified: onRefillNotified,

@@ -1,4 +1,5 @@
 import { dailyUnits, daysLeft, refillState } from '../StockForecast';
+import { isDueToday } from '../CureManager';
 
 let failed = 0;
 function check(name, cond, extra = '') {
@@ -35,6 +36,21 @@ check('plannedAt ist null ohne Eintrag', refillState(s4, sup(['morning']), 5, NO
 check('ueber Schwelle: nicht faellig', refillState({ currentUnits: 40 }, sup(['morning']), 5, NOW).due === false);
 check('Schwelle 0 = aus', refillState(s4, sup(['morning']), 0, NOW).due === false);
 check('ohne Bestand: nicht faellig', refillState({}, sup(['morning']), 5, NOW).due === false);
+
+console.log('\n— Nachfuell-Erinnerung in der Kur-Pause —');
+// onDays: 0 heisst: die Kur ist zu jedem Zeitpunkt in der Off-Phase (0 < 0
+// ist nie wahr) -- deterministisch unabhaengig vom Testlaufzeitpunkt, also
+// ohne injizierbares "jetzt" in isDueToday selbst konstruierbar.
+const pausedCureConfig = { type: 'cycle', onDays: 0, offDays: 7 };
+const pausedSupplement = { ...sup(['morning']), cureConfig: pausedCureConfig, cureStartDate: '2026-01-01T00:00:00.000Z' };
+check(
+  'Testvoraussetzung: Praeparat ist waehrend der Kur-Pause (isDueToday false)',
+  isDueToday(pausedCureConfig, pausedSupplement.cureStartDate) === false
+);
+check(
+  'Praeparat unter der Schwelle bekommt trotz Kur-Pause eine Nachfuell-Erinnerung',
+  refillState(s4, pausedSupplement, 5, NOW).notify === true
+);
 
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);
