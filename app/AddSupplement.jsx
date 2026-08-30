@@ -83,6 +83,11 @@ export default function AddSupplement() {
   const [selectedSlots, setSelectedSlots] = useState([DEFAULT_SLOT]);
   const [primarySlot, setPrimarySlot] = useState(DEFAULT_SLOT);
   const [reason, setReason] = useState(null);
+  // Sobald die Nutzerin die Slot-Auswahl selbst antastet, darf der
+  // Vorschlag sie nicht mehr ueberschreiben, auch wenn sich beim
+  // Weitertippen des Namens der erkannte Wirkstoff aendert. Kein Reset
+  // noetig: Der Screen wird je Aufruf neu gemountet.
+  const [slotsTouched, setSlotsTouched] = useState(false);
 
   // Mehr Angaben
   const [moreOpen, setMoreOpen] = useState(false);
@@ -163,7 +168,13 @@ export default function AddSupplement() {
         .filter(Boolean)
         .join('\n\n')
     );
-  }, [fromScan, pendingScanResult, t]);
+    // t absichtlich nicht in den Abhaengigkeiten: useTranslation() liefert
+    // bei jedem Render eine neue Funktionsreferenz. Mit t in den Deps wuerde
+    // dieser Effekt nach jedem Tastendruck (auch in anderen Feldern) erneut
+    // feuern und Name/Menge/Einheit/Notiz auf die Scan-Werte zuruecksetzen,
+    // sodass die Felder im Modus "Aendern" nicht editierbar waeren.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromScan, pendingScanResult]);
 
   // Vorschlag: sobald sich die erkannten Substanzen aendern (Entwurf geladen
   // oder manueller Name getippt). Nicht beim Bearbeiten.
@@ -173,7 +184,10 @@ export default function AddSupplement() {
     const suggestion = suggestPrimarySlot(substanceKey ? substanceKey.split('|') : []);
     setPrimarySlot(suggestion.slot);
     setReason(suggestion.reason);
-    setSelectedSlots(expandSlots(suggestion.slot, timesPerDay));
+    // Die Slot-AUSWAHL nur setzen, wenn die Nutzerin sie noch nicht selbst
+    // angefasst hat: Sonst wuerde ein spaeter erkannter Wirkstoff (z. B.
+    // beim Weitertippen des Namens) eine bewusste manuelle Wahl ueberschreiben.
+    if (!slotsTouched) setSelectedSlots(expandSlots(suggestion.slot, timesPerDay));
     // timesPerDay absichtlich nicht in den Abhaengigkeiten: Die Haeufigkeit
     // hat ihren eigenen Handler, sonst wuerde jede Chip-Wahl den Vorschlag
     // neu setzen und eine manuelle Slot-Auswahl ueberschreiben.
@@ -191,6 +205,7 @@ export default function AddSupplement() {
   }
 
   function toggleSlot(slotId) {
+    setSlotsTouched(true);
     setSelectedSlots((current) => {
       const next = current.includes(slotId) ? current.filter((id) => id !== slotId) : [...current, slotId];
       return SLOT_ORDER.filter((id) => next.includes(id));
