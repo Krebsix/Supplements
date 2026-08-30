@@ -49,6 +49,65 @@ export function normalizeProfile(profile = {}) {
 export const EMPTY_PROFILE = normalizeProfile({});
 
 /**
+ * createId(prefix)
+ * Erzeugt eine lokale, eindeutige ID (kein Server, kein Sequenz-Zaehler
+ * noetig). Hierher verschoben, weil normalizeUserSupplement sie fuer
+ * fehlende Bestands-IDs braucht und beide Node-testbar bleiben sollen.
+ * useStore.js importiert diese Funktion und nutzt sie auch fuer Scan- und
+ * Log-IDs weiter, statt eine zweite Definition zu pflegen.
+ */
+export function createId(prefix = 'id') {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function normalizeOptionalText(value) {
+  if (value === null || value === undefined) return '';
+  return String(value).trim();
+}
+
+export function normalizeDosage(dosage = {}) {
+  return {
+    amount: normalizeOptionalText(dosage?.amount),
+    unit: normalizeOptionalText(dosage?.unit),
+  };
+}
+
+/**
+ * normalizeUserSupplement(draft)
+ * Normalisiert einen Bestandseintrag beim Anlegen/Aktualisieren
+ * (addUserSupplement/addSupplementFromPendingScan in useStore.js). Rein
+ * und node-testbar ausgezogen, damit die Weitergabe von
+ * ingredientDetails (StackAnalyzer.extractPositions,
+ * ScheduleGuidance.buildEntryGuidance) ohne useStore.js geprueft werden
+ * kann -- siehe tests/store-logic-supplement.test.mjs.
+ *
+ * ingredientDetails bekommt hier explizit einen Array-Fallback: Ohne
+ * strukturierte Zutatenliste bleibt sie leer, statt undefined zu sein,
+ * damit aeltere Eintraege denselben Vertrag erfuellen wie neue.
+ */
+export function normalizeUserSupplement(draft = {}) {
+  const libraryId = draft.libraryId ?? (typeof draft.id === 'number' ? draft.id : null);
+  const id = typeof draft.id === 'string' && draft.id.startsWith('user-') ? draft.id : createId('user');
+
+  return {
+    ...draft,
+    id,
+    libraryId,
+    status: draft.status || 'active',
+    source: draft.source || (draft.isCustom ? 'manual' : 'library'),
+    dosage: normalizeDosage(draft.dosage),
+    timingSlots: Array.isArray(draft.timingSlots) ? draft.timingSlots : [],
+    conflictIds: Array.isArray(draft.conflictIds) ? draft.conflictIds : [],
+    conflictTags: Array.isArray(draft.conflictTags) ? draft.conflictTags : [],
+    synergyIds: Array.isArray(draft.synergyIds) ? draft.synergyIds : [],
+    ingredientDetails: Array.isArray(draft.ingredientDetails) ? draft.ingredientDetails : [],
+    flags: draft.flags || {},
+    createdAt: draft.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+/**
  * Ausgangszustand aller Nutzerdaten. Einmal definiert, zweimal verwendet:
  * als Startwert beim ersten Oeffnen und als Ziel von resetAllData() --
  * so kann der Loeschweg (Art. 17 DSGVO) kein Feld vergessen, das spaeter

@@ -22,18 +22,16 @@ import { setActiveLanguage } from './i18n/runtime';
 import inventoryData from './inventory.json';
 import {
   applyOnboardingCompletion,
+  createId,
   EMPTY_PROFILE,
   INITIAL_USER_STATE,
   normalizeProfile,
+  normalizeUserSupplement,
 } from './storeLogic';
 
 // Re-export: bestehende Importe aus './useStore' bleiben gueltig. Die
 // eigentlichen Definitionen liegen in storeLogic.js (rein, Node-testbar).
 export { EMPTY_PROFILE, INITIAL_USER_STATE };
-
-function createId(prefix = 'id') {
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-}
 
 function toDateKey(date = new Date()) {
   const value = date instanceof Date ? date : new Date(date);
@@ -44,13 +42,6 @@ function toDateKey(date = new Date()) {
 function normalizeOptionalText(value) {
   if (value === null || value === undefined) return '';
   return String(value).trim();
-}
-
-function normalizeDosage(dosage = {}) {
-  return {
-    amount: normalizeOptionalText(dosage?.amount),
-    unit: normalizeOptionalText(dosage?.unit),
-  };
 }
 
 function normalizeCaptureSummary(captureSummary) {
@@ -110,27 +101,6 @@ function normalizeScanResult(result = {}) {
     id: scanData.id || createId('scan'),
     savedAt:
       scanData.savedAt || new Date().toISOString(),
-  };
-}
-
-function normalizeUserSupplement(draft = {}) {
-  const libraryId = draft.libraryId ?? (typeof draft.id === 'number' ? draft.id : null);
-  const id = typeof draft.id === 'string' && draft.id.startsWith('user-') ? draft.id : createId('user');
-
-  return {
-    ...draft,
-    id,
-    libraryId,
-    status: draft.status || 'active',
-    source: draft.source || (draft.isCustom ? 'manual' : 'library'),
-    dosage: normalizeDosage(draft.dosage),
-    timingSlots: Array.isArray(draft.timingSlots) ? draft.timingSlots : [],
-    conflictIds: Array.isArray(draft.conflictIds) ? draft.conflictIds : [],
-    conflictTags: Array.isArray(draft.conflictTags) ? draft.conflictTags : [],
-    synergyIds: Array.isArray(draft.synergyIds) ? draft.synergyIds : [],
-    flags: draft.flags || {},
-    createdAt: draft.createdAt || new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
   };
 }
 
@@ -379,8 +349,19 @@ export const useStore = create(
       },
       addSupplementFromPendingScan: (formData) => {
         const pending = get().pendingScanResult;
+        // Strukturierte Zutatenliste vom Scan-Entwurf uebernehmen, falls
+        // das Formular selbst keine mitbringt: Ohne sie faellt
+        // StackAnalyzer.extractPositions auf eine einzelne, aus dem
+        // Produktnamen geratene Position zurueck -- Wechselwirkungen und
+        // Einnahme-Hinweise (ScheduleGuidance.js) blieben dann unsichtbar.
+        const ingredientDetails = Array.isArray(formData?.ingredientDetails)
+          ? formData.ingredientDetails
+          : Array.isArray(pending?.ingredientDetails)
+            ? pending.ingredientDetails
+            : [];
         const supplement = get().addUserSupplement({
           ...formData,
+          ingredientDetails,
           source: pending ? 'scan' : formData?.source || 'manual',
           scanResultId: pending?.id || null,
         });

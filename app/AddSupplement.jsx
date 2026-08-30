@@ -345,6 +345,24 @@ export default function AddSupplement() {
         .map((slotId) => SLOTS[slotId]?.label ?? slotId)
         .join(' / ');
 
+    // Strukturierte Zutatenliste fuer StackAnalyzer.extractPositions und
+    // ScheduleGuidance.buildEntryGuidance: Ohne sie sehen Wechselwirkungs-
+    // pruefung und Einnahme-Hinweise nur eine geratene Position aus dem
+    // Produktnamen. Beim Bearbeiten bleibt die bestehende Liste erhalten
+    // (sie kommt nicht ueber dieses Formular zustande), beim Scan-/
+    // Katalog-Entwurf wird sie uebernommen, bei manueller Eingabe wird sie
+    // aus Name/Dosierung abgeleitet, damit der Matcher wenigstens den
+    // Namen versuchen kann.
+    const ingredientDetails = editId
+      ? Array.isArray(existingSupplement?.ingredientDetails)
+        ? existingSupplement.ingredientDetails
+        : []
+      : fromScan
+        ? pendingScanResult?.ingredientDetails ?? []
+        : trimmedName
+          ? [{ name: trimmedName, amount: amount.trim(), unit: unit.trim() }]
+          : [];
+
     const payload = {
       name: trimmedName,
       purpose: purpose.trim() || t('addSupplement.defaultPurpose'),
@@ -355,6 +373,7 @@ export default function AddSupplement() {
         amount: amount.trim(),
         unit: unit.trim(),
       },
+      ingredientDetails,
       childSafe,
       conflictIds: [],
       conflictTags: [],
