@@ -68,4 +68,8 @@ export default {
   // Refill reminder (StockForecast)
   'logic.notifications.refillTitle': 'Refill',
   'logic.notifications.refill': '{name} lasts about {days} more days.',
+
+  // Slot suggestion (SlotSuggestion.js): descriptive, not an instruction.
+  'logic.slotSuggestion.fatSoluble':
+    '{name} is fat-soluble and is absorbed better with a meal that contains some fat.',
 };

@@ -74,4 +74,8 @@ export default {
   // ── Nachfuell-Erinnerung (StockForecast) ────────────────────
   'logic.notifications.refillTitle': 'Nachfüllen',
   'logic.notifications.refill': '{name} reicht noch etwa {days} Tage.',
+
+  // Slot-Vorschlag (SlotSuggestion.js): deskriptiv, keine Anweisung.
+  'logic.slotSuggestion.fatSoluble':
+    '{name} ist fettlöslich und wird zu einer Mahlzeit mit etwas Fett besser aufgenommen.',
 };

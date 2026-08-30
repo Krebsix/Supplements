@@ -76,6 +76,7 @@ BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 | Datei | Aufgabe |
 |---|---|
 | `TimingEngine.js` | Tages-Slots, ordnet Supplements ein |
+| `SlotSuggestion.js` | Vorschlag des Einnahmezeitpunkts fuer ein neues Praeparat, nur aus belegten Regeln (INTAKE_GUIDANCE, fatSoluble), plus Ableitung der Slots aus der Haeufigkeit 1x/2x/3x. Ohne Regel Standard morgens mit `reason: null` |
 | `ConflictLogic.js` | Regelwerk fuer Konflikte und Synergien (haengt am Beispiel-Inventar) |
 | `InteractionCheck.js` | Wechselwirkungen und Einnahme-Hinweise auf Ebene der kanonischen Substanzen (`data/interactions.js`): Paar-Regeln mit Severity und Quelle, Einnahme-Hinweise (nuechtern, viel trinken, Tageszeit). UI-Verdrahtung noch offen |
 | `AbsorptionBlocker.js` | 2h-Globalsperre nach Flohsamenschalen (ID 43) |
