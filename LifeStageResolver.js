@@ -9,7 +9,14 @@
  * Schwangerschaftsfrage nur bei Frauen von 15 bis 50, Divers und "keine
  * Angabe" fragen ab 18 nach der Referenzgruppe, unter 4 Jahren gibt es
  * keine Gruppe.
+ *
+ * Das Alter wird allein aus dem Geburtsjahr berechnet: Wer spaet im Jahr
+ * Geburtstag hat, zaehlt bis dahin ein Jahr aelter. Fuer die Zuordnung zu
+ * einer Referenzgruppe ist das hinnehmbar, weil die Eingabe bewusst nur
+ * das Geburtsjahr abfragt, kein volles Geburtsdatum.
  */
+
+import { LIFE_STAGE_IDS } from './data/referenceValues';
 
 export const GENDERS = ['female', 'male', 'diverse', 'unspecified'];
 
@@ -68,6 +75,8 @@ export function resolveLifeStage({ gender, birthYear, extra, referenceOverride }
 
   // Divers oder keine Angabe: Referenzwerte sind nach Geschlecht
   // differenziert, die Wahl bleibt bei der Nutzerin.
-  if (referenceOverride) return { ...result, lifeStageId: referenceOverride };
+  if (referenceOverride && LIFE_STAGE_IDS.includes(referenceOverride)) {
+    return { ...result, lifeStageId: referenceOverride };
+  }
   return { ...result, needsExtra: 'reference' };
 }

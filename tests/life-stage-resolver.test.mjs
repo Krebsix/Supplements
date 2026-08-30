@@ -34,6 +34,7 @@ check('ab 65: senior, auch Frau', r({ gender: 'female', birthYear: yearFor(65) }
 check('Divers ab 18: Referenzfrage', (() => { const x = r({ gender: 'diverse', birthYear: yearFor(30) }); return x.lifeStageId === null && x.needsExtra === 'reference'; })());
 check('Keine Angabe ab 18: Referenzfrage', r({ gender: 'unspecified', birthYear: yearFor(30) }).needsExtra === 'reference');
 check('Divers mit Override: Override gilt', r({ gender: 'diverse', birthYear: yearFor(30), referenceOverride: 'adult-woman' }).lifeStageId === 'adult-woman');
+check('Divers mit unbekanntem Override: faellt auf Referenzfrage zurueck', (() => { const x = r({ gender: 'diverse', birthYear: yearFor(30), referenceOverride: 'nope' }); return x.lifeStageId === null && x.needsExtra === 'reference'; })());
 check('Divers unter 18: Altersgruppe ohne Frage', r({ gender: 'diverse', birthYear: yearFor(12) }).lifeStageId === 'teen-11-17');
 check('Divers ab 65: senior ohne Frage', r({ gender: 'diverse', birthYear: yearFor(70) }).lifeStageId === 'senior');
 
@@ -44,6 +45,19 @@ check('fehlendes Geburtsjahr: alles null', (() => { const x = r({ gender: 'male'
 check('unbekanntes Geschlecht wie keine Angabe', r({ gender: 'x', birthYear: yearFor(30) }).needsExtra === 'reference');
 check('jede gelieferte Gruppe existiert', ['female', 'male', 'diverse', 'unspecified'].every((g) => [5, 12, 30, 55, 70].every((age) => { const x = r({ gender: g, birthYear: yearFor(age), extra: 'none', referenceOverride: 'adult-man' }); return x.lifeStageId === null || LIFE_STAGE_IDS.includes(x.lifeStageId); })));
 check('GENDERS vollstaendig', GENDERS.length === 4);
+
+console.log('— Exakte Grenzen —');
+check('4: child-4-10', r({ gender: 'male', birthYear: yearFor(4) }).lifeStageId === 'child-4-10');
+check('10: child-4-10', r({ gender: 'male', birthYear: yearFor(10) }).lifeStageId === 'child-4-10');
+check('11: teen-11-17', r({ gender: 'male', birthYear: yearFor(11) }).lifeStageId === 'teen-11-17');
+check('17 Mann: teen-11-17', r({ gender: 'male', birthYear: yearFor(17) }).lifeStageId === 'teen-11-17');
+check('18 Mann: adult-man', r({ gender: 'male', birthYear: yearFor(18) }).lifeStageId === 'adult-man');
+check('15 Frau, extra none: teen-11-17', r({ gender: 'female', birthYear: yearFor(15), extra: EXTRA_PREGNANCY.NONE }).lifeStageId === 'teen-11-17');
+check('15 Frau, ohne extra: needsExtra pregnancy', r({ gender: 'female', birthYear: yearFor(15) }).needsExtra === 'pregnancy');
+check('51 Frau: menopause', r({ gender: 'female', birthYear: yearFor(51) }).lifeStageId === 'menopause');
+check('64 Frau: menopause', r({ gender: 'female', birthYear: yearFor(64) }).lifeStageId === 'menopause');
+check('64 Mann: adult-man', r({ gender: 'male', birthYear: yearFor(64) }).lifeStageId === 'adult-man');
+check('65 Mann: senior', r({ gender: 'male', birthYear: yearFor(65) }).lifeStageId === 'senior');
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }
 console.log('\nAlle LifeStageResolver-Tests bestanden.');
