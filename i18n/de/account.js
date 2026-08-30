@@ -42,7 +42,7 @@ export default {
   'account.signedIn.as': 'Angemeldet als {email}',
   'account.signedIn.keyReady': 'Datenschlüssel ist für diese Sitzung entsperrt.',
   'account.signedIn.keyLocked':
-    'Datenschlüssel wird beim nächsten Anmelden mit Passwort entsperrt.',
+    'Datenschlüssel ist auf diesem Gerät nicht hinterlegt. Melde dich einmal ab und wieder an, dann ist das Cloud-Backup verfügbar.',
   'account.signedIn.recoveryNote':
     'Dein Recovery-Key wurde beim Anlegen einmalig angezeigt. Ohne Passwort und ohne Recovery-Key sind synchronisierte Daten nicht wiederherstellbar. Daten auf diesem Gerät sind davon nicht betroffen.',
   'account.signedIn.syncNote':

@@ -2,6 +2,7 @@
 // Fake-Client. Der Store haelt den Datenschluessel nur im Speicher.
 
 import { webcrypto } from 'node:crypto';
+import { bytesToHex } from '@noble/hashes/utils.js';
 import { ACCOUNT_STATUS, createAccountStore } from '../AccountStore';
 import { unlockWithPassword } from '../AccountCrypto';
 
@@ -285,6 +286,74 @@ console.log('— onSessionChange bei Session-Wechsel —');
 
   await store.getState().signOut();
   check('onSessionChange bei Logout mit null', calls[calls.length - 1] === null);
+}
+
+console.log('— keyStore: Datenschluessel im Schluesselbund —');
+{
+  const makeKeyStore = () => {
+    let value = null;
+    const log = [];
+    return {
+      log,
+      get value() { return value; },
+      save: async (hex) => { value = hex; log.push(['save', hex]); },
+      load: async () => { log.push(['load']); return value; },
+      clear: async () => { value = null; log.push(['clear']); },
+    };
+  };
+
+  // signIn speichert, signOut loescht
+  const client = makeClient();
+  const keyStore = makeKeyStore();
+  const store = createAccountStore({ ...deps(client), keyStore });
+  await store.getState().prepareSignUp('a@b.de', 'korrektes-pferd-batterie');
+  await store.getState().confirmSignUp();
+  await store.getState().signIn('a@b.de', 'korrektes-pferd-batterie');
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check('signIn speichert den Schluessel', typeof keyStore.value === 'string' && keyStore.value.length === 64);
+  check('gespeicherter Wert entspricht dataKey', keyStore.value === bytesToHex(store.getState().dataKey));
+  await store.getState().signOut();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check('signOut loescht den Schluessel', keyStore.value === null);
+  check('signOut leert dataKey im Store', store.getState().dataKey === null);
+
+  // initialize mit Session laedt den Schluessel
+  const client2 = makeClient();
+  const keyStore2 = makeKeyStore();
+  await keyStore2.save('ab'.repeat(32));
+  client2.emit('SIGNED_IN', { access_token: 'at', user: { id: 'u1', email: 'a@b.de' } });
+  const store2 = createAccountStore({ ...deps(client2), keyStore: keyStore2 });
+  await store2.getState().initialize();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check('initialize laedt den Schluessel aus dem Schluesselbund', store2.getState().dataKey && bytesToHex(store2.getState().dataKey) === 'ab'.repeat(32));
+
+  // initialize ohne Session raeumt den Schluesselbund
+  const client3 = makeClient();
+  const keyStore3 = makeKeyStore();
+  await keyStore3.save('cd'.repeat(32));
+  const store3 = createAccountStore({ ...deps(client3), keyStore: keyStore3 });
+  await store3.getState().initialize();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check('ohne Session wird der Schluesselbund geleert', keyStore3.value === null);
+
+  // SIGNED_OUT-Ereignis (Token abgelaufen) loescht ebenfalls
+  const client4 = makeClient();
+  const keyStore4 = makeKeyStore();
+  const store4 = createAccountStore({ ...deps(client4), keyStore: keyStore4 });
+  await store4.getState().initialize();
+  await store4.getState().prepareSignUp('a@b.de', 'korrektes-pferd-batterie');
+  await store4.getState().confirmSignUp();
+  await store4.getState().signIn('a@b.de', 'korrektes-pferd-batterie');
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  client4.emit('SIGNED_OUT', null);
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check('SIGNED_OUT leert den Schluesselbund', keyStore4.value === null);
+
+  // Ohne keyStore laeuft alles wie bisher (Default no-op)
+  const client5 = makeClient();
+  const store5 = createAccountStore(deps(client5));
+  await store5.getState().initialize();
+  check('ohne keyStore kein Fehler', store5.getState().status === ACCOUNT_STATUS.ANONYMOUS);
 }
 
 if (failures > 0) { console.error(`\n${failures} Fehler`); process.exit(1); }

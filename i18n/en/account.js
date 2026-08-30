@@ -40,7 +40,8 @@ export default {
   'account.signedIn.title': 'Signed in',
   'account.signedIn.as': 'Signed in as {email}',
   'account.signedIn.keyReady': 'Data key is unlocked for this session.',
-  'account.signedIn.keyLocked': 'Data key will be unlocked at the next sign in with password.',
+  'account.signedIn.keyLocked':
+    'The data key is not stored on this device. Sign out and back in once, then cloud backup is available.',
   'account.signedIn.recoveryNote':
     'Your recovery key was shown once when the account was created. Without password and without recovery key, synced data cannot be restored. Data on this device is not affected.',
   'account.signedIn.syncNote':

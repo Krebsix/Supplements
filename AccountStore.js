@@ -16,6 +16,7 @@
  */
 
 import { create } from 'zustand';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js';
 
 import { createKeyBundle } from './AccountCrypto';
 import {
@@ -47,6 +48,10 @@ const ANONYMOUS_STATE = {
   pendingEmail: null,
 };
 
+// Schluesselbund-Adapter (Spec Entscheidung 4). Default no-op, damit
+// Tests und aeltere Aufrufer ohne ihn laufen.
+const NOOP_KEY_STORE = { save: async () => {}, load: async () => null, clear: async () => {} };
+
 export function createAccountStore({
   client,
   randomBytes,
@@ -57,6 +62,10 @@ export function createAccountStore({
   // Verknuepft die Kaufschicht mit dem Konto (Task 4). Default no-op,
   // damit Tests ohne diese Abhaengigkeit weiterlaufen.
   onSessionChange = () => {},
+  // Spiegelt den Datenschluessel in den Geraete-Schluesselbund (Task 3
+  // dieses Plans). Default no-op, damit Tests und aeltere Aufrufer ohne
+  // ihn weiterlaufen.
+  keyStore = NOOP_KEY_STORE,
 }) {
   return create((set, get) => {
     // Zaehlt laufende Aktionen: zwei ueberlappende Aufrufe (z. B. ein
@@ -119,6 +128,16 @@ export function createAccountStore({
     // Session-Aktualisierung erneut mit demselben Konto verknuepfen.
     let previousUserId = null;
 
+    // Datenschluessel setzen UND im Schluesselbund spiegeln. Fehler des
+    // Schluesselbunds blockieren nie die Konto-Aktion (nur Log): Ohne
+    // gespeicherten Schluessel entfaellt das automatische Backup bis zum
+    // naechsten Login, mehr nicht.
+    const setDataKey = (dataKey) => {
+      set({ dataKey: dataKey ?? null });
+      const op = dataKey ? keyStore.save(bytesToHex(dataKey)) : keyStore.clear();
+      Promise.resolve(op).catch((error) => console.error('[Account] Schluesselbund', error));
+    };
+
     const applySession = (session) => {
       const userId = session?.user?.id ?? null;
       if (session?.user) {
@@ -130,6 +149,7 @@ export function createAccountStore({
         });
       } else {
         set({ ...ANONYMOUS_STATE });
+        Promise.resolve(keyStore.clear()).catch(() => {});
       }
       if (userId !== previousUserId) {
         previousUserId = userId;
@@ -157,6 +177,10 @@ export function createAccountStore({
         const session = await restoreSession(client).catch(() => null);
         applySession(session);
         ensureListening();
+        if (session?.user) {
+          const hex = await keyStore.load().catch(() => null);
+          if (typeof hex === 'string' && /^[0-9a-f]{64}$/.test(hex)) set({ dataKey: hexToBytes(hex) });
+        }
       },
 
       prepareSignUp: (email, password) =>
@@ -185,7 +209,7 @@ export function createAccountStore({
           set({ pendingSignUp: null });
           // Nur wenn Supabase sofort eine Session liefert (Bestaetigung
           // aus), ist der Schluessel jetzt schon nutzbar.
-          if (!result.needsConfirmation) set({ dataKey: pending.bundle.dataKey });
+          if (!result.needsConfirmation) setDataKey(pending.bundle.dataKey);
           return result;
         }),
 
@@ -195,7 +219,7 @@ export function createAccountStore({
         withBusy(async () => {
           const result = await signInWithEmail(client, { email: email.trim(), password });
           applySession(result.session);
-          set({ dataKey: result.dataKey });
+          setDataKey(result.dataKey);
         }),
 
       signOut: () =>
@@ -215,8 +239,8 @@ export function createAccountStore({
             recoveryKeyText,
             randomBytes,
           });
+          setDataKey(result.dataKey);
           set({
-            dataKey: result.dataKey,
             pendingRecoveryKeyText: result.recoveryKeyText,
             recoveryPending: false,
           });
@@ -247,7 +271,7 @@ export function createAccountStore({
       changePassword: (currentPassword, newPassword) =>
         withBusy(async () => {
           const result = await changePassword(client, { userId: get().userId, currentPassword, newPassword, randomBytes });
-          set({ dataKey: result.dataKey });
+          setDataKey(result.dataKey);
         }),
 
       changeEmail: (newEmail) =>
