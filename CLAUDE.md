@@ -168,29 +168,56 @@ aufgeteilt, Schluessel flach (`dashboard.title`).
 
 ---
 
+## Website (`web/`)
+
+Astro-Projekt, statisches Output, eigenes `package.json`. Landingpage DE
+unter `/`, EN unter `/en/`; Rechtsseiten werden weiter aus
+`data/legalContent.js` generiert (`npm run build:legal` im Root schreibt
+nach `web/public/datenschutz|impressum|nutzung/index.html`, nie von Hand
+editieren). Hosting: Vercel-Projekt `mysuplea-legal`, Root Directory `web/`.
+
+```bash
+cd web
+npm run dev        # lokal
+npm run build      # dist/
+npm test           # Woerterbuch-Compliance + dist-Pruefung (vorher build)
+npm run check      # astro check (TypeScript strict)
+npm run og         # OG-Bilder aus Icon + Headline (committen)
+```
+
+- Texte NUR in `web/src/i18n/<locale>.ts` (`satisfies Dictionary`). Neue
+  Sprache: Datei anlegen, in `i18n/index.ts` und `astro.config.mjs`
+  eintragen, Seite unter `src/pages/<locale>/`.
+- `web/tests/i18n.test.mjs` erzwingt dieselben Regeln wie die App:
+  keine Gedankenstriche, keine Verbotswoerter, echte Umlaute, "ohne Konto
+  nutzbar" statt "kein Konto".
+- Farben nur ueber `web/src/styles/tokens.css`; der Root-Test prueft jeden
+  Wert gegen `theme.js`. Keine externen Skripte, Fonts oder Analytics.
+- Beta-Formular postet an Loops; Form-ID aus `PUBLIC_LOOPS_FORM_ID`.
+  Runbook bis live: `launch/landingpage.md`.
+
+---
+
 ## Design
 
 Tokens in `theme.js`. **Keine Hex-Werte in Screens oder Komponenten** — das
 ist eine Projektregel und wird eingehalten (Stand: null Treffer).
 
-Die Palette ist bewusst nicht die Tailwind-Vorgabe: Vorher lief alles auf
-slate-900/slate-500/teal-700, also genau den Werten, die praktisch jedes
-schnell gebaute Projekt verwendet. Die Richtung heisst jetzt "Papier und
-Tinte" — warmes Off-White statt blaustichigem Grau, tiefes Petrol
-(`colors.accent`) statt Teal, gedeckte Erdtoene fuer Warnungen statt
-Signalampel.
+Richtung seit 2026-08-12 (Begruendung im Kopf von `theme.js`): **native
+iOS-Anmutung**. Neutrale Systemgrautoene (`canvas` #f2f2f7), weisse
+Flaechen ohne Rahmen, Systemschrift (SF Pro / Roboto, keine geladenen
+Fonts, keine `fontFamily`), Fliesstext 17 Punkt. Das tiefe Petrol
+(`colors.accent`) bleibt als einzige Markenfarbe, Warnungen bleiben
+gedeckt. Die fruehere Richtung "Papier und Tinte" (Creme, Newsreader-Serife,
+Instrument Sans) ist damit abgeloest; die Website in `web/` folgt denselben
+Tokens.
 
-- Eigene Schriften (seit 2026-08-09): **Newsreader** (Serife) fuer
-  `type.display/heading/subheading/numeral/quote`, **Instrument Sans**
-  fuer Fliesstext und Bedienelemente. Geladen in `app/_layout.jsx`
-  (useFonts), Namen in `theme.js` (`fonts`). Bei Schnitt-Fonts nie
-  zusaetzlich `fontWeight` setzen (Android-Faux-Bold).
-- Keine vollrunden Pillen mehr (`borderRadius: 999`), nur moderate Radien.
+- Keine vollrunden Pillen (`borderRadius: 999`), nur moderate Radien.
 - Tab- und UI-Icons kommen aus `@expo/vector-icons` (Feather, gebuendelt,
   kein Font-Download). Keine Emojis als Icons: Das war das eine Element,
   das dem redaktionellen Erscheinungsbild widersprach.
 - Der native Navigations-Header laeuft ueber `components/navigationTheme.js`
-  auf denselben Tokens (Serifen-Titel, canvas-Hintergrund).
+  auf denselben Tokens (canvas-Hintergrund).
 - Statusfarben ueber `toneFor(level)`. Eine Grenzwertueberschreitung ist ein
   Hinweis, kein Alarm — deshalb gedeckt.
 - **Keine Gedankenstriche in Nutzertexten.** Doppelpunkt, Komma oder Punkt

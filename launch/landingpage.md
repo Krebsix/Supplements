@@ -1,6 +1,32 @@
 # Landingpage MySuplea: Inhalte, Copy, Pflichtelemente
 
-Stand: 2026-08-29. Copy-paste-fertig. Haelt die Compliance-Regeln der App
+Stand: 2026-08-30. GEBAUT: Astro-Projekt in `web/` (DE unter `/`, EN unter
+`/en/`, Rechtsseiten unter `/datenschutz/`, `/impressum/`, `/nutzung/`).
+Spec: docs/superpowers/specs/2026-08-30-website-design.md. Der Text unten
+ist die Copy-Quelle; die gebaute Fassung liegt in `web/src/i18n/de.ts` und
+`en.ts` (dort mit echten Umlauten, Test erzwingt die Compliance-Regeln).
+
+## Runbook bis live (Nadines Schritte)
+
+1. Loops: Account, Formular anlegen, Double-Opt-In aktivieren, Form-ID
+   kopieren. Vercel-Projekt `mysuplea-legal`: Env `PUBLIC_LOOPS_FORM_ID`
+   setzen (Encrypted, nicht Sensitive). Ohne die ID zeigt die Seite das
+   Formular deaktiviert mit Kontakt-Mail.
+2. Vercel: Root Directory des Projekts auf `web/` pruefen (Astro wird
+   erkannt), Build `npm run build`, Output `dist`.
+3. Domain mysuplea.com kaufen und dem Vercel-Projekt zuweisen. Alte
+   URLs (`/imprint.html`, `/terms.html`, `/index.html`) leiten per
+   `web/vercel.json` auf die neuen Pfade um.
+4. Datenschutzerklaerung: Website-Abschnitt in `data/legalContent.js`
+   nachziehen (Vercel-Logs, Beta-Anmeldung ueber Loops mit DPA), dann
+   `npm run build:legal` und `web/public/` mitcommitten.
+5. Kontakt-Mail `hello@mysuplea.com` (web/src/config.ts) einrichten oder
+   auf die indoohome-Adresse aendern.
+6. Impressum-Platzhalter (Vertretung, EU-Vertreter) fuellen.
+
+Lokal: `cd web && npm install && npm run dev`. OG-Bilder neu: `npm run og`.
+
+Copy-paste-fertig. Haelt die Compliance-Regeln der App
 ein (keine Heilversprechen, keine Empfehlungen, keine Gedankenstriche) und
 den Stand nach der Konto-Grundlage: "ohne Konto nutzbar", nicht mehr
 "kein Konto".
@@ -304,17 +330,13 @@ Datenschutz.
 
 ---
 
-## 8. Entscheidungen, die vor dem Bau faellig sind
+## 8. Entscheidungen (getroffen 2026-08-30)
 
-1. **Domain:** mysuplea.com kaufen, ja oder nein. Empfehlung: ja, heute.
-   Kostet unter 20 Euro im Jahr und schliesst den Umzug spaeter aus.
-2. **Beta-Anmeldung, Anbieter:** Empfehlung Buttondown oder Loops (beide
-   mit DPA, Double-Opt-In eingebaut). Kein Mailchimp (US-Datenverarbeitung
-   ohne Not, Banner-Zwang durch deren Tracking-Pixel).
-3. **Analytics:** Empfehlung keine. Product-Hunt- und Presse-Traffic
-   sieht man an den Beta-Anmeldungen. Ohne Tracking bleibt die Seite
-   bannerfrei, und "kein Tracking" steht dann nicht nur in der App.
-4. **Englische Version:** Empfehlung erst nach dem DACH-Launch. Die
-   Presse-Ziele sind deutsch, die Fachtexte der App sind zweisprachig,
-   die Seite kann nachziehen.
-5. **Preise anzeigen:** erst nach Festlegung der Store-Preisstufen.
+1. **Domain:** mysuplea.com, Kauf steht noch aus (Runbook oben).
+2. **Beta-Anmeldung:** Loops (Nadine, 2026-08-30). Formular gebaut,
+   Form-ID kommt als Vercel-Env.
+3. **Analytics:** keine. Seite ist bannerfrei, laedt nichts nach.
+4. **Englische Version:** sofort mit gebaut (Nadine, 2026-08-30),
+   Woerterbuch-Architektur erlaubt weitere Sprachen mit einer Datei.
+5. **Preise anzeigen:** nein, bis die Store-Preisstufen feststehen.
+   Abschnitt nennt Free-Umfang und Pro-Umfang ohne Zahlen.
