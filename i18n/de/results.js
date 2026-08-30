@@ -18,6 +18,11 @@ export default {
   'results.reviewPoint_other': '{count} Prüfpunkte',
   'results.summaryComplete': 'Vollständig',
   'results.summaryOpen': '{count} offen',
+  // Offene Pruefpunkte einzeln, direkt nachtragbar.
+  'results.missing.brand': 'Marke nicht erkannt',
+  'results.missing.dosage': 'Dosierung oder Einheit nicht erkannt',
+  'results.missing.ingredients': 'Keine Inhaltsstoffe erkannt',
+  'results.completeAction': 'Angaben jetzt vervollständigen',
   'results.summaryTextComplete':
     'Alle zentralen Felder sind vorhanden, müssen aber weiterhin mit dem Produktetikett abgeglichen werden.',
   'results.summaryTextIncomplete':

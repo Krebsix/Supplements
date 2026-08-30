@@ -20,6 +20,10 @@ export default {
   'results.reviewPoint_other': '{count} review points',
   'results.summaryComplete': 'Complete',
   'results.summaryOpen': '{count} open',
+  'results.missing.brand': 'Brand not detected',
+  'results.missing.dosage': 'Dosage or unit not detected',
+  'results.missing.ingredients': 'No ingredients detected',
+  'results.completeAction': 'Complete the details now',
   'results.summaryTextComplete':
     'All key fields are present, but still need to be checked against the product label.',
   'results.summaryTextIncomplete':

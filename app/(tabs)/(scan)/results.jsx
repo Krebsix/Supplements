@@ -105,7 +105,7 @@ export default function ResultsScreen() {
 
   const matchedCount = substanceProfiles.filter((p) => p.matched).length;
 
-  function handleOpenReviewForm() {
+  function handleOpenReviewForm(extraParams = '') {
     if (!pendingScanResult) {
       const storedScan = saveScanResult({
         ...mockScanResult,
@@ -115,7 +115,7 @@ export default function ResultsScreen() {
       setPendingScanResult(storedScan);
     }
 
-    router.push('/AddSupplement?fromScan=1');
+    router.push(`/AddSupplement?fromScan=1${extraParams}`);
   }
 
   function handleRescan() {
@@ -185,6 +185,30 @@ export default function ResultsScreen() {
             ? t('results.summaryTextComplete')
             : t('results.summaryTextIncomplete')}
         </Text>
+
+        {/* Offene Punkte einzeln, direkt nachtragbar: der Knopf springt in
+            den Aufnehmen-Screen mit aufgeklappten Produktfeldern (?edit=1). */}
+        {openCriticalCount > 0 ? (
+          <>
+            {!brandDetected ? (
+              <Text style={styles.missingRow}>· {t('results.missing.brand')}</Text>
+            ) : null}
+            {!dosageDetected ? (
+              <Text style={styles.missingRow}>· {t('results.missing.dosage')}</Text>
+            ) : null}
+            {ingredientCount === 0 ? (
+              <Text style={styles.missingRow}>· {t('results.missing.ingredients')}</Text>
+            ) : null}
+            <TouchableOpacity
+              style={styles.completeButton}
+              onPress={() => handleOpenReviewForm('&edit=1')}
+              activeOpacity={0.75}
+              accessibilityRole="button"
+            >
+              <Text style={styles.completeButtonText}>{t('results.completeAction')}</Text>
+            </TouchableOpacity>
+          </>
+        ) : null}
       </View>
 
       <SupplementResultCard result={result} />
@@ -352,6 +376,24 @@ const styles = StyleSheet.create({
   },
   summaryBadgeTextComplete: {
     color: toneFor('affirm').ink,
+  },
+  missingRow: {
+    ...type.small,
+    color: cautionTone.ink,
+    marginTop: space.xs,
+  },
+  completeButton: {
+    alignSelf: 'flex-start',
+    marginTop: space.md,
+    paddingVertical: space.sm,
+    paddingHorizontal: space.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.accent,
+  },
+  completeButtonText: {
+    ...type.small,
+    color: colors.surface,
+    fontWeight: '600',
   },
   summaryText: {
     color: cautionTone.ink,

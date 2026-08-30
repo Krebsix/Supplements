@@ -76,7 +76,10 @@ export default function SubstanceInsightCard({ profile }) {
         ) : null}
       </View>
 
-      <Text style={styles.what}>{profile.what}</Text>
+      {/* Eingeklappt zeigt die Karte nur Kopf, Lebensphasen-Hinweise und
+          Referenzwert; Beschreibung, Form und Einsatzgebiete kommen beim
+          Aufklappen. Uebersicht vor Vollstaendigkeit (Geraetetest 31.08.). */}
+      {expanded ? <Text style={styles.what}>{profile.what}</Text> : null}
 
       {/* Lebensphasen-Hinweise stehen bewusst vor allem anderen —
           eine Kontraindikation darf nicht im Aufklappmenue verschwinden. */}
@@ -121,7 +124,7 @@ export default function SubstanceInsightCard({ profile }) {
         </View>
       ) : null}
 
-      {profile.form ? (
+      {expanded && profile.form ? (
         <View style={styles.formBox}>
           <View style={styles.formHeader}>
             <Text style={styles.formLabel}>
@@ -138,13 +141,17 @@ export default function SubstanceInsightCard({ profile }) {
         </View>
       ) : null}
 
-      <Text style={styles.sectionLabel}>{t('components.insight.useCases')}</Text>
-      {profile.useCases.slice(0, expanded ? undefined : 3).map((useCase) => (
-        <View key={useCase.topic} style={styles.useCase}>
-          <Text style={styles.useCaseTopic}>{useCase.topic}</Text>
-          <Text style={styles.useCaseNote}>{useCase.note}</Text>
-        </View>
-      ))}
+      {expanded ? (
+        <>
+          <Text style={styles.sectionLabel}>{t('components.insight.useCases')}</Text>
+          {profile.useCases.map((useCase) => (
+            <View key={useCase.topic} style={styles.useCase}>
+              <Text style={styles.useCaseTopic}>{useCase.topic}</Text>
+              <Text style={styles.useCaseNote}>{useCase.note}</Text>
+            </View>
+          ))}
+        </>
+      ) : null}
 
       {expanded ? (
         <>

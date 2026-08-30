@@ -80,7 +80,10 @@ export default function AddSupplement() {
   const [amount, setAmount] = useState('');
   const [unit, setUnit] = useState('');
   const [unitOther, setUnitOther] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(false);
+  // ?edit=1 (aus den Pruefpunkten des Scan-Ergebnisses): Produktfelder
+  // direkt aufgeklappt, damit fehlende Angaben sofort nachgetragen werden.
+  const editParam = Array.isArray(params.edit) ? params.edit[0] : params.edit;
+  const [editingProduct, setEditingProduct] = useState(editParam === '1');
 
   // Zwei Fragen
   const [timesPerDay, setTimesPerDay] = useState(1);
