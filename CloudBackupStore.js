@@ -26,6 +26,14 @@
  *   "echte Aenderung" von einer Restore-Nachwirkung zu unterscheiden, und
  *   ausreichend, weil nach einem Restore ohnehin kein zweiter
  *   scheduleUpload()-Aufruf folgt, bevor eine echte Aenderung passiert.
+ * - Ein unlesbarer Server-Stand (falscher Schluessel, z. B. Passwort-Reset
+ *   ohne Recovery-Key) wird NIE still ersetzt: checkOnLogin setzt dafuer
+ *   pendingDecision mit kind 'unreadable' und wartet auf resolveDecision().
+ *   Ein Upload faende sonst ohne Rueckfrage statt, obwohl der Server-Stand
+ *   moeglicherweise nur mit einem alten Passwort wieder lesbar waere.
+ * - checkOnLogin ist single-flight: ein zweiter Aufruf, waehrend der erste
+ *   noch laeuft, bekommt dieselbe Promise zurueck statt einen eigenen
+ *   Netzwerk-Roundtrip und ein zweites pendingDecision auszuloesen.
  */
 
 import { create } from 'zustand';
@@ -80,6 +88,7 @@ export function createCloudBackupStore(deps, { storage } = {}) {
         let timerId = null;
         let suppress = false;
         let justRestored = false;
+        let checking = null;
 
         const ready = () => {
           const account = getAccount();
@@ -181,65 +190,104 @@ export function createCloudBackupStore(deps, { storage } = {}) {
 
           uploadNow: () => runUpload(),
 
-          checkOnLogin: async () => {
-            if (!ready()) return 'none';
-            let remote;
-            try {
-              remote = await fetchRemote();
-            } catch (error) {
-              const code = errorCode(error);
-              set({ status: code === 'network' ? 'offline' : 'error', lastError: code });
-              return 'none';
-            }
-            set({ remoteExportedAt: remote?.exported_at ?? null, remoteDeviceLabel: remote?.device_label ?? null });
-            const decision = decideOnLogin({
-              remote,
-              localHasData: hasLocalData(getMainState()),
-              lastUploadedAt: get().lastUploadedAt,
-            });
-            if (decision === 'restore') {
+          // Single-Flight: zwei ueberlappende Aufrufe (z. B. Start-Effekt und
+          // App-Vordergrund-Wechsel kurz hintereinander) teilen sich EINE
+          // Promise. Ohne das koennten zwei parallele Laeufe je einen
+          // select-Call und je ein eigenes pendingDecision erzeugen.
+          checkOnLogin: () => {
+            if (checking) return checking;
+            checking = (async () => {
+              if (!ready()) return 'none';
+              let remote;
               try {
-                await restoreFrom(remote);
-                return 'restore';
+                remote = await fetchRemote();
               } catch (error) {
-                // doUpload setzt lastError beim Start auf null: der Code des
-                // Restore-Fehlers muss deshalb NACH dem Upload gesetzt
-                // werden, sonst verschluckt der (erfolgreiche) Upload ihn.
                 const code = errorCode(error);
-                set({ status: 'idle' });
-                await runUpload();
-                set({ lastError: code });
-                return 'upload';
+                set({ status: code === 'network' ? 'offline' : 'error', lastError: code });
+                return 'none';
               }
-            }
-            if (decision === 'ask') {
-              try {
-                const opened = decryptBackup(remote.ciphertext, getAccount().dataKey);
+              set({ remoteExportedAt: remote?.exported_at ?? null, remoteDeviceLabel: remote?.device_label ?? null });
+              const decision = decideOnLogin({
+                remote,
+                localHasData: hasLocalData(getMainState()),
+                lastUploadedAt: get().lastUploadedAt,
+              });
+              if (decision === 'restore') {
+                try {
+                  await restoreFrom(remote);
+                  return 'restore';
+                } catch (error) {
+                  const code = errorCode(error);
+                  if (code === 'wrongKey') {
+                    // Unlesbar heisst NICHT automatisch "unser Stand ersetzt
+                    // ihn": der Server-Stand koennte mit einem frueheren
+                    // Passwort (nach Reset ohne Recovery-Key auf einem
+                    // anderen Geraet) noch lesbar sein. Also fragen statt
+                    // still hochladen.
+                    set({ pendingDecision: { kind: 'unreadable', remote, counts: null }, status: 'idle', lastError: 'wrongKey' });
+                    return 'ask';
+                  }
+                  // Sonstiger Restore-Fehler (z. B. beschaedigtes Payload):
+                  // doUpload setzt lastError beim Start auf null, der Fehler-
+                  // Code muss deshalb NACH dem Upload gesetzt werden, sonst
+                  // verschluckt der (erfolgreiche) Upload ihn.
+                  set({ status: 'idle' });
+                  await runUpload();
+                  set({ lastError: code });
+                  return 'upload';
+                }
+              }
+              if (decision === 'ask') {
                 // Ein aus scheduleUpload() noch offener Timer darf jetzt
-                // nicht mehr feuern: "ask" blockiert Uploads bis zur
+                // nicht mehr feuern, egal ob sich der Server-Stand oeffnen
+                // laesst oder nicht: "ask" blockiert Uploads bis zur
                 // Entscheidung (wie restoreFrom es fuer den Restore-Fall
                 // schon tut).
                 if (timerId) { cancel(timerId); timerId = null; }
-                set({ pendingDecision: { remote, counts: countsOf(opened.data) } });
-                return 'ask';
-              } catch (error) {
-                // Unlesbar (z. B. Reset ohne Recovery-Key): unser Stand
-                // ersetzt ihn, aber lastError muss NACH dem Upload gesetzt
-                // werden (siehe Kommentar oben beim restore-Zweig).
-                const code = errorCode(error);
-                await runUpload();
-                set({ lastError: code });
-                return 'upload';
+                try {
+                  const opened = decryptBackup(remote.ciphertext, getAccount().dataKey);
+                  set({ pendingDecision: { kind: 'newer', remote, counts: countsOf(opened.data) } });
+                  return 'ask';
+                } catch (error) {
+                  const code = errorCode(error);
+                  if (code === 'wrongKey') {
+                    // Realer Fall: neues Handy, Passwort-Reset ohne Recovery-
+                    // Key auf einem anderen Geraet, jetzt hier einloggen. Der
+                    // Server-Stand darf nicht still verschwinden.
+                    set({ pendingDecision: { kind: 'unreadable', remote, counts: null }, status: 'idle', lastError: 'wrongKey' });
+                    return 'ask';
+                  }
+                  // Sonstiger Fehler beim Entschluesseln (kein Schluessel-
+                  // Problem, z. B. beschaedigtes Payload): unser Stand
+                  // ersetzt ihn, lastError NACH dem Upload setzen (siehe
+                  // Kommentar oben beim restore-Zweig).
+                  await runUpload();
+                  set({ lastError: code });
+                  return 'upload';
+                }
               }
-            }
-            if (decision === 'upload') await runUpload();
-            return decision;
+              if (decision === 'upload') await runUpload();
+              return decision;
+            })().finally(() => { checking = null; });
+            return checking;
           },
 
           resolveDecision: async (choice) => {
             const pending = get().pendingDecision;
             set({ pendingDecision: null });
             if (!pending) return;
+            if (pending.kind === 'unreadable') {
+              if (choice === 'replace') {
+                await runUpload();
+              } else {
+                // 'keep': Automatik aus, bis die Nutzerin den Server-Stand
+                // per Recovery-Key wieder lesbar gemacht hat oder bewusst
+                // ersetzt. lastError bleibt 'wrongKey' stehen, damit die
+                // Oberflaeche den Hinweis weiter zeigen kann.
+                set({ autoBackup: false, status: 'idle' });
+              }
+              return;
+            }
             if (choice === 'restore') {
               try {
                 await restoreFrom(pending.remote);

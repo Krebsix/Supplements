@@ -175,7 +175,7 @@ console.log('— checkOnLogin: ask cancelt einen bereits laufenden Timer (kein U
   check('nach resolveDecision genau ein Upload', client.calls.filter(([n]) => n === 'upsert').length === 1);
 }
 
-console.log('— checkOnLogin: unser eigener Stand → upload; falscher Schluessel → wrongKey + upload —');
+console.log('— checkOnLogin: unser eigener Stand → upload; falscher Schluessel bei fremdem Stand → ask statt stillem Ersetzen —');
 {
   const key = await randomBytes(32);
   const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }], labValues: [], intakeLogs: [] }, key, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
@@ -188,15 +188,78 @@ console.log('— checkOnLogin: unser eigener Stand → upload; falscher Schluess
   check('hochgeladen', client.calls.filter(([n]) => n === 'upsert').length === 1);
 }
 {
+  // Lokaler Stand ist NICHT leer (ask-Zweig, nicht restore-Zweig), Server-
+  // Stand mit fremdem Schluessel verschluesselt. Frueher lud das den lokalen
+  // Stand still hoch und ersetzte den einzigen Server-Stand. Jetzt: Dialog.
   const key = await randomBytes(32);
   const otherKey = await randomBytes(32);
   const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }], labValues: [], intakeLogs: [] }, otherKey, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
   const row = { ciphertext: sealed.ciphertext, payload_version: 1, device_label: 'Fremd', exported_at: sealed.exportedAt, updated_at: sealed.exportedAt };
   const { store, client } = await setup({ row, account: { signedIn: true, userId: 'u1', dataKey: key } });
   const decision = await store.getState().checkOnLogin();
-  check('unlesbar → upload', decision === 'upload');
+  check('unlesbar → ask (nicht mehr still upload)', decision === 'ask');
   check('lastError wrongKey', store.getState().lastError === 'wrongKey');
-  check('ersetzt den Stand', client.calls.filter(([n]) => n === 'upsert').length === 1);
+  check('pendingDecision.kind unreadable', store.getState().pendingDecision?.kind === 'unreadable');
+  check('nichts hochgeladen', client.calls.filter(([n]) => n === 'upsert').length === 0);
+}
+
+console.log('— checkOnLogin: unlesbarer Server-Stand bei leerem lokalen Stand (restore-Zweig) darf nie still ersetzt werden —');
+{
+  // (a) leerer lokaler Stand + unlesbarer Server-Stand.
+  const key = await randomBytes(32);
+  const otherKey = await randomBytes(32);
+  const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }], labValues: [], intakeLogs: [] }, otherKey, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
+  const row = { ciphertext: sealed.ciphertext, payload_version: 1, device_label: 'Altes Handy', exported_at: sealed.exportedAt, updated_at: sealed.exportedAt };
+  const { store, client, timer } = await setup({ row, state: { userSupplements: [], labValues: [], intakeLogs: [] }, account: { signedIn: true, userId: 'u1', dataKey: key } });
+  const decision = await store.getState().checkOnLogin();
+  check('Entscheidung ask', decision === 'ask');
+  check('kein upsert', client.calls.filter(([n]) => n === 'upsert').length === 0);
+  check('pendingDecision.kind unreadable', store.getState().pendingDecision?.kind === 'unreadable');
+  check('pendingDecision.counts null', store.getState().pendingDecision?.counts === null);
+  check('lastError wrongKey', store.getState().lastError === 'wrongKey');
+  await timer.flush();
+  check('auch nach timer.flush() weiterhin kein upsert', client.calls.filter(([n]) => n === 'upsert').length === 0);
+}
+{
+  // (b) resolveDecision('keep'): Automatik aus, kein Upload.
+  const key = await randomBytes(32);
+  const otherKey = await randomBytes(32);
+  const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }], labValues: [], intakeLogs: [] }, otherKey, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
+  const row = { ciphertext: sealed.ciphertext, payload_version: 1, device_label: 'Altes Handy', exported_at: sealed.exportedAt, updated_at: sealed.exportedAt };
+  const { store, client } = await setup({ row, state: { userSupplements: [], labValues: [], intakeLogs: [] }, account: { signedIn: true, userId: 'u1', dataKey: key } });
+  await store.getState().checkOnLogin();
+  await store.getState().resolveDecision('keep');
+  check('keep: autoBackup aus', store.getState().autoBackup === false);
+  check('keep: kein upsert', client.calls.filter(([n]) => n === 'upsert').length === 0);
+  check('keep: pendingDecision geleert', store.getState().pendingDecision === null);
+  check('keep: lastError bleibt wrongKey', store.getState().lastError === 'wrongKey');
+}
+{
+  // (c) resolveDecision('replace'): genau ein Upload.
+  const key = await randomBytes(32);
+  const otherKey = await randomBytes(32);
+  const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }], labValues: [], intakeLogs: [] }, otherKey, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
+  const row = { ciphertext: sealed.ciphertext, payload_version: 1, device_label: 'Altes Handy', exported_at: sealed.exportedAt, updated_at: sealed.exportedAt };
+  const { store, client } = await setup({ row, state: { userSupplements: [], labValues: [], intakeLogs: [] }, account: { signedIn: true, userId: 'u1', dataKey: key } });
+  await store.getState().checkOnLogin();
+  await store.getState().resolveDecision('replace');
+  check('replace: genau ein Upload', client.calls.filter(([n]) => n === 'upsert').length === 1);
+  check('replace: pendingDecision geleert', store.getState().pendingDecision === null);
+}
+
+console.log('— checkOnLogin: single-flight, zwei parallele Aufrufe teilen sich eine Promise —');
+{
+  const key = await randomBytes(32);
+  const sealed = await encryptBackup({ userSupplements: [{ id: 'a', status: 'active' }, { id: 'b', status: 'active' }], labValues: [], intakeLogs: [] }, key, randomBytes, new Date('2026-08-30T09:00:00.000Z'));
+  const row = { ciphertext: sealed.ciphertext, payload_version: 1, device_label: 'Anderes Geraet', exported_at: sealed.exportedAt, updated_at: sealed.exportedAt };
+  const { store, client } = await setup({ row, account: { signedIn: true, userId: 'u1', dataKey: key } });
+  const p1 = store.getState().checkOnLogin();
+  const p2 = store.getState().checkOnLogin();
+  check('dieselbe Promise', p1 === p2);
+  const [d1, d2] = await Promise.all([p1, p2]);
+  check('beide Entscheidung ask', d1 === 'ask' && d2 === 'ask');
+  check('genau ein select-Call', client.calls.filter(([n]) => n === 'select').length === 1);
+  check('genau ein pendingDecision-Objekt', store.getState().pendingDecision?.kind === 'newer');
 }
 
 console.log('— Offline und Widerruf —');
