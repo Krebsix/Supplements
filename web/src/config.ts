@@ -11,7 +11,7 @@
 export const SITE_URL = 'https://mysuplea.com';
 export const SITE_NAME = 'MySuplea';
 export const OPERATOR_NAME = 'indoo home LLC';
-export const CONTACT_EMAIL = 'hello@mysuplea.com';
+export const CONTACT_EMAIL = 'info@mysuplea.com';
 
 const DEFAULT_BETA_SIGNUP_URL = 'https://zeflyivnxbmkyiacogzu.supabase.co/functions/v1/beta-signup';
 

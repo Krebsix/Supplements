@@ -21,7 +21,7 @@ ist die Copy-Quelle; die gebaute Fassung liegt in `web/src/i18n/de.ts` und
    `web/vercel.json` auf die neuen Pfade um.
 4. Datenschutzerklaerung: Website-Abschnitt (Vercel-Logs, Beta-Anmeldung
    bei Supabase) ist in `data/legalContent.js` eingetragen und generiert.
-5. Kontakt-Mail `hello@mysuplea.com` (web/src/config.ts) einrichten oder
+5. Kontakt-Mail `info@mysuplea.com` (web/src/config.ts) einrichten oder
    auf die indoohome-Adresse aendern.
 6. Impressum-Platzhalter (Vertretung, EU-Vertreter) fuellen.
 
