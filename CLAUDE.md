@@ -244,9 +244,11 @@ Die Session liegt ueber `secureStorage` verschluesselt im AsyncStorage. Beim
 Signup entsteht auf dem Geraet ein Datenschluessel, der mit dem
 Passwort-Schluessel und mit einem Recovery-Key umwickelt wird; nur die
 Umschlaege gehen in `public.user_keys` (Trigger aus den Signup-Metadaten).
-Der Datenschluessel lebt im Arbeitsspeicher des Konto-Stores und ist nach
-einem Neustart weg. Konto-Loeschung ueber die Edge Function
-`delete-account` (Store-Pflicht). Wer den Konto-Datenfluss aendert,
+Der Datenschluessel liegt seit 2026-09-01 im Geraete-Schluesselbund
+(expo-secure-store, WHEN_UNLOCKED_THIS_DEVICE_ONLY) und wird beim Start
+geladen; Abmelden und Konto-Loeschung entfernen ihn. Konto-Loeschung
+laeuft ueber die Edge Function `delete-account` (Store-Pflicht). Wer den
+Konto-Datenfluss aendert,
 aendert `data/legalContent.js` mit.
 
 **Cloud-Backup (seit 2026-09-01):** Mit Konto liegt je Nutzerin ein

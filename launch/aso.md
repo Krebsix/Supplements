@@ -21,10 +21,10 @@ beides in 30 Zeichen; sonst Zusatz in den Untertitel schieben.)
 **iOS-Untertitel EN:** `Intake plan and upper limits` (28 Zeichen)
 
 **Android-Kurzbeschreibung DE (max 80):**
-`Supplemente planen, Tagessummen gegen Obergrenzen prüfen. Ohne Konto, ohne Cloud.`
+`Supplemente planen, Tagessummen gegen Obergrenzen prüfen. Cloud-Backup optional.`
 
 **Android-Kurzbeschreibung EN (max 80):**
-`Plan supplements, check daily totals against upper limits. No account, no cloud.`
+`Plan supplements, check daily totals against limits. Cloud backup optional.`
 
 ## iOS-Keyword-Feld (100 Zeichen, ohne Leerzeichen nach Komma)
 
@@ -62,10 +62,11 @@ WAS DIE APP NICHT MACHT
 · Sie stellt keine Diagnosen und ersetzt keine ärztliche Beratung
 
 DEINE DATEN
-Kein Konto, keine Cloud, kein Tracking. Alle Eingaben bleiben verschlüsselt
-auf deinem Gerät. Backup und vollständiges Löschen jederzeit in den
-Einstellungen. Nur die freiwillige Foto-Analyse überträgt Etikettenfotos,
-nach ausdrücklicher Zustimmung.
+Ohne Konto nutzbar. Cloud-Backup optional, Ende-zu-Ende verschlüsselt.
+Kein Tracking. Alle Eingaben bleiben verschlüsselt auf deinem Gerät.
+Backup und vollständiges Löschen jederzeit in den Einstellungen. Nur die
+freiwillige Foto-Analyse überträgt Etikettenfotos, nach ausdrücklicher
+Zustimmung.
 
 QUELLEN
 Fachliche Hinweise zitieren ihre Quellen wörtlich, darunter EFSA, BfR,
@@ -97,9 +98,10 @@ WHAT THE APP DOES NOT DO
 · It does not diagnose and does not replace medical advice
 
 YOUR DATA
-No account, no cloud, no tracking. Everything you enter stays encrypted on
-your device. Backup and complete deletion any time in the settings. Only
-the optional photo analysis transmits label photos, after explicit consent.
+Works without an account. Cloud backup optional, end-to-end encrypted.
+No tracking. Everything you enter stays encrypted on your device. Backup
+and complete deletion any time in the settings. Only the optional photo
+analysis transmits label photos, after explicit consent.
 
 SOURCES
 Statements cite their sources verbatim, including EFSA, BfR, HMPC and NIH.
@@ -115,7 +117,7 @@ What is not documented is not in the app.
 | 3 | Scan-Ergebnis mit Referenzwert-Einordnung | "Obergrenzen statt Empfehlungen." |
 | 4 | Beschwerdesuche mit Einordnung zuerst | "Erst einordnen, nie verkaufen." |
 | 5 | Praxis-Bericht (Export-Screen) | "Zum Mitnehmen in die Sprechstunde." |
-| 6 | Settings mit Datenschutz-Karte | "Kein Konto. Keine Cloud. Deine Daten." |
+| 6 | Settings mit Datenschutz-Karte | "Ohne Konto nutzbar. Cloud-Backup optional." |
 
 Stil: echte Screens im Geräterahmen auf Papier-Hintergrund (canvas-Farbton
 aus theme.js), Headline in der Serifenschrift. Kein Stockfoto-Mensch, kein

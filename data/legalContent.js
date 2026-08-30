@@ -40,7 +40,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Grundprinzip',
       body:
-        'Diese App ist ohne Konto nutzbar. Alles, was du eingibst, bleibt auf deinem Gerät: deine Präparate, Einnahmen, dein Profil, deine Laborwerte und Beobachtungen. Es gibt keine Analyse- oder Werbedienste und kein Tracking. Ein Konto ist freiwillig und Grundlage für spätere Funktionen wie Sync und Cloud-Backup; was dabei übertragen wird, steht im Abschnitt Konto.',
+        'Diese App ist ohne Konto nutzbar. Alles, was du eingibst, bleibt auf deinem Gerät: deine Präparate, Einnahmen, dein Profil, deine Laborwerte und Beobachtungen. Es gibt keine Analyse- oder Werbedienste und kein Tracking. Ein Konto ist freiwillig. Mit Konto kannst du ein Ende-zu-Ende verschlüsseltes Cloud-Backup nutzen; was dabei übertragen wird, steht in den Abschnitten Konto und Cloud-Backup.',
     },
     {
       heading: 'Welche Daten lokal gespeichert werden',
@@ -90,7 +90,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Was diese App nicht tut',
       body:
-        'Keine Weitergabe an Dritte über die oben beschriebenen Auftragsverarbeiter hinaus, keine Werbung, kein Verkauf von Daten, kein Konto-Zwang, keine Cloud-Synchronisation in dieser Version. Beachte: Weil es noch keine Synchronisation gibt, bedeutet ein Gerätewechsel ohne Backup den Verlust deiner Daten.',
+        'Keine Weitergabe an Dritte über die oben beschriebenen Auftragsverarbeiter hinaus, keine Werbung, kein Verkauf von Daten, kein Konto-Zwang. Keine Cloud-Synchronisation einzelner Einträge zwischen Geräten; das Cloud-Backup überträgt einen ganzen Stand, verschlüsselt, nur mit Konto. Ohne Konto und ohne JSON-Backup bedeutet ein Gerätewechsel Datenverlust.',
     },
   ],
   en: [
@@ -101,7 +101,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Core principle',
       body:
-        'This app can be used without an account. Everything you enter stays on your device: your products, intakes, profile, lab values and observations. There are no analytics or advertising services and no tracking. An account is optional and the basis for later features such as sync and cloud backup; what is transmitted for it is described in the Account section.',
+        'This app can be used without an account. Everything you enter stays on your device: your products, intakes, profile, lab values and observations. There are no analytics or advertising services and no tracking. An account is optional. With an account you can use an end-to-end encrypted cloud backup; what is transmitted for it is described in the Account and Cloud backup sections.',
     },
     {
       heading: 'What is stored locally',
@@ -151,7 +151,7 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'What this app does not do',
       body:
-        'No sharing with third parties beyond the processors described above, no advertising, no sale of data, no mandatory account, no cloud sync in this version. Note: because there is no sync yet, changing devices without a backup means losing your data.',
+        'No sharing with third parties beyond the processors described above, no advertising, no sale of data, no mandatory account. No cloud sync of individual entries between devices; the cloud backup transfers one whole encrypted state, account only. Without an account and without a JSON backup, changing devices means losing your data.',
     },
   ],
 };
