@@ -30,7 +30,7 @@ export default {
   'home.nav.history.title': 'Verlauf',
   'home.nav.history.subtitle':
     'Dokumentierte Einnahmen, Routine-Aktivität und frühere Einträge nachvollziehen.',
-  'home.nav.profile.title': 'Persönliches Profil',
+  'home.nav.profile.title': 'Gesundheitsprofil',
   'home.nav.profile.subtitle':
     'Medikamentengruppen hinterlegen und sehen, wo die Quellen dazu etwas zu deinem Bestand sagen.',
   'home.nav.analysis.title': 'Analyse',
@@ -50,4 +50,9 @@ export default {
     'Archiv, lokale Daten, Systemstatus und spätere Datenquellen verwalten.',
   'home.nav.account.title': 'Konto',
   'home.nav.account.subtitle': 'Optional. Grundlage für Sync und Backup auf mehreren Geräten.',
+
+  // Kopfkarte im Hauptmenue (menu.jsx), oberhalb der Marke.
+  'home.account.cta': 'Konto anlegen oder anmelden',
+  'home.account.ctaSub': 'Für Backup und Sync. Die App funktioniert auch ohne.',
+  'home.account.signedIn': 'Angemeldet',
 };

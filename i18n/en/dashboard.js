@@ -5,6 +5,12 @@
  */
 
 export default {
+  // Header greeting, by time of day (display only, no logic module).
+  'dashboard.greeting.morning': 'Good morning',
+  'dashboard.greeting.day': 'Hello',
+  'dashboard.greeting.evening': 'Good evening',
+  'dashboard.greetingName': '{greeting}, {name}.',
+  'dashboard.greetingPlain': '{greeting}.',
   'dashboard.kicker': 'MySuplea',
   'dashboard.profileLabel': 'Profile: {profile}',
   'dashboard.title': 'Daily plan',

@@ -14,7 +14,7 @@ export default {
   'nav.scanner': 'Scanner',
   'nav.results': 'Analysis',
   'nav.addSupplement': 'Add supplement',
-  'nav.profile': 'Profile',
+  'nav.profile': 'Health profile',
   'nav.analysis': 'Analysis',
   'nav.outcome': 'Outcome',
   'nav.lab': 'Lab values',

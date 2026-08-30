@@ -4,6 +4,12 @@
  */
 
 export default {
+  // Begruessung im Kopf, nach Tageszeit (Anzeige, kein Logik-Modul).
+  'dashboard.greeting.morning': 'Guten Morgen',
+  'dashboard.greeting.day': 'Hallo',
+  'dashboard.greeting.evening': 'Guten Abend',
+  'dashboard.greetingName': '{greeting}, {name}.',
+  'dashboard.greetingPlain': '{greeting}.',
   'dashboard.kicker': 'MySuplea',
   'dashboard.profileLabel': 'Profil: {profile}',
   'dashboard.title': 'Tagesplan',

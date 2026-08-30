@@ -9,6 +9,16 @@
  */
 
 export default {
+  // "About you": first name, gender, year of birth. The life stage itself
+  // stays in settings, this only holds what determines it.
+  'profile.about.title': 'About you',
+  'profile.about.hint':
+    'First name only for the greeting. Gender and year of birth determine the reference group; the life stage itself is changed in the settings.',
+  'profile.about.name': 'First name',
+  'profile.about.gender': 'Gender',
+  'profile.about.birthYear': 'Year of birth',
+  'profile.about.notSet': 'Not set',
+
   'profile.kicker': 'Personal profile',
   'profile.title': 'What additionally applies in your case',
   'profile.subtitle':

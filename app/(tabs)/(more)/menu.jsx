@@ -1,19 +1,69 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 
 import LanguagePicker from '../../../components/LanguagePicker';
+import { ACCOUNT_STATUS } from '../../../AccountStore';
+import { PURCHASE_STATUS } from '../../../PurchaseLogic';
 import { useTranslation } from '../../../i18n';
+import useAccountStore from '../../../useAccountStore';
+import usePurchaseStore from '../../../usePurchaseStore';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
 
+  const accountStatus = useAccountStore((state) => state.status);
+  const accountEmail = useAccountStore((state) => state.email);
+  const purchaseStatus = usePurchaseStore((state) => state.status);
+  const purchaseExpiresAt = usePurchaseStore((state) => state.expiresAt);
+  const signedIn = accountStatus === ACCOUNT_STATUS.SIGNED_IN;
+
+  // Statuszeile der Kopfkarte: bewusst nur Free/Pro, nicht alle Stufen aus
+  // subscription.jsx (Testphase, gekuendigt, Zahlungsproblem) — das gehoert
+  // in den vollen Abo-Screen, hier reicht der grobe Stand.
+  const purchaseStatusLine =
+    purchaseStatus === PURCHASE_STATUS.FREE
+      ? t('subscription.status.free')
+      : purchaseExpiresAt
+        ? t('subscription.status.active', { date: new Date(purchaseExpiresAt).toLocaleDateString() })
+        : t('paywall.kicker');
+
   return (
     <View style={styles.screenWrap}>
       <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      {/* Kopfkarte: Einstieg ins Konto, oberhalb der Marke — die erste
+          Frage im Hauptmenue ist "bin ich angemeldet", nicht "was gibt es
+          hier alles". */}
+      <TouchableOpacity
+        style={styles.accountCard}
+        onPress={() => router.push('/account')}
+        activeOpacity={0.7}
+        accessibilityRole="button"
+      >
+        <View style={styles.accountIconWrap}>
+          <Feather name="user" size={20} color={colors.accent} />
+        </View>
+        <View style={styles.accountTextWrap}>
+          {signedIn ? (
+            <>
+              <Text style={styles.accountLabel}>{t('home.account.signedIn')}</Text>
+              <Text style={styles.accountTitle}>{accountEmail}</Text>
+              <Text style={styles.accountSub}>{purchaseStatusLine}</Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.accountTitle}>{t('home.account.cta')}</Text>
+              <Text style={styles.accountSub}>{t('home.account.ctaSub')}</Text>
+            </>
+          )}
+        </View>
+        <Text style={styles.chevron}>›</Text>
+      </TouchableOpacity>
+
       {/* Kleines Markenzeichen neben der Ueberschrift. Das Hauptmenue ist
           der einzige Screen ohne eigene Aufgabe, hier stoert es nicht. */}
       <View style={styles.brandRow}>
@@ -112,11 +162,6 @@ export default function Home() {
           onPress={() => router.push('/subscription')}
         />
         <MenuRow
-          title={t('home.nav.account.title')}
-          subtitle={t('home.nav.account.subtitle')}
-          onPress={() => router.push('/account')}
-        />
-        <MenuRow
           title={t('nav.notifications')}
           subtitle={t('notifications.subtitle')}
           onPress={() => router.push('/notifications')}
@@ -194,6 +239,32 @@ const styles = StyleSheet.create({
   // Baustein aus dem Theme statt eigener Zahlen — deckt sich fast exakt
   // mit den vorherigen Werten (20/28/44 -> 22/30/48).
   content: { ...surfaces.content },
+  accountCard: {
+    ...surfaces.card,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  accountIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: radius.lg,
+    backgroundColor: colors.accentSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: space.md,
+  },
+  accountTextWrap: { flex: 1 },
+  accountLabel: {
+    ...type.label,
+  },
+  accountTitle: {
+    ...type.bodyStrong,
+    marginTop: 2,
+  },
+  accountSub: {
+    ...type.small,
+    marginTop: 2,
+  },
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',

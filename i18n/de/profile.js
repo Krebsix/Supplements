@@ -9,6 +9,16 @@
  */
 
 export default {
+  // "Über dich": Vorname, Geschlecht, Geburtsjahr. Die Lebensphase selbst
+  // bleibt in den Einstellungen, hier steht nur, was sie bestimmt.
+  'profile.about.title': 'Über dich',
+  'profile.about.hint':
+    'Vorname nur für die Anrede. Geschlecht und Geburtsjahr bestimmen die Referenzgruppe; die Lebensphase selbst änderst du in den Einstellungen.',
+  'profile.about.name': 'Vorname',
+  'profile.about.gender': 'Geschlecht',
+  'profile.about.birthYear': 'Geburtsjahr',
+  'profile.about.notSet': 'Nicht angegeben',
+
   'profile.kicker': 'Persönliches Profil',
   'profile.title': 'Was in deinem Fall zusätzlich gilt',
   'profile.subtitle':

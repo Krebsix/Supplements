@@ -5,18 +5,30 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 
 import { checkProfileAgainstStack, summarizeProfileFindings } from '../../../ProfileCheck';
 import { HEALTH_CONDITIONS } from '../../../data/healthConditions';
 import { MEDICATION_CLASSES } from '../../../data/medicationClasses';
 import { localizeHealthCondition, localizeMedicationClass } from '../../../data/localize';
+import { GENDERS } from '../../../LifeStageResolver';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
 import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
+
+const CURRENT_YEAR = new Date().getFullYear();
+const MIN_BIRTH_YEAR = CURRENT_YEAR - 100;
+const MAX_BIRTH_YEAR = CURRENT_YEAR - 4;
+const NOT_SET = '';
+const BIRTH_YEARS = Array.from(
+  { length: MAX_BIRTH_YEAR - MIN_BIRTH_YEAR + 1 },
+  (_, index) => MIN_BIRTH_YEAR + index
+);
 
 /**
  * Profil-Screen
@@ -33,6 +45,7 @@ export default function ProfileScreen() {
   const { t } = useTranslation();
 
   const profile = useStore((state) => state.profile);
+  const updateProfile = useStore((state) => state.updateProfile);
   const toggleProfileEntry = useStore((state) => state.toggleProfileEntry);
   const clearProfile = useStore((state) => state.clearProfile);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
@@ -69,6 +82,55 @@ export default function ProfileScreen() {
       <Text style={styles.kicker}>{t('profile.kicker')}</Text>
       <Text style={styles.title}>{t('profile.title')}</Text>
       <Text style={styles.subtitle}>{t('profile.subtitle')}</Text>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>{t('profile.about.title')}</Text>
+        <Text style={styles.cardHint}>{t('profile.about.hint')}</Text>
+
+        <Text style={styles.fieldLabel}>{t('profile.about.name')}</Text>
+        <TextInput
+          style={styles.input}
+          value={profile?.displayName ?? ''}
+          onChangeText={(value) => updateProfile({ displayName: value })}
+          maxLength={40}
+          accessibilityLabel={t('profile.about.name')}
+        />
+
+        <Text style={styles.fieldLabel}>{t('profile.about.gender')}</Text>
+        <View style={styles.inlineChipWrap}>
+          {GENDERS.map((genderId) => {
+            const isActive = profile?.gender === genderId;
+            return (
+              <TouchableOpacity
+                key={genderId}
+                style={[styles.chip, isActive && styles.chipActive]}
+                onPress={() => updateProfile({ gender: genderId })}
+                activeOpacity={0.8}
+                accessibilityRole="radio"
+                accessibilityState={{ checked: isActive }}
+              >
+                <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+                  {t(`onboarding.gender.${genderId}`)}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <Text style={styles.fieldLabel}>{t('profile.about.birthYear')}</Text>
+        <View style={styles.pickerWrap}>
+          <Picker
+            selectedValue={profile?.birthYear ?? NOT_SET}
+            onValueChange={(value) => updateProfile({ birthYear: value === NOT_SET ? null : value })}
+            style={styles.picker}
+          >
+            <Picker.Item label={t('profile.about.notSet')} value={NOT_SET} />
+            {BIRTH_YEARS.map((year) => (
+              <Picker.Item key={year} label={String(year)} value={year} />
+            ))}
+          </Picker>
+        </View>
+      </View>
 
       <View style={styles.privacyCard}>
         <Text style={styles.privacyTitle}>{t('profile.privacy.title')}</Text>
@@ -251,6 +313,12 @@ const styles = StyleSheet.create({
   card: { ...surfaces.card, marginBottom: space.xxl - space.sm },
   cardTitle: { ...type.subheading },
   cardHint: { ...type.small, marginTop: space.sm, marginBottom: space.lg },
+  fieldLabel: { ...type.label, marginTop: space.md, marginBottom: space.xs },
+  input: { ...surfaces.input },
+  // Kein Eingabefeld-Look fuer den Picker: das native Rad ignoriert
+  // Rahmen und Polsterung von surfaces.input ohnehin (siehe StepBirthYear).
+  pickerWrap: { marginTop: -space.sm },
+  picker: { height: 180 },
   bodyDataSource: {
     ...type.small,
     color: colors.accent,
@@ -258,6 +326,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   chipWrap: { gap: space.sm },
+  // Geschlecht: kurze Chips nebeneinander statt volle Zeilen wie bei
+  // Medikamenten/Erkrankungen, dort braucht es Platz fuer die Beispiele.
+  inlineChipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   chip: { ...surfaces.chip, borderRadius: radius.lg, paddingHorizontal: 13, paddingVertical: space.md - 2 },
   chipActive: { ...surfaces.chipActive },
   chipText: { color: colors.ink, fontSize: 14, fontWeight: '700' },

@@ -78,6 +78,19 @@ function getDuplicateCountLabel(count, t) {
   return t('dashboard.duplicateCount_other', { count });
 }
 
+function getGreetingKey(hour) {
+  if (hour < 11) return 'dashboard.greeting.morning';
+  if (hour < 18) return 'dashboard.greeting.day';
+  return 'dashboard.greeting.evening';
+}
+
+function getGreetingText(displayName, t) {
+  const greeting = t(getGreetingKey(new Date().getHours()));
+  return displayName
+    ? t('dashboard.greetingName', { greeting, name: displayName })
+    : t('dashboard.greetingPlain', { greeting });
+}
+
 function getProfileLabel(profileId, t) {
   if (profileId === 'adult') return t('dashboard.profileAdult');
   if (profileId === 'child') return t('dashboard.profileChild');
@@ -120,6 +133,7 @@ export default function Dashboard() {
   }
 
   const activeProfileId = useStore((state) => state.activeProfileId);
+  const displayName = useStore((state) => state.profile?.displayName);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
   const getLoggedToday = useStore((state) => state.getLoggedToday);
@@ -150,6 +164,7 @@ export default function Dashboard() {
   const pendingToday = progress.pending;
   const progressPercent = getProgressPercent(progress.done, progress.total);
   const routineInsight = getRoutineInsight(progress, t);
+  const greetingText = getGreetingText(displayName, t);
   const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
   const slotAlerts = dailySchedule
@@ -210,6 +225,7 @@ export default function Dashboard() {
     <View style={styles.screenWrap}>
       <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
+        <Text style={styles.greeting}>{greetingText}</Text>
         <View style={styles.kickerRow}>
           <Text style={styles.kicker}>{t('dashboard.kicker')}</Text>
           <Text style={styles.profileLabel}>
@@ -554,6 +570,10 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: space.lg,
+  },
+  greeting: {
+    ...type.bodyStrong,
+    marginBottom: space.sm,
   },
   kickerRow: {
     flexDirection: 'row',

@@ -30,7 +30,7 @@ export default {
   'home.nav.history.title': 'History',
   'home.nav.history.subtitle':
     'Review documented intakes, routine activity and earlier entries.',
-  'home.nav.profile.title': 'Personal profile',
+  'home.nav.profile.title': 'Health profile',
   'home.nav.profile.subtitle':
     'Record medication groups and see where the sources say something about your products.',
   'home.nav.analysis.title': 'Analysis',
@@ -50,4 +50,9 @@ export default {
     'Manage the archive, local data, system status and future data sources.',
   'home.nav.account.title': 'Account',
   'home.nav.account.subtitle': 'Optional. Basis for sync and backup across devices.',
+
+  // Header card in the main menu (menu.jsx), above the brand.
+  'home.account.cta': 'Create account or sign in',
+  'home.account.ctaSub': 'For backup and sync. The app also works without one.',
+  'home.account.signedIn': 'Signed in',
 };
