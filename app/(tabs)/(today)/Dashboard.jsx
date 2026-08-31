@@ -508,7 +508,6 @@ export default function Dashboard() {
                         style={styles.noteToggleButton}
                         // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop
                         // allein reichte rechnerisch nicht.
-                        hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                       >
                         {detailsExpanded && supplementNotes ? (
                           <Text style={styles.noteText}>{supplementNotes}</Text>

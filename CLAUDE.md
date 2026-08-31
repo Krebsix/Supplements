@@ -222,6 +222,10 @@ Signalampel.
 - Sichtbare Rueckmeldung am Ort der Aktion, nie nur Haptik.
 - Die erste Flaeche eines Screens beantwortet genau eine Frage; Tiefe ist
   einen Tipp entfernt, nie zwei.
+- Kontrast mindestens 4,5:1 fuer Fliesstext, 3:1 fuer grosse Schrift
+  (WCAG AA). Rechnerisches Token-Audit vom 2026-08-31 siehe
+  .superpowers-Bericht; neue Farb-Tokens werden gegen diese Grenze
+  gerechnet, bevor sie in theme.js landen.
 
 ---
 
