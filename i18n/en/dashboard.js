@@ -5,6 +5,15 @@
  */
 
 export default {
+  // Workflow head (NextUp.js): act first, numbers after.
+  'dashboard.nextUp.title': 'Up next',
+  'dashboard.nextUp.slot': '{label} ({time})',
+  'dashboard.nextUp.remaining': 'After this, {count} still open today.',
+  'dashboard.nextUp.allDone': 'Everything is documented for today.',
+  'dashboard.nextUp.nothingPlanned': 'Nothing is scheduled today.',
+  'dashboard.summaryLine': '{done} of {total} documented',
+  'dashboard.summaryDetailsShow': 'Show details',
+  'dashboard.summaryDetailsHide': 'Hide details',
   // Header greeting, by time of day (display only, no logic module).
   'dashboard.greeting.morning': 'Good morning',
   'dashboard.greeting.day': 'Hello',

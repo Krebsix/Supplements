@@ -71,6 +71,10 @@ secureStorage.js           AES-256-Adapter, Schluessel im OS-Schluesselbund
 BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 ```
 
+Dashboard.jsx folgt dem Arbeitsfluss Als-Naechstes → Zusammenfassung → Rest:
+Die Als-Naechstes-Karte (`NextUp.js`) steht zuerst, Kennzahlen stehen hinter
+einer Zeile mit Aufklapper, Slot-Karten und Bestand folgen danach.
+
 ### Fachlogik — liegt bewusst ausserhalb der UI
 
 | Datei | Aufgabe |

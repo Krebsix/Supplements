@@ -4,6 +4,15 @@
  */
 
 export default {
+  // Arbeitsfluss-Kopf (NextUp.js): erst handeln, dann Zahlen.
+  'dashboard.nextUp.title': 'Als Nächstes',
+  'dashboard.nextUp.slot': '{label} ({time})',
+  'dashboard.nextUp.remaining': 'Danach heute noch {count} offen.',
+  'dashboard.nextUp.allDone': 'Für heute ist alles dokumentiert.',
+  'dashboard.nextUp.nothingPlanned': 'Heute ist nichts geplant.',
+  'dashboard.summaryLine': '{done} von {total} dokumentiert',
+  'dashboard.summaryDetailsShow': 'Details anzeigen',
+  'dashboard.summaryDetailsHide': 'Details ausblenden',
   // Begruessung im Kopf, nach Tageszeit (Anzeige, kein Logik-Modul).
   'dashboard.greeting.morning': 'Guten Morgen',
   'dashboard.greeting.day': 'Hallo',
