@@ -396,6 +396,27 @@ export default function AddSupplement() {
             {unitOther ? (
               <TextInput style={styles.input} value={unit} onChangeText={setUnit} placeholder={t('addSupplement.unit.otherPlaceholder')} placeholderTextColor={colors.inkFaint} />
             ) : null}
+            {/* Eintrage-Hilfe (Geraetetest 31.08.): erklaert die
+                Je-Einnahme-Konvention und zeigt die daraus errechnete
+                Tagesmenge live, damit Eintragefehler sofort auffallen. */}
+            {isManual ? (
+              <>
+                <Text style={styles.amountHelp}>{t('addSupplement.amount.help')}</Text>
+                {(() => {
+                  const numeric = Number(amount.trim().replace(',', '.'));
+                  if (!Number.isFinite(numeric) || numeric <= 0) return null;
+                  return (
+                    <Text style={styles.amountDaily}>
+                      {t('addSupplement.amount.daily', {
+                        total: roundAmount(numeric * timesPerDay),
+                        unit: unit.trim() || '',
+                        times: timesPerDay,
+                      })}
+                    </Text>
+                  );
+                })()}
+              </>
+            ) : null}
           </View>
         ) : (
           <ProductSummaryCard
@@ -508,6 +529,8 @@ const styles = StyleSheet.create({
   rowSpacer: { width: space.md },
   unitWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginBottom: space.md },
   unitChip: { ...surfaces.chip },
+  amountHelp: { ...type.small, marginTop: space.xs },
+  amountDaily: { ...type.small, color: colors.accent, marginTop: space.sm },
   moreHeader: { flexDirection: 'row', alignItems: 'center', marginTop: space.xl, paddingVertical: space.md, borderTopWidth: 1, borderTopColor: colors.rule },
   moreTitles: { flex: 1 },
   moreTitle: { ...type.bodyStrong },

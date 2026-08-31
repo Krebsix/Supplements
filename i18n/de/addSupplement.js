@@ -12,6 +12,8 @@ export default {
   'addSupplement.name.placeholder': 'z. B. Magnesium Bisglycinat',
   'addSupplement.amount.label': 'Menge je Einnahme',
   'addSupplement.amount.placeholder': 'z. B. 1',
+  'addSupplement.amount.help': 'Trage ein, was du bei EINER Einnahme nimmst. Beispiel: Packung empfiehlt 3 Kapseln täglich, du nimmst morgens, mittags, abends je eine? Dann 1 Kapsel und 3× wählen. Steht auf der Packung eine mg-Angabe je Tagesportion, teile sie durch die Anzahl der Einnahmen.',
+  'addSupplement.amount.daily': 'Ergibt {total} {unit} pro Tag ({times}× je Einnahme). Vergleiche das mit der Tagesangabe auf der Packung.',
   'addSupplement.unit.label': 'Einheit',
   'addSupplement.unit.capsule': 'Kapsel',
   'addSupplement.unit.tablet': 'Tablette',

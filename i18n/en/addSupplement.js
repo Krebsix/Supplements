@@ -13,6 +13,8 @@ export default {
   'addSupplement.name.placeholder': 'e.g. Magnesium bisglycinate',
   'addSupplement.amount.label': 'Amount per intake',
   'addSupplement.amount.placeholder': 'e.g. 1',
+  'addSupplement.amount.help': 'Enter what you take at ONE intake. Example: the pack suggests 3 capsules daily and you take one in the morning, at noon and in the evening? Enter 1 capsule and select 3×. If the pack states mg per daily portion, divide it by the number of intakes.',
+  'addSupplement.amount.daily': 'Adds up to {total} {unit} per day ({times}× per intake). Compare this with the daily amount on the pack.',
   'addSupplement.unit.label': 'Unit',
   'addSupplement.unit.capsule': 'Capsule',
   'addSupplement.unit.tablet': 'Tablet',
