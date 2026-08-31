@@ -538,7 +538,9 @@ const styles = StyleSheet.create({
   finishedCard: { ...surfaces.card, padding: space.md, marginBottom: space.sm + 2 },
   finishedName: { color: colors.ink, fontSize: 14, fontWeight: '800' },
   finishedMeta: { color: colors.inkMuted, fontSize: 12, marginTop: 3 },
-  deleteLink: { color: colors.alert, fontSize: 12, fontWeight: '700', marginTop: space.md },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): Text traegt onPress direkt,
+  // hitSlop allein reichte rechnerisch nicht.
+  deleteLink: { color: colors.alert, fontSize: 12, fontWeight: '700', marginTop: space.md, minHeight: 44, verticalAlign: 'middle' },
   disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.lg - 2, marginBottom: space.lg },
   backButton: { ...surfaces.buttonQuiet },
   backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },

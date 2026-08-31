@@ -752,9 +752,13 @@ const styles = StyleSheet.create({
   consentText: {
     ...type.small,
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop allein reichte
+  // rechnerisch nicht, die Flaeche selbst traegt jetzt die 44 pt.
   consentRevokeButton: {
     marginTop: space.md,
     alignSelf: 'flex-start',
+    minHeight: 44,
+    justifyContent: 'center',
   },
   consentRevokeText: {
     color: alertTone.ink,

@@ -345,7 +345,9 @@ const styles = StyleSheet.create({
   chipTextActive: { ...surfaces.chipTextActive },
   chipExample: { ...type.tiny, marginTop: 2 },
   chipExampleActive: { color: colors.accentSoft },
-  resetButton: { marginTop: space.md, alignSelf: 'flex-start' },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop allein reichte
+  // rechnerisch nicht, die Flaeche selbst traegt jetzt die 44 pt.
+  resetButton: { marginTop: space.md, alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center' },
   resetButtonText: { color: colors.alert, fontSize: 13, fontWeight: '700' },
   sectionTitle: { ...type.heading, marginBottom: space.md },
   countLine: { ...type.small, fontWeight: '700', marginBottom: space.md },
@@ -361,7 +363,9 @@ const styles = StyleSheet.create({
   inProducts: { ...type.small, marginTop: space.md },
   sourceWrap: { marginTop: space.md, borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.sm },
   sourceLabel: { ...type.label, marginBottom: 3 },
-  sourceItem: { color: colors.inkMuted, fontSize: 11, lineHeight: 17 },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): Text traegt onPress direkt,
+  // die Flaeche selbst muss die 44 pt erreichen, nicht nur der hitSlop.
+  sourceItem: { color: colors.inkMuted, fontSize: 11, lineHeight: 17, minHeight: 44, verticalAlign: 'middle' },
   sourceLink: { color: colors.accent, textDecorationLine: 'underline' },
   disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg },
   autoSaveHint: { ...type.small, color: colors.affirm, marginTop: space.sm },

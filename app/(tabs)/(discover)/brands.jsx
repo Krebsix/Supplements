@@ -224,9 +224,12 @@ const styles = StyleSheet.create({
     marginRight: space.sm - 2,
     fontVariant: ['tabular-nums'],
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop allein reichte
+  // rechnerisch nicht, die Flaeche selbst traegt jetzt die 44 pt.
   registerBack: {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: 44,
     marginBottom: space.sm,
   },
   registerBackText: {

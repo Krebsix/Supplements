@@ -503,6 +503,9 @@ export default function Dashboard() {
                         accessibilityLabel={
                           detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')
                         }
+                        style={styles.noteToggleButton}
+                        // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop
+                        // allein reichte rechnerisch nicht.
                         hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                       >
                         {detailsExpanded && supplementNotes ? (
@@ -964,6 +967,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): traegt den TouchableOpacity
+  // von der noteText/noteToggle-Umschaltflaeche.
+  noteToggleButton: { minHeight: 44, justifyContent: 'center', alignSelf: 'flex-start' },
   noteToggle: {
     marginTop: space.sm,
     color: colors.accent,

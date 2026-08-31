@@ -73,7 +73,9 @@ export default function ComplaintCard({ view }) {
             onPress={() => setShowNutrients((current) => !current)}
             activeOpacity={0.7}
             accessibilityRole="button"
-            // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+            style={styles.toggleButton}
+            // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop allein
+            // reichte rechnerisch nicht, die Flaeche traegt jetzt die 44 pt.
             hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
           >
             <Text style={styles.toggle}>
@@ -181,6 +183,7 @@ const styles = StyleSheet.create({
     padding: space.md,
   },
   toggle: { color: colors.accent, fontSize: 13, fontWeight: '700' },
+  toggleButton: { minHeight: 44, justifyContent: 'center', alignSelf: 'flex-start' },
   nutrientIntro: { ...type.tiny, marginTop: space.sm, marginBottom: space.sm },
   nutrientRow: { marginTop: space.sm },
   nutrientHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
@@ -208,6 +211,7 @@ const styles = StyleSheet.create({
   },
   question: { ...type.small, color: colors.accentInk, marginBottom: space.xs },
   sourceWrap: { marginTop: space.md, borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.sm },
-  sourceItem: { ...type.tiny, color: colors.accent, textDecorationLine: 'underline' },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): Text traegt onPress direkt.
+  sourceItem: { ...type.tiny, color: colors.accent, textDecorationLine: 'underline', minHeight: 44, verticalAlign: 'middle' },
   disclaimer: { ...type.tiny, marginTop: space.md },
 });

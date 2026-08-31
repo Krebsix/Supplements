@@ -360,7 +360,9 @@ const styles = StyleSheet.create({
   entryMeta: { color: colors.inkMuted, fontSize: 12, marginTop: 3 },
   entryContext: { color: colors.inkFaint, fontSize: 11, lineHeight: 16, marginTop: space.xs },
   actionRow: { flexDirection: 'row', gap: space.md, marginTop: space.sm },
-  actionLink: { color: colors.alert, fontSize: 11, fontWeight: '700' },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): Text traegt onPress direkt,
+  // hitSlop allein reichte rechnerisch nicht.
+  actionLink: { color: colors.alert, fontSize: 11, fontWeight: '700', minHeight: 44, verticalAlign: 'middle' },
   disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg - 2 },
   cancelButton: { ...surfaces.buttonQuiet, paddingVertical: 13, marginTop: space.sm },
   cancelButtonText: { ...surfaces.buttonQuietText, fontSize: 14 },
