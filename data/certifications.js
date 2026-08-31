@@ -129,10 +129,6 @@ export const certifications = [
   },
 ];
 
-export const certificationById = new Map(
-  certifications.map((cert) => [cert.id, cert])
-);
-
 function normalize(value) {
   return String(value ?? '')
     .toLowerCase()
