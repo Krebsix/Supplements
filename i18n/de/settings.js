@@ -6,6 +6,9 @@
 export default {
   'settings.kicker': 'Einstellungen',
   'settings.title': 'App-Status und lokale Daten',
+  'settings.textSize.title': 'Textgröße',
+  'settings.textSize.text': 'Die App folgt der Textgröße deines Geräts. Größer oder kleiner stellst du sie in den iOS-Einstellungen unter Anzeige und Helligkeit, Textgröße; alle Bildschirme passen sich an.',
+  'settings.textSize.action': 'Geräte-Einstellungen öffnen',
   'settings.subtitle':
     'Prüfe deinen lokalen Datenbestand, verwalte die Einnahmehistorie und stelle archivierte Supplements wieder her.',
 

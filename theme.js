@@ -44,16 +44,16 @@ export const colors = {
   // Schrift
   ink: '#1c1c1e',           // label
   inkMuted: '#6c6c70',      // secondaryLabel
-  inkFaint: '#8e8e93',      // tertiaryLabel, systemGray
+  inkFaint: '#6e6e74',  // 2026-08-31 abgedunkelt: 4.5:1 auch auf canvas (WCAG AA, Bedienregeln)      // tertiaryLabel, systemGray
 
   // Linien: Trennlinien innerhalb weisser Bloecke, keine Umrandungen
   rule: '#e5e5ea',          // systemGray5
   ruleStrong: '#d1d1d6',    // systemGray4
 
   // Akzent: das Petrol aus dem App-Icon. Die einzige Markenfarbe.
-  accent: '#1c4f5c',
-  accentSoft: '#e7eff1',
-  accentInk: '#143c47',
+  accent: '#1d6472',   // 2026-08-31: eine Stufe heller/frischer (Nadine 'lebensfroher'), weiss darauf 6.7:1
+  accentSoft: '#e4f1f3',
+  accentInk: '#123f49',
 
   // Statusfarben: klar genug, um unterscheidbar zu sein, gedaempft genug,
   // um nicht zu alarmieren.

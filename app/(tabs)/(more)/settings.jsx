@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 // Legacy-API bewusst: stabile String-Schnittstelle fuer eine einzelne
@@ -224,6 +224,21 @@ export default function SettingsScreen() {
       <Text style={styles.kicker}>{t('settings.kicker')}</Text>
       <Text style={styles.title}>{t('settings.title')}</Text>
       <Text style={styles.subtitle}>{t('settings.subtitle')}</Text>
+
+      {/* Textgroesse: bewusst KEIN eigener Regler. Die App folgt Dynamic
+          Type (Bedienregeln, CLAUDE.md); ein In-App-Regler wuerde gegen
+          die Systemeinstellung arbeiten. Hier steht nur der Wegweiser. */}
+      <View style={styles.statusCard}>
+        <Text style={styles.cardLabel}>{t('settings.textSize.title')}</Text>
+        <Text style={styles.subtitle}>{t('settings.textSize.text')}</Text>
+        <Pressable
+          onPress={() => Linking.openSettings()}
+          accessibilityRole="button"
+          style={({ pressed }) => [surfaces.buttonQuiet, { minHeight: 44 }, pressed ? { opacity: 0.7 } : null]}
+        >
+          <Text style={surfaces.buttonQuietText}>{t('settings.textSize.action')}</Text>
+        </Pressable>
+      </View>
 
       <View style={styles.statusCard}>
         <Text style={styles.cardLabel}>{t('settings.profileLabel')}</Text>

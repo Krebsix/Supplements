@@ -32,9 +32,9 @@ export const WEB_TOKENS = {
   surface: '#ffffff',
   ink: '#1c1c1e',
   inkMuted: '#6c6c70',
-  inkFaint: '#8e8e93',
+  inkFaint: '#6e6e74',
   rule: '#e5e5ea',
-  accent: '#1c4f5c',
+  accent: '#1d6472',
 };
 
 function escapeHtml(text) {
