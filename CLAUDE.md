@@ -210,6 +210,19 @@ Signalampel.
   statt "—". Der Gedankenstrich ist ein verlaessliches Erkennungsmerkmal
   maschinell erzeugter Texte; in Kommentaren im Code ist er unproblematisch.
 
+### Bedienregeln (Spec 2026-08-31-bedienkonzept-design.md, verbindlich)
+
+- Tippflaechen mindestens 44x44 pt (minHeight/hitSlop), mit Abstand zueinander.
+- Jede Funktion per einzelnem Tipp erreichbar; Gesten nur als Abkuerzung.
+- Dynamic Type: Texte skalieren mit der Systemschrift; Layouts brechen um
+  statt abzuschneiden. `allowFontScaling={false}` ist verboten;
+  `maxFontSizeMultiplier` nur, wo Umbruch unmoeglich ist, nie unter 1.5.
+- Status nie nur ueber Farbe: immer zusaetzlich Text oder Icon.
+- Maximal zwei Aufklapp-Ebenen fuer dieselbe Information.
+- Sichtbare Rueckmeldung am Ort der Aktion, nie nur Haptik.
+- Die erste Flaeche eines Screens beantwortet genau eine Frage; Tiefe ist
+  einen Tipp entfernt, nie zwei.
+
 ---
 
 ## Datenhaltung

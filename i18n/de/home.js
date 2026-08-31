@@ -18,9 +18,9 @@ export default {
   'home.trust.advice.title': 'Allgemeine Hinweise',
   'home.trust.advice.text':
     'Die App organisiert und dokumentiert. Sie ersetzt keine medizinische Beratung.',
-  'home.section.workflow': 'Bestand',
-  'home.section.insight': 'Auswerten',
-  'home.section.app': 'App',
+  'home.section.workflow': 'Meine Routine',
+  'home.section.insight': 'Meine Daten',
+  'home.section.app': 'App und Erinnerungen',
   'home.nav.inventory.title': 'Mein Bestand',
   'home.nav.inventory.subtitle':
     'Alle angelegten Präparate auf einen Blick, auch die ohne Einnahmezeitpunkt.',

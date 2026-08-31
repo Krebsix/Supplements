@@ -12,7 +12,7 @@ export default {
   'nav.home': 'MySuplea',
   'nav.dashboard': 'Tagesplan',
   'nav.scanner': 'Scanner',
-  'nav.results': 'Analyse',
+  'nav.results': 'Scan prüfen',
   'nav.addSupplement': 'Supplement erfassen',
   'nav.profile': 'Gesundheitsprofil',
   'nav.analysis': 'Analyse',
