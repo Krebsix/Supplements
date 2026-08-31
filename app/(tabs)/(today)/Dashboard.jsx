@@ -481,8 +481,11 @@ export default function Dashboard() {
       ) : null}
 
       {/* Arbeitsfluss statt Kennzahlen-Wand (Spec Entscheidung 3): die
-          erste Flaeche beantwortet "Was nehme ich als Naechstes?". */}
-      {fullInventoryCount > 0 ? (
+          erste Flaeche beantwortet "Was nehme ich als Naechstes?". Zusaetzlich
+          an visibleSchedule.length > 0 gebunden: Bei unvollstaendigem Timing
+          spricht allein die emptyRoutineCard oben, sonst widerspricht sich
+          der gruene "nichts geplant"-Haken mit dem Timing-Hinweis. */}
+      {fullInventoryCount > 0 && visibleSchedule.length > 0 ? (
         nextUp ? (
           <View style={styles.nextUpCard}>
             <Text style={styles.nextUpKicker}>{t('dashboard.nextUp.title')}</Text>
