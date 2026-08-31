@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 // Tests fuer SeedCatalog.js und data/seedProducts.json:
 // Datenintegritaet des Katalogs (Quelle je Eintrag, gueltige EANs) und
 // Verhalten von Suche und Draft-Erzeugung.
@@ -126,7 +127,9 @@ for (const substanceId of ['vitamin-d3', 'vitamin-b12', 'thiamin', 'magnesium'])
 console.log('— Siegel-Referenzen im Katalog —');
 {
   const { certificationById } = await import('../data/certifications.js');
-  const raw = JSON.parse(readFileSync(new URL('../data/seedProducts.json', import.meta.url), 'utf8'));
+  const raw = JSON.parse(
+    readFileSync(path.join(process.cwd(), 'data', 'seedProducts.json'), 'utf8')
+  );
   let certCount = 0;
   for (const entry of raw) {
     for (const cert of entry.certifications ?? []) {

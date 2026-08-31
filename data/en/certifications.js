@@ -40,6 +40,10 @@
  */
 
 export const CERTIFICATIONS_EN = {
+  'amg-arzneimittel': {
+    what: 'Manufactured under an official manufacturing licence per Section 13 of the German Medicinal Products Act (AMG), with GMP supervision by the state authority.',
+    scope: 'Legal status of the product class, not a product-specific laboratory test. Says nothing about suitability or dosage in the individual case; the package leaflet applies.',
+  },
   'koelner-liste': {
     what:
       'Testing for doping substances (anabolic agents, stimulants) by an accredited laboratory. Batch-specific and publicly viewable.',
