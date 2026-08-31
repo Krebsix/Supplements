@@ -62,6 +62,7 @@ export default {
   'addSupplement.product.noDetails': 'Ingredients not captured yet.',
   'addSupplement.product.cert.product': '{name}: product listed (as of {date}). Open source',
   'addSupplement.product.cert.brand': '{name}: manufacturer certified (as of {date}). Open source',
+  'addSupplement.product.cert.law': '{name}: manufactured under an official manufacturing licence. Open source',
   'addSupplement.frequency.title': 'How often per day?',
   'addSupplement.frequency.times': '{count}×',
   'addSupplement.slot.title': 'When?',

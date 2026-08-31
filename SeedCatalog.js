@@ -219,7 +219,20 @@ export function seedEntryToScanDraft(entry) {
     // Belegte Siegel-Referenzen des Katalogeintrags (id, level, sourceUrl,
     // checkedAt) — wandern in den Entwurf, damit Aufnehmen-Screen und
     // Suche sie zeigen koennen. Keine Eigenaussagen ohne Quelle.
-    certifications: Array.isArray(entry.certifications) ? entry.certifications : [],
+    certifications: [
+      // Rechtsstatus statt Siegel: Arzneimittel tragen die behoerdliche
+      // Herstellererlaubnis als Klassen-Fakt (data/certifications.js,
+      // amg-arzneimittel), abgeleitet aus productClass, nie behauptet.
+      ...(productClass === 'arznei'
+        ? [{
+            id: 'amg-arzneimittel',
+            level: 'law',
+            sourceUrl: 'https://www.gesetze-im-internet.de/amg_1976/__13.html',
+            checkedAt: null,
+          }]
+        : []),
+      ...(Array.isArray(entry.certifications) ? entry.certifications : []),
+    ],
     productClass: productClass || null,
     barcode: clean(entry.ean) || null,
     analyzedAt: new Date().toISOString(),

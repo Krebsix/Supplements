@@ -62,6 +62,7 @@ export default {
   'addSupplement.product.noDetails': 'Inhaltsstoffe noch nicht erfasst.',
   'addSupplement.product.cert.product': '{name}: Produkt gelistet (Stand {date}). Quelle öffnen',
   'addSupplement.product.cert.brand': '{name}: Hersteller zertifiziert (Stand {date}). Quelle öffnen',
+  'addSupplement.product.cert.law': '{name}: Herstellung unter behördlicher Herstellererlaubnis. Quelle öffnen',
   'addSupplement.frequency.title': 'Wie oft am Tag?',
   'addSupplement.frequency.times': '{count}×',
   'addSupplement.slot.title': 'Wann?',

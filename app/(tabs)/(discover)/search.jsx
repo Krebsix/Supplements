@@ -442,6 +442,18 @@ export default function SearchScreen() {
                                   </View>
                                 );
                               })}
+                              {/* Rechtsstatus als Fakt aus der Produktklasse,
+                                  kein Siegel (siehe data/certifications.js). */}
+                              {product.entry?.productClass === 'arznei' ? (
+                                <View
+                                  style={styles.offBadge}
+                                  accessibilityLabel={t('search.products.drugBadge')}
+                                >
+                                  <Text style={styles.offBadgeText}>
+                                    {t('search.products.drugBadge')}
+                                  </Text>
+                                </View>
+                              ) : null}
                               {product.entry?.license === 'ODbL' ? (
                                 <View
                                   style={styles.offBadge}

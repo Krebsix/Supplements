@@ -31,6 +31,22 @@ export const KIND_LABELS = {
 };
 
 export const certifications = [
+  // Kein Siegel, sondern ein Rechtsstatus: Zugelassene Arzneimittel werden
+  // in Deutschland unter behoerdlicher Herstellererlaubnis (§ 13 AMG) und
+  // GMP-Aufsicht produziert. Das gilt fuer JEDES verkehrsfaehige
+  // Arzneimittel, deshalb wird der Eintrag automatisch aus der
+  // Produktklasse 'arznei' abgeleitet (SeedCatalog.js) und nie einzeln
+  // behauptet. Quelle ist das Gesetz, nicht der Hersteller.
+  {
+    id: 'amg-arzneimittel',
+    name: 'Arzneimittel (§ 13 AMG)',
+    kind: CERTIFICATION_KIND.MANUFACTURING,
+    issuer: 'Zustaendige Landesbehoerde (Deutschland)',
+    what: 'Herstellung unter behördlicher Herstellererlaubnis nach § 13 Arzneimittelgesetz mit GMP-Überwachung durch die Landesbehörde.',
+    scope: 'Rechtsstatus der Produktklasse, keine produktspezifische Laborprüfung. Sagt nichts über Eignung oder Dosierung im Einzelfall aus; es gilt die Packungsbeilage.',
+    region: 'DE',
+    synonyms: [],
+  },
   {
     id: 'koelner-liste',
     name: 'Kölner Liste',

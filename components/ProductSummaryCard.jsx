@@ -67,9 +67,11 @@ export default function ProductSummaryCard({
             >
               <Text style={styles.certLine}>
                 {t(
-                  cert.level === 'brand'
-                    ? 'addSupplement.product.cert.brand'
-                    : 'addSupplement.product.cert.product',
+                  cert.level === 'law'
+                    ? 'addSupplement.product.cert.law'
+                    : cert.level === 'brand'
+                      ? 'addSupplement.product.cert.brand'
+                      : 'addSupplement.product.cert.product',
                   { name: meta.name, date: String(cert.checkedAt ?? '').slice(0, 7) }
                 )}
               </Text>

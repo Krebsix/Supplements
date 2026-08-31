@@ -32,6 +32,7 @@ export default {
   'search.products.sortAmount': 'Amount',
   'search.products.sortForm': 'Form',
   'search.products.offBadge': 'OFF',
+  'search.products.drugBadge': 'Medicinal product',
   'search.products.offSource': 'Data from Open Food Facts, ODbL',
 
   'brands.kicker': 'Catalogue',

@@ -30,6 +30,7 @@ export default {
   'search.products.sortAmount': 'Menge',
   'search.products.sortForm': 'Form',
   'search.products.offBadge': 'OFF',
+  'search.products.drugBadge': 'Arzneimittel',
   'search.products.offSource': 'Daten aus Open Food Facts, ODbL',
 
   'brands.kicker': 'Katalog',
