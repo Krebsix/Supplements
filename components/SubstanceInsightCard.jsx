@@ -212,6 +212,8 @@ export default function SubstanceInsightCard({ profile }) {
                   onPress={() => source.url && Linking.openURL(source.url)}
                   activeOpacity={0.7}
                   accessibilityRole={source.url ? 'link' : undefined}
+                  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                 >
                   <Text
                     style={[styles.sourceText, source.url && styles.sourceTextLinked]}
@@ -469,8 +471,9 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontWeight: '700',
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): war 40.
   expandButton: {
-    minHeight: 40,
+    minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: space.sm,

@@ -70,8 +70,13 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
   title: { ...type.heading },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   closeButton: {
     padding: space.sm,
     borderRadius: radius.md,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

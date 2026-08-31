@@ -76,6 +76,8 @@ export default function SlotReason({ guidance, onOpenSubstance }) {
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityHint={t('dashboard.reason.sourceHint')}
+            // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
           >
             <Text style={styles.text}>
               {firstSentence(note.text)}
@@ -96,6 +98,7 @@ export default function SlotReason({ guidance, onOpenSubstance }) {
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityHint={t('dashboard.reason.sourceHint')}
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
           >
             <Feather name="alert-circle" size={13} color={tone.ink} style={styles.icon} />
             <Text style={[styles.text, { color: tone.ink }]}>
@@ -117,6 +120,7 @@ export default function SlotReason({ guidance, onOpenSubstance }) {
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityHint={t('dashboard.reason.sourceHint')}
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
           >
             <Feather name="plus-circle" size={13} color={colors.affirm} style={styles.icon} />
             <Text style={[styles.text, { color: colors.affirm }]}>

@@ -357,7 +357,12 @@ export default function Dashboard() {
               labValues: lastRestore.counts.labValues,
             })}
           </Text>
-          <TouchableOpacity onPress={dismissRestoreNotice} accessibilityRole="button" style={styles.restoredButton}>
+          <TouchableOpacity
+            onPress={dismissRestoreNotice}
+            accessibilityRole="button"
+            style={styles.restoredButton}
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+          >
             <Text style={styles.restoredButtonText}>{t('dashboard.restored.dismiss')}</Text>
           </TouchableOpacity>
         </View>
@@ -498,6 +503,7 @@ export default function Dashboard() {
                         accessibilityLabel={
                           detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')
                         }
+                        hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                       >
                         {detailsExpanded && supplementNotes ? (
                           <Text style={styles.noteText}>{supplementNotes}</Text>
@@ -789,6 +795,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     paddingHorizontal: space.lg,
     paddingVertical: space.sm,
+    // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+    minHeight: 44,
+    justifyContent: 'center',
   },
   cleanupButtonText: {
     color: colors.surface,
@@ -944,6 +953,11 @@ const styles = StyleSheet.create({
     borderColor: colors.accent,
     paddingHorizontal: space.sm,
     paddingVertical: space.xs,
+    // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): rein dekoratives Badge
+    // ohne onPress, die 44-pt-Mindesthoehe aus surfaces.chip gilt hier
+    // nicht -- sonst blaeht die zentrale Aenderung dieses Zeitpunkt-Badge
+    // sichtbar auf.
+    minHeight: 0,
   },
   timingPillText: {
     color: colors.accent,
@@ -961,6 +975,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: space.sm,
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln) fuer alle drei Zeilen-Aktionen.
   primaryAction: {
     minWidth: 116,
     borderRadius: radius.md,
@@ -968,6 +983,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     paddingVertical: space.sm,
     alignItems: 'center',
+    minHeight: 44,
+    justifyContent: 'center',
   },
   secondaryAction: {
     minWidth: 116,
@@ -977,6 +994,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     paddingVertical: space.sm,
     alignItems: 'center',
+    minHeight: 44,
+    justifyContent: 'center',
   },
   // Entfernen-Aktion: ein Hinweis vor destruktivem Schritt, kein Alarmrot.
   dangerAction: {
@@ -988,6 +1007,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     paddingVertical: space.sm,
     alignItems: 'center',
+    minHeight: 44,
+    justifyContent: 'center',
   },
   primaryActionText: {
     color: colors.surface,

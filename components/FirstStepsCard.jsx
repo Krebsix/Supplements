@@ -132,7 +132,14 @@ function detailFor(step, t, autoBackup) {
 
 function QuietLink({ label, onPress }) {
   return (
-    <Pressable onPress={onPress} style={styles.link} accessibilityRole="button" hitSlop={8}>
+    <Pressable
+      onPress={onPress}
+      style={styles.link}
+      accessibilityRole="button"
+      // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop=8 reichte bei
+      // ~20 pt Inhalt nicht aus.
+      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+    >
       <Text style={styles.linkText}>{label}</Text>
       <Feather name="chevron-right" size={16} color={colors.accent} />
     </Pressable>

@@ -258,17 +258,21 @@ const styles = StyleSheet.create({
     marginBottom: space.sm,
   },
   creditText: { ...type.body, flex: 1, marginRight: space.md },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   buyButtonSmall: {
     backgroundColor: colors.accent,
     borderRadius: radius.md,
     paddingHorizontal: space.lg,
     paddingVertical: space.sm,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   buyButtonSmallText: { fontWeight: '600', color: colors.surface, fontSize: 15 },
   legal: { ...type.tiny, marginTop: space.md, marginBottom: space.lg },
   quietButton: { ...surfaces.buttonQuiet, marginBottom: space.sm },
   quietButtonText: { ...surfaces.buttonQuietText },
-  link: { paddingVertical: space.sm, alignItems: 'center' },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+  link: { paddingVertical: space.sm, alignItems: 'center', minHeight: 44, justifyContent: 'center' },
   linkText: { ...type.small, color: colors.accent },
   pressed: { opacity: 0.72 },
 });

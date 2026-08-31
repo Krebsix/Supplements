@@ -586,15 +586,21 @@ const styles = StyleSheet.create({
     padding: 2,
     marginBottom: space.lg,
   },
-  segmentItem: { flex: 1, paddingVertical: space.sm, borderRadius: radius.sm, alignItems: 'center' },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+  segmentItem: {
+    flex: 1, paddingVertical: space.sm, borderRadius: radius.sm, alignItems: 'center',
+    minHeight: 44, justifyContent: 'center',
+  },
   segmentItemActive: { backgroundColor: colors.surface },
   segmentText: { ...type.small, color: colors.inkMuted },
   segmentTextActive: { color: colors.ink, fontWeight: '600' },
   card: { ...surfaces.card, marginBottom: space.lg },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 44,
   },
   sectionBody: { marginTop: space.sm },
   switchRow: { flexDirection: 'row', alignItems: 'center', marginTop: space.md },

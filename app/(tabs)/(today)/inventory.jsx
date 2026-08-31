@@ -207,6 +207,7 @@ export default function InventoryScreen() {
                     )
                   }
                   accessibilityRole="link"
+                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                 >
                   <Text style={styles.actionText}>{t('inventory.edit')}</Text>
                 </TouchableOpacity>
@@ -219,6 +220,7 @@ export default function InventoryScreen() {
                     })
                   }
                   accessibilityRole="button"
+                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                 >
                   <Text style={styles.actionText}>
                     {paused ? t('inventory.resume') : t('inventory.pause')}
@@ -229,6 +231,7 @@ export default function InventoryScreen() {
                   style={styles.actionButton}
                   onPress={() => handleArchive(supplement)}
                   accessibilityRole="button"
+                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                 >
                   <Text style={styles.actionDanger}>{t('inventory.archive')}</Text>
                 </TouchableOpacity>
@@ -252,6 +255,7 @@ export default function InventoryScreen() {
                     updateUserSupplement(supplement.id, { status: 'active' })
                   }
                   accessibilityRole="button"
+                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
                 >
                   <Text style={styles.actionText}>{t('inventory.restore')}</Text>
                 </TouchableOpacity>

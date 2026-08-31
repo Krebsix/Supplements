@@ -177,6 +177,9 @@ export default function Home() {
         <TouchableOpacity
           onPress={() => router.push('/privacy')}
           accessibilityRole="link"
+          // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): Fusszeilen-Link,
+          // Layout bleibt kompakt.
+          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
         >
           <Text style={styles.legalRowText}>{t('nav.privacy')}</Text>
         </TouchableOpacity>
@@ -184,6 +187,7 @@ export default function Home() {
         <TouchableOpacity
           onPress={() => router.push('/imprint')}
           accessibilityRole="link"
+          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
         >
           <Text style={styles.legalRowText}>{t('nav.imprint')}</Text>
         </TouchableOpacity>
@@ -191,6 +195,7 @@ export default function Home() {
         <TouchableOpacity
           onPress={() => router.push('/terms')}
           accessibilityRole="link"
+          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
         >
           <Text style={styles.legalRowText}>{t('nav.terms')}</Text>
         </TouchableOpacity>

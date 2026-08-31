@@ -252,7 +252,11 @@ export default function OutcomeScreen() {
                 {t(getOutcomeMetric(trial.metricId)?.labelKey ?? '')} ·{' '}
                 {t(`outcome.finished.${trial.conclusion ?? 'unclear'}`)}
               </Text>
-              <Text style={styles.deleteLink} onPress={() => confirmDelete(trial.id)}>
+              <Text
+                style={styles.deleteLink}
+                onPress={() => confirmDelete(trial.id)}
+                hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+              >
                 {t('outcome.delete')}
               </Text>
             </View>
@@ -427,7 +431,11 @@ function TrialCard({ trial, evaluation, hasRatedToday, onRate, onConclude, onDel
         </View>
       ) : null}
 
-      <Text style={styles.deleteLink} onPress={onDelete}>
+      <Text
+        style={styles.deleteLink}
+        onPress={onDelete}
+        hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+      >
         {t('outcome.delete')}
       </Text>
     </View>
@@ -520,9 +528,11 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderRadius: radius.lg, padding: space.md,
   },
   dueButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm - 1, marginTop: space.sm + 2 },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   dueButton: {
     backgroundColor: colors.surfaceSunken, borderColor: colors.rule, borderWidth: 1,
     borderRadius: radius.md, paddingHorizontal: 13, paddingVertical: space.sm,
+    minHeight: 44, justifyContent: 'center',
   },
   dueButtonText: { color: colors.ink, fontSize: 12, fontWeight: '800' },
   finishedCard: { ...surfaces.card, padding: space.md, marginBottom: space.sm + 2 },

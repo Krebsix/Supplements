@@ -382,6 +382,7 @@ const styles = StyleSheet.create({
     color: cautionTone.ink,
     marginTop: space.xs,
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   completeButton: {
     alignSelf: 'flex-start',
     marginTop: space.md,
@@ -389,6 +390,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     borderRadius: radius.md,
     backgroundColor: colors.accent,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   completeButtonText: {
     ...type.small,

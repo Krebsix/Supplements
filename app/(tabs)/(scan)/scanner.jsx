@@ -1451,11 +1451,13 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     ...surfaces.buttonPrimaryText,
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   inlineButton: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: space.md,
     marginTop: 2,
+    minHeight: 44,
   },
   inlineButtonText: {
     color: colors.inkMuted,

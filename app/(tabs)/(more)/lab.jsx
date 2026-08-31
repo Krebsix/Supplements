@@ -284,10 +284,18 @@ export default function LabScreen() {
                       ) : null}
 
                       <View style={styles.actionRow}>
-                        <Text style={styles.actionLink} onPress={() => startEdit(entry)}>
+                        <Text
+                          style={styles.actionLink}
+                          onPress={() => startEdit(entry)}
+                          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                        >
                           {t('lab.list.edit')}
                         </Text>
-                        <Text style={styles.actionLink} onPress={() => confirmDelete(entry.id)}>
+                        <Text
+                          style={styles.actionLink}
+                          onPress={() => confirmDelete(entry.id)}
+                          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                        >
                           {t('lab.list.delete')}
                         </Text>
                       </View>
@@ -356,9 +364,11 @@ const styles = StyleSheet.create({
   disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg - 2 },
   cancelButton: { ...surfaces.buttonQuiet, paddingVertical: 13, marginTop: space.sm },
   cancelButtonText: { ...surfaces.buttonQuietText, fontSize: 14 },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   secondaryButton: {
     backgroundColor: colors.surface, borderColor: colors.accent, borderWidth: 1,
     borderRadius: radius.md, paddingVertical: 13, alignItems: 'center', marginBottom: space.sm + 2,
+    minHeight: 44, justifyContent: 'center',
   },
   secondaryButtonText: { color: colors.accent, fontSize: 14, fontWeight: '800' },
   backButton: { ...surfaces.buttonQuiet },

@@ -44,7 +44,14 @@ export default function ProductSummaryCard({
             {brand ? <Text style={styles.brand}>{brand}</Text> : null}
           </View>
           {onEdit ? (
-            <Pressable onPress={onEdit} style={styles.edit} accessibilityRole="button" hitSlop={8}>
+            <Pressable
+              onPress={onEdit}
+              style={styles.edit}
+              accessibilityRole="button"
+              // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop=8 reichte
+              // bei ~20 pt Inhalt nicht aus.
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+            >
               <Text style={styles.editText}>{t('addSupplement.product.change')}</Text>
               <Feather name="edit-2" size={14} color={colors.accent} />
             </Pressable>
@@ -63,7 +70,9 @@ export default function ProductSummaryCard({
               key={`${cert.id}-${cert.level}`}
               onPress={() => cert.sourceUrl && Linking.openURL(cert.sourceUrl)}
               accessibilityRole={cert.sourceUrl ? 'link' : undefined}
-              hitSlop={6}
+              // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop=6 reichte
+              // bei ~20 pt Inhalt nicht aus.
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
             >
               <Text style={styles.certLine}>
                 {t(

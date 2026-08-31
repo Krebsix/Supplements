@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.ink,
   },
-  checkboxRow: { flexDirection: 'row', alignItems: 'center', marginTop: space.lg },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+  checkboxRow: { flexDirection: 'row', alignItems: 'center', marginTop: space.lg, minHeight: 44 },
   checkbox: {
     width: 24,
     height: 24,

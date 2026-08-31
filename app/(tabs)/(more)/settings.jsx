@@ -543,6 +543,7 @@ export default function SettingsScreen() {
                 styles.consentRevokeButton,
                 pressed ? styles.dangerButtonPressed : null,
               ]}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
             >
               <Text style={styles.consentRevokeText}>
                 {t('settings.scanConsentRevoke')}
@@ -712,6 +713,7 @@ const styles = StyleSheet.create({
     backgroundColor: cautionTone.rule,
     marginVertical: space.sm + 2,
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   dangerButton: {
     backgroundColor: alertTone.surface,
     borderColor: alertTone.rule,
@@ -719,6 +721,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     paddingVertical: space.md + 1,
     alignItems: 'center',
+    minHeight: 44,
+    justifyContent: 'center',
   },
   dangerButtonPressed: {
     opacity: 0.72,

@@ -276,6 +276,8 @@ export default function SearchScreen() {
             onPress={() => setActiveCategory(null)}
             activeOpacity={0.7}
             accessibilityRole="button"
+            // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
           >
             <Feather name="chevron-left" size={16} color={colors.accent} />
             <Text style={styles.registerBackText}>

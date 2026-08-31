@@ -73,6 +73,8 @@ export default function ComplaintCard({ view }) {
             onPress={() => setShowNutrients((current) => !current)}
             activeOpacity={0.7}
             accessibilityRole="button"
+            // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
           >
             <Text style={styles.toggle}>
               {showNutrients ? t('complaint.hideNutrients') : t('complaint.showNutrients', {
@@ -151,6 +153,7 @@ export default function ComplaintCard({ view }) {
               key={index}
               style={styles.sourceItem}
               onPress={source.url ? () => Linking.openURL(source.url) : undefined}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
             >
               {source.label}
             </Text>

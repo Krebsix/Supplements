@@ -204,9 +204,12 @@ const styles = StyleSheet.create({
     paddingBottom: space.xl,
     alignItems: 'center',
   },
+  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   pickerDone: {
     paddingVertical: space.sm,
     paddingHorizontal: space.xl,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   pickerDoneText: { ...type.bodyStrong, color: colors.accent },
 });

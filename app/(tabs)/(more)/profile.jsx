@@ -169,7 +169,11 @@ export default function ProfileScreen() {
         </View>
 
         {selected.length > 0 ? (
-          <TouchableOpacity style={styles.resetButton} onPress={confirmReset}>
+          <TouchableOpacity
+            style={styles.resetButton}
+            onPress={confirmReset}
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+          >
             <Text style={styles.resetButtonText}>{t('profile.reset')}</Text>
           </TouchableOpacity>
         ) : null}
@@ -211,6 +215,7 @@ export default function ProfileScreen() {
           onPress={() => Linking.openURL('https://www.dge.de/wissenschaft/referenzwerte/')}
           accessibilityRole="link"
           activeOpacity={0.7}
+          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
         >
           <Text style={styles.bodyDataSource}>D-A-CH-Referenzwerte (DGE/ÖGE/SGE)</Text>
         </TouchableOpacity>
@@ -218,6 +223,7 @@ export default function ProfileScreen() {
           onPress={() => Linking.openURL('https://multimedia.efsa.europa.eu/drvs/index.htm')}
           accessibilityRole="link"
           activeOpacity={0.7}
+          hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
         >
           <Text style={styles.bodyDataSource}>EFSA Dietary Reference Values</Text>
         </TouchableOpacity>
@@ -289,6 +295,7 @@ function FindingCard({ finding, t }) {
               key={`${source.label}-${index}`}
               style={[styles.sourceItem, source.url && styles.sourceLink]}
               onPress={source.url ? () => Linking.openURL(source.url) : undefined}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
             >
               {source.label}
             </Text>

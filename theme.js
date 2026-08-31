@@ -239,6 +239,10 @@ export const surfaces = {
     borderRadius: radius.sm,
     paddingHorizontal: space.md,
     paddingVertical: 8,
+    // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): Chips sind projektweit
+    // tappbar (Sortierung, Einheiten, Haeufigkeit, Slots, Schwellen).
+    minHeight: 44,
+    justifyContent: 'center',
   },
   chipActive: { backgroundColor: colors.accent },
   chipText: { fontWeight: weight.medium, color: colors.inkMuted, fontSize: 15 },
