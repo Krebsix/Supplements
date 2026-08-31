@@ -21,6 +21,8 @@ export default {
 
   'profile.kicker': 'Personal profile',
   'profile.title': 'What additionally applies in your case',
+  'profile.autoSave': 'Every entry is stored on this device immediately, encrypted. There is no need for a save button.',
+  'profile.done': 'Done',
   'profile.subtitle':
     'The app compares your products against the documented sources. It does not assess your situation, it shows where a source says something about a medication group.',
 

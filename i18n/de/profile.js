@@ -21,6 +21,8 @@ export default {
 
   'profile.kicker': 'Persönliches Profil',
   'profile.title': 'Was in deinem Fall zusätzlich gilt',
+  'profile.autoSave': 'Jede Angabe wird sofort auf diesem Gerät gespeichert, verschlüsselt. Ein Speichern-Knopf ist nicht nötig.',
+  'profile.done': 'Fertig',
   'profile.subtitle':
     'Die App gleicht deinen Bestand mit den hinterlegten Quellen ab. Sie bewertet dabei nicht deine Situation, sondern zeigt, wo in den Quellen etwas zu einer Medikamentengruppe steht.',
 

@@ -82,6 +82,9 @@ export default function ProfileScreen() {
       <Text style={styles.kicker}>{t('profile.kicker')}</Text>
       <Text style={styles.title}>{t('profile.title')}</Text>
       <Text style={styles.subtitle}>{t('profile.subtitle')}</Text>
+      {/* Der Screen speichert jede Eingabe sofort; ohne diesen Satz suchen
+          Nutzerinnen einen Speichern-Knopf (Geraetetest 31.08.). */}
+      <Text style={styles.autoSaveHint}>{t('profile.autoSave')}</Text>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{t('profile.about.title')}</Text>
@@ -246,8 +249,8 @@ export default function ProfileScreen() {
         </>
       )}
 
-      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/menu')}>
-        <Text style={styles.backButtonText}>{t('common.backToHome')}</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/menu')} accessibilityRole="button">
+        <Text style={styles.backButtonText}>{t('profile.done')}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -354,6 +357,7 @@ const styles = StyleSheet.create({
   sourceItem: { color: colors.inkMuted, fontSize: 11, lineHeight: 17 },
   sourceLink: { color: colors.accent, textDecorationLine: 'underline' },
   disclaimer: { ...type.tiny, lineHeight: 18, marginTop: space.sm, marginBottom: space.lg },
+  autoSaveHint: { ...type.small, color: colors.affirm, marginTop: space.sm },
   backButton: { ...surfaces.buttonQuiet },
   backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });
