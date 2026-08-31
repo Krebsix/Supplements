@@ -30,6 +30,9 @@ import { getDosageAmount, getDosageUnit } from '../utils/supplementFormatting';
 // Einheiten-Chips fuer die manuelle Eingabe. Der gespeicherte Wert ist der
 // deutsche Fachbegriff bzw. das Kuerzel, wie er bisher frei eingetippt
 // wurde; nur das Label laeuft ueber i18n.
+// Rundet Multiplikationsreste weg (0.1 * 3 = 0.30000000000000004).
+const roundAmount = (value) => Math.round(value * 1000) / 1000;
+
 const UNIT_OPTIONS = [
   { value: 'Kapsel', key: 'capsule' },
   { value: 'Tablette', key: 'tablet' },
@@ -116,8 +119,21 @@ export default function AddSupplement() {
       return pendingScanResult.ingredientDetails;
     }
     const trimmed = name.trim();
-    return trimmed ? [{ name: trimmed, amount: amount.trim(), unit: unit.trim(), form: null }] : [];
-  }, [editId, existingSupplement, fromScan, pendingScanResult, name, amount, unit]);
+    if (!trimmed) return [];
+    // Tagessummen-Konvention (StackAnalyzer): ingredientDetails zaehlen
+    // EINMAL pro Tag. Katalog und Scan liefern die Menge je Tagesportion
+    // (Naehrwerttabelle nach LMIV). Bei manueller Eingabe ist die Menge
+    // "je Einnahme" — fuer die Tagessumme mal Haeufigkeit rechnen, sonst
+    // wuerde 3x taeglich als ein Drittel gezaehlt und eine echte
+    // Ueberschreitung bliebe unsichtbar. Nicht parsebare Mengen bleiben
+    // unveraendert (keine erfundenen Werte).
+    const numeric = Number(amount.trim().replace(',', '.'));
+    const dailyAmount =
+      Number.isFinite(numeric) && numeric > 0 && timesPerDay > 1
+        ? String(roundAmount(numeric * timesPerDay))
+        : amount.trim();
+    return [{ name: trimmed, amount: dailyAmount, unit: unit.trim(), form: null }];
+  }, [editId, existingSupplement, fromScan, pendingScanResult, name, amount, unit, timesPerDay]);
 
   // Bearbeiten: alles vorbelegen, kein Vorschlag, die gespeicherten Slots gelten.
   useEffect(() => {
