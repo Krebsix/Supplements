@@ -3099,7 +3099,15 @@
     "source": "https://www.zinzino.com/shop/site/de/de-de/products/shop/omega-supplements/300000",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "koelner-liste",
+        "level": "product",
+        "sourceUrl": "https://www.koelnerliste.com/news/artikel/neuer-partner-zinzino-operations-ab",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Zinzino",
@@ -3119,7 +3127,15 @@
     "source": "https://www.zinzino.com/shop/site/de/de-de/products/shop/immune-supplements/302200",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "koelner-liste",
+        "level": "product",
+        "sourceUrl": "https://www.koelnerliste.com/news/artikel/neuer-partner-zinzino-operations-ab",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Zinzino",
@@ -3158,7 +3174,15 @@
     "source": "https://www.zinzino.com/shop/site/de/de-de/products/shop/gut-health-supplements/301390",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "koelner-liste",
+        "level": "product",
+        "sourceUrl": "https://www.koelnerliste.com/news/artikel/neuer-partner-zinzino-operations-ab",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Zinzino",
@@ -3188,7 +3212,15 @@
     "source": "https://www.zinzino.com/shop/site/de/de-de/products/shop/immune-supplements/300600",
     "country": "DE",
     "channel": "direct",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "koelner-liste",
+        "level": "product",
+        "sourceUrl": "https://www.koelnerliste.com/news/artikel/neuer-partner-zinzino-operations-ab",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Zinzino",
@@ -4665,7 +4697,15 @@
     "source": "https://www.myprotein.com/p/sports-nutrition/creatine-monohydrate-powder/10530050/",
     "country": "DE",
     "channel": "sport",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "informed-sport",
+        "level": "product",
+        "sourceUrl": "https://choice.wetestyoutrust.com/supplement-search/myprotein/impact-creatine",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "MyProtein",
@@ -4792,7 +4832,15 @@
     "source": "https://www.optimumnutrition.com/en-us/products/gold-standard-100-whey-protein-powder",
     "country": "DE",
     "channel": "sport",
-    "productClass": null
+    "productClass": null,
+    "certifications": [
+      {
+        "id": "informed-sport",
+        "level": "product",
+        "sourceUrl": "https://choice.wetestyoutrust.com/supplement-search/optimum-nutrition/gold-standard-100-whey",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Optimum Nutrition",
@@ -4812,7 +4860,15 @@
     "source": "https://www.optimumnutrition.com/en-us/products/creatine-monohydrate-micronized-powder",
     "country": "DE",
     "channel": "sport",
-    "productClass": null
+    "productClass": null,
+    "certifications": [
+      {
+        "id": "informed-sport",
+        "level": "product",
+        "sourceUrl": "https://choice.wetestyoutrust.com/supplement-search/optimum-nutrition/gold-standard-100-whey",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Optimum Nutrition",
@@ -4836,7 +4892,15 @@
     "source": "https://www.optimumnutrition.com/en-us/products/essential-amino-energy-pre-workout-powder",
     "country": "DE",
     "channel": "sport",
-    "productClass": null
+    "productClass": null,
+    "certifications": [
+      {
+        "id": "informed-sport",
+        "level": "product",
+        "sourceUrl": "https://choice.wetestyoutrust.com/supplement-search/optimum-nutrition/gold-standard-100-whey",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Optimum Nutrition",
@@ -4898,7 +4962,15 @@
     "source": "https://www.thorne.com/products/dp/basic-nutrients-2-day",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "nsf-sport",
+        "level": "product",
+        "sourceUrl": "https://www.nsfsport.com/certified-products/search-results.php?keyword=thorne",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Thorne",
@@ -4917,7 +4989,15 @@
     "source": "https://www.thorne.com/products/dp/d-5-000-vitamin-d-capsule",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "nsf-sport",
+        "level": "product",
+        "sourceUrl": "https://www.nsfsport.com/certified-products/search-results.php?keyword=thorne",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Thorne",
@@ -4963,7 +5043,15 @@
     "source": "https://www.thorne.com/products/dp/meriva-500-sf-120",
     "country": "DE",
     "channel": "online",
-    "productClass": "nem"
+    "productClass": "nem",
+    "certifications": [
+      {
+        "id": "nsf-sport",
+        "level": "product",
+        "sourceUrl": "https://www.nsfsport.com/certified-products/search-results.php?keyword=thorne",
+        "checkedAt": "2026-08-31"
+      }
+    ]
   },
   {
     "brand": "Life Extension",
