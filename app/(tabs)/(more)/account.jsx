@@ -188,6 +188,10 @@ function AuthForm({ t }) {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              autoCorrect={false}
+              spellCheck={false}
+              keyboardType={showPassword && Platform.OS === 'android' ? 'visible-password' : 'default'}
               textContentType={mode === 'signUp' ? 'newPassword' : 'password'}
               accessibilityLabel={t('account.field.password')}
               returnKeyType={mode === 'signIn' ? 'done' : 'next'}
@@ -212,6 +216,10 @@ function AuthForm({ t }) {
                   value={passwordRepeat}
                   onChangeText={setPasswordRepeat}
                   secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  spellCheck={false}
+                  keyboardType={showPassword && Platform.OS === 'android' ? 'visible-password' : 'default'}
                   textContentType="newPassword"
                   accessibilityLabel={t('account.field.passwordRepeat')}
                   returnKeyType="done"
