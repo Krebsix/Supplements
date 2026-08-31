@@ -62,6 +62,7 @@ export default {
   'addSupplement.scanHint': 'Aus dem Etikett erkannt, bitte prüfen.',
   'addSupplement.product.change': 'Ändern',
   'addSupplement.product.noDetails': 'Inhaltsstoffe noch nicht erfasst.',
+  'addSupplement.product.recognized': 'Erkannt: {summary}',
   'addSupplement.product.cert.product': '{name}: Produkt gelistet (Stand {date}). Quelle öffnen',
   'addSupplement.product.cert.brand': '{name}: Hersteller zertifiziert (Stand {date}). Quelle öffnen',
   'addSupplement.product.cert.law': '{name}: Herstellung unter behördlicher Herstellererlaubnis. Quelle öffnen',

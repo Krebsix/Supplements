@@ -178,10 +178,22 @@ export default function AddSupplement() {
   useEffect(() => {
     if (!fromScan) return;
     setName(pendingScanResult.productName || pendingScanResult.name || '');
-    const scannedAmount = pendingScanResult?.dosage?.amount ?? pendingScanResult?.dosageAmount ?? pendingScanResult?.amount ?? '';
-    const scannedUnit = pendingScanResult?.dosage?.unit ?? pendingScanResult?.dosageUnit ?? pendingScanResult?.unit ?? '';
+    let scannedAmount = pendingScanResult?.dosage?.amount ?? pendingScanResult?.dosageAmount ?? pendingScanResult?.amount ?? '';
+    let scannedUnit = pendingScanResult?.dosage?.unit ?? pendingScanResult?.dosageUnit ?? pendingScanResult?.unit ?? '';
+    // Foto-Scans tragen die Mengen oft nur in der Zutatenliste, nicht im
+    // Dosis-Feld: dann die erste erkannte Position vorbefuellen, statt die
+    // Nutzerin abtippen zu lassen (Geraetetest 31.08.).
+    const firstDetail = Array.isArray(pendingScanResult?.ingredientDetails)
+      ? pendingScanResult.ingredientDetails.find((detail) => detail?.amount && detail?.unit)
+      : null;
+    if (!String(scannedAmount ?? '').trim() && firstDetail) scannedAmount = firstDetail.amount;
+    if (!String(scannedUnit ?? '').trim() && firstDetail) scannedUnit = firstDetail.unit;
+    const unitText = scannedUnit === null || scannedUnit === undefined ? '' : String(scannedUnit);
     setAmount(scannedAmount === null || scannedAmount === undefined ? '' : String(scannedAmount));
-    setUnit(scannedUnit === null || scannedUnit === undefined ? '' : String(scannedUnit));
+    setUnit(unitText);
+    // Erkannte Einheit ausserhalb der Chips (z. B. "IE") sichtbar machen,
+    // sonst sieht das Feld leer aus, obwohl ein Wert dahinter liegt.
+    setUnitOther(Boolean(unitText) && !UNIT_OPTIONS.some((option) => option.value === unitText));
     const warnings = Array.isArray(pendingScanResult.warnings) ? pendingScanResult.warnings : [];
     setNotes(
       [
@@ -373,6 +385,25 @@ export default function AddSupplement() {
 
         {showProductFields ? (
           <View style={styles.productFields}>
+            {/* Im Aendern-Modus nach einem Scan bleibt sichtbar, was schon
+                erkannt wurde: Marke und Inhaltsstoffe stehen ueber den
+                Feldern, statt mit der Produktkarte zu verschwinden. */}
+            {fromScan && pendingScanResult ? (
+              <Text style={styles.recognizedHint}>
+                {t('addSupplement.product.recognized', {
+                  summary: [
+                    pendingScanResult.brand && pendingScanResult.brand !== 'Demo Brand' ? pendingScanResult.brand : null,
+                    ...(Array.isArray(pendingScanResult.ingredientDetails)
+                      ? pendingScanResult.ingredientDetails.slice(0, 3).map((detail) =>
+                          [detail.amount, detail.unit, detail.name].filter(Boolean).join(' ')
+                        )
+                      : []),
+                  ]
+                    .filter(Boolean)
+                    .join(' · '),
+                })}
+              </Text>
+            ) : null}
             <Field label={t('addSupplement.name.label')} value={name} onChangeText={setName} placeholder={t('addSupplement.name.placeholder')} autoFocus={isManual} />
             <View style={styles.row}>
               <View style={styles.rowField}>
@@ -520,6 +551,7 @@ const styles = StyleSheet.create({
   content: { ...surfaces.content, paddingBottom: 120 },
   title: { ...type.heading, marginBottom: space.lg },
   productFields: { ...surfaces.card, padding: space.lg },
+  recognizedHint: { ...type.small, color: colors.accentInk, marginBottom: space.md },
   field: { marginBottom: space.md },
   label: { ...type.label, marginBottom: space.xs },
   input: { ...surfaces.input },

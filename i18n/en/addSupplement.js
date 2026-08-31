@@ -62,6 +62,7 @@ export default {
   'addSupplement.scanHint': 'Read from the label, please check.',
   'addSupplement.product.change': 'Change',
   'addSupplement.product.noDetails': 'Ingredients not captured yet.',
+  'addSupplement.product.recognized': 'Detected: {summary}',
   'addSupplement.product.cert.product': '{name}: product listed (as of {date}). Open source',
   'addSupplement.product.cert.brand': '{name}: manufacturer certified (as of {date}). Open source',
   'addSupplement.product.cert.law': '{name}: manufactured under an official manufacturing licence. Open source',
