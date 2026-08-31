@@ -460,8 +460,10 @@ const styles = StyleSheet.create({
     marginBottom: space.sm + 1,
   },
   warningNumber: {
-    width: 25,
-    height: 25,
+    // Dynamic Type: minWidth/minHeight statt fester Groesse, damit die
+    // Box mit der Ziffer mitwaechst statt sie abzuschneiden.
+    minWidth: 25,
+    minHeight: 25,
     borderRadius: radius.md,
     backgroundColor: colors.surface,
     alignItems: 'center',

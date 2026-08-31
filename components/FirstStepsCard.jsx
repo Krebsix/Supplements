@@ -180,8 +180,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   badge: {
-    width: BADGE,
-    height: BADGE,
+    // Dynamic Type: minWidth/minHeight statt fester Groesse, damit der
+    // Kreis bei grosser Systemschrift mit der Ziffer mitwaechst statt sie
+    // abzuschneiden.
+    minWidth: BADGE,
+    minHeight: BADGE,
     borderRadius: BADGE / 2,
     borderWidth: 1,
     borderColor: colors.ruleStrong,

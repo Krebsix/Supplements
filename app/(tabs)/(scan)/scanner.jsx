@@ -768,7 +768,13 @@ export default function ScannerScreen() {
                       isActive && styles.stepThumbActive,
                     ]}
                   >
-                    <Text style={styles.stepThumbNumber}>{index + 1}</Text>
+                    {/* Dynamic Type: stepThumb ist ein Bild-Platzhalter mit fester
+                        Groesse (Kamera-Thumbnail, braucht explizite Masse).
+                        Erlaubte Ausnahme laut Bedienregeln (CLAUDE.md):
+                        maxFontSizeMultiplier statt Umbruch, nie unter 1.5. */}
+                    <Text style={styles.stepThumbNumber} maxFontSizeMultiplier={1.5}>
+                      {index + 1}
+                    </Text>
                   </View>
                 )}
                 <Text
@@ -1089,8 +1095,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   stepNumberBadge: {
-    width: 42,
-    height: 42,
+    // Dynamic Type: minWidth/minHeight statt fester Groesse, damit der
+    // Kreis mit der Ziffer mitwaechst statt sie abzuschneiden.
+    minWidth: 42,
+    minHeight: 42,
     borderRadius: radius.lg,
     backgroundColor: colors.accentSoft,
     alignItems: 'center',

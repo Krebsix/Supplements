@@ -247,7 +247,9 @@ export default function InventoryScreen() {
             </Text>
             {archived.map((supplement) => (
               <View key={supplement.id} style={styles.archivedRow}>
-                <Text style={styles.archivedName} numberOfLines={1}>
+                {/* Dynamic Type: kein numberOfLines-Limit, das ist der
+                    Praeparatname und wird an anderer Stelle nie gekuerzt. */}
+                <Text style={styles.archivedName}>
                   {formatSupplementName(supplement)}
                 </Text>
                 <TouchableOpacity

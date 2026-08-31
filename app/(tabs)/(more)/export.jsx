@@ -132,7 +132,9 @@ const styles = StyleSheet.create({
   card: { ...surfaces.card, padding: space.sm - 2 },
   checkRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11, paddingHorizontal: space.sm + 2 },
   checkbox: {
-    width: 22, height: 22, borderRadius: radius.sm,
+    // Dynamic Type: minWidth/minHeight statt fester Groesse, damit die
+    // Box mit dem Haekchen-Text mitwaechst statt es abzuschneiden.
+    minWidth: 22, minHeight: 22, borderRadius: radius.sm,
     borderColor: colors.ruleStrong, borderWidth: 1.5,
     alignItems: 'center', justifyContent: 'center', marginRight: 11,
   },

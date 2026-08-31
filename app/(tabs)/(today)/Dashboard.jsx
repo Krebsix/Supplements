@@ -332,7 +332,9 @@ export default function Dashboard() {
             })}
           </Text>
           {duplicateGroupNames ? (
-            <Text style={styles.cleanupMeta} numberOfLines={2}>
+            // Dynamic Type: kein numberOfLines-Limit, das nennt die
+            // tatsaechlichen Praeparatnamen der Duplikate.
+            <Text style={styles.cleanupMeta}>
               {t('dashboard.cleanupMeta', { names: duplicateGroupNames })}
             </Text>
           ) : null}
