@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useRouter } from 'expo-router';
 
 import { ACCOUNT_STATUS } from '../../../AccountStore';
@@ -69,6 +70,10 @@ function AuthForm({ t }) {
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [formError, setFormError] = useState(null);
+  // Ein Auge fuer beide Passwortfelder (Geraetetest 31.08.): Tippfehler im
+  // verdeckten Passwort waren die Hauptursache fuer Anmelde-Frust.
+  const [showPassword, setShowPassword] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   const emailProvider = PROVIDERS.find((p) => p.id === 'email' && p.available);
   if (!emailProvider) return null;
@@ -135,6 +140,9 @@ function AuthForm({ t }) {
     <KeyboardAvoidingView
       style={styles.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      // Ohne den Header-Versatz verdeckt die Tastatur den Weiter-Knopf
+      // unter "Passwort wiederholen" (Geraetetest 31.08.).
+      keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}
     >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Text style={styles.kicker}>{t('account.kicker')}</Text>
@@ -174,26 +182,50 @@ function AuthForm({ t }) {
           />
 
           <Text style={styles.label}>{t('account.field.password')}</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            textContentType={mode === 'signUp' ? 'newPassword' : 'password'}
-            accessibilityLabel={t('account.field.password')}
-          />
+          <View style={styles.passwordRow}>
+            <TextInput
+              style={[styles.input, styles.passwordInput]}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              textContentType={mode === 'signUp' ? 'newPassword' : 'password'}
+              accessibilityLabel={t('account.field.password')}
+              returnKeyType={mode === 'signIn' ? 'done' : 'next'}
+              onSubmitEditing={mode === 'signIn' ? handleSubmit : undefined}
+            />
+            <Pressable
+              onPress={() => setShowPassword((value) => !value)}
+              style={styles.eyeButton}
+              accessibilityRole="button"
+              accessibilityLabel={t(showPassword ? 'account.field.hidePassword' : 'account.field.showPassword')}
+            >
+              <Feather name={showPassword ? 'eye-off' : 'eye'} size={20} color={colors.inkMuted} />
+            </Pressable>
+          </View>
           {mode === 'signUp' ? (
             <>
               <Text style={styles.hint}>{t('account.hint.password')}</Text>
               <Text style={styles.label}>{t('account.field.passwordRepeat')}</Text>
-              <TextInput
-                style={styles.input}
-                value={passwordRepeat}
-                onChangeText={setPasswordRepeat}
-                secureTextEntry
-                textContentType="newPassword"
-                accessibilityLabel={t('account.field.passwordRepeat')}
-              />
+              <View style={styles.passwordRow}>
+                <TextInput
+                  style={[styles.input, styles.passwordInput]}
+                  value={passwordRepeat}
+                  onChangeText={setPasswordRepeat}
+                  secureTextEntry={!showPassword}
+                  textContentType="newPassword"
+                  accessibilityLabel={t('account.field.passwordRepeat')}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit}
+                />
+                <Pressable
+                  onPress={() => setShowPassword((value) => !value)}
+                  style={styles.eyeButton}
+                  accessibilityRole="button"
+                  accessibilityLabel={t(showPassword ? 'account.field.hidePassword' : 'account.field.showPassword')}
+                >
+                  <Feather name={showPassword ? 'eye-off' : 'eye'} size={20} color={colors.inkMuted} />
+                </Pressable>
+              </View>
             </>
           ) : null}
 
@@ -573,6 +605,16 @@ function PasswordSettingsCard({ t, busy }) {
 }
 
 const styles = StyleSheet.create({
+  // Passwortfeld mit Auge: Eingabe flex, Umschalter als 44-pt-Tippflaeche.
+  passwordRow: { flexDirection: 'row', alignItems: 'center' },
+  passwordInput: { flex: 1 },
+  eyeButton: {
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: space.xs,
+  },
   screen: { ...surfaces.screen },
   center: { justifyContent: 'center', alignItems: 'center' },
   content: { ...surfaces.content },

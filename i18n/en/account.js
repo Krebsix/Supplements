@@ -15,6 +15,8 @@ export default {
   'account.field.email': 'Email address',
   'account.field.password': 'Password',
   'account.field.passwordRepeat': 'Repeat password',
+  'account.field.showPassword': 'Show password',
+  'account.field.hidePassword': 'Hide password',
   'account.hint.password':
     'At least 10 characters. The password protects your data, not just the login.',
 
