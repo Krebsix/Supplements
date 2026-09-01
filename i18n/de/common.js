@@ -5,9 +5,9 @@
 
 export default {
   'tabs.today': 'Heute',
-  'tabs.discover': 'Entdecken',
-  'tabs.scan': 'Scannen',
-  'tabs.analysis': 'Analyse',
+  'tabs.inventory': 'Bestand',
+  'tabs.add': 'Hinzufügen',
+  'tabs.learn': 'Wissen',
   'tabs.more': 'Mehr',
   'nav.home': 'MySuplea',
   'nav.dashboard': 'Tagesplan',
@@ -15,7 +15,7 @@ export default {
   'nav.results': 'Scan prüfen',
   'nav.addSupplement': 'Supplement erfassen',
   'nav.profile': 'Gesundheitsprofil',
-  'nav.analysis': 'Analyse',
+  'nav.analysis': 'Tagessummen-Check',
   'nav.outcome': 'Wirkung',
   'nav.lab': 'Laborwerte',
   'nav.export': 'Bericht',

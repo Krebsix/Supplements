@@ -49,11 +49,17 @@ app/
 ├── AddSupplement.jsx      Anlegen/Bearbeiten (Modal, inkl. Kur-Zyklus)
 ├── auth/callback.jsx      Ziel der Konto-Mails (Deep Link)
 ├── paywall.jsx            Kauf-Screen (Abo + Credits), rendert ueber PurchaseLogic
-└── (tabs)/                Fuenf echte Router-Tabs, je eigener Stack:
-    ├── (today)/           Dashboard.jsx, history.jsx
-    ├── (discover)/        search.jsx
-    ├── (scan)/            scanner.jsx, results.jsx
-    ├── (analysis)/        analysis.jsx, outcome.jsx
+└── (tabs)/                Fuenf Tabs (Spec Entscheidung 1, seit 2026-09-01):
+    │                      Heute · Bestand · Hinzufuegen · Wissen · Mehr
+    ├── (today)/           Dashboard.jsx (Petrol-Buehne, DayArc), history.jsx
+    ├── (inventory)/       inventory.jsx (Bestand), analysis.jsx
+    │                      (Tagessummen-Check), outcome.jsx (Wirkung)
+    ├── add.jsx            Platzhalter der zentralen Hinzufuegen-Taste;
+    │                      die Taste in (tabs)/_layout.jsx oeffnet das
+    │                      AddSupplementSheet (Scannen/Suchen/Manuell)
+    ├── (discover)/        search.jsx, brands.jsx (Tab "Wissen")
+    ├── (scan)/            scanner.jsx, results.jsx — versteckt (href null),
+    │                      erreichbar ueber Hinzufuegen, Onboarding, Ersteinrichtung
     └── (more)/            menu.jsx (Hub), profile.jsx, lab.jsx, export.jsx,
                            notifications.jsx, settings.jsx, account.jsx,
                            account-recovery.jsx, account-reset.jsx,

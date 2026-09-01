@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 
-import AddSupplementSheet from '../../../components/AddSupplementSheet';
 import LanguagePicker from '../../../components/LanguagePicker';
 import { ACCOUNT_STATUS } from '../../../AccountStore';
 import { useTranslation } from '../../../i18n';
@@ -15,8 +14,6 @@ import { colors, radius, space, surfaces, type } from '../../../theme';
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
-  const [sheetVisible, setSheetVisible] = useState(false);
-
   const accountStatus = useAccountStore((state) => state.status);
   const accountEmail = useAccountStore((state) => state.email);
   const purchaseStatus = usePurchaseStore((state) => state.status);
@@ -106,33 +103,11 @@ export default function Home() {
           suggerierten eine Reihenfolge, die es nie gab: Ein Menue ist eine
           Liste von Orten, kein Ablauf. Die Gruppierung nach Zweck sagt
           stattdessen etwas Wahres ueber den Inhalt. */}
-      <Text style={styles.sectionTitle}>{t('home.section.workflow')}</Text>
-      <View style={styles.group}>
-        <MenuRow
-          title={t('home.nav.inventory.title')}
-          subtitle={t('home.nav.inventory.subtitle')}
-          onPress={() => router.push('/inventory')}
-        />
-        <MenuRow
-          title={t('home.nav.add.title')}
-          subtitle={t('home.nav.add.subtitle')}
-          onPress={() => setSheetVisible(true)}
-        />
-        <MenuRow
-          title={t('home.nav.history.title')}
-          subtitle={t('home.nav.history.subtitle')}
-          onPress={() => router.push('/history')}
-          last
-        />
-      </View>
-
+      {/* Bestand, Hinzufuegen, Verlauf und Wirkung sind seit dem Tab-Umbau
+          (Spec Entscheidung 1) eigene Tabs bzw. die zentrale Taste und
+          stehen deshalb nicht mehr in diesem Verzeichnis. */}
       <Text style={styles.sectionTitle}>{t('home.section.insight')}</Text>
       <View style={styles.group}>
-        <MenuRow
-          title={t('home.nav.outcome.title')}
-          subtitle={t('home.nav.outcome.subtitle')}
-          onPress={() => router.push('/outcome')}
-        />
         <MenuRow
           title={t('home.nav.profile.title')}
           subtitle={t('home.nav.profile.subtitle')}
@@ -201,8 +176,6 @@ export default function Home() {
         </TouchableOpacity>
       </View>
     </ScrollView>
-
-      <AddSupplementSheet visible={sheetVisible} onClose={() => setSheetVisible(false)} />
     </View>
   );
 }

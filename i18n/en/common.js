@@ -5,9 +5,9 @@
 
 export default {
   'tabs.today': 'Today',
-  'tabs.discover': 'Discover',
-  'tabs.scan': 'Scan',
-  'tabs.analysis': 'Analysis',
+  'tabs.inventory': 'Inventory',
+  'tabs.add': 'Add',
+  'tabs.learn': 'Learn',
   'tabs.more': 'More',
   'nav.home': 'MySuplea',
   'nav.dashboard': 'Daily plan',
@@ -15,7 +15,7 @@ export default {
   'nav.results': 'Check scan',
   'nav.addSupplement': 'Add supplement',
   'nav.profile': 'Health profile',
-  'nav.analysis': 'Analysis',
+  'nav.analysis': 'Daily total check',
   'nav.outcome': 'Outcome',
   'nav.lab': 'Lab values',
   'nav.export': 'Report',
