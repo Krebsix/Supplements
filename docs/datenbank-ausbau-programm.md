@@ -31,9 +31,11 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
 
 ## Bausteine in Reihenfolge
 
-1. **BfR-Überdosierungs-Durchgang**: `overdoseNote` je Substanz aus den
-   BfR-Einzeldokumenten (alle URLs in der Stellungnahme 006/2024,
-   bfr.bund.de ist direkt abrufbar), DE + EN, Test erzwingt Parität.
+1. **BfR-Überdosierungs-Durchgang**: ERLEDIGT 2026-09-02 (Commit
+   61fa6e7): `overdoseNote` für 29 Substanzen DE + EN aus den 27
+   BfR-Einzeldokumenten, jede Aussage gegen den Dokumenttext geprüft,
+   BfR-Quelle je Substanz ergänzt, Anzeige im Steckbrief, Test erzwingt
+   Parität.
 2. **BfR-NEM-Höchstmengen als dritte Referenz-Ebene** (neben D-A-CH-
    Referenz und EFSA-UL) für die Phase-3b-Referenzwert-Balken, inklusive
    der BfR-Warnhinweise (Vitamin K/Gerinnungshemmer, Eisen nur nach
