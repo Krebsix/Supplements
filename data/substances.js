@@ -2939,10 +2939,11 @@ export const substances = [
       { name: 'Ätherisches Öl äußerlich', note: 'Verdünnt zur Anwendung auf der Haut; nicht im Gesicht von Säuglingen und Kleinkindern anwenden.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nicht bei Verschluss der Gallenwege, Gallenblasenentzündung oder schweren Leberschäden. Bei Reflux können sich Beschwerden verstärken. Menthol-haltige Zubereitungen nicht auf Gesicht oder Brust von Säuglingen und Kleinkindern auftragen (Gefahr von Atemkrämpfen).',
+    cautionNote: 'Nicht bei Verschluss der Gallenwege, Gallenblasenentzündung oder schweren Leberschäden. Bei Reflux können sich Beschwerden verstärken. Menthol-haltige Zubereitungen nicht auf Gesicht oder Brust von Säuglingen und Kleinkindern auftragen (Gefahr von Atemkrämpfen). In der Stillzeit wird Pfefferminze traditionell zum Abstillen verwendet; eine milchreduzierende Wirkung ist klinisch nicht belegt.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Mentha x piperita L., aetheroleum', url: 'https://www.ema.europa.eu/en/medicines/herbal/menthae-piperitae-aetheroleum' },
       { label: 'NCCIH: Peppermint Oil', url: 'https://www.nccih.nih.gov/health/peppermint-oil' },
+      { label: 'NIH LactMed: Peppermint', url: 'https://www.ncbi.nlm.nih.gov/books/NBK501851/' },
     ],
   },
   {
@@ -3763,6 +3764,29 @@ export const substances = [
     cautionNote: 'Bei bestehender Nierenerkrankung gehört die Eiweißzufuhr in ärztliche Begleitung.',
     sources: [
       { label: 'EFSA Journal 2012;10(2):2557, Dietary Reference Values for protein', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/2557' },
+    ],
+  },
+  {
+    id: 'sodium-bicarbonate',
+    name: 'Natron (Natriumhydrogencarbonat)',
+    category: 'Sport',
+    synonyms: ['natron', 'natriumhydrogencarbonat', 'natriumbicarbonat',
+      'sodium bicarbonate', 'baking soda', 'nahco3', 'speisenatron'],
+    unit: 'g',
+    what: 'Natriumhydrogencarbonat (NaHCO3), ein basisches Salz; im Sport als Säurepuffer untersucht, im Haushalt als Speisenatron bekannt.',
+    useCases: [
+      { topic: 'Sport (Säurepuffer)', note: 'Die ISSN-Positionsbestimmung 2021 dokumentiert Leistungseffekte bei hochintensiven Belastungen von 30 Sekunden bis 12 Minuten; untersuchte Einzeldosen liegen um 0,2 bis 0,3 g je kg Körpergewicht.' },
+    ],
+    forms: [
+      { name: 'Pulver (Speisenatron)', bioavailability: 'hoch', note: 'In Wasser gelöst; in Sport-Studien oft zu einer kohlenhydratreichen Mahlzeit, um Magen-Darm-Beschwerden zu mindern.' },
+      { name: 'Magensaftresistente Kapseln', bioavailability: 'verzögert', note: 'Werden untersucht, um die typischen Magen-Darm-Nebenwirkungen zu umgehen.' },
+    ],
+    fatSoluble: false,
+    // Umrechnung transparent (Projektregel): Stoechiometrie steht im Text,
+    // damit der Wert nachvollziehbar ist.
+    cautionNote: 'Deutliche Natriumlast: NaHCO3 besteht stöchiometrisch zu rund 27 Prozent aus Natrium (Na 22,99 von 84,01 g/mol), 1 g Natron liefert also rund 274 mg Natrium. Bei Bluthochdruck, Herz- oder Nierenerkrankung gehört die Anwendung in ärztliche Begleitung. Sport-Dosen verursachen häufig Magen-Darm-Beschwerden.',
+    sources: [
+      { label: 'ISSN Position Stand: Sodium bicarbonate and exercise performance (J Int Soc Sports Nutr 2021)', url: 'https://pubmed.ncbi.nlm.nih.gov/34503527/' },
     ],
   },
 ];

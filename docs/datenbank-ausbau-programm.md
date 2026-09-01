@@ -1,0 +1,62 @@
+# Datenbank-Ausbau: Programm „Maximale Datentiefe"
+
+Stand: 2026-09-01. Nadines Zielvorgabe: die beste und größte Supplement-
+Datenbank mit den bestverwertbaren, anwendbarsten Infos, für alle
+Produkte und alle Infos, die wir verwenden. Quellen außerhalb Europas
+sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
+
+## Drei unverhandelbare Regeln
+
+1. **Quellenpflicht**: Jede fachliche Aussage trägt eine verifizierte
+   Quelle (abgerufen oder per Titel+Kernwert bestätigt). Tests erzwingen
+   das maschinell, wo möglich.
+2. **Keine erfundenen Werte**: Lieber Lücke als Schätzung. OFF-Nährwerte
+   „je 100 g" werden nie als Tagesdosis ausgegeben.
+3. **Transparente Umrechnung**: Wo wir selbst rechnen (Stöchiometrie,
+   Portionsumrechnung), steht der Rechenweg im Text bzw. am Datensatz,
+   sodass jeder den Wert nachvollziehen kann (Muster:
+   `data/elementalFractions.js` mit Summenformel; Natron-cautionNote).
+
+## Erledigt (2026-09-01)
+
+- OFF-Massenimport: 2.418 DACH-Produkte (Identitätsdaten), Katalog 2.831
+  Einträge; ODbL-Recherche in `launch/odbl-recherche.md`.
+- Wirkstoffe: 170 Substanzen (neu: Beta-Glucan, Inulin, Lycopin,
+  Citrus-Bioflavonoide, Chlorid, Protein, Natron), Zuordnungsquote der
+  Katalog-Zutaten 98,3 Prozent.
+- Einnahme-Hinweise: 10 Substanzen mit belegtem Einnahmezeitpunkt plus
+  Fettlöslich-Regel; Vorbefüllung im Aufnehmen-Screen greift.
+- Stillzeit/Schwangerschaft: Salbei- und Pfefferminz-Advisories
+  (EMA/HMPC, LactMed), DE + EN.
+
+## Bausteine in Reihenfolge
+
+1. **BfR-Überdosierungs-Durchgang**: `overdoseNote` je Substanz aus den
+   BfR-Einzeldokumenten (alle URLs in der Stellungnahme 006/2024,
+   bfr.bund.de ist direkt abrufbar), DE + EN, Test erzwingt Parität.
+2. **BfR-NEM-Höchstmengen als dritte Referenz-Ebene** (neben D-A-CH-
+   Referenz und EFSA-UL) für die Phase-3b-Referenzwert-Balken, inklusive
+   der BfR-Warnhinweise (Vitamin K/Gerinnungshemmer, Eisen nur nach
+   Rücksprache, Biotin vor Labortests).
+3. **OFF-Serving-Enrichment**: Für importierte Produkte per Produkt-API
+   `nutriments._serving` + `serving_size` nachladen; nur echte
+   Portionswerte übernehmen, Umrechnung 100g→Portion nur bei eindeutiger
+   Gramm-Portionsangabe, Rechenweg am Datensatz dokumentieren.
+   Erwartung: geringe Abdeckung (viele OFF-Supplements ohne Nährwerte),
+   deshalb nach DSLD priorisieren.
+4. **DSLD-Import** (NIH Dietary Supplement Label Database,
+   https://dsld.od.nih.gov/, public domain): Etikettendaten
+   zehntausender US-Produkte MIT Wirkstoffmengen je Portion. Der
+   größte Hebel für „alle Daten für alle Produkte".
+5. **HMPC-Monographien-Durchgang je Kraut**: Schwangerschaft/Stillzeit/
+   Kinder-Absätze aller Kräuter-Substanzen systematisch in
+   lifeStageAdvisories übernehmen (EMA-PDFs sind abrufbar; LactMed für
+   Stillzeit ergänzend).
+6. **ODbL-Restpflichten**: offProducts.json als Download veröffentlichen
+   (Website), product_cache-OFF-Kennzeichnung.
+
+## Arbeitsweise je Baustein
+
+Quelle beschaffen und verifizieren, Datenmodell minimal erweitern,
+DE + EN pflegen, Test erzwingt Struktur und Parität, testgrüner Stand
+wird gepusht (stehende Freigabe).

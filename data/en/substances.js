@@ -1655,7 +1655,7 @@ export default {
       'Magensaftresistente Kapseln': 'Decisive for gut use: the oil is meant to be released only in the intestine, otherwise heartburn and belching can occur.',
       'Ätherisches Öl äußerlich': 'Diluted for use on the skin; do not apply to the face of infants and small children.',
     },
-    cautionNote: 'Not with bile duct obstruction, gallbladder inflammation or severe liver damage. Reflux complaints can worsen. Do not apply menthol-containing preparations to the face or chest of infants and small children (risk of breathing spasms).',
+    cautionNote: 'Not with bile duct obstruction, gallbladder inflammation or severe liver damage. Reflux complaints can worsen. Do not apply menthol-containing preparations to the face or chest of infants and small children (risk of breathing spasms). While breastfeeding, peppermint is traditionally used for weaning; a milk-reducing effect is not clinically established.',
   },
   'lemon-balm': {
     what: 'A medicinal plant whose leaves (Melissae folium) are traditionally used for restlessness and gastrointestinal complaints.',
@@ -2114,5 +2114,16 @@ export default {
       'Pflanzliche Proteine (Soja, Erbse, Reis)': 'Amino acid profile differs by source, often combined.',
     },
     cautionNote: 'With an existing kidney disease, protein intake belongs under medical supervision.',
+  },
+  'sodium-bicarbonate': {
+    what: 'Sodium hydrogen carbonate (NaHCO3), a basic salt; studied in sport as an acid buffer, known in the household as baking soda.',
+    useCases: [
+      { topic: 'Sport (Acid Buffer)', note: 'The 2021 ISSN position stand documents performance effects in high-intensity efforts of 30 seconds to 12 minutes; studied single doses are around 0.2 to 0.3 g per kg body weight.' },
+    ],
+    forms: {
+      'Pulver (Speisenatron)': 'Dissolved in water; in sport studies often taken with a carbohydrate-rich meal to reduce gastrointestinal complaints.',
+      'Magensaftresistente Kapseln': 'Studied as a way to avoid the typical gastrointestinal side effects.',
+    },
+    cautionNote: 'Considerable sodium load: by stoichiometry NaHCO3 is about 27 percent sodium (Na 22.99 of 84.01 g/mol), so 1 g of baking soda supplies about 274 mg of sodium. With high blood pressure, heart or kidney disease, use belongs under medical supervision. Sport doses often cause gastrointestinal complaints.',
   },
 };

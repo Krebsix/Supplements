@@ -51,6 +51,20 @@ export const SEVERITY_META = {
  * lifeStages: 'all' oder eine Liste von Lebensphasen-IDs.
  */
 export const advisories = {
+  sage: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die EMA-Monographie sieht Salbei-Präparate in Schwangerschaft und Stillzeit nicht vor (Thujon). In der Stillzeit kommt hinzu: Salbei kann die Milchbildung reduzieren; dieser Effekt wird gezielt beim Abstillen genutzt.',
+    },
+  ],
+  'peppermint-oil': [
+    {
+      lifeStages: ['breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Pfefferminze wird traditionell zum Abstillen verwendet; eine milchreduzierende Wirkung ist klinisch nicht belegt (LactMed). Größere Mengen gelten in der Stillzeit als Beobachtungspunkt.',
+    },
+  ],
   'vitamin-a': [
     {
       lifeStages: ['pregnancy'],

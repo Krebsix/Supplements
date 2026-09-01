@@ -70,6 +70,14 @@ export const severityLabels = {
 };
 
 export const advisoriesEN = {
+  sage: {
+    'breastfeeding+pregnancy::contraindicated':
+      'The EMA monograph does not foresee sage preparations during pregnancy and breastfeeding (thujone). In addition, while breastfeeding: sage can reduce milk production; this effect is used deliberately for weaning.',
+  },
+  'peppermint-oil': {
+    'breastfeeding::attention':
+      'Peppermint is traditionally used for weaning; a milk-reducing effect is not clinically established (LactMed). Larger amounts are a known point of observation while breastfeeding.',
+  },
   'vitamin-a': {
     'pregnancy::contraindicated':
       'Preformed vitamin A (retinol, retinyl acetate, retinyl palmitate) is considered harmful to the fetus in higher amounts during pregnancy. Products intended for pregnancy use beta-carotene instead.',
