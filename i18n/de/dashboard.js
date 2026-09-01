@@ -101,6 +101,11 @@ export default {
   'dashboard.undo': 'Rückgängig',
   'dashboard.logAction': 'Dokumentieren',
   'dashboard.loggedAtTime': 'Dokumentiert um {time}',
+  'dashboard.nextUpAt': 'als Nächstes {time}',
+  // Tagesbogen (DayArc): Status je Punkt fuer die Vorlese-Beschriftung.
+  'dashboard.arc.done': 'dokumentiert',
+  'dashboard.arc.next': 'als Nächstes',
+  'dashboard.arc.later': 'offen',
   'dashboard.edit': 'Bearbeiten',
   'dashboard.remove': 'Entfernen',
   'dashboard.archiveAlertTitle': 'Aus Routine entfernen',

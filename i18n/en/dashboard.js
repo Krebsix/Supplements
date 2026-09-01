@@ -101,6 +101,11 @@ export default {
   'dashboard.undo': 'Undo',
   'dashboard.logAction': 'Document',
   'dashboard.loggedAtTime': 'Documented at {time}',
+  'dashboard.nextUpAt': 'next at {time}',
+  // Day arc (DayArc): per-dot status for the accessibility label.
+  'dashboard.arc.done': 'documented',
+  'dashboard.arc.next': 'up next',
+  'dashboard.arc.later': 'open',
   'dashboard.edit': 'Edit',
   'dashboard.remove': 'Remove',
   'dashboard.archiveAlertTitle': 'Remove from routine',

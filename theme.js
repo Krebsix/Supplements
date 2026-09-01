@@ -66,6 +66,20 @@ export const colors = {
 };
 
 /**
+ * Toene auf dunklem Petrol (accentInk als Flaeche): Text und Grafik der
+ * Tagesplan-Buehne. Abgeleitete Aufhellungen des vorhandenen Petrols,
+ * KEINE neue Palette (Design-Review 2026-09-01).
+ * Kontrast inkMuted auf accentInk: 6,8:1 (WCAG AA, nachgerechnet).
+ */
+export const onDark = {
+  ink: '#ffffff',        // Titel auf der Buehne
+  inkMuted: '#a8ccd3',   // Datum, Bogen-Beschriftung
+  accent: '#7fd0c6',     // erledigter Punkt, Fortschritt (helles Mint aus Petrol)
+  rule: '#2b5a66',       // Bogenlinie, gedaempfte Linien
+  checkInk: colors.accentInk, // Haken im gefuellten Punkt
+};
+
+/**
  * Schriften: die Systemschrift, bewusst ohne eigene Font-Dateien.
  *
  * Auf iOS ist das SF Pro, auf Android Roboto. Beides ist auf dem jeweiligen

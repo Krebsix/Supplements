@@ -1,17 +1,20 @@
 import React from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Alert, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-
-import { colors, radius, space, surfaces, toneFor, type, weight } from '../../../theme';
+import { colors, onDark, radius, space, surfaces, toneFor, type, weight } from '../../../theme';
 
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
 import { formatBackupTime } from '../../../CloudBackup';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
 import { countOpen, findNextUp } from '../../../NextUp';
+import DayArc from '../../../components/DayArc';
 import FirstStepsCard from '../../../components/FirstStepsCard';
+import Pictogram, { formForUnit } from '../../../components/Pictogram';
+import ProductThumb from '../../../components/ProductThumb';
 import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useCloudBackupStore from '../../../useCloudBackupStore';
@@ -144,6 +147,19 @@ export default function Dashboard() {
   // (Spec Entscheidung 3): Standard eingeklappt, damit die erste Flaeche
   // der Arbeitsfluss bleibt, nicht die Zahlenwand.
   const [summaryOpen, setSummaryOpen] = React.useState(false);
+  const insets = useSafeAreaInsets();
+  const scrollRef = React.useRef(null);
+  // Ziel-Positionen der Slot-Karten fuer den Sprung vom Tagesbogen.
+  const slotPositionsRef = React.useRef({});
+
+  // Heller Statusbar-Text, solange dieser Screen fokussiert ist — die
+  // Petrol-Buehne liegt unter der Statusleiste. Beim Verlassen zurueck.
+  useFocusEffect(
+    React.useCallback(() => {
+      StatusBar.setBarStyle('light-content');
+      return () => StatusBar.setBarStyle('dark-content');
+    }, [])
+  );
 
   function toggleNoteExpanded(id) {
     setExpandedNoteIds((current) => {
@@ -218,6 +234,30 @@ export default function Dashboard() {
   // beantwortet "Was nehme ich als Naechstes?", nicht "Wie viel Prozent?".
   const nextUp = findNextUp(dailySchedule);
   const openTotal = countOpen(dailySchedule);
+  // Tagesbogen (DayArc): Slot-Status aus dem Tagesplan — done, wenn alles
+  // im Slot dokumentiert ist, next fuer den Als-Naechstes-Slot, sonst later.
+  const arcSlots = visibleSchedule.map((item) => ({
+    id: item.slot.id,
+    time: item.slot.time,
+    label: item.slot.label,
+    status: item.supplements.every((supplement) => supplement.logged)
+      ? 'done'
+      : item.slot.id === nextUp?.slot.id
+        ? 'next'
+        : 'later',
+  }));
+  const arcStatusLabels = {
+    done: t('dashboard.arc.done'),
+    next: t('dashboard.arc.next'),
+    later: t('dashboard.arc.later'),
+  };
+
+  function scrollToSlot(slotId) {
+    const y = slotPositionsRef.current[slotId];
+    if (typeof y === 'number' && scrollRef.current) {
+      scrollRef.current.scrollTo({ y: Math.max(0, y - space.md), animated: true });
+    }
+  }
   const duplicateGroups = getDuplicateGroups(activeSupplements, t);
   const duplicateSupplementsToArchive = duplicateGroups.reduce(
     (items, group) => [...items, ...group.duplicates],
@@ -360,7 +400,7 @@ export default function Dashboard() {
   // Darstellung und dieselben Handler nutzen (kein zweiter Anzeigepfad).
   // slotId separat statt aus item.slot.id im Closure, weil diese Funktion
   // jetzt aus zwei Kontexten aufgerufen wird (Als-Naechstes-Karte, Slot-Schleife).
-  function renderSupplementRow(supplement, slotId) {
+  function renderSupplementRow(supplement, slotId, hero = false) {
     const routineSupplement =
       activeSupplements.find((entry) => entry.id === supplement.id) ?? supplement;
     const stock = getStock(supplement.id);
@@ -405,6 +445,17 @@ export default function Dashboard() {
           accessibilityRole="button"
           accessibilityLabel={`${t('dashboard.edit')}: ${supplementName}`}
         >
+          {/* Piktogramm je Zeile, Produkt-Vignette auf der Als-Naechstes-
+              Karte (Design-Review 02-G/03). */}
+          <View style={styles.rowLayout}>
+          {hero ? (
+            <ProductThumb supplement={routineSupplement} size={52} />
+          ) : (
+            <View style={styles.rowPictogramWrap}>
+              <Pictogram form={formForUnit(routineSupplement.unit)} size={20} />
+            </View>
+          )}
+          <View style={styles.rowBody}>
           <View style={styles.supplementHeaderRow}>
             <Text style={styles.supplementName}>{supplementName}</Text>
             <Feather name="chevron-right" size={18} color={colors.inkFaint} />
@@ -467,6 +518,8 @@ export default function Dashboard() {
               </Text>
             </TouchableOpacity>
           ) : null}
+          </View>
+          </View>
         </TouchableOpacity>
 
         {/* EINE Aktion pro Eintrag (Design-Review 02-B): offen = ein Button
@@ -504,10 +557,27 @@ export default function Dashboard() {
 
   return (
     <View style={styles.screenWrap}>
-      <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{t('dashboard.title')}</Text>
-        <Text style={styles.headerMeta}>{headerMeta}</Text>
+      <ScrollView ref={scrollRef} style={styles.screen} contentContainerStyle={styles.content}>
+      {/* Petrol-Buehne (Design-Review 02-F): dunkler Kopf mit Titel, Datum,
+          Fortschritt und Tagesbogen. Voll-Bleed ueber negative Raender, die
+          Safe Area uebernimmt der Screen selbst (nativer Header ist hier
+          abgeschaltet). bounceFill faengt den iOS-Bounce oben in Petrol ab. */}
+      <View style={styles.bounceFill} />
+      <View style={[styles.stage, { paddingTop: insets.top + space.md }]}>
+        <View style={styles.stageTopRow}>
+          <View style={styles.stageTextWrap}>
+            <Text style={styles.stageTitle}>{t('dashboard.title')}</Text>
+            <Text style={styles.stageMeta}>{headerMeta}</Text>
+            {scheduledToday > 0 ? (
+              <Text style={styles.stageProgress}>
+                {t('dashboard.summaryLine', { done: progress.done, total: progress.total })}
+              </Text>
+            ) : null}
+          </View>
+          {arcSlots.length > 0 ? (
+            <DayArc slots={arcSlots} onPressSlot={scrollToSlot} statusLabels={arcStatusLabels} />
+          ) : null}
+        </View>
       </View>
 
       {/* Situative Hinweise (Design-Review 02-D): maximal EINE Karte,
@@ -531,12 +601,21 @@ export default function Dashboard() {
           der gruene "nichts geplant"-Haken mit dem Timing-Hinweis. */}
       {fullInventoryCount > 0 && visibleSchedule.length > 0 ? (
         nextUp ? (
-          <View style={styles.nextUpCard}>
-            <Text style={styles.nextUpKicker}>{t('dashboard.nextUp.title')}</Text>
-            <Text style={styles.nextUpSlot}>
-              {t('dashboard.nextUp.slot', { label: nextUp.slot.label, time: nextUp.slot.time })}
-            </Text>
-            {nextUp.supplements.map((supplement) => renderSupplementRow(supplement, nextUp.slot.id))}
+          <View
+            style={styles.nextUpCard}
+            onLayout={(event) => {
+              slotPositionsRef.current[nextUp.slot.id] = event.nativeEvent.layout.y;
+            }}
+          >
+            <View style={styles.nextUpHeaderRow}>
+              <Text style={styles.nextUpKicker}>
+                {`${t('dashboard.nextUp.title')} · ${nextUp.slot.label}`}
+              </Text>
+              <Text style={styles.nextUpTime}>{nextUp.slot.time}</Text>
+            </View>
+            {nextUp.supplements.map((supplement) =>
+              renderSupplementRow(supplement, nextUp.slot.id, true)
+            )}
             {openTotal > nextUp.openCount ? (
               <Text style={styles.nextUpRemaining}>
                 {t('dashboard.nextUp.remaining', { count: openTotal - nextUp.openCount })}
@@ -556,21 +635,36 @@ export default function Dashboard() {
       {/* Kennzahlen (Fortschritt, Prozent, Insight) hinter einer Zeile mit
           Aufklapper (Spec Entscheidung 3): Der Arbeitsfluss oben beantwortet
           "was jetzt", die Zahlen hier sind Kontext, kein Einstieg. */}
+      {/* Fortschritt als Segment-Balken (Design-Review 02-G): ein Segment
+          je geplanter Einnahme, gefuellt = dokumentiert. Die Textzeile
+          darunter ist Pflicht — Status nie nur ueber Farbe. */}
       {fullInventoryCount > 0 && scheduledToday > 0 ? (
-        <View style={styles.summaryLineWrap}>
-          <Text style={styles.summaryLineText}>
-            {t('dashboard.summaryLine', { done: progress.done, total: progress.total })}
-          </Text>
-          <TouchableOpacity
-            onPress={() => setSummaryOpen((value) => !value)}
-            accessibilityRole="button"
-            accessibilityState={{ expanded: summaryOpen }}
-            style={styles.summaryToggle}
-          >
-            <Text style={styles.summaryToggleText}>
-              {t(summaryOpen ? 'dashboard.summaryDetailsHide' : 'dashboard.summaryDetailsShow')}
+        <View style={styles.progressBlock}>
+          <View style={styles.segmentRow}>
+            {Array.from({ length: progress.total }, (_, index) => (
+              <View
+                key={index}
+                style={[styles.segment, index < progress.done && styles.segmentFilled]}
+              />
+            ))}
+          </View>
+          <View style={styles.progressMetaRow}>
+            <Text style={styles.progressMetaText}>
+              {nextUp
+                ? `${t('dashboard.summaryLine', { done: progress.done, total: progress.total })} · ${t('dashboard.nextUpAt', { time: nextUp.slot.time })}`
+                : t('dashboard.summaryLine', { done: progress.done, total: progress.total })}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setSummaryOpen((value) => !value)}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: summaryOpen }}
+              style={styles.summaryToggle}
+            >
+              <Text style={styles.summaryToggleText}>
+                {t(summaryOpen ? 'dashboard.summaryDetailsHide' : 'dashboard.summaryDetailsShow')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       ) : null}
 
@@ -641,7 +735,13 @@ export default function Dashboard() {
       {fullInventoryCount > 0 ? visibleSchedule
         .filter((item) => item.slot.id !== nextUp?.slot.id)
         .map((item) => (
-        <View key={item.slot.id} style={styles.slotCard}>
+        <View
+          key={item.slot.id}
+          style={styles.slotCard}
+          onLayout={(event) => {
+            slotPositionsRef.current[item.slot.id] = event.nativeEvent.layout.y;
+          }}
+        >
           <View style={styles.slotHeader}>
             <View style={styles.slotHeaderText}>
               <Text style={styles.slotTitle}>{item.slot.label}</Text>
@@ -739,36 +839,92 @@ const styles = StyleSheet.create({
   content: {
     ...surfaces.content,
   },
-  header: {
-    marginBottom: space.lg,
+  // Petrol-Buehne (Design-Review 02-F): Voll-Bleed ueber negative Raender
+  // gegen das Content-Padding, unten -28, damit die erste Karte hineinragt.
+  bounceFill: {
+    position: 'absolute',
+    top: -600,
+    left: 0,
+    right: 0,
+    height: 600,
+    backgroundColor: colors.accentInk,
   },
-  title: {
-    ...type.display,
+  stage: {
+    marginTop: -space.lg,
+    marginHorizontal: -space.lg,
+    marginBottom: -28,
+    paddingHorizontal: space.lg,
+    paddingBottom: 28 + space.xl,
+    backgroundColor: colors.accentInk,
+    borderBottomLeftRadius: radius.xl,
+    borderBottomRightRadius: radius.xl,
   },
-  headerMeta: {
-    marginTop: space.sm,
-    ...type.small,
+  stageTopRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    gap: space.md,
+  },
+  stageTextWrap: { flex: 1 },
+  stageTitle: { ...type.display, color: onDark.ink },
+  stageMeta: { marginTop: space.sm, ...type.small, color: onDark.inkMuted },
+  stageProgress: {
+    marginTop: space.md,
+    ...type.subheading,
+    color: onDark.ink,
+    fontVariant: ['tabular-nums'],
   },
   // Als-Naechstes-Karte (Spec Entscheidung 3): erste Routine-Flaeche,
-  // beantwortet den Arbeitsfluss statt einer Kennzahl. Ohne Rahmen —
-  // weisse Flaeche auf grauem Grund grenzt sich von selbst ab.
-  nextUpCard: { ...surfaces.card, padding: space.lg, marginBottom: space.lg },
-  nextUpKicker: { ...type.eyebrow, color: colors.accent },
-  nextUpSlot: { ...type.subheading, marginTop: 2, marginBottom: space.sm },
+  // beantwortet den Arbeitsfluss statt einer Kennzahl. Ohne Rahmen; der
+  // weiche Schatten traegt das Hineinragen in die Buehne.
+  nextUpCard: {
+    ...surfaces.card,
+    padding: space.lg,
+    marginBottom: space.lg,
+    shadowColor: colors.accentInk,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  nextUpHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    marginBottom: space.sm,
+  },
+  nextUpKicker: { ...type.eyebrow, color: colors.accent, flex: 1 },
+  nextUpTime: { ...type.small, fontVariant: ['tabular-nums'] },
   nextUpRemaining: { ...type.small, marginTop: space.sm },
   nextUpCardDone: { ...surfaces.card, padding: space.lg, marginBottom: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.sm },
   nextUpDoneText: { ...type.bodyStrong, color: colors.affirm },
-  // Kennzahlen-Zeile mit Aufklapper (Spec Entscheidung 3): ersetzt die
-  // Kennzahlen-Wand im Immer-Sichtbaren.
-  summaryLineWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  // Fortschritts-Balken mit Aufklapper (Design-Review 02-G): ersetzt die
+  // Kennzahlen-Zeile im Immer-Sichtbaren.
+  progressBlock: {
     marginBottom: space.md,
   },
-  summaryLineText: {
-    ...type.body,
-    color: colors.ink,
+  segmentRow: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  segment: {
+    flex: 1,
+    height: 8,
+    borderRadius: 8,
+    backgroundColor: colors.rule,
+  },
+  segmentFilled: {
+    backgroundColor: colors.accent,
+  },
+  progressMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: space.sm,
+  },
+  progressMetaText: {
+    ...type.tiny,
+    flexShrink: 1,
   },
   // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
   summaryToggle: {
@@ -1038,6 +1194,16 @@ const styles = StyleSheet.create({
   },
   supplementTextWrap: {
     minHeight: 44,
+  },
+  rowLayout: {
+    flexDirection: 'row',
+    gap: space.md,
+  },
+  rowPictogramWrap: {
+    marginTop: 1,
+  },
+  rowBody: {
+    flex: 1,
   },
   supplementHeaderRow: {
     flexDirection: 'row',
