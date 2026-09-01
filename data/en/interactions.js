@@ -38,4 +38,14 @@ export const INTAKE_NOTES_EN = {
     'In studies, melatonin is usually used shortly before bedtime; daytime intake can cause drowsiness.',
   creatine:
     "For creatine, the timing of intake is secondary to its effect; adequate fluid intake is part of documented use.",
+  magnesium:
+    'The BfR pairs its maximum amount proposal of 250 mg per day with splitting the amount into two or more portions: high single doses more often lead to loose stools. The time of day is secondary.',
+  zinc:
+    'Zinc is absorbed well on an empty stomach but then more often irritates the stomach; with complaints, taking it with a meal is documented practice. Meals rich in calcium or phytates (whole grains, legumes) reduce absorption.',
+  calcium:
+    'Calcium is absorbed best from single doses up to about 500 mg; larger daily amounts are split across several intakes in studies. A gap of about 2 hours to iron, zinc, and magnesium supplements is documented practice.',
+  'vitamin-c':
+    'Absorption drops markedly with rising single doses: above about 1 g, 50 percent or less is absorbed, and high single doses more often lead to gastrointestinal complaints. In studies, larger amounts are spread over the day.',
+  'green-tea-extract-egcg':
+    'From 800 mg EGCG per day from supplements, EFSA sees indications of elevated liver values. EU labeling rules state that such products are not to be taken on an empty stomach.',
 };

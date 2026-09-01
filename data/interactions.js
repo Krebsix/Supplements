@@ -117,6 +117,39 @@ export const INTAKE_GUIDANCE = {
       { label: 'NIH ODS: Dietary Supplements for Exercise and Athletic Performance', url: 'https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/' },
     ],
   },
+  // ── Erweiterung 2026-09-01: mehr belegte Einnahme-Hinweise, damit die
+  // Vorbefuellung im Aufnehmen-Screen (SlotSuggestion) haeufiger greift.
+  // Quellen per Web-Recherche verifiziert.
+  magnesium: {
+    note: 'Das BfR koppelt seinen Höchstmengenvorschlag von 250 mg pro Tag an die Verteilung auf zwei oder mehr Portionen: Hohe Einzeldosen führen häufiger zu weichem Stuhl. Der Zeitpunkt am Tag ist dabei zweitrangig.',
+    sources: [
+      { label: 'BfR: Aktualisierte Höchstmengenvorschläge für Vitamine und Mineralstoffe in NEM (Stellungnahme 006/2024)', url: 'https://www.bfr.bund.de/cm/343/aktualisierte-hoechstmengenvorschlaege-fuer-vitamine-und-mineralstoffe-in-nahrungsergaenzungsmitteln-und-angereicherten-lebensmitteln-2024.pdf' },
+    ],
+  },
+  zinc: {
+    note: 'Zink wird nüchtern gut aufgenommen, reizt dann aber häufiger den Magen; bei Beschwerden ist die Einnahme zu einer Mahlzeit dokumentierte Praxis. Calcium- und phytatreiche Mahlzeiten (Vollkorn, Hülsenfrüchte) senken die Aufnahme.',
+    sources: [
+      { label: 'NIH ODS: Zinc Fact Sheet for Health Professionals', url: 'https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/' },
+    ],
+  },
+  calcium: {
+    note: 'Calcium wird aus Einzeldosen bis etwa 500 mg am besten aufgenommen; größere Tagesmengen werden in Studien auf mehrere Einnahmen verteilt. Zu Eisen-, Zink- und Magnesiumpräparaten ist ein Abstand von etwa 2 Stunden dokumentierte Praxis.',
+    sources: [
+      { label: 'NIH ODS: Calcium Fact Sheet for Health Professionals', url: 'https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/' },
+    ],
+  },
+  'vitamin-c': {
+    note: 'Die Aufnahme sinkt mit steigender Einzeldosis deutlich: Oberhalb von etwa 1 g werden 50 Prozent oder weniger aufgenommen, und hohe Einzeldosen führen häufiger zu Magen-Darm-Beschwerden. In Studien werden größere Mengen über den Tag verteilt.',
+    sources: [
+      { label: 'NIH ODS: Vitamin C Fact Sheet for Health Professionals', url: 'https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/' },
+    ],
+  },
+  'green-tea-extract-egcg': {
+    note: 'Die EFSA sieht ab 800 mg EGCG pro Tag aus Ergänzungsmitteln Hinweise auf erhöhte Leberwerte. Die EU-Kennzeichnung sieht vor, entsprechende Produkte nicht auf nüchternen Magen einzunehmen.',
+    sources: [
+      { label: 'EFSA Journal 2018;16(4):5239, Safety of green tea catechins', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/5239' },
+    ],
+  },
 };
 
 /**
