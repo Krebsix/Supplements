@@ -9278,5 +9278,40 @@
     "country": "DE",
     "channel": "apotheke",
     "productClass": "arznei"
+  },
+  {
+    "brand": "spermidineLIFE",
+    "brandOwner": "TLL The Longevity Labs GmbH, Kratkystrasse 2, 8020 Graz",
+    "name": "spermidineLIFE Original 365+",
+    "ean": null,
+    "pzn": "17467481",
+    "category": "Longevity",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      { "name": "Weizenkeimextrakt", "amount": "1300", "unit": "mg" },
+      { "name": "Spermidin", "amount": "2", "unit": "mg" },
+      { "name": "Vitamin B1", "amount": "0.17", "unit": "mg" },
+      { "name": "Zink", "amount": "1.5", "unit": "mg" }
+    ],
+    "off": false,
+    "source": "https://www.mycare.de/online-kaufen/spermidinelife-original-365-kapseln-kapseln-17467481",
+    "country": "AT",
+    "channel": "apotheke",
+    "productClass": "nem"
+  },
+  {
+    "brand": "MoleQlar",
+    "name": "Spermidin Kapseln",
+    "ean": null,
+    "category": "Longevity",
+    "doseForm": "Kapseln",
+    "keyIngredients": [
+      { "name": "Spermidin", "amount": "3", "unit": "mg" }
+    ],
+    "off": false,
+    "source": "https://moleqlar.com/en/products/spermidine-capsules",
+    "country": "DE",
+    "channel": "online",
+    "productClass": "nem"
   }
 ]

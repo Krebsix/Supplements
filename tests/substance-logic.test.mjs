@@ -57,7 +57,9 @@ check('Profil hat Anwendungsgebiete', p.useCases.length > 0);
 check('Krämpfe als Anwendungsgebiet', p.useCases.some(u => u.topic.toLowerCase().includes('krämpfe')));
 
 console.log('\n— Falsch-Treffer-Schutz —');
-for (const junk of ['Irgendein Kräuterblend', 'Kokosöl', 'Reismehl', 'Kieselerde', 'Inulin']) {
+// 'Inulin' stand hier als Junk-Beispiel, ist seit 2026-09-01 aber eine
+// kanonische Substanz (Ballaststoff-Erweiterung) — Maltodextrin ersetzt es.
+for (const junk of ['Irgendein Kräuterblend', 'Kokosöl', 'Reismehl', 'Kieselerde', 'Maltodextrin']) {
   const r = matchIngredient({ name: junk });
   check(`"${junk}" nicht falsch zugeordnet`, r.matched === false, r.substanceId ?? '');
 }
@@ -155,7 +157,7 @@ check('Keine Herstellernamen in der Siegel-DB',
   !certifications.some(c => /sunday|natural|now foods|doppelherz|orthomol/i.test(c.name)));
 
 console.log('\n— Erweiterung Juli 2026: neue Substanzen —');
-check('Substanz-Datenbank hat 163 Einträge', substances.length === 163, substances.length);
+check('Substanz-Datenbank hat 169 Einträge', substances.length === 169, substances.length);
 
 const biotinMatch = matchIngredient({ name: 'Biotin', amount: '50', unit: 'µg' });
 check('Biotin erkannt', biotinMatch.substanceId === 'biotin', biotinMatch.substanceId);

@@ -2044,4 +2044,75 @@ export default {
     },
     cautionNote: 'Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease. Sufficient data for pregnancy and breastfeeding are lacking.',
   },
+  // ── Erweiterung 2026-09-01: Luecken aus der Katalog-Gap-Analyse ──
+  'beta-glucan': {
+    what: 'Soluble dietary fiber from oats, barley, or yeast cell walls; the sources differ in structure and in the questions studied.',
+    useCases: [
+      { topic: 'Cholesterol', note: 'EFSA reviewed the data on oat beta-glucan in 2010: at doses of 3 g per day and above, most studies showed lower LDL cholesterol.' },
+      { topic: 'Immune System (yeast beta-glucan)', note: '1,3/1,6 beta-glucans from yeast are studied for immune questions; the data here is thinner than for the cholesterol link.' },
+    ],
+    forms: {
+      'Hafer-/Gersten-Beta-Glucan': 'Soluble 1,3/1,4 beta-glucan; the EFSA assessment on cholesterol refers to this source.',
+      'Hefe-Beta-Glucan (1,3/1,6)': 'Different linkage pattern than cereal beta-glucan, different study base.',
+    },
+    cautionNote: 'Dietary fiber can cause bloating at first; drink enough fluid. Take bulk-forming fibers with plenty of liquid in general.',
+  },
+  inulin: {
+    what: 'Soluble dietary fiber from chicory root, belongs to the fructans and is fermented in the large intestine.',
+    useCases: [
+      { topic: 'Stool Frequency', note: 'EFSA reviewed the data on native chicory inulin in 2015: from 12 g per day, stool frequency increased.' },
+      { topic: 'Prebiotic', note: 'is used as a substrate for gut bacteria; the fermentation also explains the typical bloating.' },
+    ],
+    forms: {
+      'Natives Chicorée-Inulin': 'The EFSA assessment on stool frequency refers to this form.',
+      'Oligofruktose (kurzkettig)': 'Fermented faster, therefore often more bloating.',
+    },
+    cautionNote: 'Fermented in the large intestine: bloating and pressure are dose-dependent and common, especially at the start. With irritable bowel, increase the dose slowly.',
+  },
+  lycopene: {
+    what: 'Carotenoid from tomatoes and other red fruits, responsible for their color; used as an antioxidant.',
+    useCases: [
+      { topic: 'Antioxidant', note: 'is used for its antioxidant properties; studies concern skin and prostate among others, without an established effect claim.' },
+    ],
+    forms: {
+      'Tomatenextrakt': 'Lycopene from heated tomatoes is more available than from raw ones.',
+      'Synthetisches Lycopin': 'Assessed as food color E 160d.',
+    },
+    cautionNote: 'In 2008 EFSA derived an ADI of 0.5 mg per kg body weight per day from all sources; high consumers can reach it.',
+  },
+  'citrus-bioflavonoids': {
+    what: 'Collective term for secondary plant compounds from citrus fruits (including hesperidin and rutin); often combined with vitamin C.',
+    useCases: [
+      { topic: 'Vessels/Capillaries', note: 'Rutin and hesperidin are studied for vessel permeability and vein questions; the supplement data is limited.' },
+      { topic: 'Combination with Vitamin C', note: 'Historically marketed as "vitamin P"; no vitamin status exists.' },
+    ],
+    forms: {
+      'Citrus-Extrakt (Bioflavonoid-Komplex)': 'Flavonoids are heavily metabolized; plasma levels stay low.',
+      'Rutin / Hesperidin (isoliert)': 'Uptake depends on the sugar binding (glycoside).',
+    },
+    cautionNote: 'Flavonoids can influence transporters and enzymes of drug metabolism; with long-term medication, ask at the pharmacy. Grapefruit flavonoids are the best-known case.',
+  },
+  chloride: {
+    what: 'Electrolyte and counterpart of sodium; in the diet it comes almost entirely from table salt (sodium chloride).',
+    useCases: [
+      { topic: 'Electrolyte Balance', note: 'Part of electrolyte mixes; in everyday life the supply via table salt is practically always covered.' },
+    ],
+    forms: {
+      'Natriumchlorid / Kaliumchlorid': 'Common salt forms in electrolyte products.',
+    },
+    cautionNote: 'EFSA names 3.1 g per day as a safe and adequate intake for adults, equimolar to the sodium reference value; a high salt intake concerns both electrolytes together.',
+  },
+  protein: {
+    what: 'Macronutrient made of amino acids; supplements provide concentrated protein from whey, casein, or plant sources.',
+    useCases: [
+      { topic: 'Muscle Building/Sport', note: 'Most common field of use to cover an increased need during training.' },
+      { topic: 'Reference Value', note: 'EFSA sets the reference intake for adults at 0.83 g per kg body weight per day; supplements complement the normal diet.' },
+    ],
+    forms: {
+      'Molkenprotein (Whey)': 'High leucine share, fast uptake.',
+      'Casein': 'Curdles in the stomach, delayed release.',
+      'Pflanzliche Proteine (Soja, Erbse, Reis)': 'Amino acid profile differs by source, often combined.',
+    },
+    cautionNote: 'With an existing kidney disease, protein intake belongs under medical supervision.',
+  },
 };

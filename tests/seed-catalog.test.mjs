@@ -48,9 +48,9 @@ check(
 check('offProducts.json traegt license ODbL-1.0 im Kopf', offProducts.license === 'ODbL-1.0');
 check('offProducts.json traegt eine Attribution', typeof offProducts.attribution === 'string' && offProducts.attribution.length > 0);
 const counts = catalogCounts();
-check('catalogCounts: 363 Herstellerkatalog-Eintraege', counts.manufacturer === 363, String(counts.manufacturer));
+check('catalogCounts: 365 Herstellerkatalog-Eintraege', counts.manufacturer === 365, String(counts.manufacturer));
 check('catalogCounts: 48 OFF-Eintraege', counts.off === 48, String(counts.off));
-check('catalogCounts: 411 Eintraege gesamt', counts.total === 411, String(counts.total));
+check('catalogCounts: 413 Eintraege gesamt', counts.total === 413, String(counts.total));
 // productsForBrand liest CATALOG (Herstellerkatalog + OFF zusammengefuehrt):
 // jedes OFF-Produkt muss dort unter seiner EAN mit license 'ODbL' auftauchen.
 const offBrands = [...new Set(offProducts.products.map((p) => p.brand))];

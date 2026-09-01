@@ -601,8 +601,9 @@ export const substances = [
     name: 'Probiotika',
     category: 'Darm',
     synonyms: ['probiotika', 'probiotic', 'probiotics', 'lactobacillus',
-      'bifidobacterium', 'laktobazillen', 'milchsäurebakterien',
-      'milchsäurebakterien', 'kulturen'],
+      'bifidobacterium', 'bifidobakterien', 'laktobazillen',
+      'milchsäurebakterien', 'kulturen', 'bakterienkulturen',
+      'mikrokulturen', 'bacillus'],
     unit: 'KBE',
     what: 'Lebende Mikroorganismen, die die Zusammensetzung der Darmflora beeinflussen. Wirkung ist stammspezifisch.',
     useCases: [
@@ -623,7 +624,7 @@ export const substances = [
     name: 'Curcumin (Kurkuma)',
     category: 'Pflanzenstoffe',
     synonyms: ['curcumin', 'kurkuma', 'turmeric', 'curcuma longa',
-      'curcuminoide', 'kurkumaextrakt'],
+      'curcuminoide', 'kurkumaextrakt', 'curcuma'],
     unit: 'mg',
     what: 'Sekundärer Pflanzenstoff aus der Kurkumawurzel, untersucht wegen entzündungsmodulierender Eigenschaften.',
     useCases: [
@@ -687,7 +688,7 @@ export const substances = [
     id: 'niacin',
     name: 'Niacin',
     category: 'Vitamine',
-    synonyms: ['niacin', 'vitamin b3', 'nicotinsäure', 'nicotinsäure', 'nicotinamid', 'niacinamid', 'nikotinsäure', 'nikotinamid', 'vitamin pp'],
+    synonyms: ['niacin', 'vitamin b3', 'nicotinsäure', 'nicotinamid', 'niacinamid', 'nikotinsäure', 'nikotinamid', 'vitamin pp', 'inosithexanicotinat'],
     unit: 'mg',
     what: 'Sammelbegriff für Nicotinsäure und Nicotinamid, Baustein der Coenzyme NAD/NADP im Energiestoffwechsel.',
     useCases: [
@@ -1897,7 +1898,7 @@ export const substances = [
     id: 'myo-inositol',
     name: 'Myo-Inositol',
     category: 'Frauengesundheit',
-    synonyms: ['myo-inositol', 'inositol', 'myoinositol'],
+    synonyms: ['myo-inositol', 'inositol', 'myoinositol', 'inosit'],
     unit: 'g',
     what: 'Zuckeralkohol, körpereigen synthetisiert und über die Nahrung aufgenommen; spielt eine Rolle in Second-Messenger-Systemen der Insulinsignalübertragung.',
     useCases: [
@@ -3631,6 +3632,137 @@ export const substances = [
     sources: [
       { label: 'NIH ODS: Sodium (Dietary Reference Intakes)', url: 'https://ods.od.nih.gov/factsheets/list-all/' },
       { label: 'D-A-CH Referenzwerte: Natrium', url: 'https://www.dge.de/wissenschaft/referenzwerte/natrium/' },
+    ],
+  },
+  // ── Erweiterung 2026-09-01: Luecken aus der Katalog-Gap-Analyse ──
+  // (805 Katalog-Zutaten gegen den Matcher; Quellen per Web-Recherche
+  // verifiziert, EFSA-Pub-IDs und Titel bestaetigt.)
+  {
+    id: 'beta-glucan',
+    name: 'Beta-Glucan',
+    category: 'Ballaststoffe',
+    synonyms: ['beta-glucan', 'beta-glucane', 'betaglucan', 'hafer-beta-glucan',
+      'haferfaser', 'haferkleie', 'gerstenbetaglucan'],
+    unit: 'g',
+    what: 'Löslicher Ballaststoff aus Hafer, Gerste oder Hefezellwänden; die Quellen unterscheiden sich in Struktur und untersuchten Fragestellungen.',
+    useCases: [
+      { topic: 'Cholesterin', note: 'EFSA bewertete 2010 die Datenlage zu Hafer-Beta-Glucan: Ab 3 g pro Tag zeigte sich in den meisten Studien eine Senkung des LDL-Cholesterins.' },
+      { topic: 'Immunsystem (Hefe-Beta-Glucan)', note: '1,3/1,6-Beta-Glucane aus Hefe werden zu Immunfragen untersucht; die Datenlage ist hier dünner als beim Cholesterin-Zusammenhang.' },
+    ],
+    forms: [
+      { name: 'Hafer-/Gersten-Beta-Glucan', bioavailability: 'n/a (Ballaststoff)', note: 'Löslicher 1,3/1,4-Beta-Glucan; die EFSA-Bewertung zum Cholesterin bezieht sich auf diese Quelle.' },
+      { name: 'Hefe-Beta-Glucan (1,3/1,6)', bioavailability: 'n/a (Ballaststoff)', note: 'Anderes Verknüpfungsmuster als Getreide-Beta-Glucan, andere Studienlage.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Ballaststoffe können anfangs Blähungen verursachen; ausreichend trinken. Quellstoffe generell mit viel Flüssigkeit einnehmen.',
+    sources: [
+      { label: 'EFSA Journal 2010;8(12):1885, Hafer-Beta-Glucan und Blutcholesterin', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/1885' },
+    ],
+  },
+  {
+    id: 'inulin',
+    name: 'Inulin',
+    category: 'Ballaststoffe',
+    synonyms: ['inulin', 'chicoree-inulin', 'zichorienwurzel', 'oligofruktose',
+      'fructooligosaccharide', 'fos'],
+    unit: 'g',
+    what: 'Löslicher Ballaststoff aus der Chicorée-/Zichorienwurzel, zählt zu den Fruktanen und wird im Dickdarm fermentiert.',
+    useCases: [
+      { topic: 'Stuhlfrequenz', note: 'EFSA bewertete 2015 die Datenlage zu nativem Chicorée-Inulin: Ab 12 g pro Tag zeigte sich eine erhöhte Stuhlfrequenz.' },
+      { topic: 'Präbiotikum', note: 'Wird als Nährsubstrat für Darmbakterien eingesetzt; die Fermentation erklärt auch die typischen Blähungen.' },
+    ],
+    forms: [
+      { name: 'Natives Chicorée-Inulin', bioavailability: 'n/a (Ballaststoff)', note: 'Die EFSA-Bewertung zur Stuhlfrequenz bezieht sich auf diese Form.' },
+      { name: 'Oligofruktose (kurzkettig)', bioavailability: 'n/a (Ballaststoff)', note: 'Wird schneller fermentiert, dadurch oft stärker blähend.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Wird im Dickdarm fermentiert: Blähungen und Druckgefühl sind dosisabhängig häufig, besonders zu Beginn. Bei Reizdarm langsam steigern.',
+    sources: [
+      { label: 'EFSA Journal 2015;13(1):3951, natives Chicorée-Inulin und Stuhlfrequenz', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3951' },
+    ],
+  },
+  {
+    id: 'lycopene',
+    name: 'Lycopin',
+    category: 'Antioxidantien',
+    synonyms: ['lycopin', 'lycopene', 'lykopin', 'tomatenextrakt'],
+    unit: 'mg',
+    what: 'Carotinoid aus Tomaten und anderen roten Früchten, verantwortlich für deren Farbe; wird als Antioxidans eingesetzt.',
+    useCases: [
+      { topic: 'Antioxidans', note: 'Wird wegen seiner antioxidativen Eigenschaften eingesetzt; Studien betreffen unter anderem Haut und Prostata, ohne gesicherte Wirkaussage.' },
+    ],
+    forms: [
+      { name: 'Tomatenextrakt', bioavailability: 'besser mit Fett', note: 'Aus erhitzten Tomaten ist Lycopin besser verfügbar als aus rohen.' },
+      { name: 'Synthetisches Lycopin', bioavailability: 'vergleichbar', note: 'Als Lebensmittelfarbstoff E 160d bewertet.' },
+    ],
+    fatSoluble: true,
+    cautionNote: 'EFSA leitete 2008 einen ADI von 0,5 mg je kg Körpergewicht und Tag aus allen Quellen ab; Vielverzehrer können diesen erreichen.',
+    sources: [
+      { label: 'EFSA 2008, Lycopin als Lebensmittelfarbstoff (ADI 0,5 mg/kg KG)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/674' },
+    ],
+  },
+  {
+    id: 'citrus-bioflavonoids',
+    name: 'Citrus-Bioflavonoide',
+    category: 'Pflanzenstoffe',
+    synonyms: ['citrus-bioflavonoide', 'bioflavonoide', 'flavonoide',
+      'hesperidin', 'rutin', 'diosmin', 'zitrus-bioflavonoide'],
+    unit: 'mg',
+    what: 'Sammelbegriff für sekundäre Pflanzenstoffe aus Zitrusfrüchten (unter anderem Hesperidin und Rutin); oft mit Vitamin C kombiniert.',
+    useCases: [
+      { topic: 'Gefäße/Kapillaren', note: 'Rutin und Hesperidin werden zu Gefäßpermeabilität und Venenfragen untersucht; die Supplement-Datenlage ist begrenzt.' },
+      { topic: 'Kombination mit Vitamin C', note: 'Historisch als "Vitamin P" vermarktet; ein Vitamin-Status besteht nicht.' },
+    ],
+    forms: [
+      { name: 'Citrus-Extrakt (Bioflavonoid-Komplex)', bioavailability: 'niedrig bis variabel', note: 'Flavonoide werden stark verstoffwechselt; die Plasmaspiegel bleiben niedrig.' },
+      { name: 'Rutin / Hesperidin (isoliert)', bioavailability: 'variabel', note: 'Die Aufnahme hängt von der Zuckerbindung (Glykosid) ab.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Flavonoide können Transporter und Enzyme des Arzneimittelstoffwechsels beeinflussen; bei Dauermedikation in der Apotheke ansprechen. Grapefruit-Flavonoide sind der bekannteste Fall.',
+    sources: [
+      { label: 'Linus Pauling Institute, Micronutrient Information Center: Flavonoids', url: 'https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/flavonoids' },
+    ],
+  },
+  {
+    id: 'chloride',
+    name: 'Chlorid',
+    category: 'Mineralien',
+    synonyms: ['chlorid', 'chloride'],
+    unit: 'mg',
+    what: 'Elektrolyt und Gegenspieler von Natrium; kommt in der Ernährung fast vollständig als Kochsalz (Natriumchlorid) vor.',
+    useCases: [
+      { topic: 'Elektrolythaushalt', note: 'Bestandteil von Elektrolytmischungen; im Alltag ist die Versorgung über Kochsalz praktisch immer gedeckt.' },
+    ],
+    forms: [
+      { name: 'Natriumchlorid / Kaliumchlorid', bioavailability: 'hoch', note: 'Übliche Salzformen in Elektrolytprodukten.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'EFSA nennt 3,1 g pro Tag als sichere und angemessene Zufuhr für Erwachsene, äquimolar zum Natrium-Referenzwert; eine hohe Kochsalzzufuhr betrifft beide Elektrolyte gemeinsam.',
+    sources: [
+      { label: 'EFSA Journal 2019, Dietary Reference Values for chloride', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/5779' },
+    ],
+  },
+  {
+    id: 'protein',
+    name: 'Protein (Eiweiß)',
+    category: 'Sport',
+    synonyms: ['protein', 'eiweiss', 'eiweiß', 'molkenprotein', 'whey',
+      'casein', 'sojaprotein', 'erbsenprotein', 'aminosäuren', 'aminosaeuren'],
+    unit: 'g',
+    what: 'Makronährstoff aus Aminosäuren; Supplemente liefern konzentriertes Protein aus Molke, Casein oder pflanzlichen Quellen.',
+    useCases: [
+      { topic: 'Muskelaufbau/Sport', note: 'Häufigstes Anwendungsgebiet zur Deckung eines erhöhten Bedarfs bei Training.' },
+      { topic: 'Referenzwert', note: 'EFSA setzt die Referenzzufuhr für Erwachsene bei 0,83 g je kg Körpergewicht und Tag an; Supplemente ergänzen die normale Ernährung.' },
+    ],
+    forms: [
+      { name: 'Molkenprotein (Whey)', bioavailability: 'schnell verfügbar', note: 'Hoher Leucin-Anteil, schnelle Aufnahme.' },
+      { name: 'Casein', bioavailability: 'langsam verfügbar', note: 'Gerinnt im Magen, verzögerte Freisetzung.' },
+      { name: 'Pflanzliche Proteine (Soja, Erbse, Reis)', bioavailability: 'variabel', note: 'Aminosäurenprofil je Quelle unterschiedlich, oft kombiniert.' },
+    ],
+    fatSoluble: false,
+    cautionNote: 'Bei bestehender Nierenerkrankung gehört die Eiweißzufuhr in ärztliche Begleitung.',
+    sources: [
+      { label: 'EFSA Journal 2012;10(2):2557, Dietary Reference Values for protein', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/2557' },
     ],
   },
 ];
