@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
   scanBadgeText: {
     color: colors.accent,
     fontSize: 11,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   confidenceCard: {
     backgroundColor: colors.surfaceSunken,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
   confidenceStatus: {
     color: colors.accent,
     fontSize: 13,
-    fontWeight: '900',
+    fontWeight: '700',
     marginTop: space.xs + 1,
   },
   confidenceExplanation: {
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     color: colors.ink,
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: '800',
+    fontWeight: '700',
     marginTop: 3,
   },
   reviewHelper: {
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
   },
   stateBadgeText: {
     fontSize: 10,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   ingredientWrap: {
     flexDirection: 'row',
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
   ingredientText: {
     color: colors.accentInk,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   warningList: {
     marginTop: space.sm + 2,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   warningNumberText: {
     color: warningTone.ink,
     fontSize: 11,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   warningText: {
     flex: 1,
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
   timingTitle: {
     color: colors.accentInk,
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   suggestionBadge: {
     backgroundColor: colors.surface,
@@ -515,7 +515,7 @@ const styles = StyleSheet.create({
   suggestionBadgeText: {
     color: colors.accent,
     fontSize: 10,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   timingText: {
     color: colors.accentInk,
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
   uncertaintyTitle: {
     color: colors.ink,
     fontSize: 12,
-    fontWeight: '900',
+    fontWeight: '700',
     marginBottom: space.xs + 1,
   },
   uncertaintyText: {

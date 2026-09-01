@@ -675,7 +675,7 @@ const styles = StyleSheet.create({
   trustNoticeTitle: {
     color: colors.accentInk,
     fontSize: 13,
-    fontWeight: '900',
+    fontWeight: '700',
     marginBottom: space.xs + 1,
   },
   trustNoticeText: {
@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
   consentRevokeText: {
     color: alertTone.ink,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   deleteAllButton: {
     marginTop: space.md + 2,
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   dangerButtonText: {
     color: alertTone.ink,
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   archiveSection: {
     marginTop: space.md + 2,
@@ -858,7 +858,7 @@ const styles = StyleSheet.create({
   archiveBadgeText: {
     color: colors.inkMuted,
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
@@ -893,7 +893,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.accent,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: '700',
     textAlign: 'right',
   },
   restoreButton: {

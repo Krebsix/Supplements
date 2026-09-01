@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   modeBadgeText: {
     color: colors.accent,
     fontSize: 10,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   title: {
     ...type.display,
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   summaryBadgeText: {
     color: cautionTone.ink,
     fontSize: 11,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   summaryBadgeTextComplete: {
     color: toneFor('affirm').ink,
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
   tertiaryButtonText: {
     color: colors.inkMuted,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   disclaimer: {
     ...type.tiny,

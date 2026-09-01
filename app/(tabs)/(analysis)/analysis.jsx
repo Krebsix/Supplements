@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   },
   totalHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   totalName: { ...type.bodyStrong, fontSize: 14, flex: 1 },
-  totalAmount: { color: colors.ink, fontSize: 14, fontWeight: '800' },
+  totalAmount: { color: colors.ink, fontSize: 14, fontWeight: '700' },
   totalMeta: { ...type.small, fontSize: 11, marginTop: space.xs },
   unresolvedNote: { ...type.tiny, fontSize: 12, marginTop: space.xs, marginBottom: space.sm },
   bigNumber: { ...type.numeral },
@@ -489,7 +489,7 @@ const styles = StyleSheet.create({
   costTextWrap: { flex: 1, paddingRight: space.md },
   costName: { ...type.bodyStrong, fontSize: 13 },
   costStatus: { ...type.tiny, marginTop: 1 },
-  costValue: { color: colors.ink, fontSize: 13, fontWeight: '800' },
+  costValue: { color: colors.ink, fontSize: 13, fontWeight: '700' },
   footnote: { ...type.tiny, lineHeight: 17, marginTop: space.md },
   // Nie ueberprueft: ein Hinweis zum Nachschauen, kein Alarm.
   reviewCard: {

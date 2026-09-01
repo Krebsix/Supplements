@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   },
   statusBadgeText: {
     fontSize: 10,
-    fontWeight: '900',
+    fontWeight: '700',
     textAlign: 'center',
   },
   what: {
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
   formBio: {
     color: colors.accent,
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   formName: {
     ...type.bodyStrong,
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
   formRowBio: {
     color: colors.accent,
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   formRowNote: {
     ...type.small,
@@ -481,6 +481,6 @@ const styles = StyleSheet.create({
   expandButtonText: {
     color: colors.accent,
     fontSize: 12,
-    fontWeight: '900',
+    fontWeight: '700',
   },
 });

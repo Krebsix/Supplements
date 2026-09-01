@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 
 
-import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
+import { colors, radius, space, surfaces, toneFor, type, weight } from '../../../theme';
 
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
@@ -85,17 +85,28 @@ function getDuplicateCountLabel(count, t) {
   return t('dashboard.duplicateCount_other', { count });
 }
 
-function getGreetingKey(hour) {
-  if (hour < 11) return 'dashboard.greeting.morning';
-  if (hour < 18) return 'dashboard.greeting.day';
-  return 'dashboard.greeting.evening';
+// Kopf-Metazeile (Design-Review 2026-09-01, 02-A): ein Datum, ein Profil,
+// sonst nichts. Begruessung, Kicker und Untertitel sind entfallen — der
+// Titel beantwortet die Frage des Screens, der Rest war Deko.
+function formatHeaderDate(language) {
+  return new Date().toLocaleDateString(language === 'de' ? 'de-DE' : 'en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
 }
 
-function getGreetingText(displayName, t) {
-  const greeting = t(getGreetingKey(new Date().getHours()));
-  return displayName
-    ? t('dashboard.greetingName', { greeting, name: displayName })
-    : t('dashboard.greetingPlain', { greeting });
+// Uhrzeit einer dokumentierten Einnahme fuer die Zeile "Dokumentiert um
+// HH:MM". Ohne lesbaren Zeitstempel liefert sie null, die Zeile faellt
+// dann auf den Text ohne Uhrzeit zurueck.
+function formatLoggedTime(takenAt, language) {
+  if (!takenAt) return null;
+  const date = new Date(takenAt);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toLocaleTimeString(language === 'de' ? 'de-DE' : 'en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 function getProfileLabel(profileId, t) {
@@ -144,7 +155,6 @@ export default function Dashboard() {
   }
 
   const activeProfileId = useStore((state) => state.activeProfileId);
-  const displayName = useStore((state) => state.profile?.displayName);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
   const getLoggedToday = useStore((state) => state.getLoggedToday);
@@ -177,7 +187,9 @@ export default function Dashboard() {
   const pendingToday = progress.pending;
   const progressPercent = getProgressPercent(progress.done, progress.total);
   const routineInsight = getRoutineInsight(progress, t);
-  const greetingText = getGreetingText(displayName, t);
+  const headerMeta = `${formatHeaderDate(language)} · ${t('dashboard.profileLabel', {
+    profile: getProfileLabel(activeProfileId, t),
+  })}`;
   const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
   const slotAlerts = dailySchedule
@@ -214,23 +226,6 @@ export default function Dashboard() {
   const duplicateEntryCount = duplicateSupplementsToArchive.length;
   const duplicateGroupNames = duplicateGroups.map((group) => group.name).join(', ');
 
-  function handleArchiveSupplement(supplement) {
-    const supplementName = formatSupplementName(supplement);
-
-    Alert.alert(
-      t('dashboard.archiveAlertTitle'),
-      t('dashboard.archiveAlertMessage', { name: supplementName }),
-      [
-        { text: t('common.cancel'), style: 'cancel' },
-        {
-          text: t('dashboard.remove'),
-          style: 'destructive',
-          onPress: () => archiveUserSupplement(supplement.id),
-        },
-      ]
-    );
-  }
-
   function handleArchiveDuplicateSupplements() {
     if (duplicateEntryCount === 0) return;
 
@@ -251,6 +246,112 @@ export default function Dashboard() {
           },
         },
       ]
+    );
+  }
+
+  // Situative Hinweise in fester Reihenfolge; der erste wird zur Karte,
+  // alle weiteren zur kompakten Zeile (Design-Review 02-D). Die Sperre
+  // steht bewusst dabei: Wer gerade nichts dokumentieren kann, soll das
+  // sehen, bevor die Als-Naechstes-Karte einen Knopf anbietet.
+  const situationalNotices = [
+    lastRestore ? 'restored' : null,
+    duplicateEntryCount > 0 ? 'cleanup' : null,
+    blockerState.blocked ? 'blocker' : null,
+  ].filter(Boolean);
+
+  function renderSituationalNotice(kind, compact) {
+    if (kind === 'restored') {
+      if (compact) {
+        return (
+          <View key={kind} style={styles.compactNoticeRow}>
+            <Text style={styles.compactNoticeText}>{t('dashboard.restored.title')}</Text>
+            <TouchableOpacity
+              onPress={dismissRestoreNotice}
+              accessibilityRole="button"
+              style={styles.compactNoticeAction}
+            >
+              <Text style={styles.compactNoticeActionText}>{t('dashboard.restored.dismiss')}</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      }
+      return (
+        <View key={kind} style={styles.restoredCard}>
+          <Text style={styles.restoredTitle}>{t('dashboard.restored.title')}</Text>
+          <Text style={styles.restoredText}>
+            {t('dashboard.restored.text', {
+              time: formatBackupTime(lastRestore.exportedAt, language),
+              device: lastRestore.deviceLabel,
+              supplements: lastRestore.counts.supplements,
+              labValues: lastRestore.counts.labValues,
+            })}
+          </Text>
+          <TouchableOpacity
+            onPress={dismissRestoreNotice}
+            accessibilityRole="button"
+            style={styles.restoredButton}
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+          >
+            <Text style={styles.restoredButtonText}>{t('dashboard.restored.dismiss')}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    if (kind === 'cleanup') {
+      if (compact) {
+        return (
+          <TouchableOpacity
+            key={kind}
+            style={styles.compactNoticeRow}
+            onPress={handleArchiveDuplicateSupplements}
+            accessibilityRole="button"
+          >
+            <Text style={styles.compactNoticeText}>{t('dashboard.cleanupTitle')}</Text>
+            <Text style={styles.compactNoticeActionText}>{t('dashboard.cleanupButton')}</Text>
+          </TouchableOpacity>
+        );
+      }
+      return (
+        <View key={kind} style={styles.cleanupCard}>
+          <Text style={styles.cleanupTitle}>{t('dashboard.cleanupTitle')}</Text>
+          <Text style={styles.cleanupText}>
+            {t('dashboard.cleanupText', {
+              label: getDuplicateCountLabel(duplicateEntryCount, t),
+            })}
+          </Text>
+          {duplicateGroupNames ? (
+            // Dynamic Type: kein numberOfLines-Limit, das nennt die
+            // tatsaechlichen Praeparatnamen der Duplikate.
+            <Text style={styles.cleanupMeta}>
+              {t('dashboard.cleanupMeta', { names: duplicateGroupNames })}
+            </Text>
+          ) : null}
+          <TouchableOpacity
+            style={styles.cleanupButton}
+            onPress={handleArchiveDuplicateSupplements}
+            accessibilityRole="button"
+          >
+            <Text style={styles.cleanupButtonText}>{t('dashboard.cleanupButton')}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    // 'blocker': Absorptionssperre.
+    if (compact) {
+      return (
+        <View key={kind} style={styles.compactNoticeRow}>
+          <Feather name="clock" size={14} color={toneFor('notice').ink} />
+          <Text style={[styles.compactNoticeText, styles.compactNoticeTextNotice]}>
+            {getBlockMessage(blockerState.remainingMinutes)}
+          </Text>
+        </View>
+      );
+    }
+    return (
+      <View key={kind} style={styles.noticeCard}>
+        <Text style={styles.noticeTitle}>{t('dashboard.noticeTitle')}</Text>
+        <Text style={styles.noticeText}>{getBlockMessage(blockerState.remainingMinutes)}</Text>
+      </View>
     );
   }
 
@@ -283,19 +384,30 @@ export default function Dashboard() {
     const canExpandDetails =
       Boolean(supplementNotes) || hasTruncatedMeta;
 
+    const loggedTime = supplement.logged
+      ? formatLoggedTime(
+          loggedToday.find((log) => log.userSupplementId === supplement.id)?.takenAt,
+          language
+        )
+      : null;
+
     return (
       <View key={supplement.id} style={styles.supplementCard}>
-        <View style={styles.supplementTextWrap}>
+        {/* Die ganze Textflaeche fuehrt zum Bearbeiten (Design-Review 02-B).
+            Entfernen lebt eine Ebene tiefer im Bestand (inventory.jsx) —
+            Spec-konform: Tiefe ist einen Tipp entfernt. Verschachtelte
+            Touchables (Details-Schalter, SlotReason-Quellen) gewinnen den
+            Tipp gegen die Flaeche. */}
+        <TouchableOpacity
+          style={styles.supplementTextWrap}
+          onPress={() => router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`)}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={`${t('dashboard.edit')}: ${supplementName}`}
+        >
           <View style={styles.supplementHeaderRow}>
             <Text style={styles.supplementName}>{supplementName}</Text>
-            <Text
-              style={[
-                styles.statePill,
-                supplement.logged ? styles.loggedPill : styles.pendingPill,
-              ]}
-            >
-              {supplement.logged ? t('dashboard.stateLogged') : t('dashboard.statePending')}
-            </Text>
+            <Feather name="chevron-right" size={18} color={colors.inkFaint} />
           </View>
           {supplementMeta ? (
             <Text
@@ -329,10 +441,9 @@ export default function Dashboard() {
           ) : null}
 
           {supplementTiming ? (
-            <View style={styles.timingPill}>
-              <Text style={styles.timingPillText}>
-                {t('dashboard.timingPrefix', { timing: supplementTiming })}
-              </Text>
+            <View style={styles.timingRow}>
+              <Feather name="clock" size={14} color={colors.inkMuted} />
+              <Text style={styles.timingText}>{supplementTiming}</Text>
             </View>
           ) : null}
 
@@ -356,43 +467,37 @@ export default function Dashboard() {
               </Text>
             </TouchableOpacity>
           ) : null}
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.actionWrap}>
-          {supplement.logged ? (
+        {/* EINE Aktion pro Eintrag (Design-Review 02-B): offen = ein Button
+            in voller Kartenbreite, dokumentiert = Haken + Uhrzeit +
+            Rueckgaengig. Status steckt in Button bzw. Haken+Text, die
+            fruehere OFFEN/DOKUMENTIERT-Pille ist damit Doppelung. */}
+        {supplement.logged ? (
+          <View style={styles.loggedRow}>
+            <Feather name="check-circle" size={16} color={colors.affirm} />
+            <Text style={styles.loggedText}>
+              {loggedTime
+                ? t('dashboard.loggedAtTime', { time: loggedTime })
+                : t('dashboard.stateLogged')}
+            </Text>
             <TouchableOpacity
-              style={styles.secondaryAction}
+              style={styles.undoButton}
               onPress={() => undoIntakeToday(supplement.id)}
               accessibilityRole="button"
             >
-              <Text style={styles.secondaryActionText}>{t('dashboard.undo')}</Text>
+              <Text style={styles.undoButtonText}>{t('dashboard.undo')}</Text>
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.primaryAction}
-              onPress={() => logIntake(supplement.id, { slotId })}
-              accessibilityRole="button"
-            >
-              <Text style={styles.primaryActionText}>{t('dashboard.logAction')}</Text>
-            </TouchableOpacity>
-          )}
-
+          </View>
+        ) : (
           <TouchableOpacity
-            style={styles.secondaryAction}
-            onPress={() => router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`)}
-            accessibilityRole="link"
-          >
-            <Text style={styles.secondaryActionText}>{t('dashboard.edit')}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.dangerAction}
-            onPress={() => handleArchiveSupplement(supplement)}
+            style={styles.logButton}
+            onPress={() => logIntake(supplement.id, { slotId })}
             accessibilityRole="button"
           >
-            <Text style={styles.dangerActionText}>{t('dashboard.remove')}</Text>
+            <Text style={styles.logButtonText}>{t('dashboard.logAction')}</Text>
           </TouchableOpacity>
-        </View>
+        )}
       </View>
     );
   }
@@ -401,75 +506,14 @@ export default function Dashboard() {
     <View style={styles.screenWrap}>
       <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>{greetingText}</Text>
-        <View style={styles.kickerRow}>
-          <Text style={styles.kicker}>{t('dashboard.kicker')}</Text>
-          <Text style={styles.profileLabel}>
-            {t('dashboard.profileLabel', { profile: getProfileLabel(activeProfileId, t) })}
-          </Text>
-        </View>
-
         <Text style={styles.title}>{t('dashboard.title')}</Text>
-        <Text style={styles.subtitle}>{t('dashboard.subtitle')}</Text>
+        <Text style={styles.headerMeta}>{headerMeta}</Text>
       </View>
 
-      {lastRestore ? (
-        <View style={styles.restoredCard}>
-          <Text style={styles.restoredTitle}>{t('dashboard.restored.title')}</Text>
-          <Text style={styles.restoredText}>
-            {t('dashboard.restored.text', {
-              time: formatBackupTime(lastRestore.exportedAt, language),
-              device: lastRestore.deviceLabel,
-              supplements: lastRestore.counts.supplements,
-              labValues: lastRestore.counts.labValues,
-            })}
-          </Text>
-          <TouchableOpacity
-            onPress={dismissRestoreNotice}
-            accessibilityRole="button"
-            style={styles.restoredButton}
-            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-          >
-            <Text style={styles.restoredButtonText}>{t('dashboard.restored.dismiss')}</Text>
-          </TouchableOpacity>
-        </View>
-      ) : null}
-
-      {duplicateEntryCount > 0 ? (
-        <View style={styles.cleanupCard}>
-          <Text style={styles.cleanupTitle}>{t('dashboard.cleanupTitle')}</Text>
-          <Text style={styles.cleanupText}>
-            {t('dashboard.cleanupText', {
-              label: getDuplicateCountLabel(duplicateEntryCount, t),
-            })}
-          </Text>
-          {duplicateGroupNames ? (
-            // Dynamic Type: kein numberOfLines-Limit, das nennt die
-            // tatsaechlichen Praeparatnamen der Duplikate.
-            <Text style={styles.cleanupMeta}>
-              {t('dashboard.cleanupMeta', { names: duplicateGroupNames })}
-            </Text>
-          ) : null}
-          <TouchableOpacity
-            style={styles.cleanupButton}
-            onPress={handleArchiveDuplicateSupplements}
-            accessibilityRole="button"
-          >
-            <Text style={styles.cleanupButtonText}>{t('dashboard.cleanupButton')}</Text>
-          </TouchableOpacity>
-        </View>
-      ) : null}
-
-      {/* Absorptionssperre ist situativ wie restoredCard/cleanupCard und
-          steht deshalb bei den anderen Zustandshinweisen ganz oben, noch
-          vor dem Arbeitsfluss: Wer gerade nichts dokumentieren kann, soll
-          das wissen, bevor die Als-Naechstes-Karte einen Knopf anbietet. */}
-      {blockerState.blocked ? (
-        <View style={styles.noticeCard}>
-          <Text style={styles.noticeTitle}>{t('dashboard.noticeTitle')}</Text>
-          <Text style={styles.noticeText}>{getBlockMessage(blockerState.remainingMinutes)}</Text>
-        </View>
-      ) : null}
+      {/* Situative Hinweise (Design-Review 02-D): maximal EINE Karte,
+          alles Weitere als kompakte Zeile — der Einstieg gehoert dem
+          Arbeitsfluss, nicht einem Stapel Zustandskarten. */}
+      {situationalNotices.map((kind, index) => renderSituationalNotice(kind, index > 0))}
 
       {fullInventoryCount === 0 ? <FirstStepsCard /> : null}
 
@@ -553,7 +597,7 @@ export default function Dashboard() {
             </View>
 
             <View style={styles.summaryInsightRow}>
-              <Text style={styles.summaryInsightPill}>{routineInsight.label}</Text>
+              <Text style={styles.summaryInsightLabel}>{routineInsight.label}</Text>
               <Text style={styles.summaryInsightText}>{routineInsight.text}</Text>
             </View>
 
@@ -601,11 +645,9 @@ export default function Dashboard() {
           <View style={styles.slotHeader}>
             <View style={styles.slotHeaderText}>
               <Text style={styles.slotTitle}>{item.slot.label}</Text>
-              <Text style={styles.slotTime}>{item.slot.time}</Text>
-            </View>
-            <View style={styles.slotStatusWrap}>
-              <Text style={styles.slotCount}>{getSlotCountLabel(item.supplements.length, t)}</Text>
-              <Text style={styles.slotStatus}>{t('dashboard.slotStatus')}</Text>
+              <Text style={styles.slotTime}>
+                {`${item.slot.time} · ${getSlotCountLabel(item.supplements.length, t)}`}
+              </Text>
             </View>
           </View>
 
@@ -623,44 +665,44 @@ export default function Dashboard() {
           Der Tagesplan zeigt zuerst, was heute ansteht — wer ein Praeparat
           ohne Einnahmezeitpunkt angelegt hat, findet es hier trotzdem. */}
       <TouchableOpacity
-        style={styles.inventoryCard}
+        style={styles.inventoryRow}
         onPress={() => router.push('/inventory')}
-        activeOpacity={0.8}
+        activeOpacity={0.7}
         accessibilityRole="link"
       >
         <View style={styles.inventoryTextWrap}>
-          <Text style={styles.inventoryLabel}>{t('dashboard.inventoryLabel')}</Text>
-          <Text style={styles.inventoryValue}>
+          <Text style={styles.inventoryTitle}>{t('dashboard.inventoryLabel')}</Text>
+          <Text style={styles.inventorySub}>
             {fullInventoryCount === 1
               ? t('dashboard.inventoryCount_one')
               : t('dashboard.inventoryCount_other', { count: fullInventoryCount })}
           </Text>
         </View>
-        <Text style={styles.inventoryChevron}>›</Text>
+        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
       </TouchableOpacity>
 
-      <SectionHeading
-        title={t('dashboard.sectionAlertsTitle')}
-        subtitle={t('dashboard.sectionAlertsSubtitle')}
-      />
+      {/* Pruefhinweise nur, wenn es welche gibt (Design-Review 02-D):
+          kein Dauer-Gruen — die Abwesenheit von Hinweisen braucht keine
+          eigene Karte. */}
+      {slotAlerts.length > 0 ? (
+        <>
+          <SectionHeading
+            title={t('dashboard.sectionAlertsTitle')}
+            subtitle={t('dashboard.sectionAlertsSubtitle')}
+          />
 
-      {slotAlerts.length === 0 ? (
-        <View style={styles.allClearCard}>
-          <Text style={styles.allClearTitle}>{t('dashboard.noAlertsTitle')}</Text>
-          <Text style={styles.allClearText}>{t('dashboard.noAlertsText')}</Text>
-        </View>
-      ) : (
-        slotAlerts.map((group) => (
-          <View key={group.slot.id} style={styles.infoCard}>
-            <Text style={styles.infoTitle}>{group.slot.label}</Text>
-            {group.messages.map((message, index) => (
-              <Text key={`${group.slot.id}-${index}`} style={styles.infoText}>
-                {message.message}
-              </Text>
-            ))}
-          </View>
-        ))
-      )}
+          {slotAlerts.map((group) => (
+            <View key={group.slot.id} style={styles.infoCard}>
+              <Text style={styles.infoTitle}>{group.slot.label}</Text>
+              {group.messages.map((message, index) => (
+                <Text key={`${group.slot.id}-${index}`} style={styles.infoText}>
+                  {message.message}
+                </Text>
+              ))}
+            </View>
+          ))}
+        </>
+      ) : null}
 
       <View style={styles.disclaimerCard}>
         <Text style={styles.disclaimerText}>{t('dashboard.disclaimer')}</Text>
@@ -700,33 +742,17 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: space.lg,
   },
-  greeting: {
-    ...type.bodyStrong,
-    marginBottom: space.sm,
-  },
-  kickerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  // Bereichsmarke ueber dem Seitentitel — dafuer ist type.eyebrow gedacht.
-  kicker: {
-    ...type.eyebrow,
-  },
-  profileLabel: {
-    ...type.small,
-  },
   title: {
-    marginTop: space.md,
     ...type.display,
   },
-  subtitle: {
+  headerMeta: {
     marginTop: space.sm,
-    ...type.body,
+    ...type.small,
   },
   // Als-Naechstes-Karte (Spec Entscheidung 3): erste Routine-Flaeche,
-  // beantwortet den Arbeitsfluss statt einer Kennzahl.
-  nextUpCard: { ...surfaces.card, padding: space.lg, borderWidth: 2, borderColor: colors.accentSoft, marginBottom: space.lg },
+  // beantwortet den Arbeitsfluss statt einer Kennzahl. Ohne Rahmen —
+  // weisse Flaeche auf grauem Grund grenzt sich von selbst ab.
+  nextUpCard: { ...surfaces.card, padding: space.lg, marginBottom: space.lg },
   nextUpKicker: { ...type.eyebrow, color: colors.accent },
   nextUpSlot: { ...type.subheading, marginTop: 2, marginBottom: space.sm },
   nextUpRemaining: { ...type.small, marginTop: space.sm },
@@ -801,18 +827,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceSunken,
     padding: space.md,
   },
-  summaryInsightPill: {
-    alignSelf: 'flex-start',
-    overflow: 'hidden',
-    borderRadius: radius.md,
-    backgroundColor: colors.accentSoft,
-    color: colors.accent,
-    paddingHorizontal: space.sm,
-    paddingVertical: space.xs,
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 0.3,
-    textTransform: 'uppercase',
+  // Versal-Micro-Pille abgeschafft (Design-Review 01): type.eyebrow bleibt
+  // das einzige Versal-Element, Labels sind normale Textzeilen.
+  summaryInsightLabel: {
+    ...type.small,
+    fontWeight: weight.semibold,
+    color: colors.ink,
   },
   summaryInsightText: {
     marginTop: space.sm,
@@ -840,28 +860,24 @@ const styles = StyleSheet.create({
     ...type.body,
     color: toneFor('notice').ink,
   },
-  inventoryCard: {
+  // Bestand als normale weisse Listenzeile (Design-Review 02-D): kein
+  // Farbteppich mehr, der Feather-Chevron ersetzt das Text-Zeichen.
+  inventoryRow: {
     ...surfaces.card,
     marginTop: space.md,
     marginBottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.accentSoft,
+    gap: space.md,
+    minHeight: 48,
   },
   inventoryTextWrap: { flex: 1 },
-  inventoryLabel: {
-    ...type.label,
-    color: colors.accent,
+  inventoryTitle: {
+    ...type.bodyStrong,
   },
-  inventoryValue: {
-    ...type.subheading,
+  inventorySub: {
+    ...type.small,
     marginTop: 2,
-  },
-  inventoryChevron: {
-    ...type.display,
-    color: colors.accent,
-    marginLeft: space.md,
   },
   metricGrid: {
     marginTop: space.lg,
@@ -886,7 +902,6 @@ const styles = StyleSheet.create({
   cleanupCard: {
     marginTop: space.xs,
     ...surfaces.card,
-    borderColor: colors.ruleStrong,
   },
   cleanupTitle: {
     ...type.subheading,
@@ -911,9 +926,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cleanupButtonText: {
-    color: colors.surface,
-    fontSize: 12,
-    fontWeight: '800',
+    ...surfaces.buttonPrimaryText,
+  },
+  // Kompakte Zeile fuer nachrangige situative Hinweise (Design-Review 02-D).
+  compactNoticeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    minHeight: 44,
+    marginBottom: space.sm,
+  },
+  compactNoticeText: {
+    ...type.small,
+    flex: 1,
+  },
+  compactNoticeTextNotice: {
+    color: toneFor('notice').ink,
+  },
+  compactNoticeAction: {
+    minHeight: 44,
+    justifyContent: 'center',
+  },
+  compactNoticeActionText: {
+    ...type.small,
+    color: colors.accent,
   },
   restoredCard: { ...surfaces.card, backgroundColor: colors.affirmSoft, padding: space.lg, marginBottom: space.lg },
   restoredTitle: { ...type.bodyStrong, color: colors.affirm },
@@ -951,24 +987,6 @@ const styles = StyleSheet.create({
     marginTop: space.xs,
     ...type.small,
     fontWeight: '600',
-  },
-  slotStatusWrap: {
-    alignItems: 'flex-end',
-    flexShrink: 0,
-  },
-  slotCount: {
-    overflow: 'hidden',
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceSunken,
-    color: colors.ink,
-    paddingHorizontal: space.sm,
-    paddingVertical: space.xs,
-    fontSize: 12,
-    fontWeight: '800',
-  },
-  slotStatus: {
-    marginTop: space.xs,
-    ...type.label,
   },
   emptySlot: {
     borderTopWidth: 1,
@@ -1010,35 +1028,20 @@ const styles = StyleSheet.create({
   emptyRoutineText: {
     ...type.body,
   },
-  emptyRoutineButton: {
-    marginTop: space.lg,
-    alignSelf: 'flex-start',
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.sm,
-  },
-  emptyRoutineButtonText: {
-    color: colors.surface,
-    fontSize: 12,
-    fontWeight: '900',
-  },
+  // Eintrag als Spalte (Design-Review 02-B): Textflaeche oben, EINE
+  // Aktion in voller Breite darunter — statt der 116-pt-Buttonspalte.
   supplementCard: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: space.md,
     paddingTop: space.md,
     marginTop: space.md,
     borderTopWidth: 1,
     borderTopColor: colors.rule,
   },
   supplementTextWrap: {
-    flex: 1,
+    minHeight: 44,
   },
   supplementHeaderRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
     gap: space.sm,
   },
@@ -1056,104 +1059,53 @@ const styles = StyleSheet.create({
     marginTop: space.xs,
     ...type.small,
   },
-  timingPill: {
-    ...surfaces.chip,
-    alignSelf: 'flex-start',
+  // Einnahmezeitpunkt als normale Textzeile mit Uhr-Icon statt Versal-Pille
+  // (Design-Review 02-C).
+  timingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
     marginTop: space.sm,
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-    paddingHorizontal: space.sm,
-    paddingVertical: space.xs,
-    // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): rein dekoratives Badge
-    // ohne onPress, die 44-pt-Mindesthoehe aus surfaces.chip gilt hier
-    // nicht -- sonst blaeht die zentrale Aenderung dieses Zeitpunkt-Badge
-    // sichtbar auf.
-    minHeight: 0,
   },
-  timingPillText: {
-    color: colors.accent,
-    fontSize: 11,
-    fontWeight: '800',
+  timingText: {
+    ...type.small,
   },
   // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): traegt den TouchableOpacity
   // von der noteText/noteToggle-Umschaltflaeche.
   noteToggleButton: { minHeight: 44, justifyContent: 'center', alignSelf: 'flex-start' },
   noteToggle: {
     marginTop: space.sm,
+    ...type.small,
     color: colors.accent,
-    fontSize: 11,
-    fontWeight: '800',
   },
-  actionWrap: {
-    minWidth: 116,
-    alignItems: 'flex-end',
+  // EINE Aktion pro Eintrag (Design-Review 02-B).
+  logButton: {
+    ...surfaces.buttonPrimary,
+    marginTop: space.md,
+  },
+  logButtonText: {
+    ...surfaces.buttonPrimaryText,
+  },
+  loggedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: space.sm,
+    marginTop: space.sm,
+    minHeight: 44,
   },
-  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln) fuer alle drei Zeilen-Aktionen.
-  primaryAction: {
-    minWidth: 116,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-    alignItems: 'center',
+  loggedText: {
+    ...type.small,
+    color: colors.affirm,
+    flex: 1,
+  },
+  undoButton: {
     minHeight: 44,
     justifyContent: 'center',
-  },
-  secondaryAction: {
-    minWidth: 116,
-    borderRadius: radius.md,
-    backgroundColor: colors.surface,
-    borderColor: colors.ruleStrong,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-    alignItems: 'center',
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  // Entfernen-Aktion: ein Hinweis vor destruktivem Schritt, kein Alarmrot.
-  dangerAction: {
-    minWidth: 116,
-    borderRadius: radius.md,
-    backgroundColor: toneFor('notice').surface,
-    borderWidth: 1,
-    borderColor: toneFor('notice').rule,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-    alignItems: 'center',
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  primaryActionText: {
-    color: colors.surface,
-    fontSize: 12,
-    fontWeight: '800',
-  },
-  secondaryActionText: {
-    color: colors.ink,
-    fontSize: 12,
-    fontWeight: '800',
-  },
-  dangerActionText: {
-    color: toneFor('notice').ink,
-    fontSize: 12,
-    fontWeight: '800',
-  },
-  statePill: {
-    overflow: 'hidden',
-    borderRadius: radius.md,
     paddingHorizontal: space.sm,
-    paddingVertical: space.xs,
-    fontSize: 11,
-    fontWeight: '800',
   },
-  loggedPill: {
-    backgroundColor: toneFor('ok').surface,
-    color: toneFor('ok').ink,
-  },
-  pendingPill: {
-    backgroundColor: colors.surfaceSunken,
-    color: colors.inkMuted,
+  undoButtonText: {
+    ...type.small,
+    color: colors.accent,
   },
   // Konflikthinweise pro Slot — ein Konflikt ist ein Hinweis ('notice').
   infoCard: {
@@ -1172,24 +1124,6 @@ const styles = StyleSheet.create({
     marginTop: space.sm,
     ...type.body,
     color: toneFor('notice').ink,
-  },
-  // "Keine Konflikte" — entlastende Rueckmeldung, daher 'ok'.
-  allClearCard: {
-    marginBottom: space.md,
-    borderRadius: radius.lg,
-    backgroundColor: toneFor('ok').surface,
-    borderWidth: 1,
-    borderColor: toneFor('ok').rule,
-    padding: space.lg,
-  },
-  allClearTitle: {
-    ...type.subheading,
-    color: toneFor('ok').ink,
-  },
-  allClearText: {
-    marginTop: space.sm,
-    ...type.body,
-    color: toneFor('ok').ink,
   },
   disclaimerCard: {
     marginTop: space.xs,

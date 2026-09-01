@@ -100,6 +100,7 @@ export default {
   'dashboard.noteShow': 'Details anzeigen',
   'dashboard.undo': 'Rückgängig',
   'dashboard.logAction': 'Dokumentieren',
+  'dashboard.loggedAtTime': 'Dokumentiert um {time}',
   'dashboard.edit': 'Bearbeiten',
   'dashboard.remove': 'Entfernen',
   'dashboard.archiveAlertTitle': 'Aus Routine entfernen',

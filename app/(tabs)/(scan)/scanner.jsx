@@ -1034,7 +1034,7 @@ const styles = StyleSheet.create({
   progressBadgeText: {
     color: colors.inkMuted,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   progressBadgeTextComplete: {
     color: affirmTone.ink,
@@ -1066,7 +1066,7 @@ const styles = StyleSheet.create({
   barcodeValue: {
     color: colors.ink,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '700',
     fontVariant: ['tabular-nums'],
   },
   barcodeText: {
@@ -1107,7 +1107,7 @@ const styles = StyleSheet.create({
   stepNumberText: {
     color: colors.accent,
     fontSize: 16,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   captureHeaderText: {
     flex: 1,
@@ -1134,7 +1134,7 @@ const styles = StyleSheet.create({
   captureStatusText: {
     color: colors.inkMuted,
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   captureStatusTextComplete: {
     color: affirmTone.ink,
@@ -1430,7 +1430,7 @@ const styles = StyleSheet.create({
   guidanceLabel: {
     color: colors.ink,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: '700',
     marginBottom: space.xs,
   },
   guidanceText: {
@@ -1521,7 +1521,7 @@ const styles = StyleSheet.create({
   stepIndicatorText: {
     color: colors.inkMuted,
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: '700',
   },
   stepIndicatorTextActive: {
     color: colors.surface,
@@ -1542,7 +1542,7 @@ const styles = StyleSheet.create({
   stepState: {
     color: colors.inkFaint,
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   stepStateComplete: {
     color: colors.accent,
@@ -1592,7 +1592,7 @@ const styles = StyleSheet.create({
   analysisButtonText: {
     color: colors.ink,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   analysisButtonTextReady: {
     color: colors.surface,

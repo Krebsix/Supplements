@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   detailText: {
     color: colors.ink,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   metaPanel: {
     backgroundColor: colors.surfaceSunken,

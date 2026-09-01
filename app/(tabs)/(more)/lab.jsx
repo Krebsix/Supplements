@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   chipTextActive: { ...surfaces.chipTextActive },
   primaryButton: { ...surfaces.buttonPrimary, paddingVertical: 13, marginTop: space.md },
   primaryButtonText: { ...surfaces.buttonPrimaryText, fontSize: 14 },
-  groupName: { color: colors.ink, fontSize: 15, fontWeight: '800', marginBottom: space.xs },
+  groupName: { color: colors.ink, fontSize: 15, fontWeight: '700', marginBottom: space.xs },
   entryRow: { borderTopWidth: 1, borderTopColor: colors.rule, paddingTop: space.sm + 2, marginTop: space.sm + 2 },
   entryHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
   // Messwert in Serife: passt zum Laborbuch-Charakter des Screens.
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md, paddingVertical: 13, alignItems: 'center', marginBottom: space.sm + 2,
     minHeight: 44, justifyContent: 'center',
   },
-  secondaryButtonText: { color: colors.accent, fontSize: 14, fontWeight: '800' },
+  secondaryButtonText: { color: colors.accent, fontSize: 14, fontWeight: '700' },
   backButton: { ...surfaces.buttonQuiet },
   backButtonText: { ...surfaces.buttonQuietText, fontSize: 15 },
 });

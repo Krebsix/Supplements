@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center', marginRight: 11,
   },
   checkboxActive: { backgroundColor: colors.accent, borderColor: colors.accent },
-  checkmark: { color: colors.surface, fontSize: 13, fontWeight: '900' },
+  checkmark: { color: colors.surface, fontSize: 13, fontWeight: '700' },
   checkLabel: { color: colors.ink, fontSize: 14, fontWeight: '600', flex: 1 },
   primaryButton: { ...surfaces.buttonPrimary },
   primaryButtonText: { ...surfaces.buttonPrimaryText },

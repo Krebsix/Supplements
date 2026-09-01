@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   chipText: {
     color: colors.inkMuted,
     fontSize: 13,
-    fontWeight: '900',
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
   chipTextActive: {

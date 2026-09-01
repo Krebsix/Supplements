@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...type.display,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   subtitle: {
     ...type.body,
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   },
   trustItemTitle: {
     ...type.bodyStrong,
-    fontWeight: '800',
+    fontWeight: '700',
     lineHeight: 19,
   },
   trustItemText: {

@@ -554,7 +554,7 @@ const styles = StyleSheet.create({
   chipText: {
     color: colors.ink,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   chipActive: surfaces.chipActive,
   chipTextActive: surfaces.chipTextActive,

@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   toggle: {
     color: colors.accent,
     fontSize: 20,
-    fontWeight: '900',
+    fontWeight: '700',
     lineHeight: 22,
   },
   what: {
