@@ -108,7 +108,10 @@ export const substances = [
       { name: 'Carbonat', bioavailability: 'niedrig bis mittel', note: 'Wirkt zusätzlich säurebindend im Magen.' },
     ],
     fatSoluble: false,
-    sources: ['nih-ods', 'dach'],
+    overdoseNote: 'Für zusätzliche Zufuhr aus Präparaten gilt ein UL von 250 mg pro Tag (SCF 2001; verteilt auf zwei oder mehr Portionen). Erste unerwünschte Wirkung höherer Zusatzmengen sind leichte Durchfälle, teils schon ab etwa 300 mg pro Tag (via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Magnesium', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-magnesium-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach'],
   },
   {
     id: 'calcium',
@@ -129,7 +132,10 @@ export const substances = [
       { name: 'Gluconat', bioavailability: 'mittel', note: 'Niedriger Calciumanteil pro Gramm, entsprechend größere Mengen nötig.' },
     ],
     fatSoluble: false,
-    sources: ['nih-ods', 'dach', 'efsa-ul'],
+    overdoseNote: 'Der UL liegt bei 2.500 mg pro Tag für die Gesamtzufuhr (SCF 2003, EFSA 2012 bestätigt). Als früheste unerwünschte Wirkung höherer Gesamtaufnahmen gilt ein häufigeres Auftreten von Nierensteinen bei älteren Erwachsenen (via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Calcium', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-calcium-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach', 'efsa-ul'],
   },
   {
     id: 'iron',
@@ -153,7 +159,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Eisen sollte nicht ohne festgestellten Mangel ergänzt werden: überschüssiges Eisen wird gespeichert und ist nicht einfach ausscheidbar.',
-    sources: ['nih-ods', 'dach'],
+    overdoseNote: 'Die EFSA konnte keinen UL ableiten. Als niedrigste Dosis mit unerwünschten Magen-Darm-Wirkungen aus Supplementen gelten 60 mg pro Tag (Erwachsene) bzw. 40 mg bei Kindern; daraus wurde in den USA ein UL von 45 mg pro Tag abgeleitet (IOM/FNB, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Eisen', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-eisen-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach'],
   },
   {
     id: 'zinc',
@@ -178,7 +187,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Dauerhaft hohe Zinkzufuhr kann die Kupferaufnahme beeinträchtigen.',
-    sources: ['nih-ods', 'efsa-ul', 'dach'],
+    overdoseNote: 'Der UL liegt bei 25 mg pro Tag (Erwachsene) bzw. 22 mg (15 bis 17 Jahre); der Abstand zwischen üblicher Zufuhr und Obergrenze ist gering, weshalb das BfR die Höchstmenge allein der Kategorie Nahrungsergänzung zuschlägt (SCF, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Zink', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-zink-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'efsa-ul', 'dach'],
   },
   {
     id: 'selenium',
@@ -199,7 +211,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Der Abstand zwischen Bedarf und Obergrenze ist bei Selen gering: Mengenangaben genau beachten.',
-    sources: ['nih-ods', 'efsa-ul'],
+    overdoseNote: 'Die EFSA hat den UL 2023 von 300 auf 255 µg pro Tag gesenkt; bekannte Wirkung übermäßiger Selenzufuhr ist Haarausfall (Alopezie), der in der SELECT-Studie schon bei langjährig 200 µg zusätzlich pro Tag auftrat.',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Selen (2023)', url: 'https://www.bfr.bund.de/cm/343/aktualisierung-2023-hoechstmengenvorschlaege-fuer-selen-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'efsa-ul'],
   },
   {
     id: 'iodine',
@@ -218,7 +233,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Bei Schilddrüsenerkrankungen ist die Jodzufuhr ärztlich abzuklären.',
-    sources: ['nih-ods', 'dach', 'efsa-ul'],
+    overdoseNote: 'Der UL liegt bei 600 µg pro Tag (SCF); die D-A-CH-Gesellschaften setzen für Deutschland wegen möglicher Funktionsstörungen und Autonomien der Schilddrüse nach langem Jodmangel eine niedrigere Grenze von 500 µg pro Tag an (via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Jod', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-jod-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach', 'efsa-ul'],
   },
   {
     id: 'potassium',
@@ -238,7 +256,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Bei eingeschränkter Nierenfunktion oder blutdrucksenkender Medikation ist Kalium ärztlich abzuklären.',
-    sources: ['nih-ods', 'dach'],
+    overdoseNote: 'Bei gesunder Regulation gilt das Risiko bis etwa 5 bis 6 g pro Tag als gering. Eine Hyperkaliämie kann bei gestörter Regulation entstehen, etwa bei eingeschränkter Nierenfunktion oder extrem hohen Supplement-Mengen (EFSA, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Kalium', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-kalium-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach'],
   },
 
   // ── Vitamine ───────────────────────────────────────────────
@@ -263,7 +284,10 @@ export const substances = [
     fatSoluble: true,
     unitConversion: { note: '1 µg Vitamin D entspricht 40 IE.', factorToIE: 40 },
     cautionNote: 'Fettlöslich und speicherbar: dauerhaft hohe Dosen ohne Blutwertkontrolle sind nicht sinnvoll.',
-    sources: ['nih-ods', 'dach', 'efsa-ul'],
+    overdoseNote: 'Die EFSA-Obergrenze für die tägliche Gesamtzufuhr liegt bei 100 µg für Erwachsene und bei 50 µg für Kinder von 1 bis 10 Jahren (bestätigt 2023). Dauerhaft darüber liegende Zufuhren gelten als Risikobereich; das BfR orientiert seine Höchstmengen an diesen Werten.',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin D (2023)', url: 'https://www.bfr.bund.de/cm/343/aktualisierung-2023-hoechstmengenvorschlaege-fuer-vitamin-d-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach', 'efsa-ul'],
   },
   {
     id: 'vitamin-k2',
@@ -284,7 +308,10 @@ export const substances = [
     ],
     fatSoluble: true,
     cautionNote: 'Bei Einnahme von Gerinnungshemmern (Cumarine/Vitamin-K-Antagonisten) nur nach ärztlicher Absprache.',
-    sources: ['nih-ods', 'efsa-drv'],
+    overdoseNote: 'Für Vitamin K ist auch bei hoher Zufuhr keine Toxizität belegt; ein UL wurde nicht abgeleitet. Der relevante unerwünschte Effekt ist die Abschwächung von Gerinnungshemmern vom Cumarin-Typ; unter diesen Medikamenten gehören Vitamin-K-Präparate nur unter ärztliche Kontrolle (SCF, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin K', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-k-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'efsa-drv'],
   },
   {
     id: 'vitamin-c',
@@ -308,7 +335,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Sehr hohe Einzeldosen werden überwiegend ausgeschieden und können Durchfall auslösen. Auf mehrere Portionen verteilen.',
-    sources: ['nih-ods', 'dach'],
+    overdoseNote: 'Die EFSA konnte keinen UL ableiten, nennt aber 1.000 mg zusätzlich pro Tag als Menge ohne zu erwartende Magen-Darm-Beschwerden; höhere Zufuhren erhöhen das Risiko dafür (EFSA 2004, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin C', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-c-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach'],
   },
   {
     id: 'vitamin-b12',
@@ -331,7 +361,10 @@ export const substances = [
       { name: 'Cyanocobalamin', bioavailability: 'hoch', note: 'Stabilste und günstigste Form, muss im Körper umgewandelt werden.' },
     ],
     fatSoluble: false,
-    sources: ['nih-ods', 'dach'],
+    overdoseNote: 'Ein UL wurde nicht abgeleitet; auch bei Aufnahmen um 100 µg pro Tag über Supplemente sind keine unerwünschten Wirkungen bekannt geworden (SCF, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin B12', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b12-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach'],
   },
   {
     id: 'folate',
@@ -352,7 +385,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Hohe Folatzufuhr kann einen Vitamin-B12-Mangel maskieren: beides gemeinsam betrachten.',
-    sources: ['nih-ods', 'dach', 'efsa-ul'],
+    overdoseNote: 'Der UL für Folsäure liegt bei 1 mg pro Tag (Erwachsene; 2023 bestätigt). Endpunkt ist die Maskierung eines Vitamin-B12-Mangels: Hohe Folsäurezufuhr kann dessen neurologische Folgen verdecken bzw. verschlechtern.',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Folsäure (2024)', url: 'https://www.bfr.bund.de/cm/343/aktualisierung-2024-hoechstmengenvorschlaege-fuer-folsaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'dach', 'efsa-ul'],
   },
   {
     id: 'vitamin-b6',
@@ -373,7 +409,10 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Dauerhaft hohe Dosen können Nervenschädigungen verursachen: bei B6 ist die Obergrenze besonders relevant.',
-    sources: ['nih-ods', 'efsa-ul'],
+    overdoseNote: 'Dauerhaft zu hohe Zufuhr kann periphere Neuropathien (Nervenschädigungen) auslösen; die EFSA hat den UL 2023 von 25 auf 12 mg pro Tag für Erwachsene gesenkt, für Kinder gelten 4,5 bis 10,7 mg je nach Alter.',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin B6 (2024)', url: 'https://www.bfr.bund.de/cm/343/aktualisierung-2024-hoechstmengenvorschlaege-fuer-vitamin-b6-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'efsa-ul'],
   },
   {
     id: 'vitamin-a',
@@ -393,7 +432,10 @@ export const substances = [
     ],
     fatSoluble: true,
     cautionNote: 'In der Schwangerschaft ist vorgeformtes Vitamin A (Retinol) in höheren Dosen zu vermeiden. Beta-Carotin ist in dieser Hinsicht unkritischer.',
-    sources: ['nih-ods', 'efsa-ul', 'dach'],
+    overdoseNote: 'Zu hohe Zufuhr von vorgeformtem Vitamin A gilt als lebertoxisch und fruchtschädigend; der UL liegt bei 3 mg pro Tag für Erwachsene, für Frauen nach der Menopause werden wegen möglicher Wirkungen auf die Knochen 1,5 mg pro Tag genannt (SCF, via BfR).',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin A', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-a-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'efsa-ul', 'dach'],
   },
   {
     id: 'vitamin-e',
@@ -414,7 +456,10 @@ export const substances = [
     ],
     fatSoluble: true,
     cautionNote: 'Hohe Dosen können die Blutungsneigung erhöhen: relevant bei Gerinnungshemmern und vor Operationen.',
-    sources: ['nih-ods', 'efsa-ul'],
+    overdoseNote: 'Der UL liegt bei 300 mg pro Tag (Erwachsene); Studien nach dessen Ableitung verbinden hochdosierte Supplemente (rund 268 mg bzw. 400 IE pro Tag, SELECT-Studie) mit einem erhöhten Prostatakrebs-Risiko, weitere Daten mit erhöhtem Schlaganfall-Risiko.',
+    sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin E', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-e-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
+      'nih-ods', 'efsa-ul'],
   },
 
   // ── Fettsäuren ─────────────────────────────────────────────
@@ -678,7 +723,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Ab oralen Aufnahmen von ca. 150 µg/Tag sind Verfälschungen bestimmter Labor-Immunoassays (z. B. Schilddrüsen-, Herzmarker) dokumentiert (EMA/PRAC 2019). Kein UL abgeleitet (SCF/BfR 2024).',
+    overdoseNote: 'Ein UL konnte mangels Daten nicht abgeleitet werden; bei üblichen Aufnahmen gilt das Risiko als gering. Relevant bleibt die Verfälschung von Labor-Immunoassays (siehe Hinweis oben).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Biotin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Biotin', url: 'https://www.bfr.bund.de/cm/343/höchstmengenvorschlaege-für-biotin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'DGE FAQ Biotin', url: 'https://www.dge.de/gesunde-ernährung/faq/biotin/' },
       { label: 'EFSA Dietary Reference Values Biotin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3580' },
@@ -703,7 +750,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Wichtig: Die drei Formen haben stark unterschiedliche Höchstmengen (Faktor über 200 zwischen Nicotinsäure- und Nicotinamid-Obergrenze): ein Nicotinsäure-Produkt darf nicht mit dem Nicotinamid-Wert verglichen werden. In der Schwangerschaft empfiehlt das BfR bei Nicotinamid-Zusätzen über 16 mg/Tag einen Warnhinweis wegen unzureichender Sicherheitsdaten.',
+    overdoseNote: 'Die Obergrenzen unterscheiden sich je Form stark: Für Nicotinsäure liegt der UL wegen des Flush-Effekts bei 10 mg pro Tag, für Nicotinamid bei 900 mg pro Tag (Erwachsene). Für Schwangere und Stillende gilt der Erwachsenen-UL mangels Daten nicht (SCF, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Niacin', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR Stellungnahme 2024: Höchstmengenvorschläge Niacin', url: 'https://www.bfr.bund.de/cm/343/höchstmengenvorschlaege-für-niacin-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Niacin (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3759' },
     ],
@@ -726,7 +775,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Keine relevanten Wechselwirkungen dokumentiert; harmlose Gelbverfärbung des Urins bei höheren Aufnahmen. Kein UL abgeleitet (SCF 2000, bestätigt BfR 2024).',
+    overdoseNote: 'Ein UL konnte mangels Daten nicht abgeleitet werden; in einer Studie mit 400 mg pro Tag über drei Monate wurden nur vereinzelt milde Beschwerden wie Durchfall berichtet, ohne klaren Zusammenhang (SCF, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR Stellungnahme 2024: Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Riboflavin (2017)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4919' },
     ],
@@ -750,7 +801,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Keine relevante Kontraindikation bei üblichen Supplement-Dosen bekannt; überschüssiges Thiamin wird über den Urin ausgeschieden. Kein UL abgeleitet (SCF 2001, bestätigt BfR 2024).',
+    overdoseNote: 'Auch bei hohen Dosen sind keine unerwünschten Wirkungen belegt; wegen der geringen Toxizität konnte kein UL abgeleitet werden (SCF/IOM, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR Stellungnahme 2024: Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Thiamin (2016)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4653' },
     ],
@@ -773,7 +826,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Keine relevanten Wechselwirkungen in Supplement-Dosen dokumentiert. Kein UL abgeleitet (SCF 2002, bestätigt BfR 2024).',
+    overdoseNote: 'Von einer geringen Toxizität wird ausgegangen; toxikologische Kenngrößen oder ein UL konnten nicht abgeleitet werden (SCF/IOM, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR Stellungnahme 2024: Vitamin B1/B2/Pantothensäure', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-vitamin-b1-vitamin-b2-und-pantothensaeure-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Dietary Reference Values Pantothenic Acid (2014)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/3581' },
     ],
@@ -820,7 +875,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'EFSA konnte Chrom(III) nicht als essenziell für die Allgemeinbevölkerung bestätigen, daher existiert kein offizieller Referenzwert. Das BfR schlägt für Nahrungsergänzungsmittel eine Höchstmenge von 60 µg pro Tagesdosis vor (Stand 2021).',
+    overdoseNote: 'Ein UL konnte mangels Daten nicht abgeleitet werden; die EFSA sah bei zusätzlich 250 µg Chrom(III) pro Tag keine gesundheitlichen Bedenken, das BfR nutzt diesen Wert als Orientierung.',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Chrom', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-chrom-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
       { label: 'BfR: Höchstmengenvorschläge für Chrom', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-chrom-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'NIH ODS Chromium Fact Sheet', url: 'https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/' },
@@ -845,7 +902,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Das BfR schlägt für Nahrungsergänzungsmittel aktuell 0,5 mg pro Tagesdosis vor.',
+    overdoseNote: 'Ein UL konnte nicht abgeleitet werden; der Abstand zwischen Mengen mit Effekten in Studien und der üblichen Zufuhr ist gering, und Mangan gilt als neurotoxisch mit möglicherweise empfindlicheren Gruppen (SCF, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Mangan', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-mangan-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
       { label: 'EFSA Scientific Opinion: Tolerable Upper Intake Level for Manganese (2023)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/8413' },
       { label: 'BfR: Höchstmengenvorschläge für Mangan', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-mangan-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln/' },
@@ -870,7 +929,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Eine hohe Zinkzufuhr senkt die Kupferaufnahme im Darm (kompetitive Hemmung): diese Wechselwirkung ist gut belegt. Das BfR weist darauf hin, dass seine Höchstmengen-Empfehlung von 1 mg pro Tagesdosis nicht für Kinder und Jugendliche gilt, da diese Gruppe bereits über die übliche Ernährung vergleichsweise hohe Kupfermengen aufnimmt.',
+    overdoseNote: 'Der UL liegt bei 5 mg pro Tag (Erwachsene) bzw. 4 mg (ab 15 Jahren); Grundlage sind unerwünschte Wirkungen auf die Leber. Jugendliche erreichen ihren UL laut BfR teils schon über die normale Ernährung (SCF, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Kupfer', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-kupfer-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
       { label: 'EFSA Dietary Reference Values for Copper (2015)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4253' },
       { label: 'BfR: Höchstmengenvorschläge für Kupfer', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-kupfer-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
@@ -893,7 +954,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'EFSA-Schätzwert (AI) für Erwachsene: 65 µg/Tag. Ein älterer SCF-Wert von 0,6 mg/Tag (Jahr 2000) ist nicht Teil der aktuellen EFSA-Referenzwert-Bewertung von 2013 und wird hier bewusst nicht als aktuelle Obergrenze übernommen.',
+    overdoseNote: 'Der UL liegt bei 600 µg pro Tag für Erwachsene einschließlich Schwangerer und Stillender bzw. 500 µg für 15- bis 17-Jährige (SCF, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Molybdän', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-molybdaen-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel.pdf' },
       { label: 'DGE Referenzwerte: Kupfer, Mangan, Chrom, Molybdän', url: 'https://www.dge.de/wissenschaft/referenzwerte/kupfer-mangan-chrom-molybdaen/' },
       { label: 'EFSA Dietary Reference Values for Molybdenum (2013)', url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2013.3333' },
       { label: 'BfR: Höchstmengenvorschläge für Molybdän', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-molybdaen-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel.pdf' },
@@ -916,7 +979,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Das BfR rät von einer gezielten Phosphor-Zugabe in Nahrungsergänzungsmitteln grundsätzlich ab. Weder EFSA noch DGE haben eine Obergrenze abgeleitet (Datenlage laut EFSA 2015 nicht ausreichend).',
+    overdoseNote: 'Ein UL konnte nicht abgeleitet werden; bei Supplementierung über 750 mg pro Tag sind Magen-Darm-Beschwerden aufgetreten. Bei Nierenerkrankungen werden hohe Phosphataufnahmen mit Herz-Kreislauf-Risiken in Verbindung gebracht (EFSA, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Phosphor/Phosphat', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-phosphor-phosphat-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel.pdf' },
       { label: 'DGE Referenzwerte: Phosphor', url: 'https://www.dge.de/wissenschaft/referenzwerte/phosphor/' },
       { label: 'EFSA Dietary Reference Values for Phosphorus (2015)', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/4185' },
       { label: 'BfR: Höchstmengenvorschläge für Phosphor/Phosphat', url: 'https://www.bfr.bund.de/veroeffentlichung/hoechstmengenvorschlaege-fuer-phosphor-phosphat-in-lebensmitteln-inklusive-nahrungsergaenzungsmittel/' },
@@ -1715,7 +1780,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'EFSA (2004) konnte mangels Daten keine Obergrenze ableiten; Silicium gilt als nicht-essenzieller Nährstoff, ein Mangel wurde beim Menschen bisher nicht beobachtet. Die D-A-CH-Referenzwerte führen keinen Wert für Silicium. Wichtig: Die BfR-Höchstmengenempfehlung unterscheidet sich stark je nach Form (Faktor 35 zwischen SiO2 und Bambusextrakt): eine einzelne Zahl ohne Formangabe wäre irreführend, deshalb hier ohne strukturierten Referenzwert.',
+    overdoseNote: 'Eine abschließende Risikobewertung war mangels toxikologischer Daten nicht möglich; das BfR nennt formabhängige Höchstmengen je Tagesdosis (350 mg Silizium als Siliziumdioxid, 100 mg als Kieselsäure, je 10 mg für organische Formen).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Silizium', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-silizium-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR: Höchstmengenvorschläge für Silicium', url: 'https://www.bfr.bund.de/cm/349/proposed-maximum-levels-for-the-addition-of-silicon-to-foods-including-food-supplements.pdf' },
       { label: 'DGE: Referenzwerte-Übersicht', url: 'https://www.dge.de/wissenschaft/referenzwerte/' },
     ],
@@ -1993,7 +2060,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Die DGE führt für Bor keinen D-A-CH-Referenzwert. Das BfR empfiehlt für Nahrungsergänzungsmittel eine deutlich niedrigere Höchstmenge (0,5 mg/Tag) als der EFSA-UL (10 mg/Tag für Erwachsene), da die Hintergrundaufnahme aus anderen Quellen bei Kindern/Jugendlichen bereits den UL ausschöpfen kann. Das BfR empfiehlt einen Verbraucherhinweis "Für Kinder und Jugendliche nicht geeignet".',
+    overdoseNote: 'Der UL liegt bei 10 mg pro Tag (Erwachsene) und basiert auf Tierstudien mit vermindertem Gewicht des Fötus; die Gesamtaufnahme aus Nahrung und weiteren Quellen kann laut EFSA bereits nennenswert sein (via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Bor', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-bor-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'BfR: Höchstmengenvorschläge für Bor', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-bor-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA 2004: Tolerable Upper Intake Level of Boron', url: 'https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2004.80' },
     ],
@@ -3630,7 +3699,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'Die übliche Ernährung liefert bereits deutlich mehr Natrium, als die Referenzwerte vorsehen; zusätzliche Zufuhr ist außerhalb von Sport- und Verlustsituationen selten sinnvoll. Wer wegen Bluthochdruck, Herz- oder Nierenerkrankung Natrium einschränken soll, bespricht Elektrolyt-Präparate ärztlich.',
+    overdoseNote: 'Ein UL konnte nicht abgeleitet werden; es gilt aber als gut belegt, dass die in Europa üblichen Kochsalzmengen das Blutdruck-Risiko erhöhen, mit direktem Zusammenhang zu Herz-Kreislauf- und Nierenerkrankungen (EFSA, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Natrium', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-natrium-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'NIH ODS: Sodium (Dietary Reference Intakes)', url: 'https://ods.od.nih.gov/factsheets/list-all/' },
       { label: 'D-A-CH Referenzwerte: Natrium', url: 'https://www.dge.de/wissenschaft/referenzwerte/natrium/' },
     ],
@@ -3739,7 +3810,9 @@ export const substances = [
     ],
     fatSoluble: false,
     cautionNote: 'EFSA nennt 3,1 g pro Tag als sichere und angemessene Zufuhr für Erwachsene, äquimolar zum Natrium-Referenzwert; eine hohe Kochsalzzufuhr betrifft beide Elektrolyte gemeinsam.',
+    overdoseNote: 'Ein UL konnte nicht abgeleitet werden; die Bewertung folgt dem Natrium: Hohe Kochsalzzufuhr erhöht das Blutdruck-Risiko mit Folgen für Herz-Kreislauf und Nieren (EFSA, via BfR).',
     sources: [
+      { label: 'BfR: Höchstmengenvorschlag Chlorid', url: 'https://www.bfr.bund.de/cm/343/hoechstmengenvorschlaege-fuer-chlorid-in-lebensmitteln-inklusive-nahrungsergaenzungsmitteln.pdf' },
       { label: 'EFSA Journal 2019, Dietary Reference Values for chloride', url: 'https://www.efsa.europa.eu/en/efsajournal/pub/5779' },
     ],
   },

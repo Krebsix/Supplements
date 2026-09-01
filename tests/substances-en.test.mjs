@@ -52,6 +52,13 @@ for (const substance of substances) {
     check(`${substance.id}: cautionNote nicht leer`, typeof entry.cautionNote === 'string' && entry.cautionNote.trim().length > 0);
   }
 
+  // overdoseNote (BfR-Durchgang 2026-09-02): nur wenn im DE-Original vorhanden.
+  const hasOverdose = 'overdoseNote' in substance;
+  check(`${substance.id}: overdoseNote-Praesenz stimmt mit DE ueberein`, hasOverdose === ('overdoseNote' in entry));
+  if (hasOverdose) {
+    check(`${substance.id}: overdoseNote nicht leer`, typeof entry.overdoseNote === 'string' && entry.overdoseNote.trim().length > 0);
+  }
+
   // useCases: gleiche Laenge und je Eintrag topic+note vorhanden.
   const sourceUseCases = substance.useCases ?? [];
   const overlayUseCases = entry.useCases ?? [];

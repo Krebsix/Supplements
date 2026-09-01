@@ -200,6 +200,17 @@ export default function SubstanceInsightCard({ profile }) {
             </View>
           ) : null}
 
+          {/* Bei zu hoher Zufuhr (BfR-Durchgang): eigener Block unter
+              "Zu beachten", gleiche Tonalitaet — ein Hinweis, kein Alarm. */}
+          {profile.overdoseNote ? (
+            <View style={styles.cautionBox}>
+              <Text style={styles.cautionLabel}>
+                {t('components.insight.overdose')}
+              </Text>
+              <Text style={styles.cautionText}>{profile.overdoseNote}</Text>
+            </View>
+          ) : null}
+
           {profile.sources?.length > 0 ? (
             <View style={styles.sourcesBox}>
               <Text style={styles.sourcesLabel}>

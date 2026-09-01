@@ -16,6 +16,7 @@ export default {
   'components.insight.fatSolubleHint':
     'Fat-soluble: absorption is markedly better with a meal containing fat.',
   'components.insight.caution': 'Please note',
+  'components.insight.overdose': 'With excessive intake',
   'components.insight.intake': 'Intake',
   'components.insight.sources': 'Sources',
   'components.insight.showLess': 'Show less',

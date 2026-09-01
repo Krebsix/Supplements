@@ -319,6 +319,9 @@ export function buildSubstanceProfile(match, lifeStageId) {
     // null, wenn nichts hinterlegt ist — kein generierter Fallback.
     intakeGuidance: getIntakeGuidance(substance.id),
     cautionNote: substance.cautionNote ?? '',
+    // Was bei zu hoher Zufuhr dokumentiert ist (BfR-Durchgang 2026-09-02);
+    // leer, wenn nichts Belegtes hinterlegt ist — kein generierter Text.
+    overdoseNote: substance.overdoseNote ?? '',
     sources: normalizeSources(substance.sources ?? []),
     referenceCheck: checkAgainstReference(match, lifeStageId),
     // Was in DIESER Lebensphase besonders gilt (Phase 3)

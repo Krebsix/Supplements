@@ -68,6 +68,7 @@ export default {
       'Oxid': 'High magnesium content per gram, but low absorption rate. Distinctly laxative.',
       'Carbonat': 'Also acts as an acid buffer in the stomach.',
     },
+    overdoseNote: 'For additional intake from preparations a UL of 250 mg per day applies (SCF 2001; split into two or more portions). The first adverse effect of higher added amounts is mild diarrhea, sometimes from about 300 mg per day (via BfR).',
   },
   calcium: {
     what: 'Macromineral and main component of bones and teeth; also involved in muscle contraction and nerve conduction.',
@@ -81,6 +82,7 @@ export default {
       'Carbonat': 'High calcium content, but requires stomach acid; absorption is better with food.',
       'Gluconat': 'Low calcium content per gram, correspondingly larger amounts needed.',
     },
+    overdoseNote: 'The UL is 2,500 mg per day for total intake (SCF 2003, confirmed by EFSA 2012). The earliest adverse effect of higher total intakes is a more frequent occurrence of kidney stones in older adults (via BfR).',
   },
   iron: {
     what: 'Trace element, component of hemoglobin and therefore central to oxygen transport in the blood.',
@@ -97,6 +99,7 @@ export default {
       'Gluconat': 'Better tolerated, lower iron content.',
     },
     cautionNote: 'Iron should not be supplemented without a confirmed deficiency: excess iron is stored and is not easily excreted.',
+    overdoseNote: 'EFSA could not derive a UL. The lowest dose with adverse gastrointestinal effects from supplements is 60 mg per day (adults) or 40 mg for children; from this a UL of 45 mg per day was derived in the US (IOM/FNB, via BfR).',
   },
   zinc: {
     what: 'Trace element, cofactor in more than 300 enzymes; involved in immune function, wound repair, skin, and hormone metabolism.',
@@ -114,6 +117,7 @@ export default {
       'Oxid': 'Requires stomach acid, absorbed less well.',
     },
     cautionNote: 'Sustained high zinc intake can impair copper absorption.',
+    overdoseNote: 'The UL is 25 mg per day (adults) or 22 mg (15 to 17 years); the gap between usual intake and the upper level is small, which is why the BfR assigns the maximum amount to the supplement category alone (SCF, via BfR).',
   },
   selenium: {
     what: 'Trace element, component of antioxidant enzymes (glutathione peroxidases) and important for thyroid hormone metabolism.',
@@ -127,6 +131,7 @@ export default {
       'Natriumselenit': 'Inorganic form; is not incorporated into proteins.',
     },
     cautionNote: 'The margin between requirement and upper limit is narrow for selenium; amounts should be checked carefully.',
+    overdoseNote: 'In 2023 EFSA lowered the UL from 300 to 255 µg per day; a known effect of excessive selenium intake is hair loss (alopecia), which in the SELECT trial occurred with 200 µg additionally per day over years.',
   },
   iodine: {
     what: 'Trace element and indispensable building block of the thyroid hormones T3 and T4.',
@@ -139,6 +144,7 @@ export default {
       'Algenpulver (z. B. Kelp)': 'Iodine content varies widely and can be very high; the stated amount needs careful checking.',
     },
     cautionNote: 'For thyroid disorders, iodine intake should be clarified medically.',
+    overdoseNote: 'The UL is 600 µg per day (SCF); because of possible thyroid dysfunction and autonomy after long iodine deficiency, the D-A-CH societies set a lower limit of 500 µg per day for Germany (via BfR).',
   },
   potassium: {
     what: 'Macromineral, central to intracellular pressure, nerve conduction, and heart rhythm.',
@@ -152,6 +158,7 @@ export default {
       'Chlorid': 'Common form for offsetting losses.',
     },
     cautionNote: 'For impaired kidney function or blood-pressure-lowering medication, potassium should be clarified medically.',
+    overdoseNote: 'With healthy regulation the risk is considered low up to about 5 to 6 g per day. Hyperkalemia can arise with impaired regulation, for example with reduced kidney function or extremely high supplement amounts (EFSA, via BfR).',
   },
   'vitamin-d3': {
     what: 'Fat-soluble vitamin and hormone precursor; is formed in the skin through sunlight and regulates calcium absorption, among other functions.',
@@ -167,6 +174,7 @@ export default {
     },
     unitConversion: { note: '1 µg vitamin D corresponds to 40 IU.' },
     cautionNote: 'Fat-soluble and storable: sustained high doses without blood value monitoring are not advisable.',
+    overdoseNote: 'The EFSA upper level for total daily intake is 100 µg for adults and 50 µg for children aged 1 to 10 (confirmed 2023). Intakes permanently above this range count as the risk zone; the BfR bases its maximum amounts on these values.',
   },
   'vitamin-k2': {
     what: 'Fat-soluble vitamin, activates proteins for blood clotting and for incorporating calcium into bone.',
@@ -180,6 +188,7 @@ export default {
       'K1 (Phyllochinon)': 'Primarily for blood clotting; from green leafy vegetables.',
     },
     cautionNote: 'When taking anticoagulants (coumarins/vitamin K antagonists), only after medical consultation.',
+    overdoseNote: 'For vitamin K no toxicity is established even at high intakes; no UL was derived. The relevant adverse effect is the weakening of coumarin-type anticoagulants; on these medications, vitamin K products belong under medical supervision only (SCF, via BfR).',
   },
   'vitamin-c': {
     what: 'Water-soluble vitamin with antioxidant activity, necessary for collagen formation.',
@@ -196,6 +205,7 @@ export default {
       'Liposomal': 'Marketed with higher absorption; evidence is limited, notably more expensive.',
     },
     cautionNote: 'Very high single doses are mostly excreted and can cause diarrhea. Spread across several portions.',
+    overdoseNote: 'EFSA could not derive a UL but names 1,000 mg additionally per day as an amount without expected gastrointestinal complaints; higher intakes raise that risk (EFSA 2004, via BfR).',
   },
   'vitamin-b12': {
     what: 'Water-soluble vitamin, necessary for blood formation, nerve function, and homocysteine breakdown.',
@@ -211,6 +221,7 @@ export default {
       'Hydroxocobalamin': 'Very stable, good depot effect.',
       'Cyanocobalamin': 'Most stable and least expensive form, must be converted in the body.',
     },
+    overdoseNote: 'No UL was derived; even at intakes around 100 µg per day from supplements, no adverse effects have become known (SCF, via BfR).',
   },
   folate: {
     what: 'Water-soluble B vitamin, necessary for cell division, blood formation, and neural tube development.',
@@ -224,6 +235,7 @@ export default {
       'Folsäure': 'Synthetic form, must be converted enzymatically; the form the study evidence is based on.',
     },
     cautionNote: 'High folate intake can mask a vitamin B12 deficiency: consider both together.',
+    overdoseNote: 'The UL for folic acid is 1 mg per day (adults; confirmed 2023). The endpoint is the masking of a vitamin B12 deficiency: high folic acid intake can hide or worsen its neurological consequences.',
   },
   'vitamin-b6': {
     what: 'Water-soluble B vitamin, cofactor in amino acid and neurotransmitter metabolism.',
@@ -237,6 +249,7 @@ export default {
       'Pyridoxin-HCl': 'Standard form, must be activated.',
     },
     cautionNote: 'Sustained high doses can cause nerve damage: the upper limit is particularly relevant for B6.',
+    overdoseNote: 'Permanently excessive intake can trigger peripheral neuropathies (nerve damage); in 2023 EFSA lowered the UL from 25 to 12 mg per day for adults, with 4.5 to 10.7 mg for children depending on age.',
   },
   'vitamin-a': {
     what: 'Fat-soluble vitamin, important for vision, skin, mucous membranes, and immune function.',
@@ -249,6 +262,7 @@ export default {
       'Beta-Carotin': 'Provitamin, converted according to need: distinctly lower risk of overdose.',
     },
     cautionNote: 'In pregnancy, preformed vitamin A (retinol) should be avoided in higher doses. Beta-carotene is less critical in this respect.',
+    overdoseNote: 'Excessive intake of preformed vitamin A is considered liver-toxic and teratogenic; the UL is 3 mg per day for adults, and 1.5 mg per day is named for women after menopause because of possible effects on bone (SCF, via BfR).',
   },
   'vitamin-e': {
     what: 'Fat-soluble vitamin with antioxidant activity, protects cell membranes from fat oxidation.',
@@ -262,6 +276,7 @@ export default {
       'Gemischte Tocopherole': 'Closer to the natural occurrence in food.',
     },
     cautionNote: 'High doses can increase bleeding tendency: relevant with anticoagulants and before surgery.',
+    overdoseNote: 'The UL is 300 mg per day (adults); studies after its derivation link high-dose supplements (about 268 mg or 400 IU per day, SELECT trial) to a higher prostate cancer risk, and further data to a higher stroke risk.',
   },
   'omega-3': {
     what: 'Long-chain polyunsaturated fatty acids; building blocks of cell membranes and starting materials for inflammation-regulating messengers.',
@@ -416,6 +431,7 @@ export default {
       'D-Biotin': 'The only form commonly used in dietary supplements.',
     },
     cautionNote: 'From oral intakes of about 150 µg/day, interference with certain laboratory immunoassays (e.g. thyroid, cardiac markers) is documented (EMA/PRAC 2019). No UL has been derived (SCF/BfR 2024).',
+    overdoseNote: 'No UL could be derived for lack of data; at usual intakes the risk is considered low. What remains relevant is the interference with laboratory immunoassays (see note above).',
   },
   niacin: {
     what: 'Collective term for nicotinic acid and nicotinamide, a building block of the coenzymes NAD/NADP in energy metabolism.',
@@ -430,6 +446,7 @@ export default {
       'Inosithexanicotinat': 'Only approved in dietary supplements, not in fortified foods.',
     },
     cautionNote: 'Important: the three forms have very different upper limits (a factor of over 200 between the nicotinic acid and nicotinamide upper limits): a nicotinic acid product must not be compared with the nicotinamide value. During pregnancy, the BfR recommends a warning notice for nicotinamide additions above 16 mg/day due to insufficient safety data.',
+    overdoseNote: 'The upper levels differ strongly by form: for nicotinic acid the UL is 10 mg per day because of the flushing effect, for nicotinamide 900 mg per day (adults). For pregnant and breastfeeding women the adult UL does not apply for lack of data (SCF, via BfR).',
   },
   riboflavin: {
     what: 'Water-soluble B vitamin, building block of the coenzymes FAD/FMN in redox reactions of energy metabolism.',
@@ -443,6 +460,7 @@ export default {
       "Riboflavin-5'-Phosphat": 'Also approved as a food colorant (E101).',
     },
     cautionNote: 'No relevant interactions documented; harmless yellow discoloration of urine at higher intakes. No UL has been derived (SCF 2000, confirmed by BfR 2024).',
+    overdoseNote: 'No UL could be derived for lack of data; in a study with 400 mg per day over three months, only isolated mild complaints such as diarrhea were reported, without a clear link (SCF, via BfR).',
   },
   thiamin: {
     what: 'Water-soluble B vitamin, cofactor in decarboxylation within carbohydrate metabolism and for nerve function.',
@@ -457,6 +475,7 @@ export default {
       'Benfotiamin': 'Synthetic derivative, less common in classic dietary supplements.',
     },
     cautionNote: 'No relevant contraindication known at usual supplement doses; excess thiamin is excreted via urine. No UL has been derived (SCF 2001, confirmed by BfR 2024).',
+    overdoseNote: 'No adverse effects are established even at high doses; because of the low toxicity, no UL could be derived (SCF/IOM, via BfR).',
   },
   pantothensaeure: {
     what: 'Water-soluble B vitamin, building block of coenzyme A, central to fat, carbohydrate and protein metabolism.',
@@ -470,6 +489,7 @@ export default {
       'D-Panthenol': 'Used mainly in topical/cosmetic products.',
     },
     cautionNote: 'No relevant interactions documented at supplement doses. No UL has been derived (SCF 2002, confirmed by BfR 2024).',
+    overdoseNote: 'A low toxicity is assumed; toxicological reference points or a UL could not be derived (SCF/IOM, via BfR).',
   },
   choline: {
     what: 'Vitamin-like, semi-essential nutrient; needed for building cell membranes (phosphatidylcholine) and the neurotransmitter acetylcholine, and partly produced by the body itself.',
@@ -495,6 +515,7 @@ export default {
       'Chromhefe': 'Used in some products as a natural carrier form.',
     },
     cautionNote: 'EFSA could not confirm chromium(III) as essential for the general population, so no official reference value exists. The BfR proposes an upper limit of 60 µg per daily dose for dietary supplements (as of 2021).',
+    overdoseNote: 'No UL could be derived for lack of data; EFSA saw no health concerns at an additional 250 µg of chromium(III) per day, and the BfR uses this value as orientation.',
   },
   manganese: {
     what: 'Trace element, component of several enzymes, including antioxidant enzymes and those of bone metabolism.',
@@ -509,6 +530,7 @@ export default {
       'Manganchlorid': 'Used less often.',
     },
     cautionNote: 'The BfR currently proposes 0.5 mg per daily dose for dietary supplements.',
+    overdoseNote: 'No UL could be derived; the gap between amounts with effects in studies and usual intake is small, and manganese counts as neurotoxic with possibly more sensitive groups (SCF, via BfR).',
   },
   copper: {
     what: 'Trace element, component of copper-dependent enzymes, including those in iron metabolism and connective tissue formation.',
@@ -523,6 +545,7 @@ export default {
       'Kupfersulfat': 'Standard form, used among other things in food fortification.',
     },
     cautionNote: 'A high zinc intake reduces copper absorption in the gut (competitive inhibition): this interaction is well documented. The BfR notes that its proposed upper limit of 1 mg per daily dose does not apply to children and adolescents, since this group already takes in comparatively high amounts of copper through their usual diet.',
+    overdoseNote: 'The UL is 5 mg per day (adults) or 4 mg (from age 15); the basis is adverse effects on the liver. According to the BfR, adolescents partly reach their UL through the normal diet alone (SCF, via BfR).',
   },
   molybdenum: {
     what: 'Trace element, cofactor of several oxidoreductases, including those in purine and sulfite metabolism.',
@@ -535,6 +558,7 @@ export default {
       'Molybdänglycinat': 'Used less often.',
     },
     cautionNote: 'EFSA estimated value (AI) for adults: 65 µg/day. An older SCF value of 0.6 mg/day (year 2000) is not part of the current EFSA reference value assessment from 2013 and is deliberately not adopted here as a current upper limit.',
+    overdoseNote: 'The UL is 600 µg per day for adults including pregnant and breastfeeding women, or 500 µg for 15- to 17-year-olds (SCF, via BfR).',
   },
   phosphorus: {
     what: 'Macro-mineral, a central building block of bones and teeth (as hydroxyapatite), of nucleic acids and energy-carrying molecules such as ATP.',
@@ -547,6 +571,7 @@ export default {
       'Phosphat (allgemein)': 'Standalone phosphorus products are uncommon; phosphorus mostly occurs as an accompanying ion in other mineral compounds.',
     },
     cautionNote: 'The BfR generally advises against targeted phosphorus addition in dietary supplements. Neither EFSA nor the DGE have derived an upper limit (data considered insufficient by EFSA 2015).',
+    overdoseNote: 'No UL could be derived; with supplementation above 750 mg per day, gastrointestinal complaints occurred. With kidney disease, high phosphate intakes are linked to cardiovascular risks (EFSA, via BfR).',
   },
   glucosamine: {
     what: 'Amino sugar that serves as a natural building block for glycosaminoglycans: molecules that are part of cartilage structure. Products are usually made from crustacean shells (chitin) or by fermentation.',
@@ -985,6 +1010,7 @@ export default {
       'Organisches Silicium (Monomethylsilantriol)': 'approved as a Novel Food, BfR proposed maximum level up to 10 mg silicon/day.',
     },
     cautionNote: 'EFSA (2004) was unable to derive an upper limit due to a lack of data; silicon is considered a non-essential nutrient, and a deficiency has not been observed in humans to date. The D-A-CH reference values do not list a value for silicon. Important: the BfR proposed maximum level differs greatly depending on the form (a factor of 35 between SiO2 and bamboo extract): a single figure without stating the form would be misleading, so no structured reference value is given here.',
+    overdoseNote: 'A conclusive risk assessment was not possible for lack of toxicological data; the BfR names form-dependent maximum amounts per daily dose (350 mg silicon as silicon dioxide, 100 mg as silica gel, 10 mg each for organic forms).',
   },
 
   spirulina: {
@@ -1142,6 +1168,7 @@ export default {
       'Bor-Chelat': 'no separate bioavailability data researched per chelate form.',
     },
     cautionNote: 'The DGE sets no D-A-CH reference value for boron. The BfR recommends a considerably lower maximum amount for food supplements (0.5 mg/day) than the EFSA UL (10 mg/day for adults), since background intake from other sources can already exhaust the UL in children/adolescents. The BfR recommends a consumer notice stating "not suitable for children and adolescents."',
+    overdoseNote: 'The UL is 10 mg per day (adults) and is based on animal studies with reduced fetal weight; according to EFSA, total intake from food and other sources can already be considerable (via BfR).',
   },
   'l-carnosine': {
     what: 'Dipeptide made of the amino acids beta-alanine and histidine, naturally found mainly in muscle and brain tissue. Acts, among other things, as a pH buffer. To be distinguished from beta-alanine alone, which is metabolized in the body to carnosine and is the more established supplement form.',
@@ -2031,6 +2058,7 @@ export default {
       'Citrat': 'Common in effervescent tablets and sports drink powders.',
     },
     cautionNote: 'The usual diet already provides considerably more sodium than the reference values intend; additional intake is rarely useful outside sport and fluid-loss situations. Anyone advised to restrict sodium because of high blood pressure, heart or kidney disease discusses electrolyte products with a doctor.',
+    overdoseNote: 'No UL could be derived; however, it counts as well established that the salt amounts usual in Europe raise the blood pressure risk, with a direct link to cardiovascular and kidney disease (EFSA, via BfR).',
   },
   'nettle-leaf': {
     what: 'Leaves and herb of the stinging nettle (Urticae folium/herba); traditionally used to flush the urinary tract and for mild joint complaints. Not to be confused with nettle root, which is documented for prostate complaints.',
@@ -2101,6 +2129,7 @@ export default {
       'Natriumchlorid / Kaliumchlorid': 'Common salt forms in electrolyte products.',
     },
     cautionNote: 'EFSA names 3.1 g per day as a safe and adequate intake for adults, equimolar to the sodium reference value; a high salt intake concerns both electrolytes together.',
+    overdoseNote: 'No UL could be derived; the assessment follows sodium: high salt intake raises the blood pressure risk with consequences for the cardiovascular system and the kidneys (EFSA, via BfR).',
   },
   protein: {
     what: 'Macronutrient made of amino acids; supplements provide concentrated protein from whey, casein, or plant sources.',

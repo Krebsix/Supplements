@@ -16,6 +16,7 @@ export default {
   'components.insight.fatSolubleHint':
     'Fettlöslich: die Aufnahme ist zu einer Mahlzeit mit Fett deutlich besser.',
   'components.insight.caution': 'Zu beachten',
+  'components.insight.overdose': 'Bei zu hoher Zufuhr',
   'components.insight.intake': 'Einnahme',
   'components.insight.sources': 'Quellen',
   'components.insight.showLess': 'Weniger anzeigen',

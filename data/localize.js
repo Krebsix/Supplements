@@ -52,6 +52,7 @@ export function localizeSubstanceTexts(substance) {
     ...substance,
     what: en.what ?? substance.what,
     cautionNote: en.cautionNote ?? substance.cautionNote,
+    overdoseNote: en.overdoseNote ?? substance.overdoseNote,
     useCases: Array.isArray(substance.useCases)
       ? substance.useCases.map((useCase, index) => ({
           ...useCase,
