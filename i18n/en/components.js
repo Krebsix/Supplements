@@ -17,6 +17,8 @@ export default {
     'Fat-soluble: absorption is markedly better with a meal containing fat.',
   'components.insight.caution': 'Please note',
   'components.insight.overdose': 'With excessive intake',
+  'components.insight.bfrMax': 'BfR maximum per daily dose of one product',
+  'components.insight.bfrMaxNone': 'No amount-based maximum proposed',
   'components.insight.intake': 'Intake',
   'components.insight.sources': 'Sources',
   'components.insight.showLess': 'Show less',

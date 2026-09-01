@@ -36,8 +36,18 @@ import {
   HEALTH_CONDITIONS_EN,
 } from './en/healthConditions';
 import { PAIR_NOTES_EN, INTAKE_NOTES_EN } from './en/interactions';
+import { BFR_MAX_NOTES_EN } from './en/bfrMaxAmounts';
 
 const isEnglish = () => getActiveLanguage() === 'en';
+
+/**
+ * BfR-Höchstmengen-Notiz (data/bfrMaxAmounts.js): Overlay fuer den
+ * note-Text, Zahlen bleiben in der kanonischen Datei.
+ */
+export function localizeBfrMaxNote(substanceId, germanNote) {
+  if (!isEnglish()) return germanNote;
+  return BFR_MAX_NOTES_EN[substanceId] ?? germanNote;
+}
 
 /**
  * Wirkstoff-Freitexte (what, cautionNote, useCases, forms-Notizen).

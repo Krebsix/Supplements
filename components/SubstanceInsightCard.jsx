@@ -37,7 +37,7 @@ function advisoryTone(severity) {
  */
 export default function SubstanceInsightCard({ profile }) {
   const [expanded, setExpanded] = useState(false);
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   if (!profile) return null;
 
@@ -120,6 +120,29 @@ export default function SubstanceInsightCard({ profile }) {
 
           {check.upperLimitNote ? (
             <Text style={styles.referenceNote}>{check.upperLimitNote}</Text>
+          ) : null}
+        </View>
+      ) : null}
+
+      {/* BfR-Hoechstmenge je Tagesdosis (dritte Referenz-Ebene): steht
+          auch ohne Mengen-Check, weil der Vorschlag produktunabhaengig
+          gilt. Zahl im DE-Format mit Komma. */}
+      {profile.bfrMax ? (
+        <View style={styles.bfrBox}>
+          <Text style={styles.referenceLabel}>
+            {t('components.insight.bfrMax')}
+          </Text>
+          <Text style={styles.referenceSummary}>
+            {profile.bfrMax.amount !== null
+              ? `${
+                  language === 'de'
+                    ? String(profile.bfrMax.amount).replace('.', ',')
+                    : String(profile.bfrMax.amount)
+                } ${profile.bfrMax.unit}`
+              : t('components.insight.bfrMaxNone')}
+          </Text>
+          {profile.bfrMax.note ? (
+            <Text style={styles.referenceNote}>{profile.bfrMax.note}</Text>
           ) : null}
         </View>
       ) : null}
@@ -347,6 +370,16 @@ const styles = StyleSheet.create({
   referenceNote: {
     ...type.small,
     marginTop: space.xs + 1,
+  },
+  // BfR-Hoechstmenge: gleiche Anatomie wie referenceBox, aber neutral
+  // im Akzent statt Status-Ton — ein Vorschlagswert, kein Befund.
+  bfrBox: {
+    backgroundColor: colors.surfaceSunken,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.accent,
+    borderRadius: radius.md,
+    padding: space.md,
+    marginTop: space.md + 1,
   },
   formBox: {
     backgroundColor: colors.accentSoft,

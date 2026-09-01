@@ -36,10 +36,14 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    BfR-Einzeldokumenten, jede Aussage gegen den Dokumenttext geprüft,
    BfR-Quelle je Substanz ergänzt, Anzeige im Steckbrief, Test erzwingt
    Parität.
-2. **BfR-NEM-Höchstmengen als dritte Referenz-Ebene** (neben D-A-CH-
-   Referenz und EFSA-UL) für die Phase-3b-Referenzwert-Balken, inklusive
-   der BfR-Warnhinweise (Vitamin K/Gerinnungshemmer, Eisen nur nach
-   Rücksprache, Biotin vor Labortests).
+2. **BfR-NEM-Höchstmengen als dritte Referenz-Ebene**: ERLEDIGT
+   2026-09-02: `data/bfrMaxAmounts.js` mit allen 29 Werten je
+   Tagesdosis (inkl. Absenkungen B6 0,9 mg und Selen 40 µg aus den
+   EFSA-Aktualisierungen) plus BfR-Warnhinweisen (Vitamin K/
+   Gerinnungshemmer, Eisen nur nach Rücksprache, Biotin vor
+   Labortests, Kupfer nicht für Jugendliche), DE + EN, eigener Test,
+   Anzeige im Substanz-Steckbrief. Die Phase-3b-Balken greifen darauf
+   zu.
 3. **OFF-Serving-Enrichment**: Für importierte Produkte per Produkt-API
    `nutriments._serving` + `serving_size` nachladen; nur echte
    Portionswerte übernehmen, Umrechnung 100g→Portion nur bei eindeutiger

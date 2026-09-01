@@ -17,6 +17,8 @@ export default {
     'Fettlöslich: die Aufnahme ist zu einer Mahlzeit mit Fett deutlich besser.',
   'components.insight.caution': 'Zu beachten',
   'components.insight.overdose': 'Bei zu hoher Zufuhr',
+  'components.insight.bfrMax': 'BfR-Höchstmenge je Tagesdosis eines Präparats',
+  'components.insight.bfrMaxNone': 'Keine Mengen-Höchstmenge vorgeschlagen',
   'components.insight.intake': 'Einnahme',
   'components.insight.sources': 'Quellen',
   'components.insight.showLess': 'Weniger anzeigen',

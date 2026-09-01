@@ -19,7 +19,8 @@ import { convertAmount } from './SubstanceMatcher';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { tr } from './i18n/runtime';
 import { getAdvisories } from './data/lifeStageAdvisories';
-import { localizeAdvisory, localizeSubstanceTexts } from './data/localize';
+import { localizeAdvisory, localizeBfrMaxNote, localizeSubstanceTexts } from './data/localize';
+import { getBfrMaxAmount } from './data/bfrMaxAmounts';
 import { getReferenceValue } from './data/referenceValues';
 import { normalizeSources } from './data/substances';
 
@@ -322,6 +323,19 @@ export function buildSubstanceProfile(match, lifeStageId) {
     // Was bei zu hoher Zufuhr dokumentiert ist (BfR-Durchgang 2026-09-02);
     // leer, wenn nichts Belegtes hinterlegt ist — kein generierter Text.
     overdoseNote: substance.overdoseNote ?? '',
+    // BfR-Hoechstmengenvorschlag je Tagesdosis eines Praeparats
+    // (dritte Referenz-Ebene neben D-A-CH-Referenz und EFSA-UL);
+    // null, wenn das BfR den Stoff nicht bewertet hat.
+    bfrMax: (() => {
+      const bfrEntry = getBfrMaxAmount(substance.id);
+      if (!bfrEntry) return null;
+      return {
+        amount: bfrEntry.amount,
+        unit: bfrEntry.unit,
+        year: bfrEntry.year,
+        note: bfrEntry.note ? localizeBfrMaxNote(substance.id, bfrEntry.note) : null,
+      };
+    })(),
     sources: normalizeSources(substance.sources ?? []),
     referenceCheck: checkAgainstReference(match, lifeStageId),
     // Was in DIESER Lebensphase besonders gilt (Phase 3)
