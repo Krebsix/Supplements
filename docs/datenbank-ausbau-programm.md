@@ -59,10 +59,16 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    Retry mit Backoff gegen das API-Stundenlimit). Offen: 31 rate-
    limitierte Labels nachziehen, weitere Marken als Welle 2, mehr
    MAX_PRODUCTS wenn gewünscht.
-5. **HMPC-Monographien-Durchgang je Kraut**: Schwangerschaft/Stillzeit/
-   Kinder-Absätze aller Kräuter-Substanzen systematisch in
-   lifeStageAdvisories übernehmen (EMA-PDFs sind abrufbar; LactMed für
-   Stillzeit ergänzend).
+5. **HMPC-Monographien-Durchgang je Kraut**: Welle 1 ERLEDIGT
+   2026-09-02: 22 Kräuter mit belegten Lebensphasen-Aussagen aus ihren
+   EMA/HMPC-basierten cautionNotes als strukturierte Advisories
+   (Schwangerschaft/Stillzeit/Kinder), DE + EN, Profil-Check zeigt sie
+   jetzt der richtigen Lebensphase. Keine neuen Behauptungen, Quellen
+   hängen an den Substanzen. Offen (v2, braucht Monographie-Recherche):
+   17 Kräuter ohne Lebensphasen-Aussage (u. a. saw-palmetto, garlic,
+   artichoke, thyme, goldenrod, arnica, horsetail) plus fennel
+   (EMA-Aussage betrifft Kinder unter 4, dafür existiert keine
+   Lebensphasen-Gruppe).
 6. **ODbL-Restpflichten**: offProducts.json als Download veröffentlichen
    (Website), product_cache-OFF-Kennzeichnung.
 

@@ -51,6 +51,204 @@ export const SEVERITY_META = {
  * lifeStages: 'all' oder eine Liste von Lebensphasen-IDs.
  */
 export const advisories = {
+  // ── HMPC-Durchgang 2026-09-02 (Baustein 5): Lebensphasen-Aussagen aus
+  // den belegten cautionNotes der Kraeuter (EMA/HMPC-Monographien, Quellen
+  // an der Substanz) als strukturierte Advisories, damit der Profil-Check
+  // sie der richtigen Lebensphase zeigt. Keine neuen Behauptungen.
+  ginger: [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Die Sicherheit hoher Ingwer-Dosen in der Schwangerschaft ist nicht abschließend geklärt; die Anwendung bei Schwangerschaftsübelkeit gehört in ärztliche Begleitung.',
+    },
+  ],
+  clove: [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Das ätherische Nelkenöl ist nicht für Kinder vorgesehen.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen Daten jenseits der Gewürzmenge; eine hochdosierte Anwendung ist nicht vorgesehen.',
+    },
+  ],
+  chamomile: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für hochkonzentrierte Kamillen-Zubereitungen fehlen in Schwangerschaft und Stillzeit ausreichende Daten.',
+    },
+  ],
+  'lemon-balm': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine ausreichenden Daten für Schwangerschaft und Stillzeit.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine ausreichenden Daten für Kinder unter 12 Jahren.',
+    },
+  ],
+  hawthorn: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
+  elderflower: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
+  'licorice-root': [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Süßholzwurzel ist in der Schwangerschaft nicht vorgesehen (Glycyrrhizin).',
+    },
+  ],
+  'lavender-oil': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine ausreichenden Daten für Schwangerschaft und Stillzeit.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine ausreichenden Daten für Kinder unter 12 Jahren.',
+    },
+  ],
+  yarrow: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
+  hops: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine ausreichenden Daten für Schwangerschaft und Stillzeit.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine ausreichenden Daten für Kinder unter 12 Jahren.',
+    },
+  ],
+  rosemary: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für arzneiliche Rosmarin-Dosierungen fehlen in Schwangerschaft und Stillzeit ausreichende Daten; Gewürzmengen sind davon nicht betroffen.',
+    },
+  ],
+  feverfew: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Mutterkraut ist in Schwangerschaft und Stillzeit nicht vorgesehen.',
+    },
+  ],
+  'uva-ursi': [
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Bärentraube ist nicht für Kinder vorgesehen.',
+    },
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Bärentraube ist in Schwangerschaft und Stillzeit nicht vorgesehen.',
+    },
+  ],
+  'willow-bark': [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Weidenrinde ist im letzten Schwangerschaftsdrittel nicht vorgesehen (Salicylate).',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Nicht für Kinder und Jugendliche mit fieberhaften Infekten (Salicylate); die Anwendung gehört in ärztliche Abklärung.',
+    },
+  ],
+  mullein: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
+  motherwort: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Herzgespann ist in Schwangerschaft und Stillzeit nicht vorgesehen.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren fehlen Daten.',
+    },
+  ],
+  meadowsweet: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten (Salicylate).',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Nicht für Kinder und Jugendliche mit fieberhaften Infekten (Salicylate).',
+    },
+  ],
+  'horse-chestnut': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.MEDICAL,
+      text: 'Die Anwendung in Schwangerschaft und Stillzeit gehört in ärztliche Abklärung.',
+    },
+  ],
+  wormwood: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Wermut ist in Schwangerschaft und Stillzeit nicht vorgesehen (Thujon).',
+    },
+  ],
+  'burdock-root': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
+  'lovage-root': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
+  'nettle-leaf': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+  ],
   sage: [
     {
       lifeStages: ['pregnancy', 'breastfeeding'],

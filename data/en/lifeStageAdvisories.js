@@ -70,6 +70,110 @@ export const severityLabels = {
 };
 
 export const advisoriesEN = {
+  ginger: {
+    'pregnancy::medical':
+      'The safety of high ginger doses during pregnancy is not conclusively established; use for pregnancy nausea belongs under medical supervision.',
+  },
+  clove: {
+    'child-4-10+teen-11-17::contraindicated':
+      'Clove essential oil is not foreseen for children.',
+    'breastfeeding+pregnancy::contraindicated':
+      'For pregnancy and breastfeeding, data beyond spice amounts are lacking; high-dose use is not foreseen.',
+  },
+  chamomile: {
+    'breastfeeding+pregnancy::contraindicated':
+      'For highly concentrated chamomile preparations, sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'lemon-balm': {
+    'breastfeeding+pregnancy::contraindicated':
+      'No sufficient data for pregnancy and breastfeeding.',
+    'child-4-10::contraindicated':
+      'No sufficient data for children under 12 years.',
+  },
+  hawthorn: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  elderflower: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'licorice-root': {
+    'pregnancy::contraindicated':
+      'Licorice root is not foreseen during pregnancy (glycyrrhizin).',
+  },
+  'lavender-oil': {
+    'breastfeeding+pregnancy::contraindicated':
+      'No sufficient data for pregnancy and breastfeeding.',
+    'child-4-10::contraindicated':
+      'No sufficient data for children under 12 years.',
+  },
+  yarrow: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  hops: {
+    'breastfeeding+pregnancy::contraindicated':
+      'No sufficient data for pregnancy and breastfeeding.',
+    'child-4-10::contraindicated':
+      'No sufficient data for children under 12 years.',
+  },
+  rosemary: {
+    'breastfeeding+pregnancy::contraindicated':
+      'For medicinal rosemary dosages, sufficient data for pregnancy and breastfeeding are lacking; spice amounts are not affected.',
+  },
+  feverfew: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Feverfew is not foreseen during pregnancy and breastfeeding.',
+  },
+  'uva-ursi': {
+    'child-4-10+teen-11-17::contraindicated':
+      'Bearberry is not foreseen for children.',
+    'breastfeeding+pregnancy::contraindicated':
+      'Bearberry is not foreseen during pregnancy and breastfeeding.',
+  },
+  'willow-bark': {
+    'pregnancy::contraindicated':
+      'Willow bark is not foreseen in the last trimester of pregnancy (salicylates).',
+    'child-4-10+teen-11-17::medical':
+      'Not for children and adolescents with feverish infections (salicylates); use belongs under medical clarification.',
+  },
+  mullein: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  motherwort: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Motherwort is not foreseen during pregnancy and breastfeeding.',
+    'child-4-10::contraindicated':
+      'Data for children under 12 years are lacking.',
+  },
+  meadowsweet: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking (salicylates).',
+    'child-4-10+teen-11-17::medical':
+      'Not for children and adolescents with feverish infections (salicylates).',
+  },
+  'horse-chestnut': {
+    'breastfeeding+pregnancy::medical':
+      'Use during pregnancy and breastfeeding belongs under medical clarification.',
+  },
+  wormwood: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Wormwood is not foreseen during pregnancy and breastfeeding (thujone).',
+  },
+  'burdock-root': {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'lovage-root': {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
+  'nettle-leaf': {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+  },
   sage: {
     'breastfeeding+pregnancy::contraindicated':
       'The EMA monograph does not foresee sage preparations during pregnancy and breastfeeding (thujone). In addition, while breastfeeding: sage can reduce milk production; this effect is used deliberately for weaning.',
