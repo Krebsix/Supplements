@@ -64,11 +64,16 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    EMA/HMPC-basierten cautionNotes als strukturierte Advisories
    (Schwangerschaft/Stillzeit/Kinder), DE + EN, Profil-Check zeigt sie
    jetzt der richtigen Lebensphase. Keine neuen Behauptungen, Quellen
-   hängen an den Substanzen. Offen (v2, braucht Monographie-Recherche):
-   17 Kräuter ohne Lebensphasen-Aussage (u. a. saw-palmetto, garlic,
-   artichoke, thyme, goldenrod, arnica, horsetail) plus fennel
-   (EMA-Aussage betrifft Kinder unter 4, dafür existiert keine
-   Lebensphasen-Gruppe).
+   hängen an den Substanzen. Welle 2 ERLEDIGT 2026-09-02:
+   12 weitere Kräuter per Monographie-PDF-Recherche (EMA-Dokumente
+   geladen und extrahiert): thyme, garlic, artichoke, dandelion,
+   marshmallow-root, goldenrod, calendula, arnica, birch-leaf,
+   horsetail, nettle-root, saw-palmetto; cautionNotes DE/EN erweitert
+   plus 27 Advisory-Einträge (inkl. "keine Anwendung bei Frauen" für
+   Sägepalme/Brennnesselwurzel). Verbleibende Lücken (bewusst, keine
+   Arzneipflanzen bzw. keine passende Gruppe): myo-inositol, d-mannose,
+   phosphatidylserine, shiitake, fennel (EMA-Aussage betrifft Kinder
+   unter 4).
 6. **ODbL-Restpflichten**: offProducts.json als Download veröffentlichen
    (Website), product_cache-OFF-Kennzeichnung.
 
