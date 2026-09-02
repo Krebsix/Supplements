@@ -55,10 +55,11 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    2026-09-02: 766 On-Market-Produkte von 20 DACH-relevanten US-Marken
    MIT Wirkstoffmengen je Portion, als verified-Einträge (de/en) im
    geteilten product_cache (Migration deployt); Barcode-Scan findet sie
-   sofort. Werkzeug: scripts/import-dsld.mjs (Label-Platten-Cache,
-   Retry mit Backoff gegen das API-Stundenlimit). Offen: 31 rate-
-   limitierte Labels nachziehen, weitere Marken als Welle 2, mehr
-   MAX_PRODUCTS wenn gewünscht.
+   sofort. Welle 2 ERLEDIGT 2026-09-02: alle Rate-Limit-Lücken
+   nachgezogen (855/855 Labels, null Fehlschläge), 796 Produkte gesamt.
+   Werkzeug: scripts/import-dsld.mjs (Label-Platten-Cache, Retry mit
+   Backoff, Wellen-Logik für Delta-Migrationen). Optional später:
+   weitere Marken, mehr MAX_PRODUCTS.
 5. **HMPC-Monographien-Durchgang je Kraut**: Welle 1 ERLEDIGT
    2026-09-02: 22 Kräuter mit belegten Lebensphasen-Aussagen aus ihren
    EMA/HMPC-basierten cautionNotes als strukturierte Advisories
