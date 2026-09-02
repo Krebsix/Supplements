@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow">
+<title>Offene Produktdaten (ODbL) · Open Product Data</title>
+<meta name="description" content="Die von MySuplea genutzte Teilmenge der Open-Food-Facts-Produktdaten steht hier unter der Open Database License (ODbL 1.0) zum Download.">
+<style>
+  :root {
+    --canvas: #f2f2f7;
+    --surface: #ffffff;
+    --ink: #1c1c1e;
+    --ink-muted: #6c6c70;
+    --ink-faint: #8e8e93;
+    --rule: #e5e5ea;
+    --accent: #1c4f5c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 20px 64px;
+  }
+  h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; }
+  p, li { color: var(--ink); font-size: 16px; }
+  .muted { color: var(--ink-muted); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  a { color: var(--accent); }
+  .download {
+    display: inline-block;
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .download:hover { opacity: 0.9; }
+  footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px 48px;
+    color: var(--ink-faint);
+    font-size: 13px;
+  }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 40px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Offene Produktdaten</h1>
+  <p class="muted">Open Database License (ODbL 1.0)</p>
+
+  <p>
+    MySuplea nutzt teilweise Produktdaten aus
+    <a href="https://openfoodfacts.org" rel="noopener">Open Food Facts</a>,
+    © Open Food Facts contributors, lizenziert unter der
+    <a href="https://opendatacommons.org/licenses/odbl/1-0/" rel="noopener">Open Database License (ODbL) 1.0</a>.
+    Diese Einträge werden in der App gekennzeichnet und getrennt vom
+    redaktionell gepflegten Katalog geführt. Fotos aus Open Food Facts
+    werden nicht übernommen.
+  </p>
+
+  <div class="card">
+    <h2 style="margin-top:0">Download der Teilmenge</h2>
+    <p>
+      Die von MySuplea ausgewählte und aufbereitete Teilmenge
+      (abgeleitete Datenbank im Sinne der ODbL) steht hier als
+      maschinenlesbare Datei unter denselben Bedingungen (ODbL 1.0)
+      bereit. Das Erstellungsdatum steht im Dateikopf
+      (<code>generatedAt</code>), Lizenz und Attribution ebenfalls.
+    </p>
+    <p>
+      <a class="download" href="/odbl/offProducts.json" download>offProducts.json herunterladen</a>
+    </p>
+    <p class="muted">
+      Dieselbe Datei liegt versioniert im öffentlichen Repository:
+      <a href="https://github.com/Krebsix/Supplements" rel="noopener">github.com/Krebsix/Supplements</a>
+      (Pfad <code>data/offProducts.json</code>).
+    </p>
+  </div>
+
+  <h2>Was die Datei enthält</h2>
+  <ul>
+    <li>Produktidentität: Name, Marke, Barcode (EAN)</li>
+    <li>Wo in Open Food Facts deklariert: Portionsmengen je Nährstoff, mit dokumentiertem Rechenweg bei Umrechnungen</li>
+    <li>Keine Fotos, keine Nutzerdaten</li>
+  </ul>
+
+  <hr>
+
+  <h2>Open product data (English)</h2>
+  <p>
+    MySuplea uses some product data from
+    <a href="https://openfoodfacts.org" rel="noopener">Open Food Facts</a>,
+    © Open Food Facts contributors, licensed under the
+    <a href="https://opendatacommons.org/licenses/odbl/1-0/" rel="noopener">Open Database License (ODbL) 1.0</a>.
+    The subset selected and prepared by MySuplea (a derivative database
+    under the ODbL) is available above as a machine-readable file under
+    the same license. The same file is versioned in the public
+    repository linked above. No photos and no user data are included.
+  </p>
+</main>
+<footer>
+  <p><a href="/">Zurück zur Startseite · Back to the home page</a></p>
+</footer>
+</body>
+</html>

@@ -25,7 +25,7 @@ const anchor = `#${locale}`;
       <a href={localePath(locale, '/konto-loeschen/')}>{t.footer.deletion}</a>
       <a href={`mailto:${CONTACT_EMAIL}`}>{t.footer.contact}</a>
     </nav>
-    <span>{t.footer.odbl}</span>
+    <span><a class="footer__odbl" href="/odbl/">{t.footer.odbl}</a></span>
   </div>
 </footer>
 
@@ -55,6 +55,12 @@ const anchor = `#${locale}`;
     color: var(--onnavy-faint);
   }
   .footer__links a:hover {
+    color: #ffffff;
+  }
+  .footer__odbl {
+    color: inherit;
+  }
+  .footer__odbl:hover {
     color: #ffffff;
   }
 </style>
