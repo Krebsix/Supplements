@@ -47,7 +47,7 @@ export default {
   'onboarding.extra.reference.title': 'Which reference values should apply?',
   'onboarding.extra.reference.why': 'The published reference values are split into groups. You can change this choice at any time in the settings.',
 
-  'onboarding.routine.title': 'Your routine',
+  'onboarding.routine.title': 'Your intake times',
   'onboarding.routine.text': 'When do you usually take something? Times can be changed later.',
   'onboarding.routine.morning': 'Morning',
   'onboarding.routine.midday': 'Midday',

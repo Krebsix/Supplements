@@ -86,7 +86,7 @@ export default {
   'dashboard.slotCountEmpty': 'Keine geplanten Einnahmen',
   'dashboard.slotCount_one': '1 geplante Einnahme',
   'dashboard.slotCount_other': '{count} geplante Einnahmen',
-  'dashboard.slotStatus': 'Routine-Fenster',
+  'dashboard.slotStatus': 'Zeitfenster',
   'dashboard.emptySlotText': 'Für dieses Zeitfenster ist aktuell nichts geplant.',
   'dashboard.stateLogged': 'Dokumentiert',
   'dashboard.statePending': 'Offen',

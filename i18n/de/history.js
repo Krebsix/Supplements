@@ -7,7 +7,7 @@ export default {
   'history.kicker': 'Verlauf',
   'history.title': 'Einnahmehistorie',
   'history.subtitle':
-    'Übersicht der erfassten Einnahmen und rückgängig gemachten Einträge aus deiner lokalen Routine.',
+    'Übersicht der erfassten Einnahmen und rückgängig gemachten Einträge aus deinem lokalen Tagesplan.',
 
   'history.summary.active': 'Aktiv',
   'history.summary.undone': 'Rückgängig',
@@ -28,7 +28,7 @@ export default {
 
   'history.notice.title': 'Hinweis',
   'history.notice.text':
-    'Die Historie zeigt lokale Routine-Einträge. Sie ersetzt keine medizinische Bewertung und dient aktuell der persönlichen Nachvollziehbarkeit.',
+    'Die Historie zeigt lokal dokumentierte Einnahmen. Sie ersetzt keine medizinische Bewertung und dient aktuell der persönlichen Nachvollziehbarkeit.',
 
   'history.group.noDate': 'Ohne Datum',
   'history.group.today': 'Heute',
@@ -44,7 +44,7 @@ export default {
   'history.source.scan': 'Scan',
   'history.source.manual': 'Manuell',
   'history.source.legacy': 'Importiert',
-  'history.source.default': 'Routine',
+  'history.source.default': 'Nicht hinterlegt',
 
   'history.supplement.unknown': 'Unbekanntes Supplement',
 };

@@ -78,7 +78,7 @@ export default {
   'components.result.timingBadge': 'Vorschlag',
   'components.result.timingEmpty': 'Kein Timing-Vorschlag verfügbar.',
   'components.result.timingFootnote':
-    'Dieser Hinweis wird nicht automatisch als persönliche Routine bestätigt.',
+    'Dieser Hinweis wird nicht automatisch in deinen Tagesplan übernommen.',
   'components.result.uncertaintyTitle': 'Grenzen der Analyse',
 
   // CertificationPanel.jsx

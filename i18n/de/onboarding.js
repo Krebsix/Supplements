@@ -49,7 +49,7 @@ export default {
   'onboarding.extra.reference.title': 'Welche Referenzwerte sollen gelten?',
   'onboarding.extra.reference.why': 'Die veröffentlichten Referenzwerte sind nach Gruppen aufgeteilt. Du kannst die Wahl jederzeit in den Einstellungen ändern.',
 
-  'onboarding.routine.title': 'Deine Routine',
+  'onboarding.routine.title': 'Deine Einnahmezeiten',
   'onboarding.routine.text': 'Wann nimmst du meistens etwas? Zeiten lassen sich später ändern.',
   'onboarding.routine.morning': 'Morgens',
   'onboarding.routine.midday': 'Mittags',

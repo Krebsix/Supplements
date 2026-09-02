@@ -5,20 +5,20 @@
 
 export default {
   'home.kicker': 'MySuplea',
-  'home.title': 'Scannen. Prüfen. In Routine überführen.',
+  'home.title': 'Scannen. Prüfen. In den Tagesplan überführen.',
   'home.subtitle':
-    'Dein strukturierter Workspace für Supplement-Daten, Tagesroutine, Verlauf und spätere Scanner-Qualität.',
+    'Dein strukturierter Workspace für Supplement-Daten, Tagesplan, Verlauf und spätere Scanner-Qualität.',
   'home.trust.label': 'Produktprinzip',
   'home.trust.quality.title': 'Datenqualität vor Automatisierung',
   'home.trust.quality.text':
-    'Scanner- und manuelle Einträge sollen nachvollziehbar bleiben, bevor sie Routine-Logik beeinflussen.',
+    'Scanner- und manuelle Einträge sollen nachvollziehbar bleiben, bevor sie den Tagesplan beeinflussen.',
   'home.trust.archive.title': 'Archiv statt Datenverlust',
   'home.trust.archive.text':
     'Entfernte Supplements bleiben wiederherstellbar, damit Verlauf und Kontext erhalten bleiben.',
   'home.trust.advice.title': 'Allgemeine Hinweise',
   'home.trust.advice.text':
     'Die App organisiert und dokumentiert. Sie ersetzt keine medizinische Beratung.',
-  'home.section.workflow': 'Meine Routine',
+  'home.section.workflow': 'Mein Tagesplan',
   'home.section.insight': 'Meine Daten',
   'home.section.app': 'App und Erinnerungen',
   'home.nav.inventory.title': 'Mein Bestand',
@@ -26,10 +26,10 @@ export default {
     'Alle angelegten Präparate auf einen Blick, auch die ohne Einnahmezeitpunkt.',
   'home.nav.add.title': 'Neues Supplement',
   'home.nav.add.subtitle':
-    'Manuellen Eintrag mit Dosierung, Timing und Zweck sauber in die aktive Routine aufnehmen.',
+    'Manuellen Eintrag mit Dosierung, Timing und Zweck sauber in den Tagesplan aufnehmen.',
   'home.nav.history.title': 'Verlauf',
   'home.nav.history.subtitle':
-    'Dokumentierte Einnahmen, Routine-Aktivität und frühere Einträge nachvollziehen.',
+    'Dokumentierte Einnahmen und frühere Einträge nachvollziehen.',
   'home.nav.profile.title': 'Gesundheitsprofil',
   'home.nav.profile.subtitle':
     'Medikamentengruppen hinterlegen und sehen, wo die Quellen dazu etwas zu deinem Bestand sagen.',

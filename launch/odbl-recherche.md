@@ -82,6 +82,31 @@ Unsere Architektur ist bereits richtig gebaut:
 4. **Keine Fotos, keine Vermischung**: bestehende Regeln beibehalten
    (kein OFF-Material in seedProducts.json, keine OFF-Fotos).
 
+## 4a. Stand der vier Aufgaben (2026-09-02)
+
+1. **Sichtbare Attribution: ERLEDIGT.** `data/legalContent.js` nennt
+   Open Food Facts und die ODbL in Datenschutzerklärung und Impressum
+   (DE + EN); OFF-Einträge tragen in der App `license: 'ODbL'`. Die
+   Landingpage (Branch phase-2u-website) trägt die Footer-Zeile.
+2. **Teilmenge verfügbar machen: ERLEDIGT** über zwei Wege: Das
+   GitHub-Repo ist öffentlich, `data/offProducts.json` ist damit als
+   maschinenlesbare Derivative Database unter ODbL abrufbar; zusätzlich
+   liegt eine Kopie als Download auf der Website
+   (`web/public/odbl/`, Branch phase-2u-website). Wer `offProducts.json`
+   ändert (split:off, Enrichment), zieht die Website-Kopie nach.
+3. **Produkt-Cache: GEKLÄRT, kein Handlungsbedarf.** OFF-Daten fließen
+   NICHT in den geteilten `product_cache`: Der Cache enthält
+   ausschließlich Claude-Vision-Analysen (verified=false bis zur
+   Freigabe), redaktionelle Seed-Einträge und DSLD-Daten (public
+   domain). OFF-Barcode-Treffer werden client-seitig aufgelöst
+   (`BarcodeLookup.js`) und nie an die Edge Function zurückgeschrieben.
+   Damit greift die Alternative aus Aufgabe 3 („OFF-Treffer nicht in
+   den Cache schreiben"); eine Kennzeichnung ist gegenstandslos. Wer
+   einen OFF→Cache-Pfad einführt, muss die Einträge kennzeichnen und
+   abrufbar machen (siehe Aufgabe 3 oben).
+4. **Keine Fotos, keine Vermischung: steht.** split:off erzwingt die
+   Trennung, OFF-Fotos werden nicht genutzt.
+
 ## 5. Risikoeinschätzung
 
 - OFF wirbt aktiv für kommerzielle Weiterverwendung; das praktische

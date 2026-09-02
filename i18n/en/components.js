@@ -77,7 +77,7 @@ export default {
   'components.result.timingBadge': 'Suggestion',
   'components.result.timingEmpty': 'No timing suggestion available.',
   'components.result.timingFootnote':
-    'This note is not automatically confirmed as a personal routine.',
+    'This note is not automatically added to your daily plan.',
   'components.result.uncertaintyTitle': 'Limits of the analysis',
 
   // CertificationPanel.jsx

@@ -5,20 +5,20 @@
 
 export default {
   'home.kicker': 'MySuplea',
-  'home.title': 'Scan. Verify. Turn into routine.',
+  'home.title': 'Scan. Verify. Add to your daily plan.',
   'home.subtitle':
-    'Your structured workspace for supplement data, daily routine, history and scan quality.',
+    'Your structured workspace for supplement data, daily plan, history and scan quality.',
   'home.trust.label': 'Product principles',
   'home.trust.quality.title': 'Data quality before automation',
   'home.trust.quality.text':
-    'Scanned and manual entries stay traceable before they feed into routine logic.',
+    'Scanned and manual entries stay traceable before they feed into the daily plan.',
   'home.trust.archive.title': 'Archive instead of data loss',
   'home.trust.archive.text':
     'Removed supplements stay restorable, so history and context are preserved.',
   'home.trust.advice.title': 'General information',
   'home.trust.advice.text':
     'The app organises and documents. It does not replace medical advice.',
-  'home.section.workflow': 'My routine',
+  'home.section.workflow': 'My daily plan',
   'home.section.insight': 'My data',
   'home.section.app': 'App and reminders',
   'home.nav.inventory.title': 'My inventory',
@@ -26,10 +26,10 @@ export default {
     'Every product you added at a glance, including those without an intake time.',
   'home.nav.add.title': 'New supplement',
   'home.nav.add.subtitle':
-    'Add a manual entry with dosage, timing and purpose to your active routine.',
+    'Add a manual entry with dosage, timing and purpose to your daily plan.',
   'home.nav.history.title': 'History',
   'home.nav.history.subtitle':
-    'Review documented intakes, routine activity and earlier entries.',
+    'Review documented intakes and earlier entries.',
   'home.nav.profile.title': 'Health profile',
   'home.nav.profile.subtitle':
     'Record medication groups and see where the sources say something about your products.',

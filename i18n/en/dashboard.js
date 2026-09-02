@@ -86,7 +86,7 @@ export default {
   'dashboard.slotCountEmpty': 'No intake scheduled',
   'dashboard.slotCount_one': '1 scheduled intake',
   'dashboard.slotCount_other': '{count} scheduled intakes',
-  'dashboard.slotStatus': 'Routine window',
+  'dashboard.slotStatus': 'Time window',
   'dashboard.emptySlotText': 'Nothing is currently scheduled for this time window.',
   'dashboard.stateLogged': 'Documented',
   'dashboard.statePending': 'Open',

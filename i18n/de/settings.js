@@ -56,7 +56,7 @@ export default {
     'Archivierte Supplements sind nicht endgültig gelöscht. Ihre gespeicherten Angaben bleiben erhalten und können wieder als aktive Supplements geführt werden.',
   'settings.emptyArchiveTitle': 'Archiv ist leer',
   'settings.emptyArchiveText':
-    'Aktuell sind keine Supplements archiviert. Aus der aktiven Routine entfernte Supplements werden hier sicher aufbewahrt.',
+    'Aktuell sind keine Supplements archiviert. Aus dem aktiven Bestand entfernte Supplements werden hier sicher aufbewahrt.',
   'settings.archivedBadge': 'Archiviert',
   'settings.storedPurposeLabel': 'Gespeicherter Zweck',
   'settings.dataStatusLabel': 'Datenstatus',

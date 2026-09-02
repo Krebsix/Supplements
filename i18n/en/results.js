@@ -14,7 +14,7 @@ export default {
   'results.modeDefault': 'Scan available',
   'results.title': 'Review first. Then adopt it.',
   'results.subtitle':
-    'The detected fields are a draft. Review missing and uncertain fields before they become an entry in your personal routine.',
+    'The detected fields are a draft. Review missing and uncertain fields before they become an entry in your daily plan.',
   'results.reviewStatusLabel': 'Review status',
   'results.reviewPoint_one': '{count} review point',
   'results.reviewPoint_other': '{count} review points',
@@ -41,7 +41,7 @@ export default {
   'results.nextStepKicker': 'Next step',
   'results.nextStepTitle': 'Confirm details in the form',
   'results.nextStepText':
-    'On the next screen you can review or complete the name, dosage, unit, and time of day. Saving afterwards is what creates a routine entry.',
+    'On the next screen you can review or complete the name, dosage, unit, and time of day. Saving afterwards is what creates an entry in your daily plan.',
   'results.primaryButton': 'Review data in the form',
   'results.rescanButton': 'Scan again',
   'results.disclaimer':

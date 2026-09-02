@@ -12,7 +12,7 @@ export default {
   'results.modeDefault': 'Scan vorhanden',
   'results.title': 'Erst prüfen. Dann übernehmen.',
   'results.subtitle':
-    'Die erkannten Angaben sind ein Arbeitsstand. Kontrolliere fehlende und unsichere Felder, bevor daraus ein Eintrag für deine persönliche Routine wird.',
+    'Die erkannten Angaben sind ein Arbeitsstand. Kontrolliere fehlende und unsichere Felder, bevor daraus ein Eintrag für deinen Tagesplan wird.',
   'results.reviewStatusLabel': 'Prüfstatus',
   'results.reviewPoint_one': '{count} Prüfpunkt',
   'results.reviewPoint_other': '{count} Prüfpunkte',
@@ -40,7 +40,7 @@ export default {
   'results.nextStepKicker': 'Nächster Schritt',
   'results.nextStepTitle': 'Angaben im Formular bestätigen',
   'results.nextStepText':
-    'Im nächsten Bildschirm kannst du Name, Dosierung, Einheit und Tageszeit kontrollieren oder ergänzen. Erst das anschließende Speichern erstellt einen Routine-Eintrag.',
+    'Im nächsten Bildschirm kannst du Name, Dosierung, Einheit und Tageszeit kontrollieren oder ergänzen. Erst das anschließende Speichern erstellt einen Eintrag im Tagesplan.',
   'results.primaryButton': 'Daten im Formular prüfen',
   'results.rescanButton': 'Scan wiederholen',
   'results.disclaimer':

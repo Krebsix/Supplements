@@ -7,7 +7,7 @@ export default {
   'history.kicker': 'History',
   'history.title': 'Intake history',
   'history.subtitle':
-    'Overview of documented intakes and undone entries from your local routine.',
+    'Overview of documented intakes and undone entries from your local daily plan.',
 
   'history.summary.active': 'Active',
   'history.summary.undone': 'Undone',
@@ -28,7 +28,7 @@ export default {
 
   'history.notice.title': 'Note',
   'history.notice.text':
-    'The history shows local routine entries. It does not replace a medical assessment and currently serves personal traceability.',
+    'The history shows locally documented intakes. It does not replace a medical assessment and currently serves personal traceability.',
 
   'history.group.noDate': 'No date',
   'history.group.today': 'Today',
@@ -44,7 +44,7 @@ export default {
   'history.source.scan': 'Scan',
   'history.source.manual': 'Manual',
   'history.source.legacy': 'Imported',
-  'history.source.default': 'Routine',
+  'history.source.default': 'Not documented',
 
   'history.supplement.unknown': 'Unknown supplement',
 };
