@@ -70,6 +70,84 @@ export const severityLabels = {
 };
 
 export const advisoriesEN = {
+  thyme: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::attention':
+      'Most thyme preparations are foreseen only from age 12, a few liquid extracts from age 4.',
+  },
+  garlic: {
+    'breastfeeding+pregnancy::contraindicated':
+      'For medicinal garlic dosages, sufficient data for pregnancy and breastfeeding are lacking; culinary amounts are not affected.',
+    'child-4-10+teen-11-17::attention':
+      'Medicinal dosages are foreseen only from age 12 or 18, depending on the use.',
+  },
+  artichoke: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::contraindicated':
+      'Not foreseen for children under 12 years.',
+  },
+  dandelion: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::contraindicated':
+      'Not foreseen for children under 12 years.',
+  },
+  'marshmallow-root': {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::attention':
+      'For dry cough the monograph foresees use from age 3, other uses only from age 12.',
+  },
+  goldenrod: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::contraindicated':
+      'Not foreseen for children under 12 years.',
+  },
+  calendula: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::attention':
+      'External use is foreseen from age 6, mouth and throat rinses from age 12.',
+  },
+  arnica: {
+    'pregnancy::contraindicated':
+      'External use during pregnancy is not foreseen.',
+    'breastfeeding::attention':
+      'Safety while breastfeeding is not established.',
+    'child-4-10::contraindicated':
+      'Not foreseen for children under 12 years.',
+  },
+  'birch-leaf': {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::contraindicated':
+      'Not foreseen for children under 12 years.',
+  },
+  horsetail: {
+    'breastfeeding+pregnancy::contraindicated':
+      'Sufficient data for pregnancy and breastfeeding are lacking.',
+    'child-4-10::contraindicated':
+      'Not foreseen for children under 12 years.',
+  },
+  'nettle-root': {
+    'breastfeeding+pregnancy::contraindicated':
+      'The monograph classifies pregnancy and breastfeeding as not relevant: use is foreseen in men only.',
+    'child-4-10+teen-11-17::contraindicated':
+      'No use foreseen under 18 years.',
+    'adult-woman+menopause::attention':
+      'The monograph foresees no use in women (indication: prostate complaints).',
+  },
+  'saw-palmetto': {
+    'breastfeeding+pregnancy::contraindicated':
+      'The monograph foresees no use in women; pregnancy and breastfeeding are classified as not relevant.',
+    'child-4-10+teen-11-17::contraindicated':
+      'No use foreseen in children and adolescents.',
+    'adult-woman+menopause::attention':
+      'The monograph foresees no use in women.',
+  },
   ginger: {
     'pregnancy::medical':
       'The safety of high ginger doses during pregnancy is not conclusively established; use for pregnancy nausea belongs under medical supervision.',

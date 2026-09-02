@@ -51,6 +51,168 @@ export const SEVERITY_META = {
  * lifeStages: 'all' oder eine Liste von Lebensphasen-IDs.
  */
 export const advisories = {
+  // ── HMPC-Durchgang Welle 2 (2026-09-02): Aussagen direkt aus den
+  // EMA/HMPC-Monographie-PDFs geprueft und zuerst in die cautionNotes
+  // uebernommen (Quelle haengt an der Substanz).
+  thyme: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die meisten Thymian-Zubereitungen sind erst ab 12 Jahren vorgesehen, einzelne Flüssigextrakte ab 4.',
+    },
+  ],
+  garlic: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für arzneiliche Knoblauch-Dosierungen fehlen in Schwangerschaft und Stillzeit ausreichende Daten; Küchenmengen sind davon nicht betroffen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Arzneiliche Dosierungen sind je nach Anwendung erst ab 12 bzw. 18 Jahren vorgesehen.',
+    },
+  ],
+  artichoke: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren nicht vorgesehen.',
+    },
+  ],
+  dandelion: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren nicht vorgesehen.',
+    },
+  ],
+  'marshmallow-root': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Bei Reizhusten sieht die Monographie eine Anwendung ab 3 Jahren vor, andere Anwendungen erst ab 12 Jahren.',
+    },
+  ],
+  goldenrod: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren nicht vorgesehen.',
+    },
+  ],
+  calendula: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Äußerliche Anwendung ab 6 Jahren vorgesehen, Mund- und Rachenspülungen ab 12 Jahren.',
+    },
+  ],
+  arnica: [
+    {
+      lifeStages: ['pregnancy'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die äußerliche Anwendung in der Schwangerschaft ist nicht vorgesehen.',
+    },
+    {
+      lifeStages: ['breastfeeding'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Sicherheit in der Stillzeit ist nicht belegt.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren nicht vorgesehen.',
+    },
+  ],
+  'birch-leaf': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren nicht vorgesehen.',
+    },
+  ],
+  horsetail: [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Schwangerschaft und Stillzeit fehlen ausreichende Daten.',
+    },
+    {
+      lifeStages: ['child-4-10'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Für Kinder unter 12 Jahren nicht vorgesehen.',
+    },
+  ],
+  'nettle-root': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die Monographie stuft Schwangerschaft und Stillzeit als nicht relevant ein: Die Anwendung ist nur bei Männern vorgesehen.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine Anwendung unter 18 Jahren vorgesehen.',
+    },
+    {
+      lifeStages: ['adult-woman', 'menopause'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Monographie sieht keine Anwendung bei Frauen vor (Indikation: Prostatabeschwerden).',
+    },
+  ],
+  'saw-palmetto': [
+    {
+      lifeStages: ['pregnancy', 'breastfeeding'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Die Monographie sieht keine Anwendung bei Frauen vor; Schwangerschaft und Stillzeit sind als nicht relevant eingestuft.',
+    },
+    {
+      lifeStages: ['child-4-10', 'teen-11-17'],
+      severity: ADVISORY_SEVERITY.CONTRAINDICATED,
+      text: 'Keine Anwendung bei Kindern und Jugendlichen vorgesehen.',
+    },
+    {
+      lifeStages: ['adult-woman', 'menopause'],
+      severity: ADVISORY_SEVERITY.ATTENTION,
+      text: 'Die Monographie sieht keine Anwendung bei Frauen vor.',
+    },
+  ],
   // ── HMPC-Durchgang 2026-09-02 (Baustein 5): Lebensphasen-Aussagen aus
   // den belegten cautionNotes der Kraeuter (EMA/HMPC-Monographien, Quellen
   // an der Substanz) als strukturierte Advisories, damit der Profil-Check

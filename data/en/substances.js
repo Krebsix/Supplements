@@ -1075,7 +1075,7 @@ export default {
       'Hexan-Extrakt': 'The best-studied extract form.',
       'Ethanol-Extrakt': 'Lower evidence base.',
     },
-    cautionNote: 'HMPC restricts use to adult and elderly men. Serious conditions (e.g. prostate cancer) should be excluded by a doctor before use.',
+    cautionNote: 'HMPC restricts use to adult and elderly men. Serious conditions (e.g. prostate cancer) should be excluded by a doctor before use. The monograph foresees no use in women, children and adolescents; pregnancy and breastfeeding are classified as not relevant.',
   },
 
   'nettle-root': {
@@ -1086,7 +1086,7 @@ export default {
     forms: {
       'Wässrig-alkoholischer Trockenextrakt': 'Classic traditional preparation form.',
     },
-    cautionNote: 'Not to be confused with nettle leaf (different monograph, different indication). Serious urinary tract conditions should be excluded by a doctor before use.',
+    cautionNote: 'Not to be confused with nettle leaf (different monograph, different indication). Serious urinary tract conditions should be excluded by a doctor before use. The monograph classifies pregnancy and breastfeeding as not relevant (use in men only) and foresees no use under 18 years.',
   },
 
   chasteberry: {
@@ -1731,7 +1731,7 @@ export default {
       'Pulver': 'Dried, ground garlic powder; allicin yield varies greatly with processing.',
       'Gealterter Extrakt': 'Low odour; a different constituent profile than fresh garlic.',
     },
-    cautionNote: 'Garlic products can intensify the effect of anticoagulant medication; discuss intake with a doctor before surgery and pause it in good time. Harmless in usual culinary amounts.',
+    cautionNote: 'Garlic products can intensify the effect of anticoagulant medication; discuss intake with a doctor before surgery and pause it in good time. Harmless in usual culinary amounts. For medicinal dosages, sufficient data for pregnancy and breastfeeding are lacking; depending on the use they are foreseen only from age 12 or 18.',
   },
   'artichoke': {
     what: 'Leaves of the artichoke (Cynarae folium); traditionally used for digestive complaints related to bile and fat digestion.',
@@ -1742,7 +1742,7 @@ export default {
       'Trockenextrakt': 'The usual form in capsules and tablets.',
       'Frischpflanzensaft': 'Traditional liquid form of use.',
     },
-    cautionNote: 'Not with bile duct obstruction; with gallstones only after consulting a doctor. Do not use with an allergy to Asteraceae.',
+    cautionNote: 'Not with bile duct obstruction; with gallstones only after consulting a doctor. Do not use with an allergy to Asteraceae. Sufficient data for pregnancy and breastfeeding are lacking; not foreseen for children under 12 years.',
   },
   'hawthorn': {
     what: 'Leaves with flowers of hawthorn (Crataegi folium cum flore); traditionally documented for nervous heart complaints and to support sleep.',
@@ -1837,7 +1837,7 @@ export default {
       'Tee/Aufguss': 'The classic form of use for root and herb.',
       'Extrakt': 'Liquid or solid preparations, also as fresh plant juice.',
     },
-    cautionNote: 'Not with bile duct obstruction or active gallstones; with biliary disease, clarify use with a doctor. Do not use with an allergy to Asteraceae. Drink enough fluid when flushing.',
+    cautionNote: 'Not with bile duct obstruction or active gallstones; with biliary disease, clarify use with a doctor. Do not use with an allergy to Asteraceae. Drink enough fluid when flushing. Sufficient data for pregnancy and breastfeeding are lacking; not foreseen for children under 12 years.',
   },
   'rosemary': {
     what: 'Leaves of rosemary (Rosmarini folium); traditionally used for digestive complaints and externally for muscle complaints.',
@@ -1861,7 +1861,7 @@ export default {
       'Tee/Aufguss': 'The classic form of use for the herb.',
       'Extrakt/Saft': 'Liquid preparations, often combined with ivy or primrose root.',
     },
-    cautionNote: 'Do not use with an allergy to Lamiaceae. If a cough lasts longer than a week or fever and shortness of breath appear, it belongs in medical evaluation.',
+    cautionNote: 'Do not use with an allergy to Lamiaceae. If a cough lasts longer than a week or fever and shortness of breath appear, it belongs in medical evaluation. Sufficient data for pregnancy and breastfeeding are lacking. Most preparations are foreseen only from age 12, a few liquid extracts from age 4.',
   },
   'feverfew': {
     what: 'Herb of feverfew (Tanaceti parthenii herba); traditionally used for the prophylaxis of migraine.',
@@ -1884,7 +1884,7 @@ export default {
       'Kaltauszug/Tee': 'The mucilage dissolves best in a cold infusion.',
       'Sirup/Lutschpastillen': 'The usual finished forms for dry cough.',
     },
-    cautionNote: 'The mucilage can delay the absorption of other medicines; keep 30 to 60 minutes between marshmallow and other medication.',
+    cautionNote: 'The mucilage can delay the absorption of other medicines; keep 30 to 60 minutes between marshmallow and other medication. Sufficient data for pregnancy and breastfeeding are lacking. For dry cough the monograph foresees use from age 3, other uses only from age 12.',
   },
   'uva-ursi': {
     what: 'Leaves of the bearberry (Uvae ursi folium); traditionally used for mild recurrent complaints of the lower urinary tract.',
@@ -1919,7 +1919,7 @@ export default {
       'Tee/Aufguss': 'The classic form of use for the herb.',
       'Extrakt': 'Liquid or solid preparations.',
     },
-    cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Do not use with an allergy to Asteraceae.',
+    cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Do not use with an allergy to Asteraceae. Sufficient data for pregnancy and breastfeeding are lacking; not foreseen for children under 12 years.',
   },
   'mullein': {
     what: 'Flowers of the great mullein (Verbasci flos); traditionally used for coughs and throat complaints associated with a cold.',
@@ -1953,7 +1953,7 @@ export default {
       'Salbe/Creme': 'The most common external form of use.',
       'Tee/Aufguss': 'For rinses and compresses.',
     },
-    cautionNote: 'Do not use with an allergy to Asteraceae. The monograph refers to external use and rinses.',
+    cautionNote: 'Do not use with an allergy to Asteraceae. The monograph refers to external use and rinses. Sufficient data for pregnancy and breastfeeding are lacking. External use is foreseen from age 6, mouth and throat rinses from age 12.',
   },
   'arnica': {
     what: 'Flowers of arnica (Arnicae flos); documented exclusively for external use on blunt injuries.',
@@ -1964,7 +1964,7 @@ export default {
       'Gel/Salbe': 'The usual external form of use.',
       'Tinktur verdünnt': 'Only diluted for compresses; undiluted it irritates the skin.',
     },
-    cautionNote: 'For EXTERNAL use only: swallowed arnica is toxic (heart rhythm disturbances, gastrointestinal complaints). Do not apply to open wounds or damaged skin. Do not use with an allergy to Asteraceae.',
+    cautionNote: 'For EXTERNAL use only: swallowed arnica is toxic (heart rhythm disturbances, gastrointestinal complaints). Do not apply to open wounds or damaged skin. Do not use with an allergy to Asteraceae. Safety during pregnancy and breastfeeding is not established; use during pregnancy is not foreseen. Not foreseen for children under 12 years.',
   },
   'meadowsweet': {
     what: 'Herb of meadowsweet (Filipendulae ulmariae herba); contains salicylates and is traditionally used for cold symptoms.',
@@ -1998,7 +1998,7 @@ export default {
       'Tee/Aufguss': 'The classic form of use for the leaves.',
       'Extrakt': 'Liquid or solid preparations.',
     },
-    cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Reactions can occur with a birch pollen allergy.',
+    cautionNote: 'Drink enough fluid when flushing. Do not use if fluid intake is restricted because of heart or kidney disease. Reactions can occur with a birch pollen allergy. Sufficient data for pregnancy and breastfeeding are lacking; not foreseen for children under 12 years.',
   },
   'horsetail': {
     what: 'Herb of field horsetail (Equiseti herba); traditionally used to flush the urinary tract, rich in silicon.',
@@ -2010,7 +2010,7 @@ export default {
       'Tee/Abkochung': 'The classic form of use; the silicic acid dissolves better when decocted.',
       'Extrakt': 'Liquid or solid preparations.',
     },
-    cautionNote: 'Risk of confusion with the toxic marsh horsetail when collecting yourself; rely on tested pharmacy or manufacturer products. Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease.',
+    cautionNote: 'Risk of confusion with the toxic marsh horsetail when collecting yourself; rely on tested pharmacy or manufacturer products. Drink enough fluid when flushing; not with restricted fluid intake due to heart or kidney disease. Sufficient data for pregnancy and breastfeeding are lacking; not foreseen for children under 12 years.',
   },
   'wormwood': {
     what: 'Herb of wormwood (Absinthii herba); a traditional bitter for loss of appetite and digestive complaints.',

@@ -1893,7 +1893,7 @@ export const substances = [
       { name: 'Ethanol-Extrakt', bioavailability: 'Traditional Use (HMPC)', note: 'geringere Evidenzbasis.' },
     ],
     fatSoluble: false,
-    cautionNote: 'HMPC beschränkt die Anwendung auf erwachsene und ältere Männer. Vor Einnahme sollen ernste Erkrankungen (z. B. Prostatakarzinom) ärztlich ausgeschlossen werden.',
+    cautionNote: 'HMPC beschränkt die Anwendung auf erwachsene und ältere Männer. Vor Einnahme sollen ernste Erkrankungen (z. B. Prostatakarzinom) ärztlich ausgeschlossen werden. Die Monographie sieht keine Anwendung bei Frauen, Kindern und Jugendlichen vor; Schwangerschaft und Stillzeit sind als nicht relevant eingestuft.',
     sources: [
       { label: 'EMA/HMPC: Sabalis serrulatae fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/sabalis-serrulatae-fructus' },
       { label: 'NCCIH: Saw Palmetto', url: 'https://www.nccih.nih.gov/health/saw-palmetto' },
@@ -1913,7 +1913,7 @@ export const substances = [
       { name: 'Wässrig-alkoholischer Trockenextrakt', bioavailability: 'Traditional Use (HMPC)', note: 'klassische traditionelle Zubereitungsform.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nicht zu verwechseln mit Brennnesselblatt (andere Monographie, andere Indikation). Ernste Erkrankungen der Harnwege sollten vor Einnahme ärztlich ausgeschlossen werden.',
+    cautionNote: 'Nicht zu verwechseln mit Brennnesselblatt (andere Monographie, andere Indikation). Ernste Erkrankungen der Harnwege sollten vor Einnahme ärztlich ausgeschlossen werden. Die Monographie stuft Schwangerschaft und Stillzeit als nicht relevant ein (Anwendung nur bei Männern) und sieht keine Anwendung unter 18 Jahren vor.',
     sources: [
       { label: 'EMA/HMPC: Urticae radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/urticae-radix' },
     ],
@@ -3096,7 +3096,7 @@ export const substances = [
       { name: 'Gealterter Extrakt', aka: ['Aged Garlic Extract'], note: 'Geruchsarm; anderes Inhaltsstoffprofil als frischer Knoblauch.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Knoblauch-Präparate können die Wirkung gerinnungshemmender Medikamente verstärken; vor Operationen die Einnahme ärztlich besprechen und rechtzeitig pausieren. In üblichen Küchenmengen unbedenklich.',
+    cautionNote: 'Knoblauch-Präparate können die Wirkung gerinnungshemmender Medikamente verstärken; vor Operationen die Einnahme ärztlich besprechen und rechtzeitig pausieren. In üblichen Küchenmengen unbedenklich. Für arzneiliche Dosierungen fehlen in Schwangerschaft und Stillzeit ausreichende Daten; je nach Anwendung sind sie erst ab 12 bzw. 18 Jahren vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Allium sativum L., bulbus', url: 'https://www.ema.europa.eu/en/medicines/herbal/allii-sativi-bulbus' },
       { label: 'NCCIH: Garlic', url: 'https://www.nccih.nih.gov/health/garlic' },
@@ -3117,7 +3117,7 @@ export const substances = [
       { name: 'Frischpflanzensaft', note: 'Traditionelle flüssige Anwendungsform.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nicht bei Verschluss der Gallenwege; bei Gallensteinen nur nach ärztlicher Rücksprache. Bei Allergie gegen Korbblütler nicht anwenden.',
+    cautionNote: 'Nicht bei Verschluss der Gallenwege; bei Gallensteinen nur nach ärztlicher Rücksprache. Bei Allergie gegen Korbblütler nicht anwenden. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten; für Kinder unter 12 Jahren nicht vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Cynara cardunculus L., folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/cynarae-folium' },
     ],
@@ -3285,7 +3285,7 @@ export const substances = [
       { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen, auch als Frischpflanzensaft.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Nicht bei Verschluss der Gallenwege oder aktiven Gallensteinen; bei Gallenerkrankungen ärztlich abklären. Bei Allergie gegen Korbblütler nicht anwenden. Zur Durchspülung ausreichend trinken.',
+    cautionNote: 'Nicht bei Verschluss der Gallenwege oder aktiven Gallensteinen; bei Gallenerkrankungen ärztlich abklären. Bei Allergie gegen Korbblütler nicht anwenden. Zur Durchspülung ausreichend trinken. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten; für Kinder unter 12 Jahren nicht vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Taraxacum officinale, radix cum herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/taraxaci-radix-cum-herba' },
     ],
@@ -3327,7 +3327,7 @@ export const substances = [
       { name: 'Extrakt/Saft', note: 'Flüssige Zubereitungen, oft kombiniert mit Efeu oder Primelwurzel.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Bei Allergie gegen Lippenblütler nicht anwenden. Hält Husten länger als eine Woche an oder kommen Fieber und Atemnot dazu, gehört das in ärztliche Abklärung.',
+    cautionNote: 'Bei Allergie gegen Lippenblütler nicht anwenden. Hält Husten länger als eine Woche an oder kommen Fieber und Atemnot dazu, gehört das in ärztliche Abklärung. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten. Die meisten Zubereitungen sind erst ab 12 Jahren vorgesehen, einzelne Flüssigextrakte ab 4.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Thymus vulgaris L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/thymi-herba' },
     ],
@@ -3368,7 +3368,7 @@ export const substances = [
       { name: 'Sirup/Lutschpastillen', note: 'Übliche Fertigformen bei Reizhusten.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Die Schleimstoffe können die Aufnahme anderer Medikamente verzögern; zwischen Eibisch und anderen Arzneimitteln 30 bis 60 Minuten Abstand halten.',
+    cautionNote: 'Die Schleimstoffe können die Aufnahme anderer Medikamente verzögern; zwischen Eibisch und anderen Arzneimitteln 30 bis 60 Minuten Abstand halten. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten. Bei Reizhusten sieht die Monographie eine Anwendung ab 3 Jahren vor, andere Anwendungen erst ab 12.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Althaea officinalis L., radix', url: 'https://www.ema.europa.eu/en/medicines/herbal/althaeae-radix' },
     ],
@@ -3430,7 +3430,7 @@ export const substances = [
       { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Zur Durchspülung ausreichend trinken. Nicht anwenden, wenn wegen einer Herz- oder Nierenerkrankung die Flüssigkeitszufuhr eingeschränkt ist. Bei Allergie gegen Korbblütler nicht anwenden.',
+    cautionNote: 'Zur Durchspülung ausreichend trinken. Nicht anwenden, wenn wegen einer Herz- oder Nierenerkrankung die Flüssigkeitszufuhr eingeschränkt ist. Bei Allergie gegen Korbblütler nicht anwenden. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten; für Kinder unter 12 Jahren nicht vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Solidago virgaurea L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/solidaginis-virgaureae-herba' },
     ],
@@ -3491,7 +3491,7 @@ export const substances = [
       { name: 'Tee/Aufguss', note: 'Für Spülungen und Umschläge.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Bei Allergie gegen Korbblütler nicht anwenden. Die Monographie bezieht sich auf die äußerliche Anwendung und Spülungen.',
+    cautionNote: 'Bei Allergie gegen Korbblütler nicht anwenden. Die Monographie bezieht sich auf die äußerliche Anwendung und Spülungen. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten. Äußerlich erst ab 6 Jahren vorgesehen, Mund- und Rachenspülungen ab 12.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Calendula officinalis L., flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/calendulae-flos' },
     ],
@@ -3511,7 +3511,7 @@ export const substances = [
       { name: 'Tinktur verdünnt', note: 'Nur verdünnt für Umschläge; unverdünnt reizt sie die Haut.' },
     ],
     fatSoluble: false,
-    cautionNote: 'AUSSCHLIESSLICH äußerlich anwenden: Eingenommene Arnika ist giftig (Herzrhythmusstörungen, Magen-Darm-Beschwerden). Nicht auf offene Wunden oder geschädigte Haut auftragen. Bei Allergie gegen Korbblütler nicht anwenden.',
+    cautionNote: 'AUSSCHLIESSLICH äußerlich anwenden: Eingenommene Arnika ist giftig (Herzrhythmusstörungen, Magen-Darm-Beschwerden). Nicht auf offene Wunden oder geschädigte Haut auftragen. Bei Allergie gegen Korbblütler nicht anwenden. Die Sicherheit in Schwangerschaft und Stillzeit ist nicht belegt; die Anwendung in der Schwangerschaft ist nicht vorgesehen. Für Kinder unter 12 Jahren nicht vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Arnica montana L., flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/arnicae-flos' },
     ],
@@ -3572,7 +3572,7 @@ export const substances = [
       { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Zur Durchspülung ausreichend trinken. Nicht anwenden, wenn wegen einer Herz- oder Nierenerkrankung die Flüssigkeitszufuhr eingeschränkt ist. Bei Allergie gegen Birkenpollen kann es zu Reaktionen kommen.',
+    cautionNote: 'Zur Durchspülung ausreichend trinken. Nicht anwenden, wenn wegen einer Herz- oder Nierenerkrankung die Flüssigkeitszufuhr eingeschränkt ist. Bei Allergie gegen Birkenpollen kann es zu Reaktionen kommen. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten; für Kinder unter 12 Jahren nicht vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Betula, folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/betulae-folium' },
     ],
@@ -3593,7 +3593,7 @@ export const substances = [
       { name: 'Extrakt', note: 'Flüssige oder feste Zubereitungen.' },
     ],
     fatSoluble: false,
-    cautionNote: 'Verwechslungsgefahr beim Selbstsammeln mit dem giftigen Sumpfschachtelhalm; auf geprüfte Apotheken- oder Herstellerware achten. Zur Durchspülung ausreichend trinken; nicht bei eingeschränkter Flüssigkeitszufuhr wegen Herz- oder Nierenerkrankung.',
+    cautionNote: 'Verwechslungsgefahr beim Selbstsammeln mit dem giftigen Sumpfschachtelhalm; auf geprüfte Apotheken- oder Herstellerware achten. Zur Durchspülung ausreichend trinken; nicht bei eingeschränkter Flüssigkeitszufuhr wegen Herz- oder Nierenerkrankung. Für Schwangerschaft und Stillzeit fehlen ausreichende Daten; für Kinder unter 12 Jahren nicht vorgesehen.',
     sources: [
       { label: 'EMA/HMPC: European Union herbal monograph on Equisetum arvense L., herba', url: 'https://www.ema.europa.eu/en/medicines/herbal/equiseti-herba' },
     ],

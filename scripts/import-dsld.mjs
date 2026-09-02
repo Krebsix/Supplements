@@ -248,10 +248,29 @@ for (const row of rows) {
 }
 
 // 3) Seed-Migration schreiben (chunked, on conflict do nothing).
-const stamp = '20260902090000';
-const outPath = path.join(repoRoot, 'supabase', 'migrations', `${stamp}_seed_product_cache_dsld_w1.sql`);
+// Wellen-Logik: Barcodes aus frueheren dsld-Migrationen werden
+// uebersprungen, damit jede Welle nur ihr Delta traegt (die alten
+// Migrationen sind bereits deployt und duerfen sich nicht aendern).
+import('node:fs').then(() => {});
+const migrationsDir = path.join(repoRoot, 'supabase', 'migrations');
+const { readdirSync } = await import('node:fs');
+const alreadySeeded = new Set();
+for (const file of readdirSync(migrationsDir)) {
+  if (!/_seed_product_cache_dsld_w\d+\.sql$/.test(file)) continue;
+  const sql = readFileSync(path.join(migrationsDir, file), 'utf8');
+  for (const m of sql.matchAll(/^\('(\d+)', 'de'/gm)) alreadySeeded.add(m[1]);
+}
+const wave = process.env.DSLD_WAVE ?? 'w1';
+const stamp = process.env.DSLD_STAMP ?? '20260902090000';
+const outPath = path.join(migrationsDir, `${stamp}_seed_product_cache_dsld_${wave}.sql`);
+const newProducts = [...byBarcode.values()].filter(({ barcode }) => !alreadySeeded.has(barcode));
+console.log(`Bereits deployt: ${alreadySeeded.size}, neu in dieser Welle: ${newProducts.length}`);
+if (newProducts.length === 0) {
+  console.log('Nichts Neues; keine Migration geschrieben.');
+  process.exit(0);
+}
 const values = [];
-for (const { barcode, label, ingredients } of byBarcode.values()) {
+for (const { barcode, label, ingredients } of newProducts) {
   for (const language of ['de', 'en']) {
     const json = JSON.stringify(buildResult(label, ingredients, language));
     values.push(`(${sqlString(barcode)}, ${sqlString(language)}, ${sqlString(json)}::jsonb, 'dsld-2026-09-02', true)`);
@@ -276,4 +295,4 @@ const header = `-- Seed DSLD Welle 1 (Baustein 4, docs/datenbank-ausbau-programm
 `;
 writeFileSync(outPath, header + chunks.join('\n\n') + '\n');
 console.log(`Geschrieben: ${outPath}`);
-console.log(`Produkte: ${byBarcode.size}, Zeilen: ${values.length}`);
+console.log(`Produkte in dieser Welle: ${newProducts.length}, Zeilen: ${values.length}`);
