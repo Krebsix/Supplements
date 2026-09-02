@@ -182,7 +182,7 @@ export const TERMS_SECTIONS = {
     {
       heading: 'Inhalte und Quellen',
       body:
-        'Referenzwerte und Hinweise stammen aus öffentlichen Quellen (u. a. EFSA, BfR, HMPC, NIH, D-A-CH-Referenzwerte). Produktdaten stammen teilweise von Open Food Facts unter der Open Data Commons Open Database License (ODbL). Für Vollständigkeit und Richtigkeit der Inhalte wird keine Gewähr übernommen; Fehler kannst du an die oben genannte Kontaktadresse melden.',
+        'Referenzwerte und Hinweise stammen aus öffentlichen Quellen (u. a. EFSA, BfR, HMPC, NIH, D-A-CH-Referenzwerte). Produktdaten stammen teilweise von Open Food Facts unter der Open Data Commons Open Database License (ODbL) sowie aus der NIH Dietary Supplement Label Database (DSLD, gemeinfreie US-Etikettendaten). Für Vollständigkeit und Richtigkeit der Inhalte wird keine Gewähr übernommen; Fehler kannst du an die oben genannte Kontaktadresse melden.',
     },
     {
       heading: 'Haftung',
@@ -222,7 +222,7 @@ export const TERMS_SECTIONS = {
     {
       heading: 'Content and sources',
       body:
-        'Reference values and notes come from public sources (including EFSA, BfR, HMPC, NIH, D-A-CH reference values). Product data comes in part from Open Food Facts under the Open Data Commons Open Database License (ODbL). No guarantee is given for the completeness or correctness of the content; you can report errors to the contact address above.',
+        'Reference values and notes come from public sources (including EFSA, BfR, HMPC, NIH, D-A-CH reference values). Product data comes in part from Open Food Facts under the Open Data Commons Open Database License (ODbL) and from the NIH Dietary Supplement Label Database (DSLD, public domain US label data). No guarantee is given for the completeness or correctness of the content; you can report errors to the contact address above.',
     },
     {
       heading: 'Liability',
@@ -271,7 +271,7 @@ export const IMPRINT_SECTIONS = {
     {
       heading: 'Datenquellen',
       body:
-        'Produktdaten stammen teilweise aus Open Food Facts (world.openfoodfacts.org), lizenziert unter der Open Database License (ODbL). Diese Einträge sind in der App gekennzeichnet und werden getrennt vom redaktionell gepflegten Katalog geführt.',
+        'Produktdaten stammen teilweise aus Open Food Facts (world.openfoodfacts.org), lizenziert unter der Open Database License (ODbL). Diese Einträge sind in der App gekennzeichnet und werden getrennt vom redaktionell gepflegten Katalog geführt. Weitere Produktdaten stammen aus der NIH Dietary Supplement Label Database (dsld.od.nih.gov, gemeinfreie US-Etikettendaten); solche Einträge sind mit ihrer Herkunft gekennzeichnet.',
     },
   ],
   en: [
@@ -295,7 +295,7 @@ export const IMPRINT_SECTIONS = {
     {
       heading: 'Data sources',
       body:
-        'Product data comes in part from Open Food Facts (world.openfoodfacts.org), licensed under the Open Database License (ODbL). These entries are marked in the app and are kept separate from the editorially maintained catalogue.',
+        'Product data comes in part from Open Food Facts (world.openfoodfacts.org), licensed under the Open Database License (ODbL). These entries are marked in the app and are kept separate from the editorially maintained catalogue. Further product data comes from the NIH Dietary Supplement Label Database (dsld.od.nih.gov, public domain US label data); such entries are marked with their origin.',
     },
   ],
 };

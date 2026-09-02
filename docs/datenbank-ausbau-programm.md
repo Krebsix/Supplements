@@ -51,9 +51,14 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    Erwartung: geringe Abdeckung (viele OFF-Supplements ohne Nährwerte),
    deshalb nach DSLD priorisieren.
 4. **DSLD-Import** (NIH Dietary Supplement Label Database,
-   https://dsld.od.nih.gov/, public domain): Etikettendaten
-   zehntausender US-Produkte MIT Wirkstoffmengen je Portion. Der
-   größte Hebel für „alle Daten für alle Produkte".
+   https://dsld.od.nih.gov/, public domain): Welle 1 ERLEDIGT
+   2026-09-02: 766 On-Market-Produkte von 20 DACH-relevanten US-Marken
+   MIT Wirkstoffmengen je Portion, als verified-Einträge (de/en) im
+   geteilten product_cache (Migration deployt); Barcode-Scan findet sie
+   sofort. Werkzeug: scripts/import-dsld.mjs (Label-Platten-Cache,
+   Retry mit Backoff gegen das API-Stundenlimit). Offen: 31 rate-
+   limitierte Labels nachziehen, weitere Marken als Welle 2, mehr
+   MAX_PRODUCTS wenn gewünscht.
 5. **HMPC-Monographien-Durchgang je Kraut**: Schwangerschaft/Stillzeit/
    Kinder-Absätze aller Kräuter-Substanzen systematisch in
    lifeStageAdvisories übernehmen (EMA-PDFs sind abrufbar; LactMed für
