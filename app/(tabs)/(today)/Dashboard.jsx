@@ -454,15 +454,21 @@ export default function Dashboard() {
       routineSupplement.timingRaw || supplement.timingRaw || ''
     ).trim();
     const detailsExpanded = expandedNoteIds.has(supplement.id);
-    // In der taeglichen Routine zaehlt die Liste, nicht der
-    // Steckbrief: Dosierung und Anwendungsgebiet stehen
-    // eingeklappt auf einer Zeile. Aufgeklappt wird, wer es
-    // wissen will. Der Schalter erscheint nur, wenn es etwas zu
-    // sehen gibt — eine Notiz oder eine Zeile, die abgeschnitten
-    // waere.
+    // Weniger Text je Praeparat (Geraetetest 02.09.): In den Listen-
+    // zeilen steht eingeklappt nur der Name — Dosierung, Zweck,
+    // Zeitpunkt, Bestand und Erklaerungen liegen hinter dem Aufklapper
+    // (eine Ebene, Spec-konform). Die Als-Naechstes-Karte (hero) zeigt
+    // weiterhin alles: Dort faellt die Entscheidung.
+    const showDepth = hero || detailsExpanded;
     const hasTruncatedMeta = supplementMeta.length > 42;
-    const canExpandDetails =
-      Boolean(supplementNotes) || hasTruncatedMeta;
+    const canExpandDetails = hero
+      ? Boolean(supplementNotes) || hasTruncatedMeta
+      : Boolean(
+          supplementMeta ||
+            supplementNotes ||
+            supplementTiming ||
+            stock?.currentUnits !== undefined
+        );
 
     const loggedTime = supplement.logged
       ? formatLoggedTime(
@@ -500,7 +506,7 @@ export default function Dashboard() {
             <Text style={styles.supplementName}>{supplementName}</Text>
             <Feather name="chevron-right" size={18} color={colors.inkFaint} />
           </View>
-          {supplementMeta ? (
+          {showDepth && supplementMeta ? (
             <Text
               style={styles.supplementMeta}
               numberOfLines={detailsExpanded ? undefined : 1}
@@ -509,6 +515,7 @@ export default function Dashboard() {
             </Text>
           ) : null}
 
+          {showDepth ? (
           <SlotReason
             guidance={
               guidanceBySupplementId.get(supplement.id) ?? {
@@ -521,8 +528,9 @@ export default function Dashboard() {
               router.push(`/search?substance=${substanceId}`)
             }
           />
+          ) : null}
 
-          {stock?.currentUnits !== undefined ? (
+          {showDepth && stock?.currentUnits !== undefined ? (
             <Text style={styles.noteText}>
               {t('dashboard.stockNote', {
                 amount: stock.currentUnits,
@@ -531,7 +539,7 @@ export default function Dashboard() {
             </Text>
           ) : null}
 
-          {supplementTiming ? (
+          {showDepth && supplementTiming ? (
             <View style={styles.timingRow}>
               <Feather name="clock" size={14} color={colors.inkMuted} />
               <Text style={styles.timingText}>{supplementTiming}</Text>
@@ -738,11 +746,34 @@ export default function Dashboard() {
             <Text style={styles.lastActivity}>{formatLastLogged(lastLoggedAt, t, language)}</Text>
           </View>
 
+          {/* Kacheln sind tappbar (Geraetetest 02.09.): jede fuehrt zu
+              ihrem Ort — Bestand, Tagesplan-Slots, Verlauf, naechster
+              offener Slot. */}
           <View style={styles.metricGrid}>
-            <MetricCard label={t('dashboard.metricActiveRoutine')} value={String(fullInventoryCount)} />
-            <MetricCard label={t('dashboard.metricScheduledToday')} value={String(scheduledToday)} />
-            <MetricCard label={t('dashboard.metricLogged')} value={String(progress.done)} />
-            <MetricCard label={t('dashboard.metricPending')} value={String(pendingToday)} />
+            <MetricCard
+              label={t('dashboard.metricActiveRoutine')}
+              value={String(fullInventoryCount)}
+              onPress={() => router.push('/inventory')}
+            />
+            <MetricCard
+              label={t('dashboard.metricScheduledToday')}
+              value={String(scheduledToday)}
+              onPress={
+                visibleSchedule.length > 0
+                  ? () => scrollToSlot(visibleSchedule[0].slot.id)
+                  : undefined
+              }
+            />
+            <MetricCard
+              label={t('dashboard.metricLogged')}
+              value={String(progress.done)}
+              onPress={() => router.push('/history')}
+            />
+            <MetricCard
+              label={t('dashboard.metricPending')}
+              value={String(pendingToday)}
+              onPress={nextUp ? () => scrollToSlot(nextUp.slot.id) : undefined}
+            />
           </View>
         </>
       ) : null}
@@ -861,12 +892,24 @@ function SectionHeading({ title, subtitle }) {
   );
 }
 
-function MetricCard({ label, value }) {
+function MetricCard({ label, value, onPress }) {
   return (
-    <View style={styles.metricCard}>
-      <Text style={styles.metricValue}>{value}</Text>
+    <TouchableOpacity
+      style={styles.metricCard}
+      onPress={onPress}
+      disabled={!onPress}
+      activeOpacity={0.7}
+      accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityLabel={onPress ? `${label}: ${value}` : undefined}
+    >
+      <View style={styles.metricValueRow}>
+        <Text style={styles.metricValue}>{value}</Text>
+        {onPress ? (
+          <Feather name="chevron-right" size={16} color={colors.inkFaint} />
+        ) : null}
+      </View>
       <Text style={styles.metricLabel}>{label}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -1085,6 +1128,11 @@ const styles = StyleSheet.create({
     width: '48%',
     ...surfaces.card,
     padding: space.lg,
+  },
+  metricValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   metricValue: {
     ...type.numeral,

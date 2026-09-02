@@ -25,13 +25,13 @@ export default {
   'dashboard.title': 'Daily plan',
   'dashboard.subtitle':
     'Daily control center for intake, timing, history and clean documentation.',
-  'dashboard.summaryLabel': 'Daily routine',
+  'dashboard.summaryLabel': 'Today',
   'dashboard.summaryProgress': '{done} / {total} documented',
   'dashboard.summaryEmpty': 'No intake scheduled',
   'dashboard.insightSetupLabel': 'Setup pending',
   'dashboard.insightSetupText':
-    'Add supplements or assign timing so the daily routine becomes reliable.',
-  'dashboard.insightCompleteLabel': 'Routine complete',
+    'Add supplements or assign timing so the daily plan becomes reliable.',
+  'dashboard.insightCompleteLabel': 'All documented',
   'dashboard.insightCompleteText':
     'All intake scheduled for today has been documented.',
   'dashboard.insightPendingLabel': '{pending} open',
@@ -41,22 +41,22 @@ export default {
   'dashboard.lastActivityInvalid': 'Last activity could not be read.',
   'dashboard.lastActivityLogged': 'Last documented: {date}',
   'dashboard.noticeTitle': 'Intake notice active',
-  'dashboard.metricActiveRoutine': 'Active routine',
+  'dashboard.metricActiveRoutine': 'Active supplements',
   'dashboard.metricScheduledToday': 'Scheduled today',
   'dashboard.metricLogged': 'Documented',
   'dashboard.metricPending': 'Still open',
-  'dashboard.cleanupTitle': 'Multiple routine entries detected',
+  'dashboard.cleanupTitle': 'Multiple entries detected',
   'dashboard.cleanupText':
-    '{label} with the same name. Additional entries can be moved to the archive; one active routine entry remains per supplement.',
+    '{label} with the same name. Additional entries can be moved to the archive; one active entry remains per supplement.',
   'dashboard.cleanupMeta': 'Affected: {names}',
   'dashboard.cleanupButton': 'Archive duplicates',
   'dashboard.duplicateCount_one': '1 additional entry',
   'dashboard.duplicateCount_other': '{count} additional entries',
   'dashboard.unnamedEntry': 'Unnamed entry',
-  'dashboard.sectionRoutineTitle': 'Routine',
+  'dashboard.sectionRoutineTitle': 'Intake',
   'dashboard.sectionRoutineSubtitle':
     'Grouped by timing, so open and documented intake stay immediately distinguishable.',
-  'dashboard.emptyRoutineTitle': 'Routine not set up yet',
+  'dashboard.emptyRoutineTitle': 'Nothing planned yet',
   'dashboard.emptyRoutineText':
     'Add your first supplement so the daily plan can be structured by intake time, documentation and history.',
   'dashboard.emptyRoutineButton': 'Add supplement',
@@ -112,21 +112,21 @@ export default {
   'dashboard.remindersOff.action': 'Turn on',
   'dashboard.edit': 'Edit',
   'dashboard.remove': 'Remove',
-  'dashboard.archiveAlertTitle': 'Remove from routine',
+  'dashboard.archiveAlertTitle': 'Remove from daily plan',
   'dashboard.archiveAlertMessage':
-    '{name} will be removed from the active routine. The entry is archived, not permanently deleted.',
+    '{name} will be removed from the daily plan. The entry is archived, not permanently deleted.',
   'dashboard.cleanupAlertTitle': 'Clean up duplicate entries',
   'dashboard.cleanupAlertMessage':
-    '{label} will be archived. One active entry per supplement remains in your routine.',
+    '{label} will be archived. One active entry per supplement remains in your daily plan.',
   'dashboard.cleanupAlertConfirm': 'Clean up',
   'dashboard.sectionAlertsTitle': 'Review notices',
   'dashboard.sectionAlertsSubtitle':
-    'General notices on routine organization, without medical assessment.',
+    'General notices on organizing your intake, without medical assessment.',
   'dashboard.noAlertsTitle': 'No open review notices',
   'dashboard.noAlertsText':
     'No additional organizational notices are currently documented for the current daily plan.',
   'dashboard.disclaimer':
-    'MySuplea supports the structured documentation of your routine. Notices remain general, serve organization and do not replace medical advice.',
+    'MySuplea supports the structured documentation of your intake. Notices remain general, serve organization and do not replace medical advice.',
   'dashboard.profileAdult': 'Adult',
   'dashboard.profileChild': 'Child',
   'dashboard.profileDefault': 'Default',

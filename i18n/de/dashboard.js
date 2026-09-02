@@ -24,13 +24,13 @@ export default {
   'dashboard.title': 'Tagesplan',
   'dashboard.subtitle':
     'Tägliches Kontrollzentrum für Einnahmen, Timing, Verlauf und saubere Dokumentation.',
-  'dashboard.summaryLabel': 'Tagesroutine',
+  'dashboard.summaryLabel': 'Heute',
   'dashboard.summaryProgress': '{done} / {total} dokumentiert',
   'dashboard.summaryEmpty': 'Keine Einnahmen geplant',
   'dashboard.insightSetupLabel': 'Setup offen',
   'dashboard.insightSetupText':
-    'Füge Supplements hinzu oder ordne Timing zu, damit die Tagesroutine belastbar wird.',
-  'dashboard.insightCompleteLabel': 'Routine vollständig',
+    'Füge Supplements hinzu oder ordne Timing zu, damit der Tagesplan belastbar wird.',
+  'dashboard.insightCompleteLabel': 'Alles dokumentiert',
   'dashboard.insightCompleteText':
     'Alle geplanten Einnahmen sind für heute dokumentiert.',
   'dashboard.insightPendingLabel': '{pending} offen',
@@ -40,22 +40,22 @@ export default {
   'dashboard.lastActivityInvalid': 'Letzte Aktivität konnte nicht gelesen werden.',
   'dashboard.lastActivityLogged': 'Zuletzt dokumentiert: {date}',
   'dashboard.noticeTitle': 'Einnahmehinweis aktiv',
-  'dashboard.metricActiveRoutine': 'Aktive Routine',
+  'dashboard.metricActiveRoutine': 'Aktive Präparate',
   'dashboard.metricScheduledToday': 'Heute geplant',
   'dashboard.metricLogged': 'Dokumentiert',
   'dashboard.metricPending': 'Noch offen',
-  'dashboard.cleanupTitle': 'Mehrfache Routine-Einträge erkannt',
+  'dashboard.cleanupTitle': 'Mehrfache Einträge erkannt',
   'dashboard.cleanupText':
-    '{label} mit gleichem Namen. Zusätzliche Einträge können ins Archiv verschoben werden; je Supplement bleibt ein aktiver Routine-Eintrag erhalten.',
+    '{label} mit gleichem Namen. Zusätzliche Einträge können ins Archiv verschoben werden; je Supplement bleibt ein aktiver Eintrag erhalten.',
   'dashboard.cleanupMeta': 'Betroffen: {names}',
   'dashboard.cleanupButton': 'Duplikate archivieren',
   'dashboard.duplicateCount_one': '1 zusätzlicher Eintrag',
   'dashboard.duplicateCount_other': '{count} zusätzliche Einträge',
   'dashboard.unnamedEntry': 'Unbenannter Eintrag',
-  'dashboard.sectionRoutineTitle': 'Routine',
+  'dashboard.sectionRoutineTitle': 'Einnahmen',
   'dashboard.sectionRoutineSubtitle':
     'Nach Timing gruppiert, damit offene und dokumentierte Einnahmen sofort unterscheidbar bleiben.',
-  'dashboard.emptyRoutineTitle': 'Routine noch nicht eingerichtet',
+  'dashboard.emptyRoutineTitle': 'Noch nichts eingeplant',
   'dashboard.emptyRoutineText':
     'Füge dein erstes Supplement hinzu, damit der Tagesplan nach Einnahmezeit, Dokumentation und Verlauf strukturiert werden kann.',
   'dashboard.emptyRoutineButton': 'Supplement hinzufügen',
@@ -114,21 +114,21 @@ export default {
   'dashboard.remindersOff.action': 'Einschalten',
   'dashboard.edit': 'Bearbeiten',
   'dashboard.remove': 'Entfernen',
-  'dashboard.archiveAlertTitle': 'Aus Routine entfernen',
+  'dashboard.archiveAlertTitle': 'Aus dem Tagesplan entfernen',
   'dashboard.archiveAlertMessage':
-    '{name} wird aus der aktiven Routine entfernt. Der Eintrag wird archiviert und nicht dauerhaft gelöscht.',
+    '{name} wird aus dem Tagesplan entfernt. Der Eintrag wird archiviert und nicht dauerhaft gelöscht.',
   'dashboard.cleanupAlertTitle': 'Mehrfache Einträge bereinigen',
   'dashboard.cleanupAlertMessage':
-    '{label} werden archiviert. Je Supplement-Name bleibt ein aktiver Eintrag in deiner Routine erhalten.',
+    '{label} werden archiviert. Je Supplement-Name bleibt ein aktiver Eintrag in deinem Tagesplan erhalten.',
   'dashboard.cleanupAlertConfirm': 'Bereinigen',
   'dashboard.sectionAlertsTitle': 'Prüfhinweise',
   'dashboard.sectionAlertsSubtitle':
-    'Allgemeine Hinweise zur Routine-Organisation, ohne medizinische Bewertung.',
+    'Allgemeine Hinweise zur Organisation deiner Einnahmen, ohne medizinische Bewertung.',
   'dashboard.noAlertsTitle': 'Keine offenen Prüfhinweise',
   'dashboard.noAlertsText':
     'Für den aktuellen Tagesplan liegen derzeit keine zusätzlichen organisatorischen Hinweise vor.',
   'dashboard.disclaimer':
-    'MySuplea unterstützt die strukturierte Dokumentation deiner Routine. Hinweise bleiben allgemein, dienen der Organisation und ersetzen keine medizinische Beratung.',
+    'MySuplea unterstützt die strukturierte Dokumentation deiner Einnahmen. Hinweise bleiben allgemein, dienen der Organisation und ersetzen keine medizinische Beratung.',
   'dashboard.profileAdult': 'Erwachsen',
   'dashboard.profileChild': 'Kind',
   'dashboard.profileDefault': 'Standard',
