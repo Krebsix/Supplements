@@ -110,6 +110,15 @@ export default {
   'dashboard.remindersOff.text':
     'Your device currently does not remind you of your intake. Turning them on takes a moment.',
   'dashboard.remindersOff.action': 'Turn on',
+  'dashboard.allTodayTitle': 'All intake today ({count})',
+  'dashboard.curated.stackTitle': 'Daily total above the upper limit',
+  'dashboard.curated.stackText':
+    '{names}: the sum across all products lies above the daily upper limit. Details in the daily total check.',
+  'dashboard.curated.advisoryTitle': 'Note for your life stage',
+  'dashboard.curated.advisoryText':
+    'Notes for your life stage are documented for {names}.',
+  'dashboard.curated.refillTitle': 'Stock running low',
+  'dashboard.curated.refillText': '{names}: about {days} days left.',
   'dashboard.edit': 'Edit',
   'dashboard.remove': 'Remove',
   'dashboard.archiveAlertTitle': 'Remove from daily plan',

@@ -11,6 +11,11 @@ import { checkAllConflictsForSlot } from '../../../ConflictLogic';
 import { formatBackupTime } from '../../../CloudBackup';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
 import { countOpen, findNextUp } from '../../../NextUp';
+import { analyzeStack } from '../../../StackAnalyzer';
+import { refillState } from '../../../StockForecast';
+import { substanceIdsFromDetails } from '../../../SlotSuggestion';
+import { getAdvisories } from '../../../data/lifeStageAdvisories';
+import { getSubstance } from '../../../data/substances';
 import DayArc from '../../../components/DayArc';
 import FirstStepsCard from '../../../components/FirstStepsCard';
 import Pictogram, { formForUnit } from '../../../components/Pictogram';
@@ -148,6 +153,8 @@ export default function Dashboard() {
   // (Spec Entscheidung 3): Standard eingeklappt, damit die erste Flaeche
   // der Arbeitsfluss bleibt, nicht die Zahlenwand.
   const [summaryOpen, setSummaryOpen] = React.useState(false);
+  // Slot-Liste eine Ebene tiefer (Spec-Iteration 2026-09-02): Standard zu.
+  const [slotsOpen, setSlotsOpen] = React.useState(false);
   const insets = useSafeAreaInsets();
   const scrollRef = React.useRef(null);
   // Ziel-Positionen der Slot-Karten fuer den Sprung vom Tagesbogen.
@@ -186,6 +193,8 @@ export default function Dashboard() {
   const dismissRestoreNotice = useCloudBackupStore((state) => state.dismissRestoreNotice);
   const notificationsEnabled = useNotificationStore((state) => state.notificationsEnabled);
   const notificationPermission = useNotificationStore((state) => state.permissionGranted);
+  const activeLifeStageId = useStore((state) => state.activeLifeStageId);
+  const refillThresholdDays = useNotificationStore((state) => state.refillThresholdDays);
 
   // Subscribe to changing store slices so the dashboard re-renders after intake/stock/user-supplement updates.
   const intakeLogs = useStore((state) => state.intakeLogs);
@@ -255,11 +264,135 @@ export default function Dashboard() {
     later: t('dashboard.arc.later'),
   };
 
+  const restSlots = visibleSchedule.filter((item) => item.slot.id !== nextUp?.slot.id);
+  const restCount = restSlots.reduce((sum, item) => sum + item.supplements.length, 0);
+
   function scrollToSlot(slotId) {
-    const y = slotPositionsRef.current[slotId];
-    if (typeof y === 'number' && scrollRef.current) {
-      scrollRef.current.scrollTo({ y: Math.max(0, y - space.md), animated: true });
+    const jump = () => {
+      const y = slotPositionsRef.current[slotId];
+      if (typeof y === 'number' && scrollRef.current) {
+        scrollRef.current.scrollTo({ y: Math.max(0, y - space.md), animated: true });
+      }
+    };
+    if (slotId !== nextUp?.slot.id && !slotsOpen) {
+      // Slots erst aufklappen, dann springen: Die Zielposition entsteht
+      // erst im Layout nach dem Aufklappen.
+      setSlotsOpen(true);
+      setTimeout(jump, 300);
+      return;
     }
+    jump();
+  }
+
+  // Kuratierte Karten (Spec-Iteration 2026-09-02): nur bei Aussage,
+  // maximal drei, Prioritaet Auffaelligkeit > Lebensphase > Bestand.
+  // Inhalte ausschliesslich aus bestehender Fachlogik.
+  const curatedCards = React.useMemo(() => {
+    const cards = [];
+
+    const stack = analyzeStack(activeSupplements, activeLifeStageId);
+    const overLimit = (stack.totals ?? []).filter(
+      (entry) => entry.referenceCheck?.status === 'above_limit'
+    );
+    if (overLimit.length > 0) {
+      cards.push({ key: 'stack', names: overLimit.map((entry) => entry.name) });
+    }
+
+    const advisoryHits = [];
+    const seenSubstances = new Set();
+    for (const supplement of activeSupplements) {
+      for (const id of substanceIdsFromDetails(supplement.ingredientDetails)) {
+        if (seenSubstances.has(id)) continue;
+        seenSubstances.add(id);
+        if (getAdvisories(id, activeLifeStageId).length > 0) {
+          advisoryHits.push({ id, name: getSubstance(id)?.name ?? id });
+        }
+      }
+    }
+    if (advisoryHits.length > 0) {
+      cards.push({ key: 'advisory', hits: advisoryHits });
+    }
+
+    const low = activeSupplements
+      .map((supplement) => {
+        const stock = stockBySupplementId?.[supplement.id];
+        if (!stock) return null;
+        const forecast = refillState(stock, supplement, refillThresholdDays);
+        return forecast.due
+          ? { name: formatSupplementName(supplement), daysLeft: forecast.daysLeft }
+          : null;
+      })
+      .filter(Boolean);
+    if (low.length > 0) {
+      cards.push({ key: 'refill', items: low });
+    }
+
+    return cards.slice(0, 3);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userSupplements, stockBySupplementId, activeLifeStageId, refillThresholdDays]);
+
+  function renderCuratedCard(card) {
+    if (card.key === 'stack') {
+      return (
+        <TouchableOpacity
+          key="curated-stack"
+          style={[styles.curatedCard, { borderLeftColor: toneFor('notice').ink }]}
+          onPress={() => router.push('/analysis')}
+          accessibilityRole="button"
+          activeOpacity={0.7}
+        >
+          <View style={styles.curatedTextWrap}>
+            <Text style={styles.curatedTitle}>{t('dashboard.curated.stackTitle')}</Text>
+            <Text style={styles.curatedText}>
+              {t('dashboard.curated.stackText', { names: joinNames(card.names) })}
+            </Text>
+          </View>
+          <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+        </TouchableOpacity>
+      );
+    }
+    if (card.key === 'advisory') {
+      return (
+        <TouchableOpacity
+          key="curated-advisory"
+          style={[styles.curatedCard, { borderLeftColor: colors.accent }]}
+          onPress={() => router.push(`/search?substance=${card.hits[0].id}`)}
+          accessibilityRole="button"
+          activeOpacity={0.7}
+        >
+          <View style={styles.curatedTextWrap}>
+            <Text style={styles.curatedTitle}>{t('dashboard.curated.advisoryTitle')}</Text>
+            <Text style={styles.curatedText}>
+              {t('dashboard.curated.advisoryText', {
+                names: joinNames(card.hits.map((hit) => hit.name)),
+              })}
+            </Text>
+          </View>
+          <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+        </TouchableOpacity>
+      );
+    }
+    const minDays = Math.min(...card.items.map((item) => item.daysLeft));
+    return (
+      <TouchableOpacity
+        key="curated-refill"
+        style={[styles.curatedCard, { borderLeftColor: colors.ruleStrong }]}
+        onPress={() => router.push('/inventory')}
+        accessibilityRole="button"
+        activeOpacity={0.7}
+      >
+        <View style={styles.curatedTextWrap}>
+          <Text style={styles.curatedTitle}>{t('dashboard.curated.refillTitle')}</Text>
+          <Text style={styles.curatedText}>
+            {t('dashboard.curated.refillText', {
+              names: joinNames(card.items.map((item) => item.name)),
+              days: Number.isFinite(minDays) ? minDays : '?',
+            })}
+          </Text>
+        </View>
+        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+      </TouchableOpacity>
+    );
   }
   const duplicateGroups = getDuplicateGroups(activeSupplements, t);
   const duplicateSupplementsToArchive = duplicateGroups.reduce(
@@ -778,10 +911,10 @@ export default function Dashboard() {
         </>
       ) : null}
 
-      <SectionHeading
-        title={t('dashboard.sectionRoutineTitle')}
-        subtitle={t('dashboard.sectionRoutineSubtitle')}
-      />
+      {/* Kuratierte Karten (Spec-Iteration 2026-09-02): erscheinen nur,
+          wenn sie etwas zu sagen haben — Auffaelligkeit, Lebensphase,
+          Bestand knapp. Ziel ist immer der Ort mit der vollen Tiefe. */}
+      {curatedCards.map((card) => renderCuratedCard(card))}
 
       {/* Kur-Pausen erscheinen als eigener Block statt still aus den Slots
           zu verschwinden: Wer heute nichts nimmt, soll sehen, warum. */}
@@ -801,10 +934,28 @@ export default function Dashboard() {
         </View>
       ) : null}
 
-      {/* Der Als-Naechstes-Slot steht schon in der Karte oben (Arbeitsfluss
-          statt Dopplung) und erscheint deshalb hier unten nicht noch einmal. */}
-      {fullInventoryCount > 0 ? visibleSchedule
-        .filter((item) => item.slot.id !== nextUp?.slot.id)
+      {/* Slot-Liste eine Ebene tiefer (Spec-Iteration 2026-09-02): der
+          Als-Naechstes-Slot steht oben in der Karte, der Rest liegt
+          hinter diesem Aufklapper. */}
+      {fullInventoryCount > 0 && restSlots.length > 0 ? (
+        <TouchableOpacity
+          style={styles.slotsToggleRow}
+          onPress={() => setSlotsOpen((value) => !value)}
+          accessibilityRole="button"
+          accessibilityState={{ expanded: slotsOpen }}
+        >
+          <Text style={styles.slotsToggleTitle}>
+            {t('dashboard.allTodayTitle', { count: restCount })}
+          </Text>
+          <Feather
+            name={slotsOpen ? 'chevron-up' : 'chevron-down'}
+            size={18}
+            color={colors.inkFaint}
+          />
+        </TouchableOpacity>
+      ) : null}
+
+      {slotsOpen && fullInventoryCount > 0 ? restSlots
         .map((item) => (
         <View
           key={item.slot.id}
@@ -1228,6 +1379,34 @@ const styles = StyleSheet.create({
   },
   slotCard: {
     ...surfaces.card,
+  },
+  // Kuratierte Karten (Spec-Iteration 2026-09-02).
+  curatedCard: {
+    ...surfaces.card,
+    borderLeftWidth: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+  },
+  curatedTextWrap: { flex: 1 },
+  curatedTitle: {
+    ...type.bodyStrong,
+  },
+  curatedText: {
+    ...type.small,
+    marginTop: space.xs,
+  },
+  // Aufklapp-Zeile der Slot-Liste.
+  slotsToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 48,
+    marginTop: space.md,
+    marginBottom: space.sm,
+  },
+  slotsToggleTitle: {
+    ...type.heading,
   },
   slotHeader: {
     flexDirection: 'row',

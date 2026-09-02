@@ -112,6 +112,16 @@ export default {
   'dashboard.remindersOff.text':
     'Dein Gerät erinnert dich derzeit nicht an deine Einnahmen. Einschalten dauert einen Moment.',
   'dashboard.remindersOff.action': 'Einschalten',
+  // Kuratierte Karten und Slot-Aufklapper (Spec-Iteration 2026-09-02).
+  'dashboard.allTodayTitle': 'Alle Einnahmen heute ({count})',
+  'dashboard.curated.stackTitle': 'Tagessumme über der Obergrenze',
+  'dashboard.curated.stackText':
+    '{names}: Die Summe über alle Präparate liegt über der Tagesobergrenze. Details im Tagessummen-Check.',
+  'dashboard.curated.advisoryTitle': 'Hinweis für deine Lebensphase',
+  'dashboard.curated.advisoryText':
+    'Zu {names} sind Hinweise für deine Lebensphase hinterlegt.',
+  'dashboard.curated.refillTitle': 'Bestand wird knapp',
+  'dashboard.curated.refillText': '{names}: reicht noch etwa {days} Tage.',
   'dashboard.edit': 'Bearbeiten',
   'dashboard.remove': 'Entfernen',
   'dashboard.archiveAlertTitle': 'Aus dem Tagesplan entfernen',
