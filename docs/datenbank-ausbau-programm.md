@@ -44,12 +44,16 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    Labortests, Kupfer nicht für Jugendliche), DE + EN, eigener Test,
    Anzeige im Substanz-Steckbrief. Die Phase-3b-Balken greifen darauf
    zu.
-3. **OFF-Serving-Enrichment**: Für importierte Produkte per Produkt-API
-   `nutriments._serving` + `serving_size` nachladen; nur echte
-   Portionswerte übernehmen, Umrechnung 100g→Portion nur bei eindeutiger
-   Gramm-Portionsangabe, Rechenweg am Datensatz dokumentieren.
-   Erwartung: geringe Abdeckung (viele OFF-Supplements ohne Nährwerte),
-   deshalb nach DSLD priorisieren.
+3. **OFF-Serving-Enrichment**: ERLEDIGT 2026-09-02: 957 von 2.455
+   offenen OFF-Produkten tragen jetzt Portionsmengen (39 Prozent,
+   deutlich über der Erwartung), alle über die Umrechnung 100g→Portion
+   bei eindeutiger Gramm-Portionsangabe (`amountBasis:
+   'converted-from-100g'`, Rechenweg in `conversionNote` am Datensatz);
+   kein einziges Produkt deklarierte je Portion (`per-serving`: 0).
+   Rest bleibt bewusst Lücke (keine Nährwerte oder keine eindeutige
+   Gramm-Portion in OFF). Werkzeug: `scripts/enrich-off-servings.mjs`
+   (Search-API in 100er-Blöcken, 429/503-Backoff, Platten-Cache je EAN
+   unter ../.off-product-cache).
 4. **DSLD-Import** (NIH Dietary Supplement Label Database,
    https://dsld.od.nih.gov/, public domain): Welle 1 ERLEDIGT
    2026-09-02: 766 On-Market-Produkte von 20 DACH-relevanten US-Marken
@@ -75,8 +79,15 @@ sind ausdrücklich erwünscht (NIH, LactMed, DSLD).
    Arzneipflanzen bzw. keine passende Gruppe): myo-inositol, d-mannose,
    phosphatidylserine, shiitake, fennel (EMA-Aussage betrifft Kinder
    unter 4).
-6. **ODbL-Restpflichten**: offProducts.json als Download veröffentlichen
-   (Website), product_cache-OFF-Kennzeichnung.
+6. **ODbL-Restpflichten**: ERLEDIGT 2026-09-02, Details in
+   `launch/odbl-recherche.md` Abschnitt 4a: Download-Seite
+   `web/public/odbl/` mit `offProducts.json` unter ODbL (Branch
+   phase-2u-website, Footer verlinkt); zusätzlich ist das GitHub-Repo
+   öffentlich (maschinenlesbarer Repo-Pfad). product_cache-Frage
+   geklärt: OFF-Daten fließen NICHT in den Cache (nur Vision-Analysen,
+   Seeds, DSLD), damit greift die Nicht-Schreiben-Alternative, eine
+   Kennzeichnung ist gegenstandslos. Wer `offProducts.json` ändert,
+   zieht die Website-Kopie nach.
 
 ## Arbeitsweise je Baustein
 
