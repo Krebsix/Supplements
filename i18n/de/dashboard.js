@@ -106,6 +106,12 @@ export default {
   'dashboard.arc.done': 'dokumentiert',
   'dashboard.arc.next': 'als Nächstes',
   'dashboard.arc.later': 'offen',
+  // Hinweis, wenn Erinnerungen faktisch aus sind (Gerätetest 02.09.):
+  // geplante Einnahmen ohne aktive Push-Erinnerung.
+  'dashboard.remindersOff.title': 'Erinnerungen sind aus',
+  'dashboard.remindersOff.text':
+    'Dein Gerät erinnert dich derzeit nicht an deine Einnahmen. Einschalten dauert einen Moment.',
+  'dashboard.remindersOff.action': 'Einschalten',
   'dashboard.edit': 'Bearbeiten',
   'dashboard.remove': 'Entfernen',
   'dashboard.archiveAlertTitle': 'Aus Routine entfernen',

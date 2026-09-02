@@ -342,8 +342,10 @@ async function _scheduleOne(supplement, slotId, triggerTimestamp) {
   try {
     const notifId = await Notifications.scheduleNotificationAsync({
       content: {
-        title:      `${slot?.emoji ?? '💊'} ${supplement.name}`,
-        body:       `${dosageLabel} – ${purposeLabel}`,
+        // Kein Emoji und kein Gedankenstrich in Nutzertexten (Designregeln
+        // gelten auch fuer Push-Mitteilungen); der Punkt trennt.
+        title:      supplement.name,
+        body:       `${dosageLabel} · ${purposeLabel}`,
         data: {
           supplementId: supplement.id,
           slotId,

@@ -18,6 +18,7 @@ import ProductThumb from '../../../components/ProductThumb';
 import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useCloudBackupStore from '../../../useCloudBackupStore';
+import useNotificationStore from '../../../useNotificationStore';
 import useStore from '../../../useStore';
 import {
   formatSupplementDosage,
@@ -183,6 +184,8 @@ export default function Dashboard() {
   const getStock = useStore((state) => state.getStock);
   const lastRestore = useCloudBackupStore((state) => state.lastRestore);
   const dismissRestoreNotice = useCloudBackupStore((state) => state.dismissRestoreNotice);
+  const notificationsEnabled = useNotificationStore((state) => state.notificationsEnabled);
+  const notificationPermission = useNotificationStore((state) => state.permissionGranted);
 
   // Subscribe to changing store slices so the dashboard re-renders after intake/stock/user-supplement updates.
   const intakeLogs = useStore((state) => state.intakeLogs);
@@ -297,6 +300,13 @@ export default function Dashboard() {
     lastRestore ? 'restored' : null,
     duplicateEntryCount > 0 ? 'cleanup' : null,
     blockerState.blocked ? 'blocker' : null,
+    // Erinnerungen faktisch aus (Toggle aus ODER Systemerlaubnis fehlt),
+    // obwohl Einnahmen geplant sind: Die App soll ans Nicht-Vergessen
+    // erinnern koennen — der Weg dorthin darf nicht in Mehr verborgen
+    // bleiben (Geraetetest 2026-09-02).
+    scheduledToday > 0 && (!notificationsEnabled || !notificationPermission)
+      ? 'reminders'
+      : null,
   ].filter(Boolean);
 
   function renderSituationalNotice(kind, compact) {
@@ -374,6 +384,36 @@ export default function Dashboard() {
             <Text style={styles.cleanupButtonText}>{t('dashboard.cleanupButton')}</Text>
           </TouchableOpacity>
         </View>
+      );
+    }
+    if (kind === 'reminders') {
+      if (compact) {
+        return (
+          <TouchableOpacity
+            key={kind}
+            style={styles.compactNoticeRow}
+            onPress={() => router.push('/notifications')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.compactNoticeText}>{t('dashboard.remindersOff.title')}</Text>
+            <Text style={styles.compactNoticeActionText}>{t('dashboard.remindersOff.action')}</Text>
+          </TouchableOpacity>
+        );
+      }
+      return (
+        <TouchableOpacity
+          key={kind}
+          style={styles.reminderCard}
+          onPress={() => router.push('/notifications')}
+          accessibilityRole="button"
+          activeOpacity={0.7}
+        >
+          <View style={styles.reminderTextWrap}>
+            <Text style={styles.reminderTitle}>{t('dashboard.remindersOff.title')}</Text>
+            <Text style={styles.reminderText}>{t('dashboard.remindersOff.text')}</Text>
+          </View>
+          <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+        </TouchableOpacity>
       );
     }
     // 'blocker': Absorptionssperre.
@@ -1106,6 +1146,21 @@ const styles = StyleSheet.create({
   compactNoticeActionText: {
     ...type.small,
     color: colors.accent,
+  },
+  // Erinnerungen-aus-Hinweis: normale Karte, ganze Flaeche tappbar.
+  reminderCard: {
+    ...surfaces.card,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+  },
+  reminderTextWrap: { flex: 1 },
+  reminderTitle: {
+    ...type.bodyStrong,
+  },
+  reminderText: {
+    ...type.small,
+    marginTop: space.xs,
   },
   restoredCard: { ...surfaces.card, backgroundColor: colors.affirmSoft, padding: space.lg, marginBottom: space.lg },
   restoredTitle: { ...type.bodyStrong, color: colors.affirm },

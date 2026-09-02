@@ -106,6 +106,10 @@ export default {
   'dashboard.arc.done': 'documented',
   'dashboard.arc.next': 'up next',
   'dashboard.arc.later': 'open',
+  'dashboard.remindersOff.title': 'Reminders are off',
+  'dashboard.remindersOff.text':
+    'Your device currently does not remind you of your intake. Turning them on takes a moment.',
+  'dashboard.remindersOff.action': 'Turn on',
   'dashboard.edit': 'Edit',
   'dashboard.remove': 'Remove',
   'dashboard.archiveAlertTitle': 'Remove from routine',
