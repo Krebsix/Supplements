@@ -105,6 +105,14 @@ function formatHeaderDate(language) {
   });
 }
 
+// Namen fuer die kuratierten Kartentexte kompakt halten: maximal drei,
+// Rest als Anzahl.
+function joinNames(names = []) {
+  const shown = names.slice(0, 3).join(', ');
+  const more = names.length - 3;
+  return more > 0 ? `${shown} +${more}` : shown;
+}
+
 // Uhrzeit einer dokumentierten Einnahme fuer die Zeile "Dokumentiert um
 // HH:MM". Ohne lesbaren Zeitstempel liefert sie null, die Zeile faellt
 // dann auf den Text ohne Uhrzeit zurueck.
