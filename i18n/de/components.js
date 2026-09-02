@@ -18,6 +18,10 @@ export default {
   'components.insight.caution': 'Zu beachten',
   'components.insight.overdose': 'Bei zu hoher Zufuhr',
   'components.insight.bfrMax': 'BfR-Höchstmenge je Tagesdosis eines Präparats',
+  // Legende des Referenz-Balkens (Phase 3b).
+  'components.refBar.reference': 'Referenz',
+  'components.refBar.bfrMax': 'BfR je Präparat',
+  'components.refBar.upperLimit': 'Obergrenze',
   'components.insight.bfrMaxNone': 'Keine Mengen-Höchstmenge vorgeschlagen',
   'components.insight.intake': 'Einnahme',
   'components.insight.sources': 'Quellen',

@@ -16,10 +16,39 @@ import { analyzeCosts, findSharedGoals } from '../../../CostAnalyzer';
 import { canUseProFeature } from '../../../Entitlements';
 import { findPairInteractions } from '../../../InteractionCheck';
 import ProGate from '../../../components/ProGate';
+import ReferenceBar from '../../../components/ReferenceBar';
 import { analyzeStack, getStackWarnings } from '../../../StackAnalyzer';
+import { getBfrMaxAmount } from '../../../data/bfrMaxAmounts';
 import { getOutcomeMetric } from '../../../data/outcomeMetrics';
 import { useTranslation } from '../../../i18n';
 import useStore from '../../../useStore';
+
+// Legende fuer den Referenz-Balken im Tagessummen-Check (Phase 3b):
+// lokalisiert, Zahlformat der Sprache, nur vorhandene Ebenen.
+function buildBarLegend(check, bfrMax, unit, t, language) {
+  if (!check) return '';
+  const fmt = (value) => (language === 'de' ? String(value).replace('.', ',') : String(value));
+  const parts = [
+    Number.isFinite(check.reference) && check.reference > 0
+      ? `${t('components.refBar.reference')} ${fmt(check.reference)}`
+      : null,
+    Number.isFinite(bfrMax) && bfrMax > 0
+      ? `${t('components.refBar.bfrMax')} ${fmt(bfrMax)}`
+      : null,
+    Number.isFinite(check.upperLimit) && check.upperLimit > 0
+      ? `${t('components.refBar.upperLimit')} ${fmt(check.upperLimit)}`
+      : null,
+  ].filter(Boolean);
+  return parts.length ? `${parts.join(' · ')} ${unit ?? ''}`.trim() : '';
+}
+
+// Fuellfarbe des Balkens aus dem Referenz-Status; gedeckte Toene,
+// eine Ueberschreitung ist ein Hinweis, kein Alarm.
+function barTone(status) {
+  if (status === 'above_limit') return toneFor('critical').ink;
+  if (status === 'above_reference') return toneFor('notice').ink;
+  return toneFor('ok').ink;
+}
 
 /**
  * Analyse
@@ -33,7 +62,7 @@ import useStore from '../../../useStore';
  */
 export default function AnalysisScreen() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   const lifeStageId = useStore((state) => state.activeLifeStageId);
   const intakeLogs = useStore((state) => state.intakeLogs);
@@ -111,7 +140,11 @@ export default function AnalysisScreen() {
             <Text style={styles.allClear}>{t('analysis.totals.allClear')}</Text>
           ) : null}
 
-          {stack.totals.map((entry) => (
+          {stack.totals.map((entry) => {
+            const bfrEntry = getBfrMaxAmount(entry.substanceId);
+            const barBfrMax =
+              bfrEntry && bfrEntry.unit === entry.unit ? bfrEntry.amount : null;
+            return (
             <View key={entry.substanceId} style={styles.totalRow}>
               <View style={styles.totalHead}>
                 <Text style={styles.totalName}>{entry.name}</Text>
@@ -121,6 +154,17 @@ export default function AnalysisScreen() {
                     : `${entry.totalMin}–${entry.totalMax} ${entry.unit}`}
                 </Text>
               </View>
+              {/* Referenz-Balken (Phase 3b): Tagessumme relativ zu
+                  Referenz, BfR-Hoechstmenge und Obergrenze — die
+                  Textzeilen darunter bleiben, Status nie nur Farbe. */}
+              <ReferenceBar
+                amount={entry.totalMax}
+                reference={entry.referenceCheck?.reference}
+                bfrMax={barBfrMax}
+                upperLimit={entry.referenceCheck?.upperLimit}
+                fillColor={barTone(entry.referenceCheck?.status)}
+                legend={buildBarLegend(entry.referenceCheck, barBfrMax, entry.unit, t, language)}
+              />
               <Text style={styles.totalMeta}>
                 {t(
                   entry.sources.length === 1
@@ -131,7 +175,8 @@ export default function AnalysisScreen() {
                 {entry.hasConvertedAmounts ? ` · ${t('analysis.totals.converted')}` : ''}
               </Text>
             </View>
-          ))}
+            );
+          })}
 
           {stack.unresolved.length > 0 ? (
             <Text style={styles.unresolvedNote}>

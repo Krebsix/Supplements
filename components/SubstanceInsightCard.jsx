@@ -3,6 +3,7 @@ import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { useTranslation } from '../i18n';
 import { getStatusMeta } from '../ReferenceCheck';
+import ReferenceBar from './ReferenceBar';
 import { colors, radius, space, surfaces, toneFor, type } from '../theme';
 
 // Mapping von ReferenceCheck-Tonnamen auf die Statusstufen aus theme.js.
@@ -57,6 +58,32 @@ export default function SubstanceInsightCard({ profile }) {
   const statusMeta = check ? getStatusMeta(check.status) : null;
   const statusTone = statusMeta ? referenceTone(statusMeta.tone) : null;
 
+  // Legende fuer den Referenz-Balken (Phase 3b): lokalisiert und im
+  // Zahlformat der Sprache; BfR-Marker nur bei gleicher Einheit.
+  const fmtRefNumber = (value) =>
+    language === 'de' ? String(value).replace('.', ',') : String(value);
+  const barBfrMax =
+    profile.bfrMax &&
+    profile.bfrMax.unit === check?.unit &&
+    Number.isFinite(profile.bfrMax.amount)
+      ? profile.bfrMax.amount
+      : null;
+  const referenceBarLegend = check
+    ? [
+        Number.isFinite(check.reference) && check.reference > 0
+          ? `${t('components.refBar.reference')} ${fmtRefNumber(check.reference)}`
+          : null,
+        barBfrMax !== null
+          ? `${t('components.refBar.bfrMax')} ${fmtRefNumber(barBfrMax)}`
+          : null,
+        Number.isFinite(check.upperLimit) && check.upperLimit > 0
+          ? `${t('components.refBar.upperLimit')} ${fmtRefNumber(check.upperLimit)}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(' · ') + (check.unit ? ` ${check.unit}` : '')
+    : '';
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -106,6 +133,17 @@ export default function SubstanceInsightCard({ profile }) {
           <Text style={styles.referenceLabel}>
             {t('components.insight.referenceHeading')}
           </Text>
+          {/* Referenz-Balken (Phase 3b): Menge relativ zu Referenz,
+              BfR-Hoechstmenge und Obergrenze. Der Text darunter bleibt
+              Pflicht — Status nie nur ueber Farbe. */}
+          <ReferenceBar
+            amount={check.amount}
+            reference={check.reference}
+            bfrMax={barBfrMax}
+            upperLimit={check.upperLimit}
+            fillColor={statusTone?.ink}
+            legend={referenceBarLegend}
+          />
           <Text style={styles.referenceSummary}>{check.summary}</Text>
 
           {check.upperLimit !== null ? (
