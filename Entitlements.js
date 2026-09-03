@@ -1,13 +1,21 @@
 /**
  * Entitlements.js
  * ─────────────────────────────────────────────────────────────
- * Tiers, Scan-Kontingente und Credits (Decision 2026-08-09).
+ * Tiers, Scan-Kontingente und Credits (Decision 2026-08-09, Familien-Abo
+ * ergaenzt 2026-09-03).
  *
  * MODELL:
  *   Free  unbegrenzter Barcode-Scan (kostet uns nichts), 3 KI-Foto-Scans
  *         gesamt, bis 5 Praeparate.
  *   Pro   unbegrenzte KI-Scans mit Fair-Use-Limit pro Monat, unbegrenzter
- *         Bestand, Pro-Features.
+ *         Bestand, Pro-Features. Zwei Abrechnungsplaene (PLANS in
+ *         purchaseConfig.js): individual oder family -- BEIDE schalten
+ *         genau dieselben Features frei, `plan` ist reine Anzeige-/
+ *         Belegangabe, kein zweites Feature-Gate. Familie ist eine
+ *         Abrechnungsfrage (mehrere Geraete teilen ein Abo, v1 nur ueber
+ *         Apple Family Sharing), keine geteilten Gesundheitsdaten: jedes
+ *         Geraet zaehlt seine KI-Scans weiterhin einzeln (siehe unten),
+ *         kein serverseitiger Familien-Topf.
  *   Credits  nachgekaufte Scans (Consumable). Fuer Free-Nutzerinnen ohne
  *         Abo UND als Overflow ueber dem Fair-Use-Limit.
  *
@@ -23,10 +31,12 @@
  * Bewusst NICHT hier: Bericht-Export und Backup. Die bleiben in jedem
  * Tier frei (Vertriebskanal bzw. Datenrechte, Art. 17/20 DSGVO).
  */
+import { PLANS, planFromProductId } from './purchaseConfig';
 
 export const PAYWALL_ENFORCED = false;
 
 export const TIERS = { FREE: 'free', PRO: 'pro' };
+export { PLANS };
 
 export const FREE_VISION_SCANS = 3;
 export const PRO_MONTHLY_FAIR_USE = 100;
@@ -34,6 +44,11 @@ export const FREE_MAX_SUPPLEMENTS = 5;
 
 export const EMPTY_ENTITLEMENT = {
   tier: TIERS.FREE,
+  // Abrechnungsplan des Pro-Abos, nur informativ (siehe Kopfkommentar).
+  // Bei tier FREE bedeutungslos, bleibt aber gesetzt statt null, damit
+  // Aufrufer nicht zusaetzlich auf tier verzweigen muessen, um den
+  // Default zu kennen.
+  plan: PLANS.INDIVIDUAL,
   // Verbrauchte Frei-Scans (gesamt, kein Reset)
   freeScansUsed: 0,
   // Fair-Use-Zaehler des Abos, monatlich
@@ -56,6 +71,7 @@ function normalize(entitlement = {}) {
   };
   return {
     tier: entitlement?.tier === TIERS.PRO ? TIERS.PRO : TIERS.FREE,
+    plan: entitlement?.plan === PLANS.FAMILY ? PLANS.FAMILY : PLANS.INDIVIDUAL,
     freeScansUsed: toCount(entitlement?.freeScansUsed),
     fairUseMonth:
       typeof entitlement?.fairUseMonth === 'string' ? entitlement.fairUseMonth : null,
@@ -134,9 +150,17 @@ export function addCredits(entitlement, count) {
   return { ...ent, extraCredits: ent.extraCredits + Math.floor(add) };
 }
 
-export function setTier(entitlement, tier) {
+/**
+ * setTier(entitlement, tier, plan)
+ * `plan` nur relevant beim Wechsel auf PRO; faellt ohne Angabe auf
+ * 'individual' zurueck. Ein Wechsel zurueck auf FREE setzt den Plan
+ * ebenfalls auf 'individual' zurueck (kein bedeutungsloser Rest-Zustand).
+ */
+export function setTier(entitlement, tier, plan) {
   const ent = normalize(entitlement);
-  return { ...ent, tier: tier === TIERS.PRO ? TIERS.PRO : TIERS.FREE };
+  const nextTier = tier === TIERS.PRO ? TIERS.PRO : TIERS.FREE;
+  const nextPlan = nextTier === TIERS.PRO && plan === PLANS.FAMILY ? PLANS.FAMILY : PLANS.INDIVIDUAL;
+  return { ...ent, tier: nextTier, plan: nextPlan };
 }
 
 /**
@@ -157,7 +181,8 @@ export function canUseProFeature(entitlement) {
  * Scans.
  */
 export function applyPurchaseStatus(entitlement, mapped) {
-  return setTier(entitlement, mapped?.isPro ? TIERS.PRO : TIERS.FREE);
+  const plan = planFromProductId(mapped?.productId) ?? PLANS.INDIVIDUAL;
+  return setTier(entitlement, mapped?.isPro ? TIERS.PRO : TIERS.FREE, plan);
 }
 
 /** Darf ein weiteres Praeparat angelegt werden? */

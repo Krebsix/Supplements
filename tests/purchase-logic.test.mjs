@@ -40,7 +40,7 @@ function makeSdk() {
   return {
     calls,
     PURCHASES_ERROR_CODE: { PURCHASE_CANCELLED_ERROR: 'CANCELLED' },
-    getOfferings: async () => ({ current: { availablePackages: [pkg('pro_yearly'), pkg('pro_monthly'), pkg('credits_10'), pkg('credits_50')] } }),
+    getOfferings: async () => ({ current: { availablePackages: [pkg('pro_yearly'), pkg('pro_monthly'), pkg('pro_family_yearly'), pkg('pro_family_monthly'), pkg('credits_10'), pkg('credits_50')] } }),
     purchasePackage: async (p) => {
       calls.push(['purchase', p.identifier]);
       if (p.identifier === 'cancel') { const e = new Error('cancelled'); e.userCancelled = true; throw e; }
@@ -56,6 +56,20 @@ function makeSdk() {
   const sdk = makeSdk();
   const offers = await loadOfferings(sdk);
   check('Pakete zugeordnet', offers.yearly.identifier === 'pro_yearly' && offers.monthly.identifier === 'pro_monthly' && offers.credits.length === 2);
+  check(
+    'Familien-Pakete zugeordnet (Decision 2026-09-03)',
+    offers.familyYearly.identifier === 'pro_family_yearly' && offers.familyMonthly.identifier === 'pro_family_monthly'
+  );
+  const noFamilyPkg = (id) => ({ identifier: id, product: { identifier: id, priceString: '29,99 €' } });
+  const sdkWithoutFamily = makeSdk();
+  sdkWithoutFamily.getOfferings = async () => ({
+    current: { availablePackages: [noFamilyPkg('pro_yearly'), noFamilyPkg('pro_monthly')] },
+  });
+  const offersWithoutFamily = await loadOfferings(sdkWithoutFamily);
+  check(
+    'fehlen Familien-Produkte im Offering (noch kein Apple-Setup): null statt Absturz',
+    offersWithoutFamily.familyYearly === null && offersWithoutFamily.familyMonthly === null
+  );
   check('ohne current: null', (await loadOfferings({ getOfferings: async () => ({ current: null }) })) === null);
   const bought = await purchase(sdk, offers.yearly);
   check('Kauf liefert customerInfo und productId', !bought.cancelled && bought.productId === 'pro_yearly' && bought.customerInfo);

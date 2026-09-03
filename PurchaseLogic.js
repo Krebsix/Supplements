@@ -58,6 +58,12 @@ export async function loadOfferings(sdk) {
   return {
     yearly: byProduct(PRODUCT_IDS.yearly),
     monthly: byProduct(PRODUCT_IDS.monthly),
+    // Familien-Abo (Decision 2026-09-03): null, solange RevenueCat die
+    // Produkte nicht kennt (leere Keys, oder Apple-Enrollment noch nicht
+    // abgeschlossen) -- genau wie yearly/monthly heute schon, kein
+    // Sonderfall im Aufrufer noetig.
+    familyYearly: byProduct(PRODUCT_IDS.familyYearly),
+    familyMonthly: byProduct(PRODUCT_IDS.familyMonthly),
     credits: [PRODUCT_IDS.credits10, PRODUCT_IDS.credits50].map(byProduct).filter(Boolean),
   };
 }

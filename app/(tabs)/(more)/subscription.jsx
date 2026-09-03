@@ -9,7 +9,7 @@ import {
   REFUND_URL_ANDROID,
   REFUND_URL_IOS,
 } from '../../../purchaseConfig';
-import { evaluateVisionScan, isPro } from '../../../Entitlements';
+import { PLANS, evaluateVisionScan, isPro } from '../../../Entitlements';
 import usePurchaseStore from '../../../usePurchaseStore';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
@@ -81,6 +81,9 @@ export default function SubscriptionScreen() {
 
       <View style={styles.statusCard}>
         <Text style={styles.statusText}>{statusText}</Text>
+        {proTier && entitlement.plan === PLANS.FAMILY ? (
+          <Text style={styles.planBadge}>{t('subscription.planFamily')}</Text>
+        ) : null}
         {platform === 'ios' || platform === 'android' ? (
           <Text style={styles.platformText}>{t(`subscription.platform.${platform}`)}</Text>
         ) : null}
@@ -176,6 +179,7 @@ const styles = StyleSheet.create({
   title: { ...type.display, marginBottom: space.lg },
   statusCard: { ...surfaces.card, borderColor: colors.ruleStrong },
   statusText: { ...type.bodyStrong },
+  planBadge: { ...type.small, color: colors.accent, marginTop: 2 },
   platformText: { ...type.small, marginTop: space.xs },
   noticeCard: {
     backgroundColor: colors.surfaceSunken,

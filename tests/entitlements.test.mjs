@@ -7,9 +7,11 @@ import {
   FREE_MAX_SUPPLEMENTS,
   FREE_VISION_SCANS,
   PAYWALL_ENFORCED,
+  PLANS,
   PRO_MONTHLY_FAIR_USE,
   TIERS,
   addCredits,
+  applyPurchaseStatus,
   applyVisionScan,
   canAddSupplement,
   evaluateVisionScan,
@@ -17,6 +19,7 @@ import {
   monthKey,
   setTier,
 } from '../Entitlements';
+import { PRODUCT_IDS, planFromProductId } from '../purchaseConfig';
 
 let failures = 0;
 
@@ -78,6 +81,48 @@ check('Free: unter der Grenze erlaubt', canAddSupplement(EMPTY_ENTITLEMENT, FREE
 check('Free: an der Grenze nicht mehr', canAddSupplement(EMPTY_ENTITLEMENT, FREE_MAX_SUPPLEMENTS).withinLimit === false);
 check('Pro: keine Grenze', canAddSupplement(setTier(EMPTY_ENTITLEMENT, TIERS.PRO), 50).withinLimit === true);
 check('bei abgeschalteter Paywall immer erlaubt', canAddSupplement(EMPTY_ENTITLEMENT, 99).allowed === true);
+
+console.log('— Familien-Abo (Decision 2026-09-03) —');
+check('Default-Plan ist individual', EMPTY_ENTITLEMENT.plan === PLANS.INDIVIDUAL);
+check(
+  'setTier(PRO, family) setzt den Familienplan',
+  setTier(EMPTY_ENTITLEMENT, TIERS.PRO, PLANS.FAMILY).plan === PLANS.FAMILY
+);
+check(
+  'setTier(PRO) ohne Plan-Angabe faellt auf individual zurueck',
+  setTier(EMPTY_ENTITLEMENT, TIERS.PRO).plan === PLANS.INDIVIDUAL
+);
+check(
+  'Zurueck auf FREE setzt den Plan wieder auf individual',
+  setTier(setTier(EMPTY_ENTITLEMENT, TIERS.PRO, PLANS.FAMILY), TIERS.FREE).plan === PLANS.INDIVIDUAL
+);
+check(
+  'Familien- und Einzel-Plan schalten dieselben Features frei (kein zweites Gate)',
+  isPro(setTier(EMPTY_ENTITLEMENT, TIERS.PRO, PLANS.FAMILY)) === isPro(setTier(EMPTY_ENTITLEMENT, TIERS.PRO, PLANS.INDIVIDUAL))
+);
+check(
+  'planFromProductId erkennt beide Familien-Produkte',
+  planFromProductId(PRODUCT_IDS.familyYearly) === PLANS.FAMILY &&
+    planFromProductId(PRODUCT_IDS.familyMonthly) === PLANS.FAMILY
+);
+check(
+  'planFromProductId erkennt beide Einzel-Produkte',
+  planFromProductId(PRODUCT_IDS.yearly) === PLANS.INDIVIDUAL &&
+    planFromProductId(PRODUCT_IDS.monthly) === PLANS.INDIVIDUAL
+);
+check('planFromProductId: unbekannte ID → null', planFromProductId('irgendwas') === null);
+check(
+  'applyPurchaseStatus setzt den Plan aus dem gekauften Produkt',
+  applyPurchaseStatus(EMPTY_ENTITLEMENT, { isPro: true, productId: PRODUCT_IDS.familyMonthly }).plan === PLANS.FAMILY
+);
+check(
+  'applyPurchaseStatus ohne erkennbares Produkt faellt auf individual zurueck',
+  applyPurchaseStatus(EMPTY_ENTITLEMENT, { isPro: true, productId: null }).plan === PLANS.INDIVIDUAL
+);
+check(
+  'kaputter plan-Wert wird normalisiert statt uebernommen',
+  applyVisionScan({ ...EMPTY_ENTITLEMENT, plan: 'not-a-real-plan' }, AUG).plan === PLANS.INDIVIDUAL
+);
 
 console.log('— Robustheit —');
 check('kaputter Zustand wird normalisiert', evaluateVisionScan({ tier: 'x', freeScansUsed: -2, extraCredits: 'y' }, AUG).source === 'free');

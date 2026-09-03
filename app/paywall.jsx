@@ -126,6 +126,10 @@ export default function PaywallScreen() {
         </View>
       ) : offerings ? (
         <>
+          {offerings.yearly || offerings.monthly ? (
+            <Text style={styles.sectionTitle}>{t('paywall.plan.individual')}</Text>
+          ) : null}
+
           {offerings.yearly ? (
             <PlanCard
               t={t}
@@ -144,6 +148,34 @@ export default function PaywallScreen() {
               priceLabel={t('paywall.perMonth', { price: offerings.monthly.product.priceString })}
               onBuy={() => handleBuy(offerings.monthly, false)}
             />
+          ) : null}
+
+          {/* Familien-Abo (Decision 2026-09-03): erscheint erst, sobald
+              RevenueCat die Produkte kennt (Apple-Enrollment steht noch
+              aus) -- bis dahin unsichtbar statt eines toten Angebots. */}
+          {offerings.familyYearly || offerings.familyMonthly ? (
+            <>
+              <Text style={styles.sectionTitle}>{t('paywall.plan.family')}</Text>
+              <Text style={styles.body}>{t('paywall.familyNote')}</Text>
+              {offerings.familyYearly ? (
+                <PlanCard
+                  t={t}
+                  pkg={offerings.familyYearly}
+                  name={t('paywall.familyYearly')}
+                  priceLabel={t('paywall.perYear', { price: offerings.familyYearly.product.priceString })}
+                  onBuy={() => handleBuy(offerings.familyYearly, false)}
+                />
+              ) : null}
+              {offerings.familyMonthly ? (
+                <PlanCard
+                  t={t}
+                  pkg={offerings.familyMonthly}
+                  name={t('paywall.familyMonthly')}
+                  priceLabel={t('paywall.perMonth', { price: offerings.familyMonthly.product.priceString })}
+                  onBuy={() => handleBuy(offerings.familyMonthly, false)}
+                />
+              ) : null}
+            </>
           ) : null}
 
           {offerings.credits.length > 0 ? (
