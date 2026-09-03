@@ -46,11 +46,19 @@ Vorschlaege beim Anlegen (aktuell nur im bestehenden Tagesplan).
 Mehrere Profile lokal (Ich/Partner/Eltern). Wichtig fuer Aeltere mit
 Medikamenten. Verschluesselung und Backup pro Profil durchdenken.
 
-## 5. Evidence Graph (sehr gross, eigenes Projekt)
-Wirkstoff x Form x Dosis x Outcome x Population mit Evidenzgrad.
-NUR mit derselben Zitat-Disziplin wie medicationClasses (keine
-LLM-generierten Zusammenfassungen als Quelle). Realistisch: schrittweise
-je Top-Wirkstoff, beginnend bei Magnesium/D3/Omega-3.
+## 5. Evidence Graph: PILOT ERLEDIGT 2026-09-03 (Magnesium)
+data/evidenceGraph.js: 3 Anwendungsgebiete fuer Magnesium (Muskelkraempfe,
+Migraene, Schlaf), je mit Kernaussage aus einem echten systematischen
+Review (Cochrane bevorzugt), GRADE-Sicherheitsstufe wie vom Review selbst
+verwendet, eigener Quellenliste. Rendering in SubstanceInsightCard.jsx
+als Abschnitt "Studienlage". 40 Tests (Struktur, Quellenpflicht,
+EN-Paritaet, keine praeskriptive Sprache).
+
+Weiterhin "sehr gross, eigenes Projekt" fuer den vollen Umfang: Vitamin
+D3 und Omega-3 (naechste Kandidaten laut Roadmap) sowie die Dimensionen
+Form und Dosis sind bewusst NICHT im Pilot enthalten. Nicht automatisch
+fortsetzen -- erst Rueckmeldung zum Piloten (Layout, Tonfall,
+Aussagekraft) einholen, dann entscheiden, welche Substanz als naechstes.
 
 ## 6. Positionierung "Supplement Intelligence"
 Story traegt es bereits inhaltlich ("ordnet ein, zitiert Quellen").
