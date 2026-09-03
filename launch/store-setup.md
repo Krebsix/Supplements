@@ -21,19 +21,30 @@ Kein Bau in diesem Task, kein `eas login`.
 
 - App anlegen: Bundle-ID `com.indoohome.mysuplea` (steht schon in `app.json`).
 - Abo-Gruppe "MySuplea Pro" anlegen.
-- Darin zwei Abo-Produkte:
+- Darin vier Abo-Produkte:
   - `pro_yearly`, mit 7-Tage-Trial (Introductory Offer, kostenlose Testphase).
   - `pro_monthly`, ohne Trial.
+  - `pro_family_yearly` (Familien-Abo, Decision 2026-09-03): **"Family
+    Sharing" aktivieren** (Feld "Family Sharable" im Produkt), sonst bleibt
+    es ein normales Einzel-Abo unter Familien-Namen. Kein eigener Trial
+    vorgesehen.
+  - `pro_family_monthly`, ebenfalls mit Family Sharing aktiviert.
 - Zwei Consumables (Verbrauchsartikel, keine Abos):
   - `credits_10`
   - `credits_50`
 - Preise als Apple-Preisstufe eintragen, nicht als fester Betrag: `pro_yearly`
   auf die Stufe fuer 29,99 Euro/Jahr, `pro_monthly` auf die Stufe fuer
-  4,99 Euro/Monat. Apple rechnet daraus die Preise in allen anderen Waehrungen.
+  4,99 Euro/Monat, `pro_family_yearly` auf die Stufe fuer 47,99 Euro/Jahr,
+  `pro_family_monthly` auf die Stufe fuer 7,99 Euro/Monat. Apple rechnet
+  daraus die Preise in allen anderen Waehrungen.
 - Sandbox-Tester anlegen: App Store Connect → Users and Access → Sandbox →
   Testers. Eigene Test-E-Mail-Adresse reicht (muss nicht real empfangsfaehig
   sein, Apple verlangt aber ein neues, noch nie in der App Store benutztes
   Apple-Konto).
+- Familien-Abo testen: Family Sharing braucht eine ECHTE Apple-ID-Familiengruppe
+  (auch im Sandbox), nicht nur einen einzelnen Sandbox-Tester. Zwei
+  Sandbox-Apple-IDs in derselben Sandbox-Familiengruppe anlegen, den Kauf
+  mit der einen taetigen, den Empfang mit der anderen pruefen.
 
 ## 3. Play Console
 
@@ -42,6 +53,12 @@ Kein Bau in diesem Task, kein `eas login`.
   - Abos: `pro_yearly` (mit 7-Tage-Testphase), `pro_monthly`.
   - In-App-Produkte (verwaltet, kein Abo): `credits_10`, `credits_50`.
 - Preise analog: Jahresabo 29,99 Euro, Monatsabo 4,99 Euro.
+- **Kein Familien-Abo auf Android in v1** (Decision 2026-09-03): Google
+  Play hat keine dem Apple Family Sharing gleichwertige automatische
+  Freigabe fuer Abos. `pro_family_yearly`/`pro_family_monthly` NICHT in
+  der Play Console anlegen, solange das nicht eigens umgesetzt wird --
+  `PurchaseLogic.loadOfferings` liefert dann einfach `null` fuer beide,
+  die Paywall zeigt den Familien-Abschnitt auf Android gar nicht erst.
 - Lizenztester eintragen: Play Console → Setup → License testing, die
   eigene Google-Konto-Adresse eintragen. Lizenztester koennen ohne echte
   Abbuchung kaufen.
@@ -53,10 +70,14 @@ Kein Bau in diesem Task, kein `eas login`.
   Integrations → App Store Connect API erzeugen) und die Android-App
   (Play-Service-Account-JSON, in der Google Cloud Console fuer das
   Play-Console-Projekt erzeugen).
-- Entitlement `pro` anlegen und beide Abo-Produkte (`pro_yearly`,
-  `pro_monthly`) daran haengen.
-- Offering `default` mit vier Paketen: Jahresabo, Monatsabo, `credits_10`,
-  `credits_50`.
+- Entitlement `pro` anlegen und ALLE Abo-Produkte daran haengen: `pro_yearly`,
+  `pro_monthly`, `pro_family_yearly`, `pro_family_monthly` (auf iOS; auf
+  Android nur die beiden Einzel-Produkte, siehe Abschnitt Play Console).
+  Ein Familien-Abo schaltet damit exakt dasselbe `pro`-Entitlement frei
+  wie das Einzel-Abo -- `Entitlements.js` unterscheidet die Plaene nur
+  fuer die Anzeige (`plan`), nicht fuer den Funktionsumfang.
+- Offering `default` mit sechs Paketen: Jahresabo, Monatsabo,
+  Familien-Jahresabo, Familien-Monatsabo, `credits_10`, `credits_50`.
 - Offering `default` als Current markieren (RevenueCat → Offerings →
   Make current). `PurchaseLogic.loadOfferings` liest `offerings.current`;
   ohne ein als Current markiertes Offering zeigt die Paywall
