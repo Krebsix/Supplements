@@ -27,6 +27,11 @@ export default {
   'components.insight.sources': 'Quellen',
   'components.insight.showLess': 'Weniger anzeigen',
   'components.insight.showMore': 'Formen und Hinweise anzeigen',
+  'components.insight.evidence': 'Studienlage',
+  'components.insight.evidenceCertainty.high': 'Sicherheit der Evidenz: hoch',
+  'components.insight.evidenceCertainty.moderate': 'Sicherheit der Evidenz: moderat',
+  'components.insight.evidenceCertainty.low': 'Sicherheit der Evidenz: niedrig',
+  'components.insight.evidenceCertainty.very-low': 'Sicherheit der Evidenz: sehr niedrig',
 
   // SupplementResultCard.jsx
   'components.result.fieldStateDetected': 'Erkannt',

@@ -37,6 +37,7 @@ import {
 } from './en/healthConditions';
 import { PAIR_NOTES_EN, INTAKE_NOTES_EN } from './en/interactions';
 import { BFR_MAX_NOTES_EN } from './en/bfrMaxAmounts';
+import { EVIDENCE_SUMMARIES_EN } from './en/evidenceGraph';
 
 const isEnglish = () => getActiveLanguage() === 'en';
 
@@ -172,6 +173,19 @@ export function localizePairNote(a, b, germanNote) {
 export function localizeIntakeNote(substanceId, germanNote) {
   if (!isEnglish()) return germanNote;
   return INTAKE_NOTES_EN[substanceId] ?? germanNote;
+}
+
+/**
+ * Evidence-Graph-Eintrag (data/evidenceGraph.js) in der aktiven Sprache.
+ * `entry` bleibt unveraendert (inkl. sources), nur `summary` und
+ * `population` werden ersetzt, wenn ein EN-Overlay existiert. Schluessel
+ * ist `${substanceId}|${outcome}`.
+ */
+export function localizeEvidenceEntry(substanceId, entry) {
+  if (!isEnglish()) return entry;
+  const overlay = EVIDENCE_SUMMARIES_EN[`${substanceId}|${entry.outcome}`];
+  if (!overlay) return entry;
+  return { ...entry, summary: overlay.summary ?? entry.summary, population: overlay.population ?? entry.population };
 }
 
 /**

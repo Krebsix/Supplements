@@ -214,6 +214,40 @@ export default function SubstanceInsightCard({ profile }) {
         </>
       ) : null}
 
+      {expanded && profile.evidence?.length > 0 ? (
+        <>
+          {/* Evidence Graph (Pilot Magnesium): Kernaussage je
+              Anwendungsgebiet aus systematischen Reviews, mit eigener
+              Quellenliste je Eintrag -- getrennt von den allgemeinen
+              Wirkstoff-Quellen unten, weil jede Aussage ihre eigene
+              Studie zitiert. */}
+          <Text style={styles.sectionLabel}>{t('components.insight.evidence')}</Text>
+          {profile.evidence.map((entry) => (
+            <View key={entry.outcome} style={styles.evidenceEntry}>
+              <Text style={styles.useCaseNote}>{entry.summary}</Text>
+              <Text style={styles.evidenceMeta}>
+                {entry.population} · {t(`components.insight.evidenceCertainty.${entry.certainty}`)}
+              </Text>
+              {entry.sources.map((source, index) => (
+                <TouchableOpacity
+                  key={`${entry.outcome}-${index}`}
+                  disabled={!source.url}
+                  onPress={() => source.url && Linking.openURL(source.url)}
+                  activeOpacity={0.7}
+                  accessibilityRole={source.url ? 'link' : undefined}
+                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                >
+                  <Text style={[styles.sourceText, source.url && styles.sourceTextLinked]}>
+                    {source.url ? '↗ ' : '· '}
+                    {source.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))}
+        </>
+      ) : null}
+
       {expanded ? (
         <>
           {profile.allForms.length > 1 ? (
@@ -465,6 +499,15 @@ const styles = StyleSheet.create({
   useCaseNote: {
     ...type.small,
     marginTop: 2,
+  },
+  evidenceEntry: {
+    marginBottom: space.md,
+  },
+  evidenceMeta: {
+    ...type.tiny,
+    color: colors.inkFaint,
+    marginTop: 2,
+    marginBottom: space.xs,
   },
   formRow: {
     borderTopWidth: 1,

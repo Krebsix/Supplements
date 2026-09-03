@@ -19,8 +19,9 @@ import { convertAmount } from './SubstanceMatcher';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { tr } from './i18n/runtime';
 import { getAdvisories } from './data/lifeStageAdvisories';
-import { localizeAdvisory, localizeBfrMaxNote, localizeSubstanceTexts } from './data/localize';
+import { localizeAdvisory, localizeBfrMaxNote, localizeEvidenceEntry, localizeSubstanceTexts } from './data/localize';
 import { getBfrMaxAmount } from './data/bfrMaxAmounts';
+import { getEvidenceForSubstance } from './data/evidenceGraph';
 import { getReferenceValue } from './data/referenceValues';
 import { normalizeSources } from './data/substances';
 
@@ -319,6 +320,12 @@ export function buildSubstanceProfile(match, lifeStageId) {
     // Einnahme-Hinweis aus der Interaktions-Schicht (belegt, deskriptiv);
     // null, wenn nichts hinterlegt ist — kein generierter Fallback.
     intakeGuidance: getIntakeGuidance(substance.id),
+    // Evidence Graph (Roadmap-Baustein, Pilot Magnesium): Kernaussagen
+    // aus systematischen Reviews je Anwendungsgebiet, leeres Array ohne
+    // hinterlegte Daten -- kein generierter Fallbacktext.
+    evidence: getEvidenceForSubstance(substance.id).map((entry) =>
+      localizeEvidenceEntry(substance.id, entry)
+    ),
     cautionNote: substance.cautionNote ?? '',
     // Was bei zu hoher Zufuhr dokumentiert ist (BfR-Durchgang 2026-09-02);
     // leer, wenn nichts Belegtes hinterlegt ist — kein generierter Text.

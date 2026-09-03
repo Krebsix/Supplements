@@ -26,6 +26,11 @@ export default {
   'components.insight.sources': 'Sources',
   'components.insight.showLess': 'Show less',
   'components.insight.showMore': 'Show forms and notes',
+  'components.insight.evidence': 'Evidence',
+  'components.insight.evidenceCertainty.high': 'Certainty of evidence: high',
+  'components.insight.evidenceCertainty.moderate': 'Certainty of evidence: moderate',
+  'components.insight.evidenceCertainty.low': 'Certainty of evidence: low',
+  'components.insight.evidenceCertainty.very-low': 'Certainty of evidence: very low',
 
   // SupplementResultCard.jsx
   'components.result.fieldStateDetected': 'Detected',
