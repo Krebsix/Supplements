@@ -16,6 +16,7 @@
 
 import Anthropic from "npm:@anthropic-ai/sdk";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { hasFormulaChanged } from "./formulaVersioning.ts";
 
 // Rate-Limit: Der Anon-Key ist oeffentlich (App-Bundle, Repo) und laesst
 // sich ohne diese Sperre per curl beliebig oft aufrufen — jeder Aufruf
@@ -260,12 +261,16 @@ Deno.serve(async (req) => {
     // Nur GEPRUEFTE Eintraege werden an andere ausgeliefert
     // (Pruef-Schleuse, 2026-08-10): ungepruefte Nutzer-Scans bleiben
     // unsichtbar, bis die Redaktion sie freigibt.
+    // superseded_at is null: nur die aktuell gueltige Formula-Version wird
+    // ausgeliefert (Formula Versioning, siehe Migration
+    // 20260903100000_product_cache_formula_versioning.sql).
     const { data, error } = await supabaseAdmin
       .from("product_cache")
-      .select("result, model, hit_count")
+      .select("id, result, model, hit_count")
       .eq("barcode", barcode)
       .eq("language", language)
       .eq("verified", true)
+      .is("superseded_at", null)
       .maybeSingle();
 
     if (error) {
@@ -282,8 +287,7 @@ Deno.serve(async (req) => {
     supabaseAdmin
       .from("product_cache")
       .update({ hit_count: (data.hit_count ?? 0) + 1 })
-      .eq("barcode", barcode)
-      .eq("language", language)
+      .eq("id", data.id)
       .then(() => {}, () => {});
 
     return jsonResponse(200, { result: data.result, model: data.model, cached: true });
@@ -507,21 +511,62 @@ Deno.serve(async (req) => {
         : null;
     const cacheKey = barcode ?? visionBarcode ?? textFallbackKey;
     if (cacheKey) {
-      const { error: cacheError } = await supabaseAdmin
+      // Formula Versioning: erst die aktuell gueltige Version desselben
+      // (barcode, language) holen. Ohne bestehende Version einfach
+      // anlegen (formula_version bleibt beim Spaltendefault 1). Mit
+      // bestehender Version nur dann eine neue anlegen, wenn sich
+      // Zutatenliste oder Dosierung TATSAECHLICH unterscheiden
+      // (hasFormulaChanged) -- sonst waere jede leicht andere
+      // Vision-Auslesung eine neue "Rezeptur" und die Pruef-Schleuse
+      // liefe mit Rauschen statt echten Aenderungen voll.
+      const { data: currentVersion, error: currentVersionError } = await supabaseAdmin
         .from("product_cache")
-        .insert({
-          barcode: cacheKey,
-          language,
-          result,
-          model: response.model,
-          verified: false,
-        })
-        .select()
+        .select("id, result, formula_version")
+        .eq("barcode", cacheKey)
+        .eq("language", language)
+        .is("superseded_at", null)
         .maybeSingle();
-      if (cacheError && cacheError.code !== "23505") {
-        // 23505 = Eintrag existiert bereits — gewolltes Verhalten
-        console.error("product_cache insert failed:", cacheError);
+
+      if (currentVersionError) {
+        console.error("product_cache current-version lookup failed:", currentVersionError);
+      } else if (!currentVersion) {
+        const { error: insertError } = await supabaseAdmin
+          .from("product_cache")
+          .insert({ barcode: cacheKey, language, result, model: response.model, verified: false })
+          .select()
+          .maybeSingle();
+        if (insertError && insertError.code !== "23505") {
+          // 23505 = im selben Moment bereits von einer anderen Anfrage
+          // angelegt (Race) — gewolltes Verhalten, kein Fehler.
+          console.error("product_cache insert failed:", insertError);
+        }
+      } else if (hasFormulaChanged(currentVersion.result, result)) {
+        const { error: supersedeError } = await supabaseAdmin
+          .from("product_cache")
+          .update({ superseded_at: new Date().toISOString() })
+          .eq("id", currentVersion.id);
+        if (supersedeError) {
+          console.error("product_cache supersede failed:", supersedeError);
+        } else {
+          const { error: versionInsertError } = await supabaseAdmin
+            .from("product_cache")
+            .insert({
+              barcode: cacheKey,
+              language,
+              result,
+              model: response.model,
+              verified: false,
+              formula_version: currentVersion.formula_version + 1,
+            })
+            .select()
+            .maybeSingle();
+          if (versionInsertError) {
+            console.error("product_cache version insert failed:", versionInsertError);
+          }
+        }
       }
+      // Sonst: bestehende Version deckt sich mit dem neuen Treffer,
+      // nichts zu tun.
     }
 
     return jsonResponse(200, {
