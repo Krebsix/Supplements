@@ -10,6 +10,14 @@ export default {
   'results.modeDemoFallback': 'Testanalyse',
   'results.modeMock': 'Test-Ergebnis',
   'results.modeDefault': 'Scan vorhanden',
+  // Herkunfts-Hinweis (BarcodeLookup.js originCountryFromTags): OFF fuehrt
+  // Verkaufslaender, nicht das Herstellungsland -- Formulierung haelt das offen.
+  'results.originDach': 'Auch in {country} verkauft',
+  'results.originOther': 'Verkauft in {country}',
+  'results.originHint': 'Laut Open Food Facts, nicht das Herstellungsland',
+  'results.originNames.DE': 'Deutschland',
+  'results.originNames.AT': 'Österreich',
+  'results.originNames.CH': 'der Schweiz',
   'results.title': 'Erst prüfen. Dann übernehmen.',
   'results.subtitle':
     'Die erkannten Angaben sind ein Arbeitsstand. Kontrolliere fehlende und unsichere Felder, bevor daraus ein Eintrag für deinen Tagesplan wird.',

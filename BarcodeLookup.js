@@ -19,7 +19,16 @@ const OFF_FIELDS = [
   'ingredients_text',
   'quantity',
   'serving_size',
+  'countries_tags',
 ].join(',');
+
+// DACH-Laendertags, wie Open Food Facts sie kanonisch fuehrt (immer
+// Englisch, unabhaengig von der Anzeigesprache der Nutzerin).
+const DACH_COUNTRY_CODES = {
+  'en:germany': 'DE',
+  'en:austria': 'AT',
+  'en:switzerland': 'CH',
+};
 const REQUEST_TIMEOUT_MS = 15000;
 
 // Exportiert fuer Tests: reine Normalisierungslogik, kein Netzwerkzugriff.
@@ -167,6 +176,40 @@ export async function searchProductsByName(query) {
 }
 
 /**
+ * originCountryFromTags(countriesTags)
+ * Leitet aus den OFF-Laendertags eine Herkunfts-Kennzeichnung ab.
+ *
+ * WICHTIG: Open Food Facts fuehrt hier die Verkaufslaender eines Produkts
+ * (wo es angeboten wird), nicht zwingend das Herstellungsland. Die
+ * Kennzeichnung ist deshalb eine "wird auch in X verkauft"-Aussage, keine
+ * Herkunftsgarantie -- die Formulierung im UI muss das offenhalten.
+ *
+ * Steht eines der DACH-Laender in der Liste, hat es Vorrang (der relevante
+ * Fall fuer die Kennzeichnung). Sonst wird das erste gelistete Land lesbar
+ * aufbereitet ("en:united-states" -> "United States"). Fehlt die Angabe
+ * ganz, bleibt es bei null -- keine erfundene Herkunft.
+ */
+export function originCountryFromTags(countriesTags) {
+  if (!Array.isArray(countriesTags) || countriesTags.length === 0) return null;
+
+  for (const tag of countriesTags) {
+    const code = DACH_COUNTRY_CODES[cleanText(tag).toLowerCase()];
+    if (code) return { code, isDach: true };
+  }
+
+  const first = cleanText(countriesTags[0]).toLowerCase();
+  if (!first.startsWith('en:')) return null;
+  const name = first
+    .slice(3)
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(' ');
+  if (!name) return null;
+  return { code: name, isDach: false };
+}
+
+/**
  * mapOffProductToScanResult(product, code)
  * Reine Mapping-/Normalisierungslogik: OFF-Produktobjekt → Scan-Ergebnis
  * im App-Format. Bewusst ohne Netzwerkzugriff, damit sie isoliert testbar
@@ -198,5 +241,6 @@ export function mapOffProductToScanResult(product, code) {
     analysisMode: 'barcode-off',
     barcode: code,
     analyzedAt: new Date().toISOString(),
+    origin: originCountryFromTags(product.countries_tags),
   };
 }

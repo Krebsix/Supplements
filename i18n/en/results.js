@@ -12,6 +12,14 @@ export default {
   'results.modeDemoFallback': 'Test analysis',
   'results.modeMock': 'Test result',
   'results.modeDefault': 'Scan available',
+  // Origin hint (BarcodeLookup.js originCountryFromTags): OFF tracks
+  // countries of sale, not the country of manufacture -- wording keeps that open.
+  'results.originDach': 'Also sold in {country}',
+  'results.originOther': 'Sold in {country}',
+  'results.originHint': 'According to Open Food Facts, not the country of manufacture',
+  'results.originNames.DE': 'Germany',
+  'results.originNames.AT': 'Austria',
+  'results.originNames.CH': 'Switzerland',
   'results.title': 'Review first. Then adopt it.',
   'results.subtitle':
     'The detected fields are a draft. Review missing and uncertain fields before they become an entry in your daily plan.',

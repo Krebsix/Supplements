@@ -59,6 +59,21 @@ export default function ResultsScreen() {
             ? t('results.modeMock')
             : t('results.modeDefault');
 
+  // Herkunfts-Hinweis (BarcodeLookup.js originCountryFromTags): zeigt nur,
+  // was Open Food Facts als Verkaufsland fuehrt -- keine Herstellungsgarantie,
+  // deshalb "auch verkauft in" statt "kommt aus".
+  const origin = result?.origin ?? null;
+  const originCountryName = origin
+    ? origin.isDach
+      ? t(`results.originNames.${origin.code}`)
+      : origin.code
+    : '';
+  const originLabel = origin
+    ? origin.isDach
+      ? t('results.originDach', { country: originCountryName })
+      : t('results.originOther', { country: originCountryName })
+    : '';
+
   const brandDetected =
     hasText(result?.brand) && result.brand !== 'Demo Brand';
 
@@ -139,6 +154,16 @@ export default function ResultsScreen() {
             </Text>
           </View>
         </View>
+
+        {origin ? (
+          <View
+            style={styles.originBadge}
+            accessibilityLabel={originLabel}
+            accessibilityHint={t('results.originHint')}
+          >
+            <Text style={styles.originBadgeText}>{originLabel}</Text>
+          </View>
+        ) : null}
 
         <Text style={styles.title}>
           {t('results.title')}
@@ -329,6 +354,23 @@ const styles = StyleSheet.create({
     color: colors.accent,
     fontSize: 10,
     fontWeight: '700',
+  },
+  // Herkunfts-Hinweis: neutrale Optik wie jede andere Metazeile, kein
+  // Warn- oder Werbeton (gleiche Bauweise wie der OFF-Badge in
+  // components/SupplementResultCard.jsx, search.jsx, brands.jsx).
+  originBadge: {
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: colors.rule,
+    borderRadius: radius.sm,
+    paddingHorizontal: space.sm - 2,
+    paddingVertical: 2,
+    marginTop: space.sm,
+  },
+  originBadgeText: {
+    ...type.tiny,
+    fontSize: 10,
+    lineHeight: 12,
   },
   title: {
     ...type.display,

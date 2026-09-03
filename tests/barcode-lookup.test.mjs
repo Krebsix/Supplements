@@ -21,7 +21,7 @@ global.fetch = () => {
   throw new Error('fetch darf in diesem Test nicht aufgerufen werden');
 };
 
-import { mapOffProductToScanResult, cleanText, splitIngredients, lookupBarcode, extractProductCode } from '../BarcodeLookup.js';
+import { mapOffProductToScanResult, cleanText, splitIngredients, lookupBarcode, extractProductCode, originCountryFromTags } from '../BarcodeLookup.js';
 
 let failed = 0;
 function check(name, cond, extra = '') {
@@ -93,6 +93,38 @@ check('productName faellt auf Englisch zurueck, wenn Deutsch fehlt',
 check('detectedIngredients faellt auf Englisch zurueck',
   JSON.stringify(mappedEnglish.detectedIngredients) ===
   JSON.stringify(['Zinc picolinate', 'Cellulose']));
+
+console.log('\n— originCountryFromTags: Herkunfts-Kennzeichnung —');
+
+check('DACH-Land Deutschland → Kuerzel DE',
+  JSON.stringify(originCountryFromTags(['en:germany'])) === JSON.stringify({ code: 'DE', isDach: true }));
+check('DACH-Land Oesterreich → Kuerzel AT',
+  JSON.stringify(originCountryFromTags(['en:austria'])) === JSON.stringify({ code: 'AT', isDach: true }));
+check('DACH-Land Schweiz → Kuerzel CH',
+  JSON.stringify(originCountryFromTags(['en:switzerland'])) === JSON.stringify({ code: 'CH', isDach: true }));
+check('DACH-Land hat Vorrang, auch wenn zuerst ein anderes Land steht',
+  JSON.stringify(originCountryFromTags(['en:france', 'en:germany'])) === JSON.stringify({ code: 'DE', isDach: true }));
+check('Kein DACH-Land: erstes Land lesbar aufbereitet, isDach false',
+  JSON.stringify(originCountryFromTags(['en:united-states'])) === JSON.stringify({ code: 'United States', isDach: false }));
+check('Leeres Array → null (keine erfundene Herkunft)',
+  originCountryFromTags([]) === null);
+check('Fehlendes Feld (undefined) → null',
+  originCountryFromTags(undefined) === null);
+check('Nicht-Array-Eingabe → null',
+  originCountryFromTags('en:germany') === null);
+
+console.log('\n— mapOffProductToScanResult: Herkunft im Ergebnis —');
+
+const withCountry = mapOffProductToScanResult(
+  { product_name: 'Vitamin D3', countries_tags: ['en:germany'] },
+  '333'
+);
+check('origin wird aus countries_tags abgeleitet',
+  JSON.stringify(withCountry.origin) === JSON.stringify({ code: 'DE', isDach: true }));
+
+const withoutCountry = mapOffProductToScanResult({ product_name: 'Ohne Laenderangabe' }, '444');
+check('Ohne countries_tags: origin bleibt null statt geraten',
+  withoutCountry.origin === null);
 
 console.log('\n— mapOffProductToScanResult: fehlende Felder statt erfundener Werte —');
 
