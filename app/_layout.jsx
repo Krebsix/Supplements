@@ -121,9 +121,25 @@ export default function Layout() {
       }
     });
     // Beim Zurueckkehren in den Vordergrund offene Aenderungen nachholen.
+    //
+    // WICHTIG fuer Erinnerungen: Ohne diesen Zweig plant refreshNotificationSchedule()
+    // nur beim App-Start (kaltem Mount dieses Effekts) und bei bestimmten
+    // Datenaenderungen neu -- NotificationScheduler.js plant aber immer nur
+    // "heute" und ueberspringt bereits vergangene Slot-Zeiten ersatzlos,
+    // ohne sie fuer morgen neu anzulegen. Wer die App nicht taeglich komplett
+    // neu startet, sondern wie ueblich aus dem Hintergrund zurueckholt, bekam
+    // dadurch nach dem ersten Tag nie wieder eine Erinnerung (Geraetetest-
+    // Befund 2026-09-03). Jeder Vordergrund-Wechsel erneuert den Plan jetzt
+    // ebenfalls, wie es der Kommentar in refreshSchedule() (useNotificationStore.js)
+    // von Anfang an vorsah ("beim App-Start"), nur dass "App-Start" fuer
+    // Nutzerinnen auch das Zurueckholen aus dem Hintergrund meint, nicht nur
+    // den kalten Prozessstart.
     const appState = AppState.addEventListener('change', (next) => {
-      if (next === 'active' && useCloudBackupStore.getState().dirty) {
-        useCloudBackupStore.getState().scheduleUpload();
+      if (next === 'active') {
+        if (useCloudBackupStore.getState().dirty) {
+          useCloudBackupStore.getState().scheduleUpload();
+        }
+        refreshNotificationSchedule().catch(() => {});
       }
     });
 
