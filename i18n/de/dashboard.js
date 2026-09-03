@@ -149,6 +149,8 @@ export default {
   'dashboard.reason.synergy': 'Zusammen mit {partner}:',
   'dashboard.reason.sourceHint': 'Quelle antippen für das vollständige Zitat',
   'dashboard.reason.openSource': 'Quelle öffnen',
+  'dashboard.reason.moveTo': 'Auf {slot} verschieben',
+  'dashboard.reason.moveHint': 'Verschiebt dieses Präparat in einen bereits genutzten Slot ohne den Partner-Wirkstoff',
   // Hinweis nach einer Cloud-Wiederherstellung beim Start.
   'dashboard.restored.title': 'Stand übernommen',
   'dashboard.restored.text': 'Stand vom {time} von {device}: {supplements} Präparate, {labValues} Laborwerte.',

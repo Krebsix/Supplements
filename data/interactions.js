@@ -18,6 +18,13 @@
  * Praxis benannt ("wird zeitlich getrennt eingenommen"), nicht als
  * Anweisung. Severity-Stufen wie in StackAnalyzer: 'critical' | 'notice'
  * | 'info'; 'synergy' fuer foerderliche Kombinationen.
+ *
+ * alwaysSeparate: true (StackConflictResolver.js, Baustein "Stack
+ * Conflict Resolver", 2026-09-03): NUR bei Regeln, deren Text die
+ * Trennung UNBEDINGT nennt, nicht dosisabhaengig macht und keine
+ * Synergie ist. Editorisch gesetzt, nicht aus severity abgeleitet --
+ * severity 'info' heisst hier oft "nur bei hohen Dosen", das waere als
+ * pauschaler Verschiebungs-Vorschlag mehr, als die Quelle hergibt.
  */
 
 export const PAIR_RULES = [
@@ -25,6 +32,7 @@ export const PAIR_RULES = [
     a: 'iron',
     b: 'calcium',
     severity: 'notice',
+    alwaysSeparate: true,
     note: 'Calcium hemmt die Aufnahme von Eisen bei gleichzeitiger Einnahme. Die beiden werden üblicherweise zeitlich getrennt eingenommen (mehrere Stunden Abstand).',
     sources: [
       { label: 'NIH ODS: Iron Fact Sheet for Health Professionals', url: 'https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/' },
@@ -34,6 +42,7 @@ export const PAIR_RULES = [
     a: 'iron',
     b: 'zinc',
     severity: 'notice',
+    alwaysSeparate: true,
     note: 'Hochdosiertes Eisen und Zink konkurrieren um dieselben Aufnahmewege. Bei Supplement-Dosen beider Stoffe ist eine zeitlich getrennte Einnahme dokumentierte Praxis.',
     sources: [
       { label: 'NIH ODS: Zinc Fact Sheet for Health Professionals', url: 'https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/' },
@@ -70,6 +79,7 @@ export const PAIR_RULES = [
     a: 'green-tea-extract-egcg',
     b: 'iron',
     severity: 'notice',
+    alwaysSeparate: true,
     note: 'Grüntee-Polyphenole (EGCG) binden Nicht-Häm-Eisen und senken dessen Aufnahme deutlich. Eisenpräparate und Grüntee-Extrakt werden zeitlich getrennt eingenommen.',
     sources: [
       { label: 'NIH ODS: Iron Fact Sheet for Health Professionals', url: 'https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/' },

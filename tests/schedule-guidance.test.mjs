@@ -78,6 +78,48 @@ check(
   !g4.conflicts.some((c) => c.partnerSupplementName === 'Vitamin C Kapseln')
 );
 
+console.log('— Verschiebungs-Vorschlag (alwaysSeparate) —');
+// Eisen/Calcium traegt alwaysSeparate: true (data/interactions.js).
+// Zink/Kupfer ist eine Regel OHNE alwaysSeparate (langfristiges
+// Mengenverhaeltnis, keine Tageszeit-Aussage) -- dort darf kein
+// Vorschlag entstehen, auch mit passendem Tagesplan.
+import { SLOTS } from '../TimingEngine';
+
+const ironCalciumRule = PAIR_RULES.find(
+  (r) => r.alwaysSeparate && ((r.a === 'iron' && r.b === 'calcium') || (r.a === 'calcium' && r.b === 'iron'))
+);
+check('Testvoraussetzung: Eisen/Calcium hat alwaysSeparate', Boolean(ironCalciumRule));
+
+const ironForMove = sup('Eisen', [[getSubstance('iron').name, '14', 'mg']]);
+const calciumForMove = sup('Calcium', [[getSubstance('calcium').name, '500', 'mg']]);
+const scheduleWithAlternative = [
+  { slot: SLOTS.morning, supplements: [ironForMove, calciumForMove] },
+  { slot: SLOTS.evening, supplements: [{ id: 'user-other' }] },
+];
+const gMove = buildEntryGuidance(ironForMove, [ironForMove, calciumForMove], scheduleWithAlternative);
+const moveConflict = gMove.conflicts.find((c) => c.partnerSupplementName === 'Calcium');
+check('alwaysSeparate-Konflikt traegt einen Verschiebungs-Vorschlag', Boolean(moveConflict?.move));
+check('Vorschlag zeigt auf einen heute bereits genutzten Slot', moveConflict?.move?.slotId === 'evening');
+
+check(
+  'ohne Tagesplan (dailySchedule-Default): kein Absturz, move bleibt leer',
+  buildEntryGuidance(ironForMove, [ironForMove, calciumForMove]).conflicts.find(
+    (c) => c.partnerSupplementName === 'Calcium'
+  )?.move == null
+);
+
+const zincSup = sup('Zink', [[getSubstance('zinc').name, '10', 'mg']]);
+const copperSup = sup('Kupfer', [[getSubstance('copper').name, '1', 'mg']]);
+const gNoMove = buildEntryGuidance(zincSup, [zincSup, copperSup], [
+  { slot: SLOTS.morning, supplements: [zincSup, copperSup] },
+  { slot: SLOTS.evening, supplements: [{ id: 'user-other' }] },
+]);
+const noMoveConflict = gNoMove.conflicts.find((c) => c.partnerSupplementName === 'Kupfer');
+check(
+  'Zink/Kupfer ohne alwaysSeparate: Konflikt erscheint, aber ohne Verschiebungs-Vorschlag',
+  Boolean(noMoveConflict) && noMoveConflict.move == null
+);
+
 console.log('— EN-Overlay —');
 setActiveLanguage('en');
 const g5 = buildEntryGuidance(iron, [iron]);

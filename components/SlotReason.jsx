@@ -38,7 +38,7 @@ function sourceLabel(sources) {
  * Satz, das vollstaendige Zitat gehoert an diese Stelle, nicht in die
  * Wirkstoffsuche (die kennt Paar-Regeln zwischen zwei Praeparaten nicht).
  */
-export default function SlotReason({ guidance, onOpenSubstance }) {
+export default function SlotReason({ guidance, onOpenSubstance, onApplyMove }) {
   const { t } = useTranslation();
   const notes = guidance?.notes ?? [];
   const conflicts = guidance?.conflicts ?? [];
@@ -91,22 +91,42 @@ export default function SlotReason({ guidance, onOpenSubstance }) {
         const tone = toneFor(conflict.severity);
         const source = sourceLabel(conflict.sources);
         return (
-          <TouchableOpacity
-            key={`${conflict.substanceId}-${conflict.partnerSubstanceId}`}
-            style={styles.row}
-            onPress={() => openQuote(conflict)}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityHint={t('dashboard.reason.sourceHint')}
-            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-          >
-            <Feather name="alert-circle" size={13} color={tone.ink} style={styles.icon} />
-            <Text style={[styles.text, { color: tone.ink }]}>
-              {t('dashboard.reason.conflict', { partner: conflict.partnerSupplementName })}{' '}
-              {firstSentence(conflict.text)}
-              {source ? <Text style={styles.source}> · {source}</Text> : null}
-            </Text>
-          </TouchableOpacity>
+          <View key={`${conflict.substanceId}-${conflict.partnerSubstanceId}`}>
+            <TouchableOpacity
+              style={styles.row}
+              onPress={() => openQuote(conflict)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityHint={t('dashboard.reason.sourceHint')}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+            >
+              <Feather name="alert-circle" size={13} color={tone.ink} style={styles.icon} />
+              <Text style={[styles.text, { color: tone.ink }]}>
+                {t('dashboard.reason.conflict', { partner: conflict.partnerSupplementName })}{' '}
+                {firstSentence(conflict.text)}
+                {source ? <Text style={styles.source}> · {source}</Text> : null}
+              </Text>
+            </TouchableOpacity>
+            {/* Verschiebungs-Vorschlag: nur wenn StackConflictResolver einen
+                bereits genutzten Alternativ-Slot gefunden hat (siehe
+                ScheduleGuidance.js, alwaysSeparate). Voreinstellung, keine
+                Anweisung -- aendert erst etwas, wenn angetippt. */}
+            {conflict.move ? (
+              <TouchableOpacity
+                style={styles.moveRow}
+                onPress={() => onApplyMove?.(conflict)}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityHint={t('dashboard.reason.moveHint')}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Feather name="corner-down-right" size={12} color={colors.accent} style={styles.icon} />
+                <Text style={styles.moveText}>
+                  {t('dashboard.reason.moveTo', { slot: conflict.move.label })}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         );
       })}
 
@@ -155,5 +175,16 @@ const styles = StyleSheet.create({
   },
   source: {
     ...type.tiny,
+  },
+  moveRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+    marginLeft: 18,
+  },
+  moveText: {
+    ...type.tiny,
+    color: colors.accent,
+    fontWeight: '600',
   },
 });

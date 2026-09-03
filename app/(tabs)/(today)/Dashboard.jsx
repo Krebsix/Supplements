@@ -8,6 +8,7 @@ import { colors, onDark, radius, space, surfaces, toneFor, type, weight } from '
 
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
+import { applySeparation } from '../../../StackConflictResolver';
 import { formatBackupTime } from '../../../CloudBackup';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
 import { countOpen, findNextUp } from '../../../NextUp';
@@ -196,6 +197,7 @@ export default function Dashboard() {
   const logIntake = useStore((state) => state.logIntake);
   const undoIntakeToday = useStore((state) => state.undoIntakeToday);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
+  const updateUserSupplement = useStore((state) => state.updateUserSupplement);
   const getStock = useStore((state) => state.getStock);
   const lastRestore = useCloudBackupStore((state) => state.lastRestore);
   const dismissRestoreNotice = useCloudBackupStore((state) => state.dismissRestoreNotice);
@@ -246,10 +248,22 @@ export default function Dashboard() {
   const guidanceBySupplementId = React.useMemo(() => {
     const map = new Map();
     for (const supplement of activeSupplements) {
-      map.set(supplement.id, buildEntryGuidance(supplement, activeSupplements));
+      map.set(supplement.id, buildEntryGuidance(supplement, activeSupplements, dailySchedule));
     }
     return map;
-  }, [activeSupplements]);
+  }, [activeSupplements, dailySchedule]);
+
+  // Verschiebungs-Vorschlag anwenden (StackConflictResolver.js): ersetzt
+  // nur den betroffenen Slot, andere Slots eines 2x/3x-Praeparats bleiben.
+  function handleApplyMove(supplement, conflict) {
+    if (!conflict?.move) return;
+    const nextSlots = applySeparation(
+      supplement.timingSlots ?? [],
+      conflict.move.fromSlotId,
+      conflict.move.slotId
+    );
+    updateUserSupplement(supplement.id, { timingSlots: nextSlots });
+  }
   // Arbeitsfluss statt Kennzahlen-Wand (Spec Entscheidung 3): erste Flaeche
   // beantwortet "Was nehme ich als Naechstes?", nicht "Wie viel Prozent?".
   const nextUp = findNextUp(dailySchedule);
@@ -668,6 +682,7 @@ export default function Dashboard() {
             onOpenSubstance={(substanceId) =>
               router.push(`/search?substance=${substanceId}`)
             }
+            onApplyMove={(conflict) => handleApplyMove(supplement, conflict)}
           />
           ) : null}
 

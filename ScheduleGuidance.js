@@ -10,10 +10,18 @@
  * niemand hat ihn "entschieden". Eine nachtraeglich erfundene Begruendung
  * waere genau der Fuelltext, den die App nicht schreibt. Was hier steht,
  * hat eine Quelle, oder es steht nicht da.
+ *
+ * Traegt ein Konflikt `alwaysSeparate: true` (siehe data/interactions.js),
+ * wird zusaetzlich ein Verschiebungs-Vorschlag berechnet
+ * (StackConflictResolver.js): ein anderer, HEUTE bereits genutzter Slot
+ * ohne den Partner-Wirkstoff. `dailySchedule` ist optional, damit
+ * bestehende Aufrufer ohne Tagesplan (z. B. Tests) unveraendert
+ * funktionieren -- dann bleibt `move` einfach weg.
  */
 import { extractPositions } from './StackAnalyzer';
 import { findPairInteractions, getIntakeGuidance } from './InteractionCheck';
 import { localizePairNote, localizeIntakeNote } from './data/localize';
+import { suggestSeparationSlot } from './StackConflictResolver';
 
 const MAX_NOTES = 2;
 
@@ -28,7 +36,7 @@ function substanceIdsOf(supplement) {
   return ids;
 }
 
-export function buildEntryGuidance(supplement, activeSupplements = []) {
+export function buildEntryGuidance(supplement, activeSupplements = [], dailySchedule = []) {
   const ownIds = substanceIdsOf(supplement);
 
   const notes = [];
@@ -78,8 +86,18 @@ export function buildEntryGuidance(supplement, activeSupplements = []) {
         sources: rule.sources,
       };
 
-      if (rule.severity === 'synergy') synergies.push(entry);
-      else conflicts.push(entry);
+      if (rule.severity === 'synergy') {
+        synergies.push(entry);
+      } else {
+        if (rule.alwaysSeparate) {
+          entry.move = suggestSeparationSlot({
+            dailySchedule,
+            supplementId: supplement.id,
+            partnerSupplementId: other.id,
+          });
+        }
+        conflicts.push(entry);
+      }
     }
   }
 

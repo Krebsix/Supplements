@@ -146,6 +146,8 @@ export default {
   'dashboard.reason.synergy': 'Together with {partner}:',
   'dashboard.reason.sourceHint': 'Tap the source for the full quote',
   'dashboard.reason.openSource': 'Open source',
+  'dashboard.reason.moveTo': 'Move to {slot}',
+  'dashboard.reason.moveHint': 'Moves this product to an already used slot without the partner substance',
   // Notice after a cloud restore at startup.
   'dashboard.restored.title': 'Backup restored',
   'dashboard.restored.text': 'Backup from {time} from {device}: {supplements} supplements, {labValues} lab values.',
