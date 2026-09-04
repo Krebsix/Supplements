@@ -3,18 +3,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import OnboardingShell from '../components/onboarding/OnboardingShell';
-import StepWelcome from '../components/onboarding/StepWelcome';
-import StepLegal from '../components/onboarding/StepLegal';
-import StepName from '../components/onboarding/StepName';
-import StepGender from '../components/onboarding/StepGender';
-import StepBirthYear from '../components/onboarding/StepBirthYear';
-import StepExtra from '../components/onboarding/StepExtra';
-import StepRoutineTimes from '../components/onboarding/StepRoutineTimes';
-import StepRoutineFirst from '../components/onboarding/StepRoutineFirst';
-import StepAccount from '../components/onboarding/StepAccount';
-import StepDone from '../components/onboarding/StepDone';
-import { extraQuestionFor, resolveLifeStage } from '../LifeStageResolver';
-import { buildSteps, canAdvance } from '../OnboardingSteps';
+import ScreenStart from '../components/onboarding/ScreenStart';
+import ScreenRoutine from '../components/onboarding/ScreenRoutine';
+import { resolveLifeStage } from '../LifeStageResolver';
+import { STEP_IDS, buildSteps, canAdvance } from '../OnboardingSteps';
 import useNotificationStore from '../useNotificationStore';
 import { useStore } from '../useStore';
 import { PRIVACY_VERSION, TERMS_VERSION } from '../data/legalContent';
@@ -38,13 +30,14 @@ function PrimaryButton({ label, onPress, disabled }) {
   );
 }
 
-function QuietButton({ label, onPress }) {
+function QuietButton({ label, onPress, disabled }) {
   return (
     <TouchableOpacity
-      style={styles.quietButton}
-      onPress={onPress}
+      style={[styles.quietButton, disabled && styles.buttonDisabled]}
+      onPress={disabled ? undefined : onPress}
       activeOpacity={0.8}
       accessibilityRole="button"
+      accessibilityState={{ disabled: !!disabled }}
       accessibilityLabel={label}
     >
       <Text style={surfaces.buttonQuietText}>{label}</Text>
@@ -55,18 +48,28 @@ function QuietButton({ label, onPress }) {
 /**
  * OnboardingScreen
  * ─────────────────────────────────────────────────────────────
- * Neun bis zehn Schritte vom Logo zum ersten Tagesplan (siehe
- * docs/superpowers/specs/2026-08-30-onboarding-gefuehrt-design.md,
- * Abschnitt "Ablauf"). Traegt selbst keine Fachlogik: Die Referenzgruppe
- * kommt aus LifeStageResolver.js, das Speichern aus completeOnboarding()
+ * Zwei Bildschirme vom Logo zum ersten Tagesplan (Spec 2026-09-04,
+ * Redesign IA und Marke: die fruehere Neun-Schritt-Folge ist auf
+ * ScreenStart (Anrede, Geschlecht, Geburtsjahr, Zusatzfrage, Rechtstext)
+ * und ScreenRoutine (Einnahmezeiten, erstes Praeparat) gebuendelt.
+ * Traegt selbst keine Fachlogik: Die Referenzgruppe kommt aus
+ * LifeStageResolver.js, welche Schritte es gibt und wann "Weiter" frei
+ * ist aus OnboardingSteps.js, das Speichern aus completeOnboarding()
  * (useStore.js). Dieser Screen verwaltet nur die Antworten im
- * Screen-Zustand und die Schrittfolge, die daraus abgeleitete Liste
- * entscheidet, was als Naechstes kommt.
+ * Screen-Zustand und die Schrittfolge.
  *
  * Antworten leben bewusst NICHT im Store: Bricht die Nutzerin das
  * Onboarding mitten drin ab, beginnt es beim naechsten Start von vorn,
  * es gibt keinen Teilzustand, der widerspruechlich mit einem spaeter
  * doch abgeschlossenen Onboarding kollidieren koennte.
+ *
+ * Das Konto-Angebot ist kein eigener Pflichtschritt mehr: ScreenRoutine
+ * traegt in der Fusszeile einen zweiten, leiseren Knopf ("Konto
+ * anlegen"), der denselben Abschluss ausloest wie der Primaerknopf, nur
+ * mit dem Ziel /account statt /Dashboard. `accountOffered` (Onboarding-
+ * Flag, siehe CLAUDE.md Datenhaltung-Abschnitt) wird unveraendert bei
+ * jedem Abschluss anhand des Alters gesetzt (`!resolved.underage`), ganz
+ * gleich welcher der beiden Knoepfe gedrueckt wurde.
  */
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -84,7 +87,6 @@ export default function OnboardingScreen() {
     extra: null,
     referenceOverride: null,
     firstAction: null,
-    accountChoice: null,
   });
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState('forward');
@@ -101,27 +103,9 @@ export default function OnboardingScreen() {
     [answers.gender, answers.birthYear, answers.extra, answers.referenceOverride]
   );
 
-  // Die Schrittliste haengt bewusst NICHT an `resolved.needsExtra`: Das
-  // wird null, sobald die Zusatzfrage beantwortet ist, und wuerde den
-  // gerade beantworteten Schritt im selben Render aus der Liste werfen.
-  // buildSteps() (OnboardingSteps.js) fragt stattdessen ueber
-  // extraQuestionFor(), ob die Frage fuer diese Person grundsaetzlich
-  // gilt, unabhaengig vom Beantwortet-Status.
-  const steps = useMemo(
-    () => buildSteps({ gender: answers.gender, birthYear: answers.birthYear }),
-    [answers.gender, answers.birthYear]
-  );
-  // Dieselbe Ueberlegung gilt fuer den Inhalt des Extra-Schritts selbst
-  // (StepExtra.jsx): Auch dessen "welche Frage zeige ich" darf nicht an
-  // resolved.needsExtra haengen, sonst zeigt der Schritt seinen leeren
-  // Fallback, sobald eine Auswahl getroffen wird.
-  const extraQuestionKind = useMemo(
-    () => extraQuestionFor({ gender: answers.gender, birthYear: answers.birthYear }),
-    [answers.gender, answers.birthYear]
-  );
-  // Die Liste kann kuerzer werden als der zuletzt gesetzte Index (z. B.
-  // Zusatzfrage faellt weg, weil die Nutzerin eine Etage weiter oben das
-  // Geschlecht gewechselt hat): nie ausserhalb der aktuellen Liste zeigen.
+  // buildSteps() liefert immer genau die zwei Schritte start/routine
+  // (OnboardingSteps.js), unabhaengig von den Antworten.
+  const steps = buildSteps();
   const safeStepIndex = Math.min(stepIndex, steps.length - 1);
   const stepId = steps[safeStepIndex];
 
@@ -132,16 +116,46 @@ export default function OnboardingScreen() {
     setStepIndex(nextIndex);
   };
 
-  // Schritt 1 (Willkommen) und Schritt 2 (Rechtliches) haben keinen
-  // Zurueck-Pfeil: Rechtliches laesst sich nicht ueberspringen, Willkommen
-  // ist der Einstieg selbst.
-  const canGoBack = safeStepIndex >= 2;
+  // Schritt 1 (Start) hat keinen Zurueck-Pfeil, er ist der Einstieg
+  // selbst.
+  const canGoBack = safeStepIndex >= 1;
   const goBack = () => {
     if (!canGoBack) return;
     goTo(safeStepIndex - 1, 'back');
   };
 
-  const finish = () => {
+  const goNext = () => {
+    goTo(safeStepIndex + 1, 'forward');
+  };
+
+  // Die Systemerlaubnis fuer Erinnerungen wird bewusst erst beim
+  // Abschluss abgefragt, nicht schon beim Umlegen des Schalters in
+  // StepRoutineTimes: Der Abschluss-Tipp ist der Moment, in dem die
+  // Nutzerin die Wahl bestaetigt. Ein abgelehntes Promise (native
+  // Anfrage schlaegt fehl) darf den Abschluss nicht stumm blockieren,
+  // deshalb wird das wie eine verweigerte Erlaubnis behandelt und
+  // trotzdem abgeschlossen.
+  const requestNotificationPermissionIfNeeded = async () => {
+    if (!useNotificationStore.getState().notificationsEnabled) return;
+    let granted = false;
+    try {
+      granted = await checkAndRequestPermission();
+    } catch (error) {
+      console.error('[Onboarding] Push-Erlaubnis', error);
+      granted = false;
+    }
+    if (!granted) {
+      setNotificationsEnabled(false);
+      setPermissionDenied(true);
+    }
+  };
+
+  // finish() ersetzt den frueheren StepDone-Zwischenscreen: Abschluss
+  // passiert direkt vom letzten Schritt aus, target ist /Dashboard fuer
+  // den Primaerknopf oder /account fuer den leiseren Konto-Knopf in
+  // ScreenRoutine.
+  const finish = async (target) => {
+    await requestNotificationPermissionIfNeeded();
     completeOnboarding({
       lifeStageId: resolved.lifeStageId,
       privacyVersion: PRIVACY_VERSION,
@@ -154,120 +168,35 @@ export default function OnboardingScreen() {
       firstAction: answers.firstAction,
       accountOffered: !resolved.underage,
     });
-    const target =
-      answers.accountChoice === 'create'
-        ? '/account'
-        : answers.firstAction === 'scan'
-        ? '/scanner'
-        : answers.firstAction === 'search'
-        ? '/search'
-        : '/Dashboard';
-    // Der zustand-Set oben ist synchron, aber die (tabs)-Screens hinter
-    // dem Stack.Protected-Gate (app/_layout.jsx) sind erst nach dem
+    // Der zustand-Set oben ist synchron, aber die Screens hinter dem
+    // Stack.Protected-Gate (app/_layout.jsx) sind erst nach dem
     // naechsten Render gemountet. Direktes replace() faende sie noch
     // nicht, ein Tick Verzoegerung reicht.
     setTimeout(() => router.replace(target), 0);
   };
 
-  const goNext = async () => {
-    if (stepId === 'routineTimes' && useNotificationStore.getState().notificationsEnabled) {
-      // Die Systemerlaubnis wird bewusst erst hier abgefragt, nicht schon
-      // beim Umlegen des Schalters: Der Weiter-Tipp ist der Moment, in dem
-      // die Nutzerin die Wahl bestaetigt. Ein abgelehntes Promise (native
-      // Anfrage schlaegt fehl) darf "Weiter" nicht stumm blockieren, deshalb
-      // wird wie eine verweigerte Erlaubnis behandelt und trotzdem
-      // weitergegangen.
-      let granted = false;
-      try {
-        granted = await checkAndRequestPermission();
-      } catch (error) {
-        console.error('[Onboarding] Push-Erlaubnis', error);
-        granted = false;
-      }
-      if (!granted) {
-        setNotificationsEnabled(false);
-        setPermissionDenied(true);
-      }
-    }
-
-    if (stepId === 'done') {
-      finish();
-      return;
-    }
-
-    goTo(safeStepIndex + 1, 'forward');
-  };
-
-  const handleSkipName = () => {
-    patchAnswers({ displayName: '' });
-    goTo(safeStepIndex + 1, 'forward');
-  };
-
-  const handleAccountChoice = (choice) => {
-    patchAnswers({ accountChoice: choice });
-    goTo(safeStepIndex + 1, 'forward');
-  };
-
   const renderStep = () => {
     switch (stepId) {
-      case 'welcome':
-        return <StepWelcome t={t} />;
-      case 'legal':
+      case STEP_IDS.START:
         return (
-          <StepLegal
+          <ScreenStart
             t={t}
+            answers={answers}
+            onChange={patchAnswers}
+            resolved={resolved}
             onOpenTerms={() => router.push('/terms')}
             onOpenPrivacy={() => router.push('/privacy')}
           />
         );
-      case 'name':
+      case STEP_IDS.ROUTINE:
         return (
-          <StepName
+          <ScreenRoutine
             t={t}
-            value={answers.displayName}
-            onChange={(displayName) => patchAnswers({ displayName })}
+            answers={answers}
+            onChange={patchAnswers}
+            permissionDenied={permissionDenied}
           />
         );
-      case 'gender':
-        return (
-          <StepGender
-            t={t}
-            value={answers.gender}
-            onChange={(gender) => patchAnswers({ gender })}
-          />
-        );
-      case 'birthYear':
-        return (
-          <StepBirthYear
-            t={t}
-            value={answers.birthYear}
-            onChange={(birthYear) => patchAnswers({ birthYear })}
-            resolved={resolved}
-          />
-        );
-      case 'extra':
-        return (
-          <StepExtra
-            t={t}
-            value={{ extra: answers.extra, referenceOverride: answers.referenceOverride }}
-            onChange={(patch) => patchAnswers(patch)}
-            questionKind={extraQuestionKind}
-          />
-        );
-      case 'routineTimes':
-        return <StepRoutineTimes t={t} value={permissionDenied} />;
-      case 'routineFirst':
-        return (
-          <StepRoutineFirst
-            t={t}
-            value={answers.firstAction}
-            onChange={(firstAction) => patchAnswers({ firstAction })}
-          />
-        );
-      case 'account':
-        return <StepAccount t={t} />;
-      case 'done':
-        return <StepDone t={t} value={answers.displayName} />;
       default:
         return null;
     }
@@ -275,46 +204,34 @@ export default function OnboardingScreen() {
 
   const renderFooter = () => {
     switch (stepId) {
-      case 'welcome':
-        return <PrimaryButton label={t('onboarding.welcome.start')} onPress={goNext} />;
-      case 'legal':
-        return <PrimaryButton label={t('onboarding.legal.accept')} onPress={goNext} />;
-      case 'name':
-        return (
-          <View>
-            <PrimaryButton label={t('onboarding.next')} onPress={goNext} />
-            <QuietButton label={t('onboarding.skip')} onPress={handleSkipName} />
-          </View>
-        );
-      case 'gender':
-      case 'birthYear':
-      case 'extra':
-      case 'routineTimes':
-      case 'routineFirst':
+      case STEP_IDS.START:
+        // "Akzeptieren und weiter" ist bewusst die einzige Bestaetigung
+        // der Rechtstexte (siehe StepLegal.jsx): Es gibt keinen eigenen
+        // Haken, der Knopf traegt beides, das Profil UND die Zustimmung.
         return (
           <PrimaryButton
-            label={t('onboarding.next')}
+            label={t('onboarding.legal.accept')}
             onPress={goNext}
-            disabled={!canAdvance(stepId, answers, resolved)}
+            disabled={!canAdvance(STEP_IDS.START, answers, resolved)}
           />
         );
-      case 'account':
-        // "Spaeter ohne Konto" ist der Primaerknopf: Die App verlangt kein
-        // Konto, ein Konto ist ein Angebot, keine Voraussetzung.
+      case STEP_IDS.ROUTINE: {
+        const disabled = !canAdvance(STEP_IDS.ROUTINE, answers, resolved);
         return (
           <View>
             <PrimaryButton
-              label={t('onboarding.account.later')}
-              onPress={() => handleAccountChoice('later')}
+              label={t('onboarding.done.go')}
+              onPress={() => finish('/Dashboard')}
+              disabled={disabled}
             />
             <QuietButton
               label={t('onboarding.account.create')}
-              onPress={() => handleAccountChoice('create')}
+              onPress={() => finish('/account')}
+              disabled={disabled}
             />
           </View>
         );
-      case 'done':
-        return <PrimaryButton label={t('onboarding.done.go')} onPress={goNext} />;
+      }
       default:
         return null;
     }
