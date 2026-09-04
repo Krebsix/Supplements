@@ -17,12 +17,15 @@
  *
  * Die Richtung heisst deshalb jetzt: native iOS-Anmutung.
  *   - Neutrale Systemgrautoene statt warmem Creme
- *   - Systemschrift (SF Pro auf iOS, Roboto auf Android) statt geladener
- *     Google-Fonts: nativ, kein Download, kleinere App
  *   - Apple-Schriftgroessen: Fliesstext 17 statt 14. Das ist der groesste
  *     einzelne Unterschied zwischen "wirkt gebaut" und "wirkt fertig"
- *   - Weisse Flaechen auf grauem Grund statt umrandeter Karten. Der
- *     Rahmen um jede Karte war das zweite Erkennungsmerkmal
+ *
+ * PHASE 2 DER WEBSITE-ANGLEICHUNG (2026-09-04): Headlines und
+ * Eyebrow-Labels bekommen eigene Schnitte (Space Grotesk, IBM Plex Mono,
+ * siehe `fonts` unten) statt Systemschrift, und Karten/Listengruppen
+ * bekommen wieder eine Haarlinie statt sich nur ueber die Flaeche vom
+ * grauen Grund abzusetzen. Fliesstext und Bedienelemente bleiben
+ * Systemschrift, siehe Begruendung unten bei `weight`/`fonts`.
  *
  * WAS BLEIBT: das tiefe Petrol als Akzent. Es traegt das App-Icon und ist
  * damit die einzige Farbe, die die Marke wirklich ausmacht.

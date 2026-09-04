@@ -266,7 +266,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...type.display,
-    fontWeight: '700',
   },
   subtitle: {
     ...type.body,
