@@ -8,6 +8,7 @@ import LanguagePicker from '../../../components/LanguagePicker';
 import { ACCOUNT_STATUS } from '../../../AccountStore';
 import { useTranslation } from '../../../i18n';
 import useAccountStore from '../../../useAccountStore';
+import useNotificationStore from '../../../useNotificationStore';
 import usePurchaseStore from '../../../usePurchaseStore';
 import { colors, radius, space, surfaces, type } from '../../../theme';
 
@@ -18,6 +19,7 @@ export default function Home() {
   const accountEmail = useAccountStore((state) => state.email);
   const purchaseStatus = usePurchaseStore((state) => state.status);
   const purchaseExpiresAt = usePurchaseStore((state) => state.expiresAt);
+  const notificationsEnabled = useNotificationStore((state) => state.notificationsEnabled);
   const signedIn = accountStatus === ACCOUNT_STATUS.SIGNED_IN;
 
   // Dieselben Statustexte wie subscription.jsx (alle sieben
@@ -136,6 +138,7 @@ export default function Home() {
         <MenuRow
           title={t('nav.notifications')}
           subtitle={t('notifications.subtitle')}
+          value={notificationsEnabled ? t('common.on') : t('common.off')}
           onPress={() => router.push('/notifications')}
         />
         <MenuRow
@@ -189,7 +192,7 @@ function TrustItem({ title, text }) {
   );
 }
 
-function MenuRow({ title, subtitle, onPress, last = false }) {
+function MenuRow({ title, subtitle, value, onPress, last = false }) {
   return (
     <>
       <TouchableOpacity
@@ -202,6 +205,10 @@ function MenuRow({ title, subtitle, onPress, last = false }) {
         <View style={styles.rowTextWrap}>
           <Text style={styles.rowTitle}>{title}</Text>
           <Text style={styles.rowSubtitle}>{subtitle}</Text>
+          {/* Aktueller Wert (z.B. "Ein"/"Aus" bei Erinnerungen), damit der
+              Status ohne Antippen sichtbar ist. Nur gerendert, wenn eine
+              Zeile tatsaechlich einen Wert hat. */}
+          {value ? <Text style={styles.menuRowValue}>{value}</Text> : null}
         </View>
         <Text style={styles.chevron}>›</Text>
       </TouchableOpacity>
@@ -319,6 +326,13 @@ const styles = StyleSheet.create({
   },
   rowSubtitle: {
     ...type.tiny,
+    marginTop: 2,
+  },
+  // Wert-Zeile fuer den aktuellen Status (z.B. "Ein"/"Aus"). Akzentfarbe,
+  // damit sie sich von der neutralen Subtitle-Zeile abhebt.
+  menuRowValue: {
+    ...type.small,
+    color: colors.accent,
     marginTop: 2,
   },
   chevron: {
