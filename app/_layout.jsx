@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, AppState } from 'react-native';
 import { Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import {
+  SpaceGrotesk_600SemiBold,
+  SpaceGrotesk_700Bold,
+} from '@expo-google-fonts/space-grotesk';
+import { IBMPlexMono_500Medium } from '@expo-google-fonts/ibm-plex-mono';
 import { useTranslation } from '../i18n';
 import { useStore } from '../useStore';
 import useNotificationStore, {
@@ -72,10 +78,22 @@ export default function Layout() {
       .catch((error) => console.error('[Layout] Konto-Initialisierung fehlgeschlagen', error));
   }, [hydrated]);
 
-  // Keine eigenen Schriften mehr: Die App laeuft auf der Systemschrift
-  // (SF Pro auf iOS, Roboto auf Android). Das spart den Font-Download beim
-  // Start und laesst die Oberflaeche zur Plattform gehoeren — siehe die
-  // Begruendung in theme.js.
+  // Eigene Schnitte fuer Headlines/Eyebrow-Labels (Website-Angleichung,
+  // siehe theme.js). Fliesstext und Bedienelemente bleiben Systemschrift.
+  // Bewusst NICHT blockierend: Bis die Schnitte geladen sind, rendert RN
+  // mit der Systemschrift und wechselt beim Laden automatisch um, so wie
+  // das Onboarding-Gate unten es fuer den Store-Hydrate BRAUCHT (dort ist
+  // Warten Pflicht), hier aber nicht.
+  const [, fontsError] = useFonts({
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
+    IBMPlexMono_500Medium,
+  });
+
+  useEffect(() => {
+    if (fontsError) console.error('[Layout] Schriften konnten nicht geladen werden', fontsError);
+  }, [fontsError]);
+
   const onboardingCompletedAt = useStore((state) => state.onboardingCompletedAt);
 
   // Bis der Speicher gelesen ist, nichts entscheiden: sonst blitzt fuer

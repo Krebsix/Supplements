@@ -45,6 +45,24 @@ check(
   contrastRatio(colors.accentInk, colors.surface) >= 4.5,
   `war ${contrastRatio(colors.accentInk, colors.surface).toFixed(2)}:1`
 );
+check(
+  'ink (Navy) auf surface mindestens 4.5:1',
+  contrastRatio(colors.ink, colors.surface) >= 4.5,
+  `war ${contrastRatio(colors.ink, colors.surface).toFixed(2)}:1`
+);
+check(
+  'ink auf canvas mindestens 4.5:1',
+  contrastRatio(colors.ink, colors.canvas) >= 4.5
+);
+check(
+  'inkMuted auf surface mindestens 4.5:1',
+  contrastRatio(colors.inkMuted, colors.surface) >= 4.5,
+  `war ${contrastRatio(colors.inkMuted, colors.surface).toFixed(2)}:1`
+);
+check(
+  'inkMuted auf canvas mindestens 4.5:1',
+  contrastRatio(colors.inkMuted, colors.canvas) >= 4.5
+);
 
 if (failures > 0) {
   console.error(`\n${failures} Fehler`);

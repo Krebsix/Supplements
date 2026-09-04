@@ -42,13 +42,13 @@ export const colors = {
   overlay: '#ffffff',
 
   // Schrift
-  ink: '#1c1c1e',           // label
-  inkMuted: '#6c6c70',      // secondaryLabel
+  ink: '#0b2239',        // Navy, wie Website-Text (mysuplea.com --ink)
+  inkMuted: '#44586e',   // Website --ink-muted (Kontrast siehe Test)
   inkFaint: '#6e6e74',  // 2026-08-31 abgedunkelt: 4.5:1 auch auf canvas (WCAG AA, Bedienregeln)      // tertiaryLabel, systemGray
 
-  // Linien: Trennlinien innerhalb weisser Bloecke, keine Umrandungen
-  rule: '#e5e5ea',          // systemGray5
-  ruleStrong: '#d1d1d6',    // systemGray4
+  // Linien: navy-getoenter Ton statt iOS-Grau, wie die Website
+  rule: '#dde3ea',
+  ruleStrong: '#c3ccd6',
 
   // Akzent: Azur, dieselbe Familie wie App-Icon und Website
   // (mysuplea.com, web/src/styles/tokens.css). Eine Stufe dunkler als
@@ -83,21 +83,29 @@ export const onDark = {
 };
 
 /**
- * Schriften: die Systemschrift, bewusst ohne eigene Font-Dateien.
- *
- * Auf iOS ist das SF Pro, auf Android Roboto. Beides ist auf dem jeweiligen
- * Geraet die Schrift, die alle anderen Apps auch verwenden — genau das
- * laesst eine App dazugehoeren statt gebastelt zu wirken. Nebeneffekt:
- * kein Font-Download beim Start und eine kleinere App.
+ * Schriften: Fliesstext und Bedienelemente bleiben Systemschrift (SF Pro
+ * auf iOS, Roboto auf Android) — das laesst die App zur Plattform gehoeren.
+ * Headlines und Sektionslabels bekommen seit Phase 2 der Website-Angleichung
+ * (mysuplea.com) eigene Schnitte: Space Grotesk fuer Ueberschriften, IBM Plex
+ * Mono fuer Eyebrow-Labels. Beide werden in app/_layout.jsx per useFonts
+ * geladen; bis dahin faellt React Native auf die Systemschrift zurueck.
  *
  * In React Native heisst das: KEINE fontFamily setzen und das Gewicht ueber
- * fontWeight steuern. Deshalb gibt es hier keine Familiennamen mehr.
+ * fontWeight steuern. Nur dort, wo fontFamily auf einen eigenen Schnitt
+ * zeigt (type.display/heading/subheading/eyebrow/eyebrowAccent unten), bleibt
+ * fontWeight bewusst weg (Android-Faux-Bold).
  */
 export const weight = {
   regular: '400',
   medium: '500',
   semibold: '600',
   bold: '700',
+};
+
+export const fonts = {
+  displayBold: 'SpaceGrotesk_700Bold',
+  displaySemi: 'SpaceGrotesk_600SemiBold',
+  mono: 'IBMPlexMono_500Medium',
 };
 
 /**
@@ -109,7 +117,7 @@ export const type = {
   display: {
     fontSize: 34,
     lineHeight: 41,
-    fontWeight: weight.bold,
+    fontFamily: fonts.displayBold,
     letterSpacing: -0.5,
     color: colors.ink,
   },
@@ -117,7 +125,7 @@ export const type = {
   heading: {
     fontSize: 20,
     lineHeight: 25,
-    fontWeight: weight.semibold,
+    fontFamily: fonts.displaySemi,
     letterSpacing: -0.2,
     color: colors.ink,
   },
@@ -125,7 +133,7 @@ export const type = {
   subheading: {
     fontSize: 17,
     lineHeight: 22,
-    fontWeight: weight.semibold,
+    fontFamily: fonts.displaySemi,
     color: colors.ink,
   },
 
@@ -138,14 +146,25 @@ export const type = {
   tiny: { fontSize: 13, lineHeight: 18, fontWeight: weight.regular, color: colors.inkFaint },
 
   // Abschnittsmarke ueber einer Gruppe, wie die Ueberschrift einer
-  // gruppierten Liste in den iOS-Einstellungen.
+  // gruppierten Liste in den iOS-Einstellungen. Mono-Uppercase wie auf
+  // der Website (mysuplea.com).
   eyebrow: {
-    fontSize: 13,
+    fontSize: 12,
     lineHeight: 18,
-    fontWeight: weight.regular,
-    letterSpacing: 0.2,
+    fontFamily: fonts.mono,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
     color: colors.inkMuted,
+  },
+  // Eyebrow in Akzentfarbe statt inkMuted, fuer hervorgehobene Marken
+  // (z. B. den JETZT-Slot im Tagesplan).
+  eyebrowAccent: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontFamily: fonts.mono,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    color: colors.accent,
   },
   label: {
     fontSize: 13,
@@ -186,10 +205,9 @@ export const border = {
  * Wiederkehrende Bausteine. Screens setzen darauf auf, statt jede Karte
  * neu zu definieren.
  *
- * Der wichtigste Unterschied zur Vorgaengerversion: Karten haben keinen
- * Rahmen mehr. Eine weisse Flaeche auf grauem Grund grenzt sich von selbst
- * ab; die zusaetzliche Linie liess jede Oberflaeche wie ein Formular
- * aussehen.
+ * Seit Phase 2 der Website-Angleichung (mysuplea.com) bekommen Karten
+ * wieder eine harte Haarlinie statt sich nur ueber die Flaeche vom
+ * grauen Grund abzusetzen. Das ist die gleiche Optik wie auf der Website.
  */
 export const surfaces = {
   screen: { flex: 1, backgroundColor: colors.canvas },
@@ -198,6 +216,8 @@ export const surfaces = {
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
+    borderWidth: border.hairline,
+    borderColor: colors.rule,
     padding: space.lg,
     marginBottom: space.md,
   },
@@ -207,6 +227,8 @@ export const surfaces = {
   listGroup: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
+    borderWidth: border.hairline,
+    borderColor: colors.rule,
     overflow: 'hidden',
     marginBottom: space.lg,
   },

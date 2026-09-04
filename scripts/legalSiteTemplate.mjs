@@ -30,10 +30,10 @@ import {
 export const WEB_TOKENS = {
   canvas: '#f2f2f7',
   surface: '#ffffff',
-  ink: '#1c1c1e',
-  inkMuted: '#6c6c70',
+  ink: '#0b2239',
+  inkMuted: '#44586e',
   inkFaint: '#6e6e74',
-  rule: '#e5e5ea',
+  rule: '#dde3ea',
   accent: '#1a63c4',
 };
 
