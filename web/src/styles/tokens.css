@@ -3,12 +3,17 @@
  * 2026-08-30, design_handoff_mysuplea_landing/): Weiss plus Logo-Navy und
  * Azur, harte Linien statt weicher Schatten, Mono-Labels.
  *
- * Bewusst NICHT mehr an theme.js (App-Palette) gekoppelt: Die App bleibt
- * bei ihrer nativen iOS-Anmutung (Systemgrau, Petrol), die Website bekommt
- * eine eigenstaendige redaktionelle Bildsprache. Einzige gemeinsame Quelle
- * ist das App-Icon (Navy/Azur kommen von dort). Die generierten Rechts-
- * seiten (/datenschutz/, /impressum/, /nutzung/) bleiben unveraendert bei
- * ihren eigenen WEB_TOKENS (siehe scripts/legalSiteTemplate.mjs).
+ * Farb-Verhaeltnis zur App (Stand 2026-09-04, Redesign-Branch
+ * redesign-ia-und-marke): Die App nutzt seit dem IA/Marken-Redesign
+ * denselben Azur/Navy-Grundton wie diese Seite (App-Akzent #1a63c4, eine
+ * Stufe dunkler als das Website-Azur wegen der 4,5:1-Kontrastregel auf
+ * dem App-Canvas; Navy #0b2239 identisch). Gemeinsame Quelle bleibt das
+ * App-Icon. Website und App behalten trotzdem eigene Dichte und
+ * Typografie (hier Space Grotesk/IBM Plex, dort Newsreader/Instrument
+ * Sans) — angeglichen ist die Markenfarbe, nicht das Layout. Die
+ * generierten Rechtsseiten (/datenschutz/, /impressum/, /nutzung/)
+ * bleiben bei ihren eigenen WEB_TOKENS (scripts/legalSiteTemplate.mjs),
+ * die per Test woertlich an theme.js gespiegelt werden.
  */
 :root {
   color-scheme: light;
