@@ -821,9 +821,12 @@ git commit -m "refactor(onboarding): buildSteps/canAdvance auf zwei gebuendelte 
 - [ ] **Step 1: Container-Style der wiederverwendeten Step-Komponenten anpassen**
 
 `StepGender.jsx`, `StepBirthYear.jsx`, `StepExtra.jsx`, `StepName.jsx`,
-`StepRoutineTimes.jsx`, `StepRoutineFirst.jsx`: `styles.container` von
-`{ flex: 1, justifyContent: 'center' }` (fuer den bisherigen
-Einzelschritt-Vollbild-Modus) auf `{ marginBottom: space.xl }` aendern —
+`StepRoutineTimes.jsx`, `StepRoutineFirst.jsx`, `StepLegal.jsx`:
+`styles.container` von `{ flex: 1, justifyContent: 'center' }` (fuer den
+bisherigen Einzelschritt-Vollbild-Modus) auf `{ marginBottom: space.xl }`
+aendern — (Preflight-Fund: `StepLegal.jsx` hat denselben Vollbild-
+Container-Style wie die anderen und wird jetzt ebenfalls in ScreenStart
+gestapelt statt zentriert gerendert, war im ersten Entwurf uebersehen)
 sie werden jetzt gestapelt in einem ScrollView statt zentriert allein
 auf dem Screen zu stehen.
 
