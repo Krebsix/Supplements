@@ -50,10 +50,13 @@ export const colors = {
   rule: '#e5e5ea',          // systemGray5
   ruleStrong: '#d1d1d6',    // systemGray4
 
-  // Akzent: das Petrol aus dem App-Icon. Die einzige Markenfarbe.
-  accent: '#1d6472',   // 2026-08-31: eine Stufe heller/frischer (Nadine 'lebensfroher'), weiss darauf 6.7:1
-  accentSoft: '#e4f1f3',
-  accentInk: '#123f49',
+  // Akzent: Azur, dieselbe Familie wie App-Icon und Website
+  // (mysuplea.com, web/src/styles/tokens.css). Eine Stufe dunkler als
+  // das Website-Azur (#1e6fd9), weil #1e6fd9 auf dem App-Bildschirmgrund
+  // (canvas) nur 4.35:1 erreicht, unter der eigenen 4,5:1-Regel.
+  accent: '#1a63c4',
+  accentSoft: '#e6eefa',
+  accentInk: '#0b2239',
 
   // Statusfarben: klar genug, um unterscheidbar zu sein, gedaempft genug,
   // um nicht zu alarmieren.
@@ -66,17 +69,17 @@ export const colors = {
 };
 
 /**
- * Toene auf dunklem Petrol (accentInk als Flaeche): Text und Grafik der
- * Tagesplan-Buehne. Abgeleitete Aufhellungen des vorhandenen Petrols,
- * KEINE neue Palette (Design-Review 2026-09-01).
- * Kontrast inkMuted auf accentInk: 6,8:1 (WCAG AA, nachgerechnet).
+ * Toene auf dunklem Azur/Navy (accentInk als Flaeche): Text und Grafik der
+ * Tagesplan-Buehne. Aufhellungen von Azur/Navy statt Petrol,
+ * gleiches Vorgehen wie beim Petrol-Refresh vom 2026-08-31 (abgeleitete
+ * Toene, keine dritte Palette).
  */
 export const onDark = {
-  ink: '#ffffff',        // Titel auf der Buehne
-  inkMuted: '#a8ccd3',   // Datum, Bogen-Beschriftung
-  accent: '#7fd0c6',     // erledigter Punkt, Fortschritt (helles Mint aus Petrol)
-  rule: '#2b5a66',       // Bogenlinie, gedaempfte Linien
-  checkInk: colors.accentInk, // Haken im gefuellten Punkt
+  ink: '#ffffff',
+  inkMuted: '#a9c4e8',
+  accent: '#8fbdf0',
+  rule: '#1e4a7a',
+  checkInk: colors.accentInk,
 };
 
 /**
