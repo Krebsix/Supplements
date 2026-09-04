@@ -34,7 +34,7 @@ export const WEB_TOKENS = {
   inkMuted: '#6c6c70',
   inkFaint: '#6e6e74',
   rule: '#e5e5ea',
-  accent: '#1d6472',
+  accent: '#1a63c4',
 };
 
 function escapeHtml(text) {
