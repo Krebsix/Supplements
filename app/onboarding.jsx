@@ -66,10 +66,13 @@ function QuietButton({ label, onPress, disabled }) {
  * Das Konto-Angebot ist kein eigener Pflichtschritt mehr: ScreenRoutine
  * traegt in der Fusszeile einen zweiten, leiseren Knopf ("Konto
  * anlegen"), der denselben Abschluss ausloest wie der Primaerknopf, nur
- * mit dem Ziel /account statt /Dashboard. `accountOffered` (Onboarding-
- * Flag, siehe CLAUDE.md Datenhaltung-Abschnitt) wird unveraendert bei
- * jedem Abschluss anhand des Alters gesetzt (`!resolved.underage`), ganz
- * gleich welcher der beiden Knoepfe gedrueckt wurde.
+ * mit dem Ziel /account statt der firstAction-abhaengigen Zielseite (siehe
+ * renderFooter, STEP_IDS.ROUTINE: /scanner bei "scan", /search bei
+ * "search", sonst /Dashboard -- unveraendert aus der fruehreren
+ * Schrittfolge uebernommen). `accountOffered` (Onboarding-Flag, siehe
+ * CLAUDE.md Datenhaltung-Abschnitt) wird unveraendert bei jedem Abschluss
+ * anhand des Alters gesetzt (`!resolved.underage`), ganz gleich welcher
+ * der beiden Knoepfe gedrueckt wurde.
  */
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -151,9 +154,10 @@ export default function OnboardingScreen() {
   };
 
   // finish() ersetzt den frueheren StepDone-Zwischenscreen: Abschluss
-  // passiert direkt vom letzten Schritt aus, target ist /Dashboard fuer
-  // den Primaerknopf oder /account fuer den leiseren Konto-Knopf in
-  // ScreenRoutine.
+  // passiert direkt vom letzten Schritt aus. target kommt vom Aufrufer:
+  // primaryTarget (renderFooter, STEP_IDS.ROUTINE) fuer den Primaerknopf
+  // -- /scanner oder /search bei entsprechender firstAction, sonst
+  // /Dashboard -- oder /account fuer den leiseren Konto-Knopf.
   const finish = async (target) => {
     await requestNotificationPermissionIfNeeded();
     completeOnboarding({
@@ -217,11 +221,21 @@ export default function OnboardingScreen() {
         );
       case STEP_IDS.ROUTINE: {
         const disabled = !canAdvance(STEP_IDS.ROUTINE, answers, resolved);
+        // Wie vor dem Zwei-Screen-Umbau: "Scannen"/"Suchen" als erste
+        // Handlung fuehrt direkt dorthin, "Später" (oder gar nichts)
+        // landet auf dem Tagesplan. Der Konto-Knopf ueberschreibt das
+        // bewusst mit /account, siehe unten.
+        const primaryTarget =
+          answers.firstAction === 'scan'
+            ? '/scanner'
+            : answers.firstAction === 'search'
+            ? '/search'
+            : '/Dashboard';
         return (
           <View>
             <PrimaryButton
               label={t('onboarding.done.go')}
-              onPress={() => finish('/Dashboard')}
+              onPress={() => finish(primaryTarget)}
               disabled={disabled}
             />
             <QuietButton
