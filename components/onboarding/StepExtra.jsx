@@ -66,7 +66,7 @@ export default function StepExtra({ t, value, onChange, questionKind }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { marginBottom: space.xl },
   title: { ...type.heading, marginBottom: space.sm },
   why: { ...type.small, marginBottom: space.lg },
 });
