@@ -37,6 +37,8 @@ export default {
   'common.save': 'Speichern',
   'common.delete': 'Löschen',
   'common.language': 'Sprache',
+  'common.on': 'Ein',
+  'common.off': 'Aus',
   'language.title': 'Sprache',
   'language.hint': 'Die gesamte App wechselt sofort, auch die Fachtexte. Literaturangaben bleiben so, wie die Quelle veröffentlicht ist.',
   'proGate.label': 'Pro',

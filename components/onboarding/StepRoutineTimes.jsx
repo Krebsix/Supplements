@@ -149,7 +149,7 @@ export default function StepRoutineTimes({ t, value: permissionDenied }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { marginBottom: space.xl },
   title: { ...type.heading, marginBottom: space.sm },
   text: { ...type.small, marginBottom: space.lg },
   group: {

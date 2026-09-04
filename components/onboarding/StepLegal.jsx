@@ -58,7 +58,7 @@ export default function StepLegal({ t, onOpenTerms, onOpenPrivacy }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { marginBottom: space.xl },
   title: { ...type.heading, marginBottom: space.md },
   text: { ...type.body, marginBottom: space.lg },
   consent: { ...type.small },

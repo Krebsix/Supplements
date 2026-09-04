@@ -37,6 +37,8 @@ export default {
   'common.save': 'Save',
   'common.delete': 'Delete',
   'common.language': 'Language',
+  'common.on': 'On',
+  'common.off': 'Off',
   'language.title': 'Language',
   'language.hint':
     'The whole app switches instantly, including the substance texts. Literature references stay as published by the source.',

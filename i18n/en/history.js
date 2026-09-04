@@ -9,6 +9,13 @@ export default {
   'history.subtitle':
     'Overview of documented intakes and undone entries from your local daily plan.',
 
+  'history.period.week': 'Week',
+  'history.period.month': 'Month',
+  'history.period.all': 'All',
+
+  'history.adherence.label': 'Adherence',
+  'history.adherence.percent': '{percent} %',
+
   'history.summary.active': 'Active',
   'history.summary.undone': 'Undone',
   'history.summary.total': 'Total',

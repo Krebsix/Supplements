@@ -9,6 +9,13 @@ export default {
   'history.subtitle':
     'Übersicht der erfassten Einnahmen und rückgängig gemachten Einträge aus deinem lokalen Tagesplan.',
 
+  'history.period.week': 'Woche',
+  'history.period.month': 'Monat',
+  'history.period.all': 'Alles',
+
+  'history.adherence.label': 'Einnahme-Treue',
+  'history.adherence.percent': '{percent} %',
+
   'history.summary.active': 'Aktiv',
   'history.summary.undone': 'Rückgängig',
   'history.summary.total': 'Gesamt',

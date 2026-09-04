@@ -96,6 +96,7 @@ export default {
   'dashboard.inventoryLabel': 'Mein Bestand',
   'dashboard.inventoryCount_one': 'Ein Präparat ansehen und verwalten',
   'dashboard.inventoryCount_other': '{count} Präparate ansehen und verwalten',
+  'dashboard.historyLink': 'Verlauf ansehen',
   'dashboard.noteHide': 'Details ausblenden',
   'dashboard.noteShow': 'Details anzeigen',
   'dashboard.undo': 'Rückgängig',

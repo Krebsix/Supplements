@@ -236,7 +236,10 @@ export default function ResultsScreen() {
         ) : null}
       </View>
 
-      <SupplementResultCard result={result} />
+      <SupplementResultCard
+        result={result}
+        onEditField={() => handleOpenReviewForm('&edit=1')}
+      />
 
       {substanceProfiles.length > 0 ? (
         <View style={styles.substanceSection}>
