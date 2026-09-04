@@ -23,6 +23,11 @@ export default {
   'dashboard.kicker': 'MySuplea',
   'dashboard.profileLabel': 'Profile: {profile}',
   'dashboard.title': 'Daily plan',
+  // Checklist (redesign phase 2, task B): header line with progress and the
+  // mono-uppercase mark of the due time group. Single curly braces, the
+  // i18n runtime only interpolates this form.
+  'dashboard.takenCount': '{done} of {total} taken',
+  'dashboard.nowSuffix': ' · NOW',
   'dashboard.subtitle':
     'Daily control center for intake, timing, history and clean documentation.',
   'dashboard.summaryLabel': 'Today',

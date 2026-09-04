@@ -22,6 +22,11 @@ export default {
   'dashboard.kicker': 'MySuplea',
   'dashboard.profileLabel': 'Profil: {profile}',
   'dashboard.title': 'Tagesplan',
+  // Checkliste (Redesign Phase 2, Task B): Kopfzeile mit Fortschritt und
+  // Mono-Uppercase-Marke der faelligen Zeitgruppe. Einfache geschweifte
+  // Klammern, die i18n-Runtime interpoliert nur diese Form.
+  'dashboard.takenCount': '{done} von {total} genommen',
+  'dashboard.nowSuffix': ' · JETZT',
   'dashboard.subtitle':
     'Tägliches Kontrollzentrum für Einnahmen, Timing, Verlauf und saubere Dokumentation.',
   'dashboard.summaryLabel': 'Heute',
