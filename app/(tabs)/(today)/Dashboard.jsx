@@ -485,8 +485,16 @@ export default function Dashboard() {
   // Nehmen-Button nur in der JETZT-Zeitgruppe. Dokumentierte Zeilen sind
   // durchgestrichen UND gedimmt UND tragen das gefuellte Haken-Icon, damit
   // der Status nie allein ueber Farbe transportiert wird (Bedienregeln).
-  // Ohne eigenes Touchable fuer offene, nicht faellige Zeilen: Es gibt dort
-  // nichts zu tippen, das ist keine vergessene Aktion.
+  //
+  // Haken-Kreis in JEDER Zeitgruppe tappbar (Review-Fund, kritisch): die
+  // einzige logIntake-Stelle der App sass vorher ausschliesslich am
+  // Nehmen-Button der JETZT-Gruppe. Wer den Morgen-Slot ausliess, konnte
+  // fuer den Rest des Tages nichts mehr dokumentieren, weil "JETZT" am
+  // ersten offenen Slot kleben bleibt (findNextUp kennt keine Uhrzeit-
+  // Logik). Die alte Buehnen-Fassung erlaubte das Dokumentieren jeder
+  // offenen Zeile in jedem Slot, das stellt dieser Kreis wieder her. Der
+  // Nehmen-Button bleibt zusaetzlich die auffaellige Standard-Aktion der
+  // JETZT-Gruppe.
   //
   // Info-Symbol (Finding Task B): Einnahme-Hinweise, Paar-Konflikte und
   // Synergien (SlotReason/ScheduleGuidance.js) waren mit der Buehne
@@ -506,6 +514,7 @@ export default function Dashboard() {
           activeOpacity: 0.6,
           accessibilityRole: 'button',
           accessibilityLabel: `${t('dashboard.undo')}: ${name}`,
+          accessibilityState: { checked: true },
         }
       : {};
 
@@ -521,11 +530,24 @@ export default function Dashboard() {
     return (
       <View key={supplement.id}>
         <RowWrap style={styles.row} {...rowWrapProps}>
-          <Feather
-            name={logged ? 'check-circle' : 'circle'}
-            size={22}
-            color={logged ? colors.affirm : colors.ruleStrong}
-          />
+          {logged ? (
+            <Feather name="check-circle" size={22} color={colors.affirm} />
+          ) : (
+            <TouchableOpacity
+              onPress={() => logIntake(supplement.id, { slotId })}
+              activeOpacity={0.6}
+              accessibilityRole="button"
+              accessibilityLabel={`${t('dashboard.logAction')}: ${name}`}
+              accessibilityState={{ checked: false }}
+              // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): der 22-pt-Kreis
+              // bekommt sie ueber hitSlop statt eine groessere Box, die die
+              // Zeile gegenueber der dokumentierten Variante verschieben
+              // wuerde.
+              hitSlop={{ top: 11, bottom: 11, left: 11, right: 11 }}
+            >
+              <Feather name="circle" size={22} color={colors.ruleStrong} />
+            </TouchableOpacity>
+          )}
           <View style={styles.rowText}>
             <Text style={[styles.rowTitle, logged && styles.rowTitleDone]}>{name}</Text>
             {dosage ? <Text style={[styles.rowSub, logged && styles.rowSubDone]}>{dosage}</Text> : null}
@@ -758,10 +780,11 @@ const styles = StyleSheet.create({
   rowText: {
     flex: 1,
   },
+  // Angeglichen an menu.jsx/inventory.jsx (Review-Fund, Konsistenz):
+  // gleiche Zeilen-Typografie in allen drei Listen statt eigener Groessen
+  // nur im Tagesplan.
   rowTitle: {
     ...type.bodyStrong,
-    fontSize: 16,
-    lineHeight: 21,
   },
   rowTitleDone: {
     textDecorationLine: 'line-through',
@@ -769,7 +792,7 @@ const styles = StyleSheet.create({
   },
   rowSub: {
     marginTop: 2,
-    ...type.small,
+    ...type.tiny,
   },
   rowSubDone: {
     color: colors.inkFaint,
