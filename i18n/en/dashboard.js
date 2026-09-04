@@ -96,6 +96,7 @@ export default {
   'dashboard.inventoryLabel': 'My inventory',
   'dashboard.inventoryCount_one': 'View and manage one product',
   'dashboard.inventoryCount_other': 'View and manage {count} products',
+  'dashboard.historyLink': 'View history',
   'dashboard.noteHide': 'Hide details',
   'dashboard.noteShow': 'Show details',
   'dashboard.undo': 'Undo',

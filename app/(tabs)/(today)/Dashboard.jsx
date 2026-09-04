@@ -939,6 +939,20 @@ export default function Dashboard() {
           Bestand knapp. Ziel ist immer der Ort mit der vollen Tiefe. */}
       {curatedCards.map((card) => renderCuratedCard(card))}
 
+      {/* Verlauf-Einstieg (Spec-Iteration 2026-09-04): feste Zeile statt
+          kuratierter Karte, da sie nicht von Auffaelligkeit abhaengt.
+          Ersetzt den frueheren sechsten Tab. */}
+      <TouchableOpacity
+        style={styles.historyLink}
+        onPress={() => router.push('/history')}
+        activeOpacity={0.7}
+        accessibilityRole="link"
+      >
+        <Feather name="bar-chart-2" size={18} color={colors.accent} />
+        <Text style={styles.historyLinkText}>{t('dashboard.historyLink')}</Text>
+        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+      </TouchableOpacity>
+
       {/* Kur-Pausen erscheinen als eigener Block statt still aus den Slots
           zu verschwinden: Wer heute nichts nimmt, soll sehen, warum. */}
       {pausedCures.length > 0 ? (
@@ -1291,6 +1305,21 @@ const styles = StyleSheet.create({
   inventorySub: {
     ...type.small,
     marginTop: 2,
+  },
+  // Verlauf-Einstieg (Spec-Iteration 2026-09-04): feste Zeile, keine
+  // kuratierte Karte, deshalb kein surfaces.card-Rahmen.
+  historyLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    minHeight: 44,
+    paddingVertical: space.sm,
+    marginBottom: space.md,
+  },
+  historyLinkText: {
+    ...type.body,
+    flex: 1,
+    color: colors.accent,
   },
   metricGrid: {
     marginTop: space.lg,
