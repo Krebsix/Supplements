@@ -50,6 +50,7 @@ export default {
     'The percentage only describes the technical recognition of the test model. It confirms neither the factual accuracy nor the suitability of the product.',
   'components.result.reviewSectionTitle': 'Details to review',
   'components.result.reviewSectionHint': 'Check before accepting',
+  'components.result.editFieldAccessibility': 'Edit {field}',
   'components.result.fieldProductName': 'Product name',
   'components.result.helperProductNameDetected':
     'Compare with the front of the product.',
