@@ -200,7 +200,7 @@ function MenuRow({ title, subtitle, value, onPress, last = false }) {
         onPress={onPress}
         activeOpacity={0.6}
         accessibilityRole="button"
-        accessibilityLabel={title}
+        accessibilityLabel={value ? `${title}, ${value}` : title}
       >
         <View style={styles.rowTextWrap}>
           <Text style={styles.rowTitle}>{title}</Text>

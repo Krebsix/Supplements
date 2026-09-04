@@ -8,13 +8,7 @@ export default {
   'onboarding.logoAlt': 'MySuplea',
   'onboarding.back': 'Back',
   'onboarding.next': 'Next',
-  'onboarding.skip': 'Skip',
   'onboarding.progress': 'Step {step} of {total}',
-
-  'onboarding.welcome.eyebrow': 'Welcome',
-  'onboarding.welcome.title': 'MySuplea organises what you take.',
-  'onboarding.welcome.text': 'No recommendations, no advertising, your data stays with you.',
-  'onboarding.welcome.start': 'Let\'s go',
 
   'onboarding.legal.title': 'Before you start',
   'onboarding.legal.text': 'The app organises and documents. It does not advise, does not recommend dosages and does not replace medical judgement.',
@@ -73,13 +67,7 @@ export default {
   'onboarding.first.search': 'Search',
   'onboarding.first.later': 'Later',
 
-  'onboarding.account.title': 'Back up?',
-  'onboarding.account.text': 'With an account you can create a backup and later use several devices. The app also works without one.',
   'onboarding.account.create': 'Create account',
-  'onboarding.account.later': 'Later without an account',
 
-  'onboarding.done.title': 'Done, {name}.',
-  'onboarding.done.titleNoName': 'Done.',
-  'onboarding.done.text': 'Your daily plan is waiting.',
   'onboarding.done.go': 'To the daily plan',
 };

@@ -207,10 +207,11 @@ export default function Dashboard() {
   const refillThresholdDays = useNotificationStore((state) => state.refillThresholdDays);
 
   // Subscribe to changing store slices so the dashboard re-renders after intake/stock/user-supplement updates.
+  // intakeLogs wird inzwischen auch fuer die Verlauf-Einstiegs-Wache unten
+  // gebraucht (historyLink), deshalb kein `void` mehr dafuer.
   const intakeLogs = useStore((state) => state.intakeLogs);
   const userSupplements = useStore((state) => state.userSupplements);
   const stockBySupplementId = useStore((state) => state.stockBySupplementId);
-  void intakeLogs;
   void userSupplements;
   void stockBySupplementId;
 
@@ -941,17 +942,24 @@ export default function Dashboard() {
 
       {/* Verlauf-Einstieg (Spec-Iteration 2026-09-04): feste Zeile statt
           kuratierter Karte, da sie nicht von Auffaelligkeit abhaengt.
-          Ersetzt den frueheren sechsten Tab. */}
-      <TouchableOpacity
-        style={styles.historyLink}
-        onPress={() => router.push('/history')}
-        activeOpacity={0.7}
-        accessibilityRole="link"
-      >
-        <Feather name="bar-chart-2" size={18} color={colors.accent} />
-        <Text style={styles.historyLinkText}>{t('dashboard.historyLink')}</Text>
-        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
-      </TouchableOpacity>
+          Ersetzt den frueheren sechsten Tab. Nur sichtbar, wenn es ueberhaupt
+          etwas zu zeigen gibt (mind. ein Log ODER ein Praeparat im Bestand):
+          eine brandneue Nutzerin ohne beides landete sonst von der
+          Erste-Schritte-Karte direkt auf einem Verlauf mit "0 %
+          Einnahme-Treue" und sieben leeren Balken (Review-Fund 2026-09-04,
+          Inkonsistenz zu inventory.jsx's hasAnyRecords-Wache). */}
+      {intakeLogs.length > 0 || fullInventoryCount > 0 ? (
+        <TouchableOpacity
+          style={styles.historyLink}
+          onPress={() => router.push('/history')}
+          activeOpacity={0.7}
+          accessibilityRole="link"
+        >
+          <Feather name="bar-chart-2" size={18} color={colors.accent} />
+          <Text style={styles.historyLinkText}>{t('dashboard.historyLink')}</Text>
+          <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+        </TouchableOpacity>
+      ) : null}
 
       {/* Kur-Pausen erscheinen als eigener Block statt still aus den Slots
           zu verschwinden: Wer heute nichts nimmt, soll sehen, warum. */}

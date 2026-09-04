@@ -197,60 +197,69 @@ export default function HistoryScreen() {
         {t('history.subtitle')}
       </Text>
 
-      <View style={styles.chips}>
-        {Object.keys(PERIODS).map((key) => (
-          <TouchableOpacity
-            key={key}
-            style={[styles.chip, period === key && styles.chipActive]}
-            onPress={() => setPeriod(key)}
-            activeOpacity={0.8}
-            accessibilityRole="button"
-            accessibilityState={{ selected: period === key }}
-          >
-            <Text style={[styles.chipText, period === key && styles.chipTextActive]}>
-              {t(`history.period.${key}`)}
+      {/* Treue-Kennzahl und Tages-Balken setzen mindestens ein Log voraus,
+          sonst zeigen sie "0 %" und sieben leere Balken, bevor ueberhaupt
+          etwas dokumentiert wurde. Dieselbe hasAnyRecords-Idee wie in
+          inventory.jsx (Review-Fund 2026-09-04): ohne Logs nur die
+          Leerkarte unten. */}
+      {sortedLogs.length > 0 ? (
+        <>
+          <View style={styles.chips}>
+            {Object.keys(PERIODS).map((key) => (
+              <TouchableOpacity
+                key={key}
+                style={[styles.chip, period === key && styles.chipActive]}
+                onPress={() => setPeriod(key)}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityState={{ selected: period === key }}
+              >
+                <Text style={[styles.chipText, period === key && styles.chipTextActive]}>
+                  {t(`history.period.${key}`)}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.adherenceCard}>
+            <Text style={styles.adherenceLabel}>{t('history.adherence.label')}</Text>
+            <Text style={styles.adherenceValue}>
+              {t('history.adherence.percent', { percent: adherence.percent })}
             </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
 
-      <View style={styles.adherenceCard}>
-        <Text style={styles.adherenceLabel}>{t('history.adherence.label')}</Text>
-        <Text style={styles.adherenceValue}>
-          {t('history.adherence.percent', { percent: adherence.percent })}
-        </Text>
-
-        <View style={styles.barsRow}>
-          {last7Days.map((day) => (
-            <View key={day.key} style={styles.barColumn}>
-              <View
-                style={[
-                  styles.bar,
-                  { height: Math.max(4, Math.min(64, day.count * 20)) },
-                  day.isToday ? styles.barToday : day.count === 0 ? styles.barEmpty : null,
-                ]}
-              />
+            <View style={styles.barsRow}>
+              {last7Days.map((day) => (
+                <View key={day.key} style={styles.barColumn}>
+                  <View
+                    style={[
+                      styles.bar,
+                      { height: Math.max(4, Math.min(64, day.count * 20)) },
+                      day.isToday ? styles.barToday : day.count === 0 ? styles.barEmpty : null,
+                    ]}
+                  />
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
-      </View>
+          </View>
 
-      <View style={styles.summaryCard}>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryValue}>{activeLogs.length}</Text>
-          <Text style={styles.summaryLabel}>{t('history.summary.active')}</Text>
-        </View>
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryValue}>{undoneLogs.length}</Text>
-          <Text style={styles.summaryLabel}>{t('history.summary.undone')}</Text>
-        </View>
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryValue}>{sortedLogs.length}</Text>
-          <Text style={styles.summaryLabel}>{t('history.summary.total')}</Text>
-        </View>
-      </View>
+          <View style={styles.summaryCard}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryValue}>{activeLogs.length}</Text>
+              <Text style={styles.summaryLabel}>{t('history.summary.active')}</Text>
+            </View>
+            <View style={styles.summaryDivider} />
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryValue}>{undoneLogs.length}</Text>
+              <Text style={styles.summaryLabel}>{t('history.summary.undone')}</Text>
+            </View>
+            <View style={styles.summaryDivider} />
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryValue}>{sortedLogs.length}</Text>
+              <Text style={styles.summaryLabel}>{t('history.summary.total')}</Text>
+            </View>
+          </View>
+        </>
+      ) : null}
 
       {sortedLogs.length === 0 ? (
         <View style={styles.emptyCard}>

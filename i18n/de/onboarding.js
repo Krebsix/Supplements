@@ -10,13 +10,7 @@ export default {
   'onboarding.logoAlt': 'MySuplea',
   'onboarding.back': 'Zurück',
   'onboarding.next': 'Weiter',
-  'onboarding.skip': 'Überspringen',
   'onboarding.progress': 'Schritt {step} von {total}',
-
-  'onboarding.welcome.eyebrow': 'Willkommen',
-  'onboarding.welcome.title': 'MySuplea ordnet, was du nimmst.',
-  'onboarding.welcome.text': 'Keine Empfehlungen, keine Werbung, deine Daten bleiben bei dir.',
-  'onboarding.welcome.start': 'Los geht\'s',
 
   'onboarding.legal.title': 'Bevor es losgeht',
   'onboarding.legal.text': 'Die App ordnet ein und dokumentiert. Sie berät nicht, empfiehlt keine Dosierungen und ersetzt keine ärztliche Einschätzung.',
@@ -75,13 +69,7 @@ export default {
   'onboarding.first.search': 'Suchen',
   'onboarding.first.later': 'Später',
 
-  'onboarding.account.title': 'Sichern?',
-  'onboarding.account.text': 'Mit Konto kannst du ein Backup anlegen und später mehrere Geräte nutzen. Die App funktioniert auch ohne.',
   'onboarding.account.create': 'Konto anlegen',
-  'onboarding.account.later': 'Später ohne Konto',
 
-  'onboarding.done.title': 'Fertig, {name}.',
-  'onboarding.done.titleNoName': 'Fertig.',
-  'onboarding.done.text': 'Dein Tagesplan wartet.',
   'onboarding.done.go': 'Zum Tagesplan',
 };

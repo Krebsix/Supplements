@@ -33,6 +33,8 @@ export default function ScreenRoutine({ t, answers, onChange, permissionDenied }
 }
 
 const styles = StyleSheet.create({
-  content: { padding: space.lg },
+  // Siehe ScreenStart.jsx: horizontale und obere Polsterung kommt bereits
+  // von OnboardingShell.styles.content, hier nur noch der untere Abstand.
+  content: { paddingBottom: space.lg },
   title: { ...type.display, marginBottom: space.xl },
 });

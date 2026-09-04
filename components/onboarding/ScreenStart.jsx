@@ -50,7 +50,12 @@ export default function ScreenStart({ t, answers, onChange, resolved, onOpenTerm
 }
 
 const styles = StyleSheet.create({
-  content: { padding: space.lg },
+  // Nur noch vertikaler Abstand zum Fussleisten-Rand: horizontale und
+  // obere Polsterung kommt bereits von OnboardingShell.styles.content,
+  // ein eigenes `padding: space.lg` hier hat sie frueher verdoppelt
+  // (Review-Fund 2026-09-04, engere Chips/Geburtsjahr-Rad auf beiden
+  // ersten Screens).
+  content: { paddingBottom: space.lg },
   title: { ...type.display, marginBottom: space.sm },
   subtitle: { ...type.body, marginBottom: space.xl },
 });

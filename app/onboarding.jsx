@@ -138,8 +138,14 @@ export default function OnboardingScreen() {
   // Anfrage schlaegt fehl) darf den Abschluss nicht stumm blockieren,
   // deshalb wird das wie eine verweigerte Erlaubnis behandelt und
   // trotzdem abgeschlossen.
+  //
+  // Rueckgabewert (true = abgelehnt) wird von finish() genutzt, um die
+  // Weiterleitung kurz zu verzoegern: Ohne diese Verzoegerung wuerde
+  // setPermissionDenied(true) zwar committen, aber noch im selben Tick
+  // durch die Navigation weg von StepRoutineTimes wieder verworfen,
+  // die Nutzerin saehe den Hinweis nie (siehe Review-Fund 2026-09-04).
   const requestNotificationPermissionIfNeeded = async () => {
-    if (!useNotificationStore.getState().notificationsEnabled) return;
+    if (!useNotificationStore.getState().notificationsEnabled) return false;
     let granted = false;
     try {
       granted = await checkAndRequestPermission();
@@ -150,7 +156,9 @@ export default function OnboardingScreen() {
     if (!granted) {
       setNotificationsEnabled(false);
       setPermissionDenied(true);
+      return true;
     }
+    return false;
   };
 
   // finish() ersetzt den frueheren StepDone-Zwischenscreen: Abschluss
@@ -159,7 +167,7 @@ export default function OnboardingScreen() {
   // -- /scanner oder /search bei entsprechender firstAction, sonst
   // /Dashboard -- oder /account fuer den leiseren Konto-Knopf.
   const finish = async (target) => {
-    await requestNotificationPermissionIfNeeded();
+    const permissionWasDenied = await requestNotificationPermissionIfNeeded();
     completeOnboarding({
       lifeStageId: resolved.lifeStageId,
       privacyVersion: PRIVACY_VERSION,
@@ -175,8 +183,13 @@ export default function OnboardingScreen() {
     // Der zustand-Set oben ist synchron, aber die Screens hinter dem
     // Stack.Protected-Gate (app/_layout.jsx) sind erst nach dem
     // naechsten Render gemountet. Direktes replace() faende sie noch
-    // nicht, ein Tick Verzoegerung reicht.
-    setTimeout(() => router.replace(target), 0);
+    // nicht, ein Tick Verzoegerung reicht. Wurde die Erinnerungs-Erlaubnis
+    // gerade abgelehnt, bleibt die Nutzerin laenger auf StepRoutineTimes:
+    // Sonst verschwindet permissionDenied im selben Frame, in dem es
+    // gesetzt wurde, und sie erfaehrt nie, warum Erinnerungen wieder aus
+    // sind (siehe Kommentar an requestNotificationPermissionIfNeeded).
+    const delay = permissionWasDenied ? 2200 : 0;
+    setTimeout(() => router.replace(target), delay);
   };
 
   const renderStep = () => {
@@ -238,11 +251,15 @@ export default function OnboardingScreen() {
               onPress={() => finish(primaryTarget)}
               disabled={disabled}
             />
-            <QuietButton
-              label={t('onboarding.account.create')}
-              onPress={() => finish('/account')}
-              disabled={disabled}
-            />
+            {/* Minderjaehrige bekommen kein Konto-Angebot (frueher: buildSteps()
+                liess STEP_IDS.ACCOUNT fuer `underage` ganz aus). */}
+            {!resolved.underage ? (
+              <QuietButton
+                label={t('onboarding.account.create')}
+                onPress={() => finish('/account')}
+                disabled={disabled}
+              />
+            ) : null}
           </View>
         );
       }
