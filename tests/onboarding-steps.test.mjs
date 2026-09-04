@@ -43,6 +43,10 @@ check(
   canAdvance('start', { gender: 'female', birthYear: yearFor(30), extra: 'none' }, resolvedFemale30) === true
 );
 check(
+  'Zusatzfrage tatsaechlich beantwortet, frisch aufgeloest: weiter ueber den Fallback',
+  canAdvance('start', { ...female30, extra: 'none' }, resolved({ ...female30, extra: 'none' })) === true
+);
+check(
   'keine Zusatzfrage noetig (Mann): weiter ohne extra',
   canAdvance('start', { gender: 'male', birthYear: yearFor(30) }, resolved({ gender: 'male', birthYear: yearFor(30) })) === true
 );
