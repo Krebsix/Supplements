@@ -5,15 +5,6 @@
  */
 
 export default {
-  // Workflow head (NextUp.js): act first, numbers after.
-  'dashboard.nextUp.title': 'Up next',
-  'dashboard.nextUp.slot': '{label} ({time})',
-  'dashboard.nextUp.remaining': 'After this, {count} still open today.',
-  'dashboard.nextUp.allDone': 'Everything is documented for today.',
-  'dashboard.nextUp.nothingPlanned': 'Nothing is scheduled today.',
-  'dashboard.summaryLine': '{done} of {total} documented',
-  'dashboard.summaryDetailsShow': 'Show details',
-  'dashboard.summaryDetailsHide': 'Hide details',
   // Header greeting, by time of day (display only, no logic module).
   'dashboard.greeting.morning': 'Good morning',
   'dashboard.greeting.day': 'Hello',
@@ -30,26 +21,7 @@ export default {
   'dashboard.nowSuffix': ' · NOW',
   'dashboard.subtitle':
     'Daily control center for intake, timing, history and clean documentation.',
-  'dashboard.summaryLabel': 'Today',
-  'dashboard.summaryProgress': '{done} / {total} documented',
-  'dashboard.summaryEmpty': 'No intake scheduled',
-  'dashboard.insightSetupLabel': 'Setup pending',
-  'dashboard.insightSetupText':
-    'Add supplements or assign timing so the daily plan becomes reliable.',
-  'dashboard.insightCompleteLabel': 'All documented',
-  'dashboard.insightCompleteText':
-    'All intake scheduled for today has been documented.',
-  'dashboard.insightPendingLabel': '{pending} open',
-  'dashboard.insightPendingText':
-    'Open intake stays visible until it is documented or undone.',
-  'dashboard.lastActivityNone': 'No intake has been documented today yet.',
-  'dashboard.lastActivityInvalid': 'Last activity could not be read.',
-  'dashboard.lastActivityLogged': 'Last documented: {date}',
   'dashboard.noticeTitle': 'Intake notice active',
-  'dashboard.metricActiveRoutine': 'Active supplements',
-  'dashboard.metricScheduledToday': 'Scheduled today',
-  'dashboard.metricLogged': 'Documented',
-  'dashboard.metricPending': 'Still open',
   'dashboard.cleanupTitle': 'Multiple entries detected',
   'dashboard.cleanupText':
     '{label} with the same name. Additional entries can be moved to the archive; one active entry remains per supplement.',
@@ -88,14 +60,9 @@ export default {
   'dashboard.timingIncompleteTitle': 'Timing still incomplete',
   'dashboard.timingIncompleteText':
     'Your supplements exist, but are currently not assigned to a time window. Use "Edit" to complete the timing.',
-  'dashboard.slotCountEmpty': 'No intake scheduled',
-  'dashboard.slotCount_one': '1 scheduled intake',
-  'dashboard.slotCount_other': '{count} scheduled intakes',
   'dashboard.slotStatus': 'Time window',
   'dashboard.emptySlotText': 'Nothing is currently scheduled for this time window.',
-  'dashboard.stateLogged': 'Documented',
   'dashboard.statePending': 'Open',
-  'dashboard.stockNote': 'Stock documented: {amount} {unit}',
   'dashboard.stockUnitFallback': 'units',
   'dashboard.timingPrefix': '🕐 {timing}',
   'dashboard.inventoryLabel': 'My inventory',
@@ -106,17 +73,11 @@ export default {
   'dashboard.noteShow': 'Show details',
   'dashboard.undo': 'Undo',
   'dashboard.logAction': 'Document',
-  'dashboard.loggedAtTime': 'Documented at {time}',
   'dashboard.nextUpAt': 'next at {time}',
-  // Day arc (DayArc): per-dot status for the accessibility label.
-  'dashboard.arc.done': 'documented',
-  'dashboard.arc.next': 'up next',
-  'dashboard.arc.later': 'open',
   'dashboard.remindersOff.title': 'Reminders are off',
   'dashboard.remindersOff.text':
     'Your device currently does not remind you of your intake. Turning them on takes a moment.',
   'dashboard.remindersOff.action': 'Turn on',
-  'dashboard.allTodayTitle': 'All intake today ({count})',
   'dashboard.curated.stackTitle': 'Daily total above the upper limit',
   'dashboard.curated.stackText':
     '{names}: the sum across all products lies above the daily upper limit. Details in the daily total check.',
@@ -125,7 +86,6 @@ export default {
     'Notes for your life stage are documented for {names}.',
   'dashboard.curated.refillTitle': 'Stock running low',
   'dashboard.curated.refillText': '{names}: about {days} days left.',
-  'dashboard.edit': 'Edit',
   'dashboard.remove': 'Remove',
   'dashboard.archiveAlertTitle': 'Remove from daily plan',
   'dashboard.archiveAlertMessage':
@@ -134,9 +94,6 @@ export default {
   'dashboard.cleanupAlertMessage':
     '{label} will be archived. One active entry per supplement remains in your daily plan.',
   'dashboard.cleanupAlertConfirm': 'Clean up',
-  'dashboard.sectionAlertsTitle': 'Review notices',
-  'dashboard.sectionAlertsSubtitle':
-    'General notices on organizing your intake, without medical assessment.',
   'dashboard.noAlertsTitle': 'No open review notices',
   'dashboard.noAlertsText':
     'No additional organizational notices are currently documented for the current daily plan.',

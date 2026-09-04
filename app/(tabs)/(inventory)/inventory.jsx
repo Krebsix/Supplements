@@ -357,7 +357,11 @@ export default function InventoryScreen() {
                         style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
                         onPress={() => goToEdit(supplement)}
                         accessibilityRole="button"
-                        accessibilityLabel={formatSupplementName(supplement)}
+                        accessibilityLabel={
+                          dosage
+                            ? `${formatSupplementName(supplement)}. ${dosage}`
+                            : formatSupplementName(supplement)
+                        }
                         accessibilityHint={t('inventory.edit')}
                       >
                         <View style={styles.iconTile}>

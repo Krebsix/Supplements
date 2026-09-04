@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Alert, AppState } from 'react-native';
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
-import {
-  SpaceGrotesk_600SemiBold,
-  SpaceGrotesk_700Bold,
-} from '@expo-google-fonts/space-grotesk';
-import { IBMPlexMono_500Medium } from '@expo-google-fonts/ibm-plex-mono';
+// Einzelne Schnitte statt Paket-Wurzel importieren (Review-Fund): Der
+// Paket-Index von @expo-google-fonts/* verlangt alle ~19 Schnitte auf
+// einmal (CJS, Metro kann das nicht wegschuetteln) und blaeht den
+// nativen Build unnoetig auf, obwohl die App nur drei Schnitte braucht.
+import { SpaceGrotesk_600SemiBold } from '@expo-google-fonts/space-grotesk/600SemiBold';
+import { SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk/700Bold';
+import { IBMPlexMono_500Medium } from '@expo-google-fonts/ibm-plex-mono/500Medium';
 import { useTranslation } from '../i18n';
 import { useStore } from '../useStore';
 import useNotificationStore, {

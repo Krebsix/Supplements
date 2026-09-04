@@ -4,15 +4,6 @@
  */
 
 export default {
-  // Arbeitsfluss-Kopf (NextUp.js): erst handeln, dann Zahlen.
-  'dashboard.nextUp.title': 'Als Nächstes',
-  'dashboard.nextUp.slot': '{label} ({time})',
-  'dashboard.nextUp.remaining': 'Danach heute noch {count} offen.',
-  'dashboard.nextUp.allDone': 'Für heute ist alles dokumentiert.',
-  'dashboard.nextUp.nothingPlanned': 'Heute ist nichts geplant.',
-  'dashboard.summaryLine': '{done} von {total} dokumentiert',
-  'dashboard.summaryDetailsShow': 'Details anzeigen',
-  'dashboard.summaryDetailsHide': 'Details ausblenden',
   // Begruessung im Kopf, nach Tageszeit (Anzeige, kein Logik-Modul).
   'dashboard.greeting.morning': 'Guten Morgen',
   'dashboard.greeting.day': 'Hallo',
@@ -29,26 +20,7 @@ export default {
   'dashboard.nowSuffix': ' · JETZT',
   'dashboard.subtitle':
     'Tägliches Kontrollzentrum für Einnahmen, Timing, Verlauf und saubere Dokumentation.',
-  'dashboard.summaryLabel': 'Heute',
-  'dashboard.summaryProgress': '{done} / {total} dokumentiert',
-  'dashboard.summaryEmpty': 'Keine Einnahmen geplant',
-  'dashboard.insightSetupLabel': 'Setup offen',
-  'dashboard.insightSetupText':
-    'Füge Supplements hinzu oder ordne Timing zu, damit der Tagesplan belastbar wird.',
-  'dashboard.insightCompleteLabel': 'Alles dokumentiert',
-  'dashboard.insightCompleteText':
-    'Alle geplanten Einnahmen sind für heute dokumentiert.',
-  'dashboard.insightPendingLabel': '{pending} offen',
-  'dashboard.insightPendingText':
-    'Offene Einnahmen bleiben sichtbar, bis sie dokumentiert oder rückgängig gemacht werden.',
-  'dashboard.lastActivityNone': 'Heute wurde noch keine Einnahme dokumentiert.',
-  'dashboard.lastActivityInvalid': 'Letzte Aktivität konnte nicht gelesen werden.',
-  'dashboard.lastActivityLogged': 'Zuletzt dokumentiert: {date}',
   'dashboard.noticeTitle': 'Einnahmehinweis aktiv',
-  'dashboard.metricActiveRoutine': 'Aktive Präparate',
-  'dashboard.metricScheduledToday': 'Heute geplant',
-  'dashboard.metricLogged': 'Dokumentiert',
-  'dashboard.metricPending': 'Noch offen',
   'dashboard.cleanupTitle': 'Mehrfache Einträge erkannt',
   'dashboard.cleanupText':
     '{label} mit gleichem Namen. Zusätzliche Einträge können ins Archiv verschoben werden; je Supplement bleibt ein aktiver Eintrag erhalten.',
@@ -88,14 +60,9 @@ export default {
   'dashboard.timingIncompleteTitle': 'Timing noch unvollständig',
   'dashboard.timingIncompleteText':
     'Deine Supplements sind vorhanden, aber aktuell keinem Zeitfenster zugeordnet. Über „Bearbeiten“ kannst du das Timing sauber ergänzen.',
-  'dashboard.slotCountEmpty': 'Keine geplanten Einnahmen',
-  'dashboard.slotCount_one': '1 geplante Einnahme',
-  'dashboard.slotCount_other': '{count} geplante Einnahmen',
   'dashboard.slotStatus': 'Zeitfenster',
   'dashboard.emptySlotText': 'Für dieses Zeitfenster ist aktuell nichts geplant.',
-  'dashboard.stateLogged': 'Dokumentiert',
   'dashboard.statePending': 'Offen',
-  'dashboard.stockNote': 'Bestand dokumentiert: {amount} {unit}',
   'dashboard.stockUnitFallback': 'Einheiten',
   'dashboard.timingPrefix': '🕐 {timing}',
   'dashboard.inventoryLabel': 'Mein Bestand',
@@ -106,12 +73,7 @@ export default {
   'dashboard.noteShow': 'Details anzeigen',
   'dashboard.undo': 'Rückgängig',
   'dashboard.logAction': 'Dokumentieren',
-  'dashboard.loggedAtTime': 'Dokumentiert um {time}',
   'dashboard.nextUpAt': 'als Nächstes {time}',
-  // Tagesbogen (DayArc): Status je Punkt fuer die Vorlese-Beschriftung.
-  'dashboard.arc.done': 'dokumentiert',
-  'dashboard.arc.next': 'als Nächstes',
-  'dashboard.arc.later': 'offen',
   // Hinweis, wenn Erinnerungen faktisch aus sind (Gerätetest 02.09.):
   // geplante Einnahmen ohne aktive Push-Erinnerung.
   'dashboard.remindersOff.title': 'Erinnerungen sind aus',
@@ -119,7 +81,6 @@ export default {
     'Dein Gerät erinnert dich derzeit nicht an deine Einnahmen. Einschalten dauert einen Moment.',
   'dashboard.remindersOff.action': 'Einschalten',
   // Kuratierte Karten und Slot-Aufklapper (Spec-Iteration 2026-09-02).
-  'dashboard.allTodayTitle': 'Alle Einnahmen heute ({count})',
   'dashboard.curated.stackTitle': 'Tagessumme über der Obergrenze',
   'dashboard.curated.stackText':
     '{names}: Die Summe über alle Präparate liegt über der Tagesobergrenze. Details im Tagessummen-Check.',
@@ -128,7 +89,6 @@ export default {
     'Zu {names} sind Hinweise für deine Lebensphase hinterlegt.',
   'dashboard.curated.refillTitle': 'Bestand wird knapp',
   'dashboard.curated.refillText': '{names}: reicht noch etwa {days} Tage.',
-  'dashboard.edit': 'Bearbeiten',
   'dashboard.remove': 'Entfernen',
   'dashboard.archiveAlertTitle': 'Aus dem Tagesplan entfernen',
   'dashboard.archiveAlertMessage':
@@ -137,9 +97,6 @@ export default {
   'dashboard.cleanupAlertMessage':
     '{label} werden archiviert. Je Supplement-Name bleibt ein aktiver Eintrag in deinem Tagesplan erhalten.',
   'dashboard.cleanupAlertConfirm': 'Bereinigen',
-  'dashboard.sectionAlertsTitle': 'Prüfhinweise',
-  'dashboard.sectionAlertsSubtitle':
-    'Allgemeine Hinweise zur Organisation deiner Einnahmen, ohne medizinische Bewertung.',
   'dashboard.noAlertsTitle': 'Keine offenen Prüfhinweise',
   'dashboard.noAlertsText':
     'Für den aktuellen Tagesplan liegen derzeit keine zusätzlichen organisatorischen Hinweise vor.',

@@ -72,10 +72,13 @@ export const colors = {
 };
 
 /**
- * Toene auf dunklem Azur/Navy (accentInk als Flaeche): Text und Grafik der
- * Tagesplan-Buehne. Aufhellungen von Azur/Navy statt Petrol,
- * gleiches Vorgehen wie beim Petrol-Refresh vom 2026-08-31 (abgeleitete
- * Toene, keine dritte Palette).
+ * Toene auf dunklem Azur/Navy (accentInk als Flaeche): Text und Grafik auf
+ * farbigen Flaechen in Akzentfarbe, aktuell nur die zentrale Hinzufuegen-
+ * Taste der Tab-Leiste (app/(tabs)/_layout.jsx, onDark.ink fuer das
+ * Plus-Icon auf dem accent-farbenen Quadrat). Die frueher gemeinte
+ * Tagesplan-Buehne ist mit dem Redesign Phase 2 entfallen. Aufhellungen
+ * von Azur/Navy statt Petrol, gleiches Vorgehen wie beim Petrol-Refresh
+ * vom 2026-08-31 (abgeleitete Toene, keine dritte Palette).
  */
 export const onDark = {
   ink: '#ffffff',
