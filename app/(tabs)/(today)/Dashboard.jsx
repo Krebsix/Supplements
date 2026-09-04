@@ -10,12 +10,15 @@ import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
 import { formatBackupTime } from '../../../CloudBackup';
 import { findNextUp } from '../../../NextUp';
+import { buildEntryGuidance } from '../../../ScheduleGuidance';
+import { applySeparation } from '../../../StackConflictResolver';
 import { analyzeStack } from '../../../StackAnalyzer';
 import { refillState } from '../../../StockForecast';
 import { substanceIdsFromDetails } from '../../../SlotSuggestion';
 import { getAdvisories } from '../../../data/lifeStageAdvisories';
 import { getSubstance } from '../../../data/substances';
 import FirstStepsCard from '../../../components/FirstStepsCard';
+import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useCloudBackupStore from '../../../useCloudBackupStore';
 import useNotificationStore from '../../../useNotificationStore';
@@ -95,6 +98,10 @@ export default function Dashboard() {
   const router = useRouter();
   const { t, language } = useTranslation();
   const insets = useSafeAreaInsets();
+  // Welche Zeilen ihre Einnahme-Hinweise/Konflikt-Erklaerung aufgeklappt
+  // zeigen (SlotReason), Pattern unveraendert aus der Buehnen-Fassung
+  // uebernommen: Standard zu, Tiefe ist einen Tipp entfernt.
+  const [expandedNoteIds, setExpandedNoteIds] = React.useState(() => new Set());
 
   const activeProfileId = useStore((state) => state.activeProfileId);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
@@ -105,6 +112,7 @@ export default function Dashboard() {
   const logIntake = useStore((state) => state.logIntake);
   const undoIntakeToday = useStore((state) => state.undoIntakeToday);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
+  const updateUserSupplement = useStore((state) => state.updateUserSupplement);
   const lastRestore = useCloudBackupStore((state) => state.lastRestore);
   const dismissRestoreNotice = useCloudBackupStore((state) => state.dismissRestoreNotice);
   const notificationsEnabled = useNotificationStore((state) => state.notificationsEnabled);
@@ -142,6 +150,43 @@ export default function Dashboard() {
 
   function alertsForSlot(slotId) {
     return slotAlerts.find((entry) => entry.slot.id === slotId) ?? null;
+  }
+
+  // Erklaerung je Eintrag (SlotReason), unveraendert aus der Buehnen-Fassung
+  // uebernommen (Finding Task B: war komplett aus der App verschwunden).
+  // Einmal je aktivem Praeparat berechnet statt in der Zeilen-Schleife,
+  // sonst wuerde ein Hook in einer .map()-Schleife stehen (Rules of Hooks).
+  // buildEntryGuidance ist reine Fachlogik aus ScheduleGuidance.js,
+  // ausschliesslich belegte Regeln (Einnahme-Hinweise, Paar-Konflikte,
+  // Synergien).
+  const guidanceBySupplementId = React.useMemo(() => {
+    const map = new Map();
+    for (const supplement of activeSupplements) {
+      map.set(supplement.id, buildEntryGuidance(supplement, activeSupplements, dailySchedule));
+    }
+    return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSupplements, dailySchedule]);
+
+  function toggleNoteExpanded(id) {
+    setExpandedNoteIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  // Verschiebungs-Vorschlag anwenden (StackConflictResolver.js): ersetzt
+  // nur den betroffenen Slot, andere Slots eines 2x/3x-Praeparats bleiben.
+  function handleApplyMove(supplement, conflict) {
+    if (!conflict?.move) return;
+    const nextSlots = applySeparation(
+      supplement.timingSlots ?? [],
+      conflict.move.fromSlotId,
+      conflict.move.slotId
+    );
+    updateUserSupplement(supplement.id, { timingSlots: nextSlots });
   }
 
   // Checkliste statt Arbeitsfluss-Karte (Redesign Phase 2, Task B): "als
@@ -442,6 +487,14 @@ export default function Dashboard() {
   // der Status nie allein ueber Farbe transportiert wird (Bedienregeln).
   // Ohne eigenes Touchable fuer offene, nicht faellige Zeilen: Es gibt dort
   // nichts zu tippen, das ist keine vergessene Aktion.
+  //
+  // Info-Symbol (Finding Task B): Einnahme-Hinweise, Paar-Konflikte und
+  // Synergien (SlotReason/ScheduleGuidance.js) waren mit der Buehne
+  // komplett aus der App verschwunden, nicht nur versteckt. Die Zeile
+  // bleibt kompakt (Bedienregel "Tiefe ist einen Tipp entfernt"): Nur wenn
+  // ueberhaupt eine Erklaerung hinterlegt ist, erscheint ein Feather-
+  // Info-Icon; Antippen klappt SlotReason darunter auf, inklusive des
+  // "Verschieben"-Vorschlags bei alwaysSeparate-Konflikten.
   function renderChecklistRow(supplement, slotId, isNow) {
     const name = formatSupplementName(supplement);
     const dosage = formatSupplementDosage(supplement, '');
@@ -456,28 +509,62 @@ export default function Dashboard() {
         }
       : {};
 
+    const guidance = guidanceBySupplementId.get(supplement.id) ?? {
+      notes: [],
+      conflicts: [],
+      synergies: [],
+    };
+    const hasGuidance =
+      guidance.notes.length > 0 || guidance.conflicts.length > 0 || guidance.synergies.length > 0;
+    const detailsExpanded = expandedNoteIds.has(supplement.id);
+
     return (
-      <RowWrap key={supplement.id} style={styles.row} {...rowWrapProps}>
-        <Feather
-          name={logged ? 'check-circle' : 'circle'}
-          size={22}
-          color={logged ? colors.affirm : colors.ruleStrong}
-        />
-        <View style={styles.rowText}>
-          <Text style={[styles.rowTitle, logged && styles.rowTitleDone]}>{name}</Text>
-          {dosage ? <Text style={[styles.rowSub, logged && styles.rowSubDone]}>{dosage}</Text> : null}
-        </View>
-        {isNow && !logged ? (
-          <TouchableOpacity
-            style={styles.nehmenButton}
-            onPress={() => logIntake(supplement.id, { slotId })}
-            accessibilityRole="button"
-            accessibilityLabel={`${t('dashboard.logAction')}: ${name}`}
-          >
-            <Text style={styles.nehmenButtonText}>{t('dashboard.logAction')}</Text>
-          </TouchableOpacity>
+      <View key={supplement.id}>
+        <RowWrap style={styles.row} {...rowWrapProps}>
+          <Feather
+            name={logged ? 'check-circle' : 'circle'}
+            size={22}
+            color={logged ? colors.affirm : colors.ruleStrong}
+          />
+          <View style={styles.rowText}>
+            <Text style={[styles.rowTitle, logged && styles.rowTitleDone]}>{name}</Text>
+            {dosage ? <Text style={[styles.rowSub, logged && styles.rowSubDone]}>{dosage}</Text> : null}
+          </View>
+          {hasGuidance ? (
+            <TouchableOpacity
+              style={styles.infoButton}
+              onPress={() => toggleNoteExpanded(supplement.id)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')}
+              // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop
+              // allein reicht rechnerisch nicht.
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Feather name="info" size={18} color={colors.inkFaint} />
+            </TouchableOpacity>
+          ) : null}
+          {isNow && !logged ? (
+            <TouchableOpacity
+              style={styles.nehmenButton}
+              onPress={() => logIntake(supplement.id, { slotId })}
+              accessibilityRole="button"
+              accessibilityLabel={`${t('dashboard.logAction')}: ${name}`}
+            >
+              <Text style={styles.nehmenButtonText}>{t('dashboard.logAction')}</Text>
+            </TouchableOpacity>
+          ) : null}
+        </RowWrap>
+        {hasGuidance && detailsExpanded ? (
+          <View style={styles.guidanceWrap}>
+            <SlotReason
+              guidance={guidance}
+              onOpenSubstance={(substanceId) => router.push(`/search?substance=${substanceId}`)}
+              onApplyMove={(conflict) => handleApplyMove(supplement, conflict)}
+            />
+          </View>
         ) : null}
-      </RowWrap>
+      </View>
     );
   }
 
@@ -686,6 +773,19 @@ const styles = StyleSheet.create({
   },
   rowSubDone: {
     color: colors.inkFaint,
+  },
+  // Info-Icon fuer den SlotReason-Aufklapper (Finding Task B): kein Ersatz
+  // fuer eine eigene Karte, nur ein leiser Hinweis, dass es zu diesem
+  // Praeparat eine belegte Erklaerung gibt.
+  infoButton: {
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  guidanceWrap: {
+    marginLeft: 34,
+    paddingBottom: space.sm,
   },
   nehmenButton: {
     ...surfaces.buttonPrimary,
