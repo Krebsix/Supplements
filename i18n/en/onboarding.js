@@ -23,6 +23,11 @@ export default {
   'onboarding.legal.privacyLink': 'privacy policy',
   'onboarding.legal.accept': 'Accept and continue',
 
+  // Screen title of ScreenStart.jsx, which bundles name, gender, birth
+  // year, the extra question and the legal text.
+  'onboarding.start.title': 'A little about you',
+  'onboarding.start.subtitle': 'For the right reference values and how we address you.',
+
   'onboarding.name.title': 'How should we address you?',
   'onboarding.name.field': 'First name',
   'onboarding.name.hint': 'Only for the greeting in the app. Stays on your device.',
@@ -46,6 +51,12 @@ export default {
   'onboarding.extra.none': 'None of these',
   'onboarding.extra.reference.title': 'Which reference values should apply?',
   'onboarding.extra.reference.why': 'The published reference values are split into groups. You can change this choice at any time in the settings.',
+
+  // Screen title of ScreenRoutine.jsx, which bundles intake times and
+  // the first preparation. Its own key so it does not collide with
+  // 'onboarding.routine.title' (StepRoutineTimes' own internal title,
+  // rendered underneath it in the same ScrollView).
+  'onboarding.routineScreen.title': 'Get started',
 
   'onboarding.routine.title': 'Your intake times',
   'onboarding.routine.text': 'When do you usually take something? Times can be changed later.',

@@ -25,6 +25,11 @@ export default {
   'onboarding.legal.privacyLink': 'Datenschutzerklärung',
   'onboarding.legal.accept': 'Akzeptieren und weiter',
 
+  // Bildschirmtitel von ScreenStart.jsx, das Anrede, Geschlecht,
+  // Geburtsjahr, Zusatzfrage und Rechtstext buendelt.
+  'onboarding.start.title': 'Kurz zu dir',
+  'onboarding.start.subtitle': 'Für passende Referenzwerte und die richtige Anrede.',
+
   'onboarding.name.title': 'Wie sollen wir dich ansprechen?',
   'onboarding.name.field': 'Vorname',
   'onboarding.name.hint': 'Nur für die Anrede in der App. Bleibt auf deinem Gerät.',
@@ -48,6 +53,12 @@ export default {
   'onboarding.extra.none': 'Nichts davon',
   'onboarding.extra.reference.title': 'Welche Referenzwerte sollen gelten?',
   'onboarding.extra.reference.why': 'Die veröffentlichten Referenzwerte sind nach Gruppen aufgeteilt. Du kannst die Wahl jederzeit in den Einstellungen ändern.',
+
+  // Bildschirmtitel von ScreenRoutine.jsx, das Einnahmezeiten und erstes
+  // Praeparat buendelt. Eigener Schluessel, damit er nicht mit
+  // 'onboarding.routine.title' (interner Titel von StepRoutineTimes,
+  // erscheint darunter im selben ScrollView) zusammenfaellt.
+  'onboarding.routineScreen.title': 'Loslegen',
 
   'onboarding.routine.title': 'Deine Einnahmezeiten',
   'onboarding.routine.text': 'Wann nimmst du meistens etwas? Zeiten lassen sich später ändern.',

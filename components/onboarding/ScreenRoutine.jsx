@@ -10,11 +10,17 @@ import StepRoutineFirst from './StepRoutineFirst';
  * Buendelt Einnahmezeiten und erstes Praeparat. Das Konto-Angebot
  * (frueher StepAccount als Pflichtschritt) ist jetzt nur noch ein Link
  * in der Fusszeile, siehe app/onboarding.jsx (Task 10).
+ *
+ * Eigener Bildschirmtitel (`onboarding.routineScreen.title`), NICHT
+ * `onboarding.routine.title`: Letzteres ist der interne Titel von
+ * StepRoutineTimes und wuerde sonst doppelt untereinander erscheinen,
+ * einmal als Screen-Ueberschrift, einmal als Block-Ueberschrift des
+ * ersten Kindes.
  */
 export default function ScreenRoutine({ t, answers, onChange, permissionDenied }) {
   return (
     <ScrollView contentContainerStyle={styles.content}>
-      <Text style={styles.title}>{t('onboarding.routine.title')}</Text>
+      <Text style={styles.title}>{t('onboarding.routineScreen.title')}</Text>
 
       <StepRoutineTimes t={t} value={permissionDenied} />
       <StepRoutineFirst
