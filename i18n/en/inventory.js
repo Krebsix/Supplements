@@ -40,4 +40,8 @@ export default {
   'inventory.archiveConfirm': 'Archive',
 
   'inventory.refillIn': 'Lasts about {days} more days',
+  // Due case of the refill forecast: its own wording instead of just a
+  // color change, otherwise the status would only be visible through
+  // color (Bedienregeln, CLAUDE.md).
+  'inventory.refillDue': 'Refill soon, lasts about {days} more days',
 };

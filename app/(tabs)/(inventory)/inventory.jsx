@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   Alert,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import AddSupplementChooser from '../../../components/AddSupplementChooser';
@@ -36,6 +38,14 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
  * wurde, unabhaengig von Zeitpunkt, Kur-Pause oder Tagesplan. Er sortiert
  * die Eintraege ohne Zeitpunkt nach oben und benennt den Grund, statt sie
  * still verschwinden zu lassen.
+ *
+ * PHASE 2 DER WEBSITE-ANGLEICHUNG: kompakte Zeilen statt grosser Karten
+ * (eine gruppierte Liste im iOS-Einstellungen-Muster, siehe
+ * surfaces.listGroup/listDivider in theme.js). Antippen einer Zeile
+ * oeffnet direkt das Bearbeiten, darunter bleibt eine kompakte
+ * Aktionsleiste fuer Pausieren/Archivieren bzw. Wiederherstellen, weil
+ * der Bearbeiten-Screen (AddSupplement.jsx) nicht Teil dieser Aenderung
+ * ist und diese Aktionen sonst nirgends erreichbar waeren.
  */
 
 const cautionTone = toneFor('caution');
@@ -121,6 +131,10 @@ export default function InventoryScreen() {
         },
       ]
     );
+  }
+
+  function goToEdit(supplement) {
+    router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`);
   }
 
   return (
@@ -214,87 +228,108 @@ export default function InventoryScreen() {
               </Text>
             ) : null}
 
-            {active.map((supplement) => {
-              const slotLabels = (supplement.timingSlots ?? [])
-                .map((slotId) => SLOTS[slotId]?.label)
-                .filter(Boolean)
-                .join(' · ');
-              const dosage = formatSupplementDosage(supplement, '');
-              const paused = supplement.status === 'paused';
-              const stock = stockBySupplementId?.[supplement.id];
-              const forecast = stock
-                ? refillState(stock, supplement, refillThresholdDays)
-                : null;
+            {active.length > 0 ? (
+              <View style={styles.group}>
+                {active.map((supplement, index) => {
+                  const slotLabels = (supplement.timingSlots ?? [])
+                    .map((slotId) => SLOTS[slotId]?.label)
+                    .filter(Boolean)
+                    .join(' · ');
+                  const dosage = formatSupplementDosage(supplement, '');
+                  const paused = supplement.status === 'paused';
+                  const stock = stockBySupplementId?.[supplement.id];
+                  const forecast = stock
+                    ? refillState(stock, supplement, refillThresholdDays)
+                    : null;
+                  const showRefill = forecast && forecast.daysLeft !== null;
 
-              return (
-                <View key={supplement.id} style={styles.card}>
-                  <View style={styles.cardHeader}>
-                    <Text style={styles.cardName}>{formatSupplementName(supplement)}</Text>
-                    {paused ? (
-                      <Text style={styles.pausedPill}>{t('inventory.paused')}</Text>
-                    ) : null}
-                  </View>
+                  // Subzeile: Dosis · Slots (oder Hinweis auf fehlenden
+                  // Zeitpunkt) · Pausiert-Status. Der Nachfuell-Hinweis
+                  // steht bewusst NICHT hier drin, sondern als eigene
+                  // Zeile darunter, weil er faellig werden kann und dann
+                  // eigenen Wortlaut braucht statt nur Farbe.
+                  const subline = [
+                    dosage,
+                    slotLabels || t('inventory.noSlotBadge'),
+                    paused ? t('inventory.paused') : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ');
 
-                  {dosage ? <Text style={styles.cardMeta}>{dosage}</Text> : null}
+                  return (
+                    <View key={supplement.id}>
+                      <Pressable
+                        style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+                        onPress={() => goToEdit(supplement)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${formatSupplementName(supplement)}. ${subline}`}
+                        accessibilityHint={t('inventory.edit')}
+                      >
+                        <View style={styles.iconTile}>
+                          <Feather name="disc" size={18} color={colors.accent} />
+                        </View>
+                        <View style={styles.rowText}>
+                          <Text style={styles.rowTitle} numberOfLines={1}>
+                            {formatSupplementName(supplement)}
+                          </Text>
+                          {subline ? (
+                            <Text style={styles.rowSub} numberOfLines={2}>
+                              {subline}
+                            </Text>
+                          ) : null}
+                        </View>
+                        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+                      </Pressable>
 
-                  {slotLabels ? (
-                    <Text style={styles.cardSlots}>{slotLabels}</Text>
-                  ) : (
-                    <Text style={styles.cardMissing}>{t('inventory.noSlotBadge')}</Text>
-                  )}
+                      {showRefill ? (
+                        <View
+                          style={[styles.refillLine, forecast.due && styles.refillLineDue]}
+                        >
+                          <Feather
+                            name={forecast.due ? 'alert-circle' : 'clock'}
+                            size={13}
+                            color={forecast.due ? cautionTone.ink : colors.inkFaint}
+                          />
+                          <Text
+                            style={[styles.refillText, forecast.due && styles.refillTextDue]}
+                          >
+                            {forecast.due
+                              ? t('inventory.refillDue', { days: forecast.daysLeft })
+                              : t('inventory.refillIn', { days: forecast.daysLeft })}
+                          </Text>
+                        </View>
+                      ) : null}
 
-                  {forecast && forecast.daysLeft !== null ? (
-                    <Text
-                      style={[
-                        styles.cardRefill,
-                        forecast.due && styles.cardRefillDue,
-                      ]}
-                    >
-                      {t('inventory.refillIn', { days: forecast.daysLeft })}
-                    </Text>
-                  ) : null}
+                      <View style={styles.actionsStrip}>
+                        <TouchableOpacity
+                          style={styles.actionBtn}
+                          onPress={() =>
+                            updateUserSupplement(supplement.id, {
+                              status: paused ? 'active' : 'paused',
+                            })
+                          }
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.actionBtnText}>
+                            {paused ? t('inventory.resume') : t('inventory.pause')}
+                          </Text>
+                        </TouchableOpacity>
 
-                  <View style={styles.cardActions}>
-                    <TouchableOpacity
-                      style={styles.actionButton}
-                      onPress={() =>
-                        router.push(
-                          `/AddSupplement?editId=${encodeURIComponent(supplement.id)}`
-                        )
-                      }
-                      accessibilityRole="link"
-                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                    >
-                      <Text style={styles.actionText}>{t('inventory.edit')}</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.actionBtn}
+                          onPress={() => handleArchive(supplement)}
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.actionBtnDanger}>{t('inventory.archive')}</Text>
+                        </TouchableOpacity>
+                      </View>
 
-                    <TouchableOpacity
-                      style={styles.actionButton}
-                      onPress={() =>
-                        updateUserSupplement(supplement.id, {
-                          status: paused ? 'active' : 'paused',
-                        })
-                      }
-                      accessibilityRole="button"
-                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                    >
-                      <Text style={styles.actionText}>
-                        {paused ? t('inventory.resume') : t('inventory.pause')}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.actionButton}
-                      onPress={() => handleArchive(supplement)}
-                      accessibilityRole="button"
-                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                    >
-                      <Text style={styles.actionDanger}>{t('inventory.archive')}</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              );
-            })}
+                      {index < active.length - 1 ? <View style={styles.divider} /> : null}
+                    </View>
+                  );
+                })}
+              </View>
+            ) : null}
           </>
         ) : null}
 
@@ -306,34 +341,57 @@ export default function InventoryScreen() {
               </Text>
             ) : null}
 
-            {archived.map((supplement) => {
-              const dosage = formatSupplementDosage(supplement, '');
+            {archived.length > 0 ? (
+              <View style={styles.group}>
+                {/* Archivierte Eintraege zeigen weder Einnahmezeitpunkt
+                    noch Reichweiten-Prognose noch Pausiert-Status: Sie
+                    laufen nicht mehr im Tagesplan mit, diese Angaben
+                    waeren erfundene Aktualitaet. Einzige Aktion ist
+                    Wiederherstellen. */}
+                {archived.map((supplement, index) => {
+                  const dosage = formatSupplementDosage(supplement, '');
 
-              return (
-                <View key={supplement.id} style={styles.card}>
-                  {/* Archivierte Eintraege zeigen weder Einnahmezeitpunkt
-                      noch Reichweiten-Prognose: Sie laufen nicht mehr im
-                      Tagesplan mit, diese Angaben waeren erfundene
-                      Aktualitaet. Einzige Aktion ist Wiederherstellen. */}
-                  <View style={styles.cardHeader}>
-                    <Text style={styles.cardName}>{formatSupplementName(supplement)}</Text>
-                  </View>
+                  return (
+                    <View key={supplement.id}>
+                      <Pressable
+                        style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+                        onPress={() => goToEdit(supplement)}
+                        accessibilityRole="button"
+                        accessibilityLabel={formatSupplementName(supplement)}
+                        accessibilityHint={t('inventory.edit')}
+                      >
+                        <View style={styles.iconTile}>
+                          <Feather name="disc" size={18} color={colors.accent} />
+                        </View>
+                        <View style={styles.rowText}>
+                          <Text style={styles.rowTitle} numberOfLines={1}>
+                            {formatSupplementName(supplement)}
+                          </Text>
+                          {dosage ? (
+                            <Text style={styles.rowSub} numberOfLines={2}>
+                              {dosage}
+                            </Text>
+                          ) : null}
+                        </View>
+                        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+                      </Pressable>
 
-                  {dosage ? <Text style={styles.cardMeta}>{dosage}</Text> : null}
+                      <View style={styles.actionsStrip}>
+                        <TouchableOpacity
+                          style={styles.actionBtn}
+                          onPress={() => handleRestore(supplement)}
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.actionBtnText}>{t('inventory.restore')}</Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  <View style={styles.cardActions}>
-                    <TouchableOpacity
-                      style={styles.actionButton}
-                      onPress={() => handleRestore(supplement)}
-                      accessibilityRole="button"
-                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                    >
-                      <Text style={styles.actionText}>{t('inventory.restore')}</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              );
-            })}
+                      {index < archived.length - 1 ? <View style={styles.divider} /> : null}
+                    </View>
+                  );
+                })}
+              </View>
+            ) : null}
           </>
         ) : null}
 
@@ -385,53 +443,71 @@ const styles = StyleSheet.create({
   emptyCard: { ...surfaces.card },
   emptyTitle: { ...type.heading },
   emptyText: { ...type.body, marginTop: space.sm, marginBottom: space.md },
-  card: { ...surfaces.card },
-  cardHeader: {
+
+  // Gruppierte Liste im iOS-Einstellungen-Muster (siehe menu.jsx): ein
+  // Block mit Haarlinie, Zeilen durch listDivider getrennt.
+  group: { ...surfaces.listGroup },
+  row: {
+    ...surfaces.listRow,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: space.md,
   },
-  cardName: { ...type.subheading, flex: 1 },
-  pausedPill: {
-    ...type.tiny,
-    color: cautionTone.ink,
-    backgroundColor: cautionTone.surface,
+  rowPressed: { backgroundColor: colors.surfaceSunken },
+  iconTile: {
+    width: 38,
+    height: 38,
     borderRadius: radius.sm,
-    paddingHorizontal: space.sm,
-    paddingVertical: 2,
-    overflow: 'hidden',
+    backgroundColor: colors.accentSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  cardMeta: { ...type.small, marginTop: space.xs },
-  cardSlots: { ...type.small, color: colors.accent, marginTop: space.xs },
-  cardMissing: {
-    ...type.small,
-    color: cautionTone.ink,
-    marginTop: space.xs,
-  },
-  cardRefill: {
-    ...type.tiny,
-    color: colors.inkMuted,
-    marginTop: space.xs,
-  },
-  cardRefillDue: {
-    color: colors.caution,
-  },
-  cardActions: {
+  rowText: { flex: 1 },
+  rowTitle: { ...type.bodyStrong },
+  rowSub: { ...type.tiny, marginTop: 2 },
+
+  // Nachfuell-Hinweis: eigene Zeile mit Wortlaut statt reinem Farbwechsel
+  // (Bedienregeln, CLAUDE.md: Status nie nur ueber Farbe).
+  refillLine: {
     flexDirection: 'row',
-    marginTop: space.md,
+    alignItems: 'center',
+    gap: space.xs,
+    paddingHorizontal: space.lg,
+    paddingBottom: space.sm,
+  },
+  refillLineDue: {
+    backgroundColor: cautionTone.surface,
+    paddingVertical: space.xs,
+  },
+  refillText: { ...type.tiny, color: colors.inkFaint },
+  refillTextDue: { color: cautionTone.ink, fontWeight: '600' },
+
+  // Kompakte Aktionsleiste unterhalb der Zeile: Pausieren/Ins Archiv
+  // bzw. Wiederherstellen bleiben so erreichbar, ohne den Bearbeiten-
+  // Screen anfassen zu muessen (der ist nicht Teil dieser Aenderung).
+  actionsStrip: {
+    flexDirection: 'row',
+    paddingHorizontal: space.lg,
+    paddingBottom: space.sm,
     gap: space.lg,
   },
-  actionButton: { paddingVertical: space.xs },
-  actionText: {
+  actionBtn: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingVertical: space.xs,
+  },
+  actionBtnText: {
     color: colors.accent,
     fontSize: 13,
     fontWeight: '700',
   },
-  actionDanger: {
+  actionBtnDanger: {
     color: colors.alert,
     fontSize: 13,
     fontWeight: '700',
   },
+  divider: { ...surfaces.listDivider },
+
   filterChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -451,8 +527,6 @@ const styles = StyleSheet.create({
     ...type.small,
     marginBottom: space.md,
   },
-  primaryButton: { ...surfaces.buttonPrimary },
-  primaryButtonText: { ...surfaces.buttonPrimaryText },
   addButton: {
     ...surfaces.buttonQuiet,
     marginTop: space.lg,

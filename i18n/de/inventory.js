@@ -40,4 +40,8 @@ export default {
   'inventory.archiveConfirm': 'Ins Archiv',
 
   'inventory.refillIn': 'Reicht noch etwa {days} Tage',
+  // Faellig-Fall der Nachfuell-Prognose: eigener Wortlaut statt nur
+  // Farbwechsel, sonst waere der Status nur ueber Farbe erkennbar
+  // (Bedienregeln, CLAUDE.md).
+  'inventory.refillDue': 'Bald nachfüllen, reicht noch etwa {days} Tage',
 };
