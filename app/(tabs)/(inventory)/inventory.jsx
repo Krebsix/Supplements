@@ -59,6 +59,7 @@ export default function InventoryScreen() {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [sheetVisible, setSheetVisible] = useState(false);
+  const [filter, setFilter] = useState('active'); // 'active' | 'archived'
 
   const userSupplements = useStore((state) => state.userSupplements);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
@@ -97,6 +98,16 @@ export default function InventoryScreen() {
     (s) => s.status !== 'archived'
   ).length;
 
+  // Ob es ueberhaupt etwas anzulegen gibt, unabhaengig von der Suche: nur
+  // dann lohnen sich die Filterchips. `totalCount` allein reicht nicht, das
+  // zaehlt nur Aktive, ein Bestand nur aus Archiv-Eintraegen waere sonst
+  // "leer".
+  const hasAnyRecords = (Array.isArray(userSupplements) ? userSupplements : []).length > 0;
+
+  function handleRestore(supplement) {
+    updateUserSupplement(supplement.id, { status: 'active' });
+  }
+
   function handleArchive(supplement) {
     Alert.alert(
       t('inventory.archiveTitle'),
@@ -123,6 +134,43 @@ export default function InventoryScreen() {
             : t('inventory.subtitle_other', { count: totalCount })}
         </Text>
 
+        {hasAnyRecords ? (
+          <View style={styles.filterChips}>
+            <TouchableOpacity
+              style={[styles.filterChip, filter === 'active' && styles.filterChipActive]}
+              onPress={() => setFilter('active')}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityState={{ selected: filter === 'active' }}
+            >
+              <Text
+                style={[
+                  styles.filterChipText,
+                  filter === 'active' && styles.filterChipTextActive,
+                ]}
+              >
+                {t('inventory.filter.active', { count: active.length })}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterChip, filter === 'archived' && styles.filterChipActive]}
+              onPress={() => setFilter('archived')}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityState={{ selected: filter === 'archived' }}
+            >
+              <Text
+                style={[
+                  styles.filterChipText,
+                  filter === 'archived' && styles.filterChipTextActive,
+                ]}
+              >
+                {t('inventory.filter.archived', { count: archived.length })}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+
         {totalCount > 4 ? (
           <TextInput
             value={query}
@@ -146,7 +194,7 @@ export default function InventoryScreen() {
           </View>
         ) : null}
 
-        {totalCount === 0 ? (
+        {!hasAnyRecords ? (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>{t('inventory.emptyTitle')}</Text>
             <Text style={styles.emptyText}>{t('inventory.emptyText')}</Text>
@@ -158,115 +206,138 @@ export default function InventoryScreen() {
           </View>
         ) : null}
 
-        {active.map((supplement) => {
-          const slotLabels = (supplement.timingSlots ?? [])
-            .map((slotId) => SLOTS[slotId]?.label)
-            .filter(Boolean)
-            .join(' · ');
-          const dosage = formatSupplementDosage(supplement, '');
-          const paused = supplement.status === 'paused';
-          const stock = stockBySupplementId?.[supplement.id];
-          const forecast = stock
-            ? refillState(stock, supplement, refillThresholdDays)
-            : null;
-
-          return (
-            <View key={supplement.id} style={styles.card}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardName}>{formatSupplementName(supplement)}</Text>
-                {paused ? (
-                  <Text style={styles.pausedPill}>{t('inventory.paused')}</Text>
-                ) : null}
-              </View>
-
-              {dosage ? <Text style={styles.cardMeta}>{dosage}</Text> : null}
-
-              {slotLabels ? (
-                <Text style={styles.cardSlots}>{slotLabels}</Text>
-              ) : (
-                <Text style={styles.cardMissing}>{t('inventory.noSlotBadge')}</Text>
-              )}
-
-              {forecast && forecast.daysLeft !== null ? (
-                <Text
-                  style={[
-                    styles.cardRefill,
-                    forecast.due && styles.cardRefillDue,
-                  ]}
-                >
-                  {t('inventory.refillIn', { days: forecast.daysLeft })}
-                </Text>
-              ) : null}
-
-              <View style={styles.cardActions}>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    router.push(
-                      `/AddSupplement?editId=${encodeURIComponent(supplement.id)}`
-                    )
-                  }
-                  accessibilityRole="link"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionText}>{t('inventory.edit')}</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    updateUserSupplement(supplement.id, {
-                      status: paused ? 'active' : 'paused',
-                    })
-                  }
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionText}>
-                    {paused ? t('inventory.resume') : t('inventory.pause')}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => handleArchive(supplement)}
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionDanger}>{t('inventory.archive')}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        })}
-
-        {archived.length > 0 ? (
+        {filter === 'active' ? (
           <>
-            <Text style={styles.sectionTitle}>
-              {t('inventory.archivedSection', { count: archived.length })}
-            </Text>
-            {archived.map((supplement) => (
-              <View key={supplement.id} style={styles.archivedRow}>
-                {/* Dynamic Type: kein numberOfLines-Limit, das ist der
-                    Praeparatname und wird an anderer Stelle nie gekuerzt. */}
-                <Text style={styles.archivedName}>
-                  {formatSupplementName(supplement)}
-                </Text>
-                <TouchableOpacity
-                  onPress={() =>
-                    updateUserSupplement(supplement.id, { status: 'active' })
-                  }
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionText}>{t('inventory.restore')}</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+            {active.length === 0 && hasAnyRecords ? (
+              <Text style={styles.filterEmptyText}>
+                {t('inventory.filter.emptyActive')}
+              </Text>
+            ) : null}
+
+            {active.map((supplement) => {
+              const slotLabels = (supplement.timingSlots ?? [])
+                .map((slotId) => SLOTS[slotId]?.label)
+                .filter(Boolean)
+                .join(' · ');
+              const dosage = formatSupplementDosage(supplement, '');
+              const paused = supplement.status === 'paused';
+              const stock = stockBySupplementId?.[supplement.id];
+              const forecast = stock
+                ? refillState(stock, supplement, refillThresholdDays)
+                : null;
+
+              return (
+                <View key={supplement.id} style={styles.card}>
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.cardName}>{formatSupplementName(supplement)}</Text>
+                    {paused ? (
+                      <Text style={styles.pausedPill}>{t('inventory.paused')}</Text>
+                    ) : null}
+                  </View>
+
+                  {dosage ? <Text style={styles.cardMeta}>{dosage}</Text> : null}
+
+                  {slotLabels ? (
+                    <Text style={styles.cardSlots}>{slotLabels}</Text>
+                  ) : (
+                    <Text style={styles.cardMissing}>{t('inventory.noSlotBadge')}</Text>
+                  )}
+
+                  {forecast && forecast.daysLeft !== null ? (
+                    <Text
+                      style={[
+                        styles.cardRefill,
+                        forecast.due && styles.cardRefillDue,
+                      ]}
+                    >
+                      {t('inventory.refillIn', { days: forecast.daysLeft })}
+                    </Text>
+                  ) : null}
+
+                  <View style={styles.cardActions}>
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() =>
+                        router.push(
+                          `/AddSupplement?editId=${encodeURIComponent(supplement.id)}`
+                        )
+                      }
+                      accessibilityRole="link"
+                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                    >
+                      <Text style={styles.actionText}>{t('inventory.edit')}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() =>
+                        updateUserSupplement(supplement.id, {
+                          status: paused ? 'active' : 'paused',
+                        })
+                      }
+                      accessibilityRole="button"
+                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                    >
+                      <Text style={styles.actionText}>
+                        {paused ? t('inventory.resume') : t('inventory.pause')}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() => handleArchive(supplement)}
+                      accessibilityRole="button"
+                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                    >
+                      <Text style={styles.actionDanger}>{t('inventory.archive')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })}
           </>
         ) : null}
 
-        {totalCount > 0 ? (
+        {filter === 'archived' ? (
+          <>
+            {archived.length === 0 ? (
+              <Text style={styles.filterEmptyText}>
+                {t('inventory.filter.emptyArchived')}
+              </Text>
+            ) : null}
+
+            {archived.map((supplement) => {
+              const dosage = formatSupplementDosage(supplement, '');
+
+              return (
+                <View key={supplement.id} style={styles.card}>
+                  {/* Archivierte Eintraege zeigen weder Einnahmezeitpunkt
+                      noch Reichweiten-Prognose: Sie laufen nicht mehr im
+                      Tagesplan mit, diese Angaben waeren erfundene
+                      Aktualitaet. Einzige Aktion ist Wiederherstellen. */}
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.cardName}>{formatSupplementName(supplement)}</Text>
+                  </View>
+
+                  {dosage ? <Text style={styles.cardMeta}>{dosage}</Text> : null}
+
+                  <View style={styles.cardActions}>
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() => handleRestore(supplement)}
+                      accessibilityRole="button"
+                      hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+                    >
+                      <Text style={styles.actionText}>{t('inventory.restore')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })}
+          </>
+        ) : null}
+
+        {hasAnyRecords ? (
           <TouchableOpacity
             style={styles.addButton}
             onPress={() => setSheetVisible(true)}
@@ -361,23 +432,24 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
   },
-  sectionTitle: {
-    ...type.label,
-    marginTop: space.lg,
+  filterChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: space.md,
+  },
+  filterChip: {
+    ...surfaces.chip,
+    marginRight: space.sm,
     marginBottom: space.sm,
   },
-  archivedRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: space.md - 2,
-    borderTopWidth: 1,
-    borderTopColor: colors.rule,
+  filterChipText: {
+    ...surfaces.chipText,
   },
-  archivedName: {
+  filterChipActive: surfaces.chipActive,
+  filterChipTextActive: surfaces.chipTextActive,
+  filterEmptyText: {
     ...type.small,
-    flex: 1,
-    marginRight: space.md,
+    marginBottom: space.md,
   },
   primaryButton: { ...surfaces.buttonPrimary },
   primaryButtonText: { ...surfaces.buttonPrimaryText },
