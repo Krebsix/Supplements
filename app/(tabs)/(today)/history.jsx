@@ -1,7 +1,8 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import StatusBadge from '../../../components/StatusBadge';
+import { calculateOverallAdherence } from '../../../OutcomeTracker';
 import { getSlotLabel } from '../../../TimingEngine';
 import useStore from '../../../useStore';
 import { formatSupplementDosage, formatSupplementName } from '../../../utils/supplementFormatting';
@@ -11,6 +12,11 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 const EMPTY_LOGS = [];
 const EMPTY_SUPPLEMENTS = [];
 const cautionTone = toneFor('caution');
+
+// Zeitraeume fuer die Einnahme-Treue-Kennzahl. "all" hat keine feste
+// Fensterbreite, die Tage werden ab dem ersten Log gezaehlt
+// (daysSinceFirstLog).
+const PERIODS = { week: 7, month: 30, all: null };
 
 function toDateKey(date = new Date()) {
   const value = date instanceof Date ? date : new Date(date);
@@ -124,6 +130,20 @@ function groupLogsByDate(logs) {
   }, []);
 }
 
+function daysSinceFirstLog(logs) {
+  if (!logs.length) return 1;
+
+  const firstKey = logs.reduce(
+    (min, log) => (log.dateKey && log.dateKey < min ? log.dateKey : min),
+    logs[0].dateKey || toDateKey()
+  );
+  const first = new Date(`${firstKey}T00:00:00`);
+  if (Number.isNaN(first.getTime())) return 1;
+
+  const diff = Math.floor((Date.now() - first.getTime()) / 86400000) + 1;
+  return Math.max(1, diff);
+}
+
 function resolveSupplement(log, supplements) {
   return supplements.find((supplement) => (
     supplement.id === log.userSupplementId ||
@@ -137,8 +157,27 @@ export default function HistoryScreen() {
   const intakeLogs = useStore((state) => state.intakeLogs) ?? EMPTY_LOGS;
   const userSupplements = useStore((state) => state.userSupplements) ?? EMPTY_SUPPLEMENTS;
   const librarySupplements = useStore((state) => state.librarySupplements) ?? EMPTY_SUPPLEMENTS;
+  const [period, setPeriod] = useState('week');
 
   const supplements = [...userSupplements, ...librarySupplements];
+
+  const periodDays = PERIODS[period] ?? daysSinceFirstLog(intakeLogs);
+  const adherence = calculateOverallAdherence(intakeLogs, periodDays || 1, new Date());
+
+  const last7Days = useMemo(() => {
+    const days = [];
+    const today = new Date();
+
+    for (let i = 6; i >= 0; i -= 1) {
+      const day = new Date(today);
+      day.setDate(day.getDate() - i);
+      const key = toDateKey(day);
+      const count = intakeLogs.filter((log) => log.dateKey === key && !log.undoneAt).length;
+      days.push({ key, count, isToday: i === 0 });
+    }
+
+    return days;
+  }, [intakeLogs]);
   const sortedLogs = [...intakeLogs].sort((a, b) => {
     const aTime = new Date(a.takenAt || 0).getTime();
     const bTime = new Date(b.takenAt || 0).getTime();
@@ -157,6 +196,44 @@ export default function HistoryScreen() {
       <Text style={styles.subtitle}>
         {t('history.subtitle')}
       </Text>
+
+      <View style={styles.chips}>
+        {Object.keys(PERIODS).map((key) => (
+          <TouchableOpacity
+            key={key}
+            style={[styles.chip, period === key && styles.chipActive]}
+            onPress={() => setPeriod(key)}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityState={{ selected: period === key }}
+          >
+            <Text style={[styles.chipText, period === key && styles.chipTextActive]}>
+              {t(`history.period.${key}`)}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={styles.adherenceCard}>
+        <Text style={styles.adherenceLabel}>{t('history.adherence.label')}</Text>
+        <Text style={styles.adherenceValue}>
+          {t('history.adherence.percent', { percent: adherence.percent })}
+        </Text>
+
+        <View style={styles.barsRow}>
+          {last7Days.map((day) => (
+            <View key={day.key} style={styles.barColumn}>
+              <View
+                style={[
+                  styles.bar,
+                  { height: Math.max(4, Math.min(64, day.count * 20)) },
+                  day.isToday ? styles.barToday : day.count === 0 ? styles.barEmpty : null,
+                ]}
+              />
+            </View>
+          ))}
+        </View>
+      </View>
 
       <View style={styles.summaryCard}>
         <View style={styles.summaryItem}>
@@ -267,6 +344,57 @@ const styles = StyleSheet.create({
     ...type.body,
     marginTop: space.sm + 2,
     marginBottom: space.xl - 2,
+  },
+  chips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: space.md,
+  },
+  chip: {
+    ...surfaces.chip,
+    marginRight: space.sm,
+    marginBottom: space.sm,
+  },
+  chipText: {
+    color: colors.ink,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  chipActive: surfaces.chipActive,
+  chipTextActive: surfaces.chipTextActive,
+  adherenceCard: {
+    ...surfaces.card,
+    borderColor: colors.ruleStrong,
+    marginBottom: space.lg,
+  },
+  adherenceLabel: {
+    ...type.small,
+    marginBottom: space.xs,
+  },
+  adherenceValue: {
+    ...type.display,
+    marginBottom: space.md,
+  },
+  barsRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    height: 64,
+  },
+  barColumn: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  bar: {
+    width: 10,
+    borderRadius: radius.sm,
+    backgroundColor: colors.accentSoft,
+  },
+  barToday: {
+    backgroundColor: colors.accent,
+  },
+  barEmpty: {
+    backgroundColor: colors.rule,
   },
   summaryCard: {
     ...surfaces.card,
