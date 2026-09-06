@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useRouter } from 'expo-router';
 
 import { ACCOUNT_STATUS } from '../../../AccountStore';

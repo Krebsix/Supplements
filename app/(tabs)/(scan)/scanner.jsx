@@ -12,8 +12,8 @@ import {
   View,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useIsFocused } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+
+import { useIsFocused, useRouter } from 'expo-router';
 
 
 import {

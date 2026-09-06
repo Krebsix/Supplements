@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { canAddSupplement, canUseProFeature } from '../Entitlements';
