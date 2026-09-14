@@ -72,7 +72,70 @@ ausschließlich auf der Zeile des Testkontos.
 Sicherheit, Bedienungshilfen, dort das Programm freigeben, aus dem die
 Prüfung läuft (Terminal bzw. der Editor). Die Berechtigung liegt in einer
 vom System geschützten Datenbank und ist über die Kommandozeile nicht
-setzbar. Danach sind die Zeilen im Simulator durchführbar.
+setzbar.
+
+### Zweiter Versuch am 2026-09-14, 15:51 bis 16:10: Berechtigung erteilt, weiter blockiert
+
+Die Bedienungshilfen-Freigabe war gesetzt. Damit ist die vorige
+Blockade behoben, eine zweite trat an ihre Stelle.
+
+**Was jetzt funktioniert (Nachweise):**
+
+- `System Events` antwortet ohne Fehler (Prozess-Anzahl 153 bis 162);
+  zuvor kam Fehler -1719.
+- Menüstrukturen von Simulator.app sind lesbar (Menüleiste: Apple,
+  Simulator, File, Edit, Device, I/O, Features, Debug, Window, Help).
+- **Ein Klick wurde nachweislich ausgeführt:** `click menu item
+  "iPhone 17e" of menu "Open Simulator" of menu "File"` lief ohne Fehler
+  durch und öffnete kurzzeitig ein Fenster (Position -1090/219, Größe
+  260x224, also auf dem zweiten Bildschirm). Klicken ist damit
+  grundsätzlich möglich.
+- `screencapture` liefert wieder Bilder (1920x1080); der erste
+  Fehlschlag ("could not create image from display") kam vom
+  ruhenden Bildschirm, nicht von einer fehlenden Freigabe.
+
+**Woran es jetzt scheitert:**
+
+1. **Simulator.app stellt kein Gerätefenster dar.** `count of windows`
+   bleibt bei 0, über alle Varianten hinweg: Gerät per `simctl` gebootet
+   oder nicht, Simulator.app neu gestartet, Gerät über das Menü
+   geöffnet, `CurrentDeviceUDID` per `defaults` auf das Prüfgerät
+   gesetzt. `lsappinfo info -only windows Simulator` gibt
+   `"windows"=[ NULL ]`. Das kurz erschienene 260x224-Fenster schloss
+   sich wieder. Ohne Fenster auf dem Bildschirm gibt es keine
+   Zielkoordinate für einen Tipp.
+2. **Der Bildschirm ist von der laufenden Arbeit belegt.** Das
+   Bildschirmfoto zeigt einen Browser im Vollbild. Klicks auf
+   Bildschirmkoordinaten würden in diese Sitzung eingreifen. Deshalb
+   wurde kein Klick auf "Los geht's" abgeschickt: Das Ziel war nicht
+   sichtbar, und ein Fehlklick hätte in der fremden Anwendung gelandet.
+
+Nebenbefund zur Geräteauswahl: Das Menü "File, Open Simulator" listet
+ausschließlich die Xcode-Standardgeräte, nicht selbst angelegte. Die
+vier für diese Abnahme erstellten Geräte sind darüber nicht öffenbar:
+
+| Name | UDID | Typ |
+|---|---|---|
+| MySuplea-Abnahme-A | 3E67ED35-D278-4358-B010-6F63D58C580F | iPhone 17, trägt den Development-Build |
+| MySuplea-Abnahme-B | B6052A86-288A-49FC-9067-E029087F845D | iPhone 17, trägt den Release-Build |
+| MySuplea-A | F005697C-0446-40A8-94B5-61719F54584D | iPhone 16 Pro, frisch |
+| MySuplea-B | F91886C3-BC94-4E8B-9C1D-F94B875432C2 | iPhone 16, frisch |
+
+Als über das Menü erreichbares Ersatzgerät wurde iPhone 17e
+(2BBC79C1-BA14-4967-B5DC-559BB74A4E07) herangezogen, vorher als
+unbenutzt verifiziert (0 App-Container, 0 Schlüsselbund-Dateien). Es
+wurde nur gebootet, keine App installiert; durch das Booten entsteht
+dort inzwischen eine Schlüsselbund-Datei, es ist also für
+Neuinstallations-Fälle vor Gebrauch zurückzusetzen.
+
+**Was jetzt gebraucht wird**, damit die dreizehn Zeilen laufen: Ein
+sichtbares Simulator-Fenster auf dem Hauptbildschirm, das nicht von
+einem Vollbildfenster verdeckt ist. Praktisch: Simulator.app von Hand
+öffnen, das Prüfgerät auswählen, Fenster sichtbar stehen lassen und den
+Bildschirm während der Prüfung nicht anderweitig belegen. Danach lassen
+sich Fensterposition und -größe auslesen und die Taps gezielt setzen.
+Gegen Eingriffe in fremde Fenster hilft zusätzlich, den Simulator per
+"Window, Stay On Top" nach vorn zu binden.
 
 So kommt die Umgebung zurück:
 
@@ -554,9 +617,9 @@ ausgeführt, Grund in der Bemerkung.
 
 | Fall | Aufbau | Ergebnis | Datum | Bemerkung |
 |---|---|---|---|---|
-| 1 Backup aus neuerer App | 1 + präpariert | blockiert | 2026-09-14 | keine Tap-Freigabe, App nicht bedienbar |
+| 1 Backup aus neuerer App | 1 + präpariert | blockiert | 2026-09-14 | Tap-Freigabe erteilt, aber kein Simulator-Fenster darstellbar |
 | 2 Falscher Schlüssel | 1 | blockiert | 2026-09-14 | dito |
-| 3 Behalten (inkl. VoiceOver) | 1 | blockiert | 2026-09-14 | dito; Dynamic Type separat am Onboarding bestanden |
+| 3 Behalten (inkl. VoiceOver) | 1 | blockiert | 2026-09-14 | dito. Dynamic Type ist NUR für den Onboarding-Startbildschirm belegt, nicht für den Konto-Screen mit dem gesperrten Knopf |
 | 4 Neustart und Jetzt sichern | 1 | blockiert | 2026-09-14 | dito |
 | 4z Bestandsgerät nicht gesperrt | 1 | blockiert | 2026-09-14 | dito |
 | 5 Bewusster Ersatz | 1 | blockiert | 2026-09-14 | dito |
