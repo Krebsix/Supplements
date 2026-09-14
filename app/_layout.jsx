@@ -185,7 +185,7 @@ export default function Layout() {
       shownDecisionRef.current = null;
       return;
     }
-    const { kind, remote, counts } = pendingDecision;
+    const { kind, remote, counts, reason } = pendingDecision;
     const key = `${kind}:${remote?.exported_at}`;
     if (shownDecisionRef.current === key) return;
     shownDecisionRef.current = key;
@@ -193,12 +193,12 @@ export default function Layout() {
     if (kind === 'unreadable') {
       Alert.alert(
         t('account.cloud.unreadableTitle'),
-        t('account.cloud.unreadableText', {
+        t(reason === 'wrongKey' ? 'account.cloud.unreadableText' : 'account.cloud.unreadableDataText', {
           time: formatBackupTime(remote.exported_at, language),
           device: remote.device_label || '',
         }),
         [
-          { text: t('account.cloud.unreadableKeep'), style: 'cancel', onPress: () => useCloudBackupStore.getState().resolveDecision('keep') },
+          { text: t('account.cloud.keepBackup'), style: 'cancel', onPress: () => useCloudBackupStore.getState().resolveDecision('keep') },
           { text: t('account.cloud.unreadableReplace'), style: 'destructive', onPress: () => useCloudBackupStore.getState().resolveDecision('replace') },
         ],
         { cancelable: false }

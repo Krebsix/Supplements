@@ -9,6 +9,7 @@ import {
   hasLocalData,
   REMOTE_COLUMNS,
 } from '../CloudBackup';
+import { INITIAL_USER_STATE } from '../storeLogic';
 import { BACKUP_VERSION } from '../BackupManager';
 
 let failures = 0;
@@ -36,6 +37,13 @@ console.log('— hasLocalData / countsOf —');
 check('leer → false', hasLocalData({}) === false);
 check('nur Logs → true', hasLocalData({ intakeLogs: [{}] }) === true);
 check('Praeparate → true', hasLocalData(state) === true);
+check('vollstaendiger Standardzustand bleibt leer', !hasLocalData({ ...INITIAL_USER_STATE, language: 'de' }));
+check('Profil allein wird geschuetzt', hasLocalData({ profile: { displayName: 'Testperson' } }));
+check('Medikamentengruppen allein werden geschuetzt', hasLocalData({ profile: { medicationClasses: ['test'] } }));
+check('Beobachtung allein wird geschuetzt', hasLocalData({ trials: [{ id: 'trial' }] }));
+check('Bewertung allein wird geschuetzt', hasLocalData({ trialRatings: [{ value: 3 }] }));
+check('Einstellungen allein werden geschuetzt', hasLocalData({ settings: { custom: true } }));
+check('leere partielle Profillisten bleiben leer', !hasLocalData({ profile: { medicationClasses: [], conditions: [] } }));
 const counts = countsOf(state);
 check('zaehlt aktive Praeparate', counts.supplements === 1);
 check('zaehlt Laborwerte', counts.labValues === 1);

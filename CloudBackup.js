@@ -10,18 +10,31 @@
  */
 
 import { decryptText, encryptText } from './AccountCrypto';
-import { BACKUP_VERSION, buildBackupPayload, parseBackupPayload } from './BackupManager';
-
-export const REMOTE_COLUMNS = 'ciphertext,payload_version,device_label,exported_at,updated_at';
+import { BACKUP_DATA_FIELDS, BACKUP_VERSION, buildBackupPayload, parseBackupPayload } from './BackupManager';
+import { INITIAL_USER_STATE } from './storeLogic';
 
 const lengthOf = (list) => (Array.isArray(list) ? list.length : 0);
 
-/** Lokal liegt etwas, das verloren gehen koennte. */
+export const REMOTE_COLUMNS = 'ciphertext,payload_version,device_label,exported_at,updated_at';
+
+// Fehlende Felder und unveraenderte Standardwerte sind kein eigener Stand.
+// Objekt-Schluesselreihenfolge darf keinen Konflikt ausloesen.
+function differsFromDefault(value, baseline) {
+  if (value === undefined || value === null) return false;
+  if (Array.isArray(value)) {
+    return !Array.isArray(baseline) || value.length !== baseline.length ||
+      value.some((item, index) => differsFromDefault(item, baseline[index]));
+  }
+  if (typeof value === 'object') {
+    return Object.keys(value).some((key) => differsFromDefault(value[key], baseline?.[key]));
+  }
+  return value !== baseline;
+}
+
+/** Alle gesicherten Nutzerdaten zaehlen, auch ein Profil ohne Praeparate. */
 export function hasLocalData(state = {}) {
-  return (
-    lengthOf(state?.userSupplements) > 0 ||
-    lengthOf(state?.labValues) > 0 ||
-    lengthOf(state?.intakeLogs) > 0
+  return BACKUP_DATA_FIELDS.some((field) =>
+    differsFromDefault(state?.[field], field === 'language' ? 'de' : INITIAL_USER_STATE[field])
   );
 }
 

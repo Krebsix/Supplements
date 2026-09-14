@@ -1,6 +1,8 @@
 // Tests fuer CloudBackupStore.js: Upload gebuendelt, Login-Entscheidung,
 // Wiederherstellen ohne Rueck-Upload, Offline, Widerruf.
 import { webcrypto } from 'node:crypto';
+import { encryptText } from '../AccountCrypto';
+import { BACKUP_SCHEMA, BACKUP_VERSION } from '../BackupManager';
 import { createCloudBackupStore } from '../CloudBackupStore';
 import { decryptBackup, encryptBackup } from '../CloudBackup';
 
@@ -283,6 +285,42 @@ console.log('— Offline und Widerruf —');
   check('Geraetename auf 60 gekappt', store.getState().deviceLabel.length === 60);
   store.getState().onSignedOut();
   check('onSignedOut raeumt Laufzeitfelder', store.getState().pendingDecision === null && store.getState().remoteExportedAt === null && store.getState().lastUploadedAt === null);
+}
+
+console.log('— Regression: unlesbare Payload niemals still ersetzen —');
+for (const [code, payload] of [
+  ['newerVersion', JSON.stringify({ schema: BACKUP_SCHEMA, version: BACKUP_VERSION + 1, data: {} })],
+  ['invalidJson', '{'],
+  ['wrongSchema', JSON.stringify({ schema: 'other', version: 1, data: {} })],
+  ['missingData', JSON.stringify({ schema: BACKUP_SCHEMA, version: 1 })],
+]) {
+  for (const state of [{}, { userSupplements: [{ id: 'local' }] }]) {
+    const key = await randomBytes(32);
+    const row = { ciphertext: await encryptText(payload, key, randomBytes), exported_at: '2026-08-29T12:00:00.000Z' };
+    const { store, client, timer } = await setup({ row, state, account: { signedIn: true, userId: 'u1', dataKey: key } });
+    store.getState().scheduleUpload();
+    check(`${code}: Rueckfrage`, await store.getState().checkOnLogin() === 'ask');
+    check(`${code}: Fehler bleibt erhalten`, store.getState().lastError === code);
+    check(`${code}: Timer entfernt`, timer.size === 0);
+    await store.getState().resolveDecision('keep');
+    await store.getState().uploadNow();
+    store.getState().setAutoBackup(true);
+    store.getState().scheduleUpload();
+    await timer.flush();
+    await tick();
+    check(`${code}: kein Upload nach Behalten`, !client.calls.some(([n]) => n === 'upsert'));
+    check(`${code}: Sperre bleibt`, store.getState().uploadBlocked);
+    await store.getState().checkOnLogin();
+    await store.getState().resolveDecision('replace');
+    check(`${code}: bewusster Ersatz schreibt einmal`, client.calls.filter(([n]) => n === 'upsert').length === 1);
+  }
+}
+{
+  const key = await randomBytes(32);
+  const sealed = await encryptBackup({ profile: { displayName: 'Remote' } }, key, randomBytes);
+  const { store, imported } = await setup({ row: { ciphertext: sealed.ciphertext, exported_at: sealed.exportedAt }, state: { profile: { displayName: 'Lokal' } }, account: { signedIn: true, userId: 'u1', dataKey: key } });
+  check('Profil allein: Rueckfrage statt stiller Import', await store.getState().checkOnLogin() === 'ask');
+  check('Profil allein: kein Import', imported.length === 0);
 }
 
 if (failures > 0) { console.error(`\n${failures} Test(s) fehlgeschlagen`); process.exit(1); }

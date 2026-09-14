@@ -54,6 +54,7 @@ export const CLOUD_BACKUP_STORAGE_KEY = 'mysuplea-cloud-backup-v1';
 const LABEL_MAX = 60;
 
 const RUNTIME_RESET = {
+  uploadBlocked: false,
   remoteExportedAt: null,
   remoteDeviceLabel: null,
   status: 'idle',
@@ -109,11 +110,12 @@ export function createCloudBackupStore(deps, { storage } = {}) {
           // gewaehlt hat. Ebenso waehrend restoreFrom laeuft (status
           // 'restoring'): sonst liefe ein Upload parallel zum Import und
           // koennte lastUploadedAt/remoteExportedAt verfaelschen.
-          if (get().pendingDecision || get().status === 'restoring') return;
+          if (get().uploadBlocked || get().pendingDecision || get().status === 'restoring') return;
           const { userId, dataKey } = getAccount();
           set({ status: 'uploading', lastError: null });
           try {
             const sealed = await encryptBackup(getMainState(), dataKey, randomBytes, now());
+            if (get().uploadBlocked || get().pendingDecision || get().status === 'restoring') return;
             const { error } = await client.from('user_backups').upsert({
               user_id: userId,
               ciphertext: sealed.ciphertext,
@@ -140,6 +142,16 @@ export function createCloudBackupStore(deps, { storage } = {}) {
         };
         const runUpload = createCoalescedRunner(doUpload);
 
+        // Jeder nicht lesbare Stand bleibt erhalten. Die Sperre ueberlebt
+        // Neustarts und blockiert auch manuelles Sichern nach "Behalten".
+        const preserveRemote = (remote, error) => {
+          if (timerId) { cancel(timerId); timerId = null; }
+          const reason = errorCode(error);
+          set({ uploadBlocked: true, autoBackup: false, status: 'error', lastError: reason,
+            pendingDecision: { kind: 'unreadable', remote, counts: null, reason } });
+          return 'ask';
+        };
+
         const restoreFrom = async (remote) => {
           const { dataKey } = getAccount();
           set({ status: 'restoring', lastError: null });
@@ -159,6 +171,7 @@ export function createCloudBackupStore(deps, { storage } = {}) {
             lastUploadedAt: remote.exported_at,
             remoteExportedAt: remote.exported_at,
             remoteDeviceLabel: remote.device_label ?? null,
+            uploadBlocked: false,
             lastRestore: { exportedAt: remote.exported_at, deviceLabel: remote.device_label ?? '', counts },
           });
         };
@@ -217,27 +230,10 @@ export function createCloudBackupStore(deps, { storage } = {}) {
                   await restoreFrom(remote);
                   return 'restore';
                 } catch (error) {
-                  const code = errorCode(error);
-                  if (code === 'wrongKey') {
-                    // Unlesbar heisst NICHT automatisch "unser Stand ersetzt
-                    // ihn": der Server-Stand koennte mit einem frueheren
-                    // Passwort (nach Reset ohne Recovery-Key auf einem
-                    // anderen Geraet) noch lesbar sein. Also fragen statt
-                    // still hochladen.
-                    set({ pendingDecision: { kind: 'unreadable', remote, counts: null }, status: 'idle', lastError: 'wrongKey' });
-                    return 'ask';
-                  }
-                  // Sonstiger Restore-Fehler (z. B. beschaedigtes Payload):
-                  // doUpload setzt lastError beim Start auf null, der Fehler-
-                  // Code muss deshalb NACH dem Upload gesetzt werden, sonst
-                  // verschluckt der (erfolgreiche) Upload ihn.
-                  set({ status: 'idle' });
-                  await runUpload();
-                  set({ lastError: code });
-                  return 'upload';
+                  return preserveRemote(remote, error);
                 }
               }
-              if (decision === 'ask') {
+              if (decision === 'ask' || (decision === 'upload' && remote && get().uploadBlocked)) {
                 // Ein aus scheduleUpload() noch offener Timer darf jetzt
                 // nicht mehr feuern, egal ob sich der Server-Stand oeffnen
                 // laesst oder nicht: "ask" blockiert Uploads bis zur
@@ -249,21 +245,7 @@ export function createCloudBackupStore(deps, { storage } = {}) {
                   set({ pendingDecision: { kind: 'newer', remote, counts: countsOf(opened.data) } });
                   return 'ask';
                 } catch (error) {
-                  const code = errorCode(error);
-                  if (code === 'wrongKey') {
-                    // Realer Fall: neues Handy, Passwort-Reset ohne Recovery-
-                    // Key auf einem anderen Geraet, jetzt hier einloggen. Der
-                    // Server-Stand darf nicht still verschwinden.
-                    set({ pendingDecision: { kind: 'unreadable', remote, counts: null }, status: 'idle', lastError: 'wrongKey' });
-                    return 'ask';
-                  }
-                  // Sonstiger Fehler beim Entschluesseln (kein Schluessel-
-                  // Problem, z. B. beschaedigtes Payload): unser Stand
-                  // ersetzt ihn, lastError NACH dem Upload setzen (siehe
-                  // Kommentar oben beim restore-Zweig).
-                  await runUpload();
-                  set({ lastError: code });
-                  return 'upload';
+                  return preserveRemote(remote, error);
                 }
               }
               if (decision === 'upload') await runUpload();
@@ -278,13 +260,13 @@ export function createCloudBackupStore(deps, { storage } = {}) {
             if (!pending) return;
             if (pending.kind === 'unreadable') {
               if (choice === 'replace') {
+                set({ uploadBlocked: false });
                 await runUpload();
+                // Ein fehlgeschlagener bewusster Ersatz darf keine spaetere
+                // unbestaetigte Wiederholung ausloesen.
+                if (get().status !== 'idle') set({ uploadBlocked: true });
               } else {
-                // 'keep': Automatik aus, bis die Nutzerin den Server-Stand
-                // per Recovery-Key wieder lesbar gemacht hat oder bewusst
-                // ersetzt. lastError bleibt 'wrongKey' stehen, damit die
-                // Oberflaeche den Hinweis weiter zeigen kann.
-                set({ autoBackup: false, status: 'idle' });
+                set({ uploadBlocked: true, autoBackup: false, status: 'error' });
               }
               return;
             }
@@ -292,11 +274,14 @@ export function createCloudBackupStore(deps, { storage } = {}) {
               try {
                 await restoreFrom(pending.remote);
               } catch (error) {
-                set({ status: 'idle', lastError: errorCode(error) });
+                preserveRemote(pending.remote, error);
               }
               return;
             }
-            await runUpload();
+            if (choice === 'upload') {
+              set({ uploadBlocked: false });
+              await runUpload();
+            }
           },
 
           deleteRemote: async () => {
@@ -307,7 +292,7 @@ export function createCloudBackupStore(deps, { storage } = {}) {
               set({ status: 'error', lastError: 'server' });
               return;
             }
-            set({ remoteExportedAt: null, remoteDeviceLabel: null, lastUploadedAt: null, status: 'idle', lastError: null });
+            set({ uploadBlocked: false, remoteExportedAt: null, remoteDeviceLabel: null, lastUploadedAt: null, status: 'idle', lastError: null });
           },
 
           setAutoBackup: (value) => set({ autoBackup: Boolean(value) }),
@@ -323,6 +308,7 @@ export function createCloudBackupStore(deps, { storage } = {}) {
         name: CLOUD_BACKUP_STORAGE_KEY,
         storage: createJSONStorage(() => storage ?? memoryFallback()),
         partialize: (state) => ({
+          uploadBlocked: state.uploadBlocked,
           autoBackup: state.autoBackup,
           deviceLabel: state.deviceLabel,
           lastUploadedAt: state.lastUploadedAt,
