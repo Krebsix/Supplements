@@ -128,6 +128,31 @@ wurde nur gebootet, keine App installiert; durch das Booten entsteht
 dort inzwischen eine Schlüsselbund-Datei, es ist also für
 Neuinstallations-Fälle vor Gebrauch zurückzusetzen.
 
+Dritter Versuch, 16:14 bis 16:17: Drei weitere Startvarianten geprüft,
+alle ohne Fenster, bei jeweils gebootetem Gerät und Simulator.app im
+Vordergrund (Menüleiste belegt das):
+
+| Variante | Ergebnis |
+|---|---|
+| `simctl boot` und danach `open -a Simulator` | 0 Fenster |
+| `defaults write com.apple.iphonesimulator CurrentDeviceUDID` plus Neustart | 0 Fenster |
+| `open -a Simulator --args -CurrentDeviceUDID <UDID>` | 0 Fenster |
+| Menü "File, Open Simulator" mit einem Standardgerät | kurzzeitig ein 260x224-Fenster auf dem zweiten Bildschirm, schließt sich wieder |
+
+Damit ist belegt: Der Fensteraufbau von Simulator.app lässt sich aus
+dieser Sitzung heraus nicht auslösen, unabhängig vom Gerät und von der
+Startvariante.
+
+**Vorbereitet für einen manuellen Anlauf:** Da selbst angelegte Geräte
+im Menü fehlen, wurde der Release-Build zusätzlich auf **iPhone 17e**
+(2BBC79C1-BA14-4967-B5DC-559BB74A4E07) installiert und gestartet. Das
+Gerät erscheint im Menü und war vor Verwendung unbenutzt. Screenshot
+belegt: MySuplea zeigt dort den Bildschirm "Los geht's". Wer das Fenster
+von Hand öffnet, kann die Prüfung dort sofort fortsetzen. Für die Fälle
+mit Neuinstallation ist vorher `xcrun simctl erase` auf dieses Gerät
+nötig, weil es jetzt einen App-Container und eine Schlüsselbund-Datei
+trägt.
+
 **Was jetzt gebraucht wird**, damit die dreizehn Zeilen laufen: Ein
 sichtbares Simulator-Fenster auf dem Hauptbildschirm, das nicht von
 einem Vollbildfenster verdeckt ist. Praktisch: Simulator.app von Hand
