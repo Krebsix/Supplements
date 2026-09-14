@@ -332,7 +332,10 @@ function CloudBackupCard({ t, dataKey, language }) {
       <Text style={styles.hint}>{t('account.cloud.deviceSub')}</Text>
       <Pressable
         onPress={uploadNow}
-        disabled={status === 'uploading'}
+        // Auch bei gesetzter Schreibsperre: doUpload kehrte sonst still am
+        // Guard zurueck, der Knopf haette sich also druecken lassen und
+        // nichts getan. Die Statuszeile darueber nennt den Grund.
+        disabled={status === 'uploading' || uploadBlocked}
         style={({ pressed }) => [styles.quietButton, pressed ? styles.buttonPressed : null]}
         accessibilityRole="button"
       >
