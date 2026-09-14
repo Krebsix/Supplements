@@ -272,7 +272,7 @@ function AuthForm({ t }) {
 function CloudBackupCard({ t, dataKey, language }) {
   const {
     autoBackup, deviceLabel, lastUploadedAt, remoteExportedAt, remoteDeviceLabel,
-    status, lastError, setAutoBackup, setDeviceLabel, uploadNow, deleteRemote,
+    status, lastError, uploadBlocked, setAutoBackup, setDeviceLabel, uploadNow, deleteRemote,
   } = useCloudBackupStore();
 
   if (!dataKey) {
@@ -285,6 +285,7 @@ function CloudBackupCard({ t, dataKey, language }) {
   }
 
   const statusLine = (() => {
+    if (uploadBlocked) return t('account.cloud.blocked');
     if (status === 'uploading') return t('account.cloud.uploading');
     if (status === 'restoring') return t('account.cloud.restoring');
     if (status === 'offline') return t('account.cloud.offline');
