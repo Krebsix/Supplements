@@ -79,7 +79,14 @@ umrechenbare Einheiten als eine Position behandeln und die redundante
 Zeile in `duplicates` ausweisen statt addieren; oder im Schema der
 Edge Function eine Zeile je Substanz erzwingen.
 
-## L2. Kein Kostenschutz: Paywall aus, Modell ist Opus — BEHOBEN 2026-09-14 (Branch fix/scanner-beta-readiness)
+## L2. Kein Kostenschutz: Paywall aus, Modell ist Opus
+
+**Status: implementiert und automatisch getestet, Deployment und
+Live-Abnahme offen.** Branch `fix/scanner-beta-readiness`, Commit
+`3c77e02`. Abschluss samt Liste der noch nicht angewendeten
+Migration und Edge-Function-Aenderungen:
+`docs/l2-kostenschutz-abschluss.md`. Bis zum Deployment gilt der hier
+beschriebene alte Zustand weiter.
 
 `Entitlements.js:36` — `PAYWALL_ENFORCED = false`. `evaluateVisionScan`
 liefert deshalb `allowed: true` unabhängig vom Kontingent
@@ -626,7 +633,7 @@ Label-Zuordnung.
 | Nutzerprüfung vor Speichern | B, Marke D | `AddSupplement.jsx:308-316`, kein Markenfeld |
 | ODbL-Attribution | A, inkonsistent (B) | `tests/seed-catalog.test.mjs:41-64` |
 | Datenschutz Scan-Pfad | A, zwei Textabweichungen (D) | Edge Function ohne Storage-Upload |
-| Kostenschutz | **D** | `PAYWALL_ENFORCED = false` |
+| Kostenschutz | implementiert, Deployment offen | `3c77e02`, Migration `20260914180000` nicht angewendet |
 | Offline Cache-Pfad | D | `ScanAnalyzer.js:150-152` |
 | Fehlerfälle im UI | A (Abdeckung), kein Test | Tabelle in Abschnitt 10 |
 | DE und EN | A | 0 Lücken in 5 Katalogen, `tests/i18n.test.mjs` |
@@ -635,7 +642,7 @@ Label-Zuordnung.
 ## Reihenfolge für die Umsetzung, wenn beauftragt
 
 1. **L1** Doppelangaben (falsche fachliche Aussage)
-2. **L2** Kostenschutz (Paywall-Entscheidung und Modellwahl)
+2. ~~**L2** Kostenschutz~~ — implementiert und getestet (`3c77e02`), Deployment und Live-Abnahme offen
 3. **L4** Produktsuche einbinden (kleiner Aufwand, große Wirkung)
 4. **L5** Herkunft am Datensatz plus Modus-Kennzeichnung aus Abschnitt 12
 5. **L3** Freigabeweg für den Cache
