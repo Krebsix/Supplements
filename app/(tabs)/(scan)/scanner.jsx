@@ -25,6 +25,8 @@ import {
 import { searchSeedCatalog, seedEntryToScanDraft } from '../../../SeedCatalog';
 import { evaluateVisionScan } from '../../../Entitlements';
 import { analyzeCaptures, isAnalyzerConfigured, lookupProductCache } from '../../../ScanAnalyzer';
+import { restoreSession } from '../../../AccountLogic';
+import supabase from '../../../supabaseClient';
 import mockScanResult from '../../../data/mockScanResult';
 import useStore from '../../../useStore';
 import { useTranslation } from '../../../i18n';
@@ -396,7 +398,16 @@ export default function ScannerScreen() {
     try {
       // Ein zuvor gescannter, nicht aufgeloester Barcode wandert mit:
       // Er heftet sich ans Ergebnis und fuellt den geteilten Produkt-Cache.
-      const analysis = await analyzeCaptures(captures, { barcode: scannedBarcode });
+      // Zugriffstoken der Konto-Sitzung mitgeben: Die Foto-Analyse
+      // braucht seit 2026-09-14 ein angemeldetes Konto, weil das
+      // Kontingent serverseitig je Konto gefuehrt wird. Der Token wird
+      // frisch geholt, nicht aus dem Store gespiegelt, damit kein
+      // abgelaufener Wert mitgeht.
+      const session = await restoreSession(supabase).catch(() => null);
+      const analysis = await analyzeCaptures(captures, {
+        barcode: scannedBarcode,
+        accessToken: session?.access_token ?? '',
+      });
 
       // Erst nach erfolgreicher Analyse verbrauchen: Ein fehlgeschlagener
       // Scan kostet die Nutzerin nichts.

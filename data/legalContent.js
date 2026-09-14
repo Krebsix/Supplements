@@ -60,7 +60,12 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Schutz vor Missbrauch',
       body:
-        'Um die Foto-Analyse vor automatisiertem Missbrauch zu schützen, wird serverseitig die IP-Adresse der Anfrage kurzzeitig gespeichert und nach etwa zwei Stunden automatisch gelöscht. Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO).',
+        'Um die Foto-Analyse vor automatisiertem Missbrauch zu schützen, wird serverseitig die IP-Adresse der Anfrage gespeichert und beim nächsten Aufruf entfernt, sobald sie älter als zwei Stunden ist. Rechtsgrundlage: berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO).',
+    },
+    {
+      heading: 'Kontingent der Foto-Analyse',
+      body:
+        'Die KI-Foto-Analyse setzt ein Konto voraus, weil jede Auswertung Kosten verursacht und wir sie je Konto begrenzen. Dazu speichern wir auf unserem Server zu deiner Konto-Kennung einen Zähler: den Kalendermonat und die Anzahl der in diesem Monat ausgewerteten Fotos. Keine Fotos, keine Produktdaten, keine Gesundheitsdaten. Der Zähler wird nach 14 Monaten gelöscht. Rechtsgrundlage: Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO) und berechtigtes Interesse am Schutz vor Missbrauch (Art. 6 Abs. 1 lit. f DSGVO). Barcode-Scan und Katalogsuche brauchen kein Konto und keinen Zähler.',
     },
     {
       heading: 'Erinnerungen',
@@ -121,7 +126,12 @@ export const PRIVACY_SECTIONS = {
     {
       heading: 'Abuse protection',
       body:
-        'To protect the photo analysis against automated abuse, the IP address of a request is stored briefly on the server side and deleted automatically after about two hours. Legal basis: legitimate interest (Art. 6(1)(f) GDPR).',
+        'To protect the photo analysis against automated abuse, the IP address of a request is stored on the server side and removed on the next request once it is older than two hours. Legal basis: legitimate interest (Art. 6(1)(f) GDPR).',
+    },
+    {
+      heading: 'Photo analysis allowance',
+      body:
+        'The AI photo analysis requires an account, because every analysis costs money and we cap it per account. For this we store a counter on our server next to your account identifier: the calendar month and the number of photos analysed in that month. No photos, no product data, no health data. The counter is deleted after 14 months. Legal basis: performance of a contract (Art. 6(1)(b) GDPR) and legitimate interest in abuse protection (Art. 6(1)(f) GDPR). Barcode scan and catalogue search need neither an account nor a counter.',
     },
     {
       heading: 'Reminders',

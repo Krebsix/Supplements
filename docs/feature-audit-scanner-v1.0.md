@@ -79,7 +79,7 @@ umrechenbare Einheiten als eine Position behandeln und die redundante
 Zeile in `duplicates` ausweisen statt addieren; oder im Schema der
 Edge Function eine Zeile je Substanz erzwingen.
 
-## L2. Kein Kostenschutz: Paywall aus, Modell ist Opus (D)
+## L2. Kein Kostenschutz: Paywall aus, Modell ist Opus — BEHOBEN 2026-09-14 (Branch fix/scanner-beta-readiness)
 
 `Entitlements.js:36` — `PAYWALL_ENFORCED = false`. `evaluateVisionScan`
 liefert deshalb `allowed: true` unabhängig vom Kontingent
@@ -101,6 +101,56 @@ Eine Modell-Whitelist für billigere Modelle existiert serverseitig
 genutzt**: `ScanAnalyzer.js` sendet kein `model`-Feld
 (`ScanAnalyzer.js:198-202`). Das ist Einstufung **C** für die Whitelist
 und **D** für den Kostenschutz insgesamt.
+
+### Stand nach der Korrektur
+
+Der Kostenschutz liegt jetzt serverseitig und haengt nicht mehr an
+`PAYWALL_ENFORCED` oder am Client:
+
+- **Anmeldepflicht** fuer die Foto-Analyse (`index.ts`, Auth-Block vor
+  der Bildpruefung): Der oeffentliche Anon-Key zaehlt nicht als
+  Anmeldung, die Nutzerkennung kommt aus `auth.getUser(bearer)`.
+  Barcode- und Cache-Abfragen bleiben ohne Konto erreichbar, sie kosten
+  nichts.
+- **Kontingent je Konto und Kalendermonat** in `public.scan_quotas`
+  (Migration `20260914180000_scan_quota_per_user.sql`), atomar
+  reserviert vor dem Claude-Aufruf (`reserve_scan_quota` unter
+  Row-Lock), zurueckgegeben bei jedem Ausstieg ohne verwertbares
+  Ergebnis (`release_scan_quota`, neun Aufrufstellen).
+- **Obergrenze 100 je Monat**, zentral in
+  `supabase/functions/analyze-supplement/quota.ts` (`MONTHLY_HARD_CAP`).
+  Der Wert ist nicht erfunden, er ist die Fair-Use-Grenze aus
+  `Brain/decisions/2026-08-09-supplements-freemium-abo-und-credits.md`
+  und steht identisch als `PRO_MONTHLY_FAIR_USE` in `Entitlements.js`.
+- **Modellwahl nur serverseitig**: Das `model`-Feld im Request-Body wird
+  nicht mehr gelesen; `resolveModel()` nimmt ausschliesslich das Secret
+  `ANALYZE_MODEL` und prueft es gegen `ALLOWED_MODELS`.
+- **IP-Limit bleibt**, jetzt als zusaetzlicher Missbrauchsschutz fuer
+  den Weg ohne Konto.
+
+**Das Standardmodell bleibt Opus.** Der Auftrag sah einen Wechsel auf
+ein guenstigeres Modell vor, "sofern der Qualitaetsvergleich dies
+traegt". Er traegt ihn nicht:
+`Brain/decisions/2026-08-10-supplements-haiku-umstellung-verworfen.md`
+ist aktiv und haelt fest, dass Haiku im In-house-Vergleich mit zehn
+echten Etikettenfotos unter 50 Prozent korrekte Substanz-und-Dosis-Zeilen
+lag und auf dem anspruchsvollsten Etikett einen Substanznamen zu einer
+ANDEREN Verbindung verstuemmelte, bei gleichzeitig hoeheren
+Konfidenzwerten. Sonnet ist dort ausdruecklich "nicht getestet", und die
+Revidier-Bedingung (Scan-Kosten ueber 100 Euro im Monat) ist nicht
+belegt. Der vorgeschriebene Gegentest braucht dieselben zehn Fotos plus
+die gesammelten Problem-Etiketten; die Originalfotos liegen nicht mehr
+auf dem Arbeitsrechner (Suche am 2026-09-14 ohne Treffer). Ein Vergleich
+auf einem synthetisch gedruckten Testetikett waere der guenstigste Fall
+und damit kein Beleg.
+
+Offen bleibt: **Der Server kann den Kauf-Tier nicht verifizieren.** Tier
+und Credits kommen aus RevenueCat in die App und liegen im lokalen
+Store. Deshalb zieht der Server fuer JEDES Konto dieselbe Monatsgrenze
+und rechnet nachgekaufte Credits nicht an
+(`SERVER_CREDIT_ALLOWANCE = 0`). Die 3-Scan-Grenze des Free-Tiers bleibt
+Produktschranke in der App. Wer Credits serverseitig anrechnen will,
+braucht zuerst einen RevenueCat-Webhook, der den Kaufstatus hinterlegt.
 
 ## L3. Kein Freigabeweg für den Community-Cache (D)
 

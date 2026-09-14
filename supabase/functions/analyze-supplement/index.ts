@@ -17,6 +17,12 @@
 import Anthropic from "npm:@anthropic-ai/sdk";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { hasFormulaChanged } from "./formulaVersioning.ts";
+import {
+  MONTHLY_HARD_CAP,
+  SERVER_CREDIT_ALLOWANCE,
+  billingPeriod,
+  resolveModel,
+} from "./quota.ts";
 
 // Rate-Limit: Der Anon-Key ist oeffentlich (App-Bundle, Repo) und laesst
 // sich ohne diese Sperre per curl beliebig oft aufrufen — jeder Aufruf
@@ -36,15 +42,16 @@ const MAX_IMAGES = 4;
 const MAX_BASE64_LENGTH = 6_000_000; // ~4.5 MB pro Bild
 const ALLOWED_MEDIA_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
-// Modell-Override fuer den Qualitaetsvergleich (Haiku-Test, Decision
-// 2026-08-09). Bewusst NUR Modelle, die guenstiger sind als der
-// Opus-Default — sonst waere der oeffentliche Endpoint ein Kosten-Hebel.
-// Der Produktiv-Default bleibt das ANALYZE_MODEL-Secret.
-const MODEL_OVERRIDE_WHITELIST = new Set([
-  "claude-haiku-4-5-20251001",
-  "claude-haiku-4-5",
-  "claude-sonnet-5",
-]);
+// Die Modellwahl liegt ausschliesslich serverseitig (quota.ts:
+// resolveModel, ALLOWED_MODELS) und kommt aus dem Secret ANALYZE_MODEL.
+//
+// ENTFERNT am 2026-09-14 (Audit-Befund L2): Vorher las die Function ein
+// `model`-Feld aus dem Request-Body und akzeptierte es, wenn es in einer
+// Whitelist stand. Gedacht war das fuer den Qualitaetsvergleich; in der
+// App wurde es nie gesetzt. Fuer einen selbstgebauten Aufruf mit dem
+// oeffentlichen Anon-Key war es aber ein freier Modellschalter am
+// kostenpflichtigen Endpunkt. Ein Modellwunsch im Body wird jetzt
+// ignoriert, nicht mehr gelesen.
 
 // Schema fuer die Extraktion. Grundsatz: Nicht Lesbares ist null/leer —
 // das Modell darf nichts erfinden (Regel aus CLAUDE.md der App).
@@ -224,7 +231,6 @@ Deno.serve(async (req) => {
   // nicht verbrauchen — das schuetzt Claude-API-Kosten, keine DB-Reads.
   let images: IncomingImage[];
   let language = "de";
-  let modelOverride: string | null = null;
   let barcode: string | null = null;
   try {
     const body = await req.json();
@@ -234,14 +240,7 @@ Deno.serve(async (req) => {
     if (typeof body?.language === "string" && body.language in LANGUAGE_RULES) {
       language = body.language;
     }
-    // Nicht gelistete Modelle werden ignoriert, nicht abgelehnt: Der
-    // Aufruf laeuft dann einfach auf dem Produktiv-Default.
-    if (
-      typeof body?.model === "string" &&
-      MODEL_OVERRIDE_WHITELIST.has(body.model)
-    ) {
-      modelOverride = body.model;
-    }
+    // body.model wird bewusst NICHT gelesen (siehe Kommentar oben).
     // EAN-8 bis GTIN-14. Alles andere wird ignoriert statt abgelehnt.
     if (typeof body?.barcode === "string" && /^[0-9]{6,14}$/.test(body.barcode)) {
       barcode = body.barcode;
@@ -351,7 +350,96 @@ Deno.serve(async (req) => {
     });
   }
 
+  // ────────────────────────────────────────────────────────────
+  // Kostenschutz fuer die Foto-Analyse (Audit-Befund L2, 2026-09-14).
+  //
+  // Ab hier wird es kostenpflichtig, deshalb zwei Huerden, die der
+  // Client nicht umgehen kann:
+  //   1. Anmeldung. Ohne Konto gibt es kein Kontingent, das man fuehren
+  //      koennte -- der lokale Zaehler in Entitlements.js liegt auf dem
+  //      Geraet der Nutzerin. Barcode- und Cache-Abfragen bleiben
+  //      bewusst ohne Anmeldung erreichbar (oben, vor dieser Stelle):
+  //      Die kosten nichts.
+  //   2. Kontingent je Konto und Kalendermonat, gefuehrt in der
+  //      Datenbank (scan_quotas), reserviert VOR dem Claude-Aufruf.
+  //
+  // Das IP-Limit oben bleibt bestehen, ist aber nur noch zusaetzlicher
+  // Missbrauchsschutz, nicht mehr der einzige Schutz.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const bearer = authHeader.toLowerCase().startsWith("bearer ")
+    ? authHeader.slice(7).trim()
+    : "";
+
+  // Der Anon-Key ist oeffentlich und zaehlt deshalb NICHT als Anmeldung.
+  // Ein Nutzer-Token unterscheidet sich von ihm dadurch, dass
+  // auth.getUser() eine userId liefert.
+  let userId: string | null = null;
+  if (bearer) {
+    try {
+      const { data, error } = await supabaseAdmin.auth.getUser(bearer);
+      if (!error && data?.user?.id) userId = data.user.id;
+    } catch (error) {
+      console.error("auth lookup failed:", error);
+    }
+  }
+
+  if (!userId) {
+    return jsonResponse(401, {
+      error: "Für die Foto-Analyse ist eine Anmeldung nötig.",
+      reason: "auth_required",
+    });
+  }
+
+  const period = billingPeriod(new Date());
+  let reservation: { allowed: boolean; usedAfter: number; limit: number } | null = null;
+  try {
+    const { data, error } = await supabaseAdmin.rpc("reserve_scan_quota", {
+      p_user_id: userId,
+      p_period: period,
+      p_limit: MONTHLY_HARD_CAP + SERVER_CREDIT_ALLOWANCE,
+    });
+    if (error) throw error;
+    const row = Array.isArray(data) ? data[0] : data;
+    reservation = {
+      allowed: row?.allowed === true,
+      usedAfter: Number(row?.used_after ?? 0),
+      limit: Number(row?.quota_limit ?? MONTHLY_HARD_CAP),
+    };
+  } catch (error) {
+    // Fail closed, dieselbe Linie wie beim IP-Limit: Ohne funktionierende
+    // Kontingentpruefung lieber ablehnen als ungeschuetzt zahlen.
+    console.error("scan quota reservation failed:", error);
+    return jsonResponse(503, {
+      error: "Dienst vorübergehend nicht verfügbar. Bitte später erneut versuchen.",
+    });
+  }
+
+  if (!reservation.allowed) {
+    return jsonResponse(429, {
+      error:
+        "Das Kontingent für KI-Foto-Analysen ist für diesen Monat aufgebraucht. Barcode-Scan und Katalogsuche bleiben nutzbar.",
+      reason: "quota_exhausted",
+      period,
+    });
+  }
+
+  // Ab hier ist eine Analyse reserviert. Jeder Ausstieg ohne verwertbares
+  // Ergebnis muss sie zurueckgeben, sonst kostet ein Fehler Kontingent.
+  const releaseReservation = async () => {
+    try {
+      await supabaseAdmin.rpc("release_scan_quota", {
+        p_user_id: userId,
+        p_period: period,
+      });
+    } catch (error) {
+      // Nur protokollieren: Eine nicht zurueckgegebene Reservierung ist
+      // aergerlich, aber harmlos. Ein Absturz hier waere schlimmer.
+      console.error("scan quota release failed:", error);
+    }
+  };
+
   if (images.length === 0 || images.length > MAX_IMAGES) {
+    await releaseReservation();
     return jsonResponse(400, {
       error: `Es werden 1 bis ${MAX_IMAGES} Bilder erwartet.`,
     });
@@ -360,12 +448,15 @@ Deno.serve(async (req) => {
   for (const image of images) {
     const mediaType = image.mediaType ?? "image/jpeg";
     if (!ALLOWED_MEDIA_TYPES.has(mediaType)) {
+      await releaseReservation();
       return jsonResponse(400, { error: `Bildformat ${mediaType} wird nicht unterstuetzt.` });
     }
     if (typeof image.data !== "string" || image.data.length === 0) {
+      await releaseReservation();
       return jsonResponse(400, { error: "Ein Bild enthaelt keine Daten." });
     }
     if (image.data.length > MAX_BASE64_LENGTH) {
+      await releaseReservation();
       return jsonResponse(413, { error: "Ein Bild ist zu gross." });
     }
   }
@@ -405,7 +496,9 @@ Deno.serve(async (req) => {
 
   try {
     const response = await client.messages.create({
-      model: modelOverride ?? Deno.env.get("ANALYZE_MODEL") ?? "claude-opus-5",
+      // Ausschliesslich serverseitig gewaehlt: Secret gegen Whitelist,
+      // sonst Default. Kein Einfluss aus dem Request-Body.
+      model: resolveModel(Deno.env.get("ANALYZE_MODEL")).model,
       max_tokens: 16000,
       system: buildSystemPrompt(language),
       output_config: {
@@ -415,16 +508,20 @@ Deno.serve(async (req) => {
     });
 
     if (response.stop_reason === "refusal") {
+      // Kein verwertbares Ergebnis: Reservierung zurueckgeben.
+      await releaseReservation();
       return jsonResponse(422, {
         error: "Die Analyse wurde vom Modell abgelehnt. Bitte andere Fotos versuchen.",
       });
     }
     if (response.stop_reason === "max_tokens") {
+      await releaseReservation();
       return jsonResponse(502, { error: "Die Analyse wurde abgeschnitten. Bitte erneut versuchen." });
     }
 
     const textBlock = response.content.find((block) => block.type === "text");
     if (!textBlock || textBlock.type !== "text") {
+      await releaseReservation();
       return jsonResponse(502, { error: "Die Analyse hat keinen Text geliefert." });
     }
 
@@ -581,8 +678,10 @@ Deno.serve(async (req) => {
     console.error("analyze-supplement error:", error);
     const status = (error as { status?: number })?.status;
     if (status === 429) {
+      await releaseReservation();
       return jsonResponse(429, { error: "Rate-Limit erreicht. Bitte kurz warten." });
     }
+    await releaseReservation();
     return jsonResponse(502, { error: "Die Analyse ist fehlgeschlagen." });
   }
 });
