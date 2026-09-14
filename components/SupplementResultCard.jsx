@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 import { useTranslation } from '../i18n';
 import { colors, radius, space, surfaces, toneFor, type } from '../theme';
@@ -27,15 +28,48 @@ function hasText(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-function ReviewRow({ t, label, value, state = 'review', helper }) {
+// "detected" ist der einzige sichere Zustand: Feld erkannt, kein weiterer
+// Abgleich noetig. "review" (erkannt, aber grundsaetzlich pruefenswert,
+// z. B. Dosierung/Zutaten) und "missing" (nicht erkannt) gelten beide als
+// unsicher und fuehren zum selben Editier-Tap -- reale Praesenz-Daten aus
+// dem Scan-Ergebnis, kein erfundenes Confidence-Flag pro Feld.
+function ReviewRow({ t, label, value, state = 'review', helper, onEdit }) {
   const stateConfig = FIELD_STATES[state] || FIELD_STATES.review;
   const tone = toneFor(stateConfig.tone);
+  const isCertain = state === 'detected';
 
   return (
-    <View style={styles.reviewRow}>
+    <View style={[styles.reviewRow, !isCertain && styles.reviewRowUncertain]}>
       <View style={styles.reviewRowContent}>
         <Text style={styles.reviewLabel}>{label}</Text>
-        <Text style={styles.reviewValue}>{value}</Text>
+
+        {isCertain ? (
+          <View style={styles.reviewValueRow}>
+            <Text style={styles.reviewValue}>{value}</Text>
+            <Feather
+              name="check-circle"
+              size={16}
+              color={tone.ink}
+              style={styles.reviewIcon}
+            />
+          </View>
+        ) : (
+          <Pressable
+            onPress={onEdit}
+            style={styles.reviewValueRow}
+            accessibilityRole="button"
+            accessibilityLabel={t('components.result.editFieldAccessibility', { field: label })}
+          >
+            <Text style={styles.reviewValue}>{value}</Text>
+            <Feather
+              name="edit-2"
+              size={14}
+              color={tone.ink}
+              style={styles.reviewIcon}
+            />
+          </Pressable>
+        )}
+
         {helper ? <Text style={styles.reviewHelper}>{helper}</Text> : null}
       </View>
 
@@ -48,7 +82,7 @@ function ReviewRow({ t, label, value, state = 'review', helper }) {
   );
 }
 
-export default function SupplementResultCard({ result }) {
+export default function SupplementResultCard({ result, onEditField }) {
   const { t } = useTranslation();
 
   const productNameDetected =
@@ -161,6 +195,7 @@ export default function SupplementResultCard({ result }) {
                 ? t('components.result.helperProductNameDetected')
                 : t('components.result.helperProductNameMissing')
             }
+            onEdit={onEditField}
           />
 
           <ReviewRow
@@ -173,6 +208,7 @@ export default function SupplementResultCard({ result }) {
                 ? t('components.result.helperBrandDetected')
                 : t('components.result.helperBrandMissing')
             }
+            onEdit={onEditField}
           />
 
           <ReviewRow
@@ -185,6 +221,7 @@ export default function SupplementResultCard({ result }) {
                 ? t('components.result.helperDosageDetected')
                 : t('components.result.helperDosageMissing')
             }
+            onEdit={onEditField}
           />
 
           <ReviewRow
@@ -203,6 +240,7 @@ export default function SupplementResultCard({ result }) {
                 ? t('components.result.helperIngredientsDetected')
                 : t('components.result.helperIngredientsMissing')
             }
+            onEdit={onEditField}
           />
         </View>
       </View>
@@ -398,6 +436,13 @@ const styles = StyleSheet.create({
     padding: space.md + 1,
     marginBottom: space.sm + 1,
   },
+  // Unsicherer Zustand (review/missing): zusaetzlich zum Farb-Badge ein
+  // sichtbarer Rand, damit der Status nie nur ueber Farbe/Text am rechten
+  // Rand erkennbar ist (Bedienregeln 2026-08-31).
+  reviewRowUncertain: {
+    borderWidth: 1,
+    borderColor: colors.accent,
+  },
   reviewRowContent: {
     flex: 1,
     paddingRight: space.sm + 2,
@@ -406,12 +451,22 @@ const styles = StyleSheet.create({
     ...type.label,
     color: colors.inkMuted,
   },
+  reviewValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 3,
+    // Tippflaeche fuer den Editier-Tap bei unsicheren Feldern
+    // (Bedienregeln: mindestens 44 pt Hoehe).
+    minHeight: 44,
+  },
   reviewValue: {
     color: colors.ink,
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '700',
-    marginTop: 3,
+  },
+  reviewIcon: {
+    marginLeft: space.xs + 2,
   },
   reviewHelper: {
     ...type.small,

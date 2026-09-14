@@ -49,7 +49,7 @@ export default function StepBirthYear({ t, value, onChange, resolved }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { marginBottom: space.xl },
   title: { ...type.heading, marginBottom: space.sm },
   why: { ...type.small, marginBottom: space.md },
   // Kein Eingabefeld-Look: das native Rad ignoriert Rahmen und Polsterung

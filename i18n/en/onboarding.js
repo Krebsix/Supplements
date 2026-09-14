@@ -8,13 +8,7 @@ export default {
   'onboarding.logoAlt': 'MySuplea',
   'onboarding.back': 'Back',
   'onboarding.next': 'Next',
-  'onboarding.skip': 'Skip',
   'onboarding.progress': 'Step {step} of {total}',
-
-  'onboarding.welcome.eyebrow': 'Welcome',
-  'onboarding.welcome.title': 'MySuplea organises what you take.',
-  'onboarding.welcome.text': 'No recommendations, no advertising, your data stays with you.',
-  'onboarding.welcome.start': 'Let\'s go',
 
   'onboarding.legal.title': 'Before you start',
   'onboarding.legal.text': 'The app organises and documents. It does not advise, does not recommend dosages and does not replace medical judgement.',
@@ -22,6 +16,11 @@ export default {
   'onboarding.legal.termsLink': 'terms of use',
   'onboarding.legal.privacyLink': 'privacy policy',
   'onboarding.legal.accept': 'Accept and continue',
+
+  // Screen title of ScreenStart.jsx, which bundles name, gender, birth
+  // year, the extra question and the legal text.
+  'onboarding.start.title': 'A little about you',
+  'onboarding.start.subtitle': 'For the right reference values and how we address you.',
 
   'onboarding.name.title': 'How should we address you?',
   'onboarding.name.field': 'First name',
@@ -47,6 +46,12 @@ export default {
   'onboarding.extra.reference.title': 'Which reference values should apply?',
   'onboarding.extra.reference.why': 'The published reference values are split into groups. You can change this choice at any time in the settings.',
 
+  // Screen title of ScreenRoutine.jsx, which bundles intake times and
+  // the first preparation. Its own key so it does not collide with
+  // 'onboarding.routine.title' (StepRoutineTimes' own internal title,
+  // rendered underneath it in the same ScrollView).
+  'onboarding.routineScreen.title': 'Get started',
+
   'onboarding.routine.title': 'Your intake times',
   'onboarding.routine.text': 'When do you usually take something? Times can be changed later.',
   'onboarding.routine.morning': 'Morning',
@@ -62,13 +67,7 @@ export default {
   'onboarding.first.search': 'Search',
   'onboarding.first.later': 'Later',
 
-  'onboarding.account.title': 'Back up?',
-  'onboarding.account.text': 'With an account you can create a backup and later use several devices. The app also works without one.',
   'onboarding.account.create': 'Create account',
-  'onboarding.account.later': 'Later without an account',
 
-  'onboarding.done.title': 'Done, {name}.',
-  'onboarding.done.titleNoName': 'Done.',
-  'onboarding.done.text': 'Your daily plan is waiting.',
   'onboarding.done.go': 'To the daily plan',
 };

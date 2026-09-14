@@ -51,6 +51,7 @@ export default {
     'Der Prozentwert beschreibt nur die technische Erkennung des Testmodells. Er bestätigt weder die inhaltliche Richtigkeit noch die Eignung des Produkts.',
   'components.result.reviewSectionTitle': 'Zu prüfende Angaben',
   'components.result.reviewSectionHint': 'Vor Übernahme kontrollieren',
+  'components.result.editFieldAccessibility': '{field} bearbeiten',
   'components.result.fieldProductName': 'Produktname',
   'components.result.helperProductNameDetected':
     'Mit der Vorderseite des Produkts abgleichen.',

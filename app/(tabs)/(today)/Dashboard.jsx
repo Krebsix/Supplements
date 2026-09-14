@@ -1,61 +1,53 @@
 import React from 'react';
-import { Alert, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors, onDark, radius, space, surfaces, toneFor, type, weight } from '../../../theme';
+import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 
 import { getBlockMessage, isBlocked } from '../../../AbsorptionBlocker';
 import { checkAllConflictsForSlot } from '../../../ConflictLogic';
-import { applySeparation } from '../../../StackConflictResolver';
 import { formatBackupTime } from '../../../CloudBackup';
+import { findNextUp } from '../../../NextUp';
 import { buildEntryGuidance } from '../../../ScheduleGuidance';
-import { countOpen, findNextUp } from '../../../NextUp';
+import { applySeparation } from '../../../StackConflictResolver';
 import { analyzeStack } from '../../../StackAnalyzer';
 import { refillState } from '../../../StockForecast';
 import { substanceIdsFromDetails } from '../../../SlotSuggestion';
 import { getAdvisories } from '../../../data/lifeStageAdvisories';
 import { getSubstance } from '../../../data/substances';
-import DayArc from '../../../components/DayArc';
 import FirstStepsCard from '../../../components/FirstStepsCard';
-import Pictogram, { formForUnit } from '../../../components/Pictogram';
-import ProductThumb from '../../../components/ProductThumb';
 import SlotReason from '../../../components/SlotReason';
 import { useTranslation } from '../../../i18n';
 import useCloudBackupStore from '../../../useCloudBackupStore';
 import useNotificationStore from '../../../useNotificationStore';
 import useStore from '../../../useStore';
-import {
-  formatSupplementDosage,
-  formatSupplementName,
-  formatSupplementPurpose,
-} from '../../../utils/supplementFormatting';
+import { formatSupplementDosage, formatSupplementName } from '../../../utils/supplementFormatting';
 
-function formatLastLogged(lastLoggedAt, t, language = 'de') {
-  if (!lastLoggedAt) return t('dashboard.lastActivityNone');
-
-  const date = new Date(lastLoggedAt);
-  if (Number.isNaN(date.getTime())) return t('dashboard.lastActivityInvalid');
-
-  const formatted = date.toLocaleString(language === 'de' ? 'de-DE' : 'en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+// Kopf-Metazeile (Design-Review 2026-09-01, 02-A): ein Datum, ein Profil,
+// sonst nichts. Begruessung, Kicker und Untertitel sind entfallen — der
+// Titel beantwortet die Frage des Screens, der Rest war Deko.
+function formatHeaderDate(language) {
+  return new Date().toLocaleDateString(language === 'de' ? 'de-DE' : 'en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
   });
-  return t('dashboard.lastActivityLogged', { date: formatted });
 }
 
-function getProgressPercent(done, total) {
-  if (!total) return 0;
-  return Math.min(100, Math.round((done / total) * 100));
+// Namen fuer die kuratierten Kartentexte kompakt halten: maximal drei,
+// Rest als Anzahl.
+function joinNames(names = []) {
+  const shown = names.slice(0, 3).join(', ');
+  const more = names.length - 3;
+  return more > 0 ? `${shown} +${more}` : shown;
 }
 
-function getSlotCountLabel(count, t) {
-  if (count === 0) return t('dashboard.slotCountEmpty');
-  if (count === 1) return t('dashboard.slotCount_one');
-  return t('dashboard.slotCount_other', { count });
+function getProfileLabel(profileId, t) {
+  if (profileId === 'adult') return t('dashboard.profileAdult');
+  if (profileId === 'child') return t('dashboard.profileChild');
+  return profileId || t('dashboard.profileDefault');
 }
 
 function normalizeRoutineName(name = '') {
@@ -95,102 +87,25 @@ function getDuplicateCountLabel(count, t) {
   return t('dashboard.duplicateCount_other', { count });
 }
 
-// Kopf-Metazeile (Design-Review 2026-09-01, 02-A): ein Datum, ein Profil,
-// sonst nichts. Begruessung, Kicker und Untertitel sind entfallen — der
-// Titel beantwortet die Frage des Screens, der Rest war Deko.
-function formatHeaderDate(language) {
-  return new Date().toLocaleDateString(language === 'de' ? 'de-DE' : 'en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  });
-}
-
-// Namen fuer die kuratierten Kartentexte kompakt halten: maximal drei,
-// Rest als Anzahl.
-function joinNames(names = []) {
-  const shown = names.slice(0, 3).join(', ');
-  const more = names.length - 3;
-  return more > 0 ? `${shown} +${more}` : shown;
-}
-
-// Uhrzeit einer dokumentierten Einnahme fuer die Zeile "Dokumentiert um
-// HH:MM". Ohne lesbaren Zeitstempel liefert sie null, die Zeile faellt
-// dann auf den Text ohne Uhrzeit zurueck.
-function formatLoggedTime(takenAt, language) {
-  if (!takenAt) return null;
-  const date = new Date(takenAt);
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toLocaleTimeString(language === 'de' ? 'de-DE' : 'en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
-function getProfileLabel(profileId, t) {
-  if (profileId === 'adult') return t('dashboard.profileAdult');
-  if (profileId === 'child') return t('dashboard.profileChild');
-  return profileId || t('dashboard.profileDefault');
-}
-
-function getRoutineInsight(progress, t) {
-  if (!progress.total) {
-    return {
-      label: t('dashboard.insightSetupLabel'),
-      text: t('dashboard.insightSetupText'),
-    };
-  }
-
-  if (progress.pending === 0) {
-    return {
-      label: t('dashboard.insightCompleteLabel'),
-      text: t('dashboard.insightCompleteText'),
-    };
-  }
-
-  return {
-    label: t('dashboard.insightPendingLabel', { pending: progress.pending }),
-    text: t('dashboard.insightPendingText'),
-  };
+// Zeitgruppen-Kopf der Checkliste: Slot-Name plus Uhrzeit, wie bisher in
+// den Slot-Karten ("Morgens · 07:00"), jetzt als Mono-Eyebrow-Zeile
+// (type.eyebrow, Task A).
+function slotHeading(slot) {
+  return `${slot.label} · ${slot.time}`;
 }
 
 export default function Dashboard() {
   const router = useRouter();
   const { t, language } = useTranslation();
-  const [expandedNoteIds, setExpandedNoteIds] = React.useState(() => new Set());
-  // Kennzahlen (summaryCard, metricGrid) stehen hinter einem Aufklapper
-  // (Spec Entscheidung 3): Standard eingeklappt, damit die erste Flaeche
-  // der Arbeitsfluss bleibt, nicht die Zahlenwand.
-  const [summaryOpen, setSummaryOpen] = React.useState(false);
-  // Slot-Liste eine Ebene tiefer (Spec-Iteration 2026-09-02): Standard zu.
-  const [slotsOpen, setSlotsOpen] = React.useState(false);
   const insets = useSafeAreaInsets();
-  const scrollRef = React.useRef(null);
-  // Ziel-Positionen der Slot-Karten fuer den Sprung vom Tagesbogen.
-  const slotPositionsRef = React.useRef({});
-
-  // Heller Statusbar-Text, solange dieser Screen fokussiert ist — die
-  // Petrol-Buehne liegt unter der Statusleiste. Beim Verlassen zurueck.
-  useFocusEffect(
-    React.useCallback(() => {
-      StatusBar.setBarStyle('light-content');
-      return () => StatusBar.setBarStyle('dark-content');
-    }, [])
-  );
-
-  function toggleNoteExpanded(id) {
-    setExpandedNoteIds((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
+  // Welche Zeilen ihre Einnahme-Hinweise/Konflikt-Erklaerung aufgeklappt
+  // zeigen (SlotReason), Pattern unveraendert aus der Buehnen-Fassung
+  // uebernommen: Standard zu, Tiefe ist einen Tipp entfernt.
+  const [expandedNoteIds, setExpandedNoteIds] = React.useState(() => new Set());
 
   const activeProfileId = useStore((state) => state.activeProfileId);
   const absorptionBlockedAt = useStore((state) => state.absorptionBlockedAt);
   const getActiveSupplements = useStore((state) => state.getActiveSupplements);
-  const getLoggedToday = useStore((state) => state.getLoggedToday);
   const getTodayProgress = useStore((state) => state.getTodayProgress);
   const getTodaySchedule = useStore((state) => state.getTodaySchedule);
   const getPausedCuresToday = useStore((state) => state.getPausedCuresToday);
@@ -198,7 +113,6 @@ export default function Dashboard() {
   const undoIntakeToday = useStore((state) => state.undoIntakeToday);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
   const updateUserSupplement = useStore((state) => state.updateUserSupplement);
-  const getStock = useStore((state) => state.getStock);
   const lastRestore = useCloudBackupStore((state) => state.lastRestore);
   const dismissRestoreNotice = useCloudBackupStore((state) => state.dismissRestoreNotice);
   const notificationsEnabled = useNotificationStore((state) => state.notificationsEnabled);
@@ -210,48 +124,58 @@ export default function Dashboard() {
   const intakeLogs = useStore((state) => state.intakeLogs);
   const userSupplements = useStore((state) => state.userSupplements);
   const stockBySupplementId = useStore((state) => state.stockBySupplementId);
-  void intakeLogs;
   void userSupplements;
   void stockBySupplementId;
 
-  const loggedToday = getLoggedToday();
   const activeSupplements = getActiveSupplements();
   const dailySchedule = getTodaySchedule();
   const pausedCures = getPausedCuresToday();
   const visibleSchedule = dailySchedule.filter((item) => item.supplements.length > 0);
   const progress = getTodayProgress();
   const fullInventoryCount = activeSupplements.length;
-  const scheduledToday = progress.total;
-  const pendingToday = progress.pending;
-  const progressPercent = getProgressPercent(progress.done, progress.total);
-  const routineInsight = getRoutineInsight(progress, t);
   const headerMeta = `${formatHeaderDate(language)} · ${t('dashboard.profileLabel', {
     profile: getProfileLabel(activeProfileId, t),
   })}`;
-  const lastLoggedAt = loggedToday[0]?.takenAt;
   const blockerState = isBlocked(absorptionBlockedAt);
+  // Slot-Konflikt-Hinweise (ConflictLogic.js): unveraendert aus der Buehnen-
+  // Fassung uebernommen, jetzt inline unter der jeweiligen Zeitgruppe statt
+  // in einer eigenen Sektion am Seitenende (Behalten-Vorgabe: an die neuen
+  // Zeitgruppen haengen, wo sie vorher am Slot hingen).
   const slotAlerts = dailySchedule
     .map((item) => {
       const messages = checkAllConflictsForSlot([], item.supplements);
       return messages.length ? { slot: item.slot, messages } : null;
     })
     .filter(Boolean);
-  // Erklaerung je Eintrag (SlotReason): einmal je aktivem Praeparat
-  // berechnet statt in der Zeilen-Schleife, sonst wuerde ein Hook in
-  // einer .map()-Schleife stehen (Rules of Hooks). buildEntryGuidance ist
-  // reine Fachlogik aus ScheduleGuidance.js, ausschliesslich belegte
-  // Regeln (Einnahme-Hinweise, Paar-Konflikte, Synergien). Die Map wird
-  // bei der ueblichen Bestandsgroesse (einstellig bis niedrig
-  // zweistellig) bei jedem Render neu berechnet, weil activeSupplements
-  // selbst jedes Mal ein neues Array ist -- bei dieser Groessenordnung
-  // unproblematisch.
+
+  function alertsForSlot(slotId) {
+    return slotAlerts.find((entry) => entry.slot.id === slotId) ?? null;
+  }
+
+  // Erklaerung je Eintrag (SlotReason), unveraendert aus der Buehnen-Fassung
+  // uebernommen (Finding Task B: war komplett aus der App verschwunden).
+  // Einmal je aktivem Praeparat berechnet statt in der Zeilen-Schleife,
+  // sonst wuerde ein Hook in einer .map()-Schleife stehen (Rules of Hooks).
+  // buildEntryGuidance ist reine Fachlogik aus ScheduleGuidance.js,
+  // ausschliesslich belegte Regeln (Einnahme-Hinweise, Paar-Konflikte,
+  // Synergien).
   const guidanceBySupplementId = React.useMemo(() => {
     const map = new Map();
     for (const supplement of activeSupplements) {
       map.set(supplement.id, buildEntryGuidance(supplement, activeSupplements, dailySchedule));
     }
     return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSupplements, dailySchedule]);
+
+  function toggleNoteExpanded(id) {
+    setExpandedNoteIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
 
   // Verschiebungs-Vorschlag anwenden (StackConflictResolver.js): ersetzt
   // nur den betroffenen Slot, andere Slots eines 2x/3x-Praeparats bleiben.
@@ -264,47 +188,12 @@ export default function Dashboard() {
     );
     updateUserSupplement(supplement.id, { timingSlots: nextSlots });
   }
-  // Arbeitsfluss statt Kennzahlen-Wand (Spec Entscheidung 3): erste Flaeche
-  // beantwortet "Was nehme ich als Naechstes?", nicht "Wie viel Prozent?".
+
+  // Checkliste statt Arbeitsfluss-Karte (Redesign Phase 2, Task B): "als
+  // Naechstes" bestimmt nur noch, welche Zeitgruppe als JETZT markiert wird
+  // und in welcher Gruppe der Nehmen-Button erscheint. Faellig ist nichts
+  // mehr, sobald findNextUp() null liefert (alles dokumentiert).
   const nextUp = findNextUp(dailySchedule);
-  const openTotal = countOpen(dailySchedule);
-  // Tagesbogen (DayArc): Slot-Status aus dem Tagesplan — done, wenn alles
-  // im Slot dokumentiert ist, next fuer den Als-Naechstes-Slot, sonst later.
-  const arcSlots = visibleSchedule.map((item) => ({
-    id: item.slot.id,
-    time: item.slot.time,
-    label: item.slot.label,
-    status: item.supplements.every((supplement) => supplement.logged)
-      ? 'done'
-      : item.slot.id === nextUp?.slot.id
-        ? 'next'
-        : 'later',
-  }));
-  const arcStatusLabels = {
-    done: t('dashboard.arc.done'),
-    next: t('dashboard.arc.next'),
-    later: t('dashboard.arc.later'),
-  };
-
-  const restSlots = visibleSchedule.filter((item) => item.slot.id !== nextUp?.slot.id);
-  const restCount = restSlots.reduce((sum, item) => sum + item.supplements.length, 0);
-
-  function scrollToSlot(slotId) {
-    const jump = () => {
-      const y = slotPositionsRef.current[slotId];
-      if (typeof y === 'number' && scrollRef.current) {
-        scrollRef.current.scrollTo({ y: Math.max(0, y - space.md), animated: true });
-      }
-    };
-    if (slotId !== nextUp?.slot.id && !slotsOpen) {
-      // Slots erst aufklappen, dann springen: Die Zielposition entsteht
-      // erst im Layout nach dem Aufklappen.
-      setSlotsOpen(true);
-      setTimeout(jump, 300);
-      return;
-    }
-    jump();
-  }
 
   // Kuratierte Karten (Spec-Iteration 2026-09-02): nur bei Aussage,
   // maximal drei, Prioritaet Auffaelligkeit > Lebensphase > Bestand.
@@ -450,7 +339,7 @@ export default function Dashboard() {
   // Situative Hinweise in fester Reihenfolge; der erste wird zur Karte,
   // alle weiteren zur kompakten Zeile (Design-Review 02-D). Die Sperre
   // steht bewusst dabei: Wer gerade nichts dokumentieren kann, soll das
-  // sehen, bevor die Als-Naechstes-Karte einen Knopf anbietet.
+  // sehen, bevor die Checkliste einen Nehmen-Button anbietet.
   const situationalNotices = [
     lastRestore ? 'restored' : null,
     duplicateEntryCount > 0 ? 'cleanup' : null,
@@ -459,9 +348,7 @@ export default function Dashboard() {
     // obwohl Einnahmen geplant sind: Die App soll ans Nicht-Vergessen
     // erinnern koennen — der Weg dorthin darf nicht in Mehr verborgen
     // bleiben (Geraetetest 2026-09-02).
-    scheduledToday > 0 && (!notificationsEnabled || !notificationPermission)
-      ? 'reminders'
-      : null,
+    progress.total > 0 && (!notificationsEnabled || !notificationPermission) ? 'reminders' : null,
   ].filter(Boolean);
 
   function renderSituationalNotice(kind, compact) {
@@ -590,500 +477,256 @@ export default function Dashboard() {
     );
   }
 
-  // Eine Eintrags-Zeile der Routine, unveraendert aus der Slot-Schleife
-  // gezogen, damit die Als-Naechstes-Karte und die Slot-Karten dieselbe
-  // Darstellung und dieselben Handler nutzen (kein zweiter Anzeigepfad).
-  // slotId separat statt aus item.slot.id im Closure, weil diese Funktion
-  // jetzt aus zwei Kontexten aufgerufen wird (Als-Naechstes-Karte, Slot-Schleife).
-  function renderSupplementRow(supplement, slotId, hero = false) {
-    const routineSupplement =
-      activeSupplements.find((entry) => entry.id === supplement.id) ?? supplement;
-    const stock = getStock(supplement.id);
-    const supplementName = formatSupplementName(routineSupplement);
-    const supplementMeta = [
-      formatSupplementDosage(routineSupplement, ''),
-      formatSupplementPurpose(routineSupplement, ''),
-    ].filter(Boolean).join(' · ');
-    const supplementNotes = routineSupplement.notes || supplement.notes;
-    const supplementTiming = (
-      routineSupplement.timingRaw || supplement.timingRaw || ''
-    ).trim();
-    const detailsExpanded = expandedNoteIds.has(supplement.id);
-    // Weniger Text je Praeparat (Geraetetest 02.09.): In den Listen-
-    // zeilen steht eingeklappt nur der Name — Dosierung, Zweck,
-    // Zeitpunkt, Bestand und Erklaerungen liegen hinter dem Aufklapper
-    // (eine Ebene, Spec-konform). Die Als-Naechstes-Karte (hero) zeigt
-    // weiterhin alles: Dort faellt die Entscheidung.
-    const showDepth = hero || detailsExpanded;
-    const hasTruncatedMeta = supplementMeta.length > 42;
-    const canExpandDetails = hero
-      ? Boolean(supplementNotes) || hasTruncatedMeta
-      : Boolean(
-          supplementMeta ||
-            supplementNotes ||
-            supplementTiming ||
-            stock?.currentUnits !== undefined
-        );
+  function handleUndo(supplement) {
+    undoIntakeToday(supplement.id);
+  }
 
-    const loggedTime = supplement.logged
-      ? formatLoggedTime(
-          loggedToday.find((log) => log.userSupplementId === supplement.id)?.takenAt,
-          language
-        )
-      : null;
+  // Eine Checklisten-Zeile: Haken-Kreis, Name, optional Dosierung, und der
+  // Nehmen-Button nur in der JETZT-Zeitgruppe. Dokumentierte Zeilen sind
+  // durchgestrichen UND gedimmt UND tragen das gefuellte Haken-Icon, damit
+  // der Status nie allein ueber Farbe transportiert wird (Bedienregeln).
+  //
+  // Haken-Kreis in JEDER Zeitgruppe tappbar (Review-Fund, kritisch): die
+  // einzige logIntake-Stelle der App sass vorher ausschliesslich am
+  // Nehmen-Button der JETZT-Gruppe. Wer den Morgen-Slot ausliess, konnte
+  // fuer den Rest des Tages nichts mehr dokumentieren, weil "JETZT" am
+  // ersten offenen Slot kleben bleibt (findNextUp kennt keine Uhrzeit-
+  // Logik). Die alte Buehnen-Fassung erlaubte das Dokumentieren jeder
+  // offenen Zeile in jedem Slot, das stellt dieser Kreis wieder her. Der
+  // Nehmen-Button bleibt zusaetzlich die auffaellige Standard-Aktion der
+  // JETZT-Gruppe.
+  //
+  // Info-Symbol (Finding Task B): Einnahme-Hinweise, Paar-Konflikte und
+  // Synergien (SlotReason/ScheduleGuidance.js) waren mit der Buehne
+  // komplett aus der App verschwunden, nicht nur versteckt. Die Zeile
+  // bleibt kompakt (Bedienregel "Tiefe ist einen Tipp entfernt"): Nur wenn
+  // ueberhaupt eine Erklaerung hinterlegt ist, erscheint ein Feather-
+  // Info-Icon; Antippen klappt SlotReason darunter auf, inklusive des
+  // "Verschieben"-Vorschlags bei alwaysSeparate-Konflikten.
+  function renderChecklistRow(supplement, slotId, isNow) {
+    const name = formatSupplementName(supplement);
+    const dosage = formatSupplementDosage(supplement, '');
+    const logged = supplement.logged;
+    const RowWrap = logged ? TouchableOpacity : View;
+    const rowWrapProps = logged
+      ? {
+          onPress: () => handleUndo(supplement),
+          activeOpacity: 0.6,
+          accessibilityRole: 'button',
+          accessibilityLabel: `${t('dashboard.undo')}: ${name}`,
+          accessibilityState: { checked: true },
+        }
+      : {};
+
+    const guidance = guidanceBySupplementId.get(supplement.id) ?? {
+      notes: [],
+      conflicts: [],
+      synergies: [],
+    };
+    const hasGuidance =
+      guidance.notes.length > 0 || guidance.conflicts.length > 0 || guidance.synergies.length > 0;
+    const detailsExpanded = expandedNoteIds.has(supplement.id);
 
     return (
-      <View key={supplement.id} style={styles.supplementCard}>
-        {/* Die ganze Textflaeche fuehrt zum Bearbeiten (Design-Review 02-B).
-            Entfernen lebt eine Ebene tiefer im Bestand (inventory.jsx) —
-            Spec-konform: Tiefe ist einen Tipp entfernt. Verschachtelte
-            Touchables (Details-Schalter, SlotReason-Quellen) gewinnen den
-            Tipp gegen die Flaeche. */}
-        <TouchableOpacity
-          style={styles.supplementTextWrap}
-          onPress={() => router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`)}
-          activeOpacity={0.7}
-          accessibilityRole="button"
-          accessibilityLabel={`${t('dashboard.edit')}: ${supplementName}`}
-        >
-          {/* Piktogramm je Zeile, Produkt-Vignette auf der Als-Naechstes-
-              Karte (Design-Review 02-G/03). */}
-          <View style={styles.rowLayout}>
-          {hero ? (
-            <ProductThumb supplement={routineSupplement} size={52} />
+      <View key={supplement.id}>
+        <RowWrap style={styles.row} {...rowWrapProps}>
+          {logged ? (
+            <Feather name="check-circle" size={22} color={colors.affirm} />
           ) : (
-            <View style={styles.rowPictogramWrap}>
-              <Pictogram form={formForUnit(routineSupplement.unit)} size={20} />
-            </View>
-          )}
-          <View style={styles.rowBody}>
-          <View style={styles.supplementHeaderRow}>
-            <Text style={styles.supplementName}>{supplementName}</Text>
-            <Feather name="chevron-right" size={18} color={colors.inkFaint} />
-          </View>
-          {showDepth && supplementMeta ? (
-            <Text
-              style={styles.supplementMeta}
-              numberOfLines={detailsExpanded ? undefined : 1}
-            >
-              {supplementMeta}
-            </Text>
-          ) : null}
-
-          {showDepth ? (
-          <SlotReason
-            guidance={
-              guidanceBySupplementId.get(supplement.id) ?? {
-                notes: [],
-                conflicts: [],
-                synergies: [],
-              }
-            }
-            onOpenSubstance={(substanceId) =>
-              router.push(`/search?substance=${substanceId}`)
-            }
-            onApplyMove={(conflict) => handleApplyMove(supplement, conflict)}
-          />
-          ) : null}
-
-          {showDepth && stock?.currentUnits !== undefined ? (
-            <Text style={styles.noteText}>
-              {t('dashboard.stockNote', {
-                amount: stock.currentUnits,
-                unit: stock.unit || t('dashboard.stockUnitFallback'),
-              })}
-            </Text>
-          ) : null}
-
-          {showDepth && supplementTiming ? (
-            <View style={styles.timingRow}>
-              <Feather name="clock" size={14} color={colors.inkMuted} />
-              <Text style={styles.timingText}>{supplementTiming}</Text>
-            </View>
-          ) : null}
-
-          {canExpandDetails ? (
             <TouchableOpacity
+              onPress={() => logIntake(supplement.id, { slotId })}
+              activeOpacity={0.6}
+              accessibilityRole="button"
+              accessibilityLabel={`${t('dashboard.logAction')}: ${name}`}
+              accessibilityState={{ checked: false }}
+              // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): der 22-pt-Kreis
+              // bekommt sie ueber hitSlop statt eine groessere Box, die die
+              // Zeile gegenueber der dokumentierten Variante verschieben
+              // wuerde.
+              hitSlop={{ top: 11, bottom: 11, left: 11, right: 11 }}
+            >
+              <Feather name="circle" size={22} color={colors.ruleStrong} />
+            </TouchableOpacity>
+          )}
+          <View style={styles.rowText}>
+            <Text style={[styles.rowTitle, logged && styles.rowTitleDone]}>{name}</Text>
+            {dosage ? <Text style={[styles.rowSub, logged && styles.rowSubDone]}>{dosage}</Text> : null}
+          </View>
+          {hasGuidance ? (
+            <TouchableOpacity
+              style={styles.infoButton}
               onPress={() => toggleNoteExpanded(supplement.id)}
               activeOpacity={0.7}
               accessibilityRole="button"
-              accessibilityLabel={
-                detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')
-              }
-              style={styles.noteToggleButton}
+              accessibilityLabel={detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')}
               // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): hitSlop
-              // allein reichte rechnerisch nicht.
+              // allein reicht rechnerisch nicht.
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              {detailsExpanded && supplementNotes ? (
-                <Text style={styles.noteText}>{supplementNotes}</Text>
-              ) : null}
-              <Text style={styles.noteToggle}>
-                {detailsExpanded ? t('dashboard.noteHide') : t('dashboard.noteShow')}
-              </Text>
+              <Feather name="info" size={18} color={colors.inkFaint} />
             </TouchableOpacity>
           ) : null}
-          </View>
-          </View>
-        </TouchableOpacity>
-
-        {/* EINE Aktion pro Eintrag (Design-Review 02-B): offen = ein Button
-            in voller Kartenbreite, dokumentiert = Haken + Uhrzeit +
-            Rueckgaengig. Status steckt in Button bzw. Haken+Text, die
-            fruehere OFFEN/DOKUMENTIERT-Pille ist damit Doppelung. */}
-        {supplement.logged ? (
-          <View style={styles.loggedRow}>
-            <Feather name="check-circle" size={16} color={colors.affirm} />
-            <Text style={styles.loggedText}>
-              {loggedTime
-                ? t('dashboard.loggedAtTime', { time: loggedTime })
-                : t('dashboard.stateLogged')}
-            </Text>
+          {isNow && !logged ? (
             <TouchableOpacity
-              style={styles.undoButton}
-              onPress={() => undoIntakeToday(supplement.id)}
+              style={styles.nehmenButton}
+              onPress={() => logIntake(supplement.id, { slotId })}
               accessibilityRole="button"
+              accessibilityLabel={`${t('dashboard.logAction')}: ${name}`}
             >
-              <Text style={styles.undoButtonText}>{t('dashboard.undo')}</Text>
+              <Text style={styles.nehmenButtonText}>{t('dashboard.logAction')}</Text>
             </TouchableOpacity>
+          ) : null}
+        </RowWrap>
+        {hasGuidance && detailsExpanded ? (
+          <View style={styles.guidanceWrap}>
+            <SlotReason
+              guidance={guidance}
+              onOpenSubstance={(substanceId) => router.push(`/search?substance=${substanceId}`)}
+              onApplyMove={(conflict) => handleApplyMove(supplement, conflict)}
+            />
           </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.logButton}
-            onPress={() => logIntake(supplement.id, { slotId })}
-            accessibilityRole="button"
-          >
-            <Text style={styles.logButtonText}>{t('dashboard.logAction')}</Text>
-          </TouchableOpacity>
-        )}
+        ) : null}
       </View>
     );
   }
 
   return (
     <View style={styles.screenWrap}>
-      <ScrollView ref={scrollRef} style={styles.screen} contentContainerStyle={styles.content}>
-      {/* Petrol-Buehne (Design-Review 02-F): dunkler Kopf mit Titel, Datum,
-          Fortschritt und Tagesbogen. Voll-Bleed ueber negative Raender, die
-          Safe Area uebernimmt der Screen selbst (nativer Header ist hier
-          abgeschaltet). bounceFill faengt den iOS-Bounce oben in Petrol ab. */}
-      <View style={styles.bounceFill} />
-      <View style={[styles.stage, { paddingTop: insets.top + space.md }]}>
-        <View style={styles.stageTopRow}>
-          <View style={styles.stageTextWrap}>
-            <Text style={styles.stageTitle}>{t('dashboard.title')}</Text>
-            <Text style={styles.stageMeta}>{headerMeta}</Text>
-            {scheduledToday > 0 ? (
-              <Text style={styles.stageProgress}>
-                {t('dashboard.summaryLine', { done: progress.done, total: progress.total })}
-              </Text>
-            ) : null}
-          </View>
-          {arcSlots.length > 0 ? (
-            <DayArc slots={arcSlots} onPressSlot={scrollToSlot} statusLabels={arcStatusLabels} />
-          ) : null}
-        </View>
-      </View>
-
-      {/* Situative Hinweise (Design-Review 02-D): maximal EINE Karte,
-          alles Weitere als kompakte Zeile — der Einstieg gehoert dem
-          Arbeitsfluss, nicht einem Stapel Zustandskarten. */}
-      {situationalNotices.map((kind, index) => renderSituationalNotice(kind, index > 0))}
-
-      {fullInventoryCount === 0 ? <FirstStepsCard /> : null}
-
-      {fullInventoryCount > 0 && visibleSchedule.length === 0 ? (
-        <View style={styles.emptyRoutineCard}>
-          <Text style={styles.emptyRoutineTitle}>{t('dashboard.timingIncompleteTitle')}</Text>
-          <Text style={styles.emptyRoutineText}>{t('dashboard.timingIncompleteText')}</Text>
-        </View>
-      ) : null}
-
-      {/* Arbeitsfluss statt Kennzahlen-Wand (Spec Entscheidung 3): die
-          erste Flaeche beantwortet "Was nehme ich als Naechstes?". Zusaetzlich
-          an visibleSchedule.length > 0 gebunden: Bei unvollstaendigem Timing
-          spricht allein die emptyRoutineCard oben, sonst widerspricht sich
-          der gruene "nichts geplant"-Haken mit dem Timing-Hinweis. */}
-      {fullInventoryCount > 0 && visibleSchedule.length > 0 ? (
-        nextUp ? (
-          <View
-            style={styles.nextUpCard}
-            onLayout={(event) => {
-              slotPositionsRef.current[nextUp.slot.id] = event.nativeEvent.layout.y;
-            }}
-          >
-            <View style={styles.nextUpHeaderRow}>
-              <Text style={styles.nextUpKicker}>
-                {`${t('dashboard.nextUp.title')} · ${nextUp.slot.label}`}
-              </Text>
-              <Text style={styles.nextUpTime}>{nextUp.slot.time}</Text>
-            </View>
-            {nextUp.supplements.map((supplement) =>
-              renderSupplementRow(supplement, nextUp.slot.id, true)
+      <ScrollView
+        style={styles.screen}
+        contentContainerStyle={[styles.content, { paddingTop: insets.top + space.lg }]}
+      >
+        <View style={styles.header}>
+          <Text style={styles.title}>{t('dashboard.title')}</Text>
+          <Text style={styles.meta}>
+            {progress.total > 0 ? (
+              <>
+                {headerMeta}{' · '}
+                <Text style={styles.metaCount}>
+                  {t('dashboard.takenCount', { done: progress.done, total: progress.total })}
+                </Text>
+              </>
+            ) : (
+              headerMeta
             )}
-            {openTotal > nextUp.openCount ? (
-              <Text style={styles.nextUpRemaining}>
-                {t('dashboard.nextUp.remaining', { count: openTotal - nextUp.openCount })}
-              </Text>
-            ) : null}
-          </View>
-        ) : (
-          <View style={styles.nextUpCardDone}>
-            <Feather name="check-circle" size={18} color={colors.affirm} />
-            <Text style={styles.nextUpDoneText}>
-              {t(scheduledToday > 0 ? 'dashboard.nextUp.allDone' : 'dashboard.nextUp.nothingPlanned')}
-            </Text>
-          </View>
-        )
-      ) : null}
+          </Text>
+        </View>
 
-      {/* Kennzahlen (Fortschritt, Prozent, Insight) hinter einer Zeile mit
-          Aufklapper (Spec Entscheidung 3): Der Arbeitsfluss oben beantwortet
-          "was jetzt", die Zahlen hier sind Kontext, kein Einstieg. */}
-      {/* Fortschritt als Segment-Balken (Design-Review 02-G): ein Segment
-          je geplanter Einnahme, gefuellt = dokumentiert. Die Textzeile
-          darunter ist Pflicht — Status nie nur ueber Farbe. */}
-      {fullInventoryCount > 0 && scheduledToday > 0 ? (
-        <View style={styles.progressBlock}>
-          <View style={styles.segmentRow}>
-            {Array.from({ length: progress.total }, (_, index) => (
-              <View
-                key={index}
-                style={[styles.segment, index < progress.done && styles.segmentFilled]}
-              />
+        {/* Situative Hinweise (Design-Review 02-D): maximal EINE Karte,
+            alles Weitere als kompakte Zeile — der Einstieg gehoert dem
+            Arbeitsfluss, nicht einem Stapel Zustandskarten. */}
+        {situationalNotices.map((kind, index) => renderSituationalNotice(kind, index > 0))}
+
+        {fullInventoryCount === 0 ? <FirstStepsCard /> : null}
+
+        {fullInventoryCount > 0 && visibleSchedule.length === 0 ? (
+          <View style={styles.emptyRoutineCard}>
+            <Text style={styles.emptyRoutineTitle}>{t('dashboard.timingIncompleteTitle')}</Text>
+            <Text style={styles.emptyRoutineText}>{t('dashboard.timingIncompleteText')}</Text>
+          </View>
+        ) : null}
+
+        {/* Checkliste (Redesign Phase 2, Task B): flache Zeitgruppen statt
+            Als-Naechstes-Karte und Slot-Aufklapper. Jede Gruppe zeigt ALLE
+            heutigen Eintraege des Slots, offen und dokumentiert; nur die
+            JETZT-Gruppe (findNextUp) bekommt den Nehmen-Button. */}
+        {fullInventoryCount > 0 && visibleSchedule.length > 0 ? (
+          <View style={styles.checklist}>
+            {visibleSchedule.map((item) => {
+              const isNow = nextUp?.slot.id === item.slot.id;
+              const alerts = alertsForSlot(item.slot.id);
+              return (
+                <View key={item.slot.id} style={styles.slotGroup}>
+                  <Text style={[styles.slotLabel, isNow && styles.slotLabelNow]}>
+                    {slotHeading(item.slot)}
+                    {isNow ? t('dashboard.nowSuffix') : ''}
+                  </Text>
+                  {item.supplements.map((supplement) =>
+                    renderChecklistRow(supplement, item.slot.id, isNow)
+                  )}
+                  {alerts ? (
+                    <View style={styles.conflictNotice}>
+                      {alerts.messages.map((message, index) => (
+                        <Text
+                          key={`${item.slot.id}-${index}`}
+                          style={[styles.conflictText, index > 0 && styles.conflictTextSpacing]}
+                        >
+                          {message.message}
+                        </Text>
+                      ))}
+                    </View>
+                  ) : null}
+                </View>
+              );
+            })}
+          </View>
+        ) : null}
+
+        {/* Kuratierte Karten (Spec-Iteration 2026-09-02): erscheinen nur,
+            wenn sie etwas zu sagen haben — Auffaelligkeit, Lebensphase,
+            Bestand knapp. Ziel ist immer der Ort mit der vollen Tiefe. */}
+        {curatedCards.map((card) => renderCuratedCard(card))}
+
+        {/* Verlauf-Einstieg (Spec-Iteration 2026-09-04): feste Zeile statt
+            kuratierter Karte, da sie nicht von Auffaelligkeit abhaengt.
+            Nur sichtbar, wenn es ueberhaupt etwas zu zeigen gibt (mind. ein
+            Log ODER ein Praeparat im Bestand): eine brandneue Nutzerin ohne
+            beides landete sonst von der Erste-Schritte-Karte direkt auf
+            einem Verlauf mit "0 % Einnahme-Treue" und sieben leeren Balken
+            (Review-Fund 2026-09-04, Inkonsistenz zu inventory.jsx's
+            hasAnyRecords-Wache). */}
+        {intakeLogs.length > 0 || fullInventoryCount > 0 ? (
+          <TouchableOpacity
+            style={styles.historyLink}
+            onPress={() => router.push('/history')}
+            activeOpacity={0.7}
+            accessibilityRole="link"
+          >
+            <Feather name="bar-chart-2" size={18} color={colors.accent} />
+            <Text style={styles.historyLinkText}>{t('dashboard.historyLink')}</Text>
+            <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+          </TouchableOpacity>
+        ) : null}
+
+        {/* Kur-Pausen erscheinen als eigener Block statt still aus den Slots
+            zu verschwinden: Wer heute nichts nimmt, soll sehen, warum. */}
+        {pausedCures.length > 0 ? (
+          <View style={styles.pausedCureCard}>
+            <Text style={styles.pausedCureTitle}>{t('dashboard.curePausedTitle')}</Text>
+            {pausedCures.map(({ supplement, statusLabel }) => (
+              <View key={supplement.id} style={styles.pausedCureRow}>
+                <Text style={styles.pausedCureName}>{formatSupplementName(supplement)}</Text>
+                {statusLabel ? <Text style={styles.pausedCureStatus}>{statusLabel}</Text> : null}
+              </View>
             ))}
           </View>
-          <View style={styles.progressMetaRow}>
-            <Text style={styles.progressMetaText}>
-              {nextUp
-                ? `${t('dashboard.summaryLine', { done: progress.done, total: progress.total })} · ${t('dashboard.nextUpAt', { time: nextUp.slot.time })}`
-                : t('dashboard.summaryLine', { done: progress.done, total: progress.total })}
-            </Text>
-            <TouchableOpacity
-              onPress={() => setSummaryOpen((value) => !value)}
-              accessibilityRole="button"
-              accessibilityState={{ expanded: summaryOpen }}
-              style={styles.summaryToggle}
-            >
-              <Text style={styles.summaryToggleText}>
-                {t(summaryOpen ? 'dashboard.summaryDetailsHide' : 'dashboard.summaryDetailsShow')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : null}
-
-      {summaryOpen ? (
-        <>
-          <View style={styles.summaryCard}>
-            <View style={styles.summaryTopRow}>
-              <View>
-                <Text style={styles.summaryLabel}>{t('dashboard.summaryLabel')}</Text>
-                <Text style={styles.summaryValue}>
-                  {progress.total > 0
-                    ? t('dashboard.summaryProgress', { done: progress.done, total: progress.total })
-                    : t('dashboard.summaryEmpty')}
-                </Text>
-              </View>
-
-              <View style={styles.percentBadge}>
-                <Text style={styles.percentText}>{progressPercent}%</Text>
-              </View>
-            </View>
-
-            <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
-            </View>
-
-            <View style={styles.summaryInsightRow}>
-              <Text style={styles.summaryInsightLabel}>{routineInsight.label}</Text>
-              <Text style={styles.summaryInsightText}>{routineInsight.text}</Text>
-            </View>
-
-            <Text style={styles.lastActivity}>{formatLastLogged(lastLoggedAt, t, language)}</Text>
-          </View>
-
-          {/* Kacheln sind tappbar (Geraetetest 02.09.): jede fuehrt zu
-              ihrem Ort — Bestand, Tagesplan-Slots, Verlauf, naechster
-              offener Slot. */}
-          <View style={styles.metricGrid}>
-            <MetricCard
-              label={t('dashboard.metricActiveRoutine')}
-              value={String(fullInventoryCount)}
-              onPress={() => router.push('/inventory')}
-            />
-            <MetricCard
-              label={t('dashboard.metricScheduledToday')}
-              value={String(scheduledToday)}
-              onPress={
-                visibleSchedule.length > 0
-                  ? () => scrollToSlot(visibleSchedule[0].slot.id)
-                  : undefined
-              }
-            />
-            <MetricCard
-              label={t('dashboard.metricLogged')}
-              value={String(progress.done)}
-              onPress={() => router.push('/history')}
-            />
-            <MetricCard
-              label={t('dashboard.metricPending')}
-              value={String(pendingToday)}
-              onPress={nextUp ? () => scrollToSlot(nextUp.slot.id) : undefined}
-            />
-          </View>
-        </>
-      ) : null}
-
-      {/* Kuratierte Karten (Spec-Iteration 2026-09-02): erscheinen nur,
-          wenn sie etwas zu sagen haben — Auffaelligkeit, Lebensphase,
-          Bestand knapp. Ziel ist immer der Ort mit der vollen Tiefe. */}
-      {curatedCards.map((card) => renderCuratedCard(card))}
-
-      {/* Kur-Pausen erscheinen als eigener Block statt still aus den Slots
-          zu verschwinden: Wer heute nichts nimmt, soll sehen, warum. */}
-      {pausedCures.length > 0 ? (
-        <View style={styles.pausedCureCard}>
-          <Text style={styles.pausedCureTitle}>{t('dashboard.curePausedTitle')}</Text>
-          {pausedCures.map(({ supplement, statusLabel }) => (
-            <View key={supplement.id} style={styles.pausedCureRow}>
-              <Text style={styles.pausedCureName}>
-                {formatSupplementName(supplement)}
-              </Text>
-              {statusLabel ? (
-                <Text style={styles.pausedCureStatus}>{statusLabel}</Text>
-              ) : null}
-            </View>
-          ))}
-        </View>
-      ) : null}
-
-      {/* Slot-Liste eine Ebene tiefer (Spec-Iteration 2026-09-02): der
-          Als-Naechstes-Slot steht oben in der Karte, der Rest liegt
-          hinter diesem Aufklapper. */}
-      {fullInventoryCount > 0 && restSlots.length > 0 ? (
-        <TouchableOpacity
-          style={styles.slotsToggleRow}
-          onPress={() => setSlotsOpen((value) => !value)}
-          accessibilityRole="button"
-          accessibilityState={{ expanded: slotsOpen }}
-        >
-          <Text style={styles.slotsToggleTitle}>
-            {t('dashboard.allTodayTitle', { count: restCount })}
-          </Text>
-          <Feather
-            name={slotsOpen ? 'chevron-up' : 'chevron-down'}
-            size={18}
-            color={colors.inkFaint}
-          />
-        </TouchableOpacity>
-      ) : null}
-
-      {slotsOpen && fullInventoryCount > 0 ? restSlots
-        .map((item) => (
-        <View
-          key={item.slot.id}
-          style={styles.slotCard}
-          onLayout={(event) => {
-            slotPositionsRef.current[item.slot.id] = event.nativeEvent.layout.y;
-          }}
-        >
-          <View style={styles.slotHeader}>
-            <View style={styles.slotHeaderText}>
-              <Text style={styles.slotTitle}>{item.slot.label}</Text>
-              <Text style={styles.slotTime}>
-                {`${item.slot.time} · ${getSlotCountLabel(item.supplements.length, t)}`}
-              </Text>
-            </View>
-          </View>
-
-          {item.supplements.length === 0 ? (
-            <View style={styles.emptySlot}>
-              <Text style={styles.emptyText}>{t('dashboard.emptySlotText')}</Text>
-            </View>
-          ) : (
-            item.supplements.map((supplement) => renderSupplementRow(supplement, item.slot.id))
-          )}
-        </View>
-      )) : null}
-
-      {/* Zugang zum vollstaendigen Bestand, unter den Slots statt darueber:
-          Der Tagesplan zeigt zuerst, was heute ansteht — wer ein Praeparat
-          ohne Einnahmezeitpunkt angelegt hat, findet es hier trotzdem. */}
-      <TouchableOpacity
-        style={styles.inventoryRow}
-        onPress={() => router.push('/inventory')}
-        activeOpacity={0.7}
-        accessibilityRole="link"
-      >
-        <View style={styles.inventoryTextWrap}>
-          <Text style={styles.inventoryTitle}>{t('dashboard.inventoryLabel')}</Text>
-          <Text style={styles.inventorySub}>
-            {fullInventoryCount === 1
-              ? t('dashboard.inventoryCount_one')
-              : t('dashboard.inventoryCount_other', { count: fullInventoryCount })}
-          </Text>
-        </View>
-        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
-      </TouchableOpacity>
-
-      {/* Pruefhinweise nur, wenn es welche gibt (Design-Review 02-D):
-          kein Dauer-Gruen — die Abwesenheit von Hinweisen braucht keine
-          eigene Karte. */}
-      {slotAlerts.length > 0 ? (
-        <>
-          <SectionHeading
-            title={t('dashboard.sectionAlertsTitle')}
-            subtitle={t('dashboard.sectionAlertsSubtitle')}
-          />
-
-          {slotAlerts.map((group) => (
-            <View key={group.slot.id} style={styles.infoCard}>
-              <Text style={styles.infoTitle}>{group.slot.label}</Text>
-              {group.messages.map((message, index) => (
-                <Text key={`${group.slot.id}-${index}`} style={styles.infoText}>
-                  {message.message}
-                </Text>
-              ))}
-            </View>
-          ))}
-        </>
-      ) : null}
-
-      <View style={styles.disclaimerCard}>
-        <Text style={styles.disclaimerText}>{t('dashboard.disclaimer')}</Text>
-      </View>
-    </ScrollView>
-    </View>
-  );
-}
-
-function SectionHeading({ title, subtitle }) {
-  return (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <Text style={styles.sectionSubtitle}>{subtitle}</Text>
-    </View>
-  );
-}
-
-function MetricCard({ label, value, onPress }) {
-  return (
-    <TouchableOpacity
-      style={styles.metricCard}
-      onPress={onPress}
-      disabled={!onPress}
-      activeOpacity={0.7}
-      accessibilityRole={onPress ? 'button' : undefined}
-      accessibilityLabel={onPress ? `${label}: ${value}` : undefined}
-    >
-      <View style={styles.metricValueRow}>
-        <Text style={styles.metricValue}>{value}</Text>
-        {onPress ? (
-          <Feather name="chevron-right" size={16} color={colors.inkFaint} />
         ) : null}
-      </View>
-      <Text style={styles.metricLabel}>{label}</Text>
-    </TouchableOpacity>
+
+        {/* Zugang zum vollstaendigen Bestand: Der Tagesplan zeigt zuerst,
+            was heute ansteht — wer ein Praeparat ohne Einnahmezeitpunkt
+            angelegt hat, findet es hier trotzdem. */}
+        <TouchableOpacity
+          style={styles.inventoryRow}
+          onPress={() => router.push('/inventory')}
+          activeOpacity={0.7}
+          accessibilityRole="link"
+        >
+          <View style={styles.inventoryTextWrap}>
+            <Text style={styles.inventoryTitle}>{t('dashboard.inventoryLabel')}</Text>
+            <Text style={styles.inventorySub}>
+              {fullInventoryCount === 1
+                ? t('dashboard.inventoryCount_one')
+                : t('dashboard.inventoryCount_other', { count: fullInventoryCount })}
+            </Text>
+          </View>
+          <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+        </TouchableOpacity>
+
+        <View style={styles.disclaimerCard}>
+          <Text style={styles.disclaimerText}>{t('dashboard.disclaimer')}</Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -1096,164 +739,102 @@ const styles = StyleSheet.create({
   content: {
     ...surfaces.content,
   },
-  // Petrol-Buehne (Design-Review 02-F): Voll-Bleed ueber negative Raender
-  // gegen das Content-Padding, unten -28, damit die erste Karte hineinragt.
-  bounceFill: {
-    position: 'absolute',
-    top: -600,
-    left: 0,
-    right: 0,
-    height: 600,
-    backgroundColor: colors.accentInk,
-  },
-  stage: {
-    marginTop: -space.lg,
-    marginHorizontal: -space.lg,
-    marginBottom: -28,
-    paddingHorizontal: space.lg,
-    paddingBottom: 28 + space.xl,
-    backgroundColor: colors.accentInk,
-    borderBottomLeftRadius: radius.xl,
-    borderBottomRightRadius: radius.xl,
-  },
-  stageTopRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    gap: space.md,
-  },
-  stageTextWrap: { flex: 1 },
-  stageTitle: { ...type.display, color: onDark.ink },
-  stageMeta: { marginTop: space.sm, ...type.small, color: onDark.inkMuted },
-  stageProgress: {
-    marginTop: space.md,
-    ...type.subheading,
-    color: onDark.ink,
-    fontVariant: ['tabular-nums'],
-  },
-  // Als-Naechstes-Karte (Spec Entscheidung 3): erste Routine-Flaeche,
-  // beantwortet den Arbeitsfluss statt einer Kennzahl. Ohne Rahmen; der
-  // weiche Schatten traegt das Hineinragen in die Buehne.
-  nextUpCard: {
-    ...surfaces.card,
-    padding: space.lg,
+  header: {
     marginBottom: space.lg,
-    shadowColor: colors.accentInk,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
   },
-  nextUpHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    marginBottom: space.sm,
-  },
-  nextUpKicker: { ...type.eyebrow, color: colors.accent, flex: 1 },
-  nextUpTime: { ...type.small, fontVariant: ['tabular-nums'] },
-  nextUpRemaining: { ...type.small, marginTop: space.sm },
-  nextUpCardDone: { ...surfaces.card, padding: space.lg, marginBottom: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  nextUpDoneText: { ...type.bodyStrong, color: colors.affirm },
-  // Fortschritts-Balken mit Aufklapper (Design-Review 02-G): ersetzt die
-  // Kennzahlen-Zeile im Immer-Sichtbaren.
-  progressBlock: {
-    marginBottom: space.md,
-  },
-  segmentRow: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  segment: {
-    flex: 1,
-    height: 8,
-    borderRadius: 8,
-    backgroundColor: colors.rule,
-  },
-  segmentFilled: {
-    backgroundColor: colors.accent,
-  },
-  progressMetaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: space.sm,
-  },
-  progressMetaText: {
-    ...type.tiny,
-    flexShrink: 1,
-  },
-  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln).
-  summaryToggle: {
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  summaryToggleText: {
-    ...type.small,
-    color: colors.accent,
-  },
-  summaryCard: {
-    ...surfaces.card,
-    padding: space.xl,
-    marginBottom: 0,
-  },
-  summaryTopRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: space.lg,
-  },
-  summaryLabel: {
-    ...type.label,
-  },
-  summaryValue: {
+  title: { ...type.display },
+  meta: {
     marginTop: space.sm,
-    ...type.numeral,
-  },
-  percentBadge: {
-    minWidth: 68,
-    borderRadius: radius.lg,
-    backgroundColor: colors.accentSoft,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-    alignItems: 'center',
-  },
-  percentText: {
-    ...type.numeral,
-    color: colors.accent,
-  },
-  progressTrack: {
-    height: 7,
-    marginTop: space.xl,
-    borderRadius: radius.md,
-    backgroundColor: colors.rule,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: 7,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-  },
-  summaryInsightRow: {
-    marginTop: space.lg,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surfaceSunken,
-    padding: space.md,
-  },
-  // Versal-Micro-Pille abgeschafft (Design-Review 01): type.eyebrow bleibt
-  // das einzige Versal-Element, Labels sind normale Textzeilen.
-  summaryInsightLabel: {
     ...type.small,
-    fontWeight: weight.semibold,
+  },
+  metaCount: {
+    ...type.small,
+    fontWeight: '600',
     color: colors.ink,
   },
-  summaryInsightText: {
-    marginTop: space.sm,
-    ...type.body,
+  // Checkliste (Redesign Phase 2, Task B): flache Zeitgruppen mit
+  // Mono-Eyebrow-Label, keine Karten-Umrandung je Gruppe, harte Haarlinie
+  // je Zeile (Website-Look statt Karten-Stapel).
+  checklist: {
+    marginBottom: space.md,
   },
-  lastActivity: {
-    marginTop: space.md,
+  slotGroup: {
+    marginBottom: space.lg,
+  },
+  slotLabel: {
+    ...type.eyebrow,
+    marginBottom: space.sm,
+  },
+  slotLabelNow: {
+    ...type.eyebrowAccent,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    minHeight: 44,
+    paddingVertical: space.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.rule,
+  },
+  rowText: {
+    flex: 1,
+  },
+  // Angeglichen an menu.jsx/inventory.jsx (Review-Fund, Konsistenz):
+  // gleiche Zeilen-Typografie in allen drei Listen statt eigener Groessen
+  // nur im Tagesplan.
+  rowTitle: {
+    ...type.bodyStrong,
+  },
+  rowTitleDone: {
+    textDecorationLine: 'line-through',
+    color: colors.inkFaint,
+  },
+  rowSub: {
+    marginTop: 2,
+    ...type.tiny,
+  },
+  rowSubDone: {
+    color: colors.inkFaint,
+  },
+  // Info-Icon fuer den SlotReason-Aufklapper (Finding Task B): kein Ersatz
+  // fuer eine eigene Karte, nur ein leiser Hinweis, dass es zu diesem
+  // Praeparat eine belegte Erklaerung gibt.
+  infoButton: {
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  guidanceWrap: {
+    marginLeft: 34,
+    paddingBottom: space.sm,
+  },
+  nehmenButton: {
+    ...surfaces.buttonPrimary,
+    minHeight: 44,
+    paddingHorizontal: space.lg,
+  },
+  nehmenButtonText: {
+    ...surfaces.buttonPrimaryText,
+    fontSize: 15,
+  },
+  // Slot-Konflikt-Hinweise (ConflictLogic.js), jetzt unter der jeweiligen
+  // Zeitgruppe statt in einer eigenen Sektion am Seitenende.
+  conflictNotice: {
+    marginTop: space.sm,
+    borderRadius: radius.md,
+    backgroundColor: toneFor('notice').surface,
+    borderWidth: 1,
+    borderColor: toneFor('notice').rule,
+    padding: space.md,
+  },
+  conflictText: {
     ...type.small,
+    color: toneFor('notice').ink,
+  },
+  conflictTextSpacing: {
+    marginTop: space.xs,
   },
   // Absorptionssperre: ein Hinweis zum Timing, kein Alarm — daher 'notice'.
   noticeCard: {
@@ -1292,30 +873,20 @@ const styles = StyleSheet.create({
     ...type.small,
     marginTop: 2,
   },
-  metricGrid: {
-    marginTop: space.lg,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  metricCard: {
-    width: '48%',
-    ...surfaces.card,
-    padding: space.lg,
-  },
-  metricValueRow: {
+  // Verlauf-Einstieg (Spec-Iteration 2026-09-04): feste Zeile, keine
+  // kuratierte Karte, deshalb kein surfaces.card-Rahmen.
+  historyLink: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: space.sm,
+    minHeight: 44,
+    paddingVertical: space.sm,
+    marginBottom: space.md,
   },
-  metricValue: {
-    ...type.numeral,
-    fontSize: 26,
-  },
-  metricLabel: {
-    marginTop: space.sm,
-    ...type.small,
-    fontWeight: '600',
+  historyLinkText: {
+    ...type.body,
+    flex: 1,
+    color: colors.accent,
   },
   cleanupCard: {
     marginTop: space.xs,
@@ -1389,20 +960,6 @@ const styles = StyleSheet.create({
   restoredText: { ...type.small, marginTop: space.xs },
   restoredButton: { alignSelf: 'flex-start', marginTop: space.sm },
   restoredButtonText: { ...type.small, color: colors.accent },
-  sectionHeader: {
-    marginTop: space.md,
-    marginBottom: space.md,
-  },
-  sectionTitle: {
-    ...type.heading,
-  },
-  sectionSubtitle: {
-    marginTop: space.xs,
-    ...type.small,
-  },
-  slotCard: {
-    ...surfaces.card,
-  },
   // Kuratierte Karten (Spec-Iteration 2026-09-02).
   curatedCard: {
     ...surfaces.card,
@@ -1419,47 +976,16 @@ const styles = StyleSheet.create({
     ...type.small,
     marginTop: space.xs,
   },
-  // Aufklapp-Zeile der Slot-Liste.
-  slotsToggleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 48,
-    marginTop: space.md,
-    marginBottom: space.sm,
-  },
-  slotsToggleTitle: {
-    ...type.heading,
-  },
-  slotHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: space.md,
-    gap: space.md,
-  },
-  slotHeaderText: {
-    flex: 1,
-  },
-  slotTitle: {
-    ...type.subheading,
-  },
-  slotTime: {
-    marginTop: space.xs,
-    ...type.small,
-    fontWeight: '600',
-  },
-  emptySlot: {
-    borderTopWidth: 1,
-    borderTopColor: colors.rule,
-    paddingTop: space.md,
-  },
-  emptyText: {
-    ...type.body,
-  },
   emptyRoutineCard: {
     ...surfaces.card,
     padding: space.lg,
+  },
+  emptyRoutineTitle: {
+    ...type.subheading,
+    marginBottom: space.sm,
+  },
+  emptyRoutineText: {
+    ...type.body,
   },
   pausedCureCard: {
     ...surfaces.card,
@@ -1481,120 +1007,6 @@ const styles = StyleSheet.create({
   pausedCureStatus: {
     ...type.small,
     marginTop: space.xs,
-  },
-  emptyRoutineTitle: {
-    ...type.subheading,
-    marginBottom: space.sm,
-  },
-  emptyRoutineText: {
-    ...type.body,
-  },
-  // Eintrag als Spalte (Design-Review 02-B): Textflaeche oben, EINE
-  // Aktion in voller Breite darunter — statt der 116-pt-Buttonspalte.
-  supplementCard: {
-    paddingTop: space.md,
-    marginTop: space.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.rule,
-  },
-  supplementTextWrap: {
-    minHeight: 44,
-  },
-  rowLayout: {
-    flexDirection: 'row',
-    gap: space.md,
-  },
-  rowPictogramWrap: {
-    marginTop: 1,
-  },
-  rowBody: {
-    flex: 1,
-  },
-  supplementHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: space.sm,
-  },
-  supplementName: {
-    flex: 1,
-    ...type.bodyStrong,
-    fontSize: 16,
-    lineHeight: 21,
-  },
-  supplementMeta: {
-    marginTop: space.xs,
-    ...type.body,
-  },
-  noteText: {
-    marginTop: space.xs,
-    ...type.small,
-  },
-  // Einnahmezeitpunkt als normale Textzeile mit Uhr-Icon statt Versal-Pille
-  // (Design-Review 02-C).
-  timingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.xs,
-    marginTop: space.sm,
-  },
-  timingText: {
-    ...type.small,
-  },
-  // Tippflaeche 44 pt (CLAUDE.md Bedienregeln): traegt den TouchableOpacity
-  // von der noteText/noteToggle-Umschaltflaeche.
-  noteToggleButton: { minHeight: 44, justifyContent: 'center', alignSelf: 'flex-start' },
-  noteToggle: {
-    marginTop: space.sm,
-    ...type.small,
-    color: colors.accent,
-  },
-  // EINE Aktion pro Eintrag (Design-Review 02-B).
-  logButton: {
-    ...surfaces.buttonPrimary,
-    marginTop: space.md,
-  },
-  logButtonText: {
-    ...surfaces.buttonPrimaryText,
-  },
-  loggedRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    marginTop: space.sm,
-    minHeight: 44,
-  },
-  loggedText: {
-    ...type.small,
-    color: colors.affirm,
-    flex: 1,
-  },
-  undoButton: {
-    minHeight: 44,
-    justifyContent: 'center',
-    paddingHorizontal: space.sm,
-  },
-  undoButtonText: {
-    ...type.small,
-    color: colors.accent,
-  },
-  // Konflikthinweise pro Slot — ein Konflikt ist ein Hinweis ('notice').
-  infoCard: {
-    marginBottom: space.md,
-    borderRadius: radius.lg,
-    backgroundColor: toneFor('notice').surface,
-    borderWidth: 1,
-    borderColor: toneFor('notice').rule,
-    padding: space.lg,
-  },
-  infoTitle: {
-    ...type.subheading,
-    color: toneFor('notice').ink,
-  },
-  infoText: {
-    marginTop: space.sm,
-    ...type.body,
-    color: toneFor('notice').ink,
   },
   disclaimerCard: {
     marginTop: space.xs,

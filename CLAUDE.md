@@ -51,7 +51,7 @@ app/
 ├── paywall.jsx            Kauf-Screen (Abo + Credits), rendert ueber PurchaseLogic
 └── (tabs)/                Fuenf Tabs (Spec Entscheidung 1, seit 2026-09-01):
     │                      Heute · Bestand · Hinzufuegen · Wissen · Mehr
-    ├── (today)/           Dashboard.jsx (Petrol-Buehne, DayArc), history.jsx
+    ├── (today)/           Dashboard.jsx (Tages-Checkliste), history.jsx
     ├── (inventory)/       inventory.jsx (Bestand), analysis.jsx
     │                      (Tagessummen-Check), outcome.jsx (Wirkung)
     ├── add.jsx            Platzhalter der zentralen Hinzufuegen-Taste;
@@ -77,9 +77,15 @@ secureStorage.js           AES-256-Adapter, Schluessel im OS-Schluesselbund
 BackupManager.js           Voll-Export/-Import als JSON (Art. 15/20 DSGVO)
 ```
 
-Dashboard.jsx folgt dem Arbeitsfluss Als-Naechstes → Zusammenfassung → Rest:
-Die Als-Naechstes-Karte (`NextUp.js`) steht zuerst, Kennzahlen stehen hinter
-einer Zeile mit Aufklapper, Slot-Karten und Bestand folgen danach.
+Dashboard.jsx ist seit dem Redesign 2026-09-04 eine flache Checkliste:
+Kopf mit Zaehler ("X von Y genommen"), dann je Slot eine Zeitgruppe mit
+Mono-Uppercase-Label; der als Naechstes faellige Slot traegt " · JETZT"
+(`findNextUp` aus `NextUp.js`). Jede Zeile hat einen tippbaren
+Haken-Kreis (dokumentieren, in jedem Slot), dokumentierte Zeilen sind
+durchgestrichen und per Zeilen-Tipp ruecknehmbar. Einnahme-Hinweise und
+der Verschiebungs-Vorschlag (`ScheduleGuidance.js`/`StackConflictResolver.js`)
+stecken hinter dem Info-Icon der Zeile. Kuratierte Warn-Karten,
+Ersteinrichtung, Verlauf- und Bestand-Link folgen unter der Liste.
 
 ### Fachlogik — liegt bewusst ausserhalb der UI
 
@@ -195,15 +201,23 @@ ist eine Projektregel und wird eingehalten (Stand: null Treffer).
 Die Palette ist bewusst nicht die Tailwind-Vorgabe: Vorher lief alles auf
 slate-900/slate-500/teal-700, also genau den Werten, die praktisch jedes
 schnell gebaute Projekt verwendet. Die Richtung heisst jetzt "Papier und
-Tinte" — warmes Off-White statt blaustichigem Grau, tiefes Petrol
-(`colors.accent`) statt Teal, gedeckte Erdtoene fuer Warnungen statt
-Signalampel.
+Tinte" — warmes Off-White statt blaustichigem Grau, gedeckte Erdtoene
+fuer Warnungen statt Signalampel. Seit 2026-09-04 ist der Markenakzent
+Azur `#1a63c4` mit Navy `#0b2239` als Textfarbe — dieselbe Familie wie
+App-Icon und mysuplea.com (Brain-Decision
+2026-09-04-supplements-markenfarbe-azur-navy). Karten und Listengruppen
+tragen eine Haarlinie (`surfaces.card`/`listGroup`), wie die harten
+Linien der Website.
 
-- Eigene Schriften (seit 2026-08-09): **Newsreader** (Serife) fuer
-  `type.display/heading/subheading/numeral/quote`, **Instrument Sans**
-  fuer Fliesstext und Bedienelemente. Geladen in `app/_layout.jsx`
-  (useFonts), Namen in `theme.js` (`fonts`). Bei Schnitt-Fonts nie
-  zusaetzlich `fontWeight` setzen (Android-Faux-Bold).
+- Schriften (seit 2026-09-04): **Space Grotesk** fuer
+  `type.display/heading/subheading`, **IBM Plex Mono** fuer die
+  Uppercase-Sektionslabels (`type.eyebrow`/`eyebrowAccent`) — die
+  Wiedererkennungs-Elemente der Website. Fliesstext und Bedienelemente
+  bleiben bewusst Systemschrift. Geladen in `app/_layout.jsx` ueber
+  useFonts mit SUBPATH-Imports (`@expo-google-fonts/space-grotesk/700Bold`
+  etc.) — Root-Imports wuerden alle 19 Schnitte in den Build ziehen.
+  Bei Schnitt-Fonts nie zusaetzlich `fontWeight` setzen
+  (Android-Faux-Bold).
 - Keine vollrunden Pillen mehr (`borderRadius: 999`), nur moderate Radien.
 - Tab- und UI-Icons kommen aus `@expo/vector-icons` (Feather, gebuendelt,
   kein Font-Download). Keine Emojis als Icons: Das war das eine Element,

@@ -10,13 +10,7 @@ export default {
   'onboarding.logoAlt': 'MySuplea',
   'onboarding.back': 'Zurück',
   'onboarding.next': 'Weiter',
-  'onboarding.skip': 'Überspringen',
   'onboarding.progress': 'Schritt {step} von {total}',
-
-  'onboarding.welcome.eyebrow': 'Willkommen',
-  'onboarding.welcome.title': 'MySuplea ordnet, was du nimmst.',
-  'onboarding.welcome.text': 'Keine Empfehlungen, keine Werbung, deine Daten bleiben bei dir.',
-  'onboarding.welcome.start': 'Los geht\'s',
 
   'onboarding.legal.title': 'Bevor es losgeht',
   'onboarding.legal.text': 'Die App ordnet ein und dokumentiert. Sie berät nicht, empfiehlt keine Dosierungen und ersetzt keine ärztliche Einschätzung.',
@@ -24,6 +18,11 @@ export default {
   'onboarding.legal.termsLink': 'Nutzungsbedingungen',
   'onboarding.legal.privacyLink': 'Datenschutzerklärung',
   'onboarding.legal.accept': 'Akzeptieren und weiter',
+
+  // Bildschirmtitel von ScreenStart.jsx, das Anrede, Geschlecht,
+  // Geburtsjahr, Zusatzfrage und Rechtstext buendelt.
+  'onboarding.start.title': 'Kurz zu dir',
+  'onboarding.start.subtitle': 'Für passende Referenzwerte und die richtige Anrede.',
 
   'onboarding.name.title': 'Wie sollen wir dich ansprechen?',
   'onboarding.name.field': 'Vorname',
@@ -49,6 +48,12 @@ export default {
   'onboarding.extra.reference.title': 'Welche Referenzwerte sollen gelten?',
   'onboarding.extra.reference.why': 'Die veröffentlichten Referenzwerte sind nach Gruppen aufgeteilt. Du kannst die Wahl jederzeit in den Einstellungen ändern.',
 
+  // Bildschirmtitel von ScreenRoutine.jsx, das Einnahmezeiten und erstes
+  // Praeparat buendelt. Eigener Schluessel, damit er nicht mit
+  // 'onboarding.routine.title' (interner Titel von StepRoutineTimes,
+  // erscheint darunter im selben ScrollView) zusammenfaellt.
+  'onboarding.routineScreen.title': 'Loslegen',
+
   'onboarding.routine.title': 'Deine Einnahmezeiten',
   'onboarding.routine.text': 'Wann nimmst du meistens etwas? Zeiten lassen sich später ändern.',
   'onboarding.routine.morning': 'Morgens',
@@ -64,13 +69,7 @@ export default {
   'onboarding.first.search': 'Suchen',
   'onboarding.first.later': 'Später',
 
-  'onboarding.account.title': 'Sichern?',
-  'onboarding.account.text': 'Mit Konto kannst du ein Backup anlegen und später mehrere Geräte nutzen. Die App funktioniert auch ohne.',
   'onboarding.account.create': 'Konto anlegen',
-  'onboarding.account.later': 'Später ohne Konto',
 
-  'onboarding.done.title': 'Fertig, {name}.',
-  'onboarding.done.titleNoName': 'Fertig.',
-  'onboarding.done.text': 'Dein Tagesplan wartet.',
   'onboarding.done.go': 'Zum Tagesplan',
 };

@@ -154,6 +154,38 @@ export function calculateAdherence(trial, intakeLogs = [], now = new Date()) {
 }
 
 /**
+ * calculateOverallAdherence(intakeLogs, periodDays, now)
+ *
+ * Anteil der Tage der letzten `periodDays` Tage (inklusive heute), an
+ * denen mindestens eine Einnahme dokumentiert wurde — ueber ALLE
+ * Praeparate, nicht an einen einzelnen Trial gebunden. Speist die
+ * Einnahme-Treue-Kennzahl im Verlauf-Screen. Rueckgaengig gemachte Logs
+ * (undoneAt gesetzt) zaehlen nicht.
+ */
+export function calculateOverallAdherence(intakeLogs = [], periodDays, now = new Date()) {
+  if (!periodDays || periodDays <= 0) {
+    return { loggedDays: 0, periodDays: 0, percent: 0 };
+  }
+
+  const nowKey = toDateKey(now);
+  const startDate = new Date(now);
+  startDate.setDate(startDate.getDate() - (periodDays - 1));
+  const startKey = toDateKey(startDate);
+
+  const loggedDays = new Set(
+    intakeLogs
+      .filter((log) => !log?.undoneAt && log?.dateKey && log.dateKey >= startKey && log.dateKey <= nowKey)
+      .map((log) => log.dateKey)
+  );
+
+  return {
+    loggedDays: loggedDays.size,
+    periodDays,
+    percent: Math.round((loggedDays.size / periodDays) * 100),
+  };
+}
+
+/**
  * evaluateTrial(trial, ratings, options)
  *
  * Gibt Zahlen und Stoerfaktoren getrennt zurueck. Die Formulierung

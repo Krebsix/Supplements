@@ -30,7 +30,7 @@ export default function StepName({ t, value, onChange }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { marginBottom: space.xl },
   title: { ...type.heading, marginBottom: space.lg },
   input: { ...surfaces.input, marginBottom: space.sm },
   hint: { ...type.small },

@@ -29,11 +29,19 @@ export default {
   'inventory.restore': 'Restore',
   'inventory.addButton': 'Add another product',
 
-  'inventory.archivedSection': 'Archive ({count})',
+  'inventory.filter.active': 'Active · {count}',
+  'inventory.filter.archived': 'Archive · {count}',
+  'inventory.filter.emptyActive': 'No matching products in the active list.',
+  'inventory.filter.emptyArchived': 'No matching products in the archive.',
+
   'inventory.archiveTitle': 'Move to the archive?',
   'inventory.archiveMessage':
     '{name} disappears from the daily plan and the inventory. Logged intakes stay in the history, and you can restore the entry at any time.',
   'inventory.archiveConfirm': 'Archive',
 
   'inventory.refillIn': 'Lasts about {days} more days',
+  // Due case of the refill forecast: its own wording instead of just a
+  // color change, otherwise the status would only be visible through
+  // color (Bedienregeln, CLAUDE.md).
+  'inventory.refillDue': 'Refill soon, lasts about {days} more days',
 };

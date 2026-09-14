@@ -17,6 +17,7 @@ import {
   TRIAL_CONCLUSION,
   TRIAL_STATUS,
   calculateAdherence,
+  calculateOverallAdherence,
   clampRating,
   concludeTrial,
   createRating,
@@ -187,6 +188,22 @@ check('Weiterführen schließt ab, ohne zu stoppen',
   continued.status === TRIAL_STATUS.COMPLETED);
 check('Ungültige Entscheidung ändert nichts',
   concludeTrial(dueTrial, 'quatsch').status === TRIAL_STATUS.RUNNING);
+
+console.log('\n— Gesamt-Einnahme-Treue (Verlauf-Kennzahl) —');
+const NOW = new Date('2026-09-04T12:00:00Z');
+const overallLogs = [
+  { dateKey: '2026-09-04', undoneAt: null },
+  { dateKey: '2026-09-03', undoneAt: null },
+  { dateKey: '2026-09-03', undoneAt: null }, // zweiter Log gleicher Tag zaehlt nur einmal
+  { dateKey: '2026-09-01', undoneAt: null },
+  { dateKey: '2026-08-30', undoneAt: '2026-08-30T10:00:00Z' }, // rueckgaengig gemacht, zaehlt nicht
+];
+const result = calculateOverallAdherence(overallLogs, 7, NOW);
+check('drei distincte Tage mit Log in 7 Tagen', result.loggedDays === 3, `war ${result.loggedDays}`);
+check('periodDays wird durchgereicht', result.periodDays === 7);
+check('percent gerundet', result.percent === Math.round((3 / 7) * 100), `war ${result.percent}`);
+check('leere Logs ergeben 0 Prozent, kein NaN', calculateOverallAdherence([], 7, NOW).percent === 0);
+check('periodDays 0 wirft nicht, ergibt 0', calculateOverallAdherence(overallLogs, 0, NOW).percent === 0);
 
 console.log('\n— Grenzfälle —');
 check('Kein Test → keine Auswertung', evaluateTrial(null) === null);

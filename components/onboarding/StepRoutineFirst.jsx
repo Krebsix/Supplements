@@ -37,7 +37,7 @@ export default function StepRoutineFirst({ t, value, onChange }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { marginBottom: space.xl },
   title: { ...type.heading, marginBottom: space.sm },
   text: { ...type.small, marginBottom: space.lg },
 });

@@ -17,12 +17,15 @@
  *
  * Die Richtung heisst deshalb jetzt: native iOS-Anmutung.
  *   - Neutrale Systemgrautoene statt warmem Creme
- *   - Systemschrift (SF Pro auf iOS, Roboto auf Android) statt geladener
- *     Google-Fonts: nativ, kein Download, kleinere App
  *   - Apple-Schriftgroessen: Fliesstext 17 statt 14. Das ist der groesste
  *     einzelne Unterschied zwischen "wirkt gebaut" und "wirkt fertig"
- *   - Weisse Flaechen auf grauem Grund statt umrandeter Karten. Der
- *     Rahmen um jede Karte war das zweite Erkennungsmerkmal
+ *
+ * PHASE 2 DER WEBSITE-ANGLEICHUNG (2026-09-04): Headlines und
+ * Eyebrow-Labels bekommen eigene Schnitte (Space Grotesk, IBM Plex Mono,
+ * siehe `fonts` unten) statt Systemschrift, und Karten/Listengruppen
+ * bekommen wieder eine Haarlinie statt sich nur ueber die Flaeche vom
+ * grauen Grund abzusetzen. Fliesstext und Bedienelemente bleiben
+ * Systemschrift, siehe Begruendung unten bei `weight`/`fonts`.
  *
  * WAS BLEIBT: das tiefe Petrol als Akzent. Es traegt das App-Icon und ist
  * damit die einzige Farbe, die die Marke wirklich ausmacht.
@@ -42,18 +45,21 @@ export const colors = {
   overlay: '#ffffff',
 
   // Schrift
-  ink: '#1c1c1e',           // label
-  inkMuted: '#6c6c70',      // secondaryLabel
+  ink: '#0b2239',        // Navy, wie Website-Text (mysuplea.com --ink)
+  inkMuted: '#44586e',   // Website --ink-muted (Kontrast siehe Test)
   inkFaint: '#6e6e74',  // 2026-08-31 abgedunkelt: 4.5:1 auch auf canvas (WCAG AA, Bedienregeln)      // tertiaryLabel, systemGray
 
-  // Linien: Trennlinien innerhalb weisser Bloecke, keine Umrandungen
-  rule: '#e5e5ea',          // systemGray5
-  ruleStrong: '#d1d1d6',    // systemGray4
+  // Linien: navy-getoenter Ton statt iOS-Grau, wie die Website
+  rule: '#dde3ea',
+  ruleStrong: '#c3ccd6',
 
-  // Akzent: das Petrol aus dem App-Icon. Die einzige Markenfarbe.
-  accent: '#1d6472',   // 2026-08-31: eine Stufe heller/frischer (Nadine 'lebensfroher'), weiss darauf 6.7:1
-  accentSoft: '#e4f1f3',
-  accentInk: '#123f49',
+  // Akzent: Azur, dieselbe Familie wie App-Icon und Website
+  // (mysuplea.com, web/src/styles/tokens.css). Eine Stufe dunkler als
+  // das Website-Azur (#1e6fd9), weil #1e6fd9 auf dem App-Bildschirmgrund
+  // (canvas) nur 4.35:1 erreicht, unter der eigenen 4,5:1-Regel.
+  accent: '#1a63c4',
+  accentSoft: '#e6eefa',
+  accentInk: '#0b2239',
 
   // Statusfarben: klar genug, um unterscheidbar zu sein, gedaempft genug,
   // um nicht zu alarmieren.
@@ -66,35 +72,46 @@ export const colors = {
 };
 
 /**
- * Toene auf dunklem Petrol (accentInk als Flaeche): Text und Grafik der
- * Tagesplan-Buehne. Abgeleitete Aufhellungen des vorhandenen Petrols,
- * KEINE neue Palette (Design-Review 2026-09-01).
- * Kontrast inkMuted auf accentInk: 6,8:1 (WCAG AA, nachgerechnet).
+ * Toene auf dunklem Azur/Navy (accentInk als Flaeche): Text und Grafik auf
+ * farbigen Flaechen in Akzentfarbe, aktuell nur die zentrale Hinzufuegen-
+ * Taste der Tab-Leiste (app/(tabs)/_layout.jsx, onDark.ink fuer das
+ * Plus-Icon auf dem accent-farbenen Quadrat). Die frueher gemeinte
+ * Tagesplan-Buehne ist mit dem Redesign Phase 2 entfallen. Aufhellungen
+ * von Azur/Navy statt Petrol, gleiches Vorgehen wie beim Petrol-Refresh
+ * vom 2026-08-31 (abgeleitete Toene, keine dritte Palette).
  */
 export const onDark = {
-  ink: '#ffffff',        // Titel auf der Buehne
-  inkMuted: '#a8ccd3',   // Datum, Bogen-Beschriftung
-  accent: '#7fd0c6',     // erledigter Punkt, Fortschritt (helles Mint aus Petrol)
-  rule: '#2b5a66',       // Bogenlinie, gedaempfte Linien
-  checkInk: colors.accentInk, // Haken im gefuellten Punkt
+  ink: '#ffffff',
+  inkMuted: '#a9c4e8',
+  accent: '#8fbdf0',
+  rule: '#1e4a7a',
+  checkInk: colors.accentInk,
 };
 
 /**
- * Schriften: die Systemschrift, bewusst ohne eigene Font-Dateien.
- *
- * Auf iOS ist das SF Pro, auf Android Roboto. Beides ist auf dem jeweiligen
- * Geraet die Schrift, die alle anderen Apps auch verwenden — genau das
- * laesst eine App dazugehoeren statt gebastelt zu wirken. Nebeneffekt:
- * kein Font-Download beim Start und eine kleinere App.
+ * Schriften: Fliesstext und Bedienelemente bleiben Systemschrift (SF Pro
+ * auf iOS, Roboto auf Android) — das laesst die App zur Plattform gehoeren.
+ * Headlines und Sektionslabels bekommen seit Phase 2 der Website-Angleichung
+ * (mysuplea.com) eigene Schnitte: Space Grotesk fuer Ueberschriften, IBM Plex
+ * Mono fuer Eyebrow-Labels. Beide werden in app/_layout.jsx per useFonts
+ * geladen; bis dahin faellt React Native auf die Systemschrift zurueck.
  *
  * In React Native heisst das: KEINE fontFamily setzen und das Gewicht ueber
- * fontWeight steuern. Deshalb gibt es hier keine Familiennamen mehr.
+ * fontWeight steuern. Nur dort, wo fontFamily auf einen eigenen Schnitt
+ * zeigt (type.display/heading/subheading/eyebrow/eyebrowAccent unten), bleibt
+ * fontWeight bewusst weg (Android-Faux-Bold).
  */
 export const weight = {
   regular: '400',
   medium: '500',
   semibold: '600',
   bold: '700',
+};
+
+export const fonts = {
+  displayBold: 'SpaceGrotesk_700Bold',
+  displaySemi: 'SpaceGrotesk_600SemiBold',
+  mono: 'IBMPlexMono_500Medium',
 };
 
 /**
@@ -106,7 +123,7 @@ export const type = {
   display: {
     fontSize: 34,
     lineHeight: 41,
-    fontWeight: weight.bold,
+    fontFamily: fonts.displayBold,
     letterSpacing: -0.5,
     color: colors.ink,
   },
@@ -114,7 +131,7 @@ export const type = {
   heading: {
     fontSize: 20,
     lineHeight: 25,
-    fontWeight: weight.semibold,
+    fontFamily: fonts.displaySemi,
     letterSpacing: -0.2,
     color: colors.ink,
   },
@@ -122,7 +139,7 @@ export const type = {
   subheading: {
     fontSize: 17,
     lineHeight: 22,
-    fontWeight: weight.semibold,
+    fontFamily: fonts.displaySemi,
     color: colors.ink,
   },
 
@@ -135,14 +152,25 @@ export const type = {
   tiny: { fontSize: 13, lineHeight: 18, fontWeight: weight.regular, color: colors.inkFaint },
 
   // Abschnittsmarke ueber einer Gruppe, wie die Ueberschrift einer
-  // gruppierten Liste in den iOS-Einstellungen.
+  // gruppierten Liste in den iOS-Einstellungen. Mono-Uppercase wie auf
+  // der Website (mysuplea.com).
   eyebrow: {
-    fontSize: 13,
+    fontSize: 12,
     lineHeight: 18,
-    fontWeight: weight.regular,
-    letterSpacing: 0.2,
+    fontFamily: fonts.mono,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
     color: colors.inkMuted,
+  },
+  // Eyebrow in Akzentfarbe statt inkMuted, fuer hervorgehobene Marken
+  // (z. B. den JETZT-Slot im Tagesplan).
+  eyebrowAccent: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontFamily: fonts.mono,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    color: colors.accent,
   },
   label: {
     fontSize: 13,
@@ -183,10 +211,9 @@ export const border = {
  * Wiederkehrende Bausteine. Screens setzen darauf auf, statt jede Karte
  * neu zu definieren.
  *
- * Der wichtigste Unterschied zur Vorgaengerversion: Karten haben keinen
- * Rahmen mehr. Eine weisse Flaeche auf grauem Grund grenzt sich von selbst
- * ab; die zusaetzliche Linie liess jede Oberflaeche wie ein Formular
- * aussehen.
+ * Seit Phase 2 der Website-Angleichung (mysuplea.com) bekommen Karten
+ * wieder eine harte Haarlinie statt sich nur ueber die Flaeche vom
+ * grauen Grund abzusetzen. Das ist die gleiche Optik wie auf der Website.
  */
 export const surfaces = {
   screen: { flex: 1, backgroundColor: colors.canvas },
@@ -195,6 +222,8 @@ export const surfaces = {
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
+    borderWidth: border.hairline,
+    borderColor: colors.rule,
     padding: space.lg,
     marginBottom: space.md,
   },
@@ -204,6 +233,8 @@ export const surfaces = {
   listGroup: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
+    borderWidth: border.hairline,
+    borderColor: colors.rule,
     overflow: 'hidden',
     marginBottom: space.lg,
   },

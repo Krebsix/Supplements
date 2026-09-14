@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   Alert,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import AddSupplementChooser from '../../../components/AddSupplementChooser';
@@ -36,6 +38,14 @@ import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
  * wurde, unabhaengig von Zeitpunkt, Kur-Pause oder Tagesplan. Er sortiert
  * die Eintraege ohne Zeitpunkt nach oben und benennt den Grund, statt sie
  * still verschwinden zu lassen.
+ *
+ * PHASE 2 DER WEBSITE-ANGLEICHUNG: kompakte Zeilen statt grosser Karten
+ * (eine gruppierte Liste im iOS-Einstellungen-Muster, siehe
+ * surfaces.listGroup/listDivider in theme.js). Antippen einer Zeile
+ * oeffnet direkt das Bearbeiten, darunter bleibt eine kompakte
+ * Aktionsleiste fuer Pausieren/Archivieren bzw. Wiederherstellen, weil
+ * der Bearbeiten-Screen (AddSupplement.jsx) nicht Teil dieser Aenderung
+ * ist und diese Aktionen sonst nirgends erreichbar waeren.
  */
 
 const cautionTone = toneFor('caution');
@@ -59,6 +69,7 @@ export default function InventoryScreen() {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [sheetVisible, setSheetVisible] = useState(false);
+  const [filter, setFilter] = useState('active'); // 'active' | 'archived'
 
   const userSupplements = useStore((state) => state.userSupplements);
   const archiveUserSupplement = useStore((state) => state.archiveUserSupplement);
@@ -97,6 +108,16 @@ export default function InventoryScreen() {
     (s) => s.status !== 'archived'
   ).length;
 
+  // Ob es ueberhaupt etwas anzulegen gibt, unabhaengig von der Suche: nur
+  // dann lohnen sich die Filterchips. `totalCount` allein reicht nicht, das
+  // zaehlt nur Aktive, ein Bestand nur aus Archiv-Eintraegen waere sonst
+  // "leer".
+  const hasAnyRecords = (Array.isArray(userSupplements) ? userSupplements : []).length > 0;
+
+  function handleRestore(supplement) {
+    updateUserSupplement(supplement.id, { status: 'active' });
+  }
+
   function handleArchive(supplement) {
     Alert.alert(
       t('inventory.archiveTitle'),
@@ -112,6 +133,10 @@ export default function InventoryScreen() {
     );
   }
 
+  function goToEdit(supplement) {
+    router.push(`/AddSupplement?editId=${encodeURIComponent(supplement.id)}`);
+  }
+
   return (
     <View style={styles.screenWrap}>
       <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
@@ -122,6 +147,43 @@ export default function InventoryScreen() {
             ? t('inventory.subtitle_one')
             : t('inventory.subtitle_other', { count: totalCount })}
         </Text>
+
+        {hasAnyRecords ? (
+          <View style={styles.filterChips}>
+            <TouchableOpacity
+              style={[styles.filterChip, filter === 'active' && styles.filterChipActive]}
+              onPress={() => setFilter('active')}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityState={{ selected: filter === 'active' }}
+            >
+              <Text
+                style={[
+                  styles.filterChipText,
+                  filter === 'active' && styles.filterChipTextActive,
+                ]}
+              >
+                {t('inventory.filter.active', { count: active.length })}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterChip, filter === 'archived' && styles.filterChipActive]}
+              onPress={() => setFilter('archived')}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityState={{ selected: filter === 'archived' }}
+            >
+              <Text
+                style={[
+                  styles.filterChipText,
+                  filter === 'archived' && styles.filterChipTextActive,
+                ]}
+              >
+                {t('inventory.filter.archived', { count: archived.length })}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
         {totalCount > 4 ? (
           <TextInput
@@ -146,7 +208,7 @@ export default function InventoryScreen() {
           </View>
         ) : null}
 
-        {totalCount === 0 ? (
+        {!hasAnyRecords ? (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyTitle}>{t('inventory.emptyTitle')}</Text>
             <Text style={styles.emptyText}>{t('inventory.emptyText')}</Text>
@@ -158,115 +220,186 @@ export default function InventoryScreen() {
           </View>
         ) : null}
 
-        {active.map((supplement) => {
-          const slotLabels = (supplement.timingSlots ?? [])
-            .map((slotId) => SLOTS[slotId]?.label)
-            .filter(Boolean)
-            .join(' · ');
-          const dosage = formatSupplementDosage(supplement, '');
-          const paused = supplement.status === 'paused';
-          const stock = stockBySupplementId?.[supplement.id];
-          const forecast = stock
-            ? refillState(stock, supplement, refillThresholdDays)
-            : null;
-
-          return (
-            <View key={supplement.id} style={styles.card}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardName}>{formatSupplementName(supplement)}</Text>
-                {paused ? (
-                  <Text style={styles.pausedPill}>{t('inventory.paused')}</Text>
-                ) : null}
-              </View>
-
-              {dosage ? <Text style={styles.cardMeta}>{dosage}</Text> : null}
-
-              {slotLabels ? (
-                <Text style={styles.cardSlots}>{slotLabels}</Text>
-              ) : (
-                <Text style={styles.cardMissing}>{t('inventory.noSlotBadge')}</Text>
-              )}
-
-              {forecast && forecast.daysLeft !== null ? (
-                <Text
-                  style={[
-                    styles.cardRefill,
-                    forecast.due && styles.cardRefillDue,
-                  ]}
-                >
-                  {t('inventory.refillIn', { days: forecast.daysLeft })}
-                </Text>
-              ) : null}
-
-              <View style={styles.cardActions}>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    router.push(
-                      `/AddSupplement?editId=${encodeURIComponent(supplement.id)}`
-                    )
-                  }
-                  accessibilityRole="link"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionText}>{t('inventory.edit')}</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    updateUserSupplement(supplement.id, {
-                      status: paused ? 'active' : 'paused',
-                    })
-                  }
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionText}>
-                    {paused ? t('inventory.resume') : t('inventory.pause')}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => handleArchive(supplement)}
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionDanger}>{t('inventory.archive')}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        })}
-
-        {archived.length > 0 ? (
+        {filter === 'active' ? (
           <>
-            <Text style={styles.sectionTitle}>
-              {t('inventory.archivedSection', { count: archived.length })}
-            </Text>
-            {archived.map((supplement) => (
-              <View key={supplement.id} style={styles.archivedRow}>
-                {/* Dynamic Type: kein numberOfLines-Limit, das ist der
-                    Praeparatname und wird an anderer Stelle nie gekuerzt. */}
-                <Text style={styles.archivedName}>
-                  {formatSupplementName(supplement)}
-                </Text>
-                <TouchableOpacity
-                  onPress={() =>
-                    updateUserSupplement(supplement.id, { status: 'active' })
-                  }
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-                >
-                  <Text style={styles.actionText}>{t('inventory.restore')}</Text>
-                </TouchableOpacity>
+            {active.length === 0 && hasAnyRecords ? (
+              <Text style={styles.filterEmptyText}>
+                {t('inventory.filter.emptyActive')}
+              </Text>
+            ) : null}
+
+            {active.length > 0 ? (
+              <View style={styles.group}>
+                {active.map((supplement, index) => {
+                  const slotLabels = (supplement.timingSlots ?? [])
+                    .map((slotId) => SLOTS[slotId]?.label)
+                    .filter(Boolean)
+                    .join(' · ');
+                  const dosage = formatSupplementDosage(supplement, '');
+                  const paused = supplement.status === 'paused';
+                  const stock = stockBySupplementId?.[supplement.id];
+                  const forecast = stock
+                    ? refillState(stock, supplement, refillThresholdDays)
+                    : null;
+                  const showRefill = forecast && forecast.daysLeft !== null;
+
+                  // Subzeile: Dosis · Slots (oder Hinweis auf fehlenden
+                  // Zeitpunkt) · Pausiert-Status. Der Nachfuell-Hinweis
+                  // steht bewusst NICHT hier drin, sondern als eigene
+                  // Zeile darunter, weil er faellig werden kann und dann
+                  // eigenen Wortlaut braucht statt nur Farbe.
+                  const subline = [
+                    dosage,
+                    slotLabels || t('inventory.noSlotBadge'),
+                    paused ? t('inventory.paused') : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ');
+
+                  return (
+                    <View key={supplement.id}>
+                      <Pressable
+                        style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+                        onPress={() => goToEdit(supplement)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${formatSupplementName(supplement)}. ${subline}`}
+                        accessibilityHint={t('inventory.edit')}
+                      >
+                        <View style={styles.iconTile}>
+                          <Feather name="disc" size={18} color={colors.accent} />
+                        </View>
+                        <View style={styles.rowText}>
+                          <Text style={styles.rowTitle} numberOfLines={1}>
+                            {formatSupplementName(supplement)}
+                          </Text>
+                          {subline ? (
+                            <Text style={styles.rowSub} numberOfLines={2}>
+                              {subline}
+                            </Text>
+                          ) : null}
+                        </View>
+                        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+                      </Pressable>
+
+                      {showRefill ? (
+                        <View
+                          style={[styles.refillLine, forecast.due && styles.refillLineDue]}
+                        >
+                          <Feather
+                            name={forecast.due ? 'alert-circle' : 'clock'}
+                            size={13}
+                            color={forecast.due ? cautionTone.ink : colors.inkFaint}
+                          />
+                          <Text
+                            style={[styles.refillText, forecast.due && styles.refillTextDue]}
+                          >
+                            {forecast.due
+                              ? t('inventory.refillDue', { days: forecast.daysLeft })
+                              : t('inventory.refillIn', { days: forecast.daysLeft })}
+                          </Text>
+                        </View>
+                      ) : null}
+
+                      <View style={styles.actionsStrip}>
+                        <TouchableOpacity
+                          style={styles.actionBtn}
+                          onPress={() =>
+                            updateUserSupplement(supplement.id, {
+                              status: paused ? 'active' : 'paused',
+                            })
+                          }
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.actionBtnText}>
+                            {paused ? t('inventory.resume') : t('inventory.pause')}
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.actionBtn}
+                          onPress={() => handleArchive(supplement)}
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.actionBtnDanger}>{t('inventory.archive')}</Text>
+                        </TouchableOpacity>
+                      </View>
+
+                      {index < active.length - 1 ? <View style={styles.divider} /> : null}
+                    </View>
+                  );
+                })}
               </View>
-            ))}
+            ) : null}
           </>
         ) : null}
 
-        {totalCount > 0 ? (
+        {filter === 'archived' ? (
+          <>
+            {archived.length === 0 ? (
+              <Text style={styles.filterEmptyText}>
+                {t('inventory.filter.emptyArchived')}
+              </Text>
+            ) : null}
+
+            {archived.length > 0 ? (
+              <View style={styles.group}>
+                {/* Archivierte Eintraege zeigen weder Einnahmezeitpunkt
+                    noch Reichweiten-Prognose noch Pausiert-Status: Sie
+                    laufen nicht mehr im Tagesplan mit, diese Angaben
+                    waeren erfundene Aktualitaet. Einzige Aktion ist
+                    Wiederherstellen. */}
+                {archived.map((supplement, index) => {
+                  const dosage = formatSupplementDosage(supplement, '');
+
+                  return (
+                    <View key={supplement.id}>
+                      <Pressable
+                        style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+                        onPress={() => goToEdit(supplement)}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                          dosage
+                            ? `${formatSupplementName(supplement)}. ${dosage}`
+                            : formatSupplementName(supplement)
+                        }
+                        accessibilityHint={t('inventory.edit')}
+                      >
+                        <View style={styles.iconTile}>
+                          <Feather name="disc" size={18} color={colors.accent} />
+                        </View>
+                        <View style={styles.rowText}>
+                          <Text style={styles.rowTitle} numberOfLines={1}>
+                            {formatSupplementName(supplement)}
+                          </Text>
+                          {dosage ? (
+                            <Text style={styles.rowSub} numberOfLines={2}>
+                              {dosage}
+                            </Text>
+                          ) : null}
+                        </View>
+                        <Feather name="chevron-right" size={18} color={colors.inkFaint} />
+                      </Pressable>
+
+                      <View style={styles.actionsStrip}>
+                        <TouchableOpacity
+                          style={styles.actionBtn}
+                          onPress={() => handleRestore(supplement)}
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.actionBtnText}>{t('inventory.restore')}</Text>
+                        </TouchableOpacity>
+                      </View>
+
+                      {index < archived.length - 1 ? <View style={styles.divider} /> : null}
+                    </View>
+                  );
+                })}
+              </View>
+            ) : null}
+          </>
+        ) : null}
+
+        {hasAnyRecords ? (
           <TouchableOpacity
             style={styles.addButton}
             onPress={() => setSheetVisible(true)}
@@ -314,73 +447,90 @@ const styles = StyleSheet.create({
   emptyCard: { ...surfaces.card },
   emptyTitle: { ...type.heading },
   emptyText: { ...type.body, marginTop: space.sm, marginBottom: space.md },
-  card: { ...surfaces.card },
-  cardHeader: {
+
+  // Gruppierte Liste im iOS-Einstellungen-Muster (siehe menu.jsx): ein
+  // Block mit Haarlinie, Zeilen durch listDivider getrennt.
+  group: { ...surfaces.listGroup },
+  row: {
+    ...surfaces.listRow,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: space.md,
   },
-  cardName: { ...type.subheading, flex: 1 },
-  pausedPill: {
-    ...type.tiny,
-    color: cautionTone.ink,
-    backgroundColor: cautionTone.surface,
+  rowPressed: { backgroundColor: colors.surfaceSunken },
+  iconTile: {
+    width: 38,
+    height: 38,
     borderRadius: radius.sm,
-    paddingHorizontal: space.sm,
-    paddingVertical: 2,
-    overflow: 'hidden',
+    backgroundColor: colors.accentSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  cardMeta: { ...type.small, marginTop: space.xs },
-  cardSlots: { ...type.small, color: colors.accent, marginTop: space.xs },
-  cardMissing: {
-    ...type.small,
-    color: cautionTone.ink,
-    marginTop: space.xs,
-  },
-  cardRefill: {
-    ...type.tiny,
-    color: colors.inkMuted,
-    marginTop: space.xs,
-  },
-  cardRefillDue: {
-    color: colors.caution,
-  },
-  cardActions: {
+  rowText: { flex: 1 },
+  rowTitle: { ...type.bodyStrong },
+  rowSub: { ...type.tiny, marginTop: 2 },
+
+  // Nachfuell-Hinweis: eigene Zeile mit Wortlaut statt reinem Farbwechsel
+  // (Bedienregeln, CLAUDE.md: Status nie nur ueber Farbe).
+  refillLine: {
     flexDirection: 'row',
-    marginTop: space.md,
+    alignItems: 'center',
+    gap: space.xs,
+    paddingHorizontal: space.lg,
+    paddingBottom: space.sm,
+  },
+  refillLineDue: {
+    backgroundColor: cautionTone.surface,
+    paddingVertical: space.xs,
+  },
+  refillText: { ...type.tiny, color: colors.inkFaint },
+  refillTextDue: { color: cautionTone.ink, fontWeight: '600' },
+
+  // Kompakte Aktionsleiste unterhalb der Zeile: Pausieren/Ins Archiv
+  // bzw. Wiederherstellen bleiben so erreichbar, ohne den Bearbeiten-
+  // Screen anfassen zu muessen (der ist nicht Teil dieser Aenderung).
+  actionsStrip: {
+    flexDirection: 'row',
+    paddingHorizontal: space.lg,
+    paddingBottom: space.sm,
     gap: space.lg,
   },
-  actionButton: { paddingVertical: space.xs },
-  actionText: {
+  actionBtn: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingVertical: space.xs,
+  },
+  actionBtnText: {
     color: colors.accent,
     fontSize: 13,
     fontWeight: '700',
   },
-  actionDanger: {
+  actionBtnDanger: {
     color: colors.alert,
     fontSize: 13,
     fontWeight: '700',
   },
-  sectionTitle: {
-    ...type.label,
-    marginTop: space.lg,
+  divider: { ...surfaces.listDivider },
+
+  filterChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: space.md,
+  },
+  filterChip: {
+    ...surfaces.chip,
+    marginRight: space.sm,
     marginBottom: space.sm,
   },
-  archivedRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: space.md - 2,
-    borderTopWidth: 1,
-    borderTopColor: colors.rule,
+  filterChipText: {
+    ...surfaces.chipText,
   },
-  archivedName: {
+  filterChipActive: surfaces.chipActive,
+  filterChipTextActive: surfaces.chipTextActive,
+  filterEmptyText: {
     ...type.small,
-    flex: 1,
-    marginRight: space.md,
+    marginBottom: space.md,
   },
-  primaryButton: { ...surfaces.buttonPrimary },
-  primaryButtonText: { ...surfaces.buttonPrimaryText },
   addButton: {
     ...surfaces.buttonQuiet,
     marginTop: space.lg,
