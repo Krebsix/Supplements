@@ -218,7 +218,16 @@ export default function Layout() {
           device: remote.device_label || '',
         }),
         [
-          { text: t('account.cloud.keepBackup'), style: 'cancel', onPress: () => useCloudBackupStore.getState().resolveDecision('keep') },
+          // Beim Schluessel-Fall bleibt der ausfuehrlichere Knopftext: Der
+          // Recovery-Key ist dort der Weg zurueck, genau diese Information
+          // gehoert an die Entscheidung. Sonst der neutrale Text, weil es
+          // dann keinen Recovery-Key-Weg gibt (neuere App-Version, kaputtes
+          // Payload).
+          {
+            text: t(reason === 'wrongKey' ? 'account.cloud.unreadableKeep' : 'account.cloud.keepBackup'),
+            style: 'cancel',
+            onPress: () => useCloudBackupStore.getState().resolveDecision('keep'),
+          },
           { text: t('account.cloud.unreadableReplace'), style: 'destructive', onPress: () => useCloudBackupStore.getState().resolveDecision('replace') },
         ],
         { cancelable: false }
@@ -234,9 +243,14 @@ export default function Layout() {
         supplements: counts.supplements,
         labValues: counts.labValues,
       }),
+      // Reihenfolge und Stil bewusst: Seit hasLocalData auch Profile und
+      // Beobachtungen zaehlt, ist dieser Dialog der Normalfall beim
+      // Anmelden auf einem zweiten Geraet. "Hochladen" ueberschreibt dabei
+      // den Server-Stand unwiderruflich, steht deshalb hinten und
+      // destruktiv; "uebernehmen" ist der verlustfreie Weg.
       [
-        { text: t('account.cloud.decisionUpload'), onPress: () => useCloudBackupStore.getState().resolveDecision('upload') },
         { text: t('account.cloud.decisionRestore'), onPress: () => useCloudBackupStore.getState().resolveDecision('restore') },
+        { text: t('account.cloud.decisionUpload'), style: 'destructive', onPress: () => useCloudBackupStore.getState().resolveDecision('upload') },
       ],
       { cancelable: false }
     );

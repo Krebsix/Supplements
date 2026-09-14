@@ -10,31 +10,73 @@
  */
 
 import { decryptText, encryptText } from './AccountCrypto';
-import { BACKUP_DATA_FIELDS, BACKUP_VERSION, buildBackupPayload, parseBackupPayload } from './BackupManager';
+import { BACKUP_VERSION, buildBackupPayload, parseBackupPayload } from './BackupManager';
 import { INITIAL_USER_STATE } from './storeLogic';
 
 const lengthOf = (list) => (Array.isArray(list) ? list.length : 0);
 
 export const REMOTE_COLUMNS = 'ciphertext,payload_version,device_label,exported_at,updated_at';
 
+/**
+ * Welche gesicherten Felder ueberhaupt etwas tragen, das verloren gehen
+ * KANN. Bewusst eine eigene Liste und nicht BACKUP_DATA_FIELDS: Das
+ * Backup sichert auch Einrichtungszustand (onboardingCompletedAt,
+ * consents, language, activeProfileId, activeLifeStageId, entitlement).
+ * Der ist auf JEDEM eingerichteten Geraet gesetzt, weil das
+ * Onboarding-Gate ihn erzwingt, bevor ueberhaupt ein Konto angelegt
+ * werden kann. Zaehlte er mit, waere hasLocalData immer true und der
+ * 'restore'-Zweig von decideOnLogin toter Code: Selbst ein frisch
+ * installiertes Geraet bekaeme beim Anmelden eine Rueckfrage statt seine
+ * Daten zurueck.
+ */
+const LOCAL_DATA_FIELDS = [
+  'userSupplements',
+  'intakeLogs',
+  'stockBySupplementId',
+  'scanResults',
+  'pendingScanResult',
+  'profile',
+  'trials',
+  'trialRatings',
+  'labValues',
+  'absorptionBlockedAt',
+  'settings',
+];
+
+/**
+ * Profilfelder, die das gefuehrte Onboarding zwingend erhebt
+ * (LifeStageResolver.js braucht sie fuer die Referenzgruppe). Sie
+ * entstehen auf jedem Geraet neu und liegen im Server-Stand ebenfalls,
+ * sind also kein Grund fuer eine Rueckfrage. Die selbst gepflegten
+ * Gesundheitsangaben (medicationClasses, conditions, allergies, goals,
+ * dietaryPattern) und der Anzeigename zaehlen dagegen mit.
+ */
+const PROFILE_SETUP_KEYS = ['gender', 'birthYear'];
+
 // Fehlende Felder und unveraenderte Standardwerte sind kein eigener Stand.
 // Objekt-Schluesselreihenfolge darf keinen Konflikt ausloesen.
-function differsFromDefault(value, baseline) {
+function differsFromDefault(value, baseline, skipKeys = null) {
   if (value === undefined || value === null) return false;
   if (Array.isArray(value)) {
     return !Array.isArray(baseline) || value.length !== baseline.length ||
       value.some((item, index) => differsFromDefault(item, baseline[index]));
   }
   if (typeof value === 'object') {
-    return Object.keys(value).some((key) => differsFromDefault(value[key], baseline?.[key]));
+    return Object.keys(value).some(
+      (key) => !skipKeys?.includes(key) && differsFromDefault(value[key], baseline?.[key])
+    );
   }
   return value !== baseline;
 }
 
 /** Alle gesicherten Nutzerdaten zaehlen, auch ein Profil ohne Praeparate. */
 export function hasLocalData(state = {}) {
-  return BACKUP_DATA_FIELDS.some((field) =>
-    differsFromDefault(state?.[field], field === 'language' ? 'de' : INITIAL_USER_STATE[field])
+  return LOCAL_DATA_FIELDS.some((field) =>
+    differsFromDefault(
+      state?.[field],
+      INITIAL_USER_STATE[field],
+      field === 'profile' ? PROFILE_SETUP_KEYS : null
+    )
   );
 }
 

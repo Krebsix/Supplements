@@ -323,5 +323,43 @@ for (const [code, payload] of [
   check('Profil allein: kein Import', imported.length === 0);
 }
 
+console.log('— Sperre laeuft nicht in eine Sackgasse —');
+{
+  // Sperre steht, der geschuetzte Server-Stand ist aber inzwischen weg
+  // (anderes Geraet, Konto-Reset). Dann gibt es nichts mehr zu schuetzen:
+  // Ohne Loesen bliebe das Sichern dauerhaft aus, ohne dass noch ein
+  // Dialog erschiene.
+  const key = await randomBytes(32);
+  const row = { ciphertext: await encryptText('{', key, randomBytes), exported_at: '2026-08-29T12:00:00.000Z' };
+  const storage = memoryStorage();
+  const first = await setup({ row, account: { signedIn: true, userId: 'u1', dataKey: key }, storage });
+  await first.store.getState().checkOnLogin();
+  await first.store.getState().resolveDecision('keep');
+  check('Sperre gesetzt', first.store.getState().uploadBlocked === true);
+
+  const { store, client } = await setup({ row: null, account: { signedIn: true, userId: 'u1', dataKey: key }, storage });
+  check('Sperre ueberlebt den Neustart', store.getState().uploadBlocked === true);
+  await store.getState().checkOnLogin();
+  check('ohne Server-Stand wird die Sperre geloest', store.getState().uploadBlocked === false);
+  await store.getState().uploadNow();
+  check('danach ist Sichern wieder moeglich', client.calls.some(([n]) => n === 'upsert'));
+}
+
+console.log('— abgebrochener Upload haengt nicht in "uploading" —');
+{
+  // Waehrend des Verschluesselns wird gesperrt: nicht schreiben, aber auch
+  // nicht mit status 'uploading' stehen bleiben.
+  const key = await randomBytes(32);
+  const { store, client } = await setup({ account: { signedIn: true, userId: 'u1', dataKey: key } });
+  const blockMidFlight = store.subscribe((state) => {
+    if (state.status === 'uploading' && !state.uploadBlocked) store.setState({ uploadBlocked: true });
+  });
+  await store.getState().uploadNow();
+  blockMidFlight();
+  check('kein Schreibversuch', !client.calls.some(([n]) => n === 'upsert'));
+  check('Status nicht haengen geblieben', store.getState().status !== 'uploading');
+  check('Stand bleibt als ungesichert vermerkt', store.getState().dirty === true);
+}
+
 if (failures > 0) { console.error(`\n${failures} Test(s) fehlgeschlagen`); process.exit(1); }
 console.log('\nCloudBackupStore: alle Tests bestanden');

@@ -2,8 +2,9 @@
  * CloudBackupStore.js
  * zustand-Factory fuer das Cloud-Backup (Spec 2026-08-30-cloud-backup-design).
  * Alle Abhaengigkeiten injiziert, in Node testbar; useCloudBackupStore.js
- * bindet die echten. Persistiert nur autoBackup, deviceLabel und
- * lastUploadedAt (kein Gesundheitsbezug), Rest ist Laufzeit.
+ * bindet die echten. Persistiert nur autoBackup, deviceLabel,
+ * lastUploadedAt und uploadBlocked (kein Gesundheitsbezug), Rest ist
+ * Laufzeit.
  *
  * Regeln:
  * - Upload nur mit Session, Datenschluessel und (bei Automatik) autoBackup.
@@ -26,11 +27,21 @@
  *   "echte Aenderung" von einer Restore-Nachwirkung zu unterscheiden, und
  *   ausreichend, weil nach einem Restore ohnehin kein zweiter
  *   scheduleUpload()-Aufruf folgt, bevor eine echte Aenderung passiert.
- * - Ein unlesbarer Server-Stand (falscher Schluessel, z. B. Passwort-Reset
- *   ohne Recovery-Key) wird NIE still ersetzt: checkOnLogin setzt dafuer
- *   pendingDecision mit kind 'unreadable' und wartet auf resolveDecision().
- *   Ein Upload faende sonst ohne Rueckfrage statt, obwohl der Server-Stand
- *   moeglicherweise nur mit einem alten Passwort wieder lesbar waere.
+ * - Ein unlesbarer Server-Stand wird NIE still ersetzt: checkOnLogin setzt
+ *   dafuer pendingDecision mit kind 'unreadable' und wartet auf
+ *   resolveDecision(). Das gilt fuer JEDEN Grund, nicht nur den falschen
+ *   Schluessel (Passwort-Reset ohne Recovery-Key): auch ein Stand aus einer
+ *   neueren App-Version, ungueltiges JSON, fremdes Schema und fehlende
+ *   Daten bleiben erhalten. Ein Upload faende sonst ohne Rueckfrage statt,
+ *   obwohl der Server-Stand mit einem alten Passwort oder einer neueren
+ *   App-Version noch lesbar waere. pendingDecision.reason traegt den Grund,
+ *   damit der Dialog den passenden Text zeigt.
+ * - Dazu gehoert die Schreibsperre uploadBlocked: Sie ueberlebt den
+ *   Neustart (persistiert), blockiert auch manuelles Sichern nach
+ *   "Behalten" und wird nur durch bewusstes Ersetzen, einen gelungenen
+ *   Restore, deleteRemote oder Abmelden geloest. Ist der geschuetzte
+ *   Server-Stand verschwunden, loest checkOnLogin sie selbst: sonst waere
+ *   das Sichern dauerhaft aus, ohne dass noch ein Dialog erschiene.
  * - checkOnLogin ist single-flight: ein zweiter Aufruf, waehrend der erste
  *   noch laeuft, bekommt dieselbe Promise zurueck statt einen eigenen
  *   Netzwerk-Roundtrip und ein zweites pendingDecision auszuloesen.
@@ -115,7 +126,17 @@ export function createCloudBackupStore(deps, { storage } = {}) {
           set({ status: 'uploading', lastError: null });
           try {
             const sealed = await encryptBackup(getMainState(), dataKey, randomBytes, now());
-            if (get().uploadBlocked || get().pendingDecision || get().status === 'restoring') return;
+            // Zweiter Halt: Der Zustand kann sich waehrend des
+            // Verschluesselns geaendert haben (Sperre gesetzt, Dialog
+            // geoeffnet, Import gestartet). Dann NICHT schreiben -- aber
+            // auch nicht mit status 'uploading' stehen bleiben, sonst
+            // zeigt die Oberflaeche dauerhaft "wird gesichert" und
+            // resolveDecision('replace') haelt den Lauf faelschlich fuer
+            // fehlgeschlagen (status !== 'idle').
+            if (get().uploadBlocked || get().pendingDecision || get().status === 'restoring') {
+              if (get().status === 'uploading') set({ status: 'idle', dirty: true });
+              return;
+            }
             const { error } = await client.from('user_backups').upsert({
               user_id: userId,
               ciphertext: sealed.ciphertext,
@@ -220,6 +241,14 @@ export function createCloudBackupStore(deps, { storage } = {}) {
                 return 'none';
               }
               set({ remoteExportedAt: remote?.exported_at ?? null, remoteDeviceLabel: remote?.device_label ?? null });
+              // Die Sperre schuetzt einen vorhandenen Server-Stand. Ist
+              // keiner mehr da (auf einem anderen Geraet geloescht, Konto
+              // zurueckgesetzt), gibt es nichts zu schuetzen, und die
+              // Sperre wuerde das Sichern dauerhaft verhindern, ohne dass
+              // noch ein Dialog erschiene: Sackgasse. Also loesen.
+              if (!remote && get().uploadBlocked) {
+                set({ uploadBlocked: false, status: 'idle', lastError: null });
+              }
               const decision = decideOnLogin({
                 remote,
                 localHasData: hasLocalData(getMainState()),
