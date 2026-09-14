@@ -369,6 +369,11 @@ export const useStore = create(
           ingredientDetails,
           source: pending ? 'scan' : formData?.source || 'manual',
           scanResultId: pending?.id || null,
+          // Herkunft mit uebernehmen (Audit-Befund L5): Ohne diese beiden
+          // Felder am Praeparat war nach dem Speichern nicht mehr
+          // feststellbar, aus welchem Weg der Eintrag stammt.
+          analysisMode: pending?.analysisMode ?? formData?.analysisMode ?? null,
+          captureSummary: pending?.captureSummary ?? formData?.captureSummary ?? null,
         });
         if (pending) get().clearPendingScanResult();
         return supplement;

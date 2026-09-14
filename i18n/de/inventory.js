@@ -44,4 +44,15 @@ export default {
   // Farbwechsel, sonst waere der Status nur ueber Farbe erkennbar
   // (Bedienregeln, CLAUDE.md).
   'inventory.refillDue': 'Bald nachfüllen, reicht noch etwa {days} Tage',
+
+  // Herkunft der Angaben (SupplementOrigin.js). Bewusst ohne Modellnamen
+  // und ohne interne Modus-Schluessel: Die Nutzerin soll wissen, woher die
+  // Zahlen kommen, nicht welche Technik dahinter lief.
+  'inventory.originLine': 'Angaben: {origin}',
+  'origin.photo': 'aus einem Etikettenfoto gelesen',
+  'origin.barcode': 'über den Barcode gefunden',
+  'origin.catalog': 'aus dem Produktkatalog',
+  'origin.manual': 'von dir eingetragen',
+  'origin.demo': 'Testdaten',
+  'origin.unknown': 'Herkunft nicht hinterlegt',
 };

@@ -16,6 +16,7 @@ import AddSupplementChooser from '../../../components/AddSupplementChooser';
 import AddSupplementSheet from '../../../components/AddSupplementSheet';
 import { SLOTS } from '../../../TimingEngine';
 import { refillState } from '../../../StockForecast';
+import { resolveOrigin } from '../../../SupplementOrigin';
 import useStore from '../../../useStore';
 import useNotificationStore from '../../../useNotificationStore';
 import {
@@ -277,6 +278,15 @@ export default function InventoryScreen() {
                               {subline}
                             </Text>
                           ) : null}
+                          {/* Herkunft der Angaben (Audit-Befund L5). Bewusst nur die
+                              verstaendliche Einordnung, keine Modellnamen und keine
+                              internen Modus-Schluessel: SupplementOrigin.js bildet die
+                              sechs technischen Werte auf vier Herkuenfte ab. */}
+                          <Text style={styles.rowOrigin}>
+                            {t('inventory.originLine', {
+                              origin: t(resolveOrigin(supplement).labelKey),
+                            })}
+                          </Text>
                         </View>
                         <Feather name="chevron-right" size={18} color={colors.inkFaint} />
                       </Pressable>
@@ -469,6 +479,7 @@ const styles = StyleSheet.create({
   rowText: { flex: 1 },
   rowTitle: { ...type.bodyStrong },
   rowSub: { ...type.tiny, marginTop: 2 },
+  rowOrigin: { ...type.tiny, color: colors.inkFaint, marginTop: 2 },
 
   // Nachfuell-Hinweis: eigene Zeile mit Wortlaut statt reinem Farbwechsel
   // (Bedienregeln, CLAUDE.md: Status nie nur ueber Farbe).

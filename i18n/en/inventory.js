@@ -44,4 +44,14 @@ export default {
   // color change, otherwise the status would only be visible through
   // color (Bedienregeln, CLAUDE.md).
   'inventory.refillDue': 'Refill soon, lasts about {days} more days',
+
+  // Origin of the values (SupplementOrigin.js). Deliberately without model
+  // names and without internal mode keys.
+  'inventory.originLine': 'Details: {origin}',
+  'origin.photo': 'read from a label photo',
+  'origin.barcode': 'found via the barcode',
+  'origin.catalog': 'from the product catalogue',
+  'origin.manual': 'entered by you',
+  'origin.demo': 'test data',
+  'origin.unknown': 'origin not recorded',
 };

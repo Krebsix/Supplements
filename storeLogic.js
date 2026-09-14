@@ -101,6 +101,19 @@ export function normalizeUserSupplement(draft = {}) {
     conflictTags: Array.isArray(draft.conflictTags) ? draft.conflictTags : [],
     synergyIds: Array.isArray(draft.synergyIds) ? draft.synergyIds : [],
     ingredientDetails: Array.isArray(draft.ingredientDetails) ? draft.ingredientDetails : [],
+    // Herkunft des Eintrags, damit spaeter nachvollziehbar bleibt, woher
+    // die Zahlen kommen (Feature-Audit 2026-09-14, Befund L5): Vorher lag
+    // analysisMode nur am Scan-Ergebnis, und scanResultId wurde geschrieben,
+    // aber nie gelesen. Bei einer Rueckfrage ("warum steht da 1000 IE")
+    // war nicht mehr feststellbar, ob der Wert aus einer Fotoanalyse, einem
+    // Barcode, dem Katalog oder von Hand kam.
+    //
+    // Alle drei Felder sind optional und duerfen null sein: Bestandseintraege
+    // ohne sie bleiben gueltig und werden in der Oberflaeche als Herkunft
+    // "nicht hinterlegt" gefuehrt, nicht als Fehler.
+    analysisMode: draft.analysisMode ?? null,
+    scanResultId: draft.scanResultId ?? null,
+    captureSummary: draft.captureSummary ?? null,
     flags: draft.flags || {},
     createdAt: draft.createdAt || new Date().toISOString(),
     updatedAt: new Date().toISOString(),
