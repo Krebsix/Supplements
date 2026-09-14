@@ -44,6 +44,32 @@ check('Beobachtung allein wird geschuetzt', hasLocalData({ trials: [{ id: 'trial
 check('Bewertung allein wird geschuetzt', hasLocalData({ trialRatings: [{ value: 3 }] }));
 check('Einstellungen allein werden geschuetzt', hasLocalData({ settings: { custom: true } }));
 check('leere partielle Profillisten bleiben leer', !hasLocalData({ profile: { medicationClasses: [], conditions: [] } }));
+// Einrichtungszustand ist kein eigener Datenstand: Sonst waere
+// hasLocalData auf jedem Geraet true, das das Onboarding-Gate passiert
+// hat, und der 'restore'-Zweig von decideOnLogin nie erreichbar.
+check('abgeschlossenes Onboarding allein zaehlt nicht', !hasLocalData({ onboardingCompletedAt: '2026-09-14T06:00:00.000Z' }));
+check('Einwilligungsstand allein zaehlt nicht', !hasLocalData({ consents: { scanUpload: null, privacyVersion: '2026-08-01', termsVersion: '2026-08-01' } }));
+check('Sprache allein zaehlt nicht', !hasLocalData({ language: 'en' }));
+check('Lebensphase allein zaehlt nicht', !hasLocalData({ activeLifeStageId: 'pregnant' }));
+check('Profil allein zaehlt nicht', !hasLocalData({ activeProfileId: 'child' }));
+check('Kauf-/Kontingentstand allein zaehlt nicht', !hasLocalData({ entitlement: { ...INITIAL_USER_STATE.entitlement, scansUsed: 3 } }));
+check('Geschlecht und Geburtsjahr aus dem Onboarding zaehlen nicht', !hasLocalData({ profile: { gender: 'female', birthYear: 1985 } }));
+check('Gesundheitsangaben neben den Onboarding-Feldern zaehlen doch', hasLocalData({ profile: { gender: 'female', birthYear: 1985, conditions: ['hypertension'] } }));
+// Der Normalfall, der ohne diese Trennung kaputt waere: frisch
+// installiertes Geraet, Onboarding durchlaufen, Server-Stand vorhanden.
+{
+  const frischNachOnboarding = {
+    ...INITIAL_USER_STATE,
+    language: 'de',
+    onboardingCompletedAt: '2026-09-14T06:00:00.000Z',
+    activeLifeStageId: 'adult-woman',
+    consents: { scanUpload: null, privacyVersion: '2026-08-01', termsVersion: '2026-08-01' },
+    profile: { ...INITIAL_USER_STATE.profile, gender: 'female', birthYear: 1985 },
+  };
+  check('frisches Geraet nach Onboarding bleibt leer', !hasLocalData(frischNachOnboarding));
+  check('frisches Geraet holt seine Daten zurueck statt zu fragen',
+    decideOnLogin({ remote: { exported_at: '2026-09-10T10:00:00.000Z' }, localHasData: hasLocalData(frischNachOnboarding), lastUploadedAt: null }) === 'restore');
+}
 const counts = countsOf(state);
 check('zaehlt aktive Praeparate', counts.supplements === 1);
 check('zaehlt Laborwerte', counts.labValues === 1);
