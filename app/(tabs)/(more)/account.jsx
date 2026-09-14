@@ -297,6 +297,9 @@ function CloudBackupCard({ t, dataKey, language }) {
       : t('account.cloud.none');
   })();
 
+  // Gesperrt ODER laufender Upload: beides macht den Knopf wirkungslos.
+  const uploadDisabled = status === 'uploading' || uploadBlocked;
+
   const handleDelete = () =>
     Alert.alert(t('account.cloud.deleteConfirmTitle'), t('account.cloud.deleteConfirmText'), [
       { text: t('common.cancel'), style: 'cancel' },
@@ -335,11 +338,33 @@ function CloudBackupCard({ t, dataKey, language }) {
         // Auch bei gesetzter Schreibsperre: doUpload kehrte sonst still am
         // Guard zurueck, der Knopf haette sich also druecken lassen und
         // nichts getan. Die Statuszeile darueber nennt den Grund.
-        disabled={status === 'uploading' || uploadBlocked}
-        style={({ pressed }) => [styles.quietButton, pressed ? styles.buttonPressed : null]}
+        disabled={uploadDisabled}
+        style={({ pressed }) => [
+          uploadDisabled ? styles.quietButtonDisabled : styles.quietButton,
+          pressed && !uploadDisabled ? styles.buttonPressed : null,
+        ]}
         accessibilityRole="button"
+        // VoiceOver: 'disabled' im State laesst iOS "abgeblendet" ansagen,
+        // der Hint nennt den Grund. Ohne den Hint waere die Sperre nur aus
+        // der Statuszeile weiter oben erschliessbar, die separat
+        // angesteuert werden muss. Das Label steht explizit hier, damit
+        // das Schloss-Symbol nicht als Glyphe mitgelesen wird.
+        accessibilityLabel={t('account.cloud.now')}
+        accessibilityState={{ disabled: uploadDisabled }}
+        accessibilityHint={uploadBlocked ? t('account.cloud.blocked') : undefined}
       >
-        <Text style={styles.quietButtonText}>{t('account.cloud.now')}</Text>
+        {/* Status nie nur ueber Farbe (Bedienregeln): bei Sperre zusaetzlich
+            ein Schloss neben der Beschriftung. */}
+        {uploadBlocked ? (
+          <View style={styles.buttonRow}>
+            <Feather name="lock" size={16} color={colors.inkMuted} />
+            <Text style={styles.quietButtonTextDisabled}>{t('account.cloud.now')}</Text>
+          </View>
+        ) : (
+          <Text style={uploadDisabled ? styles.quietButtonTextDisabled : styles.quietButtonText}>
+            {t('account.cloud.now')}
+          </Text>
+        )}
       </Pressable>
       <Pressable
         onPress={handleDelete}
@@ -669,6 +694,10 @@ const styles = StyleSheet.create({
   primaryButtonText: { ...surfaces.buttonPrimaryText },
   quietButton: { ...surfaces.buttonQuiet, marginTop: space.md },
   quietButtonText: { ...surfaces.buttonQuietText },
+  quietButtonDisabled: { ...surfaces.buttonQuietDisabled, marginTop: space.md },
+  quietButtonTextDisabled: { ...surfaces.buttonQuietTextDisabled },
+  // Schloss plus Beschriftung im inaktiven Knopf.
+  buttonRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   dangerButton: {
     ...surfaces.buttonQuiet,
     marginTop: space.md,

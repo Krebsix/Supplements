@@ -1,264 +1,407 @@
 # Geräteabnahme: Cloud-Backup-Schutz
 
-Gegenstand: Branch `fix/cloud-backup-schutz`, Commits `0fa4b51` (Fremdpatch
-MySuplea-Backup-Korrekturpaket-v1) und `60aa83c` (vier Befunde aus der
-Prüfung). Stand dieser Liste: 2026-09-14.
+Gegenstand: Branch `fix/cloud-backup-schutz`. Commits `0fa4b51`
+(Fremdpatch MySuplea-Backup-Korrekturpaket-v1), `60aa83c` (vier Befunde
+aus der Prüfung), `0e889a6` (diese Liste, "Jetzt sichern" gesperrt) und
+der Stand dieser Fassung. Liste aktualisiert: 2026-09-14.
 
-Warum diese Abnahme nötig ist: Die Prüfung des Pakets lief in Node mit
-Ersatzfunktionen für Kryptografie, Persistenz und Netz. `npm test` ist
-grün (echter Exitcode 0, 7664 Zusicherungen, 45 Testdateien) und die
-Metro-Bundles für iOS und Android bauen, aber die Alert-Dialoge, der
-Geräte-Schlüsselbund, die persist-Middleware auf AsyncStorage und das
-echte Supabase-Backend sind damit nicht geprüft. Genau dort liegt das
-Risiko: Es geht um Datenverlust bei Gesundheitsdaten.
+Warum die Abnahme nötig ist: Die Prüfung lief in Node mit
+Ersatzfunktionen für Kryptografie, Persistenz und Netz. Alert-Dialoge,
+Geräte-Schlüsselbund, persist auf AsyncStorage und das echte
+Supabase-Backend sind damit nicht geprüft. Es geht um Datenverlust bei
+Gesundheitsdaten.
 
-**Alle acht Fälle sind offen.** Keiner wurde ausgeführt.
+**Alle Fälle sind offen. Keiner wurde ausgeführt.** Ein Fall gilt erst
+als bestanden, wenn er auf einem Gerät durchgeführt und das Ergebnis in
+der Tabelle am Ende eingetragen ist.
 
-## Voraussetzungen
+## Tatsächlich geprüfter Stand
 
-- Development Build (nicht Expo Go: dort fehlt das Kauf-SDK, und der
-  Schlüsselbund verhält sich anders).
-- Zwei Geräte oder ein Gerät plus Neuinstallation, beide mit demselben
-  Konto.
-- Testkonto, keine echten Gesundheitsdaten.
-- Server-Stand vor jedem Fall bewusst herstellen: Konto, Cloud-Backup,
-  "Jetzt sichern".
+| Prüfung | Ergebnis |
+|---|---|
+| `npm test`, pipe-frei, Exitcode separat erfasst | **0**, 7664 Zusicherungen, 45 Testdateien, 0 Fehlschläge |
+| `npx expo export --platform ios` | Exitcode **0** |
+| `npx expo export --platform android` | Exitcode **0** (Stand `60aa83c`) |
+| `npx expo-doctor` | 17/18; offen sind vier Expo-Patchversionen aus dem Vorbestand (expo 54.0.34 statt ~54.0.37, expo-constants, expo-file-system, expo-router), nicht aus diesem Branch |
+| Hex-Werte in Screens (Projektregel) | keine |
 
-Wo steht was: Konto und Cloud-Backup unter **Mehr, Konto**. Die
-Statuszeile sitzt direkt unter dem Einleitungstext der Karte
-"Cloud-Backup".
+Relevante lokale Konfiguration zum Zeitpunkt dieser Prüfungen:
+
+- `app.json` trägt `extra.eas.projectId` (EAS-Projekt `@krebsi/mysuplea`).
+  **Diese Änderung ist bewusst nicht committet** und muss auf dem
+  Arbeitsgerät erhalten bleiben; ohne sie findet die CLI das Projekt
+  nicht. Gesichert im Sitzungs-Scratchpad.
+- `eas.json`: Profile `development` (`developmentClient: true`,
+  `distribution: internal`, `ios.simulator: false`), `preview`,
+  `production`. Unverändert.
+- Expo SDK 54, eas-cli 24.3.0 (Homebrew, nicht über npx erreichbar),
+  Xcode 26.6, CocoaPods 1.17.0, kein `ios/`-Ordner (managed workflow).
+
+## Was für die Abnahme noch fehlt
+
+Der interne iOS-Development-Build lässt sich derzeit **nicht** erstellen:
+`eas device:list` antwortet "No Apple teams found for account krebsi".
+Ohne Apple-Team gibt es kein Signierungszertifikat, kein Provisioning
+Profile und keine registrierte Geräte-UDID. Die genau notwendige Eingabe
+steht im Abschlussbericht der Sitzung.
+
+Bis dahin ist die Abnahme nur auf dem iOS-Simulator möglich (lokaler
+Build, keine Signierung nötig). Der Simulator deckt alles in dieser
+Liste ab: Dialoge, Schlüsselbund, AsyncStorage, Supabase. Er deckt
+**nicht** ab: Kauf-SDK, Push-Erinnerungen und echtes
+Hintergrund-/Vordergrund-Verhalten des Systems.
+
+---
+
+## Wie viele Geräte je Fall
+
+Entscheidend ist nicht die Zahl der Geräte, sondern ob zwei
+**unabhängige Datenstände** nebeneinander existieren müssen.
+
+| Aufbau | Bedeutung |
+|---|---|
+| **1 Gerät** | Ein Gerät genügt, ohne Neuinstallation. |
+| **1 Gerät + Neuinstallation** | Ein Gerät genügt, aber der lokale Stand muss zwischendurch wirklich leer werden. Vorher den Abschnitt "Neuinstallation überprüfen" abarbeiten. |
+| **1 Gerät + präparierter Server-Stand** | Ein Gerät genügt, der Server-Stand wird direkt in `public.user_backups` hergestellt (Supabase-Konsole), weil die App ihn selbst nicht erzeugen kann. |
+| **2 unabhängige Stände** | Zwei Geräte oder zwei Simulatoren, beide mit demselben Konto und eigenen Daten. Mit einem Gerät nicht ehrlich herstellbar. |
+
+Zuordnung:
+
+| Fall | Aufbau |
+|---|---|
+| 1 Backup aus neuerer App | 1 Gerät + präparierter Server-Stand (echte Variante: 2 Stände mit zwei Build-Versionen) |
+| 2 Falscher Schlüssel | 1 Gerät |
+| 3 Behalten | 1 Gerät |
+| 4 Neustart und "Jetzt sichern" | 1 Gerät |
+| 5 / 5b Bewusster Ersatz | 1 Gerät |
+| 6 Gültiger Restore | 1 Gerät + Neuinstallation |
+| 7a / 7b Nur lokales Profil | 1 Gerät + Neuinstallation |
+| 8 Widersprüchliche Gerätestände | **2 unabhängige Stände** |
+| 9 Sperre, Server-Backup entfernt | **2 unabhängige Stände** (oder 1 Gerät + Löschung in Supabase) |
+
+---
+
+## Neuinstallation überprüfen
+
+Eine Neuinstallation darf **nicht** ungeprüft als leerer Zustand gelten.
+Gründe, aus denen Daten überleben können: ein Build wird überschrieben
+statt gelöscht; das Gerät wird aus einem iCloud-Backup wiederhergestellt;
+Schlüsselbund-Einträge (`expo-secure-store`) bleiben liegen, wenn die App
+nicht wirklich entfernt wurde. Ein nur scheinbar leeres Gerät verfälscht
+genau die Fälle 6, 7a und 7b, weil dort der Unterschied zwischen
+`restore` und `ask` geprüft wird.
+
+Vorgehen und Nachweis vor jedem Fall mit Neuinstallation:
+
+1. App über den Homescreen löschen (nicht nur neu installieren). Auf dem
+   Simulator: Gerät zurücksetzen ("Erase All Content and Settings") oder
+   die App aus dem Homescreen entfernen.
+2. Neu installieren und öffnen.
+3. **Nachweis leerer Zustand, alle vier Punkte:**
+   - Das **Onboarding** startet. Springt die App direkt ins Dashboard,
+     ist `onboardingCompletedAt` noch gesetzt: nicht leer, abbrechen.
+   - Nach dem Onboarding ist der **Bestand leer** (Tab Bestand, keine
+     Einträge).
+   - **Verlauf leer** (Heute, Verlauf).
+   - **Mehr, Konto** zeigt "abgemeldet", nicht eine bestehende Sitzung.
+     Eine überlebende Sitzung bedeutet einen überlebenden Datenschlüssel
+     im Schlüsselbund.
+4. Erst dann anmelden.
+
+Wird einer der vier Punkte nicht erfüllt, ist das Ergebnis des Falls
+nicht verwertbar und der Fall bleibt offen.
+
+---
 
 ## Abkürzungen der erwarteten Anzeigen
 
 | Kürzel | Text (DE) |
 |---|---|
 | SPERRE | "Das vorhandene Backup bleibt geschützt. Automatisches und manuelles Sichern sind gesperrt. Öffne die App erneut, um den Stand zu prüfen und bewusst zu entscheiden." |
-| SCHLUESSEL | "Der Stand auf dem Server wurde mit einem früheren Schlüssel verschlüsselt und lässt sich nicht lesen. Automatisches Sichern ist aus, bis du ihn ersetzt oder dein Passwort mit dem Recovery-Key neu setzt." |
+| SCHLUESSEL | "Der Stand auf dem Server wurde mit einem früheren Schlüssel verschlüsselt und lässt sich nicht lesen. ..." |
 | LETZTER | "Letzter Stand {Zeit} von {Gerät}" |
+| KEINER | "Noch kein Stand auf dem Server." |
 | DIALOG-UNLESBAR | Titel "Server-Stand nicht lesbar" |
 | DIALOG-NEUER | Titel "Neuerer Stand auf dem Server" |
+
+Wo steht was: Konto und Cloud-Backup unter **Mehr, Konto**. Die
+Statuszeile sitzt unter dem Einleitungstext der Karte "Cloud-Backup".
 
 ---
 
 ## 1. Backup aus neuerer App
 
-**Ausgangszustand:** Auf dem Server liegt ein Stand mit einer höheren
-`payload_version`, als diese App-Version kennt (`BACKUP_VERSION` in
-BackupManager.js). Herstellen: Auf Gerät A mit einer neueren Build-Version
-sichern, dann auf Gerät B mit der älteren Version anmelden. Ersatzweise die
-Zeile in `public.user_backups` mit einem Ciphertext befüllen, dessen
-Klartext `version: BACKUP_VERSION + 1` trägt.
+**Aufbau:** 1 Gerät + präparierter Server-Stand.
 
-**Aktion:** Auf Gerät B anmelden und die App in den Vordergrund holen.
+**Ausgangszustand:** In `public.user_backups` liegt für das Testkonto ein
+Ciphertext, dessen Klartext `version: BACKUP_VERSION + 1` trägt
+(`BACKUP_VERSION` in `BackupManager.js`). Echte Variante: Auf einem
+Gerät mit neuerem Build sichern, dann auf dem älteren Build anmelden.
+
+**Aktion:** Anmelden und die App in den Vordergrund holen.
 
 **Erwartet:**
-- DIALOG-UNLESBAR erscheint, Text nennt die App-Version ("kann mit dieser
-  App-Version nicht geöffnet werden. Beide Datenstände bleiben erhalten.").
-  NICHT der Recovery-Key-Text.
-- Knöpfe: "Backup behalten" und "Dauerhaft ersetzen".
-- Der Dialog lässt sich nicht wegtippen (`cancelable: false`).
-- Kein Upload: Die Zeile in `user_backups` behält ihren `exported_at`.
+- DIALOG-UNLESBAR, Text nennt die App-Version ("kann mit dieser
+  App-Version nicht geöffnet werden. Beide Datenstände bleiben
+  erhalten."). **Nicht** der Recovery-Key-Text.
+- Knöpfe "Backup behalten" und "Dauerhaft ersetzen".
+- Dialog nicht wegtippbar.
+- Kein Upload: `exported_at` der Zeile bleibt unverändert.
 
-**Das ist der Kern des Pakets.** Vor der Korrektur ersetzte die App
-diesen Stand still durch den lokalen.
+Das ist der Kern des Pakets. Vorher ersetzte die App diesen Stand still.
 
 ---
 
 ## 2. Falscher Schlüssel
 
-**Ausgangszustand:** Server-Stand mit einem früheren Datenschlüssel
-verschlüsselt. Herstellen: Auf Gerät A sichern, dann Passwort ohne
-Recovery-Key zurücksetzen (Konto, Passwort vergessen), danach auf Gerät B
-mit dem neuen Passwort anmelden.
+**Aufbau:** 1 Gerät.
 
-**Aktion:** Auf Gerät B anmelden.
+**Ausgangszustand:** Angemeldet, Daten vorhanden, "Jetzt sichern"
+ausgeführt (Statuszeile LETZTER).
+
+**Aktion:** Abmelden. Passwort **ohne** Recovery-Key zurücksetzen
+(Konto, Passwort vergessen, Mail-Link). Mit dem neuen Passwort anmelden.
 
 **Erwartet:**
-- DIALOG-UNLESBAR mit dem Recovery-Key-Text ("Hast du deinen
-  Recovery-Key? Dann setze dein Passwort damit neu").
+- DIALOG-UNLESBAR mit dem Recovery-Key-Text.
 - Knopf links heißt **"Behalten, später mit Recovery-Key"**, nicht
-  "Backup behalten". (Befund 4 aus `60aa83c`: Der Fremdpatch hatte den
-  ausführlicheren Text hier entfernt.)
+  "Backup behalten" (Befund 4 aus `60aa83c`).
 - Kein Upload, Server-Stand unverändert.
 
 ---
 
 ## 3. Behalten
 
-**Ausgangszustand:** Fall 1 oder 2 hergestellt, Dialog offen.
+**Aufbau:** 1 Gerät. Setzt Fall 1 oder 2 voraus, Dialog offen.
 
-**Aktion:** "Backup behalten" bzw. "Behalten, später mit Recovery-Key"
-tippen. Danach Mehr, Konto öffnen.
+**Aktion:** "Backup behalten" bzw. "Behalten, später mit Recovery-Key".
+Danach Mehr, Konto öffnen.
 
 **Erwartet:**
-- Statuszeile zeigt SPERRE.
+- Statuszeile SPERRE.
 - Schalter "Automatisch sichern" steht auf aus.
-- Knopf "Jetzt sichern" ist **inaktiv** und reagiert nicht auf Tippen.
-  (Befund aus der Prüfung: Der Knopf war bei gesetzter Sperre noch
-  drückbar und tat dann sichtbar nichts.)
-- Änderungen am Bestand lösen keinen Upload aus: `exported_at` auf dem
-  Server bleibt gleich, auch nach mehreren Minuten und nach einem Wechsel
-  in den Hintergrund und zurück.
-
-**Offener Design-Punkt, hier mitbewerten:** Der Screen kennt keinen
-sichtbaren Inaktiv-Stil für Knöpfe (Bestandsmuster, gilt auch für
-`disabled={busy}` an anderen Stellen). Der Knopf sieht aktiv aus, ist es
-aber nicht. Ob das für die Abnahme reicht oder ein Inaktiv-Stil in
-`theme.js` gebraucht wird, ist eine Designentscheidung, keine
-Fehlfunktion.
+- **"Jetzt sichern" ist sichtbar inaktiv:** graue Fläche statt weiß,
+  Beschriftung grau statt petrol, Schloss-Symbol links davor. Tippen
+  löst nichts aus, auch keine Drück-Animation.
+- Der Sperrgrund bleibt darüber lesbar (SPERRE, nicht ausgegraut).
+- **VoiceOver:** Der Knopf wird als "Jetzt sichern, Taste, abgeblendet"
+  angesagt, gefolgt vom Hinweis mit dem Sperrtext. Zusätzlich prüfen: Die
+  Statuszeile ist als eigenes Element erreichbar und wird vollständig
+  vorgelesen.
+- **Dynamic Type:** Bei größter Systemschrift bricht die Zeile aus
+  Schloss und Beschriftung um statt abzuschneiden.
+- Änderungen am Bestand lösen keinen Upload aus: `exported_at` bleibt
+  gleich, auch nach mehreren Minuten und nach Hintergrund/Vordergrund.
 
 ---
 
 ## 4. Neustart und "Jetzt sichern"
 
-**Ausgangszustand:** Fall 3 abgeschlossen, Sperre steht.
+**Aufbau:** 1 Gerät. Setzt Fall 3 voraus.
 
 **Aktion:** App vollständig beenden (App-Switcher, nach oben wischen),
-neu starten, Mehr, Konto öffnen, "Jetzt sichern" tippen.
+neu starten, Mehr, Konto öffnen, "Jetzt sichern" antippen.
 
 **Erwartet:**
-- Statuszeile zeigt nach dem Neustart weiterhin SPERRE. Die Sperre wird
-  mitpersistiert (`uploadBlocked` in `partialize`), sie darf den Neustart
-  überleben.
-- "Jetzt sichern" ist inaktiv, kein Schreibversuch.
-- Beim Start erscheint der Dialog erneut (checkOnLogin findet den
-  unlesbaren Stand wieder), sofern das Konto angemeldet ist.
+- Statuszeile zeigt nach dem Neustart weiterhin SPERRE. `uploadBlocked`
+  wird mitpersistiert, die Sperre muss den Neustart überleben.
+- "Jetzt sichern" weiter sichtbar inaktiv, kein Schreibversuch.
+- Beim Start erscheint der Dialog erneut, solange das Konto angemeldet
+  und der unlesbare Stand vorhanden ist.
 - `user_backups.exported_at` unverändert.
 
 **Zusatzprüfung Bestandsgeräte (keine Migration nötig, aber belegen):**
 Ein Gerät, das vor diesem Update gesichert hat, kennt `uploadBlocked` im
-Speicher nicht. Erwartet: Es ist nach dem Update **nicht** gesperrt,
-Statuszeile zeigt LETZTER, Automatik läuft weiter.
+Speicher nicht. Erwartet: nach dem Update **nicht** gesperrt,
+Statuszeile LETZTER, Automatik läuft, Knopf aktiv.
 
 ---
 
 ## 5. Bewusster Ersatz
 
-**Ausgangszustand:** Fall 1 oder 2 hergestellt, Dialog offen. Lokal
-mindestens ein Präparat und ein Laborwert, damit erkennbar ist, was
-hochgeht.
+**Aufbau:** 1 Gerät. Setzt Fall 1 oder 2 voraus, Dialog offen. Lokal
+mindestens ein Präparat und ein Laborwert.
 
-**Aktion:** "Dauerhaft ersetzen" tippen.
+**Aktion:** "Dauerhaft ersetzen".
 
 **Erwartet:**
 - Genau **ein** Schreibvorgang auf `user_backups`, neuer `exported_at`,
-  neuer `device_label` dieses Geräts.
-- Statuszeile wechselt auf LETZTER mit der aktuellen Zeit.
-- Sperre gelöst: "Jetzt sichern" ist wieder aktiv, Automatik wieder
-  einschaltbar.
-- Danach ein Neustart: Statuszeile bleibt LETZTER, kein Dialog mehr.
+  `device_label` dieses Geräts.
+- Statuszeile wechselt auf LETZTER mit aktueller Zeit.
+- Sperre gelöst: Knopf wieder aktiv (weiß, petrol, kein Schloss),
+  Automatik wieder einschaltbar.
+- Nach einem Neustart: Statuszeile bleibt LETZTER, kein Dialog.
 
-**Variante 5b, Netz weg:** Flugmodus einschalten, dann "Dauerhaft
-ersetzen" tippen. Erwartet: Kein Schreibvorgang, Sperre wird **wieder
-gesetzt** (SPERRE in der Statuszeile), kein stiller Wiederholversuch.
+### 5b. Bewusster Ersatz ohne Netz
+
+**Aktion:** Flugmodus ein, dann "Dauerhaft ersetzen".
+
+**Erwartet:** Kein Schreibvorgang, Sperre wird **wieder gesetzt**
+(SPERRE), kein stiller Wiederholversuch.
+
 Das ist die bewusste Entscheidung des Pakets ("ein fehlgeschlagener
-bewusster Ersatz sperrt erneut") und der unschönste Fall: Es war nur das
+bewusster Ersatz sperrt erneut") und der unschönste Pfad: Es war nur das
 Netz weg, trotzdem muss die Nutzerin die App neu öffnen und erneut
-bestätigen. **Bei der Abnahme bewerten, ob das zumutbar ist** oder ob ein
+bestätigen. **Bei der Abnahme bewerten**, ob das zumutbar ist oder ob ein
 Netzwerkfehler von einem echten Schreibfehler unterschieden werden soll.
 
 ---
 
 ## 6. Gültiger Restore
 
-**Ausgangszustand:** Gerät A hat einen lesbaren Stand mit mehreren
-Präparaten, Laborwerten und Einnahmen gesichert. Gerät B ist frisch
-installiert, Onboarding durchlaufen (Geschlecht und Geburtsjahr
-angegeben, Name leer gelassen), kein eigener Bestand.
+**Aufbau:** 1 Gerät + Neuinstallation.
 
-**Aktion:** Auf Gerät B mit demselben Konto anmelden.
+**Ausgangszustand:** Vorher auf demselben Gerät mehrere Präparate,
+Laborwerte und Einnahmen anlegen und sichern (LETZTER notieren: Zeit und
+Gerätename). Dann App löschen, neu installieren, Abschnitt
+"Neuinstallation überprüfen" abarbeiten, Onboarding durchlaufen
+(Geschlecht und Geburtsjahr angeben, **Name leer lassen**), keine
+weiteren Eingaben.
+
+**Aktion:** Mit demselben Konto anmelden.
 
 **Erwartet:**
 - **Kein Dialog.** Der Stand wird automatisch übernommen.
-- Bestand, Laborwerte und Verlauf von Gerät A sind da.
-- Der Hinweis zur Wiederherstellung erscheint (`lastRestore`).
-- Kein Rück-Upload direkt danach: `exported_at` bleibt der von Gerät A
-  (justRestored unterdrückt den Nachlauf-Upload).
+- Bestand, Laborwerte und Verlauf sind zurück.
+- Der Wiederherstellungs-Hinweis erscheint.
+- Kein Rück-Upload danach: `exported_at` bleibt der gesicherte Wert.
 
-**Das ist Befund 1 aus `60aa83c`.** Mit dem Fremdpatch allein hätte
-dieser Fall einen Dialog gezeigt, weil abgeschlossenes Onboarding,
-Einwilligungen, Sprache und Lebensphase als "lokale Daten" zählten. Wenn
-hier ein Dialog erscheint, ist der Fix nicht wirksam.
+Das ist Befund 1 aus `60aa83c`. Mit dem Fremdpatch allein hätte dieser
+Fall einen Dialog gezeigt, weil abgeschlossenes Onboarding,
+Einwilligungen, Sprache und Lebensphase als lokale Daten zählten.
+**Erscheint hier ein Dialog, ist der Fix nicht wirksam.**
 
 ---
 
 ## 7. Ausschließlich lokales Profil
 
-Zwei Varianten, sie müssen sich unterscheiden. Genau hier weicht die
+Zwei Varianten, die sich unterscheiden müssen. Genau hier weicht die
 Korrektur vom Fremdpatch ab.
 
-**7a, nur Onboarding-Angaben:** Gerät B frisch, Onboarding mit
+### 7a. Nur Onboarding-Angaben
+
+**Aufbau:** 1 Gerät + Neuinstallation. Server-Stand vorhanden.
+
+**Ausgangszustand:** Nach überprüfter Neuinstallation Onboarding mit
 Geschlecht und Geburtsjahr, **kein** Name, keine Medikamentengruppen,
-keine Erkrankungen. Server-Stand vorhanden.
+keine Erkrankungen, kein Präparat, kein Laborwert.
+
 **Aktion:** Anmelden.
+
 **Erwartet:** Automatischer Restore wie Fall 6, kein Dialog.
 
-**7b, gepflegtes Gesundheitsprofil:** Gerät B frisch, Onboarding
-durchlaufen, danach unter Mehr, Gesundheitsprofil mindestens eine
-Medikamentengruppe oder Erkrankung eintragen (alternativ einen
-Anzeigenamen setzen). Weiterhin kein Präparat, kein Laborwert.
+### 7b. Gepflegtes Gesundheitsprofil
+
+**Aufbau:** 1 Gerät + Neuinstallation. Server-Stand vorhanden.
+
+**Ausgangszustand:** Wie 7a, danach unter Mehr, Gesundheitsprofil
+mindestens eine Medikamentengruppe oder Erkrankung eintragen
+(alternativ einen Anzeigenamen setzen). Weiter kein Präparat, kein
+Laborwert.
+
 **Aktion:** Anmelden.
+
 **Erwartet:**
-- DIALOG-NEUER erscheint, mit den Zählern des Server-Standes
-  ("{n} Präparate, {m} Laborwerte").
-- Reihenfolge der Knöpfe: **"Server-Stand übernehmen" zuerst**, "Diesen
-  Stand hochladen" danach und rot/destruktiv.
-- "Server-Stand übernehmen" holt die Daten, die lokalen Profilangaben
+- DIALOG-NEUER mit den Zählern des Server-Standes ("{n} Präparate,
+  {m} Laborwerte").
+- Knopfreihenfolge: **"Server-Stand übernehmen" zuerst**, "Diesen Stand
+  hochladen" danach und rot/destruktiv.
+- "Server-Stand übernehmen" holt die Daten; die lokalen Profilangaben
   werden dabei durch die des Standes ersetzt.
-- "Diesen Stand hochladen" überschreibt den Server-Stand. **Hier prüfen,
-  ob die Warnwirkung ausreicht**: Ein Fehltipp kostet das Backup.
+- "Diesen Stand hochladen" überschreibt den Server-Stand. **Hier
+  bewerten, ob die Warnwirkung ausreicht:** Ein Fehltipp kostet das
+  Backup.
 
 ---
 
 ## 8. Widersprüchliche Gerätestände
 
-**Ausgangszustand:** Gerät A und Gerät B haben beide eigene Daten
-(je ein anderes Präparat, unterschiedliche Laborwerte). Gerät A hat
-zuletzt gesichert, Gerät B kennt diesen Stand nicht
-(`lastUploadedAt` weicht ab).
+**Aufbau:** 2 unabhängige Stände. Mit einem Gerät nicht ehrlich
+herstellbar, weil beide Seiten gleichzeitig eigene Daten und einen
+eigenen `lastUploadedAt` brauchen.
 
-**Aktion:** Auf Gerät B in den Vordergrund wechseln bzw. anmelden.
+**Ausgangszustand:** Gerät A und Gerät B, dasselbe Konto, je eigene Daten
+(unterschiedliche Präparate und Laborwerte). A hat zuletzt gesichert, B
+kennt diesen Stand nicht.
+
+**Aktion:** Auf B in den Vordergrund wechseln bzw. anmelden.
 
 **Erwartet:**
 - DIALOG-NEUER mit Zeit und Gerätename von A sowie den Zählern aus dem
   Server-Stand.
-- Während der Dialog offen ist, findet **kein** Upload statt, auch wenn
-  auf B etwas geändert wird (pendingDecision blockiert, ein laufender
-  Timer wird abgebrochen).
+- Solange der Dialog offen ist, **kein** Upload, auch wenn auf B etwas
+  geändert wird.
 - "Server-Stand übernehmen": Bs eigene Daten werden ersetzt, danach kein
   Rück-Upload.
-- "Diesen Stand hochladen": As Stand auf dem Server wird ersetzt, genau
-  ein Schreibvorgang.
-- Nach der Entscheidung erscheint derselbe Dialog nicht erneut
-  (Dedup über `kind:exported_at`).
+- "Diesen Stand hochladen": As Stand wird ersetzt, genau ein
+  Schreibvorgang.
+- Derselbe Dialog erscheint nach der Entscheidung nicht erneut.
 
 **Zusatzprüfung Statushänger (Befund 2 aus `60aa83c`):** Während "Jetzt
 sichern" läuft, den Dialog auslösen (App in den Hintergrund und zurück).
 Erwartet: Die Statuszeile bleibt **nicht** dauerhaft auf "Wird
-gesichert." stehen.
+gesichert." stehen, und der Knopf wird wieder bedienbar.
+
+---
+
+## 9. Sperre gesetzt, Server-Backup inzwischen entfernt
+
+**Aufbau:** 2 unabhängige Stände, oder 1 Gerät und Löschung der Zeile in
+Supabase. Wichtig: Die Löschung muss **von außen** kommen. Löscht man auf
+demselben Gerät über "Stand auf dem Server löschen", hebt die App die
+Sperre selbst mit auf, und der Fall greift nicht.
+
+**Ausgangszustand:** Auf Gerät B ist die Sperre gesetzt (Fall 3
+abgeschlossen, Statuszeile SPERRE, Knopf inaktiv). Danach wird der
+Server-Stand entfernt: von Gerät A über "Stand auf dem Server löschen",
+oder durch Löschen der Zeile in `public.user_backups`.
+
+**Aktion:** Auf Gerät B die App beenden, neu starten und anmelden bzw. in
+den Vordergrund holen, sodass der Login-Abgleich läuft.
+
+**Erwartet:**
+- Statuszeile wechselt auf KEINER ("Noch kein Stand auf dem Server.").
+- Sperre ist **gelöst**: "Jetzt sichern" ist wieder aktiv (weiß, petrol,
+  kein Schloss), Automatik wieder einschaltbar.
+- Kein Dialog, denn es gibt keinen Stand mehr, über den zu entscheiden
+  wäre.
+- Nach "Jetzt sichern": genau ein Schreibvorgang, Statuszeile LETZTER.
+
+Das ist Befund 3 aus `60aa83c`. Ohne den Fix wäre das eine Sackgasse: Die
+Sperre schützte einen Stand, den es nicht mehr gibt, und blockierte das
+Sichern dauerhaft, ohne dass noch ein Dialog erschienen wäre. **Bleibt
+die Sperre hier stehen, ist der Fix nicht wirksam.**
 
 ---
 
 ## Was diese Liste nicht abdeckt
 
-Bewusst außerhalb: Bereits abgeschickte Uploads lassen sich nicht
-zurückholen, Kontowechsel während laufender Requests und parallele
-Schreibvorgänge mehrerer Geräte auf denselben Datensatz. Das sind die
-Grenzen, die das Paket selbst nennt; sie brauchen eine eigene Prüfung und
-möglicherweise eine Versionsspalte mit optimistischem Sperren auf
-`user_backups`.
+Bewusst außerhalb, weil es eigene Prüfungen und womöglich eine
+Versionsspalte mit optimistischem Sperren auf `user_backups` braucht:
+bereits abgeschickte Uploads lassen sich nicht zurückholen, Kontowechsel
+während laufender Requests, parallele Schreibvorgänge zweier Geräte auf
+denselben Datensatz.
 
-## Ergebnisspalte
+Ebenfalls offen, aber unabhängig von diesem Branch: die vier
+Expo-Patchversionen aus `expo-doctor`.
 
-| Fall | Ergebnis | Datum | Bemerkung |
-|---|---|---|---|
-| 1 Backup aus neuerer App | offen | | |
-| 2 Falscher Schlüssel | offen | | |
-| 3 Behalten | offen | | |
-| 4 Neustart und Jetzt sichern | offen | | |
-| 5 Bewusster Ersatz | offen | | |
-| 5b Ersatz ohne Netz | offen | | |
-| 6 Gültiger Restore | offen | | |
-| 7a Nur Onboarding-Angaben | offen | | |
-| 7b Gepflegtes Profil | offen | | |
-| 8 Widersprüchliche Stände | offen | | |
+## Ergebnistabelle
+
+Erst nach tatsächlicher Durchführung ausfüllen. "offen" bedeutet: nicht
+ausgeführt.
+
+| Fall | Aufbau | Ergebnis | Datum | Bemerkung |
+|---|---|---|---|---|
+| 1 Backup aus neuerer App | 1 + präpariert | offen | | |
+| 2 Falscher Schlüssel | 1 | offen | | |
+| 3 Behalten (inkl. VoiceOver) | 1 | offen | | |
+| 4 Neustart und Jetzt sichern | 1 | offen | | |
+| 4z Bestandsgerät nicht gesperrt | 1 | offen | | |
+| 5 Bewusster Ersatz | 1 | offen | | |
+| 5b Ersatz ohne Netz | 1 | offen | | |
+| 6 Gültiger Restore | 1 + Neuinst. | offen | | |
+| 7a Nur Onboarding-Angaben | 1 + Neuinst. | offen | | |
+| 7b Gepflegtes Profil | 1 + Neuinst. | offen | | |
+| 8 Widersprüchliche Stände | 2 Stände | offen | | |
+| 8z Statushänger | 2 Stände | offen | | |
+| 9 Sperre, Backup entfernt | 2 Stände | offen | | |
