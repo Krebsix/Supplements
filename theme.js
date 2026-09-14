@@ -248,6 +248,26 @@ export const surfaces = {
   },
   buttonQuietText: { fontWeight: weight.semibold, color: colors.accent, fontSize: 17 },
 
+  // Inaktiver ruhiger Knopf. Die Flaeche wird grau, damit der Knopf auf der
+  // weissen Karte sichtbar bleibt statt zu verschwinden (ein nur
+  // ausgegrauter Text auf Weiss waere kaum noch als Flaeche erkennbar).
+  //
+  // Kontrast gerechnet (Bedienregeln CLAUDE.md, 4,5:1 fuer 17 pt):
+  //   inkMuted #6c6c70 auf canvas #f2f2f7       = 4,69:1  ✓
+  //   inkMuted #6c6c70 auf surfaceSunken #e9e9ee = 4,32:1  ✗
+  // Deshalb canvas als Flaeche, nicht surfaceSunken. Deaktivierte
+  // Bedienelemente sind nach WCAG 1.4.3 vom Minimum ausgenommen; diese
+  // Projektregel ist strenger, und der Grund fuer die Sperre muss lesbar
+  // bleiben.
+  buttonQuietDisabled: {
+    backgroundColor: colors.canvas,
+    borderRadius: radius.md,
+    minHeight: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonQuietTextDisabled: { fontWeight: weight.semibold, color: colors.inkMuted, fontSize: 17 },
+
   chip: {
     backgroundColor: colors.surfaceSunken,
     borderRadius: radius.sm,
