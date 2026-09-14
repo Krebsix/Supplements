@@ -28,6 +28,7 @@
  */
 
 import { matchIngredient, convertAmount } from './SubstanceMatcher';
+import { POSITION_ROLE, resolveDuplicateAmounts } from './AmountEquivalence';
 import { AMOUNT_BASIS, resolveAmountBasis } from './DoseNormalizer';
 import { checkAgainstReference, REFERENCE_STATUS } from './ReferenceCheck';
 import { tr } from './i18n/runtime';
@@ -73,6 +74,13 @@ export function extractPositions(supplement) {
       match: matchIngredient(detail),
       range: parseAmountRange(detail?.amount),
       unit: detail?.unit ?? '',
+      // Formangabe wie auf dem Etikett, unveraendert. AmountEquivalence.js
+      // braucht sie, um zwei echte Quellen ("aus Lanolin" / "aus Flechten")
+      // von einer Doppelangabe zu unterscheiden. Die ZUGEORDNETE Form aus
+      // match.form taugt dafuer nicht: detectForm() raet sie auch aus dem
+      // Substanznamen, "Vitamin D3" liefert deshalb immer die D3-Form,
+      // selbst wenn auf dem Etikett D2 steht.
+      rawForm: detail?.form ?? '',
     }));
   }
 
@@ -117,6 +125,23 @@ function toComparableRange(position, referenceUnit) {
 }
 
 /**
+ * Zieleinheit fuer die Zusammenfuehrung von Doppelangaben: die
+ * Referenz-Einheit der Substanz, damit die gezaehlte Position die ist,
+ * in der die App ohnehin vergleicht (bei Vitamin D3 also IE, nicht µg).
+ * Ohne Lebensphase oder ohne Referenzwert bleibt sie leer, dann gewinnt
+ * die erste Position.
+ */
+function preferredUnitFor(positions, lifeStageId) {
+  if (!lifeStageId) return '';
+  for (const position of positions) {
+    if (!position?.match?.matched) continue;
+    const reference = getReferenceValue(position.match.substanceId, lifeStageId);
+    if (reference?.unit) return reference.unit;
+  }
+  return '';
+}
+
+/**
  * analyzeStack(supplements, lifeStageId)
  * supplements: aktive Eintraege aus useStore (userSupplements)
  *
@@ -130,7 +155,15 @@ export function analyzeStack(supplements = [], lifeStageId = null) {
   const unresolved = [];
 
   for (const supplement of Array.isArray(supplements) ? supplements : []) {
-    for (const position of extractPositions(supplement)) {
+    // Doppelangaben DESSELBEN Etiketts zusammenfuehren, bevor summiert
+    // wird ("Vitamin D3 1000 I.E. (25 µg)" ist eine Menge, nicht zwei).
+    // Bewusst je Produkt: Zwei Praeparate mit je 1000 IE bleiben 2000 IE.
+    // Die Zieleinheit wird vorher bestimmt, damit die gezaehlte Position
+    // die in der Referenz-Einheit ist — das macht die Anzeige lesbar.
+    const rawPositions = extractPositions(supplement);
+    const preferUnit = preferredUnitFor(rawPositions, lifeStageId);
+
+    for (const position of resolveDuplicateAmounts(rawPositions, { preferUnit })) {
       if (!position.match?.matched) {
         unresolved.push({
           supplementName: supplement?.name ?? '',
@@ -159,12 +192,20 @@ export function analyzeStack(supplements = [], lifeStageId = null) {
           totalMax: 0,
           countedPositions: 0,
           skippedPositions: 0,
+          // Wiederholungen derselben Menge in anderer Einheit (zusammen-
+          // gefuehrt) und Faelle, die nicht sicher entscheidbar waren und
+          // deshalb weiter addiert werden.
+          restatedPositions: 0,
+          ambiguousPositions: 0,
           sources: [],
           hasConvertedAmounts: false,
         });
       }
 
       const entry = bySubstance.get(substanceId);
+      // Beide Etikettangaben bleiben in sources sichtbar, auch die, die
+      // nicht mitgezaehlt wird: sonst waere die Zahl nicht mehr gegen das
+      // Etikett pruefbar.
       entry.sources.push({
         supplementId: supplement?.id ?? null,
         supplementName: supplement?.name ?? '',
@@ -174,7 +215,22 @@ export function analyzeStack(supplements = [], lifeStageId = null) {
               ? `${position.range.min} ${position.unit}`
               : `${position.range.min}–${position.range.max} ${position.unit}`)
           : '',
+        role: position.role ?? POSITION_ROLE.COUNTED,
+        countedForTotal: position.countedForTotal !== false,
+        equivalence: position.equivalence ?? null,
       });
+
+      // Wiederholung derselben Menge in anderer Einheit: sichtbar, aber
+      // nicht summiert und ausdruecklich KEIN unresolved-Fall, denn es
+      // fehlt nichts.
+      if (position.countedForTotal === false) {
+        entry.restatedPositions += 1;
+        continue;
+      }
+
+      if (position.role === POSITION_ROLE.AMBIGUOUS) {
+        entry.ambiguousPositions += 1;
+      }
 
       if (comparable) {
         entry.totalMin += comparable.min;

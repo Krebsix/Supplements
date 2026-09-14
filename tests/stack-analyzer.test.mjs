@@ -117,5 +117,130 @@ check('Leerer Bestand → keine Summen', empty.totals.length === 0);
 check('Leerer Bestand → keine Warnungen', getStackWarnings(empty).length === 0);
 check('Kein Absturz ohne Lebensphase', Array.isArray(analyzeStack(stack, null).totals));
 
+console.log('\n— Doppelangabe auf EINEM Etikett: "1000 I.E. (25 µg)" —');
+// Belegter Fall aus dem Feature-Audit 2026-09-14: Die Vision-Analyse
+// liefert fuer diese eine Etikettzeile ZWEI Zutatenzeilen. Vorher summierte
+// der Analyzer sie zu 2000 IE und meldete 250 Prozent des Referenzwerts.
+{
+  const doppelangabe = [
+    {
+      id: 'dup-1',
+      name: 'Vitamin D3 + K2 Tropfen',
+      status: 'active',
+      dosage: { amount: '1', unit: 'Tropfen' },
+      ingredientDetails: [
+        { name: 'Vitamin D3', form: 'Cholecalciferol', amount: '1000', unit: 'I.E.' },
+        { name: 'Vitamin D3', form: 'Cholecalciferol', amount: '25', unit: 'µg' },
+      ],
+    },
+  ];
+  const result = analyzeStack(doppelangabe, 'adult-woman');
+  const d3 = result.totals.find((entry) => entry.substanceId === 'vitamin-d3');
+
+  check('genau eine Position gezaehlt', d3?.countedPositions === 1, `war ${d3?.countedPositions}`);
+  check('als Wiederholung erkannt', d3?.restatedPositions === 1, `war ${d3?.restatedPositions}`);
+  check('Summe 1000 IE statt 2000', d3?.totalMax === 1000, `war ${d3?.totalMax} ${d3?.unit}`);
+  check('Einheit bleibt IE', d3?.unit === 'IE', `war ${d3?.unit}`);
+  check(
+    '125 Prozent bei Referenzwert 800 IE',
+    d3?.referenceCheck?.percentOfReference === 125,
+    `war ${d3?.referenceCheck?.percentOfReference}`
+  );
+  check('Referenzwert unveraendert 800 IE', d3?.referenceCheck?.reference === 800);
+  check('keine Obergrenzen-Ueberschreitung gemeldet', d3?.referenceCheck?.status !== 'above_limit');
+  // Beide Etikettangaben muessen nachvollziehbar bleiben.
+  check('beide Angaben bleiben sichtbar', d3?.sources.length === 2, `waren ${d3?.sources.length}`);
+  check(
+    'eine Quelle traegt 1000 I.E., eine 25 µg',
+    d3?.sources.some((s) => s.amountText === '1000 I.E.') &&
+      d3?.sources.some((s) => s.amountText === '25 µg')
+  );
+  check(
+    'genau eine Quelle zaehlt fuer die Summe',
+    d3?.sources.filter((s) => s.countedForTotal).length === 1
+  );
+  check(
+    'die gezaehlte Quelle ist die in IE',
+    d3?.sources.find((s) => s.countedForTotal)?.amountText === '1000 I.E.'
+  );
+  check('Wiederholung nicht als ungeloest gemeldet', result.unresolved.length === 0, JSON.stringify(result.unresolved));
+}
+
+console.log('\n— Zwei VERSCHIEDENE Praeparate mit je 1000 IE: addieren —');
+{
+  const zweiPraeparate = [
+    {
+      id: 'a',
+      name: 'Vitamin D3 Tropfen',
+      status: 'active',
+      ingredientDetails: [{ name: 'Vitamin D3', form: 'Cholecalciferol', amount: '1000', unit: 'I.E.' }],
+    },
+    {
+      id: 'b',
+      name: 'Multivitamin',
+      status: 'active',
+      ingredientDetails: [{ name: 'Vitamin D3', form: 'Cholecalciferol', amount: '1000', unit: 'I.E.' }],
+    },
+  ];
+  const d3 = analyzeStack(zweiPraeparate, 'adult-woman').totals
+    .find((entry) => entry.substanceId === 'vitamin-d3');
+
+  check('beide Positionen gezaehlt', d3?.countedPositions === 2, `war ${d3?.countedPositions}`);
+  check('Summe 2000 IE', d3?.totalMax === 2000, `war ${d3?.totalMax}`);
+  check('keine Wiederholung erkannt', d3?.restatedPositions === 0);
+  check('250 Prozent bei Referenzwert 800 IE', d3?.referenceCheck?.percentOfReference === 250);
+}
+
+console.log('\n— Zwei Praeparate, eines mit Doppelangabe: 1000 + 1000 = 2000 —');
+{
+  const gemischt = [
+    {
+      id: 'a',
+      name: 'Tropfen mit Doppelangabe',
+      status: 'active',
+      ingredientDetails: [
+        { name: 'Vitamin D3', form: 'Cholecalciferol', amount: '1000', unit: 'I.E.' },
+        { name: 'Vitamin D3', form: 'Cholecalciferol', amount: '25', unit: 'µg' },
+      ],
+    },
+    {
+      id: 'b',
+      name: 'Multivitamin',
+      status: 'active',
+      ingredientDetails: [{ name: 'Vitamin D3', form: 'Cholecalciferol', amount: '25', unit: 'µg' }],
+    },
+  ];
+  const d3 = analyzeStack(gemischt, 'adult-woman').totals
+    .find((entry) => entry.substanceId === 'vitamin-d3');
+
+  check('zwei Positionen gezaehlt', d3?.countedPositions === 2, `war ${d3?.countedPositions}`);
+  check('Summe 2000 IE', d3?.totalMax === 2000, `war ${d3?.totalMax}`);
+  check('eine Wiederholung erkannt', d3?.restatedPositions === 1);
+  check('alle drei Angaben bleiben sichtbar', d3?.sources.length === 3);
+}
+
+console.log('\n— Verschiedene Formen: zwei Quellen, nicht zusammenfuehren —');
+{
+  // "D3 aus Lanolin 500 IE" plus "D3 aus Flechten 12,5 µg" sind zwei
+  // echte Quellen. Ohne Formpruefung wuerde daraus 500 IE, also zu wenig.
+  const zweiQuellen = [
+    {
+      id: 'c',
+      name: 'Kombipraeparat',
+      status: 'active',
+      ingredientDetails: [
+        { name: 'Vitamin D3', form: 'D3 (Cholecalciferol)', amount: '500', unit: 'I.E.' },
+        { name: 'Vitamin D3', form: 'D2 (Ergocalciferol)', amount: '12.5', unit: 'µg' },
+      ],
+    },
+  ];
+  const d3 = analyzeStack(zweiQuellen, 'adult-woman').totals
+    .find((entry) => entry.substanceId === 'vitamin-d3');
+
+  check('beide Positionen gezaehlt', d3?.countedPositions === 2, `war ${d3?.countedPositions}`);
+  check('Summe 1000 IE', d3?.totalMax === 1000, `war ${d3?.totalMax}`);
+  check('keine Zusammenfuehrung', d3?.restatedPositions === 0);
+}
+
 console.log(`\n${failed === 0 ? 'ALLE TESTS BESTANDEN' : failed + ' FEHLER'}\n`);
 process.exit(failed === 0 ? 0 : 1);

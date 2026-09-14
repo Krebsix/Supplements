@@ -20,6 +20,7 @@ import {
   formatSupplementDosage,
   formatSupplementName,
 } from '../../../utils/supplementFormatting';
+import { resolveOrigin } from '../../../SupplementOrigin';
 import { useTranslation } from '../../../i18n';
 import { colors, radius, space, surfaces, toneFor, type } from '../../../theme';
 
@@ -198,6 +199,16 @@ export default function InventoryScreen() {
                 </Text>
               ) : null}
 
+              {/* Herkunft der Angaben (Audit-Befund L5). Bewusst nur die
+                  verstaendliche Einordnung, keine Modellnamen und keine
+                  internen Modus-Schluessel: SupplementOrigin.js bildet die
+                  sechs technischen Werte auf vier Herkuenfte ab. */}
+              <Text style={styles.cardOrigin}>
+                {t('inventory.originLine', {
+                  origin: t(resolveOrigin(supplement).labelKey),
+                })}
+              </Text>
+
               <View style={styles.cardActions}>
                 <TouchableOpacity
                   style={styles.actionButton}
@@ -340,6 +351,11 @@ const styles = StyleSheet.create({
   cardRefill: {
     ...type.tiny,
     color: colors.inkMuted,
+    marginTop: space.xs,
+  },
+  cardOrigin: {
+    ...type.tiny,
+    color: colors.inkFaint,
     marginTop: space.xs,
   },
   cardRefillDue: {

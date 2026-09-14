@@ -36,4 +36,14 @@ export default {
   'inventory.archiveConfirm': 'Archive',
 
   'inventory.refillIn': 'Lasts about {days} more days',
+
+  // Origin of the values (SupplementOrigin.js). Deliberately without model
+  // names and without internal mode keys.
+  'inventory.originLine': 'Details: {origin}',
+  'origin.photo': 'read from a label photo',
+  'origin.barcode': 'found via the barcode',
+  'origin.catalog': 'from the product catalogue',
+  'origin.manual': 'entered by you',
+  'origin.demo': 'test data',
+  'origin.unknown': 'origin not recorded',
 };
