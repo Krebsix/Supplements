@@ -160,9 +160,20 @@ export async function lookupProductCache(barcode) {
  * Produkt-Cache ablegen kann.
  * Rueckgabe: Scan-Ergebnis im Format von results.jsx / SupplementResultCard.
  */
-export async function analyzeCaptures(captures, { barcode } = {}) {
+export async function analyzeCaptures(captures, { barcode, accessToken } = {}) {
   if (!isAnalyzerConfigured()) {
     throw new Error(tr('analyzer.notConfigured'));
+  }
+
+  // Seit 2026-09-14 braucht die Foto-Analyse ein angemeldetes Konto: Das
+  // Kontingent wird serverseitig je Konto gefuehrt (Migration
+  // 20260914180000_scan_quota_per_user.sql). Der oeffentliche Anon-Key
+  // zaehlt nicht als Anmeldung. Hier abfangen, damit die Nutzerin eine
+  // klare Ansage bekommt statt eines 401 aus dem Netz. Barcode-Scan und
+  // Katalogsuche brauchen weiterhin kein Konto.
+  const token = cleanText(accessToken);
+  if (!token) {
+    throw new Error(tr('analyzer.accountRequired'));
   }
 
   const entries = Object.entries(captures || {}).filter(
@@ -186,12 +197,11 @@ export async function analyzeCaptures(captures, { barcode } = {}) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(SUPABASE_ANON_KEY
-          ? {
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              apikey: SUPABASE_ANON_KEY,
-            }
-          : {}),
+        // Nutzer-Token im Authorization-Header, Anon-Key in apikey: Die
+        // Function liest die Nutzerkennung aus dem Bearer-Token und
+        // braucht den Anon-Key nur als Projektschluessel.
+        Authorization: `Bearer ${token}`,
+        ...(SUPABASE_ANON_KEY ? { apikey: SUPABASE_ANON_KEY } : {}),
       },
       // Sprache mitschicken: die Vision-Auswertung formuliert ihre
       // Freitextfelder in der Sprache, in der die App gerade laeuft.
@@ -213,11 +223,22 @@ export async function analyzeCaptures(captures, { barcode } = {}) {
 
   if (!response.ok) {
     let serverMessage = '';
+    let reason = '';
     try {
       const body = await response.json();
       serverMessage = cleanText(body?.error);
+      reason = cleanText(body?.reason);
     } catch {
       // Antwort war kein JSON — generische Meldung verwenden
+    }
+    // Die beiden Kontingent-Faelle bekommen den App-Text in der aktiven
+    // Sprache: Die Meldung der Function ist immer deutsch, und sie nennt
+    // nicht, dass Barcode und Katalog weiter gehen.
+    if (reason === 'auth_required' || response.status === 401) {
+      throw new Error(tr('analyzer.accountRequired'));
+    }
+    if (reason === 'quota_exhausted') {
+      throw new Error(tr('analyzer.quotaExhausted'));
     }
     throw new Error(
       serverMessage || tr('analyzer.failedWithStatus', { status: response.status })

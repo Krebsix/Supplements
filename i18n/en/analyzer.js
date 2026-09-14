@@ -14,6 +14,14 @@ export default {
   'analyzer.unreachable': 'The analysis cannot be reached. Please check your internet connection.',
   'analyzer.failedWithStatus': 'The analysis failed (status {status}).',
   'analyzer.noResult': 'The analysis returned no usable result.',
+  // Since 2026-09-14 the photo analysis needs an account, because the
+  // allowance is tracked per account on the server. Barcode scan and
+  // catalogue search stay available without one. No model names, no cost
+  // figures.
+  'analyzer.accountRequired':
+    'Photo analysis needs an account. Barcode scan and catalogue search work without one.',
+  'analyzer.quotaExhausted':
+    'Your photo analysis allowance for this month is used up. Barcode scan and catalogue search stay available.',
 
   'analyzer.manufacturerNote': "Manufacturer's statement: {text}",
   'analyzer.uncertain': 'Uncertain reading: {text}',

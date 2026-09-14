@@ -15,6 +15,14 @@ export default {
   'analyzer.unreachable': 'Die Analyse ist nicht erreichbar. Internetverbindung pruefen.',
   'analyzer.failedWithStatus': 'Die Analyse ist fehlgeschlagen (Status {status}).',
   'analyzer.noResult': 'Die Analyse hat kein verwertbares Ergebnis geliefert.',
+  // Seit 2026-09-14: Die Foto-Analyse braucht ein Konto, weil das
+  // Kontingent serverseitig je Konto gefuehrt wird. Barcode-Scan und
+  // Katalogsuche bleiben ohne Konto nutzbar, deshalb steht das hier
+  // ausdruecklich dabei. Keine Modellnamen, keine Kostenangaben.
+  'analyzer.accountRequired':
+    'Für die Foto-Analyse brauchst du ein Konto. Barcode-Scan und Katalogsuche gehen auch ohne.',
+  'analyzer.quotaExhausted':
+    'Dein Kontingent für Foto-Analysen ist für diesen Monat aufgebraucht. Barcode-Scan und Katalogsuche bleiben nutzbar.',
 
   'analyzer.manufacturerNote': 'Herstellerangabe: {text}',
   'analyzer.uncertain': 'Unsicher erkannt: {text}',
