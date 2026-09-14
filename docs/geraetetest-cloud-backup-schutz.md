@@ -11,9 +11,82 @@ Geräte-Schlüsselbund, persist auf AsyncStorage und das echte
 Supabase-Backend sind damit nicht geprüft. Es geht um Datenverlust bei
 Gesundheitsdaten.
 
-**Alle Fälle sind offen. Keiner wurde ausgeführt.** Ein Fall gilt erst
-als bestanden, wenn er auf einem Gerät durchgeführt und das Ergebnis in
-der Tabelle am Ende eingetragen ist.
+**Alle dreizehn Fälle sind offen. Keiner wurde ausgeführt.** Ein Fall
+gilt erst als bestanden, wenn er durchgeführt und das Ergebnis in der
+Tabelle am Ende eingetragen ist.
+
+## Simulator-Lauf vom 2026-09-14
+
+Durchgeführt auf Basis `deaa747`, in einem eigenen Git-Worktree
+(`.worktrees/sim-abnahme`) mit derselben Konfiguration wie die geprüften
+Stände, inklusive der nicht committeten EAS-projectId in `app.json`.
+Keine bestehenden nativen Dateien gelöscht: Der Worktree hatte weder
+`ios/` noch `android/`, `expo prebuild` hat beide neu erzeugt.
+
+**Was im Simulator bestanden ist:**
+
+| Prüfung | Ergebnis | Nachweis |
+|---|---|---|
+| `npm install` im Worktree | **bestanden** | Exitcode 0 |
+| `expo prebuild --platform ios` | **bestanden** | Exitcode 0, `ios/` neu erzeugt |
+| `pod install` | **bestanden** | Exitcode 0, `MySuplea.xcworkspace` vorhanden |
+| Nativer Build Debug (Simulator) | **bestanden** | `xcodebuild` Exitcode 0, `** BUILD SUCCEEDED **` |
+| Nativer Build Release mit eingebettetem Bundle | **bestanden** | Exitcode 0, `MySuplea.app/main.jsbundle` vorhanden |
+| Installation und Start auf frischem Gerät | **bestanden** | `simctl install`/`launch` Exitcode 0, Prozess-PID vergeben |
+| App rendert den ersten Onboarding-Schritt | **bestanden** | Screenshot: Fortschrittsbalken, App-Icon, "WILLKOMMEN", Headline "MySuplea ordnet, was du nimmst.", Petrol-Knopf "Los geht's" |
+| Nachweispunkt 1 des leeren Zustands (Onboarding startet, springt nicht ins Dashboard) | **bestanden** | derselbe Screenshot, auf frisch angelegtem Gerät |
+| Frischer Ausgangszustand über Datei-Metadaten belegt | **bestanden** | frisch angelegtes Gerät: 0 App-Container, kein `Library/Keychains/`-Verzeichnis. Gegenprobe am gebrauchten Prüfgerät: 146 Container, gewachsene `keychain-2-debug.db`. Inhalte nicht gelesen |
+| Dynamic Type, größte Systemschrift | **bestanden** | `simctl ui content_size extra-extra-extra-large` plus App-Neustart (eine laufende RN-App übernimmt die Änderung nicht): Texte skalieren, Headline und Untertitel brechen um, nichts abgeschnitten, Knopf vollständig |
+
+Prüfumgebung: zwei **neu angelegte** Simulatoren (iPhone 17, iOS 26.5)
+statt Zurücksetzen bestehender Geräte, damit keine fremden
+Simulator-Daten anderer Projekte gelöscht werden.
+
+**Warum die dreizehn Zeilen trotzdem blockiert sind:** Der Simulator
+lässt sich per `xcrun simctl` booten, installieren, starten,
+zurücksetzen, mit Deep Links ansprechen und fotografieren, aber **nicht
+bedienen**. `simctl` hat keinen Tipp-Befehl; der Weg über AppleScript
+scheitert an der Systemberechtigung ("keine Berechtigung für den
+Hilfszugriff", -25211; "nicht berechtigt, Tastatureingaben zu senden",
+1002). `idb` und `cliclick` sind nicht installiert.
+
+Konkret gescheitert ist es an zwei Stellen, beide belegt per Screenshot:
+1. Der Development Build startet in den Dev-Client, findet Metro auf
+   `localhost:8081` (grüner Punkt), verlangt für den Sprung in die App
+   aber einen Tap auf "Öffnen" in einem System-Dialog. Umgangen durch
+   den Release-Build mit eingebettetem Bundle, der direkt startet.
+2. Der erste Onboarding-Schritt braucht einen Tap auf "Los geht's".
+   Ab hier geht es ohne Tippen nicht weiter: kein Onboarding, also kein
+   Konto, also keine der dreizehn Zeilen, die alle eine Anmeldung
+   voraussetzen.
+
+**Kein Testkonto angelegt, keine Server-Daten angefasst.** Weil die App
+nicht bedienbar war, ist kein Konto entstanden; damit gab es auch keinen
+eindeutig zugeordneten Testdatensatz, an dem eine Manipulation oder
+Löschung zulässig gewesen wäre. In `public.user_backups` wurde nichts
+verändert. Der Zugang wäre vorhanden (Supabase-CLI angemeldet, Projekt
+`supplements` zugeordnet) und bleibt für die Fälle 1 und 9 vorgesehen,
+ausschließlich auf der Zeile des Testkontos.
+
+**Die eine fehlende Freigabe:** Systemeinstellungen, Datenschutz &
+Sicherheit, Bedienungshilfen, dort das Programm freigeben, aus dem die
+Prüfung läuft (Terminal bzw. der Editor). Die Berechtigung liegt in einer
+vom System geschützten Datenbank und ist über die Kommandozeile nicht
+setzbar. Danach sind die Zeilen im Simulator durchführbar.
+
+So kommt die Umgebung zurück:
+
+```bash
+cd ~/Developer/supplements/.worktrees/sim-abnahme
+xcrun simctl boot B6052A86-288A-49FC-9067-E029087F845D   # Gerät B, frisch
+xcrun simctl install B6052A86-288A-49FC-9067-E029087F845D \
+  ios/build-release/Build/Products/Release-iphonesimulator/MySuplea.app
+xcrun simctl launch B6052A86-288A-49FC-9067-E029087F845D com.indoohome.mysuplea
+```
+
+Gerät A (`3E67ED35-D278-4358-B010-6F63D58C580F`) trägt den
+Development-Build und braucht zusätzlich `npx expo start` im Worktree.
+Für die Fälle 8 und 9 werden beide Geräte gebraucht.
 
 ## Tatsächlich geprüfter Stand
 
@@ -39,17 +112,40 @@ Relevante lokale Konfiguration zum Zeitpunkt dieser Prüfungen:
 
 ## Was für die Abnahme noch fehlt
 
-Der interne iOS-Development-Build lässt sich derzeit **nicht** erstellen:
-`eas device:list` antwortet "No Apple teams found for account krebsi".
-Ohne Apple-Team gibt es kein Signierungszertifikat, kein Provisioning
-Profile und keine registrierte Geräte-UDID. Die genau notwendige Eingabe
-steht im Abschlussbericht der Sitzung.
+**Kein Build für echte Geräte.** `eas device:list` antwortet "No Apple
+teams found for account krebsi". Ohne Apple-Team gibt es kein
+Signierungszertifikat, kein Provisioning Profile und keine registrierte
+Geräte-UDID. Die notwendigen Eingaben stehen im Abschlussbericht der
+Sitzung.
 
-Bis dahin ist die Abnahme nur auf dem iOS-Simulator möglich (lokaler
-Build, keine Signierung nötig). Der Simulator deckt alles in dieser
-Liste ab: Dialoge, Schlüsselbund, AsyncStorage, Supabase. Er deckt
-**nicht** ab: Kauf-SDK, Push-Erinnerungen und echtes
-Hintergrund-/Vordergrund-Verhalten des Systems.
+**Simulator-Umgebung steht, Bedienung blockiert.** Am 2026-09-14 wurde
+der native iOS-Build im Arbeitsverzeichnis
+`.worktrees/sim-abnahme` (Git-Worktree auf `deaa747`, `app.json` mit der
+EAS-projectId übernommen, `expo prebuild` plus `pod install`, keine
+bestehenden nativen Dateien gelöscht) erzeugt und im Simulator gestartet.
+Die Prüfzeilen konnten trotzdem nicht durchlaufen werden:
+
+Der Simulator lässt sich per `xcrun simctl` booten, starten,
+zurücksetzen und fotografieren, aber **nicht bedienen**. `simctl` kennt
+keinen Tipp-Befehl, und der Weg über AppleScript scheitert an der
+Systemberechtigung: `osascript` meldet "keine Berechtigung für den
+Hilfszugriff" (-25211) und "nicht berechtigt, Tastatureingaben zu
+senden" (1002). `idb` und `cliclick` sind nicht installiert. Ohne Tippen
+lässt sich das Onboarding nicht durchlaufen, also auch kein Konto
+anlegen, also keine der dreizehn Zeilen abschließen: Alle setzen eine
+Anmeldung voraus.
+
+Freischalten lässt sich das durch **eine** Aktion am Rechner:
+Systemeinstellungen, Datenschutz & Sicherheit, Bedienungshilfen, dort
+das Programm freigeben, aus dem die Prüfung läuft (Terminal bzw. der
+Editor). Die Berechtigung liegt in einer vom System geschützten
+Datenbank und ist über die Kommandozeile nicht setzbar. Danach sind die
+Zeilen im Simulator durchführbar.
+
+Was der Simulator auch mit Berechtigung **nicht** abdeckt: Kauf-SDK,
+Push-Erinnerungen, echtes Hintergrund- und Sperrverhalten des Systems,
+und den Schlüsselbund eines echten Geräts (siehe den Abschnitt zum
+Schlüsselbund).
 
 ---
 
@@ -103,13 +199,61 @@ Vorgehen und Nachweis vor jedem Fall mit Neuinstallation:
    - Nach dem Onboarding ist der **Bestand leer** (Tab Bestand, keine
      Einträge).
    - **Verlauf leer** (Heute, Verlauf).
-   - **Mehr, Konto** zeigt "abgemeldet", nicht eine bestehende Sitzung.
-     Eine überlebende Sitzung bedeutet einen überlebenden Datenschlüssel
-     im Schlüsselbund.
+   - **Mehr, Konto** zeigt "abgemeldet", keine bestehende Sitzung.
 4. Erst dann anmelden.
 
-Wird einer der vier Punkte nicht erfüllt, ist das Ergebnis des Falls
-nicht verwertbar und der Fall bleibt offen.
+### Eine abgemeldete Oberfläche beweist keinen leeren Schlüsselbund
+
+Punkt 4 der Liste zeigt nur, dass **keine Sitzung** wiederhergestellt
+wurde. Das ist etwas anderes als ein leerer Schlüsselbund, und die
+Unterscheidung ist für diese Abnahme wesentlich:
+
+- Die **Sitzung** liegt über `secureStorage` verschlüsselt im
+  AsyncStorage. Der wird beim Löschen der App entfernt, deshalb zeigt die
+  Oberfläche "abgemeldet".
+- Der **Datenschlüssel** liegt getrennt davon im Geräte-Schlüsselbund
+  (`expo-secure-store`, WHEN_UNLOCKED_THIS_DEVICE_ONLY), ebenso der
+  Schlüssel, mit dem `secureStorage` den Store verschlüsselt. Beide
+  können die Oberfläche überleben: iOS löscht Schlüsselbund-Einträge beim
+  Entfernen einer App nicht in jedem Fall, und eine Wiederherstellung aus
+  einem Backup bringt sie zurück.
+
+Folge für die Fälle 2, 6, 7a und 7b: Ein überlebender Datenschlüssel
+kann einen Server-Stand **lesbar** machen, der eigentlich unlesbar sein
+soll (Fall 2), oder einen `restore` durchlaufen lassen, dessen
+Ausgangslage nicht wirklich frisch war (Fälle 6, 7a, 7b). Die App zeigt
+das nicht an.
+
+**Zusätzlicher Nachweis, ohne Schlüsselwerte auszugeben.** Geprüft wird
+nur, ob ein Eintrag **existiert**, nie sein Inhalt. Schlüsselwerte,
+Recovery-Keys und Passwörter gehören in kein Protokoll und in keinen
+Bericht.
+
+- **Simulator:** Der Schlüsselbund liegt im Gerätecontainer unter
+  `~/Library/Developer/CoreSimulator/Devices/<UDID>/data/Library/Keychains/`
+  als `keychain-2-debug.db` (plus `-shm`/`-wal`). Nachweis über
+  Datei-Metadaten: vorhanden ja/nein, Größe, Änderungszeit, und ob nach
+  einem Zurücksetzen eine neue Datei mit frischem Zeitstempel entsteht.
+  Der Inhalt wird nicht gelesen und gehört in kein Protokoll.
+  Ein `xcrun simctl erase <UDID>` leert Schlüsselbund und App-Container
+  zuverlässig; das Entfernen der App allein nicht. **Für die Fälle mit
+  Neuinstallation deshalb immer `erase` verwenden, nicht nur die App
+  löschen.**
+  Gegenprobe am 2026-09-14 auf dem Prüfgerät (iPhone 17): Vor dem
+  Zurücksetzen lagen 146 App-Container und eine gewachsene
+  Schlüsselbund-Datei vor. Ein Simulator, der schon benutzt wurde, ist
+  also nachweislich kein frischer Ausgangszustand, selbst wenn keine App
+  sichtbar installiert ist.
+- **Echtes Gerät:** Von außen nicht einsehbar. Ersatzweise am Verhalten
+  belegen: Nach dem Löschen der App und Neustart des Geräts muss der
+  erste Start der App das Onboarding zeigen **und** eine Anmeldung
+  verlangen, und ein zuvor unlesbarer Server-Stand muss unlesbar
+  bleiben. Bleibt er lesbar, ist ein alter Datenschlüssel vorhanden und
+  der Fall nicht verwertbar. Sauberer Ausgangszustand auf dem echten
+  Gerät: App löschen, Gerät neu starten, App neu installieren.
+
+Wird einer der vier Punkte oder dieser Zusatznachweis nicht erfüllt, ist
+das Ergebnis des Falls nicht verwertbar und der Fall bleibt offen.
 
 ---
 
@@ -385,23 +529,59 @@ denselben Datensatz.
 Ebenfalls offen, aber unabhängig von diesem Branch: die vier
 Expo-Patchversionen aus `expo-doctor`.
 
+## Reihenfolge der Durchführung
+
+Sobald die Bedienungshilfen-Freigabe erteilt ist, in dieser Reihenfolge,
+weil diese vier den Kern der Korrektur belegen:
+
+1. **6 / 7a** Automatischer Restore nach reinem Onboarding. Erscheint
+   hier ein Dialog, ist Befund 1 nicht wirksam.
+2. **7b** Schutz bei lokalem Gesundheitsprofil. Erscheint hier kein
+   Dialog, greift der Schutz nicht.
+3. **3 / 4** Behalten mit Neustart. Belegt die persistierte Sperre und
+   den sichtbar inaktiven Knopf.
+4. **9** Freigabe nach extern entferntem Server-Backup. Bleibt die
+   Sperre stehen, ist Befund 3 nicht wirksam.
+
+Danach der Rest: 1, 2, 5, 5b, 8, 8z, 4z.
+
 ## Ergebnistabelle
 
-Erst nach tatsächlicher Durchführung ausfüllen. "offen" bedeutet: nicht
-ausgeführt.
+Erst nach tatsächlicher Durchführung ausfüllen. Status ausdrücklich als
+"im Simulator bestanden", "im Simulator fehlgeschlagen", "blockiert"
+oder "auf echtem Gerät bestanden" eintragen. "blockiert" heißt: nicht
+ausgeführt, Grund in der Bemerkung.
 
 | Fall | Aufbau | Ergebnis | Datum | Bemerkung |
 |---|---|---|---|---|
-| 1 Backup aus neuerer App | 1 + präpariert | offen | | |
-| 2 Falscher Schlüssel | 1 | offen | | |
-| 3 Behalten (inkl. VoiceOver) | 1 | offen | | |
-| 4 Neustart und Jetzt sichern | 1 | offen | | |
-| 4z Bestandsgerät nicht gesperrt | 1 | offen | | |
-| 5 Bewusster Ersatz | 1 | offen | | |
-| 5b Ersatz ohne Netz | 1 | offen | | |
-| 6 Gültiger Restore | 1 + Neuinst. | offen | | |
-| 7a Nur Onboarding-Angaben | 1 + Neuinst. | offen | | |
-| 7b Gepflegtes Profil | 1 + Neuinst. | offen | | |
-| 8 Widersprüchliche Stände | 2 Stände | offen | | |
-| 8z Statushänger | 2 Stände | offen | | |
-| 9 Sperre, Backup entfernt | 2 Stände | offen | | |
+| 1 Backup aus neuerer App | 1 + präpariert | blockiert | 2026-09-14 | keine Tap-Freigabe, App nicht bedienbar |
+| 2 Falscher Schlüssel | 1 | blockiert | 2026-09-14 | dito |
+| 3 Behalten (inkl. VoiceOver) | 1 | blockiert | 2026-09-14 | dito; Dynamic Type separat am Onboarding bestanden |
+| 4 Neustart und Jetzt sichern | 1 | blockiert | 2026-09-14 | dito |
+| 4z Bestandsgerät nicht gesperrt | 1 | blockiert | 2026-09-14 | dito |
+| 5 Bewusster Ersatz | 1 | blockiert | 2026-09-14 | dito |
+| 5b Ersatz ohne Netz | 1 | blockiert | 2026-09-14 | dito |
+| 6 Gültiger Restore | 1 + Neuinst. | blockiert | 2026-09-14 | dito; Nachweispunkt 1 (Onboarding startet) bestanden |
+| 7a Nur Onboarding-Angaben | 1 + Neuinst. | blockiert | 2026-09-14 | dito |
+| 7b Gepflegtes Profil | 1 + Neuinst. | blockiert | 2026-09-14 | dito |
+| 8 Widersprüchliche Stände | 2 Stände | blockiert | 2026-09-14 | dito; zwei frische Simulatoren stehen bereit |
+| 8z Statushänger | 2 Stände | blockiert | 2026-09-14 | dito |
+| 9 Sperre, Backup entfernt | 2 Stände | blockiert | 2026-09-14 | dito |
+
+## Was auch nach der Simulator-Abnahme auf einem echten iPhone offen bleibt
+
+Diese Punkte kann der Simulator grundsätzlich nicht beantworten, auch
+mit erteilter Tap-Freigabe nicht. Sie brauchen den iOS-Development-Build
+auf einem registrierten Gerät und damit das Apple-Team.
+
+| Offen auf echtem Gerät | Warum der Simulator nicht genügt |
+|---|---|
+| Schlüsselbund-Verhalten beim Löschen der App | Der Simulator-Schlüsselbund ist eine Datei ohne Secure Enclave; `WHEN_UNLOCKED_THIS_DEVICE_ONLY` verhält sich dort nicht wie auf dem Gerät. Ob ein Datenschlüssel eine Neuinstallation überlebt, entscheidet sich nur am Gerät |
+| Ausgangszustand nach Wiederherstellung aus einem iCloud-Backup | Im Simulator nicht herstellbar |
+| VoiceOver-Ansage des gesperrten Knopfs | Die Simulator-Sprachausgabe weicht ab; die Ansage "abgeblendet" plus Hinweistext muss am Gerät gehört werden |
+| Sperrbildschirm und Gerätesperre während eines Uploads | `WHEN_UNLOCKED` greift nur am echten Gerät |
+| Echtes Hintergrund- und Wiederaufnahme-Verhalten, App-Beendigung durch das System | Der Simulator terminiert Apps nach anderen Regeln, der Vordergrund-Abgleich (`AppState 'active'`) ist dort nicht repräsentativ |
+| Push-Erinnerungen | Im Simulator ohne APNs nur eingeschränkt |
+| Kauf-SDK (RevenueCat) | Braucht Development Build und Sandbox-Konto |
+| Netzwechsel und echtes Offline (Fall 5b) | Der Flugmodus des Simulators bildet nur die Host-Verbindung ab |
+| Dauer und Gefühl der Dialoge im Alltag (10-Sekunden-Maßstab) | Bedienbarkeit auf dem Gerät in der Hand, nicht am Mausklick |
