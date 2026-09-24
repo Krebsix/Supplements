@@ -120,7 +120,7 @@ Der Kostenschutz liegt jetzt serverseitig und haengt nicht mehr an
   Barcode- und Cache-Abfragen bleiben ohne Konto erreichbar, sie kosten
   nichts.
 - **Kontingent je Konto und Kalendermonat** in `public.scan_quotas`
-  (Migration `20260914180000_scan_quota_per_user.sql`), atomar
+  (Migration `20260924234856_scan_quota_per_user.sql`), atomar
   reserviert vor dem Claude-Aufruf (`reserve_scan_quota` unter
   Row-Lock), zurueckgegeben bei jedem Ausstieg ohne verwertbares
   Ergebnis (`release_scan_quota`, neun Aufrufstellen).
@@ -633,7 +633,7 @@ Label-Zuordnung.
 | Nutzerprüfung vor Speichern | B, Marke D | `AddSupplement.jsx:308-316`, kein Markenfeld |
 | ODbL-Attribution | A, inkonsistent (B) | `tests/seed-catalog.test.mjs:41-64` |
 | Datenschutz Scan-Pfad | A, zwei Textabweichungen (D) | Edge Function ohne Storage-Upload |
-| Kostenschutz | implementiert, Deployment offen | `3c77e02`, Migration `20260914180000` nicht angewendet |
+| Kostenschutz | deployt 2026-09-25 (Function v18) | `3c77e02`, Migration `20260924234856` angewendet |
 | Offline Cache-Pfad | D | `ScanAnalyzer.js:150-152` |
 | Fehlerfälle im UI | A (Abdeckung), kein Test | Tabelle in Abschnitt 10 |
 | DE und EN | A | 0 Lücken in 5 Katalogen, `tests/i18n.test.mjs` |

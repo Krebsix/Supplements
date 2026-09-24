@@ -167,7 +167,7 @@ export async function analyzeCaptures(captures, { barcode, accessToken } = {}) {
 
   // Seit 2026-09-14 braucht die Foto-Analyse ein angemeldetes Konto: Das
   // Kontingent wird serverseitig je Konto gefuehrt (Migration
-  // 20260914180000_scan_quota_per_user.sql). Der oeffentliche Anon-Key
+  // 20260924234856_scan_quota_per_user.sql). Der oeffentliche Anon-Key
   // zaehlt nicht als Anmeldung. Hier abfangen, damit die Nutzerin eine
   // klare Ansage bekommt statt eines 401 aus dem Netz. Barcode-Scan und
   // Katalogsuche brauchen weiterhin kein Konto.

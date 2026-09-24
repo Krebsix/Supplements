@@ -1,7 +1,34 @@
 # L2 Kostenschutz für KI-Scans: Abschluss
 
-**Status: implementiert und automatisch getestet, Deployment und
-Live-Abnahme offen.**
+**Status: deployt am 2026-09-25 und gegen die Produktion verifiziert.
+Live-Abnahme mit angemeldetem Konto (Punkte 2 bis 7 unten) offen.**
+
+## Nachtrag 2026-09-25: Deployment und Abgleich
+
+Deployt außerhalb dieser Sitzung (Migration per Supabase-Projekt, Function
+aus `integration/2026-09-25`). Danach hier geprüft, nur lesend:
+
+| Prüfung | Ergebnis |
+|---|---|
+| Migration in `supabase_migrations.schema_migrations` | angewendet als Version **`20260924234856`** (nicht `20260914180000`) |
+| Funktionskörper `reserve_/release_scan_quota`, `cleanup_scan_quotas` live gegen Repo | token-gleich, nur anders umgebrochen; `SECURITY DEFINER`, `search_path=public` |
+| EXECUTE-Recht | nur `service_role`; `anon` und `authenticated` nein |
+| `scan_quotas` | RLS an, 0 Policies (beabsichtigt), alle drei Constraints vorhanden |
+| Edge Function | Version 18, ACTIVE, `verify_jwt` an; heruntergeladener Code byte-gleich mit `integration/2026-09-25` (index.ts, quota.ts, formulaVersioning.ts, deno.json) |
+| Live: Barcode ohne Konto | `404` "Kein Cache-Eintrag" (Weg bleibt kontofrei) |
+| Live: Foto mit Anon-Key, `model` im Body | `401` `auth_required`, vor jedem Claude-Aufruf |
+| Live: ohne Authorization-Header | `401` vom Gateway |
+
+**Abgleich:** Weil die Migration live unter einer anderen Versionsnummer
+steht, hätte `supabase db push` die Datei `20260914180000` erneut für
+fehlend gehalten. Die Datei heißt deshalb jetzt
+`20260924234856_scan_quota_per_user.sql`, Inhalt unverändert. Keine
+Änderung an der Produktion.
+
+Offen außerhalb von L2: Supabase-Advisor meldet "Leaked Password
+Protection" deaktiviert (Auth-Härtung vor Release).
+
+## Stand vom 2026-09-14 (historisch)
 
 Stand: 2026-09-14. Rein dokumentarischer Abschluss, keine weiteren
 Code-Änderungen. Kein Merge, kein Deployment.
@@ -30,7 +57,7 @@ Migrationen bis `20260903100000` sind angewendet, genau eine nicht:
 
 | Migration | Lokal | Angewendet |
 |---|---|---|
-| `20260914180000_scan_quota_per_user.sql` | ja | **nein** |
+| `20260914180000_scan_quota_per_user.sql` (heute `20260924234856_…`) | ja | damals nein, seit 2026-09-25 ja |
 
 Inhalt: Tabelle `public.scan_quotas` (user_id, period, used) mit RLS ohne
 Policies, plus die Funktionen `reserve_scan_quota` (atomar unter

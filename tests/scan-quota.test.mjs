@@ -7,7 +7,7 @@
  * supabase/functions/analyze-supplement/quota.ts plus ein Nachbau des
  * Kontrollflusses der Edge Function mit Ersatzfunktionen fuer Datenbank
  * und Claude-Aufruf. Die atomare Zaehlung selbst steckt in SQL
- * (reserve_scan_quota, Migration 20260914180000) und laesst sich hier
+ * (reserve_scan_quota, Migration 20260924234856) und laesst sich hier
  * nicht ausfuehren; der Nachbau prueft, dass der Kontrollfluss sie
  * richtig benutzt: reservieren vor dem Aufruf, freigeben bei jedem
  * Ausstieg ohne verwertbares Ergebnis.
