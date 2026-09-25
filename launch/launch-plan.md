@@ -22,6 +22,7 @@ messbare "100-Prozent"-Fertig-Kriterium (definiert Nadine).
 | 7 | Datenschutz-URL: statische Webseite mit der Erklärung. Gebaut (web/, generiert aus data/legalContent.js via `npm run build:legal`, Drift-Test), E-Mail-Platzhalter gefüllt. Auf Vercel deployed (Projekt mysuplea-legal, live unter mysuplea-legal.vercel.app), Subdomain mysuplea.indoohome.com am Projekt registriert. Offen: EIN DNS-Eintrag bei united-domains (`A mysuplea 76.76.21.21`), danach Vertretungsberechtigte + EU-Vertreter aus Punkt 2/3 im Text nachtragen | Claude / Nadine | deployed, DNS-Eintrag offen |
 | 8 | Gerätetest: Onboarding, Scan-Einwilligung, Erinnerungen, Backup | Nadine | offen |
 | 9 | Apple Developer Account auf indoo home LLC + Store-Listing anlegen | Nadine | offen, nach Nadines Ansage: kommt "wenn alles fertig ist" |
+| 10 | Auth-Härtung Supabase: "Leaked Password Protection" ist deaktiviert (Security-Advisor, festgestellt 2026-09-25 beim L2-Deploy). Einschalten unter Authentication, Passwort-Einstellungen: Anmelde-Passwörter werden dann gegen HaveIBeenPwned geprüft. Vorher klären, ob der Schalter auf dem aktuellen Supabase-Plan verfügbar ist, und ob die App die Ablehnung eines geleakten Passworts beim Signup verständlich meldet (AccountLogic.js). Unabhängig vom Kostenschutz L2 | Nadine | offen, vor Store-Release |
 
 ## Reihenfolge und Gates (Council-Verdikt 2026-08-09, Konfidenz 80 %)
 
