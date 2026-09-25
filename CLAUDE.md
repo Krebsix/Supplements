@@ -102,6 +102,7 @@ Ersteinrichtung, Verlauf- und Bestand-Link folgen unter der Liste.
 | `DoseNormalizer.js` | Entscheidet, ob eine Menge die Verbindung oder das Element meint, und rechnet nur im ersten Fall herunter |
 | `ReferenceCheck.js` | Vergleicht Mengen mit Referenzwerten je Lebensphase, sammelt Lebensphasen-Hinweise |
 | `StackAnalyzer.js` | Summiert Wirkstoffe ueber ALLE Produkte des Bestands und prueft die Tagessumme gegen Obergrenzen |
+| `SearchPlan.js` | Suche im Tab "Wissen": Wirkstoff-Freitextsuche (`searchSubstances`) und die Rolle der Produkte nach Namen (`planProductHits` ueber `searchSeedCatalog`): bei genau einem erkannten Wirkstoff keine Namenstreffer, bei mehreren nachrangig, ohne Wirkstoff als Antwort. Tipp auf ein Produkt fuehrt nach `CATALOG_PICK_ROUTE` |
 | `ComplaintSearch.js` | Beschwerdesuche: findet Beschwerdebilder aus Alltagssprache und verknuepft sie mit dem Bestand |
 | `ProfileCheck.js` | Verknuepft das persoenliche Profil (Medikamentengruppen) mit dem Bestand und zitiert die belegten Hinweise |
 | `OutcomeTracker.js` | Wirkungskontrolle: Ausgangswert, Verlauf, Einnahmetreue — und die Stoerfaktoren, die gegen eine Zuordnung sprechen |

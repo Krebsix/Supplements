@@ -11,6 +11,7 @@ import { matchIngredient } from '../../../SubstanceMatcher';
 import { buildComplaintView, findComplaints } from '../../../ComplaintSearch';
 import ComplaintCard from '../../../components/ComplaintCard';
 import { getSubstance, substances } from '../../../data/substances';
+import { CATALOG_PICK_ROUTE, planProductHits, searchSubstances } from '../../../SearchPlan';
 import {
   findProductsBySubstance,
   listCatalogBrandSections,
@@ -27,24 +28,77 @@ import { colors, radius, space, surfaces, type } from '../../../theme';
 // Treffer in anderen Sprachen veraendern statt nur die Oberflaeche.
 const examples = ['Magnesium', 'Vitamin D', 'Omega 3', 'Zink', 'Eisen'];
 
-// Freitextsuche ueber Name, Synonyme und Anwendungsgebiete —
-// damit auch "Kraempfe" oder "Schlaf" zu Treffern fuehrt.
-function searchSubstances(query) {
-  const needle = query.trim().toLowerCase();
-  if (needle.length < 2) return [];
+// Freitextsuche ueber Wirkstoffe: SearchPlan.js (searchSubstances).
 
-  return substances.filter((substance) => {
-    const haystack = [
-      substance.name,
-      ...(substance.synonyms ?? []),
-      ...(substance.useCases ?? []).map((useCase) => useCase.topic),
-      substance.category,
-    ]
-      .join(' ')
-      .toLowerCase();
-
-    return haystack.includes(needle);
-  });
+// Eine Zeile fuer ein Katalogprodukt, gemeinsam fuer die Produkte zu einem
+// Wirkstoff und die Treffer nach Produktnamen: gleiche Kennzeichnung
+// (Siegel, Arzneimittel, Open Food Facts/ODbL), damit keine Herkunfts-
+// information je nach Suchweg verloren geht.
+function CatalogProductRow({ brand, name, meta, entry, first, onPress }) {
+  const { t } = useTranslation();
+  return (
+    <TouchableOpacity
+      style={[styles.registerRow, first && styles.registerRowFirst]}
+      onPress={onPress}
+      activeOpacity={0.7}
+      accessibilityRole="button"
+    >
+      <View style={styles.entryTextWrap}>
+        <View style={styles.productBrandRow}>
+          <Text style={styles.productBrand}>{brand}</Text>
+          {/* Belegte Siegel des Eintrags, neutral wie das
+              OFF-Badge dargestellt (kein Ranking). */}
+          {(entry?.certifications ?? []).map((cert) => {
+            const certMeta = certificationById(cert.id);
+            if (!certMeta) return null;
+            return (
+              <View
+                key={cert.id}
+                style={styles.offBadge}
+                accessibilityLabel={certMeta.name}
+              >
+                <Text style={styles.offBadgeText}>{certMeta.name}</Text>
+              </View>
+            );
+          })}
+          {/* Rechtsstatus als Fakt aus der Produktklasse,
+              kein Siegel (siehe data/certifications.js). */}
+          {entry?.productClass === 'arznei' ? (
+            <View
+              style={styles.offBadge}
+              accessibilityLabel={t('search.products.drugBadge')}
+            >
+              <Text style={styles.offBadgeText}>
+                {t('search.products.drugBadge')}
+              </Text>
+            </View>
+          ) : null}
+          {entry?.license === 'ODbL' ? (
+            <View
+              style={styles.offBadge}
+              accessibilityLabel={t('search.products.offSource')}
+              accessibilityHint={t('search.products.offSource')}
+            >
+              <Text style={styles.offBadgeText}>
+                {t('search.products.offBadge')}
+              </Text>
+            </View>
+          ) : null}
+        </View>
+        <Text style={styles.registerName}>{name}</Text>
+        {meta ? (
+          <Text style={styles.entrySummary} numberOfLines={1}>
+            {meta}
+          </Text>
+        ) : null}
+      </View>
+      <Feather
+        name="chevron-right"
+        size={16}
+        color={colors.inkFaint}
+      />
+    </TouchableOpacity>
+  );
 }
 
 export default function SearchScreen() {
@@ -154,8 +208,21 @@ export default function SearchScreen() {
   function handlePickCatalogProduct(entry) {
     const storedScan = saveScanResult(seedEntryToScanDraft(entry));
     setPendingScanResult(storedScan);
-    router.push('/AddSupplement?fromScan=1');
+    router.push(CATALOG_PICK_ROUTE);
   }
+
+  // Produkte nach Namen (Audit-Befund L4). Die Rolle entscheidet
+  // SearchPlan.js: bei genau einem erkannten Wirkstoff gar nicht (dessen
+  // Produktliste steht schon oben), sonst nach den Wirkstoffen. Die Suche
+  // ueber rund 2800 Eintraege laeuft nur bei geaenderter Eingabe.
+  const productPlan = useMemo(
+    () =>
+      hasQuery
+        ? planProductHits(query, { substanceCount: profiles.length })
+        : { placement: 'none', hits: [] },
+    [hasQuery, query, profiles.length]
+  );
+  const productHits = productPlan.hits;
 
   // Beschwerdebilder zuerst: Wer einen ganzen Satz eingibt, meint eine
   // Beschwerde und keinen Wirkstoffnamen.
@@ -326,7 +393,7 @@ export default function SearchScreen() {
             );
           })}
         </>
-      ) : complaintViews.length === 0 && profiles.length === 0 ? (
+      ) : complaintViews.length === 0 && profiles.length === 0 && productHits.length === 0 ? (
         <View style={styles.emptyBox}>
           <Text style={styles.emptyTitle}>{t('search.emptyTitle')}</Text>
           <Text style={styles.emptyText}>
@@ -407,86 +474,50 @@ export default function SearchScreen() {
                   </View>
 
                   <View style={styles.registerCard}>
-                    {sortedCatalogProducts.map((product, index) => {
-                      const meta = [
-                        Number.isFinite(product.amount) ? `${product.amount} ${product.unit}`.trim() : null,
-                        product.form,
-                        product.country,
-                      ]
-                        .filter(Boolean)
-                        .join(' · ');
-                      return (
-                        <TouchableOpacity
-                          key={`${product.brand}-${product.name}-${index}`}
-                          style={[
-                            styles.registerRow,
-                            index === 0 && styles.registerRowFirst,
-                          ]}
-                          onPress={() => handlePickCatalogProduct(product.entry)}
-                          activeOpacity={0.7}
-                          accessibilityRole="button"
-                        >
-                          <View style={styles.entryTextWrap}>
-                            <View style={styles.productBrandRow}>
-                              <Text style={styles.productBrand}>{product.brand}</Text>
-                              {/* Belegte Siegel des Eintrags, neutral wie das
-                                  OFF-Badge dargestellt (kein Ranking). */}
-                              {(product.entry?.certifications ?? []).map((cert) => {
-                                const meta = certificationById(cert.id);
-                                if (!meta) return null;
-                                return (
-                                  <View
-                                    key={cert.id}
-                                    style={styles.offBadge}
-                                    accessibilityLabel={meta.name}
-                                  >
-                                    <Text style={styles.offBadgeText}>{meta.name}</Text>
-                                  </View>
-                                );
-                              })}
-                              {/* Rechtsstatus als Fakt aus der Produktklasse,
-                                  kein Siegel (siehe data/certifications.js). */}
-                              {product.entry?.productClass === 'arznei' ? (
-                                <View
-                                  style={styles.offBadge}
-                                  accessibilityLabel={t('search.products.drugBadge')}
-                                >
-                                  <Text style={styles.offBadgeText}>
-                                    {t('search.products.drugBadge')}
-                                  </Text>
-                                </View>
-                              ) : null}
-                              {product.entry?.license === 'ODbL' ? (
-                                <View
-                                  style={styles.offBadge}
-                                  accessibilityLabel={t('search.products.offSource')}
-                                  accessibilityHint={t('search.products.offSource')}
-                                >
-                                  <Text style={styles.offBadgeText}>
-                                    {t('search.products.offBadge')}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </View>
-                            <Text style={styles.registerName}>{product.name}</Text>
-                            {meta ? (
-                              <Text style={styles.entrySummary} numberOfLines={1}>
-                                {meta}
-                              </Text>
-                            ) : null}
-                          </View>
-                          <Feather
-                            name="chevron-right"
-                            size={16}
-                            color={colors.inkFaint}
-                          />
-                        </TouchableOpacity>
-                      );
-                    })}
+                    {sortedCatalogProducts.map((product, index) => (
+                      <CatalogProductRow
+                        key={`${product.brand}-${product.name}-${index}`}
+                        brand={product.brand}
+                        name={product.name}
+                        meta={[
+                          Number.isFinite(product.amount) ? `${product.amount} ${product.unit}`.trim() : null,
+                          product.form,
+                          product.country,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                        entry={product.entry}
+                        first={index === 0}
+                        onPress={() => handlePickCatalogProduct(product.entry)}
+                      />
+                    ))}
                   </View>
                 </View>
               ) : null}
             </>
+          ) : null}
+
+          {/* Produkte nach Namen: ohne Wirkstofftreffer die eigentliche
+              Antwort ("Biogena Magnesium"), sonst nach den Wirkstoffen.
+              Nur Marke und Name, das reicht zum Wiedererkennen. */}
+          {productHits.length > 0 ? (
+            <View style={styles.productsSection}>
+              <Text style={styles.sectionLabel}>
+                {t('search.productHits.title')}
+              </Text>
+              <View style={styles.registerCard}>
+                {productHits.map((hit, index) => (
+                  <CatalogProductRow
+                    key={`${hit.brand}-${hit.productName}-${hit.code}-${index}`}
+                    brand={hit.brand}
+                    name={hit.productName}
+                    entry={hit.entry}
+                    first={index === 0}
+                    onPress={() => handlePickCatalogProduct(hit.entry)}
+                  />
+                ))}
+              </View>
+            </View>
           ) : null}
         </>
       )}

@@ -32,6 +32,7 @@ export default {
   'search.products.offBadge': 'OFF',
   'search.products.drugBadge': 'Arzneimittel',
   'search.products.offSource': 'Daten aus Open Food Facts, ODbL',
+  'search.productHits.title': 'Passende Produkte',
 
   'brands.kicker': 'Katalog',
   'brands.title': 'Marken im System',
