@@ -211,19 +211,6 @@ export default function SearchScreen() {
     router.push(CATALOG_PICK_ROUTE);
   }
 
-  // Produkte nach Namen (Audit-Befund L4). Die Rolle entscheidet
-  // SearchPlan.js: bei genau einem erkannten Wirkstoff gar nicht (dessen
-  // Produktliste steht schon oben), sonst nach den Wirkstoffen. Die Suche
-  // ueber rund 2800 Eintraege laeuft nur bei geaenderter Eingabe.
-  const productPlan = useMemo(
-    () =>
-      hasQuery
-        ? planProductHits(query, { substanceCount: profiles.length })
-        : { placement: 'none', hits: [] },
-    [hasQuery, query, profiles.length]
-  );
-  const productHits = productPlan.hits;
-
   // Beschwerdebilder zuerst: Wer einen ganzen Satz eingibt, meint eine
   // Beschwerde und keinen Wirkstoffnamen.
   const complaintHits = useMemo(() => findComplaints(query), [query]);
@@ -231,6 +218,22 @@ export default function SearchScreen() {
     () => complaintHits.map((complaint) => buildComplaintView(complaint, activeSupplements)),
     [complaintHits, activeSupplements]
   );
+
+  // Produkte nach Namen (Audit-Befund L4). Die Rolle entscheidet
+  // SearchPlan.js: bei einer erkannten Beschwerde oder genau einem
+  // erkannten Wirkstoff gar nicht, sonst nach den Wirkstoffen. Die Suche
+  // ueber rund 2800 Eintraege laeuft nur bei geaenderter Eingabe.
+  const productPlan = useMemo(
+    () =>
+      hasQuery
+        ? planProductHits(query, {
+            substanceCount: profiles.length,
+            complaintCount: complaintHits.length,
+          })
+        : { placement: 'none', hits: [] },
+    [hasQuery, query, profiles.length, complaintHits.length]
+  );
+  const productHits = productPlan.hits;
 
   return (
     <View style={styles.screenWrap}>

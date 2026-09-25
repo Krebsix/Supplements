@@ -42,15 +42,20 @@ export function searchSubstances(query) {
 }
 
 /**
- * planProductHits(query, { substanceCount })
+ * planProductHits(query, { substanceCount, complaintCount })
  * Entscheidet, ob und in welcher Rolle Produkte nach Namen erscheinen.
  *
+ * - Beschwerde erkannt ("Schlaf", "Immun"): 'none'. Die Beschwerdesuche
+ *   fuehrt mit Einordnung und Ursachenbereichen, Naehrstoffe stehen
+ *   bewusst ganz unten (CLAUDE.md, "Aus einer Beschwerde folgt kein
+ *   Mangel"). Produkte wie "SCHLAF GUT Tropfen" darunter wuerden sich wie
+ *   eine Produktempfehlung zur Beschwerde lesen.
  * - Genau ein Wirkstoff erkannt ("Magnesium"): 'none'. Der Wirkstoff ist
  *   die Antwort, und der Screen zeigt darunter bereits alle
  *   Katalogprodukte mit diesem Wirkstoff. Namenstreffer wie
  *   "Spar / Magnesium" wuerden diese Liste nur doppeln und die
  *   Wissenskarte nach unten druecken.
- * - Mehrere Wirkstoffe ("Zink", "Schlaf"): 'secondary'. Wirkstoffe
+ * - Mehrere Wirkstoffe ("Zink"): 'secondary'. Wirkstoffe
  *   bleiben vorn, Produkte folgen danach.
  * - Kein Wirkstoff ("Biogena Magnesium", "Orthomol"): 'primary'. Dann
  *   sind die Produkte die eigentliche Antwort.
@@ -58,7 +63,8 @@ export function searchSubstances(query) {
  * Liefert { placement, hits }; hits im Format von searchSeedCatalog
  * (entry bleibt vollstaendig, inklusive license fuer die ODbL-Kennzeichnung).
  */
-export function planProductHits(query, { substanceCount = 0 } = {}) {
+export function planProductHits(query, { substanceCount = 0, complaintCount = 0 } = {}) {
+  if (complaintCount > 0) return { placement: 'none', hits: [] };
   if (substanceCount === 1) return { placement: 'none', hits: [] };
 
   const hits = searchSeedCatalog(query ?? '', PRODUCT_HIT_LIMIT);

@@ -11,6 +11,7 @@ import {
   searchSubstances,
 } from '../SearchPlan';
 import { seedEntryToScanDraft } from '../SeedCatalog';
+import { findComplaints } from '../ComplaintSearch';
 import { matchIngredient } from '../SubstanceMatcher';
 import { substances } from '../data/substances';
 import { setActiveLanguage } from '../i18n/runtime';
@@ -37,7 +38,10 @@ function substanceCountFor(query) {
 }
 
 function planFor(query) {
-  return planProductHits(query, { substanceCount: substanceCountFor(query) });
+  return planProductHits(query, {
+    substanceCount: substanceCountFor(query),
+    complaintCount: findComplaints(query).length,
+  });
 }
 
 const label = (hit) => `${hit.brand} / ${hit.productName}`;
@@ -99,6 +103,20 @@ check('"Zink" trifft mehrere Wirkstoffe', substanceCountFor('Zink') > 1);
 check(
   '"Zink": Produkte erscheinen nur nachrangig',
   zink.placement === 'secondary' && zink.hits.length > 0
+);
+
+console.log('\n— Beschwerde fuehrt, keine Produkte darunter —');
+
+for (const query of ['Schlaf', 'Immun']) {
+  check(`"${query}" wird als Beschwerde erkannt`, findComplaints(query).length > 0);
+  check(
+    `"${query}": keine Produkte unter der Beschwerde-Einordnung`,
+    planFor(query).placement === 'none' && planFor(query).hits.length === 0
+  );
+}
+check(
+  'Beschwerde unterdrueckt Produkte auch ohne Wirkstofftreffer',
+  planProductHits('Orthomol', { substanceCount: 0, complaintCount: 1 }).placement === 'none'
 );
 
 console.log('\n— Produkte nach Namen —');
