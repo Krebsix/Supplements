@@ -58,6 +58,56 @@ export function normalizeCatalogText(text) {
     .trim();
 }
 
+// Vitamine, die mit einem einzelnen Buchstaben bezeichnet werden. Nur
+// diese Einzelbuchstaben bleiben in der Suche erhalten; jedes andere
+// Ein-Zeichen-Wort faellt weiter weg wie bisher.
+const VITAMIN_LETTERS = new Set(['a', 'b', 'c', 'd', 'e', 'k']);
+
+// Kurzbezeichnungen aus Buchstabe(n) und Ziffern: d3, k2, b6, b12, q10, mk7.
+const SHORT_DESIGNATION = /^[a-z]{1,2}\d{1,3}$/;
+
+/**
+ * catalogTokenMatcher(token)
+ * Pruefregel fuer ein Suchwort gegen den normalisierten Katalogtext.
+ *
+ * Frueher fielen alle Woerter unter 2 Zeichen weg, und der Rest wurde als
+ * Teilstring gesucht. Folge: "Vitamin D", "Vitamin C" und "Vitamin E"
+ * lieferten dieselben Treffer (nur "vitamin" blieb uebrig), und "B1"
+ * (Thiamin) fand ueber den Teilstring "b12" nur Vitamin-B12-Produkte.
+ *
+ * - Vitaminbuchstabe (d): als eigenes Wort oder direkt vor Ziffern
+ *   ("d", "d3", "d3k2"), nie innerhalb eines Wortes ("depot").
+ * - Kurzbezeichnung (b1, d3, k2, q10): darf nicht von einer weiteren
+ *   Ziffer gefolgt sein ("b1" trifft "b12" nicht), steht aber auch in
+ *   zusammengesetzten Formen ("k2" in "d3k2", "q10" in "coq10").
+ * - Alles andere mit mindestens 2 Zeichen: Teilstring wie bisher.
+ * - Sonstige Einzelzeichen: null (werden ignoriert, wie bisher).
+ *
+ * Ein Vitaminbuchstabe zaehlt nur zusammen mit einem weiteren Suchwort
+ * ("Vitamin D", "Biogena D"). Allein ("d") bleibt die Suche leer wie
+ * bisher, sonst waere das eine allgemeine Lockerung auf Einzelzeichen.
+ */
+// "I.E." (Internationale Einheiten) normalisiert zu "i e"; das "e" darf
+// nicht als Vitamin E gelten. Anfrage und Katalogtext werden deshalb
+// gleich zusammengezogen, damit "Vigantol 20.000 I.E." weiter trifft.
+function searchableText(text) {
+  return normalizeCatalogText(text).replace(/(^| )i e(?= |$)/g, '$1ie');
+}
+
+function catalogTokenMatcher(token) {
+  if (!token) return null;
+  if (token.length === 1) {
+    if (!VITAMIN_LETTERS.has(token)) return null;
+    const pattern = new RegExp(`(?:^| )${token}(?=\\d| |$)`);
+    return { letterOnly: true, matches: (haystack) => pattern.test(haystack) };
+  }
+  if (SHORT_DESIGNATION.test(token)) {
+    const pattern = new RegExp(`${token}(?!\\d)`);
+    return { letterOnly: false, matches: (haystack) => pattern.test(haystack) };
+  }
+  return { letterOnly: false, matches: (haystack) => haystack.includes(token) };
+}
+
 /**
  * searchSeedCatalog(query)
  * Tokenbasierte Suche ueber Marke + Produktname. Alle Suchwoerter
@@ -66,15 +116,16 @@ export function normalizeCatalogText(text) {
  * wie searchProductsByName, plus origin/entry fuer die Uebernahme.
  */
 export function searchSeedCatalog(query, limit = 5) {
-  const tokens = normalizeCatalogText(query)
+  const matchers = searchableText(query)
     .split(/\s+/)
-    .filter((token) => token.length >= 2);
-  if (tokens.length === 0) return [];
+    .map(catalogTokenMatcher)
+    .filter(Boolean);
+  if (matchers.length === 0 || matchers.every((matcher) => matcher.letterOnly)) return [];
 
   const hits = [];
   for (const entry of CATALOG) {
-    const haystack = normalizeCatalogText(`${entry.brand ?? ''} ${entry.name ?? ''}`);
-    if (!tokens.every((token) => haystack.includes(token))) continue;
+    const haystack = searchableText(`${entry.brand ?? ''} ${entry.name ?? ''}`);
+    if (!matchers.every((matcher) => matcher.matches(haystack))) continue;
     hits.push({ entry, score: haystack.length });
   }
 

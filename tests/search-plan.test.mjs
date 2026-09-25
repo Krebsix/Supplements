@@ -147,6 +147,27 @@ check(
   ['Orthomol', 'Mivolis', 'Zink', 'ESN'].every((query) => planFor(query).hits.length <= PRODUCT_HIT_LIMIT)
 );
 
+console.log('\n— Kurzbezeichnungen —');
+
+const biogenaD = planFor('Biogena Vitamin D');
+check('"Biogena Vitamin D": Produkte sind die Antwort', biogenaD.placement === 'primary');
+check(
+  '"Biogena Vitamin D": nur das Vitamin-D-Produkt, kein Vitamin C oder B12',
+  biogenaD.hits.length > 0 &&
+    biogenaD.hits.every((hit) => /d3/i.test(hit.productName) && !/vitamin c|ester c|b12/i.test(hit.productName)),
+  biogenaD.hits.map(label).join('; ')
+);
+for (const query of ['Vitamin D', 'B12', 'B6', 'K2', 'D3', 'Q10']) {
+  check(`"${query}" loest genau einen Wirkstoff auf, keine Namenstreffer`,
+    substanceCountFor(query) === 1 && planFor(query).placement === 'none');
+}
+const vitaminC = planFor('Vitamin C');
+check(
+  '"Vitamin C": Produkte nachrangig und nur mit Vitamin C im Namen',
+  vitaminC.placement === 'secondary' && vitaminC.hits.every((hit) => /vitamin(e)? c\b/i.test(hit.productName)),
+  vitaminC.hits.map(label).join('; ')
+);
+
 console.log('\n— Kein Treffer —');
 
 const nothing = planFor('xyzabc');

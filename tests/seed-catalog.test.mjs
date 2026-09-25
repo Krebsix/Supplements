@@ -72,6 +72,52 @@ check('Leere Suche → leeres Ergebnis', searchSeedCatalog('').length === 0);
 check('Fantasiewort → leeres Ergebnis', searchSeedCatalog('xyzzynichtda').length === 0);
 check('Maximal 5 Treffer', searchSeedCatalog('magnesium').length <= 5);
 
+console.log('— Kurzbezeichnungen (Vitamin D, B1, K2, Q10) —');
+// Frueher fielen Einzelbuchstaben weg ("Vitamin D" = "Vitamin C" =
+// "vitamin"), und Kurzbezeichnungen trafen als Teilstring ("B1" in "B12").
+const all = (query) => searchSeedCatalog(query, 100000);
+const names = (hits) => hits.map((c) => `${c.brand} / ${c.productName}`).join('; ');
+const norm = (c) => normalizeCatalogText(`${c.brand} ${c.productName}`);
+// Wort-Pruefung wie im Katalog: Buchstabe allein oder direkt vor Ziffern.
+const hasVitaminWord = (c, letter) =>
+  new RegExp(`(?:^| )${letter}(?=\\d| |$)`).test(norm(c).replace(/(^| )i e(?= |$)/g, '$1ie'));
+
+const biogenaD = all('Biogena Vitamin D');
+check('"Biogena Vitamin D" findet BIOGENA Vitamin D3 & K2',
+  biogenaD.some((c) => /d3/i.test(c.productName)), names(biogenaD));
+check('"Biogena Vitamin D" liefert kein Vitamin-C- oder B12-Produkt',
+  biogenaD.every((c) => !/vitamin c|ester c|b12/i.test(c.productName)), names(biogenaD));
+const biogenaC = all('Biogena Vitamin C');
+check('"Biogena Vitamin C" liefert nur Vitamin-C-Produkte',
+  biogenaC.length > 0 && biogenaC.every((c) => hasVitaminWord(c, 'c')), names(biogenaC));
+
+for (const letter of ['d', 'c', 'e']) {
+  const hits = all(`Vitamin ${letter.toUpperCase()}`);
+  check(`"Vitamin ${letter.toUpperCase()}": jeder Treffer nennt Vitamin ${letter.toUpperCase()}`,
+    hits.length > 0 && hits.every((c) => hasVitaminWord(c, letter)), names(hits.slice(0, 5)));
+}
+check('"Vitamin D" und "Vitamin C" liefern verschiedene Treffer',
+  names(all('Vitamin D')) !== names(all('Vitamin C')));
+check('"Vitamin E" trifft nicht ueber "I.E." (Internationale Einheiten)',
+  all('Vitamin E').every((c) => !/^vitamin d3?,? ?\d+ i ?e$/.test(norm(c))), names(all('Vitamin E')));
+check('"Vitamin D" findet D3-Schreibweisen (Vitamin-D3, D3K2)',
+  all('Vitamin D').some((c) => /d3k2/i.test(norm(c))) && all('Vitamin D').some((c) => norm(c).includes('vitamin d3')));
+check('Einzelbuchstabe allein bleibt leer wie bisher ("d", "c")',
+  all('d').length === 0 && all('c').length === 0);
+check('Nicht-Vitamin-Einzelbuchstaben werden weiter ignoriert ("x Magnesium" = "Magnesium")',
+  names(all('x Magnesium')) === names(all('Magnesium')));
+
+const b1 = all('B1');
+check('"B1" trifft nicht "B12"', b1.length > 0 && b1.every((c) => /(?:^| |[a-z])b1(?!\d)/.test(norm(c))), names(b1));
+check('"B12" findet B12-Produkte', all('B12').length >= 20);
+check('"B6" findet B6-Produkte', all('B6').length > 0 && all('B6').every((c) => /b6(?!\d)/.test(norm(c))));
+check('"K2" trifft auch zusammengesetzt (D3K2)', all('K2').some((c) => norm(c).includes('d3k2')));
+check('"K1" trifft nicht ueber "Zink15"', all('K1').every((c) => !/zink15/.test(norm(c))), names(all('K1')));
+check('"D3" findet D3-Produkte', all('D3').length >= 50);
+check('"Q10" findet Coenzym Q10', all('Q10').some((c) => /q10/i.test(c.productName)));
+check('Voller Name mit I.E. findet sich weiter selbst',
+  all('Vigantol Öl 20.000 I.E./ml').some((c) => c.productName.includes('20.000')));
+
 console.log('— Normalisierung —');
 check('Tausenderpunkt faellt weg (2.000 → 2000)', normalizeCatalogText('Vitamin D3 2.000 I.E.') === 'vitamin d3 2000 i e');
 check('Suche mit 500 findet Vigantolvit 500 I.E.',
